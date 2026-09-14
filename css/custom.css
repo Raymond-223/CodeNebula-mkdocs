@@ -173,39 +173,39 @@
    5. 引用块 & Admonition
    ====================================================== */
 
-.md-typeset blockquote,
-.md-typeset .admonition,
-.md-typeset details {
+.md-typeset blockquote {
+
+    position: relative;
 
     background: transparent !important;
 
-    border: 3px solid transparent;
+    border: 2px solid transparent;
+
     border-radius: 16px;
 
-    background:
-        linear-gradient(var(--md-default-bg-color),
-                        var(--md-default-bg-color)) padding-box,
-        var(--nebula-gradient) border-box;
+    background-image:
+        linear-gradient(
+            var(--md-default-bg-color),
+            var(--md-default-bg-color)
+        ),
+        var(--nebula-gradient);
 
-    background-size: auto, 300% 300%;
-    animation: nebula-flow 10s ease infinite;
+    background-origin: border-box;
 
-    overflow: hidden;
+    background-clip:
+        padding-box,
+        border-box;
+
+    padding: 1em 1.2em;
 }
 
 
-/* 去掉 admonition 默认顶部标题背景 */
-.md-typeset .admonition-title {
-    background: transparent !important;
-}
+/* 禁用原来的铺满渐变层 */
 
+.md-typeset blockquote::before,
+.md-typeset blockquote::after {
 
-/* 内容保持正常 */
-.md-typeset blockquote > *,
-.md-typeset .admonition > *,
-.md-typeset details > * {
-
-    background: transparent !important;
+    content: none !important;
 
 }
 
