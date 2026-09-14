@@ -218,3 +218,43 @@
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* =========================================
+   Admonition 改为只有渐变边框
+========================================= */
+
+.md-typeset .admonition {
+    background: transparent !important;
+    border: 2px solid transparent !important;
+
+    border-radius: 16px;
+
+    background-image:
+        linear-gradient(
+            var(--md-default-bg-color),
+            var(--md-default-bg-color)
+        ),
+        var(--nebula-gradient) !important;
+
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+
+/* 标题区域取消默认色 */
+.md-typeset .admonition-title {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+
+/* 左侧默认颜色去掉 */
+.md-typeset .admonition {
+    border-left-width: 2px !important;
+}
+
+
+/* 内容正常 */
+.md-typeset .admonition p {
+    background: transparent !important;
+}
