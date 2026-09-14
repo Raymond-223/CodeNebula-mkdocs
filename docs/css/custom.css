@@ -204,3 +204,15 @@
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+.md-typeset blockquote::before {
+    display: none !important;
+}
+
+.md-typeset blockquote::after {
+    display: none !important;
+}
+
+.md-typeset blockquote {
+    background: transparent !important;
+}
