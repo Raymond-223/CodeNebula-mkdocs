@@ -175,7 +175,7 @@
 
 .md-typeset blockquote,
 .md-typeset .admonition,
-.md-typeset details {
+.md-typeset details  {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
