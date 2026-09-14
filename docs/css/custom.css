@@ -269,6 +269,25 @@
   100% { background-position: 0% 50%; }
 }
 
-body {
-    border: 20px solid red !important;
+/* force override for github pages */
+
+html body .md-typeset blockquote {
+
+    border-left: none !important;
+
+    border: 3px solid transparent !important;
+
+    border-radius: 16px !important;
+
+    background:
+        linear-gradient(
+            var(--md-default-bg-color),
+            var(--md-default-bg-color)
+        ) padding-box,
+        var(--nebula-gradient) border-box !important;
+
+    background-clip:
+        padding-box,
+        border-box !important;
+
 }
