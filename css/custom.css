@@ -176,52 +176,37 @@
 .md-typeset blockquote,
 .md-typeset .admonition,
 .md-typeset details {
-    position: relative;
+
+    background: transparent !important;
+
+    border: 3px solid transparent;
     border-radius: 16px;
-    background: transparent;
-    padding: 1em 1.2em;
+
+    background:
+        linear-gradient(var(--md-default-bg-color),
+                        var(--md-default-bg-color)) padding-box,
+        var(--nebula-gradient) border-box;
+
+    background-size: auto, 300% 300%;
+    animation: nebula-flow 10s ease infinite;
+
     overflow: hidden;
 }
 
-/* 渐变边框层 */
-.md-typeset blockquote::before,
-.md-typeset .admonition::before,
-.md-typeset details::before {
-    content: "";
-    position: absolute;
-    inset: 0;
 
-    background: var(--nebula-gradient);
-    background-size: 300% 300%;
-    animation: nebula-flow 10s ease infinite;
-
-    border-radius: inherit;
-    z-index: 0;
+/* 去掉 admonition 默认顶部标题背景 */
+.md-typeset .admonition-title {
+    background: transparent !important;
 }
 
 
-/* 挖空内部，只保留边框 */
-.md-typeset blockquote::after,
-.md-typeset .admonition::after,
-.md-typeset details::after {
-    content: "";
-    position: absolute;
-
-    inset: 2px;
-
-    background: var(--md-default-bg-color);
-
-    border-radius: 14px;
-    z-index: 1;
-}
-
-
-/* 内容浮在上面 */
+/* 内容保持正常 */
 .md-typeset blockquote > *,
 .md-typeset .admonition > *,
 .md-typeset details > * {
-    position: relative;
-    z-index: 2;
+
+    background: transparent !important;
+
 }
 
 /* ======================================================
