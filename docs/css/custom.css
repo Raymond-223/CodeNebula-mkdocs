@@ -173,26 +173,42 @@
    5. 引用块 & Admonition
    ====================================================== */
 
-.md-typeset blockquote,
-.md-typeset .admonition,
-.md-typeset details {
-  position: relative;
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.6);
-  overflow: hidden;
+.md-typeset blockquote {
+
+    position: relative;
+
+    border-radius: 16px;
+
+    background: transparent !important;
+
+    border: 2px solid transparent;
+
+    background-image:
+        linear-gradient(
+            var(--md-default-bg-color),
+            var(--md-default-bg-color)
+        ),
+        var(--nebula-gradient);
+
+    background-origin: border-box;
+
+    background-clip:
+        padding-box,
+        border-box;
+
+    padding: 1em 1.2em;
+
+    overflow: hidden;
 }
 
+
+/* 删除旧渐变层 */
+
 .md-typeset blockquote::before,
-.md-typeset .admonition::before,
-.md-typeset details::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  background: var(--nebula-gradient);
-  background-size: 300% 300%;
-  animation: nebula-flow 10s ease infinite;
-  z-index: -1;
-  border-radius: inherit;
+.md-typeset blockquote::after {
+
+    content: none !important;
+
 }
 
 /* ======================================================
