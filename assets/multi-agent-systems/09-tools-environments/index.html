@@ -1,0 +1,4265 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://CodeNebula.github.io/assets/multi-agent-systems/09-tools-environments/">
+      
+      
+        <link rel="prev" href="../08-llm-multi-agent/">
+      
+      
+        <link rel="next" href="../10-applications-frontier/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>工具与环境 - CodeNebula</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CodeNebula" class="md-header__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CodeNebula
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              工具与环境
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to the dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to the dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../software-development/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  软件开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reinforcement-learning/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  强化学习
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  多智能体系统
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../inex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Algorithm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../idex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper Interpretion
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../Mathematics/index.md" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CodeNebula" class="md-nav__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CodeNebula
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../software-development/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件开发
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    软件开发
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/01-frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/02-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/03-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库与存储
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/04-version-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    版本控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/05-devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps与部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/06-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/07-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试与质量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/08-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reinforcement-learning/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    强化学习
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    强化学习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/00-bandit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多臂老虎机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/01-mdp-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDP与数学基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/02-dynamic-programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态规划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/03-monte-carlo-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    蒙特卡洛方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/04-temporal-difference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时序差分学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/05-value-approximation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    值函数逼近与DQN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/06-policy-gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    策略梯度与Actor-Critic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/07-continuous-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    连续控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/08-tools-environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    环境与工具链
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/09-advanced-topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/10-engineering-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体系统
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    多智能体系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-agent-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    智能体架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-game-theory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    博弈论基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-mechanism-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机制设计与社会选择
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-marl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体强化学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-communication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    通信与协同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-coordination-negotiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协调与协商
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-llm-multi-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM多智能体
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工具与环境
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工具与环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、环境 API 的两种范式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、环境 API 的两种范式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-aec-parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 AEC 与 Parallel：两种生命周期
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-pettingzoo-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 PettingZoo API 逐项说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 自己实现一个遵循同样接口的最小双智能体环境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Parallel 版：同一个任务的同时行动写法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-supersuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 SuperSuit、向量化与并行采样
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、环境与基准谱系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、环境与基准谱系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 轻量 / 教学
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 合作最大化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 大规模 / 社会
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 真实系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 选题速查表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、训练框架
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、训练框架">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-marllib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 MARLlib：统一适配层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-rllib-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 RLlib 多智能体 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 自建教学环境的设计规范
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-actor-learner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Actor-Learner 并行采样架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mappo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、实现一个完整的 MAPPO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、实现一个完整的 MAPPO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 网络结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 GAE 的多智能体改造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 训练循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 端到端训练实录：一个失败案例与一个成功案例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 常见实现错误清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、评估协议
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、评估协议">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 指标体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 置信区间与显著性检验
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 对手设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 利用者测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 复现清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 一个可直接复用的实验配置模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、调试与可观测性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、调试与可观测性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 诊断顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 典型症状-病因-对策表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 日志与可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、理论进阶：实验评估的统计基础
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、理论进阶：实验评估的统计基础">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-wilson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Wilson 区间与样本量估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 假设检验与多重比较校正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-elo-bradley-terry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Elo 与 Bradley-Terry 模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-applications-frontier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用与前沿
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../inex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../idex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interpretion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Game Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Four First Lessons.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Four First Lessons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Iterative Deletion.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Iterative Deletion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、环境 API 的两种范式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、环境 API 的两种范式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-aec-parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 AEC 与 Parallel：两种生命周期
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-pettingzoo-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 PettingZoo API 逐项说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 自己实现一个遵循同样接口的最小双智能体环境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Parallel 版：同一个任务的同时行动写法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-supersuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 SuperSuit、向量化与并行采样
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、环境与基准谱系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、环境与基准谱系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 轻量 / 教学
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 合作最大化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 大规模 / 社会
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 真实系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 选题速查表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、训练框架
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、训练框架">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-marllib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 MARLlib：统一适配层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-rllib-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 RLlib 多智能体 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 自建教学环境的设计规范
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-actor-learner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Actor-Learner 并行采样架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mappo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、实现一个完整的 MAPPO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、实现一个完整的 MAPPO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 网络结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 GAE 的多智能体改造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 训练循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 端到端训练实录：一个失败案例与一个成功案例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 常见实现错误清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、评估协议
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、评估协议">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 指标体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 置信区间与显著性检验
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 对手设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 利用者测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 复现清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 一个可直接复用的实验配置模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、调试与可观测性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、调试与可观测性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 诊断顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 典型症状-病因-对策表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 日志与可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、理论进阶：实验评估的统计基础
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、理论进阶：实验评估的统计基础">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-wilson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Wilson 区间与样本量估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 假设检验与多重比较校正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-elo-bradley-terry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Elo 与 Bradley-Terry 模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    多智能体系统
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="09">第 09 章 工具与环境</h1>
+<blockquote>
+<p>算法写得再漂亮，如果环境有 bug、评估口径不统一、随机种子只跑了一次，结论就一文不值。本章只做两件事：<strong>把多智能体环境与基准的全景讲清楚（选对战场）</strong>，以及<strong>给出一套可复现的评估协议（让结论站得住）</strong>。业界流传一句话：多智能体论文里最不可信的部分往往不是算法，而是实验。</p>
+</blockquote>
+<hr />
+<h2 id="api">一、环境 API 的两种范式</h2>
+<p>多智能体环境与单智能体环境最大的 API 差异是：<strong>谁来推进时间</strong>。单智能体里只有一个主体，<code>step(action)</code> 语义明确；多智能体里，是"所有主体同时行动"还是"轮流行动"，直接决定算法结构。</p>
+<h3 id="11-aec-parallel">1.1 AEC 与 Parallel：两种生命周期</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>AEC（Agent Environment Cycle）</th>
+<th>Parallel（同时行动）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谁在动</td>
+<td>任意时刻<strong>只有一个</strong> agent 可行动</td>
+<td><strong>所有</strong> agent 同时提交动作</td>
+</tr>
+<tr>
+<td>推进方式</td>
+<td><code>step()</code> 后 <code>agent_selection</code> 轮转</td>
+<td>一次 <code>step(actions_dict)</code> 推进全局一步</td>
+</tr>
+<tr>
+<td>观测语义</td>
+<td>每次只返回当前 agent 的观测</td>
+<td>返回所有 agent 的观测字典</td>
+</tr>
+<tr>
+<td>天然适配</td>
+<td>回合制/顺序博弈、扩展型博弈、棋类</td>
+<td>Markov Game、Dec-POMDP、同时行动</td>
+</tr>
+<tr>
+<td>典型算法</td>
+<td>极小极大、CFR、MCTS</td>
+<td>QMIX、MAPPO、MADDPG</td>
+</tr>
+<tr>
+<td>转换关系</td>
+<td>Parallel 可展开成 AEC（把一次同时 step 拆成 n 次）</td>
+<td>AEC 不一定能压缩成 Parallel（信息结构会丢失）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：AEC 是更"底层"的抽象（任何多智能体系统都能用 AEC 表达），Parallel 是更"高效"的抽象（向量化友好）。<strong>做研究用 AEC 看清信息结构，做训练用 Parallel 换吞吐</strong>。</p>
+</blockquote>
+<p>AEC 里两个容易踩坑的语义约定：</p>
+<ol>
+<li><code>self.agents</code> 被清空（变成 <code>[]</code>）才代表 episode 结束 —— 每次 <code>step()</code> 后所有 agent 都要被访问一遍，环境才推进下一轮。</li>
+<li>"死掉的" agent 不能从列表里删掉，而是要用 <code>infos[a]["dead"]</code> 之类的标记并继续让它们 <code>step(None)</code>；否则轮转逻辑会错位。</li>
+</ol>
+<h3 id="12-pettingzoo-api">1.2 PettingZoo API 逐项说明</h3>
+<p>PettingZoo 是当前多智能体环境的<strong>统一接口事实标准</strong>（对标单智能体的 Gymnasium）。AEC 风格的核心接口：</p>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+<th>注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>possible_agents</code></td>
+<td>智能体 ID 列表（全集）</td>
+<td>episode 之间不变，是所有循环的基准</td>
+</tr>
+<tr>
+<td><code>agents</code></td>
+<td>当前存活的智能体</td>
+<td>动态变化；空列表 = 结束信号</td>
+</tr>
+<tr>
+<td><code>agent_selection</code></td>
+<td>当前该行动者的 ID</td>
+<td>AEC 独有；Parallel 无此概念</td>
+</tr>
+<tr>
+<td><code>observation_space(agent)</code></td>
+<td>某 agent 的观测空间</td>
+<td>异构环境里<strong>每个 agent 可以不同</strong></td>
+</tr>
+<tr>
+<td><code>action_space(agent)</code></td>
+<td>某 agent 的动作空间</td>
+<td>同上，异构动作空间是常见设定</td>
+</tr>
+<tr>
+<td><code>reset(seed=…)</code></td>
+<td>重置并返回初始观测</td>
+<td><strong>seed 必须显式传</strong>，否则可复现性无从谈起</td>
+</tr>
+<tr>
+<td><code>observe(agent)</code></td>
+<td>取某 agent 当前观测</td>
+<td>与 <code>step</code> 返回的观测必须一致</td>
+</tr>
+<tr>
+<td><code>last(agent)</code></td>
+<td>取该 agent 上次的 (obs, reward, term, trunc, info)</td>
+<td>AEC 里所有 agent 各自保存一份</td>
+</tr>
+<tr>
+<td><code>step(action)</code></td>
+<td>推进一个 agent 的时间</td>
+<td>传 <code>None</code> 表示该 agent 已终止但未被移除</td>
+</tr>
+<tr>
+<td><code>rewards</code></td>
+<td>所有 agent 的当前奖励字典</td>
+<td>多智能体是<strong>向量奖励</strong>，不是标量</td>
+</tr>
+<tr>
+<td><code>terminations</code> / <code>truncations</code></td>
+<td>各自独立的终止/截断标记</td>
+<td>与 Gymnasium 0.26+ 对齐，别再用老的 <code>dones</code></td>
+</tr>
+<tr>
+<td><code>infos</code></td>
+<td>附加信息字典</td>
+<td>放"谁先死""非法动作""通信收包"</td>
+</tr>
+</tbody>
+</table>
+<p>Parallel 风格则统一成：<code>obs, rewards, terminations, truncations, infos = env.step(actions)</code>，其中每一项都是<strong>以 agent 为键的字典</strong>。</p>
+<blockquote>
+<p>⚠️ 最常见的接口误用：在 AEC 里按"全体 agent 同时 step"的直觉写训练循环。后果是环境推进速度比你以为的快 n 倍、奖励错位、训练曲线看起来"能跑"但学不到东西。写循环前先打印一次 <code>agent_selection</code> 的轮转序列确认。</p>
+</blockquote>
+<h3 id="13">1.3 自己实现一个遵循同样接口的最小双智能体环境</h3>
+<p>理解了接口，自己写一个教学环境是最快的学习方式。下面这个环境只用标准库，语义与 AEC 完全一致：两个智能体轮流给共享计数器加值，<strong>恰好</strong>到达目标才给团队奖励（超出即失败）—— 这是一个典型的需要协调、且有"过犹不及"惩罚的合作任务。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 遵循 PettingZoo AEC 风格的最小双智能体环境：轮流把共享计数器推到目标值</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TinyAECEnv</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AEC = Agent Environment Cycle：任意时刻只有一个 agent 可行动&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span> <span class="n">max_cycles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;agent_0&quot;</span><span class="p">,</span> <span class="s2">&quot;agent_1&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+        <span class="c1"># 局部观测：计数器 + 是否轮到我（无全局状态）</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">),</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>          <span class="c1"># action: 0=不动, 1=+1, 2=+2</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="n">action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># 团队奖励：只有恰好到达目标才给 1（合作博弈，超出反而不得分）</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">reward</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span> <span class="ow">or</span> <span class="n">reward</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># 空列表表示 episode 结束（AEC 约定）</span>
+        <span class="k">return</span> <span class="n">reward</span>
+
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">TinyAECEnv</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>           <span class="c1"># 手写的固定策略（agent_0 走奇数步）</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_selection</span>
+    <span class="n">act</span> <span class="o">=</span> <span class="n">policy</span><span class="p">[</span><span class="n">step</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">policy</span><span class="p">)]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t=</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">turn</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2"> 动作=</span><span class="si">{</span><span class="n">act</span><span class="si">}</span><span class="s2">  计数器=</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s2">  团队奖励=</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;episode 结束：计数器=</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s2">，目标=</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s2">，总步数=</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># t=1  agent_0 动作=1  计数器=1  团队奖励=0.0</span>
+<span class="c1"># t=2  agent_1 动作=2  计数器=3  团队奖励=0.0</span>
+<span class="c1"># t=3  agent_0 动作=2  计数器=5  团队奖励=1.0</span>
+<span class="c1"># episode 结束：计数器=5，目标=5，总步数=3</span>
+</code></pre></div>
+<p>这个环境虽小，却具备多智能体环境的全部关键要素：<strong>局部观测、团队奖励、协调需求、终止条件</strong>。第 05 章的所有算法都能在它上面跑通 —— 教学环境的价值就在于"能一眼看出算法是对是错"。</p>
+<p><strong>设计要点</strong>（照着做能省很多调试时间）：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>反例（会毁掉实验）</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>奖励尺度</td>
+<td>团队奖励 1.0，个体辅助奖励 0.01，量级差 100 倍</td>
+<td>所有奖励项归一到同量级，并记录权重</td>
+</tr>
+<tr>
+<td>终止条件</td>
+<td>只靠 <code>max_cycles</code> 截断</td>
+<td>显式定义成功/失败终止 + 截断，分开处理 bootstrap</td>
+</tr>
+<tr>
+<td>随机性</td>
+<td>用全局 <code>random</code>，不可复现</td>
+<td>每个环境实例持有独立 <code>np.random.Generator(seed)</code></td>
+</tr>
+<tr>
+<td>观测</td>
+<td>直接把全局状态塞给所有 agent</td>
+<td>只给该 agent 该看到的（否则"分布式执行"是假的）</td>
+</tr>
+<tr>
+<td>惩罚</td>
+<td>用负奖励惩罚非法动作</td>
+<td>用动作掩码（action mask），把违规动作从分布里去掉</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-parallel">1.4 Parallel 版：同一个任务的同时行动写法</h3>
+<p>把 §1.3 的任务改写成 Parallel 风格，能直观看出两种 API 的差异：<strong>没有 <code>agent_selection</code>，一次 <code>step</code> 推进一步；观测与奖励都返回字典；<code>done</code> 是全局单值</strong>。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="c1"># Parallel 风格：所有 agent 同时行动，一次 step 推进全局一步</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TinyParallelEnv</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_agents</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span> <span class="n">max_cycles</span><span class="p">,</span> <span class="n">n_agents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;a</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span><span class="p">)}</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">global_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>                      <span class="c1"># actions: dict{agent_id: int}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">actions</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>                              <span class="c1"># 超出目标：罚（&quot;过犹不及&quot;）</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;a</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+                                  <span class="n">actions</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;a</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">obs</span><span class="p">,</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;a</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">r</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span><span class="p">)},</span> <span class="n">done</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">TinyParallelEnv</span><span class="p">()</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;初始 obs:&quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obs</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+      <span class="s2">&quot;全局状态:&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">global_state</span><span class="p">())</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">({</span><span class="s2">&quot;a0&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;a1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t=1 双方同时动作 a0=1,a1=2 → 计数器=3 团队奖励=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;a0&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> 结束=</span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">({</span><span class="s2">&quot;a0&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;a1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t=2 双方同时动作 a0=1,a1=1 → 计数器=5 团队奖励=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;a0&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> 结束=</span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">({</span><span class="s2">&quot;a0&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;a1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;（若继续）计数超出 → 团队奖励=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;a0&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">（负惩罚，环境已终止故仅演示语义）&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># 初始 obs: {&#39;a0&#39;: [0.0, 0.0], &#39;a1&#39;: [0.0, 0.0]} 全局状态: [0. 0.]</span>
+<span class="c1"># t=1 双方同时动作 a0=1,a1=2 → 计数器=3 团队奖励=0.0 结束=False</span>
+<span class="c1"># t=2 双方同时动作 a0=1,a1=1 → 计数器=5 团队奖励=1.0 结束=True</span>
+<span class="c1"># （若继续）计数超出 → 团队奖励=-0.5（负惩罚，环境已终止故仅演示语义）</span>
+</code></pre></div>
+<p>两个 API 的对照要点：</p>
+<table>
+<thead>
+<tr>
+<th>观察点</th>
+<th>AEC 版（§1.3）</th>
+<th>Parallel 版（本节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一步推进</td>
+<td>一个 agent 的动作</td>
+<td>全体动作的聚合</td>
+</tr>
+<tr>
+<td>观测返回</td>
+<td><code>observe(agent)</code> 单个</td>
+<td><code>obs</code> 字典</td>
+</tr>
+<tr>
+<td>结束信号</td>
+<td><code>agents == []</code></td>
+<td><code>done</code> 布尔</td>
+</tr>
+<tr>
+<td>与算法匹配</td>
+<td>值分解类需要在 AEC 上手工拼联合动作</td>
+<td>天然对应 Markov Game 的联合动作</td>
+</tr>
+<tr>
+<td>现成实现</td>
+<td>PettingZoo <code>*_v*</code> 多数为 AEC</td>
+<td>少数环境原生 Parallel，其余用 SuperSuit 转换</td>
+</tr>
+</tbody>
+</table>
+<h3 id="15-supersuit">1.5 SuperSuit、向量化与并行采样</h3>
+<ul>
+<li><strong>SuperSuit</strong>：给 PettingZoo/ Gymnasium 做包装的工具箱 —— 观测/奖励变换、帧堆叠、动作掩码、把 AEC 转成 Parallel。多智能体里最有用的三件：<code>PadObservations</code>（异构观测补齐）、<code>MultiAgentPreprocessFrame</code>、<code>ConcatObservations</code>。</li>
+<li><strong>向量化</strong>：<code>n_envs</code> 个环境并行采样。多智能体下采样成本比单智能体高一个量级（要保存联合观测、联合动作、每个 agent 的掩码），所以实践中常用 <strong>1/4 数量的环境 × 1/2 的 rollout 长度</strong> 做等效替代。</li>
+<li><strong>共享 vs 独立环境实例</strong>：所有 worker 共享同一套环境参数（同一张 SMAC 地图）时，跨环境的多样性来自敌方策略与随机种子；若课程学习需要不同难度，则按 worker 分配难度档。</li>
+</ul>
+<hr />
+<h2 id="_1">二、环境与基准谱系</h2>
+<p><img alt="环境与基准谱系" src="../../img/mas-09-benchmarks.png" /></p>
+<p><em>图：从教学用的小网格，到星际争霸 II 的大规模博弈 —— 四个层级的战场。</em></p>
+<h3 id="21">2.1 轻量 / 教学</h3>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>特点</th>
+<th>适合验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MPE（Multi-Agent Particle Env）</td>
+<td>连续动作、粒子物理、极轻量</td>
+<td>MADDPG/MAPPO 的入门实现</td>
+</tr>
+<tr>
+<td>自建网格/博弈矩阵</td>
+<td>完全可控、可解析求解</td>
+<td>算法正确性（能和解析均衡对照）</td>
+</tr>
+<tr>
+<td>Keepaway / Predator-Prey</td>
+<td>经典多智能体测试床</td>
+<td>收敛性、非平稳性现象</td>
+</tr>
+</tbody>
+</table>
+<p>教学环境的核心价值是<strong>可解释</strong>：你能手算最优策略，就能判断算法输出对不对。<strong>永远先用教学环境验证实现，再上大基准</strong> —— 90% 的"算法不 work"其实是在大环境里调实现的 bug。</p>
+<h3 id="22">2.2 合作最大化</h3>
+<table>
+<thead>
+<tr>
+<th>基准</th>
+<th>观测/动作</th>
+<th>标准指标</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SMAC / SMACv2</td>
+<td>局部观测、离散动作、部分可观测</td>
+<td>胜率（win rate）</td>
+<td>合作 MARL 的"ImageNet"，几乎必报</td>
+</tr>
+<tr>
+<td>Google Research Football</td>
+<td>高维观测、离散动作</td>
+<td>进球率/胜率</td>
+<td>22 个异质主体，动作空间大</td>
+</tr>
+<tr>
+<td>Overcooked（协作烹饪）</td>
+<td>网格观测、离散动作</td>
+<td>汤数/协作效率</td>
+<td>研究显式协调与人机协作的经典床</td>
+</tr>
+</tbody>
+</table>
+<p>SMAC 的两个版本差异必须说清：<strong>SMAC v1 的地图是固定的，容易被过拟合</strong>；<strong>SMACv2 加入了随机化的单位类型与初始位置</strong>，泛化难度显著上升。报告结果时务必写明用的是哪个版本、哪些地图。</p>
+<h3 id="23">2.3 大规模 / 社会</h3>
+<table>
+<thead>
+<tr>
+<th>基准</th>
+<th>规模</th>
+<th>关注点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Melting Pot</td>
+<td>数十至上百主体</td>
+<td>社会困境、协作泛化到新伙伴</td>
+</tr>
+<tr>
+<td>Neural MMO</td>
+<td>持久世界、上千 agent</td>
+<td>长时程、开放世界、生态</td>
+</tr>
+<tr>
+<td>OpenSpiel</td>
+<td>游戏博弈合集（棋牌博弈）</td>
+<td>两人零和/多人一般和的理论型基准</td>
+</tr>
+</tbody>
+</table>
+<p>Melting Pot 的评估范式值得学习：它区分<strong>"与训练伙伴协作"与"与陌生伙伴协作"两组指标</strong>，后者才是真正衡量泛化的部分（对应第 05 章的种群训练与第 10 章的 zero-shot coordination）。</p>
+<h3 id="24">2.4 真实系统</h3>
+<p>真实系统类环境通常不开源或需要自建（交通仿真 SUMO、机器人编队 Gazebo/Isaac、电网仿真 pandapower + 自建市场层）。它们的共同特点是：<strong>安全约束硬、实时性要求高、状态不可重置</strong>，因此往往需要"仿真训练 + 安全层兜底"的组合。</p>
+<h3 id="25">2.5 选题速查表</h3>
+<table>
+<thead>
+<tr>
+<th>你的目标</th>
+<th>建议基准</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>验证算法实现正确性</td>
+<td>自建教学环境 + MPE</td>
+<td>可解析对照，bug 暴露快</td>
+</tr>
+<tr>
+<td>报告合作 MARL 的强度</td>
+<td>SMACv2（至少 3 个地图 × 3 种子）</td>
+<td>社区认可度高，可横向比较</td>
+</tr>
+<tr>
+<td>研究通信机制</td>
+<td>MPE（需通信的场景）+ SMAC</td>
+<td>有/无通信消融对比清晰</td>
+</tr>
+<tr>
+<td>研究泛化到新伙伴</td>
+<td>Melting Pot / Overcooked</td>
+<td>内置"陌生伙伴"评估协议</td>
+</tr>
+<tr>
+<td>研究人类-AI 协作</td>
+<td>Overcooked、Hanabi</td>
+<td>已有大量人类基线数据</td>
+</tr>
+<tr>
+<td>研究机制设计/激励</td>
+<td>OpenSpiel</td>
+<td>经典博弈有解析均衡可对照</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：基准不是越难越好，而是<strong>能否精确回答你的科学问题</strong>。用 SMAC 证明"通信有效"远比用 Melting Pot 便宜；用教学环境证明"信用分配正确"远比用 SMAC 便宜。选基准则是一条成本-信度曲线。</p>
+</blockquote>
+<hr />
+<h2 id="_2">三、训练框架</h2>
+<h3 id="31-marllib">3.1 MARLlib：统一适配层</h3>
+<p>MARLlib 解决的是多智能体最琐碎的工程问题：<strong>不同环境的观测/动作空间异构</strong>（有的给全局状态、有的只给局部；有的用 <code>Discrete</code>、有的用 <code>Box</code>、有的是 <code>MultiDiscrete</code>）。它把这些统一成算法可以直接吃的格式，从而让同一份算法实现能跑十几个不同环境。</p>
+<p>架构上分三层：</p>
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────┐
+│  算法层（policy / learner）                 │  输入：标准化的 (obs, state, mask)
+├─────────────────────────────────────────────┤
+│  适配层（space adapter / wrapper）          │  异构观测补齐、动作掩码、奖励归一
+├─────────────────────────────────────────────┤
+│  环境层（SMAC / MPE / GRF / …）             │  原始多智能体环境
+└─────────────────────────────────────────────┘
+</code></pre></div>
+<p>它的价值不只是省代码，更是<strong>让迁移测试变得可行</strong>：同一算法在 12 个环境上的表现，比在 1 个环境上调出最高分可信得多。</p>
+<h3 id="32-rllib-api">3.2 RLlib 多智能体 API</h3>
+<p>RLlib 用 <code>multiagent</code> 配置字典描述"哪些 agent 用哪个策略"（下面这段是<strong>配置结构示例</strong>，需要 <code>pip install "ray[rllib]"</code> 才能运行）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ray.rllib.algorithms.ppo</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPOConfig</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">PPOConfig</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="s2">&quot;smac_v2&quot;</span><span class="p">,</span> <span class="n">env_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;map_name&quot;</span><span class="p">:</span> <span class="s2">&quot;10gen_terran&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">multi_agent</span><span class="p">(</span>
+        <span class="n">policies</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;shared_policy&quot;</span><span class="p">},</span>                  <span class="c1"># 一个策略供所有 agent 使用</span>
+        <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">:</span> <span class="s2">&quot;shared_policy&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">training</span><span class="p">(</span><span class="n">train_batch_size</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">sgd_minibatch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">num_sgd_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>三组配置决定一切：</p>
+<ol>
+<li><code>policies</code> + <code>policy_mapping_fn</code> —— 决定<strong>参数共享的粒度</strong>（完全共享 / 按角色共享 / 不共享，见第 05 章 8.1）。</li>
+<li><code>env_config</code> —— 决定战场（地图、难度、随机化）。</li>
+<li><code>train_batch_size</code> / <code>rollout_fragment_length</code> —— 决定<strong>联合样本</strong>的采样与拆分方式（多智能体里这是最容易搞错的地方）。</li>
+</ol>
+<blockquote>
+<p>⚠️ RLlib 的多智能体采样有一个隐蔽陷阱：<code>rollout_fragment_length</code> 定义的是<strong>每个 agent 各自的步数</strong>，不是环境的步数。设错会让 batch 大小随 agent 数偏移，训练曲线表现为"学习率好像变了"。</p>
+</blockquote>
+<h3 id="33">3.3 自建教学环境的设计规范</h3>
+<p>要写一个"能用来做科研"的自建环境，至少要满足六条：</p>
+<ol>
+<li><strong>可解析基准</strong>：至少有一个基线策略（随机/贪心/最优）能让别人复现你的分数区间。</li>
+<li><strong>确定的终止</strong>：成功/失败/超时三种终止都要有，且语义清晰（超时不算失败，要做 bootstrap）。</li>
+<li><strong>种子控制</strong>：<code>seed</code> 能决定环境一切随机性（初始状态、对手策略、奖励噪声）。</li>
+<li><strong>状态可观测性开关</strong>：能一键切换"全局状态可见/不可见"，用来做 CTDE 消融。</li>
+<li><strong>动作合法性</strong>：用掩码而非负奖励表达非法动作。</li>
+<li><strong>回放能力</strong>：能保存/回放一整条 episode（诊断算法行为必备）。</li>
+</ol>
+<h3 id="34-actor-learner">3.4 Actor-Learner 并行采样架构</h3>
+<p>多智能体训练的计算瓶颈在采样（环境步进 + 对手策略前向），所以主流架构是 actor-learner 分离：</p>
+<div class="highlight"><pre><span></span><code>┌──────────┐  ┌──────────┐  ┌──────────┐
+│ Actor 0  │  │ Actor 1  │  │ Actor k  │   各自持有环境实例 + 对手策略池
+└────┬─────┘  └────┬─────┘  └────┬─────┘
+     │  联合样本 (obs_i, a_i, r_i, mask, ...)
+     └──────────────┼──────────────┘
+                    ▼
+            ┌───────────────┐
+            │ Replay/Buffer │   多智能体的经验回放要存&quot;联合&quot;记录
+            └───────┬───────┘
+                    ▼
+            ┌───────────────┐
+            │    Learner    │   集中式 Critic 在这里用全局状态
+            └───────────────┘
+</code></pre></div>
+<p>多智能体与单智能体在架构上的三个差别：</p>
+<table>
+<thead>
+<tr>
+<th>差别</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>样本必须"成组"</td>
+<td>一条经验包含 n 个 agent 的观测/动作，采样和混洗不能拆散同一时刻的组</td>
+</tr>
+<tr>
+<td>对手也在变</td>
+<td>Actor 采样的数据来自旧策略的对手 → 数据新鲜度要求更高（buffer 不能太大）</td>
+</tr>
+<tr>
+<td>Critic 需要全局状态</td>
+<td>Learner 要么拿全局状态，要么在 Actor 侧算好传回来 —— 网络带宽常常是真实瓶颈</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mappo">四、实现一个完整的 MAPPO</h2>
+<p>MAPPO 是当前合作型 MARL 最强的通用基线之一（第 05 章 5.3 已给出理论），这里给出<strong>可落地的实现要点</strong>。</p>
+<h3 id="41">4.1 网络结构</h3>
+<div class="highlight"><pre><span></span><code>        ┌───────── 执行期（每个 agent 独立） ─────────┐
+        │  o_i ──► Actor π_i(a|o_i) ──► a_i          │
+        └────────────────────────────────────────────┘
+        ┌───────── 训练期（集中式，可看全局） ────────┐
+        │  s, a_1..a_n ──► Critic V(s) 或 Q(s, a)    │
+        └────────────────────────────────────────────┘
+</code></pre></div>
+<p>三个参数共享决策：</p>
+<table>
+<thead>
+<tr>
+<th>共享方式</th>
+<th>结构</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全共享</td>
+<td>所有 agent 共用一套 Actor/Critic 参数</td>
+<td>同构智能体（SMAC 同族单位）</td>
+</tr>
+<tr>
+<td>按角色共享</td>
+<td>按单位类型分组共享</td>
+<td>异构智能体（不同射程/血量单位）</td>
+</tr>
+<tr>
+<td>不共享</td>
+<td>每个 agent 独立网络</td>
+<td>智能体数少且异质性强（通常性能收益不值参数量）</td>
+</tr>
+</tbody>
+</table>
+<p>实现细节（这些细节在论文里往往一笔带过，但决定成败）：</p>
+<ul>
+<li><strong>Actor 输入裁剪</strong>：只喂该 agent 的观测，绝不喂全局状态（否则分布式执行就是假的）。</li>
+<li><strong>Critic 输入</strong>：全局状态 + 所有 agent 的动作（或动作 one-hot）。</li>
+<li><strong>输入归一化</strong>：观测用 running mean/std 归一化，作用巨大。</li>
+<li><strong>死亡掩码</strong>：agent 死亡后其动作从 Critic 输入里屏蔽，否则 Critic 会学到"死者导致的偏差"。</li>
+<li><strong>动作掩码</strong>：非法动作 logit 置 −1e9 后再 softmax，绝不用负奖励。</li>
+</ul>
+<h3 id="42-gae">4.2 GAE 的多智能体改造</h3>
+<p>多智能体下 GAE 的形式不变，但<strong>奖励与价值函数都变成团队共享的</strong>：<span class="arithmatex">\(r_t\)</span> 是团队奖励（或团队奖励的某个分解结果），<span class="arithmatex">\(V\)</span> 是集中式 Critic 对全局状态的估计。</p>
+<div class="arithmatex">\[
+\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t), \qquad
+\hat{A}_t = \sum_{l=0}^{T-t-1} (\gamma\lambda)^l\, \delta_{t+l}
+\]</div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="c1"># GAE（广义优势估计）在多智能体下的计算：Critic 用全局状态 V(s)</span>
+<span class="n">r</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">])</span>        <span class="c1"># 团队奖励序列</span>
+<span class="n">V</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>   <span class="c1"># V(s_0)..V(s_4)，最后一个是 bootstrap</span>
+<span class="n">gamma</span><span class="p">,</span> <span class="n">lam</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.95</span>
+<span class="n">delta</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">V</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>         <span class="c1"># TD 残差</span>
+<span class="n">adv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">r</span><span class="p">);</span> <span class="n">acc</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">))):</span>          <span class="c1"># 从后往前累加</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">delta</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">acc</span>
+    <span class="n">adv</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TD 残差 δ_t :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GAE 优势 Â_t :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">adv</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;回报目标 Â+V :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">adv</span> <span class="o">+</span> <span class="n">V</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;优势标准化前均值/标准差: </span><span class="si">%.4f</span><span class="s2"> / </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">adv</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">adv</span><span class="o">.</span><span class="n">std</span><span class="p">()))</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># TD 残差 δ_t : [0.295 0.896 0.491 2.09 ]</span>
+<span class="c1"># GAE 优势 Â_t : [3.3107 3.2065 2.4566 2.09  ]</span>
+<span class="c1"># 回报目标 Â+V : [3.5107 3.7065 2.8566 2.99  ]</span>
+<span class="c1"># 优势标准化前均值/标准差: 2.7660 / 0.5107</span>
+</code></pre></div>
+<p>注意最后一步：优势进入 PPO 的 clip 目标之前<strong>必须标准化</strong>（减均值、除标准差），否则多智能体里团队奖励的量级波动会让 clip 范围完全失效。</p>
+<h3 id="43">4.3 训练循环</h3>
+<div class="highlight"><pre><span></span><code>for iteration in range(N):
+    # 1. 采样：并行 n_envs 个环境，每个跑 T 步
+    for env in parallel_envs:
+        for t in range(T):
+            o = env.observe_all()                  # 每个 agent 的局部观测
+            s = env.global_state()                 # 集中式 Critic 用
+            a = [policy_i(o[i]) for i in agents]   # 各自独立决策
+            r, term, trunc, info = env.step(a)     # 团队奖励向量
+            buffer.add(o, s, a, r, mask, term, trunc)
+    # 2. 计算 GAE（用集中式 Critic 的 V(s)）
+    adv, ret = compute_gae(buffer, critic, gamma, lam)
+    # 3. PPO 更新（Actor 只用自己的观测，Critic 用全局状态）
+    for epoch in range(K_epochs):
+        for minibatch in shuffle(buffer):
+            loss = -min(ratio*adv, clip(ratio, 1±eps)*adv) + vf_coef*MSE(V, ret) - ent_coef*H(π)
+            loss.backward(); optimizer.step()
+    # 4. 评估（固定对手、固定种子、n 轮取均值）
+</code></pre></div>
+<p>三个多智能体特有的操作：</p>
+<ol>
+<li><strong>minibatch 必须整组切分</strong>：一个时刻的 n 个 agent 样本必须落在同一个 minibatch 里，否则 Critic 看到的是"半截的联合状态"。</li>
+<li><strong>评估对手固定</strong>：训练用自博弈，评估必须用固定基线对手（否则曲线无法解释，见 §五）。</li>
+<li><strong>信息流不对称检查</strong>：上线前用"把全局状态替换成噪声"做一次消融 —— 如果性能不掉，说明 Critic 根本没用到全局信息（或者 Actor 偷看了）。</li>
+</ol>
+<h3 id="44">4.4 端到端训练实录：一个失败案例与一个成功案例</h3>
+<p>§6.1 会给出调试顺序，其中最关键的一步是：<strong>先在可解的小环境里让算法过拟合到满分</strong>。这一节用两个实跑实例把这件事演示清楚 —— 一个学得像样的、一个学不动的，二者用的是<strong>同一套训练循环</strong>。</p>
+<p><strong>案例一：需要精确协调的联合目标（学不动）</strong></p>
+<p>任务：2 个智能体同时行动，把共享计数器<strong>恰好</strong>推到 5；超出受罚。Actor 只看局部观测（计数器 + 时间 + 自己上一步动作），Critic 看全局状态 —— 标准的 CTDE 结构。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="n">TARGET</span><span class="p">,</span> <span class="n">MAX_T</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N_ACT</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">obs_i</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">last_i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">)</span> <span class="o">/</span> <span class="n">TARGET</span><span class="p">,</span> <span class="n">t</span> <span class="o">/</span> <span class="n">MAX_T</span><span class="p">,</span> <span class="n">last_i</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">softmax</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">();</span> <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">);</span> <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">e</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">over_penalty</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">shaping</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">W_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_ACT</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span> <span class="n">W_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>      <span class="c1"># 共享 Actor / 集中式 Critic</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes</span><span class="p">):</span>
+        <span class="n">s</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">MAX_T</span><span class="p">):</span>
+            <span class="n">acts</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ps</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">obs_i</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">last</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="n">p</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">W_pi</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N_ACT</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">))</span>
+                <span class="n">acts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="n">ps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">s_prev</span> <span class="o">=</span> <span class="n">s</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">acts</span><span class="p">);</span> <span class="n">last</span> <span class="o">=</span> <span class="n">acts</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">TARGET</span> <span class="k">else</span> <span class="p">(</span><span class="o">-</span><span class="n">over_penalty</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">TARGET</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">shaping</span><span class="p">:</span>                                  <span class="c1"># 势能式塑形</span>
+                <span class="n">r</span> <span class="o">+=</span> <span class="n">shaping</span> <span class="o">*</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">s_prev</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">acts</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">)</span> <span class="o">/</span> <span class="n">TARGET</span><span class="p">,</span> <span class="n">t</span> <span class="o">/</span> <span class="n">MAX_T</span><span class="p">]),</span> <span class="n">r</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="n">TARGET</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">rets</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="p">[]</span>                                <span class="c1"># 团队回报（gamma=1）</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">trace</span><span class="p">):</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">G</span><span class="p">;</span> <span class="n">rets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">rets</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">adv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">G</span> <span class="o">-</span> <span class="n">W_v</span> <span class="o">@</span> <span class="n">g</span> <span class="k">for</span> <span class="n">G</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rets</span><span class="p">,</span> <span class="n">trace</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">adv</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+            <span class="n">adv</span> <span class="o">=</span> <span class="p">(</span><span class="n">adv</span> <span class="o">-</span> <span class="n">adv</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">adv</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span>   <span class="c1"># 优势标准化</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">A</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">adv</span><span class="p">):</span>
+            <span class="n">oh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_ACT</span><span class="p">);</span> <span class="n">oh</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">W_pi</span> <span class="o">+=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">oh</span> <span class="o">-</span> <span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>           <span class="c1"># softmax 策略梯度</span>
+            <span class="n">W_v</span>  <span class="o">+=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">g</span>                             <span class="c1"># 集中式基线</span>
+        <span class="n">hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hist</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">kw</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;A 朴素（超额罚 -0.5）&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">over_penalty</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
+                 <span class="p">(</span><span class="s2">&quot;B 小罚（-0.1）&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">over_penalty</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
+                 <span class="p">(</span><span class="s2">&quot;C 小罚 + 势能塑形 0.05&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">over_penalty</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">shaping</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))]:</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">);</span> <span class="n">seg</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="o">-</span><span class="mi">500</span><span class="p">:]</span>
+    <span class="n">succ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">h</span> <span class="o">==</span> <span class="n">TARGET</span> <span class="k">else</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">])</span>
+    <span class="n">over</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="n">TARGET</span> <span class="k">else</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: 末 500 局 平均计数=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> 恰好命中=</span><span class="si">{</span><span class="n">succ</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2"> 超额=</span><span class="si">{</span><span class="n">over</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># A 朴素（超额罚 -0.5）: 末 500 局 平均计数=0.430 恰好命中=0.40% 超额=4.00%</span>
+<span class="c1"># B 小罚（-0.1）: 末 500 局 平均计数=5.740 恰好命中=18.40% 超额=66.40%</span>
+<span class="c1"># C 小罚 + 势能塑形 0.05: 末 500 局 平均计数=7.886 恰好命中=0.00% 超额=100.00%</span>
+</code></pre></div>
+<p>单看配置 A 的训练过程，就能看到一个典型病态：</p>
+<table>
+<thead>
+<tr>
+<th>episode 区间</th>
+<th>平均计数</th>
+<th>恰好命中</th>
+<th>超额（受罚）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–500</td>
+<td>6.578</td>
+<td>19.40%</td>
+<td>80.40%</td>
+</tr>
+<tr>
+<td>501–1000</td>
+<td>3.428</td>
+<td>8.40%</td>
+<td>39.60%</td>
+</tr>
+<tr>
+<td>1501–2000</td>
+<td>0.906</td>
+<td>3.40%</td>
+<td>6.00%</td>
+</tr>
+<tr>
+<td>2501–3000</td>
+<td><strong>0.430</strong></td>
+<td><strong>0.40%</strong></td>
+<td>4.00%</td>
+</tr>
+</tbody>
+</table>
+<p>策略最终学会了<strong>"不动"</strong>：不动 = 奖励 0，而尝试加值有 50% 概率越界吃 -0.5。这是<strong>风险规避塌缩（inaction collapse）</strong>：在稀疏正奖励 + 密集负惩罚下，最省事的局部最优就是躺平。这正好对应 §6.2 表里的"学出集体摸鱼"，也说明<strong>奖励设计本身就是算法的一部分</strong>。</p>
+<p>三个配置的对照给出两个结论：</p>
+<ol>
+<li><strong>负惩罚越重，越容易塌缩</strong>（A 完全塌缩，B 还能动起来）。</li>
+<li><strong>塑形不总是帮忙</strong>（C 的势能塑形把策略推向"猛加"，超额率 100%）—— 塑形方向与"精确命中"的真实目标不对齐时，它会把策略带到另一个极端。势能式塑形只在<strong>保证策略不变性</strong>（potential-based）的严格形式下才安全，而"靠近目标"这个势能对"恰好命中"任务并不等价。</li>
+</ol>
+<p><strong>案例二：极简协调任务（学到 99.6%）</strong></p>
+<p>换成任务本身可解、且奖励信号与目标一致的协调博弈：两个智能体各在 3 个目标中选一个，选同一个即成功。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="c1"># 案例二：极简协调任务 —— 两个智能体必须&quot;选同一个目标&quot;（3 选 1）</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">N_ACT</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">W_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_ACT</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>     <span class="c1"># 无观测（只有常数偏置），纯策略学习</span>
+<span class="n">W_v</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3000</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">W_pi</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                          <span class="c1"># 策略 logits（特征只有常数项）</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">();</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">acts</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N_ACT</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">acts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">acts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">W_v</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>                <span class="c1"># 优势 = 回报 − 基线</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">acts</span><span class="p">:</span>
+        <span class="n">oh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_ACT</span><span class="p">);</span> <span class="n">oh</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">W_pi</span> <span class="o">+=</span> <span class="mf">0.08</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">oh</span> <span class="o">-</span> <span class="n">p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">W_v</span> <span class="o">+=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;episode </span><span class="si">{</span><span class="n">start</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">start</span><span class="o">+</span><span class="mi">500</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">: 成功率=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="mi">500</span><span class="p">])</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">zz</span> <span class="o">=</span> <span class="n">W_pi</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">W_pi</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;最终策略分布 p(动作1/2/3) =&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">zz</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">zz</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;理论最优：任一纯策略（两者同选）→ 成功率 100%；均匀随机基线 = 33.3%&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># episode    1-  500: 成功率=82.80%</span>
+<span class="c1"># episode  501- 1000: 成功率=98.60%</span>
+<span class="c1"># episode 1501- 2000: 成功率=99.40%</span>
+<span class="c1"># episode 2501- 3000: 成功率=99.60%</span>
+<span class="c1"># 最终策略分布 p(动作1/2/3) = [9.987e-01 6.000e-04 7.000e-04]</span>
+<span class="c1"># 理论最优：任一纯策略（两者同选）→ 成功率 100%；均匀随机基线 = 33.3%</span>
+</code></pre></div>
+<blockquote>
+<p><strong>核心思想</strong>：两个案例用的是同一套训练循环（共享 Actor + 集中式 Critic + 优势标准化 + 策略梯度）。案例二能收敛到 99.6%，证明<strong>实现没有 bug</strong>；因此案例一的失败必须归因到任务与奖励设计（稀疏正奖励 + 密集负惩罚 + 精确协调要求）。<strong>"先在小环境验证循环、再排查任务本身"</strong> 是多智能体调试里省时间最多的一个习惯 —— 反过来做，你会在环境里找一周的 bug，而问题其实在奖励函数。</p>
+</blockquote>
+<h3 id="45">4.5 常见实现错误清单</h3>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>病因</th>
+<th>修复</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练完全不学</td>
+<td>Actor 拿到了全局状态（分布式执行泄漏）</td>
+<td>Actor 输入只留 obs_i</td>
+</tr>
+<tr>
+<td>曲线剧烈震荡</td>
+<td>优势未标准化 / clip 范围过大</td>
+<td>标准化优势，eps 取 0.2 起</td>
+</tr>
+<tr>
+<td>前期很好后期崩</td>
+<td>对手自博弈导致环境漂移，评估对手也在变</td>
+<td>固定评估对手池</td>
+</tr>
+<tr>
+<td>学出"摸鱼"行为</td>
+<td>团队奖励均匀分摊，个体贡献无法区分（信用分配）</td>
+<td>引入差分奖励或反事实基线（见第 05 章 2.2）</td>
+</tr>
+<tr>
+<td>死亡后性能骤降</td>
+<td>Critic 输入含死亡 agent 的无效动作</td>
+<td>加死亡掩码</td>
+</tr>
+<tr>
+<td>换地图全崩</td>
+<td>观测未归一化 / 过拟合地图尺寸</td>
+<td>running mean/std + 随机化地图</td>
+</tr>
+<tr>
+<td>多卡训练结果不稳定</td>
+<td>buffer 混洗打散了联合样本</td>
+<td>按时刻整组切分</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_3">五、评估协议</h2>
+<p><img alt="评估协议" src="../../img/mas-09-eval-protocol.png" /></p>
+<p><em>图：胜率、Elo、置信区间 —— 三个层次的信度，缺一项结论就不可比。</em></p>
+<h3 id="51">5.1 指标体系</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均回报</td>
+<td>团队奖励的 episode 均值</td>
+<td>连续、信息量大</td>
+<td>不同奖励塑形不可比</td>
+</tr>
+<tr>
+<td>胜率</td>
+<td>获胜 episode 占比</td>
+<td>直观、跨任务可比</td>
+<td>信息量粗（丢掉过程）</td>
+</tr>
+<tr>
+<td>Elo</td>
+<td>相对强度标量</td>
+<td>单一标量、适合长训练</td>
+<td>依赖对手池，不可跨池比较</td>
+</tr>
+<tr>
+<td>Nash 距离 / 可利用度</td>
+<td>与均衡策略的距离、被利用的损失</td>
+<td>零和/博弈任务的严格指标</td>
+<td>需要求解均衡，多数场景算不动</td>
+</tr>
+<tr>
+<td>协作指标</td>
+<td>冲突次数、覆盖效率、任务完成时间</td>
+<td>贴近真实系统</td>
+<td>需要自定义</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 报告胜率时<strong>必须同时给出对局数与区间</strong>。<code>60/100</code> 与 <code>6/10</code> 都是 0.6，但前者的 95% 置信区间是 [0.502, 0.691]，后者是 [0.313, 0.832] —— 后者几乎无法断言"优于 0.5"。</p>
+</blockquote>
+<h3 id="52">5.2 置信区间与显著性检验</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="c1"># Wilson 区间：小样本下比&quot;正态近似&quot;更可靠（不会越出 [0,1]）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wilson</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.96</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="n">half</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="k">return</span> <span class="n">center</span> <span class="o">-</span> <span class="n">half</span><span class="p">,</span> <span class="n">center</span> <span class="o">+</span> <span class="n">half</span>
+
+<span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">50</span><span class="p">)]:</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">wilson</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">w</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2"> 胜率=</span><span class="si">{</span><span class="n">w</span><span class="o">/</span><span class="n">n</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  95% CI=[</span><span class="si">{</span><span class="n">lo</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]  半宽=±</span><span class="si">{</span><span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 样本量估算：想以 ±0.05 精度估计真实胜率（设 p≈0.6）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">n_needed</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">half</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.96</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">half</span> <span class="o">*</span> <span class="n">half</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">half</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;目标半宽 ±</span><span class="si">{</span><span class="n">half</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> → 需要对局数 n = </span><span class="si">{</span><span class="n">n_needed</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span><span class="w"> </span><span class="n">half</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1">#  60/100 胜率=0.600  95% CI=[0.502, 0.691]  半宽=±0.094</span>
+<span class="c1">#   6/ 10 胜率=0.600  95% CI=[0.313, 0.832]  半宽=±0.260</span>
+<span class="c1">#  38/ 50 胜率=0.760  95% CI=[0.626, 0.857]  半宽=±0.116</span>
+<span class="c1"># 目标半宽 ±0.10 → 需要对局数 n = 93</span>
+<span class="c1"># 目标半宽 ±0.05 → 需要对局数 n = 369</span>
+<span class="c1"># 目标半宽 ±0.02 → 需要对局数 n = 2305</span>
+</code></pre></div>
+<p>结论很实用：<strong>想用 100 局对局把胜率精度控制在 ±5% 以内是不可能的</strong>（需要约 369 局）。这就是为什么严肃的 MARL 论文要么报几千局，要么报多个种子 × 每种子几百局的均值。</p>
+<h3 id="53">5.3 对手设置</h3>
+<p>对手设置直接决定结论的含义，四种常见设置必须显式声明：</p>
+<table>
+<thead>
+<tr>
+<th>对手</th>
+<th>含义</th>
+<th>结论适用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内置 AI（脚本/规则）</td>
+<td>固定参照</td>
+<td>与固定策略的可比性</td>
+</tr>
+<tr>
+<td>训练时快照池</td>
+<td>训练过程的中间版本</td>
+<td>自己是否真的进步了</td>
+</tr>
+<tr>
+<td>其他算法训练出的策略</td>
+<td>跨方法比较</td>
+<td>算法之间的相对强度</td>
+</tr>
+<tr>
+<td>交叉评估（cross-play）</td>
+<td>你的策略 vs 别人的策略</td>
+<td>泛化与鲁棒性（最有说服力）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>交叉评估是多智能体特有的、最重要的可信度来源</strong>：把你的策略和别的方法学出的策略配对打，双方都没见过对方。只在自己训练的对手上刷分，是 MARL 最常见的自欺方式。</p>
+<h3 id="54">5.4 利用者测试</h3>
+<p>自博弈训练的策略天然存在漏洞 —— 只是你现在的对手不去利用它。<strong>利用者测试（exploiter test）</strong>的做法是：固定你的策略，专门训练一个"只想打败你"的智能体，看它能拿到多少超额收益。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>利用者胜率</td>
+<td>越高说明策略漏洞越大</td>
+</tr>
+<tr>
+<td>可利用损失（exploitability）</td>
+<td>利用者的收益 − 均衡收益</td>
+</tr>
+<tr>
+<td>巅峰-收敛差</td>
+<td>历史最佳版本 vs 当前版本的差距</td>
+</tr>
+</tbody>
+</table>
+<p>AlphaStar 的训练框架里，联盟中就同时存在"主智能体、对手、利用者"三类角色（见第 05 章 6.4）。</p>
+<h3 id="55">5.5 复现清单</h3>
+<p>写报告（或审阅别人的报告）时逐项核对：</p>
+<ul>
+<li>[ ] 环境版本与地图名称 / 难度</li>
+<li>[ ] 随机种子数量（≥3，推荐 5）与是"环境种子"还是"网络初始化种子"</li>
+<li>[ ] 每条曲线的均值 ± 标准差（或 95% 置信带），不能只画一条线</li>
+<li>[ ] 评估对手集合与评估频率</li>
+<li>[ ] 观测/奖励归一化方式</li>
+<li>[ ] 动作是否用掩码、非法动作如何处理</li>
+<li>[ ] 超参表（学习率、clip、熵系数、GAE λ、rollout 长度、batch 大小、共享粒度）</li>
+<li>[ ] 训练总环境步数（而不是"迭代次数"）</li>
+<li>[ ] 硬件与运行时间（多智能体训练成本差异可达十倍）</li>
+<li>[ ] 代码/配置可获取（最少给出配置文件）</li>
+</ul>
+<hr />
+<h3 id="56">5.6 一个可直接复用的实验配置模板</h3>
+<p>多智能体实验最容易出的问题是"跑了三周才发现没记全参数"。下面这份 YAML 把<strong>必须显式声明的东西</strong>结构化了，直接改值即可用：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># exp_config.yaml —— 多智能体实验配置模板</span>
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mappo_10gen_terran</span>
+<span class="w">  </span><span class="nt">seed_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">]</span><span class="w">        </span><span class="c1"># 至少 3，推荐 5；写死列表而不是单个 seed</span>
+<span class="w">  </span><span class="nt">total_env_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10_000_000</span><span class="w">       </span><span class="c1"># 用环境步数计量，不用&quot;迭代数&quot;</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">smacv2</span>
+<span class="w">  </span><span class="nt">map</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10gen_terran</span>
+<span class="w">  </span><span class="nt">obs_normalize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">               </span><span class="c1"># 归一化方式必须记录</span>
+<span class="w">  </span><span class="nt">action_mask</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                 </span><span class="c1"># 非法动作用掩码而非负奖励</span>
+<span class="w">  </span><span class="nt">n_envs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">rollout_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span><span class="w">                  </span><span class="c1"># 每个 agent 的步数（不是环境步数）</span>
+<span class="w">  </span><span class="nt">death_mask</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                  </span><span class="c1"># Critic 屏蔽死亡 agent 的无效动作</span>
+
+<span class="nt">algo</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mappo</span>
+<span class="w">  </span><span class="nt">sharing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">role</span><span class="w">                     </span><span class="c1"># none | full | role</span>
+<span class="w">  </span><span class="nt">lr_actor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0e-4</span>
+<span class="w">  </span><span class="nt">lr_critic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0e-4</span>
+<span class="w">  </span><span class="nt">gamma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.99</span>
+<span class="w">  </span><span class="nt">gae_lambda</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">clip_eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">entropy_coef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">value_coef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">minibatch_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">joint_time_block</span><span class="w">  </span><span class="c1"># 关键：按时刻整组切分，禁止跨时刻混洗</span>
+<span class="w">  </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">64</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">64</span><span class="p p-Indicator">]</span>
+
+<span class="nt">eval</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">opponents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">builtin_ai</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">snapshots_v0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">qmix_baseline</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># 三类对手都要有</span>
+<span class="w">  </span><span class="nt">every_env_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200_000</span>
+<span class="w">  </span><span class="nt">episodes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w">                     </span><span class="c1"># 每轮评估局数（配合 Wilson 区间判断显著性）</span>
+<span class="w">  </span><span class="nt">fixed_seeds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                 </span><span class="c1"># 评估固定种子，减少方差</span>
+
+<span class="nt">logging</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">team_return</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ind_return</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">policy_entropy</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">td_residual</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">clip_fraction</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">grad_norm</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">eval_winrate</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">comm_bytes</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">artifacts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">config</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">git_commit</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">env_version</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">hardware</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>这份模板里三行是最容易被忽略、又最能救命：<code>minibatch_mode</code>（跨时刻混洗是隐蔽 bug）、<code>opponents</code>（没有对手池就没有可解释的曲线）、<code>fixed_seeds</code>（评估方差直接吃掉改进量）。</p>
+<hr />
+<h2 id="_4">六、调试与可观测性</h2>
+<h3 id="61">6.1 诊断顺序</h3>
+<p>多智能体的调试必须<strong>自下而上</strong>，跳步会浪费大量时间：</p>
+<div class="highlight"><pre><span></span><code>① 环境自检  →  ② 奖励自检  →  ③ 算法自检  →  ④ 超参自检
+   · 随机策略能跑完一个 episode 吗
+   · 解析基线（随机/贪心）拿到多少分
+   · 让环境可解（观测足够）时，算法能过拟合到 100% 吗
+   · 把 n 个 agent 改成 1 个，性能是否退化成单智能体算法的正常水平
+</code></pre></div>
+<p>第 3 步最关键：<strong>在可解的小环境里让算法过拟合到满分</strong>。做不到就一定是实现 bug，而不是"算法不行"。</p>
+<h3 id="62-">6.2 典型症状-病因-对策表</h3>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>病因</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>奖励完全不涨</td>
+<td>Actor 偷看全局状态 / 奖励从未到达过</td>
+<td>检查观测；把随机策略的奖励分布打出来</td>
+</tr>
+<tr>
+<td>曲线先涨后崩</td>
+<td>对手漂移 + 评估对手变了</td>
+<td>固定评估对手池；监控可利用度</td>
+</tr>
+<tr>
+<td>不同种子结果差异巨大</td>
+<td>初始化敏感、探索不足</td>
+<td>多跑种子取统计；调大熵系数</td>
+</tr>
+<tr>
+<td>学出"集体摸鱼"</td>
+<td>团队奖励均分，个体无信号</td>
+<td>差分奖励/反事实基线</td>
+</tr>
+<tr>
+<td>学出"互相拆台"</td>
+<td>奖励设计里有负外部性却没惩罚</td>
+<td>奖励审计：逐项列出对他人收益的影响</td>
+</tr>
+<tr>
+<td>收敛到次优协作</td>
+<td>联合动作探索不足</td>
+<td>参数共享 + 课程学习（先易后难）</td>
+</tr>
+<tr>
+<td>训练快、评估崩</td>
+<td>过拟合训练对手</td>
+<td>交叉评估 + 利用者测试</td>
+</tr>
+<tr>
+<td>显存/时间爆炸</td>
+<td>联合观测缓存与 batch 设计错误</td>
+<td>整组切分；减小 rollout 长度</td>
+</tr>
+<tr>
+<td>换 n（智能体数）就崩</td>
+<td>观测/动作未做尺度无关设计</td>
+<td>归一化 + 相对位置观测</td>
+</tr>
+<tr>
+<td>梯度爆炸</td>
+<td>Critic 值域失控</td>
+<td>价值裁剪、奖励缩放</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63">6.3 日志与可视化</h3>
+<p>必记的十项（缺一项后面都会回头重跑）：</p>
+<ol>
+<li>团队奖励曲线（训练 + 评估两条分开）</li>
+<li>每个智能体的个体奖励（看是否有人被牺牲）</li>
+<li>动作分布熵（探索是否塌缩）</li>
+<li>Critic 的 TD 残差均值/方差（价值估计是否可靠）</li>
+<li>策略（Actor）损失的更新幅度 / clip 触发比例</li>
+<li>评估胜率（固定对手，固定种子）</li>
+<li>对手池组成与各对手胜率</li>
+<li>通信量（若涉及通信：字节数、消息熵）</li>
+<li>环境步数（不是迭代数）与每秒步数</li>
+<li>梯度范数</li>
+</ol>
+<blockquote>
+<p><strong>核心思想</strong>：多智能体的"不可复现"绝大多数不是玄学，而是<strong>没记录对手、没固定种子、没报样本量</strong>三件事造成的。把 §5.5 的清单当成提交前的 checklist，能消除九成争议。</p>
+</blockquote>
+<hr />
+<h2 id="_5">七、理论进阶：实验评估的统计基础</h2>
+<h3 id="71-wilson">7.1 Wilson 区间与样本量估算</h3>
+<p>胜率 <span class="arithmatex">\(\hat{p} = w/n\)</span> 是对真实胜率 <span class="arithmatex">\(p\)</span> 的估计。若用正态近似，在小 <span class="arithmatex">\(n\)</span> 或 <span class="arithmatex">\(\hat p\)</span> 接近 0/1 时区间会越出 <span class="arithmatex">\([0,1]\)</span>，因此实践中用 <strong>Wilson 区间</strong>：</p>
+<div class="arithmatex">\[
+\boxed{\ \text{CI} = \frac{\hat p + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat p(1-\hat p)}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}\ }
+\]</div>
+<p>区间半宽近似为 <span class="arithmatex">\(z\sqrt{\hat p(1-\hat p)/n}\)</span>，因此要达到目标半宽 <span class="arithmatex">\(h\)</span> 所需样本量：</p>
+<div class="arithmatex">\[
+\boxed{n \approx \frac{z^2 p(1-p)}{h^2}}
+\]</div>
+<p><span class="arithmatex">\(p=0.6\)</span>、<span class="arithmatex">\(h=0.05\)</span>、<span class="arithmatex">\(z=1.96\)</span> 时 <span class="arithmatex">\(n \approx 369\)</span>。上文的实跑输出正是这组公式的数值验证。</p>
+<h3 id="72">7.2 假设检验与多重比较校正</h3>
+<p>比较多组算法时，常见错误是"两两 t 检验，看到 <span class="arithmatex">\(p&lt;0.05\)</span> 就宣布胜利"。做 <span class="arithmatex">\(m\)</span> 次比较时，假阳性期望次数是 <span class="arithmatex">\(m\alpha\)</span> —— 比较 10 对算法（<span class="arithmatex">\(\alpha=0.05\)</span>）就有约 40% 概率至少出现一次假阳性。</p>
+<table>
+<thead>
+<tr>
+<th>校正方法</th>
+<th>阈值</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bonferroni</td>
+<td><span class="arithmatex">\(\alpha/m\)</span></td>
+<td>最保守，适合比较次数少</td>
+</tr>
+<tr>
+<td>Holm-Bonferroni</td>
+<td>逐步收紧</td>
+<td>比 Bonferroni 稍宽松，推荐默认</td>
+</tr>
+<tr>
+<td>Benjamini-Hochberg（FDR）</td>
+<td>控制假发现率</td>
+<td>比较次数多时更实用</td>
+</tr>
+</tbody>
+</table>
+<p>另外两条实践建议：</p>
+<ol>
+<li><strong>配对比较优于独立比较</strong>：同一批种子下跑不同算法（配对），用 Wilcoxon 符号秩检验，功效远高于独立 t 检验。</li>
+<li><strong>报告效应量而非仅 p 值</strong>：胜率差 0.02 就算显著，工程上也没意义。同时给出区间与效应量（Cliff's delta 或胜率差）。</li>
+</ol>
+<h3 id="73-elo-bradley-terry">7.3 Elo 与 Bradley-Terry 模型</h3>
+<p>Elo 的本质是 <strong>Bradley-Terry 模型</strong>的在线近似：每个策略有强度参数 <span class="arithmatex">\(\pi_i\)</span>，<span class="arithmatex">\(i\)</span> 战胜 <span class="arithmatex">\(j\)</span> 的概率为</p>
+<div class="arithmatex">\[
+\boxed{P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}}
+\]</div>
+<p>给定两两对局胜场矩阵 <span class="arithmatex">\(W\)</span>（<span class="arithmatex">\(W_{ij}\)</span> 为 <span class="arithmatex">\(i\)</span> 战胜 <span class="arithmatex">\(j\)</span> 的次数），可用 MM 迭代拟合 <span class="arithmatex">\(\pi\)</span>：</p>
+<div class="arithmatex">\[
+\pi_i^{(k+1)} = \frac{\sum_j W_{ij}}{\sum_{j \neq i} \dfrac{W_{ij} + W_{ji}}{\pi_i^{(k)} + \pi_j^{(k)}}}
+\]</div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="c1"># Bradley-Terry / Elo 强度拟合：只用两两对局胜场数</span>
+<span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;QMIX&quot;</span><span class="p">,</span> <span class="s2">&quot;MAPPO&quot;</span><span class="p">,</span> <span class="s2">&quot;IQL&quot;</span><span class="p">]</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>      <span class="c1"># W[i][j] = i 战胜 j 的场次</span>
+              <span class="p">[</span> <span class="mi">6</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+              <span class="p">[</span> <span class="mi">2</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>                      <span class="c1"># MM（Minorization-Maximization）迭代</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">W</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">pi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">pi</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">new</span> <span class="o">/</span> <span class="n">new</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bradley-Terry 强度:&quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">players</span><span class="p">,</span> <span class="n">pi</span><span class="p">)})</span>
+<span class="n">elo</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1500</span> <span class="o">+</span> <span class="mi">400</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">pi</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">players</span><span class="p">,</span> <span class="n">pi</span><span class="p">)}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;换算 Elo（弱者为 1500）:&quot;</span><span class="p">,</span> <span class="n">elo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;两两胜率预测 QMIX vs MAPPO:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">pi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">pi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pi</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;实际 QMIX vs MAPPO 胜率:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="mi">14</span> <span class="o">/</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># Bradley-Terry 强度: {&#39;QMIX&#39;: 0.6625, &#39;MAPPO&#39;: 0.2197, &#39;IQL&#39;: 0.1178}</span>
+<span class="c1"># 换算 Elo（弱者为 1500）: {&#39;QMIX&#39;: 1800.0, &#39;MAPPO&#39;: 1608.0, &#39;IQL&#39;: 1500.0}</span>
+<span class="c1"># 两两胜率预测 QMIX vs MAPPO: 0.751</span>
+<span class="c1"># 实际 QMIX vs MAPPO 胜率: 0.7</span>
+</code></pre></div>
+<p>三点使用注意：</p>
+<ol>
+<li><strong>Elo 只在同一对手池内可比</strong>。跨论文比较 Elo 是没有意义的（对手池不同）。</li>
+<li>对局数少时 Elo 方差很大，务必报告置信区间或用贝叶斯版本（给出强度后验）。</li>
+<li>Bradley-Terry 假设"传递性"（<span class="arithmatex">\(i&gt;j&gt;k \Rightarrow i&gt;k\)</span>）。在石头剪刀布这类<strong>非传递</strong>博弈里，拟合结果会把真实存在的循环平均掉 —— 这也是为什么零和博弈里要用 Nash 距离而不是 Elo。</li>
+</ol>
+<hr />
+<h2 id="_6">附：本章速查表</h2>
+<p><strong>环境 API</strong></p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>AEC</th>
+<th>Parallel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>推进</td>
+<td>单 agent step，<code>agent_selection</code> 轮转</td>
+<td>全体同时 step</td>
+</tr>
+<tr>
+<td>结束信号</td>
+<td><code>agents == []</code></td>
+<td>全体 termination</td>
+</tr>
+<tr>
+<td>适配算法</td>
+<td>CFR/MCTS/顺序博弈</td>
+<td>QMIX/MAPPO/MADDPG</td>
+</tr>
+</tbody>
+</table>
+<p><strong>基准选择</strong></p>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>基准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>验证实现</td>
+<td>自建教学环境 + MPE</td>
+</tr>
+<tr>
+<td>报合作强度</td>
+<td>SMACv2（≥3 地图 × ≥3 种子）</td>
+</tr>
+<tr>
+<td>报泛化</td>
+<td>Melting Pot / Overcooked（交叉评估）</td>
+</tr>
+<tr>
+<td>报机制设计</td>
+<td>OpenSpiel</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MAPPO 实现五要点</strong></p>
+<table>
+<thead>
+<tr>
+<th>要点</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actor 输入</td>
+<td>只喂 obs_i（绝不喂全局状态）</td>
+</tr>
+<tr>
+<td>Critic 输入</td>
+<td>全局状态 + 全体动作 + 死亡掩码</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>GAE(γ=0.99, λ=0.95) 后<strong>必须标准化</strong></td>
+</tr>
+<tr>
+<td>minibatch</td>
+<td>按时刻整组切分</td>
+</tr>
+<tr>
+<td>评估</td>
+<td>固定对手池 + 固定种子 + 报告样本量</td>
+</tr>
+</tbody>
+</table>
+<p><strong>评估统计</strong></p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>公式/阈值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wilson 区间</td>
+<td><span class="arithmatex">\(\frac{\hat p + z^2/2n \pm z\sqrt{\hat p(1-\hat p)/n + z^2/4n^2}}{1+z^2/n}\)</span></td>
+</tr>
+<tr>
+<td>样本量</td>
+<td><span class="arithmatex">\(n \approx z^2p(1-p)/h^2\)</span>（p=0.6, h=0.05 → n≈369）</td>
+</tr>
+<tr>
+<td>多重比较</td>
+<td>Holm-Bonferroni（默认）或 BH-FDR</td>
+</tr>
+<tr>
+<td>强度模型</td>
+<td>Bradley-Terry / Elo（仅同池可比；非传递博弈改用 Nash 距离）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>下一步</strong>：工具、基准与评估协议都已就位，接下来进入 <a href="../10-applications-frontier/">第 10 章 应用与前沿</a>，把这一套方法放到真实场景里，看哪些结论能直接用、哪些会在落地时崩掉。</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "toc.follow", "navigation.top", "search.suggest", "search.highlight"], "search": "../../javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

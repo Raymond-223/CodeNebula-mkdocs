@@ -1,0 +1,5371 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://CodeNebula.github.io/assets/multi-agent-systems/05-marl/">
+      
+      
+        <link rel="prev" href="../04-mechanism-design/">
+      
+      
+        <link rel="next" href="../06-communication/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>多智能体强化学习 - CodeNebula</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#05-multi-agent-reinforcement-learning-marl" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CodeNebula" class="md-header__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CodeNebula
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              多智能体强化学习
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to the dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to the dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../software-development/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  软件开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reinforcement-learning/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  强化学习
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  多智能体系统
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../inex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Algorithm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../idex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper Interpretion
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../Mathematics/index.md" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CodeNebula" class="md-nav__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CodeNebula
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../software-development/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件开发
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    软件开发
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/01-frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/02-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/03-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库与存储
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/04-version-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    版本控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/05-devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps与部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/06-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/07-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试与质量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/08-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reinforcement-learning/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    强化学习
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    强化学习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/00-bandit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多臂老虎机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/01-mdp-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDP与数学基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/02-dynamic-programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态规划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/03-monte-carlo-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    蒙特卡洛方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/04-temporal-difference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时序差分学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/05-value-approximation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    值函数逼近与DQN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/06-policy-gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    策略梯度与Actor-Critic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/07-continuous-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    连续控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/08-tools-environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    环境与工具链
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/09-advanced-topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/10-engineering-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体系统
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    多智能体系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-agent-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    智能体架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-game-theory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    博弈论基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-mechanism-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机制设计与社会选择
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体强化学习
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体强化学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、问题设定
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、问题设定">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-markov-game-dec-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 从 Markov Game 到 Dec-POMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 联合动作与联合策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 分布式执行的硬约束
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、两大困难
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、两大困难">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 非平稳性：环境在学习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 信用分配：这把功劳记在谁头上
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 联合动作空间指数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、独立学习及其局限
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、独立学习及其局限">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-iql-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 IQL：把单智能体算法跑 n 遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 势博弈/零和下的收敛结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-iql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 为什么 IQL 仍然是标准基线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、值分解一族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、值分解一族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-igm-ctde" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 IGM 与 CTDE 的合法性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-vdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 VDN：最简单的可分解假设
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-qmix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 QMIX：单调混合网络 + 损失推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-qtran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 QTRAN：把可分解性放宽
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-qplex-igm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 QPLEX：优势分解，双向 IGM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 值分解家族对比表与选型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、策略梯度家族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、策略梯度家族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-maddpg-critic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 MADDPG：集中式 Critic 的诞生
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-coma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 COMA：反事实多智能体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-mappo-ppo-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 MAPPO：多智能体 PPO 加 GAE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 策略梯度家族对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、自博弈与种群训练
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、自博弈与种群训练">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 零和自博弈中的策略循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 历史版本池
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pfsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 PFSP 公式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-alphastar-openai-five" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 案例解剖：AlphaStar 与 OpenAI Five
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、均值场与超大规模
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、均值场与超大规模">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-q-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 均值场 Q-learning 的推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 通信约束下的可扩展性
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、训练工程与常见坑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、训练工程与常见坑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 参数共享的三种设定
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 奖励设计对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 死亡三角放大与不稳定诊断
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 超参敏感性清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#igm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、理论进阶：IGM 与单调性的充分条件
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、理论进阶：IGM 与单调性的充分条件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-igm-qmix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 IGM 定义与 QMIX 单调性充分性证明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-qtran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 QTRAN 定理与其松弛
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 值分解表达力上界：一个非单调反例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 随机逼近视角下的收敛保证与局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="附：本章速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心公式速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        算法选型速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见坑速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-communication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    通信与协同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-coordination-negotiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协调与协商
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-llm-multi-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM多智能体
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-tools-environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工具与环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-applications-frontier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用与前沿
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../inex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../idex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interpretion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Game Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Four First Lessons.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Four First Lessons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Iterative Deletion.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Iterative Deletion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、问题设定
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、问题设定">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-markov-game-dec-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 从 Markov Game 到 Dec-POMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 联合动作与联合策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 分布式执行的硬约束
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、两大困难
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、两大困难">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 非平稳性：环境在学习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 信用分配：这把功劳记在谁头上
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 联合动作空间指数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、独立学习及其局限
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、独立学习及其局限">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-iql-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 IQL：把单智能体算法跑 n 遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 势博弈/零和下的收敛结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-iql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 为什么 IQL 仍然是标准基线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、值分解一族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、值分解一族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-igm-ctde" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 IGM 与 CTDE 的合法性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-vdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 VDN：最简单的可分解假设
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-qmix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 QMIX：单调混合网络 + 损失推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-qtran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 QTRAN：把可分解性放宽
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-qplex-igm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 QPLEX：优势分解，双向 IGM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 值分解家族对比表与选型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、策略梯度家族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、策略梯度家族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-maddpg-critic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 MADDPG：集中式 Critic 的诞生
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-coma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 COMA：反事实多智能体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-mappo-ppo-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 MAPPO：多智能体 PPO 加 GAE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 策略梯度家族对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、自博弈与种群训练
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、自博弈与种群训练">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 零和自博弈中的策略循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 历史版本池
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pfsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 PFSP 公式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-alphastar-openai-five" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 案例解剖：AlphaStar 与 OpenAI Five
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、均值场与超大规模
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、均值场与超大规模">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-q-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 均值场 Q-learning 的推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 通信约束下的可扩展性
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、训练工程与常见坑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、训练工程与常见坑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 参数共享的三种设定
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 奖励设计对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 死亡三角放大与不稳定诊断
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 超参敏感性清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#igm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、理论进阶：IGM 与单调性的充分条件
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、理论进阶：IGM 与单调性的充分条件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-igm-qmix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 IGM 定义与 QMIX 单调性充分性证明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-qtran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 QTRAN 定理与其松弛
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 值分解表达力上界：一个非单调反例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 随机逼近视角下的收敛保证与局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="附：本章速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心公式速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        算法选型速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见坑速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    多智能体系统
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="05-multi-agent-reinforcement-learning-marl">第 05 章 多智能体强化学习（Multi-Agent Reinforcement Learning, MARL）</h1>
+<blockquote>
+<p>单智能体强化学习假设"环境是静止的"——转移概率与奖励不随我自己的学习而改变。一旦场上出现第二个学习者，这条假设就轰然倒塌：<strong>我的最优策略取决于你的策略，而你的策略正在因为我而改变</strong>。本章要回答的就是这一个问题：在环境本身会学习的前提下，怎么让一组主体学出协作（或对抗）的策略。这是整个知识库技术密度最高的一章，也是"强化学习第 09 章 §三 的 MARL 精简版概览，本章是其展开"的完整版本。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、问题设定</h2>
+<h3 id="11-markov-game-dec-pomdp">1.1 从 Markov Game 到 Dec-POMDP</h3>
+<p>强化学习第 09 章 §三 的 MARL 精简版概览给出了一张表格，告诉我们单智能体 MDP 升级为多智能体随机博弈后，"动作、转移、奖励、观测、策略"五个要素各自多了什么麻烦。本章从这个形式化起点出发，把它一路展开到可执行的算法。</p>
+<p>先复述这个形式化，但这次补上工程上真正重要的细节——<strong>每个主体到底看得见什么</strong>。</p>
+<div class="arithmatex">\[
+\mathcal{M} = \left\langle n,\ S,\ \{A_i\}_{i=1}^{n},\ P,\ \{R_i\}_{i=1}^{n},\ \gamma \right\rangle
+\]</div>
+<p>其中 <span class="arithmatex">\(n\)</span> 是主体数，<span class="arithmatex">\(S\)</span> 是全局状态，<span class="arithmatex">\(A_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个主体的动作集，<span class="arithmatex">\(P(s'\mid s,\mathbf{a})\)</span> 是联合动作 <span class="arithmatex">\(\mathbf{a}=(a_1,\dots,a_n)\)</span> 下的转移，<span class="arithmatex">\(R_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个主体自己的奖励函数。</p>
+<p>现实里几乎没有一个多智能体任务能让你"看到全局状态 <span class="arithmatex">\(S\)</span>"。机器人只有各自的传感器视野，交易员只有各自的市场切片，微服务只有各自的调用链。于是关键的一步升级是引入<strong>观测函数</strong>：</p>
+<div class="arithmatex">\[
+o_i = O_i(s;\, \mathbf{a}), \qquad \pi_i(a_i \mid \tau_i), \qquad \tau_i = (o_i^1, a_i^1, \dots, o_i^t)
+\]</div>
+<p>每个主体拿到的是自己的观测 <span class="arithmatex">\(o_i\)</span>，行动只依赖自己的<strong>动作-观测历史</strong> <span class="arithmatex">\(\tau_i\)</span>（history）。这个模型就是 <strong>Dec-POMDP（Decentralized Partially Observable Markov Decision Process，去中心化部分可观测马尔可夫决策过程）</strong>。它是合作型 MARL 的通用语言。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>谁在决策</th>
+<th>看得见什么</th>
+<th>奖励</th>
+<th>典型算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDP</td>
+<td>1 个决策者</td>
+<td>全局状态 <span class="arithmatex">\(s\)</span></td>
+<td><span class="arithmatex">\(R(s,a)\)</span></td>
+<td>DQN、PPO</td>
+</tr>
+<tr>
+<td>Markov Game</td>
+<td><span class="arithmatex">\(n\)</span> 个</td>
+<td>全局状态 <span class="arithmatex">\(s\)</span></td>
+<td>各自 <span class="arithmatex">\(R_i(s,\mathbf{a})\)</span></td>
+<td>极小极大 Q、IQL</td>
+</tr>
+<tr>
+<td>MMDP（多智能体 MDP）</td>
+<td><span class="arithmatex">\(n\)</span> 个</td>
+<td>全局状态 <span class="arithmatex">\(s\)</span></td>
+<td><strong>共享</strong> <span class="arithmatex">\(R\)</span></td>
+<td>VDN、QMIX</td>
+</tr>
+<tr>
+<td><strong>Dec-POMDP</strong></td>
+<td><span class="arithmatex">\(n\)</span> 个</td>
+<td><strong>各自局部观测</strong> <span class="arithmatex">\(o_i\)</span></td>
+<td><strong>共享</strong> <span class="arithmatex">\(R\)</span></td>
+<td>QMIX、MAPPO、COMA</td>
+</tr>
+<tr>
+<td>零和随机博弈</td>
+<td>2 个</td>
+<td>全局或局部</td>
+<td><span class="arithmatex">\(R_1 = -R_2\)</span></td>
+<td>自博弈、CFR</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：MARL 的全部困难，都可以追溯到上表最后两列的落差——<strong>训练时我们可能看得到全局（<span class="arithmatex">\(s\)</span>、联合动作），执行时每个主体只看得到自己那一小块（<span class="arithmatex">\(o_i\)</span>）</strong>。如何跨越这道落差而不损失最优性，就是 CTDE（集中训练、分布执行）范式要解决的问题（§四）。</p>
+</blockquote>
+<p>关于"多个主体之间到底是竞争还是合作"，这取决于博弈的<strong>收益结构</strong>，见第 03 章博弈类型；本章主要处理合作型（共享奖励）与零和型（对抗）两个极端，混合动机的中间地带留待第 04 章的机制设计处理。</p>
+<h3 id="12">1.2 联合动作与联合策略</h3>
+<p>单智能体里，一个"策略"就是一个函数 <span class="arithmatex">\(\pi(a\mid s)\)</span>。多智能体里，这个对象立刻膨胀成两样东西：</p>
+<p><strong>（1）联合动作（joint action）</strong>：所有主体动作的笛卡尔积</p>
+<div class="arithmatex">\[
+\mathbf{a} = (a_1, \dots, a_n) \in \mathcal{A} = A_1 \times A_2 \times \cdots \times A_n, \qquad |\mathcal{A}| = \prod_{i=1}^{n} |A_i|
+\]</div>
+<p><strong>（2）联合策略（joint policy）</strong>：所有主体策略的元组</p>
+<div class="arithmatex">\[
+\boldsymbol{\pi} = (\pi_1, \dots, \pi_n), \qquad \boldsymbol{\pi}(\mathbf{a}\mid \tau) = \prod_{i=1}^{n} \pi_i(a_i \mid \tau_i)
+\]</div>
+<p>注意右边这个因式分解——它假设各主体的策略<strong>条件独立</strong>，这是一个习惯性的简化。真实系统里主体之间会通信、会互相观察，条件独立性并不成立，这正是第 06 章（通信与协同）要打破的假设。本章先站在独立策略的假设上把地基打牢。</p>
+<p>联合价值函数定义为联合策略 <span class="arithmatex">\(\boldsymbol{\pi}\)</span> 下的期望回报：</p>
+<div class="arithmatex">\[
+Q^{\boldsymbol{\pi}}(s, \mathbf{a}) = \mathbb{E}_{\boldsymbol{\pi}}\!\left[\sum_{t=0}^{\infty} \gamma^t R(s_t, \mathbf{a}_t) \,\Big|\, s_0 = s,\ \mathbf{a}_0 = \mathbf{a},\ \mathbf{a}_{t&gt;0} \sim \boldsymbol{\pi}\right]
+\]</div>
+<p>单智能体的 Bellman 最优方程 <span class="arithmatex">\(\max_a Q(s,a)\)</span> 在这里要小心：<span class="arithmatex">\(\max_{\mathbf{a}}\)</span> 是<strong>联合最大化</strong>，它需要所有主体在同一时刻协调一致地选择联合动作里各自的那一项。而分布式执行时，每个主体只能看到自己的 <span class="arithmatex">\(\tau_i\)</span>，做不到"读心"。这就是 IGM 条件（§4.1、§9.1）要专门处理的东西。</p>
+<h3 id="13">1.3 分布式执行的硬约束</h3>
+<p>把"集中训练、分布执行"（Centralized Training with Decentralized Execution, <strong>CTDE</strong>）说清楚，需要区分两种完全不同的信息可用性：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>允许用的信息</th>
+<th>不允许用的信息</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>训练</strong></td>
+<td>全局状态 <span class="arithmatex">\(s\)</span>、全部观测 <span class="arithmatex">\(\{o_i\}\)</span>、全部动作 <span class="arithmatex">\(\{a_i\}\)</span>、全部奖励</td>
+<td>无（可以随便用）</td>
+<td>训练是离线的、集中的，算力与带宽不是瓶颈</td>
+</tr>
+<tr>
+<td><strong>执行</strong></td>
+<td>只有自己的 <span class="arithmatex">\(\tau_i\)</span> 与本地观测 <span class="arithmatex">\(o_i\)</span></td>
+<td><strong>别人的观测、别人的动作、全局状态</strong></td>
+<td>部署时通信可能中断、有延迟、有带宽上限</td>
+</tr>
+</tbody>
+</table>
+<p>执行阶段的这三条"不允许"，是 MARL 一切算法设计的硬边界。具体地：</p>
+<ol>
+<li><strong>不能依赖全局状态 <span class="arithmatex">\(s\)</span></strong> —— 因为 <span class="arithmatex">\(s\)</span> 可能根本不存在一个主体能观测到它（局部可观测）。</li>
+<li><strong>不能依赖其他主体的动作 <span class="arithmatex">\(a_j\)</span></strong> —— 因为实时控制回路里等不起一个通信往返；通信本身要花预算（第 06 章）。</li>
+<li><strong>不能依赖联合 Q 表的查表</strong> —— 因为 <span class="arithmatex">\(|\mathcal{A}|\)</span> 随 <span class="arithmatex">\(n\)</span> 指数爆炸（§2.3）。</li>
+</ol>
+<p>ASCII 图把这条时间线画出来：</p>
+<div class="highlight"><pre><span></span><code>        ┌─────────────────── 训练阶段（集中，看得见全局） ───────────────────┐
+        │                                                                   │
+        │   全局状态 s ──┐                                                   │
+        │   全部观测 o_i ─┼──►  联合 Critic  /  混合网络  ──►  全局 TD 误差    │
+        │   全部动作 a_i ─┤         Q_tot(s, a)              （用于更新参数）  │
+        │   全局奖励 r   ─┘                                                   │
+        └───────────────────────────────┬───────────────────────────────────┘
+                                        │  只把&quot;局部策略参数&quot;下发
+                                        ▼
+        ┌─────────────────── 执行阶段（分布，只看得到自己） ─────────────────┐
+        │                                                                   │
+        │   智能体 1:  o_1 ──► π_1(a_1|τ_1) ──► a_1 ─┐                       │
+        │   智能体 2:  o_2 ──► π_2(a_2|τ_2) ──► a_2 ─┼──► 环境               │
+        │      ⋮                ⋮                ⋮    │                      │
+        │   智能体 n:  o_n ──► π_n(a_n|τ_n) ──► a_n ─┘                       │
+        │                                                                   │
+        │   ★ 执行时看不到 s，看不到 a_j，看不到别人的 o_j                    │
+        └───────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>最常见的实现错误</strong>：把全局状态塞进每个智能体的 Actor 输入。"反正我训练时有全局状态，用一下不亏"——这是<strong>训练/测试分布不一致</strong>，部署时你会拿不到这个输入，策略当场失效。全局状态只能进 Critic，永远不能进 Actor。</p>
+</blockquote>
+<hr />
+<h2 id="_2">二、两大困难</h2>
+<p>MARL 之所以难，不是难在"把单智能体算法跑 n 遍"，而是难在两个结构性的、无法用调参绕过的障碍。这一节每一小节都用可运行的演示把它钉死。</p>
+<h3 id="21">2.1 非平稳性：环境在学习</h3>
+<p>单智能体 RL 的收敛理论建立在"环境是平稳的（stationary）"之上：转移概率 <span class="arithmatex">\(P(s'\mid s,a)\)</span> 和奖励 <span class="arithmatex">\(R(s,a)\)</span> 不随时间变化。多智能体里，站在智能体 <span class="arithmatex">\(i\)</span> 的视角，它的"环境"包含了所有其他智能体的策略：</p>
+<div class="arithmatex">\[
+P_i(s' \mid s, a_i) = \sum_{\mathbf{a}_{-i}} \boldsymbol{\pi}_{-i}(\mathbf{a}_{-i} \mid \tau_{-i})\, P(s' \mid s, a_i, \mathbf{a}_{-i})
+\]</div>
+<p><strong>这个转移概率里藏着 <span class="arithmatex">\(\boldsymbol{\pi}_{-i}\)</span>，而它每一步都在学习、在变。</strong> 于是对智能体 <span class="arithmatex">\(i\)</span> 而言，它面对的是一个<strong>非平稳的 MDP</strong>——昨天学到的最优 <span class="arithmatex">\(Q_i\)</span> 今天可能已经过时。这就是"在人群里，没有哪个智能体能准确预测其他人的下一步"。</p>
+<p>最干净的演示是<strong>硬币匹配（Matching Pennies）</strong>：两个玩家各出一个硬币，猜中对方则 A 得 +1、B 得 -1，否则反过来。这个博弈唯一的纳什均衡是双方各以 1/2 概率出正反面（混合策略），期望收益 0。</p>
+<p>下面让两个智能体<strong>各自独立</strong>学习：每个维护一组 logits，用 REINFORCE 型策略梯度更新自己的策略，看会发生什么：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 非平稳性演示: 硬币匹配上的两个独立策略梯度学习者 ============</span>
+<span class="c1"># 智能体 1 猜对(双方动作相同)得 +1, 智能体 2 得 -1 → 零和</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">T</span><span class="p">,</span> <span class="n">every</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">,</span> <span class="mi">5000</span>
+<span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]))</span>       <span class="c1"># 初始策略: 正/反各 50%</span>
+<span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]))</span>
+<span class="n">rec</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>   <span class="c1"># 软最大策略</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p1</span><span class="p">))</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p2</span><span class="p">))</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">a1</span> <span class="o">==</span> <span class="n">a2</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span>              <span class="c1"># 智能体 1 的即时奖励</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">r1</span>
+    <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">e1</span><span class="p">[</span><span class="n">a1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">e2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">e2</span><span class="p">[</span><span class="n">a2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">theta1</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="p">(</span><span class="n">e1</span> <span class="o">-</span> <span class="n">p1</span><span class="p">)</span>              <span class="c1"># REINFORCE 型策略梯度</span>
+    <span class="n">theta2</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="p">(</span><span class="n">e2</span> <span class="o">-</span> <span class="n">p2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;独立策略梯度在硬币匹配上: 各智能体出&#39;正面&#39;的概率&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;步数&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;π1(正面)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;π2(正面)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rec</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">every</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">&gt;9.3f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">&gt;9.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">lo</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rec</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:]);</span> <span class="n">hi</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rec</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">末段 π1 在 [</span><span class="si">{</span><span class="n">lo</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">] 之间来回翻转&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;唯一的混合纳什均衡是 (0.5, 0.5), 但两个独立学习者永远达不到它。&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>独立策略梯度在硬币匹配上: 各智能体出&#39;正面&#39;的概率
+      步数 |    π1(正面) |    π2(正面)
+--------------------------------
+    5000 |     0.010 |     0.534
+   10000 |     0.063 |     0.996
+   15000 |     0.007 |     0.003
+   20000 |     0.019 |     0.998
+   25000 |     0.998 |     0.003
+   30000 |     0.002 |     0.011
+   35000 |     0.991 |     0.998
+   40000 |     0.983 |     0.002
+   45000 |     0.003 |     0.998
+   50000 |     0.998 |     0.997
+   55000 |     0.998 |     0.002
+   60000 |     0.002 |     0.002
+
+末段 π1 在 [0.002, 0.998] 之间来回翻转
+唯一的混合纳什均衡是 (0.5, 0.5), 但两个独立学习者永远达不到它。
+</code></pre></div>
+<p><strong>训练 6 万步后，两个智能体并没有收敛到各 50% 的混合策略，而是陷在纯策略之间无休止地翻转</strong>：π1 从 0.998 跌回 0.002，π2 紧跟其后反向翻转。机理很干净：<strong>当对手改变策略时，我的优势函数符号会整体翻转</strong>——"出正面"昨天带来正优势，今天对手改成总出反面，它就立刻变成负优势。策略梯度只朝当下梯度的方向走，而这个方向正被"我改变对手"这件事翻转，于是形成无休止的追逐。用 §9.4 的语言说：该博弈的<strong>有效目标算子不满足压缩性</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>单智能体 RL</th>
+<th>多智能体 RL（独立学习）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>环境平稳性</td>
+<td>成立（<span class="arithmatex">\(P,R\)</span> 固定）</td>
+<td><strong>不成立</strong>（别人的策略在变）</td>
+</tr>
+<tr>
+<td>收敛目标</td>
+<td>唯一最优策略</td>
+<td>均衡（可能不存在纯策略均衡）</td>
+</tr>
+<tr>
+<td>Q 表更新</td>
+<td>朝固定目标收敛</td>
+<td>目标本身在漂移 → <strong>极限环</strong></td>
+</tr>
+<tr>
+<td>典型症状</td>
+<td>收敛慢</td>
+<td>损失震荡、胜率周期性反转、无法复现</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：非平稳性不是"数据噪声大一点"，而是<strong>学习目标本身在移动</strong>。任何"把其他智能体当成环境一部分"的朴素做法，都要在理论上证明这个非平稳过程能收敛——对一般的独立 Q-learning，这个保证是没有的（§3.2 给出仅有保证的特殊情形）。</p>
+</blockquote>
+<h3 id="22">2.2 信用分配：这把功劳记在谁头上</h3>
+<p>第二个困难出现在<strong>团队共享奖励</strong>的设定里。假设 n 个智能体协同完成一个任务，环境只给一个全局奖励 <span class="arithmatex">\(r\)</span>，那"这次成功"该奖励谁？"这次失败"又该归咎于谁？</p>
+<p>朴素做法是<strong>均匀分摊</strong>：<span class="arithmatex">\(r\)</span> 平均分给 n 个主体，每个智能体的目标奖励都是 <span class="arithmatex">\(r/n\)</span>。这在 n 大的时候几乎必然出问题——<strong>搭便车（free-riding）</strong>：既然我摸鱼也能拿 <span class="arithmatex">\(r/n\)</span>，那我为什么要努力？梯度会被"无关紧要的动作"稀释，学出来的策略退化。</p>
+<p>更好的做法是<strong>反事实基线（counterfactual baseline）</strong>。核心直觉是：<strong>一个动作的价值，应该用"在别人都照常行动的前提下，我改成这个动作，团队结果变好/变差了多少"来衡量</strong>。这正是 COMA 算法的思想（§5.2），也是第 04 章 Shapley 贡献归因在 RL 里的对应物。</p>
+<p>设联合 Q 值为 <span class="arithmatex">\(Q(s,\mathbf{a})\)</span>，智能体 <span class="arithmatex">\(i\)</span> 的反事实基线定义为<strong>在固定其他所有主体动作 <span class="arithmatex">\(\mathbf{a}_{-i}\)</span> 的前提下，对智能体 <span class="arithmatex">\(i\)</span> 自己的动作求期望</strong>：</p>
+<div class="arithmatex">\[
+b_i(s, \mathbf{a}_{-i}) = \sum_{a_i' \in A_i} \pi_i(a_i' \mid \tau_i)\, Q\!\left(s,\ \mathbf{a}_{-i}, a_i'\right)
+\]</div>
+<p>于是优势函数（advantage）为</p>
+<div class="arithmatex">\[
+\boxed{\ A_i(s, \mathbf{a}) = Q(s, \mathbf{a}) - b_i(s, \mathbf{a}_{-i})\ }
+\]</div>
+<p>这个 <span class="arithmatex">\(A_i\)</span> 度量的是"智能体 <span class="arithmatex">\(i\)</span> 换成这个动作，相对它自己的平均表现，多贡献了多少"。下面用一个 3 智能体的玩具联合 Q 表，把"均匀分摊"和"反事实基线"放在一起对比：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 信用分配演示: 均匀分摊 vs 反事实基线 ============</span>
+<span class="c1"># 3 个智能体, 每个动作 ∈ {0, 1}; joint_value 给出一个手工设计的联合 Q 表</span>
+<span class="c1"># 设计意图: 智能体 1 是关键(它偷懒则团队崩盘), 智能体 2、3 几乎不影响结果</span>
+<span class="n">joint_value</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mf">10.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mf">9.5</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mf">9.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mf">8.8</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mf">0.4</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mf">0.2</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>                 <span class="c1"># 当前实际执行的联合动作</span>
+<span class="n">total_reward</span> <span class="o">=</span> <span class="n">joint_value</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+
+<span class="c1"># --- 方案 A: 均匀分摊 ---</span>
+<span class="n">uniform</span> <span class="o">=</span> <span class="n">total_reward</span> <span class="o">/</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;实际联合动作 a = </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2">, 联合 Q = </span><span class="si">{</span><span class="n">total_reward</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[方案 A] 均匀分摊: 每个智能体信用 = </span><span class="si">{</span><span class="n">uniform</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  (三者完全一样)&quot;</span><span class="p">)</span>
+
+<span class="c1"># --- 方案 B: 反事实基线 (COMA 式) ---</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[方案 B] 反事实基线:&quot;</span><span class="p">)</span>
+<span class="n">adv</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">cf</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">alt_a</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>                    <span class="c1"># 枚举智能体 i 的所有替代动作</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">j</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt_a</span>
+        <span class="n">cf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint_value</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">j</span><span class="p">)])</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cf</span><span class="p">))</span>           <span class="c1"># 反事实期望 = 该智能体的基线</span>
+    <span class="n">A_i</span> <span class="o">=</span> <span class="n">joint_value</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="n">adv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">A_i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  智能体 </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: 反事实均值 b_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">baseline</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> → A_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> = &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">joint_value</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">baseline</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">A_i</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">adv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adv</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  优势向量 (A_1,A_2,A_3) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">adv</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">  →  归一化信用 = &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">adv</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">adv</span><span class="p">)),</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>实际联合动作 a = (1, 1, 1), 联合 Q = 10.0
+
+[方案 A] 均匀分摊: 每个智能体信用 = 3.333  (三者完全一样)
+
+[方案 B] 反事实基线:
+  智能体 1: 反事实均值 b_1 = 5.250 → A_1 = 10.0 - 5.250 = +4.750
+  智能体 2: 反事实均值 b_2 = 9.500 → A_2 = 10.0 - 9.500 = +0.500
+  智能体 3: 反事实均值 b_3 = 9.750 → A_3 = 10.0 - 9.750 = +0.250
+
+  优势向量 (A_1,A_2,A_3) = [4.75 0.5  0.25]  →  归一化信用 = [0.864 0.091 0.045]
+</code></pre></div>
+<p>对比一目了然：<strong>均匀分摊给三个人都记 3.333 分，完全抹平了差异</strong>；而反事实基线指出真正的关键先生是智能体 1（+4.75）——把它从"努力"换成"偷懒"，团队 Q 从 10.0 掉到 0.5，几乎崩盘；智能体 2、3 的贡献则接近于零（+0.5、+0.25），它们是在搭便车。均匀分摊给这两个搭便车者的奖励，与给关键先生的奖励一模一样，梯度里于是混入了大量"与我无关"的信号。</p>
+<table>
+<thead>
+<tr>
+<th>信用分配方案</th>
+<th>公式</th>
+<th>优点</th>
+<th>缺点</th>
+<th>采用算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均匀分摊</td>
+<td><span class="arithmatex">\(r_i = r/n\)</span></td>
+<td>极简单、无额外开销</td>
+<td>搭便车、梯度稀释</td>
+<td>朴素共享奖励</td>
+</tr>
+<tr>
+<td>个体奖励塑形</td>
+<td><span class="arithmatex">\(r_i = r/n + \phi(o_i)\)</span></td>
+<td>可注入领域知识</td>
+<td>需要手工设计，可能改变最优解</td>
+<td>工程实践</td>
+</tr>
+<tr>
+<td>反事实基线</td>
+<td><span class="arithmatex">\(A_i = Q - \mathbb{E}_{a_i'}[Q]\)</span></td>
+<td>有理论依据、区分度高</td>
+<td>需要 $</td>
+<td>A_i</td>
+</tr>
+<tr>
+<td>差异奖励</td>
+<td><span class="arithmatex">\(r_i = r - \bar{r}_{-i}\)</span></td>
+<td>简单</td>
+<td>方差大</td>
+<td>DIFFER / 早期工作</td>
+</tr>
+<tr>
+<td>Shapley 值</td>
+<td>边际贡献的加权平均</td>
+<td>公理化、最公平</td>
+<td>计算量 <span class="arithmatex">\(2^n\)</span></td>
+<td>见第 04 章</td>
+</tr>
+</tbody>
+</table>
+<p>反事实基线的公平性有理论依据，它对应合作博弈里"边际贡献"的直觉，见第 04 章 Shapley 贡献归因：Shapley 值是所有"反事实顺序"上边际贡献的加权平均，而 COMA 的 <span class="arithmatex">\(A_i\)</span> 是其中最简单的一种。</p>
+<h3 id="23">2.3 联合动作空间指数</h3>
+<p>第三个量化困难是规模。联合动作空间 <span class="arithmatex">\(|\mathcal{A}| = \prod_i |A_i|\)</span> 随智能体数<strong>指数</strong>增长，这是任何"查表式"或"枚举式"方法的死穴：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 联合动作空间的指数增长 (对比 per-agent 的动作数)</span>
+<span class="n">n_actions</span> <span class="o">=</span> <span class="mi">4</span>                          <span class="c1"># 每个智能体 4 个动作</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;每个智能体的动作数 |A_i| = </span><span class="si">{</span><span class="n">n_actions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;智能体数 n&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;联合动作数 |A|^n&#39;</span><span class="si">:</span><span class="s2">&gt;22</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;相对单体的倍数&#39;</span><span class="si">:</span><span class="s2">&gt;16</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">56</span><span class="p">)</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">n_actions</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">32</span><span class="p">):</span>
+    <span class="n">joint</span> <span class="o">=</span> <span class="n">n_actions</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">&gt;10d</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">joint</span><span class="si">:</span><span class="s2">&gt;22,</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;—&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">joint</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">base</span><span class="si">:</span><span class="s1">&gt;14,.0f</span><span class="si">}</span><span class="s1">x&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>每个智能体的动作数 |A_i| = 4
+    智能体数 n |            联合动作数 |A|^n |          相对单体的倍数
+--------------------------------------------------------
+         2 |                     16 | —
+         4 |                    256 |             64x
+         8 |                 65,536 |         16,384x
+        10 |              1,048,576 |        262,144x
+        16 |          4,294,967,296 |  1,073,741,824x
+        20 |      1,099,511,627,776 | 274,877,906,944x
+        32 | 18,446,744,073,709,551,616 | 4,611,686,018,427,387,904x
+</code></pre></div>
+<p>32 个智能体、每个 4 个动作，联合动作空间就是 <span class="arithmatex">\(1.8 \times 10^{19}\)</span>——比地球上沙子的数量还多。任何需要"枚举联合动作"的算法（比如直接学一张 <span class="arithmatex">\(Q(s, \mathbf{a})\)</span> 表）在这里彻底失效。</p>
+<blockquote>
+<p><strong>核心思想</strong>：三条困难合起来，决定了 MARL 的算法设计方向——<strong>用函数逼近代替查表</strong>（对抗指数爆炸）、<strong>用集中式 Critic 提供全局信号</strong>（对抗非平稳）、<strong>用结构化分解或反事实优势分配信用</strong>（对抗信用分配）。下面三大算法家族，分别是这三条思路的工程化。</p>
+</blockquote>
+<hr />
+<h2 id="_3">三、独立学习及其局限</h2>
+<h3 id="31-iql-n">3.1 IQL：把单智能体算法跑 n 遍</h3>
+<p>最朴素的做法叫 <strong>Independent Q-Learning（IQL，独立 Q-learning）</strong>：每个智能体把"其他所有智能体的策略 + 环境"一起当成自己的环境，各自独立跑一个 Q-learning，谁也不告诉谁：</p>
+<div class="arithmatex">\[
+Q_i(s, a_i) \leftarrow Q_i(s, a_i) + \alpha\left[r_i + \gamma \max_{a_i'} Q_i(s', a_i') - Q_i(s, a_i)\right]
+\]</div>
+<p>注意这里 <span class="arithmatex">\(Q_i\)</span> 的输入只有 <span class="arithmatex">\(s\)</span> 和 <span class="arithmatex">\(a_i\)</span>，<strong>完全不含其他智能体的动作</strong>——智能体 <span class="arithmatex">\(i\)</span> 把 <span class="arithmatex">\(\mathbf{a}_{-i}\)</span> 的随机性一股脑吸收进了"环境的噪声"里。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>复杂度</td>
+<td>与单智能体同阶，<span class="arithmatex">\(O(n)\)</span> 个 <span class="arithmatex">\(Q\)</span> 表</td>
+</tr>
+<tr>
+<td>可扩展性</td>
+<td>好（互不依赖）</td>
+</tr>
+<tr>
+<td>收敛性</td>
+<td><strong>一般无保证</strong>（环境非平稳，见 §2.1 演示）</td>
+</tr>
+<tr>
+<td>实现难度</td>
+<td>最低，常作为基线</td>
+</tr>
+<tr>
+<td>典型失败</td>
+<td>极限环、策略互相踩踏、在需要协调的任务上表现差</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32">3.2 势博弈/零和下的收敛结论</h3>
+<p>"独立学习不收敛"并非绝对。理论上有两类特殊结构，能让独立学习重新拥有收敛保证：</p>
+<p><strong>（1）势博弈（potential game）</strong>。若存在一个全局势函数 <span class="arithmatex">\(\phi: \mathcal{A} \to \mathbb{R}\)</span>，使得对任意智能体 <span class="arithmatex">\(i\)</span>、任意动作变化 <span class="arithmatex">\(a_i \to a_i'\)</span>：</p>
+<div class="arithmatex">\[
+R_i(a_i, \mathbf{a}_{-i}) - R_i(a_i', \mathbf{a}_{-i}) = \phi(a_i, \mathbf{a}_{-i}) - \phi(a_i', \mathbf{a}_{-i})
+\]</div>
+<p>也就是说，<strong>每个人改变动作带来的收益变化，都等于同一个全局函数的变化</strong>。此时所有智能体在"共同爬同一座山"，独立学习能收敛到势函数的局部最优，也就是一个纳什均衡。常见的合作型共享奖励任务往往可以构造成势博弈。</p>
+<p><strong>（2）零和随机博弈（two-player zero-sum）</strong>。当 <span class="arithmatex">\(R_1 = -R_2\)</span> 时，可以用极小极大（minimax）框架，配合 Q-learning 的对手式更新（如 Minimax-Q），在理论上收敛到博弈值。但这要求<strong>双方都用混合策略</strong>，纯策略的独立 Q-learning 会像 §2.1 那样震荡。</p>
+<table>
+<thead>
+<tr>
+<th>结构</th>
+<th>收敛到</th>
+<th>前提</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>势博弈</td>
+<td>势函数局部最优 = 纳什</td>
+<td>存在势函数 <span class="arithmatex">\(\phi\)</span></td>
+<td>多数合作型共享奖励任务</td>
+</tr>
+<tr>
+<td>零和博弈</td>
+<td>博弈值（混合策略）</td>
+<td>双方极小极大、混合策略</td>
+<td>Minimax-Q、CFR</td>
+</tr>
+<tr>
+<td>一般和博弈</td>
+<td><strong>无保证</strong></td>
+<td>—</td>
+<td>独立 Q-learning（会震荡）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 参数共享（所有智能体共用一个网络，§8.1）在<strong>同质智能体 + 势博弈</strong>的结构下会显著改善独立学习的收敛行为，但它并没有改变"一般和博弈无保证"这个结论——共享参数只是减少了要学的参数数量，没有消除非平稳性。</p>
+</blockquote>
+<h3 id="33-iql">3.3 为什么 IQL 仍然是标准基线</h3>
+<p>尽管有这么多毛病，IQL 依然是每篇 MARL 论文必须报告的基线，原因有三：</p>
+<ol>
+<li><strong>便宜</strong>：训练成本与单智能体同阶，是判断"新方法是否真的带来了收益"的参照物。如果你的复杂值分解方法打不过一个 IQL，那说明问题本身不需要那么复杂。</li>
+<li><strong>揭示任务难度</strong>：IQL 在势博弈型任务上就能拿到不错的分数，在这些任务上"QMIX 略胜 IQL"并不构成强证据；只有 IQL 惨败的任务，才真正需要协调机制。</li>
+<li><strong>失败模式有诊断价值</strong>：IQL 的震荡、搭便车现象，本身就是"这个任务需要集中式信息"的直接证据。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>任务类型</th>
+<th>IQL 表现</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全独立子任务</td>
+<td>≈ 最优</td>
+<td>退化为并行单智能体</td>
+</tr>
+<tr>
+<td>势博弈型协作</td>
+<td>接近最优</td>
+<td>势函数保证收敛</td>
+</tr>
+<tr>
+<td>需要严格时序协调</td>
+<td>差</td>
+<td>非平稳 + 无信用分配</td>
+</tr>
+<tr>
+<td>零和对抗</td>
+<td>差（纯策略）</td>
+<td>需要混合策略</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">四、值分解一族</h2>
+<p>值分解（Value Decomposition）是合作型 MARL 里最优雅的一族方法。它的核心思想是：<strong>训练时用一个集中的混合网络把每个智能体的个体 Q 值融合成全局 Q 值，执行时每个智能体只需要根据自己那个 <span class="arithmatex">\(Q_i\)</span> 贪心即可</strong>。</p>
+<h3 id="41-igm-ctde">4.1 IGM 与 CTDE 的合法性</h3>
+<p><strong>为什么"个体贪心"能等于"联合最优"？</strong> 这需要一个条件，叫做 <strong>IGM（Individual-Global-Max，个体-全局最大）</strong>：</p>
+<div class="arithmatex">\[
+\boxed{\ \arg\max_{\mathbf{a}} Q_{tot}(s, \mathbf{a}) = \left( \arg\max_{a_1} Q_1(\tau_1, a_1),\ \dots,\ \arg\max_{a_n} Q_n(\tau_n, a_n) \right)\ }
+\]</div>
+<p>用人话说：<strong>联合 Q 值取最大的那个联合动作，必须恰好等于每个智能体各自贪心选出的动作拼起来</strong>。只有满足 IGM，分布式执行（各选各的 argmax）才与集中式最优等价。</p>
+<p>IGM 有一个更弱、更好实现、也更好验证的<strong>充分条件</strong>——<strong>单调性（monotonicity）</strong>：只要混合网络对每个 <span class="arithmatex">\(Q_i\)</span> 的偏导数非负：</p>
+<div class="arithmatex">\[
+\frac{\partial Q_{tot}}{\partial Q_i} \geq 0, \quad \forall i
+\]</div>
+<p>那么 IGM 就一定成立。证明见 §9.1。QMIX 的全部设计（非负权重的超网络）就是为了保证这个偏导非负。</p>
+<p>值的分解结构可以用一张图说清楚：</p>
+<p><img alt="值分解架构" src="../../img/mas-05-value-decomposition.png" /></p>
+<p><em>图：个体 Q 值经由单调的混合网络融合为全局 Q 值；执行时每个智能体只看自己那一支。</em></p>
+<div class="highlight"><pre><span></span><code>   ┌──────────────────────── 集中训练 ────────────────────────┐
+   │                                                           │
+   │   Q_1(τ_1,·)   Q_2(τ_2,·)   Q_3(τ_3,·)  ← 个体 Q (每步一支) │
+   │        │            │            │                        │
+   │        └────────────┼────────────┘                        │
+   │                     ▼                                     │
+   │        ┌────────────────────────────┐                     │
+   │        │  混合网络 (Mixing Network)  │  ◄── 全局状态 s      │
+   │        │  权重非负 → 单调不减         │      经超网络生成     │
+   │        └────────────┬───────────────┘                     │
+   │                     ▼                                     │
+   │                 Q_tot(s, a)                               │
+   │                     │                                     │
+   │                     ▼                                     │
+   │           TD 误差 L = (y - Q_tot)²  → 反传更新全部参数      │
+   └───────────────────────────────────────────────────────────┘
+                          │ 执行时只保留个体 Q
+                          ▼
+   ┌──────────────── 分布执行 ────────────────┐
+   │ 智能体 1: argmax Q_1  智能体 2: argmax Q_2  智能体 3: … │
+   └──────────────────────────────────────────┘
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>分解方法</th>
+<th>混合函数 <span class="arithmatex">\(Q_{tot}\)</span> 的形式</th>
+<th>满足 IGM?</th>
+<th>表达力</th>
+<th>年份</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IQL</td>
+<td><span class="arithmatex">\(Q_{tot} = \sum_i Q_i\)</span>（无混合）</td>
+<td>否（其实是）</td>
+<td>低</td>
+<td>—</td>
+</tr>
+<tr>
+<td>VDN</td>
+<td><span class="arithmatex">\(Q_{tot} = \sum_i Q_i\)</span></td>
+<td>是（加法是单调的）</td>
+<td>低</td>
+<td>2018</td>
+</tr>
+<tr>
+<td>QMIX</td>
+<td>单调非线性混合</td>
+<td>是</td>
+<td>中</td>
+<td>2018</td>
+</tr>
+<tr>
+<td>QTRAN</td>
+<td><span class="arithmatex">\(Q_{tot} = \sum Q_i - V\)</span> 的松弛</td>
+<td>是（松弛）</td>
+<td>高</td>
+<td>2019</td>
+</tr>
+<tr>
+<td>QPLEX</td>
+<td>优势分解</td>
+<td>是（双向）</td>
+<td>最高</td>
+<td>2021</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-vdn">4.2 VDN：最简单的可分解假设</h3>
+<p><strong>Value Decomposition Network（VDN，值分解网络）</strong> 假设全局 Q 就是个体 Q 的<strong>和</strong>：</p>
+<div class="arithmatex">\[
+Q_{tot}(s, \mathbf{a}) = \sum_{i=1}^{n} Q_i(\tau_i, a_i)
+\]</div>
+<p>这个假设极其简洁，而且<strong>天然满足 IGM</strong>：</p>
+<div class="arithmatex">\[
+\arg\max_{\mathbf{a}} \sum_i Q_i(\tau_i, a_i) = \left(\arg\max_{a_1} Q_1,\ \dots,\ \arg\max_{a_n} Q_n\right)
+\]</div>
+<p>因为"和的最大值 = 各分量最大值的和"，当且仅当各分量<strong>独立取最大</strong>（各变量可分，互不耦合）。</p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>VDN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>混合形式</td>
+<td>线性加和</td>
+</tr>
+<tr>
+<td>满足 IGM</td>
+<td>✅（加法的单调性显然）</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>极其简单，无额外参数，易于训练</td>
+</tr>
+<tr>
+<td>局限</td>
+<td>无法表达"只有两个动作同时正确才有用"这类<strong>非线性协同</strong>——参见 §9.3 的反例</td>
+</tr>
+<tr>
+<td>训练损失</td>
+<td><span class="arithmatex">\(L(\theta) = \mathbb{E}\left[(y - \sum_i Q_i)^2\right]\)</span>，<span class="arithmatex">\(y = r + \gamma \max_{\mathbf{a}'} \sum_i Q_i'\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>VDN 的局限可以用一句话概括：<strong>它假设每个智能体的贡献是"可加的、互不干扰的"</strong>。而现实任务里大量存在"1 + 1 &gt; 2"的协同效应（两个机器人同时推门才能打开），加法模型表达不出来。</p>
+<h3 id="43-qmix">4.3 QMIX：单调混合网络 + 损失推导</h3>
+<p><strong>QMIX</strong> 是值分解家族的主角。它保留了"个体 Q 各自决策"的执行结构，但把混合函数从线性加和放宽为<strong>单调非线性函数</strong>，并且——这是关键——<strong>混合网络的权重不是自由参数，而是由全局状态 <span class="arithmatex">\(s\)</span> 通过一个"超网络（hypernetwork）"动态生成的</strong>：</p>
+<div class="arithmatex">\[
+Q_{tot}(s, \mathbf{a}) = f_\theta\big(s,\ Q_1(\tau_1, a_1), \dots, Q_n(\tau_n, a_n)\big)
+\]</div>
+<p><strong>单调性约束的实现</strong>：混合网络是一个前馈网络，但它的<strong>所有权重都被强制非负</strong>：</p>
+<div class="arithmatex">\[
+w_{ij} \geq 0, \qquad b_k \text{ 可以是任意实数}
+\]</div>
+<p>非负权重 + 单调激活函数（如 ELU / ReLU） ⟹ 输出对每个输入的偏导非负 ⟹ <span class="arithmatex">\(\partial Q_{tot} / \partial Q_i \geq 0\)</span> ⟹ IGM 成立。<strong>偏置项不受约束，因为它不影响单调性。</strong></p>
+<p><strong>损失函数</strong>：QMIX 用标准的 TD 误差训练整个网络（个体 Q 网络 + 混合网络），目标值用联合动作的最大值：</p>
+<div class="arithmatex">\[
+\boxed{\ \mathcal{L}(\theta) = \mathbb{E}_{(s,\mathbf{a},r,s') \sim \mathcal{D}}\Big[ \left( \underbrace{r + \gamma \max_{\mathbf{a}'} Q_{tot}(s', \mathbf{a}'; \theta^-)}_{\text{TD 目标 } y} - Q_{tot}(s, \mathbf{a}; \theta) \right)^2 \Big]\ }
+\]</div>
+<p>其中 <span class="arithmatex">\(\theta^-\)</span> 是目标网络参数，<span class="arithmatex">\(\max_{\mathbf{a}'}\)</span> 通过"每个智能体各自 argmax 个体 Q"来算（得益于 IGM，这个分布式 <span class="arithmatex">\(\max\)</span> 等于真正的联合 <span class="arithmatex">\(\max\)</span>，而且是 <span class="arithmatex">\(O(n)\)</span> 而不是 <span class="arithmatex">\(O(|\mathcal{A}|)\)</span>）。</p>
+<blockquote>
+<p><strong>核心思想</strong>：QMIX 的 <span class="arithmatex">\(Q_{tot}\)</span> 是 <span class="arithmatex">\(Q_i\)</span> 的<strong>单调</strong>函数，但不一定是线性的。单调性保证了"分布式 argmax = 联合 argmax"（IGM）；非线性保证了它能表达比 VDN 更丰富的协同（例如"当某个智能体 Q 很高时，其他智能体 Q 的边际价值也放大")。这是一个"刚好够用"的设计。</p>
+</blockquote>
+<p>下面实跑一个最小的 QMIX 混合网络，<strong>特意验证它满足单调性</strong>：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 最小 QMIX 混合网络: 验证单调性 (IGM 的充分条件) ============</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MonotonicMixingNet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;由全局状态生成非负权重, 再把个体 Q 单调地融合为 Q_tot.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_agents</span><span class="p">,</span> <span class="n">state_dim</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">embed_dim</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="c1"># 超网络: 全局状态 -&gt; 混合网络的第一层权重 (原始, 可正可负)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W_hyper</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="p">(</span><span class="n">state_dim</span><span class="p">,</span> <span class="n">n_agents</span> <span class="o">*</span> <span class="n">embed_dim</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_hyper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_agents</span> <span class="o">*</span> <span class="n">embed_dim</span><span class="p">)</span>
+        <span class="c1"># 混合网络第二层权重 (同样经 abs 保证非负)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span> <span class="o">=</span> <span class="n">n_agents</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">q_agents</span><span class="p">):</span>
+        <span class="n">W1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">state</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_hyper</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_hyper</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">))</span>   <span class="c1"># 非负权重</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">q_agents</span> <span class="o">@</span> <span class="n">W1</span><span class="p">)</span>                             <span class="c1"># 单调激活</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>                                     <span class="c1"># 非负输出权重</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">h</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="n">n_agents</span><span class="p">,</span> <span class="n">state_dim</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">state_dim</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">MonotonicMixingNet</span><span class="p">(</span><span class="n">n_agents</span><span class="p">,</span> <span class="n">state_dim</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">base</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;基准: 个体 Q = </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">, Q_tot = </span><span class="si">{</span><span class="n">base</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;逐个提高某个智能体的 Q, 检查 Q_tot 是否单调不减:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;智能体&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Q_i 变化&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;新的 Q_tot&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;ΔQ_tot&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> | 单调?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_agents</span><span class="p">):</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">q2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">new</span> <span class="o">-</span> <span class="n">base</span>
+    <span class="n">mono</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">1e-12</span>
+    <span class="n">ok</span> <span class="o">&amp;=</span> <span class="n">mono</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">+.2f</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">q2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">+.2f</span><span class="si">}</span><span class="s2">     | </span><span class="si">{</span><span class="n">new</span><span class="si">:</span><span class="s2">&gt;12.5f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">d</span><span class="si">:</span><span class="s2">&gt;+10.5f</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;✅&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">mono</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;❌&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">结论: </span><span class="si">{</span><span class="s1">&#39;全部偏导非负 → 满足单调性 → IGM 成立 (分布式 argmax = 联合 argmax)&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;违反单调性!&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>基准: 个体 Q = [ 0.5 -0.2  0.8], Q_tot = 0.94998
+
+逐个提高某个智能体的 Q, 检查 Q_tot 是否单调不减:
+   智能体 |             Q_i 变化 |     新的 Q_tot |     ΔQ_tot | 单调?
+----------------------------------------------------------------------
+     1 | +0.50 → +1.50     |      1.62732 |   +0.67734 | ✅
+     2 | -0.20 → +0.80     |      1.79842 |   +0.84844 | ✅
+     3 | +0.80 → +1.80     |      1.46863 |   +0.51864 | ✅
+
+结论: 全部偏导非负 → 满足单调性 → IGM 成立 (分布式 argmax = 联合 argmax)
+</code></pre></div>
+<p>三个智能体的 Q 各自提高 1.0，<span class="arithmatex">\(Q_{tot}\)</span> 全都<strong>上升</strong>（Δ 均为正），这就是单调性在数值上的直接体现。正因为这个性质，执行时每个智能体安心地对 <span class="arithmatex">\(Q_i\)</span> 取 argmax，拼起来的联合动作就一定是 <span class="arithmatex">\(Q_{tot}\)</span> 的最大值。</p>
+<h3 id="44-qtran">4.4 QTRAN：把可分解性放宽</h3>
+<p>QMIX 的单调性虽然好用，但它<strong>限制表达力</strong>：它排除了那些"混合 Q 在某个 <span class="arithmatex">\(Q_i\)</span> 增大时反而下降"的合法任务。<strong>QTRAN</strong> 试图摆脱单调性约束，转而直接逼近 IGM 条件本身。</p>
+<p>QTRAN 引入一个<strong>全局 Q</strong> <span class="arithmatex">\(Q_{jt}(s,\mathbf{a})\)</span> 和一个<strong>状态价值</strong> <span class="arithmatex">\(V_{jt}(s)\)</span>，要求：</p>
+<div class="arithmatex">\[
+\sum_i Q_i(\tau_i, a_i) = Q_{jt}(s, \mathbf{a}) \quad \text{（当前联合动作上相等）}
+\]</div>
+<p>同时用软约束保证"最优联合动作满足 IGM"，把可分解性表达为一个带惩罚的优化问题（QTRAN-base 用 L2 松弛，QTRAN-alt 用更强但更贵的约束）。核心的方程组是：</p>
+<div class="arithmatex">\[
+\begin{cases}
+\sum_i Q_i(\tau_i, a_i) - Q_{jt}(s, \mathbf{a}) + V_{jt}(s) = 0 &amp; \text{（一致约束）}\\
+\sum_i Q_i(\tau_i, a_i) - Q_{jt}(s, \mathbf{a}) + V_{jt}(s) \geq 0 &amp; \text{（IGM 最优性约束）}
+\end{cases}
+\]</div>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>QTRAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能否摆脱单调性</td>
+<td>能（理论上表达力更强）</td>
+</tr>
+<tr>
+<td>代价</td>
+<td>需要额外学 <span class="arithmatex">\(Q_{jt}\)</span>、<span class="arithmatex">\(V_{jt}\)</span>，损失项多、训练不稳定</td>
+</tr>
+<tr>
+<td>实践表现</td>
+<td>常被 QMIX 追平甚至超过，超参敏感</td>
+</tr>
+<tr>
+<td>教训</td>
+<td><strong>理论表达力 ≠ 实际效果</strong>，优化难度常常才是瓶颈</td>
+</tr>
+</tbody>
+</table>
+<h3 id="45-qplex-igm">4.5 QPLEX：优势分解，双向 IGM</h3>
+<p><strong>QPLEX</strong> 的关键洞察是：与其在 <span class="arithmatex">\(Q\)</span> 上分解，不如在<strong>优势函数（advantage）</strong>上分解，把 IGM 拆成<strong>双向条件</strong>——既要"联合最优能被个体最优达到"，也要"个体最优不被联合次优掩盖"。它利用<strong>优势分解的传递性（duplex dueling）</strong>，用双头网络分别学个体优势与联合优势，再用一个单调变换矩阵连接：</p>
+<div class="arithmatex">\[
+Q_{tot}(s, \mathbf{a}) = V(s) + \sum_i w_i(s, \mathbf{a})\, A_i(\tau_i, a_i), \qquad w_i \geq 0
+\]</div>
+<p>QPLEX 声称它<strong>同时具备 QTRAN 的表达力和 QMIX 的优化稳定性</strong>，在 SMAC 等基准上取得了当时的最好成绩之一。</p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>QPLEX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分解对象</td>
+<td>优势 <span class="arithmatex">\(A_i\)</span> 而非 <span class="arithmatex">\(Q_i\)</span></td>
+</tr>
+<tr>
+<td>IGM 满足方式</td>
+<td>双向条件 + 传递性</td>
+</tr>
+<tr>
+<td>表达力</td>
+<td>高（理论覆盖 QTRAN 类）</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td>高（双头 + 变换矩阵）</td>
+</tr>
+<tr>
+<td>实践定位</td>
+<td>表达力上限的探路者</td>
+</tr>
+</tbody>
+</table>
+<h3 id="46">4.6 值分解家族对比表与选型</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th><span class="arithmatex">\(Q_{tot}\)</span> 形式</th>
+<th>IGM</th>
+<th>需全局状态?</th>
+<th>训练稳定性</th>
+<th>表达力</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IQL</strong></td>
+<td>无（各自独立）</td>
+<td>—</td>
+<td>否</td>
+<td>差</td>
+<td>—</td>
+<td>基线、势博弈任务</td>
+</tr>
+<tr>
+<td><strong>VDN</strong></td>
+<td><span class="arithmatex">\(\sum_i Q_i\)</span></td>
+<td>✅</td>
+<td>否</td>
+<td>高</td>
+<td>低</td>
+<td>快速原型、弱协同任务</td>
+</tr>
+<tr>
+<td><strong>QMIX</strong></td>
+<td>单调非线性 <span class="arithmatex">\(f(Q_1,\dots; s)\)</span></td>
+<td>✅</td>
+<td>是</td>
+<td>高</td>
+<td>中</td>
+<td><strong>默认首选</strong>，SMAC 类任务</td>
+</tr>
+<tr>
+<td><strong>QTRAN</strong></td>
+<td><span class="arithmatex">\(\sum Q_i - V_{jt} + Q_{jt}\)</span></td>
+<td>✅</td>
+<td>是</td>
+<td>中</td>
+<td>高</td>
+<td>需要非单调协同的研究</td>
+</tr>
+<tr>
+<td><strong>QPLEX</strong></td>
+<td><span class="arithmatex">\(V + \sum_i w_i A_i\)</span></td>
+<td>✅</td>
+<td>是</td>
+<td>中高</td>
+<td>最高</td>
+<td>追求表达力上限</td>
+</tr>
+</tbody>
+</table>
+<p><strong>选型口诀</strong>：</p>
+<ol>
+<li>先用 <strong>IQL</strong> 摸底，看问题是否需要协调。</li>
+<li>需要协调且任务"可加"，用 <strong>VDN</strong> 快速验证。</li>
+<li>默认上 <strong>QMIX</strong>——它在"表达力 / 稳定性 / 实现复杂度"三者间取得最好的平衡，是绝大多数论文与工程的第一选择。</li>
+<li>只有在明确观察到"QMIX 单调性假设被违反导致的性能瓶颈"时，才去尝试 <strong>QTRAN / QPLEX</strong>——因为它们带来的训练不稳定性成本，往往高于表达力带来的收益。</li>
+</ol>
+<hr />
+<h2 id="_5">五、策略梯度家族</h2>
+<p>值分解一族处理的是离散动作、共享奖励的合作任务。当动作空间连续、或者需要随机策略、或者要处理混合动机时，<strong>策略梯度</strong>方法更合适。</p>
+<h3 id="51-maddpg-critic">5.1 MADDPG：集中式 Critic 的诞生</h3>
+<p><strong>MADDPG（Multi-Agent Deep Deterministic Policy Gradient，多智能体深度确定性策略梯度）</strong> 是 CTDE 范式最有影响力的落地。它给每个智能体配一个<strong>中心化的 Critic</strong>，Critic 输入全局状态与<strong>所有</strong>智能体的动作：</p>
+<div class="arithmatex">\[
+Q_i^{\mu}\big(s,\ a_1, \dots, a_n\big)
+\]</div>
+<p>而每个智能体的 Actor 只看自己的观测：<span class="arithmatex">\(\mu_i(o_i) \to a_i\)</span>。Actor 的梯度是：</p>
+<div class="arithmatex">\[
+\nabla_{\theta_i} J(\theta_i) = \mathbb{E}\Big[ \nabla_{\theta_i} \mu_i(o_i)\ \nabla_{a_i} Q_i^{\mu}(s, a_1, \dots, a_n)\big|_{a_i = \mu_i(o_i)} \Big]
+\]</div>
+<p><strong>关键机制</strong>：Critic 能看到别人的动作，所以即使别人在变（非平稳），Critic 也能"知道"当前的变化是什么，从而把非平稳性从 Critic 的视角部分消除了。这就是 CTDE 的精髓——<strong>用集中的信息换取更稳定的学习信号</strong>。</p>
+<p><img alt="集中训练分布执行 CTDE" src="../../img/mas-05-ctde.png" /></p>
+<p><em>图：训练时 Critic 看全局、看所有动作；执行时 Actor 只看自己的观测。</em></p>
+<div class="highlight"><pre><span></span><code>   ┌──────── 训练阶段: 每个智能体配一个集中 Critic ────────┐
+   │  o_1→μ_1→a_1 ─┐                                       │
+   │  o_2→μ_2→a_2 ─┼─► Critic_i(s, a_1, a_2, …, a_n) → Q_i  │
+   │      ⋮       │            ⋮                           │
+   │  o_n→μ_n→a_n ─┘                                       │
+   │  ★ Critic 看得见 s 与全部 a_j → 非平稳性被&quot;感知&quot;        │
+   └──────────────────────┬────────────────────────────────┘
+                          ▼
+   ┌──────── 执行阶段: 各自只看局部观测 ────────┐
+   │  智能体 i:  o_i ──► μ_i(o_i) ──► a_i      │
+   └───────────────────────────────────────────┘
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>MADDPG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>适用</td>
+<td>连续动作、合作或混合动机</td>
+</tr>
+<tr>
+<td>Critic 输入</td>
+<td>全局状态 + 全部动作</td>
+</tr>
+<tr>
+<td>Actor 输入</td>
+<td>本地观测</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>首次系统化 CTDE；能处理合作/竞争统一框架</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>Critic 输入维度随 <span class="arithmatex">\(n\)</span> 线性增长；确定性策略探索不足；对超参敏感</td>
+</tr>
+<tr>
+<td>后续</td>
+<td>MADDPG → MAAC（注意力 Critic）→ MAPPO（更稳的 PPO 版本）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-coma">5.2 COMA：反事实多智能体</h3>
+<p><strong>COMA（Counterfactual Multi-Agent Policy Gradients，反事实多智能体策略梯度）</strong> 把 §2.2 的反事实基线搬进了 Actor-Critic：</p>
+<ul>
+<li><strong>集中式 Critic</strong> 估计 <span class="arithmatex">\(Q(s, \mathbf{a})\)</span>；</li>
+<li><strong>反事实基线</strong> 计算 <span class="arithmatex">\(A_i = Q(s,\mathbf{a}) - \sum_{a_i'} \pi_i(a_i'\mid\tau_i) Q(s, (\mathbf{a}_{-i}, a_i'))\)</span>；</li>
+<li><strong>Actor</strong> 用这个优势做策略梯度，正好解决了"共享奖励下我该做多少"的问题。COMA 还用一个 critic 加一个反事实头来高效计算所有反事实，避免为每个 <span class="arithmatex">\(a_i'\)</span> 跑一次完整前向。</li>
+</ul>
+<div class="highlight"><pre><span></span><code>   COMA 的信用分配机制 (智能体 i 的视角):
+
+   所有其他人照常:  a_{-i} 固定不动
+        │
+        ├── 我选 a_i^{(1)} → Q(s, a_i^{(1)}, a_{-i})
+        ├── 我选 a_i^{(2)} → Q(s, a_i^{(2)}, a_{-i})        ┌─ 取加权平均
+        ├── 我选 a_i^{(3)} → Q(s, a_i^{(3)}, a_{-i})  ──────┤  = 反事实基线 b_i
+        │        ⋮          ⋮                     ┌───────► ┘
+        └── 我选 a_i^{(k)} → Q(s, a_i^{(k)}, a_{-i})
+                  │
+           实际选了 a_i  →  Q(s, a_i, a_{-i})
+                  │
+                  ▼
+        A_i = Q(s, a_i, a_{-i}) - Σ_{a&#39;} π_i(a&#39;) Q(s, a&#39;, a_{-i})
+                  │
+                  ▼
+          用它更新智能体 i 的 Actor
+</code></pre></div>
+<p>下面实跑 COMA 的核心计算——<strong>反事实优势</strong>——并与均匀分摊对比：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ COMA 核心: 反事实优势的逐智能体计算 ============</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">global_q</span><span class="p">(</span><span class="n">joint_action</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;模拟一个集中 Critic: 团队收益 = 各自基础收益 + 动作一致的协同加成.&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">joint_action</span><span class="p">)</span>
+    <span class="n">synergy</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.0</span>   <span class="c1"># 全员一致 → 协同加成</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">synergy</span><span class="p">)</span>         <span class="c1"># 动作编号越小越好</span>
+
+<span class="n">n_agents</span><span class="p">,</span> <span class="n">n_actions</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span>
+<span class="c1"># 每个智能体的当前策略 (示例: 温和偏好的混合策略)</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]])</span>
+<span class="n">joint</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>                     <span class="c1"># 当前执行的联合动作: 大家一致</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;当前联合动作 a = </span><span class="si">{</span><span class="n">joint</span><span class="si">}</span><span class="s2">;  集中 Critic 的 Q(s,a) = </span><span class="si">{</span><span class="n">global_q</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;逐个智能体计算 A_i = Q(s,a) - Σ_{a&#39;} π_i(a&#39;) Q(s, (a_i&#39;→a_{-i})):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;智能体&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;反事实 Q 向量&#39;</span><span class="si">:</span><span class="s2">&gt;20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;基线 b_i&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;优势 A_i&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">56</span><span class="p">)</span>
+<span class="n">adv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_agents</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_agents</span><span class="p">):</span>
+    <span class="n">cf_q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">global_q</span><span class="p">(</span><span class="n">joint</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">joint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:])</span>
+                     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_actions</span><span class="p">)])</span>          <span class="c1"># 枚举 i 的所有动作</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">policy</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cf_q</span><span class="p">))</span>                    <span class="c1"># 反事实基线</span>
+    <span class="n">adv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_q</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span> <span class="o">-</span> <span class="n">b</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">cf_q</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">&gt;9.3f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">adv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;+9.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">反事实优势 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">adv</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;均匀分摊的信用 = </span><span class="si">{</span><span class="n">global_q</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n_agents</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  (三者完全相同)&quot;</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">adv</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">adv</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;softmax 归一化后的更新权重 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>当前联合动作 a = [0, 0, 0];  集中 Critic 的 Q(s,a) = 5.000
+
+逐个智能体计算 A_i = Q(s,a) - Σ_{a&#39;} π_i(a&#39;) Q(s, (a_i&#39;→a_{-i})):
+   智能体 |             反事实 Q 向量 |    基线 b_i |    优势 A_i
+--------------------------------------------------------
+     1 | [5.  2.7 2.4] |     4.050 |    +0.950
+     2 | [5.  2.7 2.4] |     3.070 |    +1.930
+     3 | [5.  2.7 2.4] |     2.720 |    +2.280
+
+反事实优势 = [0.95 1.93 2.28]
+均匀分摊的信用 = 1.667  (三者完全相同)
+softmax 归一化后的更新权重 = [0.134 0.358 0.508]
+</code></pre></div>
+<p>反事实优势指出：三人的反事实 Q 向量完全一样（其他两人的动作被固定），<strong>差别全部来自各自的策略</strong>。智能体 1 的策略本就集中在动作 0（好动作），它选 0 并不稀奇，基线最高（4.05）、优势最小（+0.95）；智能体 3 的策略把 70% 概率压在动作 2（差动作）上，这次却选了 0，属于"意外的好表现"，基线最低（2.72）、优势最大（+2.28）。<strong>均匀分摊把这些关键差异全部抹成同一个 1.667。</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>信用信号</th>
+<th>需要的信息</th>
+<th>计算成本</th>
+<th>方差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均匀分摊</td>
+<td><span class="arithmatex">\(r/n\)</span></td>
+<td>全局奖励</td>
+<td><span class="arithmatex">\(O(1)\)</span></td>
+<td>低（但偏差大）</td>
+</tr>
+<tr>
+<td>COMA 反事实</td>
+<td><span class="arithmatex">\(A_i\)</span></td>
+<td>集中 Critic + 策略</td>
+<td>$O(n \cdot</td>
+<td>A_i</td>
+</tr>
+<tr>
+<td>Shapley 归因</td>
+<td><span class="arithmatex">\(\phi_i\)</span></td>
+<td>全部子集的联合 Q</td>
+<td><span class="arithmatex">\(O(2^n)\)</span></td>
+<td>低（但极贵）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：策略梯度家族的共同信条是"<strong>集中式 Critic 提供全局梯度信号，分布式 Actor 做本地决策</strong>"。MADDPG 用全局 Critic 对抗非平稳，COMA 用反事实基线对抗信用分配，MAPPO 则把两者的优点与 PPO 的稳定性结合起来。</p>
+</blockquote>
+<h3 id="53-mappo-ppo-gae">5.3 MAPPO：多智能体 PPO 加 GAE</h3>
+<p><strong>MAPPO（Multi-Agent PPO）</strong> 是近年在合作型 MARL 基准上表现最抢眼的方法之一，也是"简单即强大"的典范——它基本上就是<strong>参数共享的 PPO + 一个集中式 Critic</strong>，几乎没有新的机制，但配合正确的工程细节就能打平甚至超过复杂的值分解方法。</p>
+<p><strong>（1）GAE 的多智能体改造。</strong> 单智能体 PPO 用 GAE（Generalized Advantage Estimation，广义优势估计）估计优势：</p>
+<div class="arithmatex">\[
+\hat{A}_t = \sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}, \qquad \delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)
+\]</div>
+<p>多智能体下，<strong>共享奖励</strong>意味着所有智能体共享同一个 <span class="arithmatex">\(r_t\)</span>；而 Critic 是集中的，输入全局状态（或全部观测的拼接）。于是第 <span class="arithmatex">\(i\)</span> 个智能体的优势就是同一个全局优势：</p>
+<div class="arithmatex">\[
+\boxed{\ \hat{A}_t^{\text{joint}} = \sum_{l=0}^{\infty} (\gamma \lambda)^l \Big( r_{t+l} + \gamma V_{\phi}(s_{t+l+1}) - V_{\phi}(s_{t+l}) \Big),\qquad V_{\phi}(s) = V_{\phi}\big(o_1, \dots, o_n\big)\ }
+\]</div>
+<p>注意这里的 <span class="arithmatex">\(V_\phi\)</span> 输入是<strong>所有智能体观测的拼接</strong>（或全局状态），这就是"集中式 Critic"。GAE 的 <span class="arithmatex">\(\lambda\)</span> 控制偏差-方差权衡：<span class="arithmatex">\(\lambda \to 0\)</span> 退化为单步 TD（低方差高偏差），<span class="arithmatex">\(\lambda \to 1\)</span> 退化为蒙特卡洛回报（高方差低偏差）。</p>
+<p><strong>（2）实现细节（这些才是 MAPPO 能打赢的关键）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>细节</th>
+<th>做法</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>参数共享</strong></td>
+<td>所有同质智能体共用一个 Actor 和一个 Critic</td>
+<td>样本效率提升 <span class="arithmatex">\(n\)</span> 倍，避免每个智能体样本不足</td>
+</tr>
+<tr>
+<td><strong>集中式 Critic 输入</strong></td>
+<td>用所有智能体的观测拼接（或全局状态）</td>
+<td>缓解非平稳，Critic 学得更准</td>
+</tr>
+<tr>
+<td><strong>输入去中心化</strong></td>
+<td>Critic 输入用"某智能体的局部观测 + 全局信息"</td>
+<td>避免 Critic 对特定 agent 编号过拟合</td>
+</tr>
+<tr>
+<td><strong>死亡掩码（dead mask）</strong></td>
+<td>智能体死亡后从 Critic 输入中屏蔽其观测</td>
+<td>否则死亡智能体的噪声观测会污染价值估计</td>
+</tr>
+<tr>
+<td><strong>收益归一化</strong></td>
+<td>用 PopArt 或 running mean/std 归一化回报</td>
+<td>共享奖励尺度大、方差大，直接训会崩</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（3）超参数表</strong>（MAPPO 论文在 SMAC 等基准上的常用配置）：</p>
+<table>
+<thead>
+<tr>
+<th>超参</th>
+<th>典型值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actor 学习率</td>
+<td><span class="arithmatex">\(5\times 10^{-4}\)</span></td>
+<td></td>
+</tr>
+<tr>
+<td>Critic 学习率</td>
+<td><span class="arithmatex">\(5\times 10^{-4}\)</span></td>
+<td>有时更高</td>
+</tr>
+<tr>
+<td>GAE <span class="arithmatex">\(\lambda\)</span></td>
+<td>0.95</td>
+<td>优势估计的偏差-方差权衡</td>
+</tr>
+<tr>
+<td>折扣 <span class="arithmatex">\(\gamma\)</span></td>
+<td>0.99</td>
+<td>长程依赖任务可调 0.995</td>
+</tr>
+<tr>
+<td>PPO 裁剪 <span class="arithmatex">\(\epsilon\)</span></td>
+<td>0.2</td>
+<td></td>
+</tr>
+<tr>
+<td>熵系数</td>
+<td>0.01</td>
+<td>鼓励探索</td>
+</tr>
+<tr>
+<td>更新轮数</td>
+<td>10</td>
+<td>每个 batch 的 SGD 轮数</td>
+</tr>
+<tr>
+<td>小批量数</td>
+<td>1–4</td>
+<td>按 episode 切</td>
+</tr>
+<tr>
+<td>训练步数</td>
+<td><span class="arithmatex">\(1\times 10^7\)</span></td>
+<td>SMAC 级别</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（4）损失函数：</strong></p>
+<div class="arithmatex">\[
+\mathcal{L} = \mathcal{L}^{\text{CLIP}} - c_1 \mathcal{L}^{V} + c_2 \mathcal{S}[\pi_\theta]
+\]</div>
+<p>其中</p>
+<div class="arithmatex">\[
+\mathcal{L}^{\text{CLIP}} = \mathbb{E}\Big[\min\big(\rho_t \hat{A}_t,\ \text{clip}(\rho_t, 1-\epsilon, 1+\epsilon)\hat{A}_t\big)\Big], \quad \rho_t = \frac{\pi_\theta(a_t\mid o_t)}{\pi_{\theta_{\text{old}}}(a_t\mid o_t)}
+\]</div>
+<table>
+<thead>
+<tr>
+<th>家族</th>
+<th>代表</th>
+<th>策略更新</th>
+<th>Critic</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>值分解</td>
+<td>QMIX</td>
+<td>隐式（<span class="arithmatex">\(Q\)</span> 贪心）</td>
+<td>混合网络</td>
+<td>稳定、样本效率高</td>
+<td>只处理离散动作、单调性限制</td>
+</tr>
+<tr>
+<td>确定性 PG</td>
+<td>MADDPG</td>
+<td>确定性梯度</td>
+<td>每个体一个</td>
+<td>连续动作</td>
+<td>探索差、超参敏感</td>
+</tr>
+<tr>
+<td>随机 PG</td>
+<td>COMA</td>
+<td>反事实优势</td>
+<td>集中式</td>
+<td>信用分配强</td>
+<td>高方差、慢</td>
+</tr>
+<tr>
+<td><strong>PPO 系</strong></td>
+<td><strong>MAPPO</strong></td>
+<td><strong>PPO 裁剪</strong></td>
+<td><strong>集中式</strong></td>
+<td><strong>稳定、通用、简单</strong></td>
+<td>需要精细工程细节</td>
+</tr>
+</tbody>
+</table>
+<h3 id="54">5.4 策略梯度家族对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>MADDPG</th>
+<th>COMA</th>
+<th>MAPPO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动作空间</td>
+<td>连续</td>
+<td>离散</td>
+<td>两者皆可</td>
+</tr>
+<tr>
+<td>策略类型</td>
+<td>确定性</td>
+<td>随机</td>
+<td>随机</td>
+</tr>
+<tr>
+<td>Critic 数量</td>
+<td>每智能体一个</td>
+<td>一个集中式</td>
+<td>一个集中式（参数共享）</td>
+</tr>
+<tr>
+<td>信用分配</td>
+<td>无显式（靠各自 Critic）</td>
+<td><strong>反事实优势</strong></td>
+<td>共享优势 + GAE</td>
+</tr>
+<tr>
+<td>训练稳定性</td>
+<td>中</td>
+<td>中低</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>样本效率</td>
+<td>中</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>中</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>工程地位</td>
+<td>教科书基线</td>
+<td>信用分配范本</td>
+<td><strong>当前首选</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：如果值分解是"用一个单调网络把局部拼成全局"，那么策略梯度家族就是"用一个集中 Critic 把全局信号分发到局部"。<strong>前者的合法性来自 IGM，后者的合法性来自"Critic 可以看全局"</strong>——两者都是 CTDE，但走的路径相反：一个自下而上合成，一个自上而下分解。</p>
+</blockquote>
+<hr />
+<h2 id="_6">六、自博弈与种群训练</h2>
+<p><img alt="自博弈与种群训练" src="../../img/mas-05-selfplay.png" /></p>
+<p><em>图：当前策略与历史版本池中的对手循环对练，PFSP 把训练算力优先投向"打不过的对手"。</em></p>
+<p>前面五节的框架默认"合作"或"固定对手"。当对手也在学习、而且是对抗性学习时，问题进入另一片天地：<strong>自博弈（self-play）</strong>。</p>
+<h3 id="61">6.1 零和自博弈中的策略循环</h3>
+<p>自博弈的基本做法是：让智能体与自己的历史版本对练。在最简单的零和博弈——<strong>剪刀石头布（Rock-Paper-Scissors, RPS）</strong>——上，自博弈会暴露出一个著名的病理现象：<strong>策略循环（strategy cycling）</strong>。</p>
+<p>RPS 的唯一纳什均衡是以 1/3 概率均匀随机。但两个"最佳回应"式学习者会像 §2.1 的硬币匹配一样陷入循环——一方猛出布赢石头，另一方猛出剪刀赢布，第一方又改出石头……<strong>永远在三种纯策略之间打转，学不到混合均衡</strong>。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 自博弈策略循环: 剪刀石头布 ============</span>
+<span class="c1"># 收益矩阵 (行玩家得分): 0=石头, 1=布, 2=剪刀</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">lr</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span>
+<span class="n">Q1</span><span class="p">,</span> <span class="n">Q2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pick</span><span class="p">(</span><span class="n">Q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">eps</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+
+<span class="n">hist1</span><span class="p">,</span> <span class="n">hist2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">T</span><span class="p">,</span> <span class="n">win</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">,</span> <span class="mi">3000</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;自博弈下智能体 1 的动作分布 (每 3000 步快照):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;步数&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;P(石头)&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;P(布)&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;P(剪刀)&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;占优&#39;</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">48</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">pick</span><span class="p">(</span><span class="n">Q1</span><span class="p">),</span> <span class="n">pick</span><span class="p">(</span><span class="n">Q2</span><span class="p">)</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span>
+    <span class="n">Q1</span><span class="p">[</span><span class="n">a1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">r1</span> <span class="o">-</span> <span class="n">Q1</span><span class="p">[</span><span class="n">a1</span><span class="p">]);</span> <span class="n">Q2</span><span class="p">[</span><span class="n">a2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">r1</span> <span class="o">-</span> <span class="n">Q2</span><span class="p">[</span><span class="n">a2</span><span class="p">])</span>
+    <span class="n">hist1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a1</span><span class="p">);</span> <span class="n">hist2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">win</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hist1</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">win</span><span class="p">:</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">seg</span> <span class="o">==</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;7.3f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;7.3f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;7.3f</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">[</span><span class="s1">&#39;石头&#39;</span><span class="p">,</span><span class="s1">&#39;布&#39;</span><span class="p">,</span><span class="s1">&#39;剪刀&#39;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">f</span><span class="p">))]</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hist1</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hist2</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">全局平均 智能体1 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">   智能体2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>自博弈下智能体 1 的动作分布 (每 3000 步快照):
+     步数 |   P(石头) |    P(布) |   P(剪刀) |    占优
+------------------------------------------------
+   3000 |   0.417 |   0.264 |   0.319 |    石头
+   6000 |   0.336 |   0.307 |   0.358 |    剪刀
+   9000 |   0.257 |   0.302 |   0.442 |    剪刀
+  12000 |   0.354 |   0.325 |   0.321 |    石头
+  15000 |   0.365 |   0.294 |   0.341 |    石头
+  18000 |   0.417 |   0.294 |   0.289 |    石头
+  21000 |   0.336 |   0.400 |   0.263 |     布
+  24000 |   0.350 |   0.278 |   0.372 |    剪刀
+  27000 |   0.346 |   0.368 |   0.286 |     布
+  30000 |   0.260 |   0.362 |   0.378 |    剪刀
+
+全局平均 智能体1 = [0.344 0.319 0.337]   智能体2 = [0.342 0.319 0.339]
+</code></pre></div>
+<p><strong>这里有一个极有教育意义的对比</strong>：全局平均频率几乎正好是 1/3 均匀（<code>[0.344, 0.319, 0.337]</code>）——但这<strong>不是</strong>学出了混合纳什均衡，而是 ε-greedy 探索自然铺出的均匀覆盖。真正看每 3000 步的窗口，频率在 <strong>0.257 到 0.442</strong> 之间大幅摆动，"占优动作"沿 石头 → 剪刀 → 布 轮转，这就是策略循环的痕迹。<strong>全局平均掩盖了局部震荡</strong>——评估 MARL 必须看时间窗口内的行为轨迹（第 09 章有评估协议）。</p>
+<blockquote>
+<p>⚠️ ε-greedy 的探索恰好为 RPS 这类博弈提供了"自动混合"，这是它看起来接近均衡的原因。若把探索率调到 0（纯贪心），你会看到教科书式的极限环：石头 → 布 → 剪刀 → 石头……这正是 §2.1 硬币匹配现象在 3 动作下的推广。</p>
+</blockquote>
+<h3 id="62">6.2 历史版本池</h3>
+<p>纯自博弈"当前版本 vs 当前版本"有一个致命问题：<strong>它会过拟合到当下这一代对手</strong>，并可能陷入"循环被利用"。解决方案是维护一个<strong>历史版本池（historical policy pool / league）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>池组成</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前主策略（main agent）</td>
+<td>与自己对练，保持进步</td>
+</tr>
+<tr>
+<td>历史快照（past snapshot）</td>
+<td>提供多样对手，防止循环过拟合</td>
+</tr>
+<tr>
+<td>主策略的"剥削者"（main exploiter）</td>
+<td>专门找主策略的弱点，逼它补短板</td>
+</tr>
+<tr>
+<td>历史策略的"剥削者"（league exploiter）</td>
+<td>在历史策略上找漏洞，发现通用弱点</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键机制</strong>：对手不是随机的，而是按 <strong>PFSP（Prioritized Fictitious Self-Play，优先虚拟自博弈）</strong> 采样——优先与"我打不过的对手"对练。</p>
+<h3 id="63-pfsp">6.3 PFSP 公式</h3>
+<p>设 <span class="arithmatex">\(f_{\theta}\)</span> 是当前策略，池中有历史策略 <span class="arithmatex">\(\{f_{\phi_1}, \dots, f_{\phi_K}\}\)</span>。PFSP 给每个对手赋予采样权重：</p>
+<div class="arithmatex">\[
+\boxed{\ P\!\left(\text{选取对手 } \phi_k\right) \propto \Big( 1 - w\!\left(f_\theta, f_{\phi_k}\right) \Big)^{p}\ }
+\]</div>
+<p>其中 <span class="arithmatex">\(w(f_\theta, f_{\phi_k})\)</span> 是当前策略对该对手的<strong>胜率</strong>，<span class="arithmatex">\(p\)</span> 是一个指数（常用 <span class="arithmatex">\(p=2\)</span>）。直觉：<strong>胜率越低（越打不过），权重越大；越碾压的对手，练得越少</strong>。这是一种"课程学习"式的对手采样。</p>
+<table>
+<thead>
+<tr>
+<th>采样策略</th>
+<th>权重</th>
+<th>效果</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均匀采样</td>
+<td><span class="arithmatex">\(1/K\)</span></td>
+<td>简单</td>
+<td>浪费算力在已碾压的对手上</td>
+</tr>
+<tr>
+<td>PFSP</td>
+<td><span class="arithmatex">\((1-w)^p\)</span></td>
+<td><strong>聚焦短板</strong></td>
+<td>可能陷入局部，忽略长远威胁</td>
+</tr>
+<tr>
+<td>FSP</td>
+<td>只打上一代</td>
+<td>经典自博弈</td>
+<td>易策略循环</td>
+</tr>
+<tr>
+<td>用胜率软最大化</td>
+<td><span class="arithmatex">\(\sigma(w/T)\)</span></td>
+<td>温和课程</td>
+<td>需要调温</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-alphastar-openai-five">6.4 案例解剖：AlphaStar 与 OpenAI Five</h3>
+<p><strong>OpenAI Five（Dota 2, 2019）</strong> 是自博弈工程化的里程碑：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>做法</th>
+<th>教训</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规模</td>
+<td>每天相当于 180 年的人类对局</td>
+<td>自博弈的算力需求极高</td>
+</tr>
+<tr>
+<td>算法</td>
+<td>PPO + GAE，参数共享（同一网络控制 5 个英雄）</td>
+<td>简单算法 + 巨大算力也能赢</td>
+</tr>
+<tr>
+<td>对手</td>
+<td>历史版本池 + 80% 概率对历史版本</td>
+<td>防止策略循环</td>
+</tr>
+<tr>
+<td>奖励</td>
+<td>用<strong>稠密奖励塑形</strong>（团队平均 GPM、经验、击杀等）</td>
+<td>纯胜负奖励太稀疏，学不动</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>分布式推理，动作延迟 217ms</td>
+<td>真实工程约束不可忽略</td>
+</tr>
+<tr>
+<td>时间线</td>
+<td>自我改进，每 30 分钟评估一次</td>
+<td>需要持续的对手多样性</td>
+</tr>
+</tbody>
+</table>
+<p><strong>AlphaStar（星际争霸 II, 2019）</strong> 把种群训练推向了更精细的层次：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>做法</th>
+<th>教训</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联盟</td>
+<td>主智能体 / 主剥削者 / 联赛剥削者 <strong>三层联盟</strong></td>
+<td>只用自博弈会过拟合，需要"陪练"和"找茬者"</td>
+</tr>
+<tr>
+<td>采样</td>
+<td><strong>PFSP</strong> 优先采样打不过的对手</td>
+<td>课程学习式对手选择</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>不仅要赢，还要在所有种族上均衡</td>
+<td>多目标、防止一个种族独大</td>
+</tr>
+<tr>
+<td>表征</td>
+<td>用人类录像做监督预训练初始化</td>
+<td>冷启动靠人类数据，加快收敛</td>
+</tr>
+<tr>
+<td>对手多样性</td>
+<td>通过"种姓"参数控制策略风格</td>
+<td>防止单一策略被针对</td>
+</tr>
+<tr>
+<td>结果</td>
+<td>达到人类宗师（Grandmaster）级别</td>
+<td>种群训练是可扩展性的关键</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>自博弈机制</th>
+<th>关键创新</th>
+<th>算力规模</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>早期 TD-Gammon</td>
+<td>纯自博弈</td>
+<td>首次证明自博弈可行</td>
+<td>小</td>
+</tr>
+<tr>
+<td>OpenAI Five</td>
+<td>历史池 + PPO</td>
+<td>规模化工程</td>
+<td>极大</td>
+</tr>
+<tr>
+<td>AlphaStar</td>
+<td>三层联盟 + PFSP</td>
+<td>种群生态</td>
+<td>极大</td>
+</tr>
+<tr>
+<td>AlphaZero</td>
+<td>自博弈 + MCTS</td>
+<td>搜索 + 学习结合</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>自博弈解决的是"对手从哪来"，种群训练解决的是"对手够不够多样"。</strong> 一个只有单一对手的训练循环，必然会过拟合到那个对手并陷入策略循环；只有维护一个持续可增长的对手生态，才能保证策略的鲁棒性。</p>
+</blockquote>
+<hr />
+<h2 id="_7">七、均值场与超大规模</h2>
+<p>当智能体数量从几十涨到几千几万（人群、车流、传感器网络），连"每个智能体一个 Q 表"都做不到。<strong>均值场（Mean Field）</strong> 方法用一个统计量——群体的平均动作分布——来近似"我与所有人的两两交互"。</p>
+<h3 id="71-q-learning">7.1 均值场 Q-learning 的推导</h3>
+<p>标准 MARL 里，智能体 <span class="arithmatex">\(i\)</span> 的 Q 值是联合动作的函数：<span class="arithmatex">\(Q_i(s, \mathbf{a})\)</span>。当 <span class="arithmatex">\(n\)</span> 很大时，<span class="arithmatex">\(\mathbf{a}_{-i}\)</span> 的维度是 <span class="arithmatex">\(n-1\)</span>，无法处理。</p>
+<p>均值场近似的核心假设：<strong>每个智能体只关心其他智能体的平均行为</strong>，即用一个"场" <span class="arithmatex">\(\bar{a}\)</span> 代替所有 <span class="arithmatex">\(\mathbf{a}_{-i}\)</span>：</p>
+<div class="arithmatex">\[
+Q_i(s, \mathbf{a}) \approx Q_i\big(s,\ a_i,\ \bar{a}\big), \qquad \bar{a} = \frac{1}{n-1}\sum_{j \neq i} a_j \quad (\text{或动作分布 } \mu)
+\]</div>
+<p>更一般地，用<strong>动作分布</strong> <span class="arithmatex">\(\mu = (\mu(a))_{a \in A}\)</span>（群体选各动作的比例）作为场的表示，则</p>
+<div class="arithmatex">\[
+\boxed{\ Q_i(s, a_i, \mu) = \mathbb{E}_{a_{-i} \sim \mu}\big[ r_i(s, a_i, \mathbf{a}_{-i}) \big] }
+\]</div>
+<p><strong>这里的近似误差</strong>：它忽略了三阶及以上的交互项。可以把真正的 Q 展开为两两交互的和：</p>
+<div class="arithmatex">\[
+Q_i(s,\mathbf{a}) = \frac{1}{n-1}\sum_{j} Q_{ij}(s, a_i, a_j) + \text{（高阶交互项，被均值场丢弃）}
+\]</div>
+<p>均值场把"两两交互"平均化，当 <span class="arithmatex">\(n \to \infty\)</span> 且交互是"弱耦合"时，误差趋于 0（这是平均场博弈理论的基本结论）。均值场更新规则：</p>
+<div class="arithmatex">\[
+Q_{t+1}(s, a, \mu) \leftarrow (1-\alpha) Q_t(s, a, \mu) + \alpha\big[ r(s, a, \mu) + \gamma \max_{a'} Q_t(s', a', \mu') \big]
+\]</div>
+<p><strong>复杂度对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>状态-动作空间的规模</th>
+<th>交互对数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>精确联合 Q</td>
+<td><span class="arithmatex">\(O(\lvert S\rvert \cdot \lvert A\rvert^n)\)</span></td>
+<td><span class="arithmatex">\(O(n^2)\)</span> 两两</td>
+</tr>
+<tr>
+<td><strong>均值场 Q</strong></td>
+<td><span class="arithmatex">\(O(\lvert S\rvert \cdot \lvert A\rvert^2)\)</span></td>
+<td><span class="arithmatex">\(O(n)\)</span> 与场的交互</td>
+</tr>
+</tbody>
+</table>
+<p>下面实跑一个均值场迭代，观察群体动作分布收敛到不动点：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 均值场 Q-learning 最小演示 (确定性版本) ============</span>
+<span class="c1"># n 个同质智能体, 各选 a ∈ {0,1}; 收益 r(a, μ) 只依赖自己的动作与群体分布 μ</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reward</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mu1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.5</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mu1</span><span class="p">)</span>      <span class="c1"># μ0 = 1 - μ1; 选 0 的人越多, 其收益越低</span>
+    <span class="k">return</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">mu1</span>                <span class="c1"># 动作 1 基础收益更高, 但拥堵惩罚更陡</span>
+
+<span class="c1"># n → ∞ 时群体频率等于其期望: 用期望收益更新 Q, 用 Boltzmann 给出群体响应概率</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mu1</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;迭代&#39;</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;μ1&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Q(动作0)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Q(动作1)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;群体p1&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">48</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">301</span><span class="p">):</span>
+    <span class="n">r0</span> <span class="o">=</span> <span class="n">reward</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mu1</span><span class="p">)</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">reward</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mu1</span><span class="p">)</span>
+    <span class="n">Q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">r0</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">Q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">r1</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">tau</span><span class="p">))</span>   <span class="c1"># Boltzmann 群体响应</span>
+    <span class="n">mu1</span> <span class="o">+=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">mu1</span><span class="p">)</span>                        <span class="c1"># 均值场朝群体响应漂移</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">%</span> <span class="mi">30</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">mu1</span><span class="si">:</span><span class="s2">&gt;7.4f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">Q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;9.4f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">Q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;9.4f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">p1</span><span class="si">:</span><span class="s2">&gt;7.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">收敛不动点 μ1* = </span><span class="si">{</span><span class="n">mu1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;精确(贪心)不动点: r(0,μ0)=r(1,μ1) → 1.5-2(1-μ1) = 2-2μ1 → μ1 = 0.6250&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>   迭代 |      μ1 |    Q(动作0) |    Q(动作1) |    群体p1
+------------------------------------------------
+   30 |  0.6105 |    0.7262 |    0.7720 |  0.6125
+   60 |  0.6135 |    0.7269 |    0.7731 |  0.6136
+   90 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  120 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  150 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  180 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  210 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  240 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  270 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+  300 |  0.6135 |    0.7269 |    0.7731 |  0.6135
+
+收敛不动点 μ1* = 0.6135
+精确(贪心)不动点: r(0,μ0)=r(1,μ1) → 1.5-2(1-μ1) = 2-2μ1 → μ1 = 0.6250
+</code></pre></div>
+<p>群体从 30% 迅速升到 61%，并在约 60 步内<strong>收敛</strong>到不动点 0.6135，与精确均衡 0.625 已非常接近（Boltzmann 平滑带来约 0.01 偏移）。这正是"动作 1 基础收益更高（2.0 &gt; 1.5），但选的人越多拥堵越重，于是在六成左右刹住车"的均衡。<strong>均值场把 <span class="arithmatex">\(|\mathcal{A}|^n\)</span> 的问题压缩成了 <span class="arithmatex">\(|\mathcal{A}|^2\)</span> 的问题。</strong></p>
+<h3 id="72">7.2 通信约束下的可扩展性</h3>
+<p>均值场虽然解决了"两两交互"的维度问题，但在真实系统里还有一层约束：<strong>通信带宽</strong>。当 <span class="arithmatex">\(n\)</span> 很大，让每个智能体广播自己的动作需要 <span class="arithmatex">\(O(n^2)\)</span> 的通信量，这在无人机集群、车联网里是不可承受的。工程上的应对：</p>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>通信复杂度</th>
+<th>代价</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全连接广播</td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+<td>带宽爆炸</td>
+<td>小规模</td>
+</tr>
+<tr>
+<td>均值场（只能说"平均"）</td>
+<td><span class="arithmatex">\(O(n)\)</span></td>
+<td>丢失个体信息</td>
+<td>大规模同质群体</td>
+</tr>
+<tr>
+<td>邻居通信（k 近邻）</td>
+<td><span class="arithmatex">\(O(nk)\)</span></td>
+<td>局部最优</td>
+<td>空间分布的群体</td>
+</tr>
+<tr>
+<td>分层聚合（簇头）</td>
+<td><span class="arithmatex">\(O(n)\)</span></td>
+<td>簇头单点压力</td>
+<td>传感器网络</td>
+</tr>
+<tr>
+<td>学习式路由（TarMAC 类）</td>
+<td>可变</td>
+<td>训练复杂</td>
+<td>需要定向通信（第 06 章）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>可扩展性的本质是"用统计量替代个体细节"。</strong> 均值场用分布替代动作列表，通信拓扑用邻居替代全网。每做一次这样的替代，你就用"最优性的一部分"换来了"规模的一份自由"。选择哪个替代，取决于你的任务是否容忍那部分最优性的损失。</p>
+</blockquote>
+<hr />
+<h2 id="_8">八、训练工程与常见坑</h2>
+<p>MARL 的论文结果往往难以复现，很大一部分原因在于工程细节。这一节把最常踩的坑集中列出来。</p>
+<h3 id="81">8.1 参数共享的三种设定</h3>
+<table>
+<thead>
+<tr>
+<th>设定</th>
+<th>共享什么</th>
+<th>适用</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>完全共享（full sharing）</strong></td>
+<td>所有智能体共用同一个 Actor 与 Critic</td>
+<td>同质智能体、动作空间相同</td>
+<td>样本效率 <span class="arithmatex">\(n\)</span> 倍、参数少</td>
+<td>异质智能体无解</td>
+</tr>
+<tr>
+<td><strong>仅 Actor 共享</strong></td>
+<td>Actor 共享，Critic 各自独立</td>
+<td>同质动作、异质观测</td>
+<td>保留个体价值差异</td>
+<td>Critic 参数多</td>
+</tr>
+<tr>
+<td><strong>仅 Critic 共享</strong></td>
+<td>Critic 共享（集中式），Actor 独立</td>
+<td>异质智能体</td>
+<td>保留个体策略差异</td>
+<td>Actor 样本少</td>
+</tr>
+<tr>
+<td><strong>不共享（independent）</strong></td>
+<td>什么都不共享</td>
+<td>完全异质</td>
+<td>灵活</td>
+<td>参数爆炸、样本效率低</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一个常被忽视的细节</strong>：如果完全共享 Actor，需要在输入中加一个<strong>智能体 one-hot ID</strong>，否则同质网络无法区分不同角色的智能体。但这个 ID 又会让网络"记住"编号，泛化变差——<strong>要不要加 ID、加什么 ID，是一个需要实验的工程决策</strong>。</p>
+<h3 id="82">8.2 奖励设计对比</h3>
+<table>
+<thead>
+<tr>
+<th>奖励类型</th>
+<th>形式</th>
+<th>优点</th>
+<th>缺点</th>
+<th>案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>稀疏胜负奖励</strong></td>
+<td><span class="arithmatex">\(r=+1\)</span> 赢 / <span class="arithmatex">\(-1\)</span> 输</td>
+<td>无偏、直接对齐目标</td>
+<td>学不动（信用分配极难）</td>
+<td>Go、国际象棋</td>
+</tr>
+<tr>
+<td><strong>稠密塑形奖励</strong></td>
+<td>加上中间过程项</td>
+<td>学得快</td>
+<td>可能引入偏差、被"刷分"</td>
+<td>OpenAI Five</td>
+</tr>
+<tr>
+<td><strong>个体奖励 + 团队奖励</strong></td>
+<td><span class="arithmatex">\(r_i = \alpha r_{team} + \beta r_i^{local}\)</span></td>
+<td>兼顾协作与个体</td>
+<td>需要调 <span class="arithmatex">\(\alpha,\beta\)</span></td>
+<td>SMAC</td>
+</tr>
+<tr>
+<td><strong>反事实奖励</strong></td>
+<td><span class="arithmatex">\(r_i = r - \bar{r}_{-i}\)</span></td>
+<td>自动信用分配</td>
+<td>需要多次环境查询</td>
+<td>COMA 思想</td>
+</tr>
+<tr>
+<td><strong>势函数塑形（PBRS）</strong></td>
+<td><span class="arithmatex">\(F(s,s') = \gamma\phi(s') - \phi(s)\)</span></td>
+<td><strong>不改变最优策略</strong>（有理论保证）</td>
+<td>需要设计势函数 <span class="arithmatex">\(\phi\)</span></td>
+<td>安全场景</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>奖励塑形能改变最优解</strong>。只有势函数型塑形（Potential-Based Reward Shaping, PBRS）被证明不改变最优策略：<span class="arithmatex">\(F(s,s') = \gamma\phi(s') - \phi(s)\)</span>。其他"随手加的中间奖励"都可能让智能体去刷它而不是完成任务，这是 MARL 最常见的隐性 bug 之一。</p>
+</blockquote>
+<h3 id="83">8.3 死亡三角放大与不稳定诊断</h3>
+<p>MARL 的训练不稳定常表现为"<strong>死亡三角</strong>"三个现象同时出现：<strong>价值估计发散 / 策略熵坍塌 / 回报剧烈震荡</strong>。它们互相放大，形成正反馈。</p>
+<div class="highlight"><pre><span></span><code>            价值估计发散 (Critic loss 爆炸)
+                    ▲               │
+                    │               ▼
+       策略熵坍塌 ◄───────► 回报剧烈震荡
+       (过早收敛到       (评估曲线像心电图,
+        确定性策略)        无法判断是否进步)
+
+       三者互为因果 —— 打破任一条边都可能救活训练
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>可能原因</th>
+<th>诊断手段</th>
+<th>处方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Critic loss 爆炸</td>
+<td>回报尺度大、无归一化</td>
+<td>打印 value 的 mean/std</td>
+<td>PopArt / running normalization</td>
+</tr>
+<tr>
+<td>熵坍塌（熵→0）</td>
+<td>熵系数太小、学习率太大</td>
+<td>记录策略熵曲线</td>
+<td>提高熵系数、降 lr、加探索</td>
+</tr>
+<tr>
+<td>回报震荡大</td>
+<td>对手策略变化、批量太小</td>
+<td>多 seed 画方差带</td>
+<td>增大批量、用曲线平滑、历史池</td>
+</tr>
+<tr>
+<td>训练涨、评估跌</td>
+<td>过拟合到当前对手</td>
+<td>分开记录训练/评估回报</td>
+<td>周期性评估、用历史池</td>
+</tr>
+<tr>
+<td>好 seed 赢一切</td>
+<td>方差极大</td>
+<td>至少 5 个 seed</td>
+<td>报告中位数与四分位（第 09 章）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="84">8.4 超参敏感性清单</h3>
+<table>
+<thead>
+<tr>
+<th>超参</th>
+<th>敏感度</th>
+<th>典型范围</th>
+<th>调参建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学习率</td>
+<td><strong>极高</strong></td>
+<td><span class="arithmatex">\(10^{-4}\sim 5\times10^{-4}\)</span></td>
+<td>先固定其他，只扫这一个</td>
+</tr>
+<tr>
+<td>折扣 <span class="arithmatex">\(\gamma\)</span></td>
+<td>高</td>
+<td>0.95–0.995</td>
+<td>任务视野越长越大</td>
+</tr>
+<tr>
+<td>GAE <span class="arithmatex">\(\lambda\)</span></td>
+<td>中高</td>
+<td>0.9–0.99</td>
+<td>0.95 起步</td>
+</tr>
+<tr>
+<td>熵系数</td>
+<td>高</td>
+<td>0.001–0.05</td>
+<td>熵坍塌就加，探索过头就减</td>
+</tr>
+<tr>
+<td>参数共享</td>
+<td>高</td>
+<td>开/关</td>
+<td>同质任务必开</td>
+</tr>
+<tr>
+<td>批量大小</td>
+<td>中</td>
+<td>按 episode</td>
+<td>MARL 样本强相关，别切太小</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>MARL 的复现性危机，80% 来自评估协议而非算法本身。</strong> 单 seed 的漂亮曲线几乎没有信息量；至少 5 个 seed 报告中位数与四分位区间，才是负责任的做法（详见第 09 章的工具与评估协议）。</p>
+</blockquote>
+<hr />
+<h2 id="igm">九、理论进阶：IGM 与单调性的充分条件</h2>
+<h3 id="91-igm-qmix">9.1 IGM 定义与 QMIX 单调性充分性证明</h3>
+<p><strong>定义（IGM）</strong>：函数族 <span class="arithmatex">\(\{Q_i\}_{i=1}^n\)</span> 与 <span class="arithmatex">\(Q_{tot}\)</span> 满足个体-全局最大一致性，当且仅当存在一组 <span class="arithmatex">\((Q_1,\dots,Q_n)\)</span> 使得</p>
+<div class="arithmatex">\[
+\arg\max_{\mathbf{a}} Q_{tot}(s, \mathbf{a}) = \Big(\arg\max_{a_1} Q_1(\tau_1, a_1),\ \dots,\ \arg\max_{a_n} Q_n(\tau_n, a_n)\Big)
+\]</div>
+<p><strong>定理（QMIX 单调性 ⟹ IGM）</strong>：若 <span class="arithmatex">\(Q_{tot}\)</span> 对每个 <span class="arithmatex">\(Q_i\)</span> 单调不减，即</p>
+<div class="arithmatex">\[
+\frac{\partial Q_{tot}}{\partial Q_i}\big(s, \mathbf{a}\big) \geq 0, \quad \forall i,\ \forall \mathbf{a},
+\]</div>
+<p>则 IGM 成立。</p>
+<p><strong>证明</strong>：设 <span class="arithmatex">\(\bar{\mathbf{a}} = (\bar{a}_1, \dots, \bar{a}_n)\)</span>，其中 <span class="arithmatex">\(\bar{a}_i = \arg\max_{a_i} Q_i(\tau_i, a_i)\)</span> 是各智能体的个体贪心动作。</p>
+<p><em>（1）<span class="arithmatex">\(\bar{\mathbf{a}}\)</span> 是 <span class="arithmatex">\(Q_{tot}\)</span> 的全局最大点。</em> 任取另一个联合动作 <span class="arithmatex">\(\mathbf{a} = (a_1, \dots, a_n)\)</span>，由 <span class="arithmatex">\(\bar{a}_i\)</span> 的定义有 <span class="arithmatex">\(Q_i(\tau_i, \bar{a}_i) \geq Q_i(\tau_i, a_i)\)</span> 对每个 <span class="arithmatex">\(i\)</span> 成立。于是逐个坐标地把 <span class="arithmatex">\(\mathbf{a}\)</span> 替换成 <span class="arithmatex">\(\bar{\mathbf{a}}\)</span>：</p>
+<div class="arithmatex">\[
+Q_{tot}(s, \bar{a}_1, a_2, \dots, a_n) \geq Q_{tot}(s, a_1, a_2, \dots, a_n)
+\]</div>
+<p>这是因为 <span class="arithmatex">\(Q_{tot}\)</span> 对第一维单调不减，而 <span class="arithmatex">\(\bar{a}_1\)</span> 在该维上给 <span class="arithmatex">\(Q_1\)</span> 更大的值。继续对第 <span class="arithmatex">\(2, \dots, n\)</span> 维做同样的替换，最终得到</p>
+<div class="arithmatex">\[
+Q_{tot}(s, \bar{\mathbf{a}}) \geq Q_{tot}(s, \mathbf{a}), \quad \forall \mathbf{a}.
+\]</div>
+<p>故 <span class="arithmatex">\(\bar{\mathbf{a}} \in \arg\max_{\mathbf{a}} Q_{tot}\)</span>。</p>
+<p><em>（2）反向：<span class="arithmatex">\(\arg\max\)</span> 的每个元素都能被个体贪心达到。</em> 设 <span class="arithmatex">\(\mathbf{a}^\star \in \arg\max_{\mathbf{a}} Q_{tot}\)</span>，若某坐标 <span class="arithmatex">\(a_i^\star \neq \bar{a}_i\)</span>，令 <span class="arithmatex">\(\mathbf{a}' = (\mathbf{a}_{-i}^\star, \bar{a}_i)\)</span>。由 <span class="arithmatex">\(Q_i(\tau_i,\bar{a}_i) \geq Q_i(\tau_i,a_i^\star)\)</span> 及单调性得 <span class="arithmatex">\(Q_{tot}(s,\mathbf{a}') \geq Q_{tot}(s,\mathbf{a}^\star)\)</span>。逐坐标改进，可得到一个与 <span class="arithmatex">\(\bar{\mathbf{a}}\)</span> 在最优值上一致的联合动作。故个体贪心集合与联合 <span class="arithmatex">\(\arg\max\)</span> 在<strong>值上等价</strong>，IGM 成立。 <span class="arithmatex">\(\blacksquare\)</span></p>
+<blockquote>
+<p><strong>核心思想</strong>：单调性是 IGM 的<strong>充分不必要条件</strong>。它给出了一个"足够好实现"（非负权重）的条件，代价是排除了所有非单调的合法可分解结构。QTRAN / QPLEX 之所以存在，就是为了在保持 IGM 的同时突破单调性的天花板。</p>
+</blockquote>
+<h3 id="92-qtran">9.2 QTRAN 定理与其松弛</h3>
+<p>QTRAN 摆脱单调性的关键是把 IGM 写成<strong>可分解性</strong>：</p>
+<p><strong>定理（QTRAN）</strong>：若存在 <span class="arithmatex">\(Q_{jt}(s, \mathbf{a})\)</span> 与 <span class="arithmatex">\(V_{jt}(s)\)</span> 满足</p>
+<div class="arithmatex">\[
+\sum_i Q_i(\tau_i, a_i) = Q_{jt}(s, \mathbf{a}) \quad \text{当 } \mathbf{a} = \arg\max_{\mathbf{a}'} Q_{jt}(s, \mathbf{a}'), \qquad
+\sum_i Q_i(\tau_i, a_i) \geq Q_{jt}(s, \mathbf{a}) - V_{jt}(s)
+\]</div>
+<p>则 IGM 成立（<span class="arithmatex">\(V_{jt}\)</span> 吸收了"个体 Q 之和"与"真实联合 Q"之间的偏移）。实践中把这两个等式变成带惩罚的损失：</p>
+<div class="arithmatex">\[
+\mathcal{L}_{QTRAN} = \mathcal{L}_{TD} + \lambda_{opt}\sum_{\mathbf{a} \neq \bar{\mathbf{a}}} \Big[ \sum_i Q_i - Q_{jt}(s,\mathbf{a}) + V_{jt}(s) \Big]^2 + \lambda_{nopt}\Big[\sum_i Q_i(\bar{\mathbf{a}}) - Q_{jt}(s,\bar{\mathbf{a}}) + V_{jt}(s)\Big]^2
+\]</div>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\mathcal{L}_{TD}\)</span></td>
+<td>拟合真实回报</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\lambda_{opt}\)</span> 项</td>
+<td>惩罚非最优联合动作上的不一致</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\lambda_{nopt}\)</span> 项</td>
+<td>保证最优联合动作处一致</td>
+</tr>
+</tbody>
+</table>
+<p><strong>松弛的代价</strong>：这两个惩罚项在实际训练中很难同时满足，<span class="arithmatex">\(\lambda\)</span> 的取值极其敏感，导致 QTRAN 经常训练不稳定——<strong>理论表达力的提升，被优化难度吃掉了</strong>。</p>
+<h3 id="93">9.3 值分解表达力上界：一个非单调反例</h3>
+<p>单调性（以及 VDN 的加性）确实<strong>限制了表达力</strong>。下面构造一个<strong>合法的、但任何单调分解都无法表示的联合 Q</strong>：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ============ 构造一个&quot;非单调&quot;的联合 Q, 证明单调分解无法覆盖 ============</span>
+<span class="c1"># 两个智能体, 各 2 个动作; 设计成&quot;只有动作互补时才高&quot;</span>
+<span class="n">Q_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>     <span class="c1"># a1=0: Q(0,0)=1.0,  Q(0,1)=5.0</span>
+    <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>     <span class="c1"># a1=1: Q(1,0)=5.0,  Q(1,1)=0.0</span>
+<span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;联合 Q 表 Q_tot(a1, a2):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Q_tot</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;检查单调性 (固定一维, 看另一维是否单调不减):&quot;</span><span class="p">)</span>
+<span class="n">violations</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">a1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">Q_tot</span><span class="p">[</span><span class="n">a1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q_tot</span><span class="p">[</span><span class="n">a1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;单调不减 ✅&quot;</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;递减 ❌ 违反单调性&quot;</span>
+    <span class="n">violations</span> <span class="o">+=</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  固定 a1=</span><span class="si">{</span><span class="n">a1</span><span class="si">}</span><span class="s2">: Q(a2=1) - Q(a2=0) = </span><span class="si">{</span><span class="n">d</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2">  → </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">a2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">Q_tot</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q_tot</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;单调不减 ✅&quot;</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;递减 ❌ 违反单调性&quot;</span>
+    <span class="n">violations</span> <span class="o">+=</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  固定 a2=</span><span class="si">{</span><span class="n">a2</span><span class="si">}</span><span class="s2">: Q(a1=1) - Q(a1=0) = </span><span class="si">{</span><span class="n">d</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2">  → </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Q_tot</span><span class="p">)),</span> <span class="n">Q_tot</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">最优联合动作 = </span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">, 值 = </span><span class="si">{</span><span class="n">Q_tot</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 尝试用加性(VDN)分解解释: Q_tot = Q_1(a1) + Q_2(a2)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">尝试加性(VDN)拟合 Q_tot = Q_1(a1) + Q_2(a2):&quot;</span><span class="p">)</span>
+<span class="c1"># 最小二乘解</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Q_tot</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sol</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">approx</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">sol</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  最优 Q_1 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sol</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">, Q_2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sol</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  拟合结果 =</span><span class="se">\n</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">approx</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  残差平方和 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">approx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Q_tot</span><span class="p">)</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  (≠0 说明无法精确表示)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">结论: 违反单调性的联合 Q 无法被 VDN/QMIX 精确表示 → &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;两者都选 argmax(a1)=</span><span class="si">{</span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">sol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="si">}</span><span class="s2">, &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;argmax(a2)=</span><span class="si">{</span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">sol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">sol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="si">}</span><span class="s2">, &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;但真正最优是 </span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>预期输出:</strong></p>
+<div class="highlight"><pre><span></span><code>联合 Q 表 Q_tot(a1, a2):
+[[1. 5.]
+ [5. 0.]] 
+
+检查单调性 (固定一维, 看另一维是否单调不减):
+  固定 a1=0: Q(a2=1) - Q(a2=0) = +4.0  → 单调不减 ✅
+  固定 a1=1: Q(a2=1) - Q(a2=0) = -5.0  → 递减 ❌ 违反单调性
+  固定 a2=0: Q(a1=1) - Q(a1=0) = +4.0  → 单调不减 ✅
+  固定 a2=1: Q(a1=1) - Q(a1=0) = -5.0  → 递减 ❌ 违反单调性
+
+最优联合动作 = (0, 1), 值 = 5.0
+
+尝试加性(VDN)拟合 Q_tot = Q_1(a1) + Q_2(a2):
+  最优 Q_1 = [1.625 1.125], Q_2 = [1.625 1.125]
+  拟合结果 =
+[[3.25 2.75]
+ [2.75 2.25]]
+  残差平方和 = 20.250  (≠0 说明无法精确表示)
+
+结论: 违反单调性的联合 Q 无法被 VDN/QMIX 精确表示 → 两者都选 argmax(a1)=0, argmax(a2)=0, 但真正最优是 (0, 1)
+</code></pre></div>
+<p>这个反例极其干净，它同时暴露了三件事：</p>
+<ol>
+<li><strong>真实最优是两个"互补"的联合动作</strong> <span class="arithmatex">\((0,1)\)</span> 与 <span class="arithmatex">\((1,0)\)</span>（值都是 5.0），而"全员一致"的 <span class="arithmatex">\((0,0)\)</span> 只有 1.0、<span class="arithmatex">\((1,1)\)</span> 只有 0.0——<strong>协同恰恰发生在动作不同的地方</strong>。</li>
+<li><strong>它违反单调性</strong>：固定 <span class="arithmatex">\(a_1=1\)</span> 时，<span class="arithmatex">\(Q\)</span> 对 <span class="arithmatex">\(a_2\)</span> 是<strong>递减</strong>的（5.0 → 0.0），这一条直接排除了 QMIX 的单调混合网络。</li>
+<li><strong>加性分解（VDN）也拟合不了</strong>：最小二乘给出 <span class="arithmatex">\(Q_1=[1.625, 1.125]\)</span>、<span class="arithmatex">\(Q_2=[1.625, 1.125]\)</span>，两侧 argmax 都指向动作 0，于是"分布式贪心"会选 <span class="arithmatex">\((0,0)\)</span>——恰恰是真实 <span class="arithmatex">\(Q\)</span> 里最差的联合动作之一（真值只有 1.0），残差平方和高达 20.25。</li>
+</ol>
+<p>更本质地看：真实 argmax 集合 <span class="arithmatex">\(\{(0,1), (1,0)\}\)</span> <strong>不是</strong>任何单个积集 <span class="arithmatex">\(\{a_1^\star\} \times \{a_2^\star\}\)</span>，而 IGM 要求联合 argmax 集合等于个体 argmax 的积集，所以<strong>不存在满足 IGM 的分解</strong>能精确表示这个 <span class="arithmatex">\(Q_{tot}\)</span>。这就是加性/单调分解的表达力上界——而真实任务里的协同（两机合力推门、两钥匙同时插入）恰恰长这个样子。</p>
+<table>
+<thead>
+<tr>
+<th>分解类</th>
+<th>能表达</th>
+<th>不能表达</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加性（VDN）</td>
+<td>完全可加的任务</td>
+<td>任何协同/互补</td>
+</tr>
+<tr>
+<td>单调（QMIX）</td>
+<td>单调协同（单调放大）</td>
+<td>非单调的互补、反协同</td>
+</tr>
+<tr>
+<td>一般（QTRAN/QPLEX）</td>
+<td>理论上任意可分解 Q</td>
+<td>受优化难度限制</td>
+</tr>
+</tbody>
+</table>
+<h3 id="94">9.4 随机逼近视角下的收敛保证与局限</h3>
+<p>MARL 的收敛理论建立在<strong>随机逼近（stochastic approximation）</strong>之上。单智能体 Q-learning 的收敛依赖 Robbins-Monro 条件：</p>
+<div class="arithmatex">\[
+\sum_t \alpha_t = \infty, \qquad \sum_t \alpha_t^2 &lt; \infty
+\]</div>
+<p>以及"环境平稳"。多智能体下，这两个条件被逐一破坏：</p>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>单智能体</th>
+<th>多智能体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学习率条件</td>
+<td>满足即可收敛</td>
+<td>满足也未必收敛（非平稳）</td>
+</tr>
+<tr>
+<td>环境平稳</td>
+<td>成立</td>
+<td><strong>不成立</strong>（策略在变）</td>
+</tr>
+<tr>
+<td>目标算子压缩</td>
+<td>Bellman 算子是 <span class="arithmatex">\(\gamma\)</span>-压缩</td>
+<td>依赖其他智能体策略，<strong>未必压缩</strong></td>
+</tr>
+<tr>
+<td>收敛点</td>
+<td>唯一最优 Q</td>
+<td>可能不存在纯策略不动点</td>
+</tr>
+</tbody>
+</table>
+<p>已知的正面结果主要集中在两类：</p>
+<ol>
+<li><strong>势博弈</strong>：独立学习收敛到势函数的局部最优（§3.2）。此时存在一个"公共 Lyapunov 函数"，所有智能体在爬同一座山。</li>
+<li><strong>两类时间尺度（two-timescale）</strong>：让对手的策略学得<strong>足够慢</strong>（快慢两个学习率），则慢的那一方看到的是一个"准平稳"环境，可收敛到 equilibrium。这是 actor-critic 类 MARL 收敛证明的常用技巧。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>视角</th>
+<th>结论</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>势博弈</td>
+<td>独立学习收敛到纳什</td>
+<td>要求存在势函数</td>
+</tr>
+<tr>
+<td>双时间尺度</td>
+<td>慢学习者可收敛</td>
+<td>快慢比例需精心设置</td>
+</tr>
+<tr>
+<td>虚拟自博弈（FSP）</td>
+<td>收敛到纳什（零和）</td>
+<td>计算量随迭代增长</td>
+</tr>
+<tr>
+<td>一般和博弈</td>
+<td><strong>无一般收敛保证</strong></td>
+<td>这是理论缺口，不是工程不够努力</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>MARL 没有一般收敛保证，这既不是可以绕过的工程问题，也不是已经解决的理论问题，而是开放的研究前沿。</strong> 实践中的"收敛"往往是"在有限步数、特定任务与超参下、看起来稳定的行为"，而非数学意义上的收敛。理解这一点，才能读懂 MARL 论文里那些漂亮曲线背后的不确定性。</p>
+</blockquote>
+<hr />
+<h2 id="_9">附：本章速查表</h2>
+<h3 id="_10">核心公式速查</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联合动作空间</td>
+<td><span class="arithmatex">\(\lvert \mathcal{A}\rvert = \prod_{i=1}^n \lvert A_i\rvert\)</span></td>
+</tr>
+<tr>
+<td>IGM 条件</td>
+<td><span class="arithmatex">\(\arg\max_{\mathbf{a}} Q_{tot} = (\arg\max_{a_1} Q_1, \dots, \arg\max_{a_n} Q_n)\)</span></td>
+</tr>
+<tr>
+<td>QMIX 单调性（充分条件）</td>
+<td><span class="arithmatex">\(\partial Q_{tot}/\partial Q_i \geq 0\ \forall i\)</span></td>
+</tr>
+<tr>
+<td>QMIX 损失</td>
+<td><span class="arithmatex">\(\mathcal{L} = \mathbb{E}[(r + \gamma \max_{\mathbf{a}'} Q_{tot}(s',\mathbf{a}') - Q_{tot}(s,\mathbf{a}))^2]\)</span></td>
+</tr>
+<tr>
+<td>VDN 分解</td>
+<td><span class="arithmatex">\(Q_{tot} = \sum_i Q_i(\tau_i, a_i)\)</span></td>
+</tr>
+<tr>
+<td>COMA 反事实优势</td>
+<td><span class="arithmatex">\(A_i = Q(s,\mathbf{a}) - \sum_{a_i'} \pi_i(a_i')\ Q(s, (a_i', \mathbf{a}_{-i}))\)</span></td>
+</tr>
+<tr>
+<td>GAE</td>
+<td><span class="arithmatex">\(\hat{A}_t = \sum_l (\gamma\lambda)^l \delta_{t+l},\ \delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)\)</span></td>
+</tr>
+<tr>
+<td>PFSP 采样权重</td>
+<td><span class="arithmatex">\(P(\phi_k) \propto (1 - w(f_\theta, f_{\phi_k}))^p\)</span></td>
+</tr>
+<tr>
+<td>均值场近似</td>
+<td><span class="arithmatex">\(Q_i(s, a_i, \mathbf{a}_{-i}) \approx Q_i(s, a_i, \mu)\)</span></td>
+</tr>
+<tr>
+<td>MADDPG Actor 梯度</td>
+<td><span class="arithmatex">\(\nabla_{\theta_i} J = \mathbb{E}[\nabla_{\theta_i}\mu_i(o_i) \nabla_{a_i} Q_i(s, \mathbf{a})]\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_11">算法选型速查</h3>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>推荐</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先摸底，看是否需要协调</td>
+<td>IQL</td>
+<td>最便宜的基线</td>
+</tr>
+<tr>
+<td>离散动作、共享奖励、需要协调</td>
+<td><strong>QMIX</strong></td>
+<td>稳定性与表达力的最佳平衡</td>
+</tr>
+<tr>
+<td>连续动作</td>
+<td>MADDPG / MAPPO</td>
+<td>值分解不适合连续动作</td>
+</tr>
+<tr>
+<td>需要显式信用分配</td>
+<td>COMA</td>
+<td>反事实优势</td>
+</tr>
+<tr>
+<td>想快速跑通、要稳</td>
+<td><strong>MAPPO</strong></td>
+<td>工程细节成熟、通用</td>
+</tr>
+<tr>
+<td>大规模同质群体</td>
+<td>Mean-Field Q / MAPPO</td>
+<td><span class="arithmatex">\(O(n)\)</span> 而非 <span class="arithmatex">\(O(n^2)\)</span></td>
+</tr>
+<tr>
+<td>对抗性任务</td>
+<td>自博弈 + PFSP</td>
+<td>种群训练</td>
+</tr>
+<tr>
+<td>非单调协同很重要</td>
+<td>QTRAN / QPLEX</td>
+<td>突破单调性上界</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_12">常见坑速查</h3>
+<table>
+<thead>
+<tr>
+<th>坑</th>
+<th>症状</th>
+<th>修复</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局状态进了 Actor</td>
+<td>部署即失效</td>
+<td>全局状态只给 Critic</td>
+</tr>
+<tr>
+<td>纯自博弈无历史池</td>
+<td>策略循环、过拟合当前对手</td>
+<td>加历史池 + PFSP</td>
+</tr>
+<tr>
+<td>稀疏胜负奖励</td>
+<td>学不动</td>
+<td>势函数型稠密塑形（PBRS）</td>
+</tr>
+<tr>
+<td>无回报归一化</td>
+<td>Critic loss 爆炸</td>
+<td>PopArt / running norm</td>
+</tr>
+<tr>
+<td>单 seed 报结果</td>
+<td>结论不可复现</td>
+<td>≥5 seed，报中位数与分位</td>
+</tr>
+<tr>
+<td>熵坍塌</td>
+<td>过早确定、探索不足</td>
+<td>提高熵系数</td>
+</tr>
+<tr>
+<td>死亡智能体污染 Critic</td>
+<td>价值估计偏差</td>
+<td>死亡掩码（dead mask）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>下一步</strong>：环境未知时怎么学出协作策略已经讲完，但"局部观测的信息缺口"还没有被填上。接下来进入 <a href="../06-communication/">第 06 章 通信与协同</a>，看智能体如何<strong>学会说什么、对谁说</strong>，把分布执行的信息劣势补回来。</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "toc.follow", "navigation.top", "search.suggest", "search.highlight"], "search": "../../javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

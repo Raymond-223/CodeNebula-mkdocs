@@ -27,6 +27,18 @@ nav:
     - 环境与工具链: assets/reinforcement-learning/08-tools-environments.md
     - 进阶专题: assets/reinforcement-learning/09-advanced-topics.md
     - 工程实践: assets/reinforcement-learning/10-engineering-practice.md
+  - 多智能体系统:
+    - 概览: assets/multi-agent-systems/index.md
+    - 系统基础: assets/multi-agent-systems/01-foundations.md
+    - 智能体架构: assets/multi-agent-systems/02-agent-architectures.md
+    - 博弈论基础: assets/multi-agent-systems/03-game-theory.md
+    - 机制设计与社会选择: assets/multi-agent-systems/04-mechanism-design.md
+    - 多智能体强化学习: assets/multi-agent-systems/05-marl.md
+    - 通信与协同: assets/multi-agent-systems/06-communication.md
+    - 协调与协商: assets/multi-agent-systems/07-coordination-negotiation.md
+    - LLM多智能体: assets/multi-agent-systems/08-llm-multi-agent.md
+    - 工具与环境: assets/multi-agent-systems/09-tools-environments.md
+    - 应用与前沿: assets/multi-agent-systems/10-applications-frontier.md
   - Algorithm: inex.md
   - Paper Interpretion: idex.md
   - Mathematics: 

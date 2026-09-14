@@ -1,0 +1,4908 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://CodeNebula.github.io/assets/multi-agent-systems/06-communication/">
+      
+      
+        <link rel="prev" href="../05-marl/">
+      
+      
+        <link rel="next" href="../07-coordination-negotiation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>通信与协同 - CodeNebula</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#06" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CodeNebula" class="md-header__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CodeNebula
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              通信与协同
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to the dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to the dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../software-development/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  软件开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reinforcement-learning/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  强化学习
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  多智能体系统
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../inex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Algorithm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../idex.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper Interpretion
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../Mathematics/index.md" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CodeNebula" class="md-nav__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CodeNebula
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../software-development/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件开发
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    软件开发
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/01-frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/02-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后端开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/03-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库与存储
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/04-version-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    版本控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/05-devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps与部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/06-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/07-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试与质量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software-development/08-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reinforcement-learning/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    强化学习
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    强化学习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/00-bandit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多臂老虎机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/01-mdp-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDP与数学基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/02-dynamic-programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态规划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/03-monte-carlo-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    蒙特卡洛方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/04-temporal-difference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时序差分学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/05-value-approximation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    值函数逼近与DQN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/06-policy-gradient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    策略梯度与Actor-Critic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/07-continuous-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    连续控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/08-tools-environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    环境与工具链
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/09-advanced-topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/10-engineering-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体系统
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    多智能体系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-agent-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    智能体架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-game-theory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    博弈论基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-mechanism-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机制设计与社会选择
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-marl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多智能体强化学习
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    通信与协同
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    通信与协同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、为什么需要通信（信息论视角）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、为什么需要通信（信息论视角）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 部分可观测下的信息缺失与下界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 通信的三种价值（消歧/协调/承诺）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 通信不是免费的（带宽、延迟、丢包）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、通信式 MARL 的四种结构（含架构图）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、通信式 MARL 的四种结构（含架构图）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-commnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 CommNet 连续广播
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-dial-gumbel-softmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 DIAL 离散符号 + 直通估计（Gumbel-Softmax 说明）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-ic3net" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 IC3Net 门控
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-tarmac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 TarMAC 定向寻址（注意力选听）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 对比表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 实跑一个最小可微通信信道
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、涌现语言与可解释性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、涌现语言与可解释性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 符号语义的度量（互信息、探针分类器、组合性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 符号坍塌与过拟合伙伴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-zero-shot-coordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 泛化到新伙伴（zero-shot coordination）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、通信受限与鲁棒性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、通信受限与鲁棒性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 带宽预算与信息瓶颈
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 丢包/延迟鲁棒训练（实跑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 通信与隐私（谁该知道什么）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fipa-acl-mcpa2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、工程协议栈：从 FIPA-ACL 到 MCP/A2A
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、工程协议栈：从 FIPA-ACL 到 MCP/A2A">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-austinsearle-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 言语行为理论（Austin/Searle）与 ACL 消息结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-kqmlfipa-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 KQML/FIPA-ACL 的历史与教训
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 黑板与发布-订阅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 MCP：工具能力标准化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-a2aagent-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 A2A：Agent Card、任务委派、流式结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 层次对照表与选型建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、通信失败模式与诊断
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、通信失败模式与诊断">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 通信坍塌（所有人发同一个符号）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 消息被忽略（信道存在但未被使用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 信道成为作弊通道（泄露全局状态导致奖励黑客）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 诊断清单（症状-病因-对策表）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、理论进阶：通信复杂度与信息瓶颈
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、理论进阶：通信复杂度与信息瓶颈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 通信复杂度模型与下界技巧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-ims-beta-ima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 信息瓶颈目标 \(I(M;S)-\beta I(M;A)\) 与拉格朗日推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 涌现语言的可解释性理论（系统性/组合性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-coordination-negotiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协调与协商
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-llm-multi-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM多智能体
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-tools-environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工具与环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-applications-frontier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用与前沿
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../inex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../idex.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interpretion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Game Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Four First Lessons.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Four First Lessons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Mathematics/Game Theory/Iterative Deletion.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Iterative Deletion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、为什么需要通信（信息论视角）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、为什么需要通信（信息论视角）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 部分可观测下的信息缺失与下界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 通信的三种价值（消歧/协调/承诺）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 通信不是免费的（带宽、延迟、丢包）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、通信式 MARL 的四种结构（含架构图）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、通信式 MARL 的四种结构（含架构图）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-commnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 CommNet 连续广播
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-dial-gumbel-softmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 DIAL 离散符号 + 直通估计（Gumbel-Softmax 说明）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-ic3net" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 IC3Net 门控
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-tarmac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 TarMAC 定向寻址（注意力选听）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 对比表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 实跑一个最小可微通信信道
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、涌现语言与可解释性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、涌现语言与可解释性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 符号语义的度量（互信息、探针分类器、组合性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 符号坍塌与过拟合伙伴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-zero-shot-coordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 泛化到新伙伴（zero-shot coordination）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、通信受限与鲁棒性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、通信受限与鲁棒性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 带宽预算与信息瓶颈
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 丢包/延迟鲁棒训练（实跑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 通信与隐私（谁该知道什么）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fipa-acl-mcpa2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、工程协议栈：从 FIPA-ACL 到 MCP/A2A
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、工程协议栈：从 FIPA-ACL 到 MCP/A2A">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-austinsearle-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 言语行为理论（Austin/Searle）与 ACL 消息结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-kqmlfipa-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 KQML/FIPA-ACL 的历史与教训
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 黑板与发布-订阅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 MCP：工具能力标准化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-a2aagent-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 A2A：Agent Card、任务委派、流式结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 层次对照表与选型建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、通信失败模式与诊断
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、通信失败模式与诊断">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 通信坍塌（所有人发同一个符号）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 消息被忽略（信道存在但未被使用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 信道成为作弊通道（泄露全局状态导致奖励黑客）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 诊断清单（症状-病因-对策表）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附：本章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、理论进阶：通信复杂度与信息瓶颈
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、理论进阶：通信复杂度与信息瓶颈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 通信复杂度模型与下界技巧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-ims-beta-ima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 信息瓶颈目标 \(I(M;S)-\beta I(M;A)\) 与拉格朗日推导
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 涌现语言的可解释性理论（系统性/组合性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    多智能体系统
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="06">第 06 章 通信与协同</h1>
+<blockquote>
+<p>通信是多智能体系统里唯一能"凭空创造信息"的机制 —— 每个智能体只能看见世界的一角，而协作往往需要拼出整张图。本章按"<strong>为什么通信（信息论）→ 怎么学通信（通信式 MARL 四大结构）→ 学到了什么（涌现语言与可解释性）→ 通信受限怎么办（带宽/丢包/隐私）→ 工程上怎么落地（FIPA-ACL → MCP/A2A）→ 会怎么坏（失败模式与诊断）</strong>"这条主线展开。核心张力是：<strong>能通信 ≠ 会通信 ≠ 通信有价值</strong>。大量看似"智能"的协作，其实是信道在替智能体做隐式全局状态泄露。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、为什么需要通信（信息论视角）</h2>
+<h3 id="11">1.1 部分可观测下的信息缺失与下界</h3>
+<p>多智能体的标准设定是 <strong>Dec-POMDP</strong>（Decentralized Partially Observable Markov Decision Process）：环境有全局状态 <span class="arithmatex">\(s \in S\)</span>，每个智能体 <span class="arithmatex">\(i\)</span> 只拿到局部观测 <span class="arithmatex">\(o_i = O_i(s; \mathbf{a})\)</span>，并据此行动 <span class="arithmatex">\(a_i \sim \pi_i(\cdot \mid \tau_i)\)</span>，其中 <span class="arithmatex">\(\tau_i = (o_i^1, a_i^1, \dots, o_i^t)\)</span> 是自己的动作-观测历史。</p>
+<p>关键事实是：<strong>局部观测是有损投影，而投影丢失的信息不会自己回来</strong>。设 <span class="arithmatex">\(\tau_{\text{joint}} = \{o_1, \dots, o_n\}\)</span> 为当前步全部智能体的观测集合，则"集体能确定多少状态"受条件熵约束：</p>
+<div class="arithmatex">\[
+H\big(S \mid \tau_i\big) \ \ge\ H\big(S \mid \tau_{\text{joint}}\big) \qquad \text{且}
+\qquad H\big(S \mid \tau_{\text{joint}}\big) \ \ge\ H\big(S \mid S\big) = 0
+\]</div>
+<p>左边是"只看自己历史"的不确定性，右边是"看全部观测"的不确定性。两者之差</p>
+<div class="arithmatex">\[
+\Delta_i \;=\; H(S \mid \tau_i) - H(S \mid \tau_{\text{joint}}) \;\ge\; 0
+\]</div>
+<p>就是<strong>智能体 <span class="arithmatex">\(i\)</span> 的信息赤字</strong>（information deficit）。通信的唯一目标，就是把这 <span class="arithmatex">\(\Delta_i\)</span> 用最少的比特填上。若 <span class="arithmatex">\(\Delta_i = 0\)</span> 对所有 <span class="arithmatex">\(i\)</span> 成立（例如全可观 MMDP），那么通信在信息论上是<strong>冗余</strong>的 —— 此时加通信只能在优化和探索层面加速，不能突破可达的回报上界。</p>
+<blockquote>
+<p><strong>核心思想</strong>：通信不是"锦上添花的能力"，而是<strong>对信息赤字的定向偿付</strong>。在设计任何通信协议之前，先问一句"谁缺哪一比特？"—— 缺的信息算不出来，能算出来的信息不必传。这句话同时解释了为什么"全广播"几乎总是低效的：它对每个接收者都发同样的东西，而各人的赤字往往是不同的。</p>
+</blockquote>
+<p>更严格地看，Dec-POMDP 的可达回报上界由<strong>集中式 POMDP</strong>（把 <span class="arithmatex">\(\tau_{\text{joint}}\)</span> 当作观测）决定；通信式 MARL 的全部理论价值，就在于用一个有限带宽的信道去逼近这个上界。这一"上界 - 实际"的差距，是衡量任何通信方案好坏的标尺。</p>
+<table>
+<thead>
+<tr>
+<th>设定</th>
+<th>每个智能体可用信息</th>
+<th>决策质量</th>
+<th>与上界的差距</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>独立执行（IQL）</td>
+<td>仅自己 <span class="arithmatex">\(\tau_i\)</span></td>
+<td>最差</td>
+<td>最大（<span class="arithmatex">\(\sum_i \Delta_i\)</span> 全部存在）</td>
+</tr>
+<tr>
+<td>有限带宽通信</td>
+<td><span class="arithmatex">\(\tau_i\)</span> + 收到的消息 <span class="arithmatex">\(m_{j\to i}\)</span></td>
+<td>中</td>
+<td>由带宽与协议决定</td>
+</tr>
+<tr>
+<td>无限带宽通信（无约束广播）</td>
+<td>等价于 <span class="arithmatex">\(\tau_{\text{joint}}\)</span></td>
+<td>接近集中式 POMDP</td>
+<td>理论最小</td>
+</tr>
+<tr>
+<td>CTDE 集中式 Critic</td>
+<td>训练时看全局，执行时仍用 <span class="arithmatex">\(\tau_i\)</span></td>
+<td>局部执行下的最优</td>
+<td>受 IGM 约束（见第 05 章）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 注意区分两种"全局信息"：<strong>CTDE</strong> 只让 Critic 在训练时看全局，执行期每个智能体仍只用 <span class="arithmatex">\(\tau_i\)</span>，通信不是必需的（第 05 章会强调这一点，并在非平稳性一节说明其边界）；而<strong>通信式 MARL</strong> 让信息在执行期也流动，代价是显式的带宽与延迟预算。二者是"训练期特权"与"执行期特权"的分野。若你还不熟悉 MARL 算法家族（IQL / VDN / QMIX / MADDPG / MAPPO / COMA），可先看<strong>强化学习第 09 章 §三</strong>给出的精简速览，再回到第 05 章读完整正文 —— 本章默认你已理解 CTDE 与值分解的基本前提。</p>
+</blockquote>
+<h3 id="12">1.2 通信的三种价值（消歧/协调/承诺）</h3>
+<p>通信的收益并不只有一种来源，把三类价值拆开看，能直接指导协议设计：</p>
+<table>
+<thead>
+<tr>
+<th>价值类型</th>
+<th>要解决的问题</th>
+<th>典型消息内容</th>
+<th>若无通信的后果</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>消歧</strong>（disambiguation）</td>
+<td>我的观测有歧义，需要别人补一比特</td>
+<td>"我看到的是左边那个"</td>
+<td>各人对世界的解释不一致，动作冲突</td>
+<td>两个机器人对同一物体做出相反判断</td>
+</tr>
+<tr>
+<td><strong>协调</strong>（coordination）</td>
+<td>我们需要选择同一个均衡，否则都不好</td>
+<td>"我打算去 A 点"</td>
+<td>落入次优均衡（如双方都退让或都抢行）</td>
+<td>会车、交叉路口、无中心任务分配</td>
+</tr>
+<tr>
+<td><strong>承诺</strong>（commitment）</td>
+<td>我要让我的行为可信、可预测</td>
+<td>"我保证守住这个位置 3 秒"</td>
+<td>需要实时互相猜测意图，反应迟缓</td>
+<td>编队飞行、人机协同、合同网投标</td>
+</tr>
+</tbody>
+</table>
+<p>三者的信息论性质不同：</p>
+<ul>
+<li><strong>消歧</strong>是<strong>纯信息传递</strong>：消息直接降低接收者的 <span class="arithmatex">\(H(S \mid \cdot)\)</span>，价值可以用互信息 <span class="arithmatex">\(I(M; S)\)</span> 量化。</li>
+<li><strong>协调</strong>是<strong>均衡选择</strong>：消息本身不携带关于 <span class="arithmatex">\(S\)</span> 的新信息，它只是一个<strong>相关信号</strong>（correlated signal），用来让双方落到同一个均衡上。这在第 03 章的"相关均衡"里出现过 —— 一个公开随机信号可以严格改进纳什回报，即使它不带任何环境信息。</li>
+<li><strong>承诺</strong>是<strong>改变他人的收益结构</strong>：它把"可能反悔"的博弈变成"反悔有成本"的博弈，本质上是把第 04 章的机制设计思想搬进了实时通信里。</li>
+</ul>
+<div class="arithmatex">\[
+\underbrace{I(M;S)}_{\text{消歧}} \;+\; \underbrace{I(M;\,\text{均衡选择})}_{\text{协调}} \;+\; \underbrace{\Delta R_{\text{承诺}}}_{\text{可信度溢价}} \;=\; \text{通信总价值}
+\]</div>
+<blockquote>
+<p><strong>核心思想</strong>：如果你发现"加了通信但没效果"，先判断你要的是哪一类价值。<strong>消歧类</strong>问题往往是消息内容没编码对；<strong>协调类</strong>问题往往不是信息不够而是没有共同随机性（可以加一个廉价公共信号）；<strong>承诺类</strong>问题则是激励问题，光传信息不解决。</p>
+</blockquote>
+<h3 id="13">1.3 通信不是免费的（带宽、延迟、丢包）</h3>
+<p>真实信道有三个硬约束，它们决定了通信式 MARL 的可部署性：</p>
+<table>
+<thead>
+<tr>
+<th>约束</th>
+<th>物理来源</th>
+<th>数学建模</th>
+<th>训练时的处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>带宽</strong>（bandwidth）</td>
+<td>信道容量有限</td>
+<td>消息维度 <span class="arithmatex">\(d_m\)</span> 固定 / 比特预算 <span class="arithmatex">\(B\)</span></td>
+<td>固定消息维度、向量量化、信息瓶颈正则</td>
+</tr>
+<tr>
+<td><strong>延迟</strong>（latency）</td>
+<td>传播与处理时间</td>
+<td>消息延迟 <span class="arithmatex">\(k\)</span> 步：收到 <span class="arithmatex">\(m^{t-k}\)</span></td>
+<td>训练时注入随机延迟、用记忆补偿</td>
+</tr>
+<tr>
+<td><strong>丢包</strong>（packet loss）</td>
+<td>链路不可靠</td>
+<td>消息以概率 <span class="arithmatex">\(p\)</span> 被丢弃</td>
+<td>训练时随机 drop、重传、冗余编码</td>
+</tr>
+</tbody>
+</table>
+<p>香农信道容量给出了硬上界：在信噪比 <span class="arithmatex">\(\mathrm{SNR}\)</span> 下，可无差错传输的速率不超过</p>
+<div class="arithmatex">\[
+C = B \log_2\!\left(1 + \mathrm{SNR}\right) \quad \text{(bit/s)}
+\]</div>
+<p>再叠加丢包，有效吞吐还要乘上成功概率。这个上界很重要，因为它告诉我们：<strong>"消息发得越长越好"是错的</strong> —— 超过 <span class="arithmatex">\(C\)</span> 的部分只会增加噪声与过拟合。</p>
+<p>延迟的影响常被低估。设消息延迟为 <span class="arithmatex">\(k\)</span> 步，则接收者在 <span class="arithmatex">\(t\)</span> 时刻拿到的是 <span class="arithmatex">\(t-k\)</span> 时刻的旧信息，其"过期程度"可以用与当前状态的条件互信息衡量：</p>
+<div class="arithmatex">\[
+I\big(M^{t-k};\, S^{t}\big) \;\le\; I\big(M^{t-k};\, S^{t-k}\big)
+\]</div>
+<p>即<strong>消息携带的当前信息不会超过它生成时携带的信息</strong>（数据处理不等式）。环境变化越快（如高速运动、高频交易），<span class="arithmatex">\(k\)</span> 步延迟的代价越大。</p>
+<blockquote>
+<p>⚠️ 一个反直觉的工程结论：在实时控制回路里，<strong>"少发、准发、早发"通常优于"多发、全发、慢发"</strong>。带宽宽松时仍有必要做门控（IC3Net 的动机），因为多发会挤占决策时延预算。这与 LLM 多智能体系统里"上下文越长越慢、越贵、越容易幻觉"的经验完全同构（见第 08 章）。</p>
+</blockquote>
+<hr />
+<h2 id="marl">二、通信式 MARL 的四种结构（含架构图）</h2>
+<p><img alt="通信式 MARL 的四种结构对比" src="../../img/mas-06-comm-arch.png" /></p>
+<p><em>图：CommNet（全广播）→ DIAL（离散符号）→ IC3Net（门控）→ TarMAC（定向寻址），从"人人都说"到"只说给该听的人"。</em></p>
+<p>四种结构的演进逻辑是一条清晰的线：<strong>从无约束广播，走向有选择的、可训练的、可解释的定向通信</strong>。下面逐一拆解。</p>
+<h3 id="21-commnet">2.1 CommNet 连续广播</h3>
+<p>CommNet（Communication Neural Net, Sukhbaatar et al., 2016）是最简洁的通信式 MARL 骨架：每个智能体维护一个隐藏状态 <span class="arithmatex">\(h_i^t\)</span>，在每一步先<strong>广播</strong>自己的隐藏状态（编码成消息），再<strong>聚合</strong>所有人的消息，然后更新。</p>
+<div class="arithmatex">\[
+c_i^{t} = \frac{1}{n-1}\sum_{j \neq i} m_j^{t}, \qquad
+h_i^{t+1} = f\!\left(h_i^{t},\ o_i^{t+1},\ c_i^{t}\right), \qquad
+m_j^{t} = g\!\left(h_j^{t}\right)
+\]</div>
+<p>其中 <span class="arithmatex">\(f\)</span> 通常是 GRU/MLP，<span class="arithmatex">\(g\)</span> 是消息编码器。执行 <span class="arithmatex">\(K\)</span> 轮"通信-更新"后，每个智能体从 <span class="arithmatex">\(h_i\)</span> 输出动作。<span class="arithmatex">\(K\)</span> 是<strong>通信跳数</strong>：<span class="arithmatex">\(K=1\)</span> 只能交换一阶信息，<span class="arithmatex">\(K=2\)</span> 就能让信息跨越两跳传播（A 的信息经 B 到达 C）。</p>
+<div class="highlight"><pre><span></span><code>       通信第 1 跳                          通信第 2 跳
+   智能体1   智能体2   智能体3        智能体1   智能体2   智能体3
+   ┌───┐    ┌───┐    ┌───┐          ┌───┐    ┌───┐    ┌───┐
+   │编码│    │编码│    │编码│          │编码│    │编码│    │编码│
+   └─┬─┘    └─┬─┘    └─┬─┘          └─┬─┘    └─┬─┘    └─┬─┘
+     │m1      │m2      │m3             │m1&#39;     │m2&#39;     │m3&#39;
+     ├────────┼────────┤  全连接广播     ├────────┼────────┤
+     ▼        ▼        ▼                ▼        ▼        ▼
+   ┌──────────────────────┐          ┌──────────────────────┐
+   │ 均值聚合 → 更新 h_i  │   ──►    │ 均值聚合 → 更新 h_i  │
+   └──────────┬───────────┘          └──────────┬───────────┘
+              │                                 │
+              ▼                                 ▼
+         动作 a_i^t                        动作 a_i^{t+K}
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>CommNet 设定</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信对象</td>
+<td>全体（除自己）</td>
+<td>无寻址，O(n²) 消息量</td>
+</tr>
+<tr>
+<td>消息类型</td>
+<td>连续向量</td>
+<td>可微，端到端可训练</td>
+</tr>
+<tr>
+<td>通信轮数</td>
+<td>固定 <span class="arithmatex">\(K\)</span></td>
+<td>控制信息传播半径</td>
+</tr>
+<tr>
+<td>聚合函数</td>
+<td>均值（也可换最大/注意力）</td>
+<td>置换不变，天然处理乱序</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>低</td>
+<td>连续向量难解读</td>
+</tr>
+</tbody>
+</table>
+<p><strong>优点</strong>：结构简单、端到端可训练、对智能体数量有置换不变性。<strong>缺点</strong>：① 无门控——即使不需要通信也照样发，浪费带宽；② 无寻址——想说给特定人听做不到；③ 均值聚合把所有人的信息"糊"在一起，无法区分信源重要性（后续 TarMAC 正是为修这一点）。</p>
+<h3 id="22-dial-gumbel-softmax">2.2 DIAL 离散符号 + 直通估计（Gumbel-Softmax 说明）</h3>
+<p>DIAL（Differentiable Inter-Agent Learning, Foerster et al., 2016）的关键创新是：<strong>强制消息走离散符号</strong>，从而更接近真实通信（有限比特、可枚举、可能可解释），同时解决"离散采样不可微"的难题。</p>
+<p>问题在于：如果消息 <span class="arithmatex">\(m\)</span> 是从 <span class="arithmatex">\(\mathrm{Categorical}\)</span> 分布里<strong>采样</strong>得到的离散符号，那么 <span class="arithmatex">\(\partial \mathcal{L} / \partial \theta_{\text{sender}}\)</span> 会被采样操作切断（采样不可导）。DIAL 的解法是 <strong>Categorical Reparameterization / Gumbel-Softmax</strong>（Jang et al., 2017；Maddison et al., 2017）：</p>
+<div class="arithmatex">\[
+z = \operatorname{softmax}\!\left(\frac{\log \pi + g}{\tau}\right), \qquad g_k = -\log(-\log u_k),\quad u_k \sim \mathrm{Uniform}(0,1)
+\]</div>
+<p>其中 <span class="arithmatex">\(g\)</span> 是 Gumbel 噪声，<span class="arithmatex">\(\tau\)</span> 是温度。性质非常漂亮：</p>
+<ul>
+<li><span class="arithmatex">\(\tau \to 0\)</span> 时，<span class="arithmatex">\(z\)</span> 趋向 <strong>one-hot</strong>（纯离散采样），期望等于 Categorical 概率。</li>
+<li><span class="arithmatex">\(\tau &gt; 0\)</span> 时，<span class="arithmatex">\(z\)</span> 是光滑近似，梯度可以顺畅回流到发送方。</li>
+<li>训练时用中等 <span class="arithmatex">\(\tau\)</span>，推理时用 <span class="arithmatex">\(\tau \to 0\)</span>（或在离散前向、软后向之间用 <strong>Straight-Through</strong>：前向传 one-hot，反向传 softmax 梯度）。</li>
+</ul>
+<p>DIAL 进一步让接收方在<strong>训练时</strong>看到软消息（可导），在<strong>执行时</strong>收到硬离散符号，这被称为"<strong>消息作为可微通信与真实通信的桥</strong>"。</p>
+<div class="highlight"><pre><span></span><code>   发送方 logits π ──► Gumbel-Softmax(τ) ──► 软消息 z (可微) ──► 训练用
+                                              │
+                                     τ→0 / 直通估计(Gumbel argmax)
+                                              ▼
+                                         硬符号 m ∈ {1..K} ──► 执行用
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Gumbel-Softmax 采样: 展示 τ 如何控制&quot;离散程度&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gumbel_softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;从 logits 采样松弛 one-hot (numpy 实现, 对应 PyTorch 的 F.gumbel_softmax).&quot;&quot;&quot;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>                        <span class="c1"># 均匀噪声</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">))</span>                     <span class="c1"># Gumbel 噪声</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">logits</span> <span class="o">+</span> <span class="n">g</span><span class="p">)</span> <span class="o">/</span> <span class="n">tau</span>                              <span class="c1"># 加噪 + 降温</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>               <span class="c1"># 数值稳定</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">e</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">logits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>   <span class="c1"># 偏好第 0 类</span>
+<span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>   <span class="c1"># 固定噪声, 只变化 τ, 便于对比</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">gumbel_softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;τ=</span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">  软采样分布 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">  argmax=</span><span class="si">{</span><span class="n">z</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;τ 越小越接近 one-hot; τ→0 退化为硬采样&quot;</span><span class="p">)</span>
+<span class="c1"># 预期输出:</span>
+<span class="c1"># τ=1.0  软采样分布 = [0.732 0.084 0.184]  argmax=0</span>
+<span class="c1"># τ=0.5  软采样分布 = [0.929 0.012 0.059]  argmax=0</span>
+<span class="c1"># τ=0.1  软采样分布 = [1. 0. 0.]  argmax=0</span>
+<span class="c1"># τ 越小越接近 one-hot; τ→0 退化为硬采样</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>DIAL 设定</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信对象</td>
+<td>指定接收者（可寻址）</td>
+<td>支持点对点，消息量可控</td>
+</tr>
+<tr>
+<td>消息类型</td>
+<td>离散符号（<span class="arithmatex">\(K\)</span> 类）</td>
+<td>有限比特、可枚举</td>
+</tr>
+<tr>
+<td>梯度通路</td>
+<td>Gumbel-Softmax / 直通估计</td>
+<td>离散采样可训练</td>
+</tr>
+<tr>
+<td>训练/执行差异</td>
+<td>训练用软、执行用硬</td>
+<td>需要温度退火</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>中</td>
+<td>符号可统计，但语义仍需探测</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 常见坑：<span class="arithmatex">\(\tau\)</span> 退火太快会让梯度方差爆炸、训练不稳；太慢则始终是"软消息"，执行时切到硬符号会出现<strong>训练-执行不一致</strong>（train-test mismatch）。工程上建议 <span class="arithmatex">\(\tau\)</span> 从 1.0 缓慢降到 0.1，并在最后阶段评估硬符号下的真实性能。</p>
+</blockquote>
+<h3 id="23-ic3net">2.3 IC3Net 门控</h3>
+<p>IC3Net（Individualized Controlled Continuous Communication Net, Singh et al., 2019）问了 CommNet 没问的问题：<strong>"我现在该不该说话？"</strong> 它给每个智能体加一个<strong>门控变量</strong> <span class="arithmatex">\(g_i^t \in \{0,1\}\)</span>，由策略自己学出来：</p>
+<div class="arithmatex">\[
+g_i^{t} \sim \mathrm{SoftBernoulli}\!\left(\sigma(w_g^\top h_i^{t})\right), \qquad
+m_i^{t} \leftarrow g_i^{t} \cdot g(h_i^{t})
+\]</div>
+<p>门关时，该智能体既不发送也不接收，成为一个"沉默的观察者"。IC3Net 用两类奖励训练门控：</p>
+<ol>
+<li><strong>环境奖励</strong>（任务本身）</li>
+<li><strong>通信成本惩罚</strong> <span class="arithmatex">\(-\lambda \sum_i g_i^t\)</span>：让系统学会"能不通信就不通信"</li>
+</ol>
+<div class="arithmatex">\[
+R^{\text{total}}_i = R^{\text{env}}_i - \lambda \sum_{t} \mathbb{E}[g_i^t]
+\]</div>
+<p>结果很直观：在<strong>需要协作的场景</strong>（捕食者-猎物 Predator-Prey）门控打开、通信活跃；在<strong>竞争场景</strong>（需要隐藏意图，如猎物的逃跑）门控几乎关闭——因为说话会泄露自己的位置。这说明门控不仅省带宽，还<strong>学会了"信息不该共享"的边界</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>门控状态</th>
+<th>发送</th>
+<th>接收</th>
+<th>语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(g_i = 1\)</span></td>
+<td>是</td>
+<td>是</td>
+<td>主动参与通信</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(g_i = 0\)</span></td>
+<td>否</td>
+<td>否</td>
+<td>沉默，独立行动</td>
+</tr>
+<tr>
+<td>混合（软 <span class="arithmatex">\(g_i\)</span>）</td>
+<td>加权发送</td>
+<td>加权接收</td>
+<td>训练期连续松弛</td>
+</tr>
+</tbody>
+</table>
+<p>与竞争场景对照：在<strong>部分可观测的对抗</strong>里，最优策略常常是"<strong>少说</strong>"。这与人类谈判里的沉默策略同构 —— 信息不是越多越好，<strong>在对手也是决策者时，发送信息 = 泄露信息</strong>。这一点在第 08 章的 LLM 多智能体（把自然语言当作通信协议）里会以"上下文泄露导致策略被对手利用"的形式再次出现。</p>
+<h3 id="24-tarmac">2.4 TarMAC 定向寻址（注意力选听）</h3>
+<p>CommNet 的均值聚合是"听所有人的平均意见"；TarMAC（Targeted Multi-Agent Communication, Das et al., 2019）改成"<strong>听我该听的人</strong>"，用<strong>注意力机制</strong>做定向寻址与选听。</p>
+<p>每个智能体同时扮演发送方与接收方：</p>
+<div class="arithmatex">\[
+\text{query}_i = W_Q h_i, \qquad \text{key}_j = W_K h_j, \qquad \text{value}_j = W_V h_j
+\]</div>
+<p>发送方在自己消息里<strong>内嵌一个 key</strong>，接收方用自己的 <strong>query</strong> 去匹配所有人的 key：</p>
+<div class="arithmatex">\[
+\alpha_{ij} = \operatorname{softmax}_j\!\left(\frac{\text{query}_i^\top \text{key}_j}{\sqrt{d}}\right), \qquad
+c_i = \sum_j \alpha_{ij}\, \text{value}_j
+\]</div>
+<p>于是 <span class="arithmatex">\(\alpha_{ij}\)</span> 直接给出了"智能体 <span class="arithmatex">\(i\)</span> 有多在意 <span class="arithmatex">\(j\)</span> 的话"，这是一个<strong>天然可解释的通信图</strong>。</p>
+<div class="highlight"><pre><span></span><code>   发送方 1              key_1 ──┐
+   发送方 2              key_2 ──┼──► 与 query_i 点积 ──► softmax ──► α_i1, α_i2, α_i3
+   发送方 3              key_3 ──┘                                        │
+                                                                          ▼
+   接收方 i: query_i ───────────────────────────────────► c_i = Σ_j α_ij · value_j
+                                                                          │
+                                                                          ▼
+                                                       融合: h_i ← f(h_i, c_i) → 动作
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>TarMAC 设定</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信对象</td>
+<td>注意力加权选择</td>
+<td>隐式寻址，可事后分析</td>
+</tr>
+<tr>
+<td>消息类型</td>
+<td>连续向量 + 内嵌 key</td>
+<td>key 决定"被谁听见"</td>
+</tr>
+<tr>
+<td>聚合函数</td>
+<td>注意力加权求和</td>
+<td>区分信源重要性</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>高（<span class="arithmatex">\(\alpha_{ij}\)</span> 可视化）</td>
+<td>能画出通信拓扑</td>
+</tr>
+<tr>
+<td>计算复杂度</td>
+<td><span class="arithmatex">\(O(n^2 d)\)</span></td>
+<td>智能体数大时开销显著</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：注意力权重 <span class="arithmatex">\(\alpha_{ij}\)</span> 不只是计算技巧，它是<strong>通信拓扑本身</strong> —— 模型学出来的"谁听谁"就是一张动态组织的图。在装配、协同搬运等任务里，可视化 <span class="arithmatex">\(\alpha\)</span> 常能解释"为什么这组智能体收敛快"：它们自发形成了分工子群（对应第 07 章的组织理论）。</p>
+</blockquote>
+<h3 id="25">2.5 对比表</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>CommNet (2016)</th>
+<th>DIAL (2016)</th>
+<th>IC3Net (2019)</th>
+<th>TarMAC (2019)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>消息类型</strong></td>
+<td>连续向量</td>
+<td>离散符号</td>
+<td>连续（门控后）</td>
+<td>连续 + key</td>
+</tr>
+<tr>
+<td><strong>通信对象</strong></td>
+<td>全体广播</td>
+<td>可指定</td>
+<td>全体广播（可静默）</td>
+<td>注意力选听</td>
+</tr>
+<tr>
+<td><strong>是否可寻址</strong></td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+<td>隐式（注意力）</td>
+</tr>
+<tr>
+<td><strong>是否门控</strong></td>
+<td>否</td>
+<td>否</td>
+<td><strong>是</strong></td>
+<td>否（权重即软门控）</td>
+</tr>
+<tr>
+<td><strong>梯度通路</strong></td>
+<td>天然可微</td>
+<td>Gumbel-Softmax / 直通</td>
+<td>软伯努利松弛</td>
+<td>天然可微</td>
+</tr>
+<tr>
+<td><strong>通信成本意识</strong></td>
+<td>无</td>
+<td>无</td>
+<td><strong>有（λ 惩罚）</strong></td>
+<td>隐式（权重稀疏）</td>
+</tr>
+<tr>
+<td><strong>可解释性</strong></td>
+<td>低</td>
+<td>中</td>
+<td>中</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td><strong>消息量复杂度</strong></td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+<td><span class="arithmatex">\(O(n)\)</span>（点对点）</td>
+<td><span class="arithmatex">\(O(n^2)\)</span>（但可静默）</td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+</tr>
+<tr>
+<td><strong>典型适用</strong></td>
+<td>小规模对称协作</td>
+<td>需要离散协议</td>
+<td>协作+竞争混合</td>
+<td>异构、需要组织</td>
+</tr>
+<tr>
+<td><strong>主要短板</strong></td>
+<td>无选择、无寻址</td>
+<td>训练不稳</td>
+<td>门控坍缩风险</td>
+<td>大 <span class="arithmatex">\(n\)</span> 时开销大</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>选型建议</strong>：<strong>小规模、同质、快速验证</strong> → CommNet；<strong>需要可枚举协议、要离散符号</strong> → DIAL；<strong>协作与竞争混合、带宽敏感</strong> → IC3Net；<strong>异构、需要理解"谁听谁"</strong> → TarMAC。真实系统常常叠加：门控 + 注意力 + 离散量化。</p>
+</blockquote>
+<h3 id="26">2.6 <strong>实跑</strong>一个最小可微通信信道</h3>
+<p>上面的理论听起来抽象，我们用<strong>纯 numpy + 手动梯度</strong>实现一个两智能体协作任务，直接量化"有通信 vs 无通信"的性能差。任务设定：</p>
+<ul>
+<li>全局目标 <span class="arithmatex">\(t = [t_0, t_1] \sim \mathcal{N}(0, I)\)</span>。</li>
+<li>智能体 1 只观测到 <span class="arithmatex">\(t_0\)</span>，智能体 2 只观测到 <span class="arithmatex">\(t_1\)</span>（<strong>各自缺一维</strong>）。</li>
+<li>每个智能体要预测<strong>完整的</strong> <span class="arithmatex">\(t\)</span>，两人损失取平均。</li>
+<li>消息维度 <span class="arithmatex">\(H=8\)</span>，用 <span class="arithmatex">\(\tanh\)</span> 生成消息并投递。<strong>无通信</strong>时接收端拿到全零向量（切断消息路径）。</li>
+</ul>
+<p>理论预期：无通信时，每个智能体只能预测缺失那一维的均值 0，误差贡献为方差 1，平均损失约 <strong>0.5</strong>（因为已知的那一维误差为 0）；有通信时，缺失信息被补上，损失应趋近 0。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 最小可微通信信道: 两智能体协作补全任务 + 手动梯度 (仅 numpy)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># 隐藏层 / 消息维度</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_batch</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;目标 t=[t0,t1]; 智能体1只看 t0, 智能体2只看 t1 (部分可观测).&quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">t</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 智能体1观测</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">t</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 智能体2观测</span>
+    <span class="k">return</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">t</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">init_params</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;Wa&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>      <span class="c1"># 观测编码</span>
+        <span class="s2">&quot;ba&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">H</span><span class="p">),</span>
+        <span class="s2">&quot;Wc&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">H</span><span class="p">)),</span>      <span class="c1"># 消息生成</span>
+        <span class="s2">&quot;bc&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">H</span><span class="p">),</span>
+        <span class="s2">&quot;Wo&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">H</span><span class="p">)),</span>  <span class="c1"># 解码: [观测; 收到的消息] -&gt; 预测</span>
+        <span class="s2">&quot;bo&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">comm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">init_params</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">make_batch</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">x1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># ---- 前向: 各自编码观测并生成消息 ----</span>
+        <span class="n">h1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x1</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;ba&quot;</span><span class="p">]);</span> <span class="n">m1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">h1</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;bc&quot;</span><span class="p">])</span>
+        <span class="n">h2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x2</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;ba&quot;</span><span class="p">]);</span> <span class="n">m2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">h2</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;bc&quot;</span><span class="p">])</span>
+        <span class="n">recv1</span> <span class="o">=</span> <span class="n">m2</span> <span class="k">if</span> <span class="n">comm</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">H</span><span class="p">))</span>   <span class="c1"># 智能体1 收到 智能体2 的消息</span>
+        <span class="n">recv2</span> <span class="o">=</span> <span class="n">m1</span> <span class="k">if</span> <span class="n">comm</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">H</span><span class="p">))</span>   <span class="c1"># 智能体2 收到 智能体1 的消息</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">recv1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">u1</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;bo&quot;</span><span class="p">]</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">recv2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">u2</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;bo&quot;</span><span class="p">]</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y1</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y2</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1"># ---- 手动反向传播 ----</span>
+        <span class="n">dy1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">;</span> <span class="n">dy2</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>          <span class="c1"># dL/dy (含 /2 系数)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">g</span><span class="p">[</span><span class="s2">&quot;Wo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dy1</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u1</span> <span class="o">+</span> <span class="n">dy2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u2</span>
+        <span class="n">g</span><span class="p">[</span><span class="s2">&quot;bo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dy1</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">dy2</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">du1</span> <span class="o">=</span> <span class="n">dy1</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wo&quot;</span><span class="p">];</span> <span class="n">du2</span> <span class="o">=</span> <span class="n">dy2</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wo&quot;</span><span class="p">]</span>
+        <span class="n">dm1</span> <span class="o">=</span> <span class="n">du2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:];</span> <span class="n">dm2</span> <span class="o">=</span> <span class="n">du1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span>              <span class="c1"># 发消息者的梯度</span>
+        <span class="n">g</span><span class="p">[</span><span class="s2">&quot;Wa&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wa&quot;</span><span class="p">]);</span> <span class="n">g</span><span class="p">[</span><span class="s2">&quot;ba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="n">g</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">]);</span> <span class="n">g</span><span class="p">[</span><span class="s2">&quot;bc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">dm</span> <span class="ow">in</span> <span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">dm1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">dm2</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">comm</span><span class="p">:</span>
+                <span class="n">dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>                  <span class="c1"># 无通信: 切断消息路径</span>
+            <span class="n">dz</span> <span class="o">=</span> <span class="n">dm</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>                      <span class="c1"># 过 tanh</span>
+            <span class="n">g</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dz</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">h</span><span class="p">;</span> <span class="n">g</span><span class="p">[</span><span class="s2">&quot;bc&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dz</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">dh</span> <span class="o">=</span> <span class="p">(</span><span class="n">dz</span> <span class="o">@</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Wc&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">g</span><span class="p">[</span><span class="s2">&quot;Wa&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dh</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x</span><span class="p">;</span> <span class="n">g</span><span class="p">[</span><span class="s2">&quot;ba&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dh</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">loss</span>
+
+<span class="k">for</span> <span class="n">comm</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">comm</span><span class="o">=</span><span class="n">comm</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;通信=</span><span class="si">{</span><span class="s1">&#39;开&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;关&#39;</span><span class="si">}</span><span class="s2">  最终训练损失 = </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;理论下界(无通信时每个智能体已知自己那一维) ≈ 0.5000&quot;</span><span class="p">)</span>
+
+<span class="c1"># 预期输出:</span>
+<span class="c1"># 通信=关  最终训练损失 = 0.5159</span>
+<span class="c1"># 通信=开  最终训练损失 = 0.0053</span>
+<span class="c1"># 理论下界(无通信时每个智能体已知自己那一维) ≈ 0.5000</span>
+</code></pre></div>
+<p><strong>结果解读</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>设定</th>
+<th>最终损失</th>
+<th>与理论下界比较</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信=关</td>
+<td>0.5159</td>
+<td>≈ 0.5（下界）</td>
+<td>每个智能体只能填 2 维中的 1 维，缺失维贡献约 0.5</td>
+</tr>
+<tr>
+<td>通信=开</td>
+<td>0.0053</td>
+<td>接近 0</td>
+<td>消息把缺失维度补上，损失降两个数量级</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这个实验揭示的核心事实</strong>：<strong>通信的收益是可测量的、有上界的</strong>。它把损失从 0.5 降到 0.005 —— 恰好对应"填补 <span class="arithmatex">\(\Delta_i\)</span> 信息赤字"的信息论预期。更重要的是，注意<strong>反向传播里 <code>if not comm</code> 那三行</strong>：通信是梯度图上的一条<strong>显式路径</strong>，切断它就等于切断信息流。所有通信式 MARL 的本质，都是在这条路径上做设计：<strong>发什么（编码）、给谁（寻址）、何时发（门控）、发多少（带宽）</strong>。</p>
+<hr />
+<h2 id="_2">三、涌现语言与可解释性</h2>
+<p><img alt="涌现语言与符号语义度量" src="../../img/mas-06-emergent-language.png" /></p>
+<p><em>图：从消息到语义 —— 互信息衡量"说了什么"，探针分类器揭露"藏了什么"，组合性检验判断能否"举一反三"。</em></p>
+<h3 id="31">3.1 符号语义的度量（互信息、探针分类器、组合性）</h3>
+<p>当两个智能体自学出一套消息协议后，第一个问题必然是：<strong>这些符号是什么意思？</strong> 有三种互补的度量手段。</p>
+<p><strong>(1) 互信息 <span class="arithmatex">\(I(M; S)\)</span></strong>：消息 <span class="arithmatex">\(M\)</span> 与状态 <span class="arithmatex">\(S\)</span> 之间的互信息，衡量"消息携带了多少关于状态的信息"：</p>
+<div class="arithmatex">\[
+I(M;S) = \sum_{m,s} p(m,s) \log_2 \frac{p(m,s)}{p(m)\,p(s)} = H(M) - H(M \mid S)
+\]</div>
+<p><span class="arithmatex">\(I(M;S)=0\)</span> 意味着消息与状态无关（符号坍塌或噪声）；<span class="arithmatex">\(I(M;S)=H(S)\)</span> 意味着消息完美编码状态。</p>
+<p><strong>(2) 探针分类器（probe classifier）</strong>：用一个<strong>独立的</strong>小分类器（如逻辑回归）从消息 <span class="arithmatex">\(m\)</span> 里预测某个目标属性（如"伙伴在哪里"）。若探针准确率高，说明该属性<strong>线性可读</strong>地编码在消息里。它是互信息的"有向、可操作"版本——不仅问"有多相关"，还问"相关的是哪个属性"。</p>
+<p><strong>(3) 组合性（compositionality）</strong>：检验"新符号 = 旧符号的组合"。理想协议下，若符号 <span class="arithmatex">\(A\)</span> 表示"红色"、<span class="arithmatex">\(B\)</span> 表示"圆形"，则组合应对应"红色圆形"，系统能<strong>外推</strong>到未见组合。组合性强的协议迁移性好，弱的协议每个概念学一个新符号（词典爆炸）。</p>
+<p>下面实跑互信息计算，对比三种协议的"语义含量"：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 消息-状态互信息 I(M;S): 用离散联合分布计算, 度量符号语义</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mutual_information</span><span class="p">(</span><span class="n">pairs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;pairs: [(state, message), ...] -&gt; I(M;S), 单位 bit.&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">)</span>          <span class="c1"># 状态边缘</span>
+    <span class="n">pm</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">m</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">)</span>          <span class="c1"># 消息边缘</span>
+    <span class="n">psm</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>                       <span class="c1"># 联合</span>
+    <span class="n">mi</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">psm</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">p_sm</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="n">mi</span> <span class="o">+=</span> <span class="n">p_sm</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">p_sm</span> <span class="o">/</span> <span class="p">((</span><span class="n">ps</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">mi</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">4000</span>
+
+<span class="c1"># 协议A: 消息忠实编码状态 (每个状态映射到唯一符号)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">msgA</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># 协议B: 符号坍塌, 所有人都发同一个符号</span>
+<span class="n">msgB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1"># 协议C: 半随机 (一半忠实, 一半乱发)</span>
+<span class="n">msgC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;H(S) = </span><span class="si">{</span><span class="n">mutual_information</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">states</span><span class="p">)))</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit (自信息上界, 采样近似)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;S) 协议A 忠实编码 = </span><span class="si">{</span><span class="n">mutual_information</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">msgA</span><span class="p">)))</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;S) 协议B 符号坍塌 = </span><span class="si">{</span><span class="n">mutual_information</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">msgB</span><span class="p">)))</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;S) 协议C 半有效   = </span><span class="si">{</span><span class="n">mutual_information</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">msgC</span><span class="p">)))</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit&quot;</span><span class="p">)</span>
+
+<span class="c1"># 预期输出:</span>
+<span class="c1"># H(S) = 1.9994 bit (自信息上界, 采样近似)</span>
+<span class="c1"># I(M;S) 协议A 忠实编码 = 1.9994 bit</span>
+<span class="c1"># I(M;S) 协议B 符号坍塌 = 0.0000 bit</span>
+<span class="c1"># I(M;S) 协议C 半有效   = 0.4390 bit</span>
+</code></pre></div>
+<p><strong>结果解读</strong>：状态有 4 种取值，理论上界 <span class="arithmatex">\(H(S)=2\)</span> bit（采样近似 1.9994）。三种协议：</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th><span class="arithmatex">\(I(M;S)\)</span></th>
+<th>语义含量</th>
+<th>诊断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 忠实编码</td>
+<td>1.9994 bit</td>
+<td>满</td>
+<td>每个状态对应唯一符号，协议有效</td>
+</tr>
+<tr>
+<td>B 符号坍塌</td>
+<td>0.0000 bit</td>
+<td>零</td>
+<td>所有消息相同，信道空转</td>
+</tr>
+<tr>
+<td>C 半有效</td>
+<td>0.4390 bit</td>
+<td>低</td>
+<td>一半消息是噪声，语义被稀释</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 关键陷阱：<strong>互信息高不等于"人类可读"</strong>。一个协议可以有完美的 <span class="arithmatex">\(I(M;S)\)</span>，但符号与概念之间是任意映射（如把"红"编码为 7、"蓝"编码为 3），可解释性仍然是零。互信息衡量的是<strong>协议的信息有效性</strong>，不是<strong>语义的可理解性</strong> —— 后者要靠探针分类器对准具体属性。</p>
+</blockquote>
+<h3 id="32">3.2 符号坍塌与过拟合伙伴</h3>
+<p><strong>符号坍塌（symbol collapse）</strong> 是通信式 MARL 最经典的病理：所有智能体退化为发送<strong>同一个符号</strong>（或极少数符号），信道虽在但无信息。原因通常是：</p>
+<table>
+<thead>
+<tr>
+<th>成因</th>
+<th>机理</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>梯度坍缩</td>
+<td>消息对损失的贡献被均值聚合稀释</td>
+<td>消息梯度趋 0，编码器不再更新</td>
+</tr>
+<tr>
+<td>通信冗余</td>
+<td>环境信息已可从自身观测推断</td>
+<td>消息对决策边际价值≈0</td>
+</tr>
+<tr>
+<td>过早收敛</td>
+<td>探索不足，大家都"抄近路"</td>
+<td>直接学成"沉默也够用"</td>
+</tr>
+<tr>
+<td>惩罚过强</td>
+<td>通信成本 <span class="arithmatex">\(\lambda\)</span> 过大</td>
+<td>门控永久关闭</td>
+</tr>
+</tbody>
+</table>
+<p><strong>过拟合伙伴（overfitting to partner）</strong> 是另一个近亲：协议在一个特定伙伴上学得很好，但<strong>换了伙伴就失效</strong>——因为符号语义是双方<strong>共同约定</strong>出来的，不存在客观依据。两个独立训练的智能体即使各自协议"内部自洽"，凑到一起也常常<strong>鸡同鸭讲</strong>。这正是"协议不可迁移"问题的根源。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>症状</th>
+<th>与"可解释性"的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>符号坍塌</td>
+<td>消息熵 <span class="arithmatex">\(\to 0\)</span></td>
+<td>完全不可解释（没有内容）</td>
+</tr>
+<tr>
+<td>过拟合伙伴</td>
+<td>换伙伴性能骤降</td>
+<td>可解释但<strong>不通用</strong></td>
+</tr>
+<tr>
+<td>词典爆炸</td>
+<td>消息种类随任务指数增长</td>
+<td>组合性缺失</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-zero-shot-coordination">3.3 泛化到新伙伴（zero-shot coordination）</h3>
+<p><strong>零样本协调（Zero-Shot Coordination, ZSC）</strong> 问的是：能否训练出一个策略，使得它能与<strong>从未见过</strong>的伙伴合作良好？这在 LLM 多智能体的语境里尤其重要——你的智能体要和<strong>未知的第三方</strong>（其他公司的智能体）协作，不能假设双方共同学过协议。</p>
+<p>代表性解法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心思想</th>
+<th>对通信的处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Other-Play</strong>（Hu et al., 2020）</td>
+<td>对伙伴的"任意对称性"做不变性</td>
+<td>协议必须对伙伴重命名不变</td>
+</tr>
+<tr>
+<td><strong>Population-Based Training</strong></td>
+<td>与多样化种群竞争/合作</td>
+<td>逼出鲁棒协议</td>
+</tr>
+<tr>
+<td><strong>MEP / 最大化熵种群训练</strong></td>
+<td>最大化种群行为多样性</td>
+<td>协议需在多样伙伴上都可读</td>
+</tr>
+<tr>
+<td><strong>共享约定训练</strong></td>
+<td>提供公共随机种子/惯例</td>
+<td>用公共信号锚定符号语义</td>
+</tr>
+<tr>
+<td><strong>自然语言作为协议</strong></td>
+<td>直接用人类语言</td>
+<td>见第 08 章 LLM 多智能体</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>协议是"约定"（convention），而非"真理"</strong>。两个智能体能通信，往往不是因为发现了一个客观编码，而是因为它们<strong>碰巧收敛到同一个约定</strong>（Coleman 的约定理论、Lewis 的《Convention》早有论述）。要让协议可迁移，必须在训练时<strong>主动注入多样性</strong>，或用<strong>人类既有的协议（自然语言）</strong>来锚定符号 —— 这正是 LLM 多智能体把自然语言当作通信协议的根本动机（第 08 章）。</p>
+</blockquote>
+<hr />
+<h2 id="_3">四、通信受限与鲁棒性</h2>
+<h3 id="41">4.1 带宽预算与信息瓶颈</h3>
+<p>现实系统不会给你无限带宽。<strong>信息瓶颈（Information Bottleneck, IB）</strong> 提供了把"消息既要够用、又要够省"这件事写成目标函数的框架。基本形式是：在最大化消息对<strong>任务</strong>的有用性的同时，最小化消息对<strong>输入</strong>的信息量：</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{IB}} \;=\; I(M;\,\text{Task}) \;-\; \beta\, I(M;\,S)
+\]</div>
+<p>其中 <span class="arithmatex">\(\beta\)</span> 是权衡系数。直观理解：<strong>让消息只保留"与任务相关"的部分，丢弃无关细节</strong>。这在通信式 MARL 里的直接落地就是给消息加惩罚项：</p>
+<div class="arithmatex">\[
+\mathcal{L} = \mathcal{L}_{\text{task}} + \beta \sum_i \big\| m_i \big\|_1 \quad \text{或} \quad
+\mathcal{L} = \mathcal{L}_{\text{task}} + \beta \sum_i I(m_i;\, \tau_i)
+\]</div>
+<table>
+<thead>
+<tr>
+<th>惩罚方式</th>
+<th>目标</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>消息维度硬约束</td>
+<td>强制 <span class="arithmatex">\(d_m\)</span> 小</td>
+<td>最直接，但要手工调 <span class="arithmatex">\(d_m\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(L_1\)</span> / <span class="arithmatex">\(L_2\)</span> 正则</td>
+<td>让消息稀疏/小</td>
+<td>简单，但未必对应信息量</td>
+</tr>
+<tr>
+<td>熵惩罚</td>
+<td>降低消息熵 <span class="arithmatex">\(H(M)\)</span></td>
+<td>抑制符号坍塌的反面（过度稀疏）</td>
+</tr>
+<tr>
+<td>互信息上界</td>
+<td>直接压 <span class="arithmatex">\(I(M;\tau_i)\)</span></td>
+<td>理论干净，估计方差大（MINE 等）</td>
+</tr>
+<tr>
+<td>向量量化（VQ-VAE）</td>
+<td>消息落入有限码本</td>
+<td>离散化 + 压缩一体</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 信息瓶颈的<strong>大 <span class="arithmatex">\(\beta\)</span> 陷阱</strong>：<span class="arithmatex">\(\beta\)</span> 太大时，系统会学到"什么也不说"（消息退化为常量，<span class="arithmatex">\(I(M;S)\to 0\)</span>）。这就是 §3.2 符号坍塌的信息论解释。<strong>带宽不是越省越好</strong>，最优 <span class="arithmatex">\(\beta\)</span> 是让"任务损失"和"带宽成本"的边际相等。</p>
+</blockquote>
+<h3 id="42">4.2 丢包/延迟鲁棒训练（<strong>实跑</strong>）</h3>
+<p>真实链路会丢包。两种应对策略：</p>
+<ol>
+<li><strong>训练时注入扰动</strong>：在训练阶段以概率 <span class="arithmatex">\(p\)</span> 随机丢弃消息，让策略学会在"某些消息缺失"时依然能行动（域随机化的通信版）。</li>
+<li><strong>冗余与重传</strong>：发送方重复/编码冗余，或用 <span class="arithmatex">\(n\)</span> 轮通信提高送达概率。</li>
+</ol>
+<p>下面实跑蒙特卡洛实验，量化<strong>丢包率 → 通信失败率</strong>的关系，并展示<strong>多轮重传</strong>如何把失败率压下去。任务简化设定：智能体需要拿到对方的一比特信息，每轮独立以 <span class="arithmatex">\(1-p\)</span> 概率送达；若连续 <span class="arithmatex">\(n\)</span> 轮全部失败，则退化为"猜均值"（损失记为 1）。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 丢包鲁棒性: 蒙特卡洛估计不同丢包率下的协作性能 (仅 numpy)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">n_rounds</span> <span class="o">=</span> <span class="mi">3</span>          <span class="c1"># 允许重传的消息轮数</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200000</span>            <span class="c1"># 蒙特卡洛样本数</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">expected_loss</span><span class="p">(</span><span class="n">drop</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;任务: 智能体需获得对方的坐标(方差1). 每轮以 1-drop 概率送达;</span>
+<span class="sd">    全部失败时退化为预测均值(贡献 1.0 的误差), 成功时误差为 0.&quot;&quot;&quot;</span>
+    <span class="n">fail</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">n_rounds</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">drop</span>     <span class="c1"># 每轮是否丢包</span>
+    <span class="n">all_fail</span> <span class="o">=</span> <span class="n">fail</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>                 <span class="c1"># n_rounds 轮全丢</span>
+    <span class="k">return</span> <span class="n">all_fail</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;丢包率   单轮  三轮重传后失败率   期望损失&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">drop</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">):</span>
+    <span class="n">one</span> <span class="o">=</span> <span class="n">drop</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="n">expected_loss</span><span class="p">(</span><span class="n">drop</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">drop</span><span class="si">:</span><span class="s2">5.2f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">one</span><span class="si">:</span><span class="s2">5.2f</span><span class="si">}</span><span class="s2">        </span><span class="si">{</span><span class="n">multi</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">         </span><span class="si">{</span><span class="n">multi</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">44</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;结论: 0.5 丢包率下, 三轮重传把失败率从 0.5 压到 ~0.125&quot;</span><span class="p">)</span>
+
+<span class="c1"># 预期输出:</span>
+<span class="c1"># 丢包率   单轮  三轮重传后失败率   期望损失</span>
+<span class="c1">#  0.00    0.00        0.0000         0.0000</span>
+<span class="c1">#  0.10    0.10        0.0009         0.0009</span>
+<span class="c1">#  0.30    0.30        0.0270         0.0270</span>
+<span class="c1">#  0.50    0.50        0.1243         0.1243</span>
+<span class="c1">#  0.70    0.70        0.3425         0.3425</span>
+<span class="c1">#  0.90    0.90        0.7310         0.7310</span>
+<span class="c1"># --------------------------------------------</span>
+<span class="c1"># 结论: 0.5 丢包率下, 三轮重传把失败率从 0.5 压到 ~0.125</span>
+</code></pre></div>
+<p><strong>结果解读</strong>：失败率 <span class="arithmatex">\(= p^{n}\)</span>（每轮独立丢掉）：</p>
+<table>
+<thead>
+<tr>
+<th>丢包率 <span class="arithmatex">\(p\)</span></th>
+<th>单轮失败</th>
+<th>3 轮重传失败 (<span class="arithmatex">\(p^3\)</span>)</th>
+<th>改善倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>0.10</td>
+<td>0.0009</td>
+<td>~111×</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>0.30</td>
+<td>0.0270</td>
+<td>~11×</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>0.50</td>
+<td>0.1243</td>
+<td>~4×</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>0.70</td>
+<td>0.3425</td>
+<td>~2×</td>
+</tr>
+<tr>
+<td>0.9</td>
+<td>0.90</td>
+<td>0.7310</td>
+<td>~1.2×</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>重传对低丢包率极其有效，对高丢包率近乎无效</strong>。当 <span class="arithmatex">\(p=0.9\)</span> 时，3 轮重传仍失败 73% —— 这时该换策略（换信道/加前向纠错/让策略学会无通信也能活），而不是继续重传。这也解释了为什么"训练时注入丢包"比"无限重传"更鲁棒：<strong>让策略学会在信息缺失下行动</strong>，而不是假设信息一定到位。</p>
+</blockquote>
+<p>延迟的处理与丢包类似但更微妙：延迟造成的是<strong>过期信息</strong>，而非缺失。常用做法是给消息打时间戳，让接收者用<strong>记忆（GRU/LSTM/Transformer）</strong>区分新旧，并在训练时注入随机延迟（如 uniform <span class="arithmatex">\(\{0,1,2\}\)</span> 步），逼出"能容忍旧消息"的策略。</p>
+<table>
+<thead>
+<tr>
+<th>扰动类型</th>
+<th>注入方式</th>
+<th>策略学到什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>丢包</td>
+<td>随机置零消息</td>
+<td>无信息时的保底行为</td>
+</tr>
+<tr>
+<td>延迟</td>
+<td>用旧消息替换</td>
+<td>用记忆融合新旧信息</td>
+</tr>
+<tr>
+<td>噪声</td>
+<td>消息加高斯噪声</td>
+<td>对量化误差鲁棒</td>
+</tr>
+<tr>
+<td>带宽限制</td>
+<td>截断/量化消息</td>
+<td>在少数比特下传递关键信息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43">4.3 通信与隐私（谁该知道什么）</h3>
+<p>通信不只关乎效率，还关乎<strong>安全与隐私</strong>。三个必须显式设计的问题：</p>
+<p><strong>(1) 谁该知道什么（最小权限）</strong>：消息应当遵循<strong>最小必要原则</strong> —— 只传对方完成任务所需的、最小粒度的信息。例如路径规划中，只需传"我要走哪条路"，不必传"我的全部位置历史"。</p>
+<p><strong>(2) 信道作为信息泄露渠道</strong>：在对抗场景里，<strong>广播 = 向对手公开情报</strong>。IC3Net 的竞争场景实验已经说明，最优策略会主动闭嘴。更一般地，任何被对手观测到的消息都必须按"会被利用"来设计 —— 这对应博弈论里的<strong>信号博弈（signaling game）</strong>。</p>
+<p><strong>(3) 梯度泄露与联邦设定</strong>：在联邦学习/分布式训练里，消息（或梯度）本身可能泄露本地数据。这不是通信效率问题，而是<strong>密码学问题</strong> —— 需要用安全聚合（secure aggregation）、差分隐私（DP）等手段保护。</p>
+<table>
+<thead>
+<tr>
+<th>威胁</th>
+<th>场景</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对手窃听</td>
+<td>广播被敌方观测</td>
+<td>门控静默、加密、私有信道</td>
+</tr>
+<tr>
+<td>消息伪造</td>
+<td>恶意智能体发假消息</td>
+<td>签名、信誉机制（第 04 章）</td>
+</tr>
+<tr>
+<td>梯度反演</td>
+<td>分布式训练</td>
+<td>安全聚合、差分隐私</td>
+</tr>
+<tr>
+<td>过度共享</td>
+<td>内部权限滥用</td>
+<td>最小必要原则、按角色授权</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>通信安全的一个反直觉点</strong>：加密只解决"内容不被读"，不解决"通信行为本身泄露信息"。<strong>元数据（谁在什么时候给谁发消息）本身就是情报</strong>。在隐私敏感的多智能体系统里，通信的<strong>存在性</strong>远比内容更难隐藏 —— 这也是隐蔽通信（covert channel）研究关注的核心。</p>
+</blockquote>
+<hr />
+<h2 id="fipa-acl-mcpa2a">五、工程协议栈：从 FIPA-ACL 到 MCP/A2A</h2>
+<p><img alt="从言语行为到现代协议栈" src="../../img/mas-06-protocol-stack.png" /></p>
+<p><em>图：言语行为理论（Austin/Searle）→ KQML/FIPA-ACL（语义层）→ 黑板/发布订阅（协调层）→ MCP/A2A（现代智能体互操作层）。</em></p>
+<p>前面四节讲的是"<strong>学习的</strong>通信"（张量消息、可微信道）。工程上还有一条完全不同的路线：<strong>显式协议</strong>。它不靠训练，而靠<strong>约定的消息格式与语义</strong>。这条路线从 1980 年代的 KQML 一路演化到今天的 MCP 与 A2A。</p>
+<h3 id="51-austinsearle-acl">5.1 言语行为理论（Austin/Searle）与 ACL 消息结构</h3>
+<p><strong>言语行为理论（Speech Act Theory）</strong>：Austin（1962）提出"说话即行动"，Searle（1969）系统化为：每一句话都同时包含</p>
+<ul>
+<li><strong>言内行为（locutionary）</strong>：说了什么内容（字面意思）</li>
+<li><strong>言外行为（illocutionary）</strong>：说话者在做什么（承诺、请求、宣告）</li>
+<li><strong>言后行为（perlocutionary）</strong>：听话者产生了什么效果</li>
+</ul>
+<p>这个区分是多智能体通信协议的<strong>理论地基</strong>：它告诉我们，一条消息 = <strong>动作类型（performative） + 内容（content）</strong>。这正是所有 ACL（Agent Communication Language）的结构基础。</p>
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────┐
+│                      一条 ACL 消息的解剖                      │
+├─────────────────────────────────────────────────────────────┤
+│  performative : request     ← 言外行为: 我在&quot;请求&quot;            │
+│  sender       : agent://A                                    │
+│  receiver     : agent://B                                    │
+│  protocol     : fipa-request                                 │
+│  ontology     : equipment-domain   ← 共享词汇表(防歧义)      │
+│  language     : fipa-sl0                                   │
+│  content      : (action B (deliver item-42))  ← 言内行为内容 │
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>对应理论</th>
+<th>作用</th>
+<th>缺失的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>performative</td>
+<td>言外行为</td>
+<td>声明消息的"类型"</td>
+<td>接收者不知道是"请求"还是"通知"</td>
+</tr>
+<tr>
+<td>content</td>
+<td>言内行为</td>
+<td>具体诉求/信息</td>
+<td>有类型无语义</td>
+</tr>
+<tr>
+<td>ontology</td>
+<td>共享本体</td>
+<td>统一术语</td>
+<td>各方对同一词理解不同</td>
+</tr>
+<tr>
+<td>protocol</td>
+<td>会话协议</td>
+<td>规定交互流程</td>
+<td>无法组织多步对话</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：ACL 的精髓是<strong>把"消息类型"和"消息内容"分离</strong>。这与现代 API 设计里的"HTTP 方法 + 载荷"、MCP 里的"工具调用 + 参数"完全同构。<strong>分离的好处是：类型可被机器验证（是否合法），内容可被领域校验（是否合理），二者解耦</strong>。</p>
+</blockquote>
+<h3 id="52-kqmlfipa-acl">5.2 KQML/FIPA-ACL 的历史与教训</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>代表</th>
+<th>时间</th>
+<th>贡献</th>
+<th>教训</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>早期</td>
+<td><strong>KQML</strong></td>
+<td>1993</td>
+<td>首个实用 ACL，"performative + content" 范式的开创者</td>
+<td>语义非形式化，实现各异，互操作失败</td>
+</tr>
+<tr>
+<td>标准化</td>
+<td><strong>FIPA-ACL</strong></td>
+<td>1997+</td>
+<td>给出 SL（Semantic Language）形式语义、交互协议库</td>
+<td>太重、太难部署，学术界热工程界冷</td>
+</tr>
+<tr>
+<td>理论</td>
+<td><strong>FIPA-SL</strong></td>
+<td>—</td>
+<td>用信念/愿望模态逻辑定义消息语义</td>
+<td>语义过强，实现成本极高</td>
+</tr>
+<tr>
+<td>衰落</td>
+<td>—</td>
+<td>2000s</td>
+<td>被 Web Service / REST / 微服务替代</td>
+<td><strong>"标准先行"败给"最小可用+生态"</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>历史教训</strong>（对今天的 MCP/A2A 极具参考价值）：</p>
+<ol>
+<li><strong>语义形式化走得太远</strong>：FIPA-SL 用模态逻辑定义语义，理论上严谨，但没人愿意实现。<strong>工程界要的是"够用的约定"，不是"完整的形式语义"</strong>。</li>
+<li><strong>标准先于生态</strong>：FIPA 试图先立标准再找应用，结果生态起不来。反观 REST/HTTP，先有应用再沉淀约定。</li>
+<li><strong>忽略实现成本</strong>：一个"符合 FIPA 规范"的收发栈动辄上千行，而当时的智能体研究根本用不上那么强的语义保证。</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>今日的映射</strong>：MCP 与 A2A 走的是<strong>完全相反的路</strong> —— 先定一个<strong>最小可用</strong>的 JSON-RPC 约定，快速接入生态，把语义留给应用层。这是 FIPA 教训的直接产物。<strong>协议要"轻到能被顺手用起来"，否则再正确也没人用</strong>。</p>
+</blockquote>
+<h3 id="53-">5.3 黑板与发布-订阅</h3>
+<p>在"直接消息"之外，还有两条<strong>间接通信</strong>路线，它们把"谁和谁说话"解耦：</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>数据结构</th>
+<th>通信模式</th>
+<th>解耦维度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>黑板（blackboard）</strong></td>
+<td>共享工作区</td>
+<td>智能体读写共享状态</td>
+<td>时间 + 空间 + 身份全解耦</td>
+</tr>
+<tr>
+<td><strong>发布-订阅（pub/sub）</strong></td>
+<td>主题 + 订阅表</td>
+<td>发布者按主题广播，订阅者按兴趣接收</td>
+<td>时间 + 身份解耦</td>
+</tr>
+<tr>
+<td><strong>消息队列</strong></td>
+<td>先进先出队列</td>
+<td>生产者/消费者</td>
+<td>时间解耦（异步）</td>
+</tr>
+<tr>
+<td><strong>直接消息</strong></td>
+<td>点对点</td>
+<td>明确发送/接收</td>
+<td>无解耦</td>
+</tr>
+</tbody>
+</table>
+<p><strong>黑板架构</strong>：所有智能体围绕一块共享的"黑板"工作 —— 谁有知识就往黑板上写，谁能处理就接着写。它的优点是<strong>完全解耦</strong>（互不知道对方存在），缺点是<strong>黑板可能成为瓶颈与冲突源</strong>（并发写、一致性）。经典的 HEARSAY-II 语音理解系统就是黑板架构。</p>
+<p><strong>发布-订阅</strong>：智能体订阅感兴趣的主题，只接收相关消息。它天然解决了"全广播"的浪费 —— <strong>只有关心的人才会收到</strong>。代价是需要一个（可能是分布式的）主题路由基础设施。</p>
+<div class="highlight"><pre><span></span><code>        黑板架构                          发布-订阅
+   ┌───────────────────┐            ┌───────────────────┐
+   │  共享黑板 (Blackboard)  │       │  主题路由 (Broker)     │
+   │  ┌─────┐ ┌─────┐   │            │  topic:plan  ─┐     │
+   │  │ 假设A│ │假设B│   │            │  topic:obs   ─┼─► 订阅者 │
+   │  └─────┘ └─────┘   │            │  topic:done  ─┘     │
+   └─────▲──────▲───────┘            └───▲───────▲────────┘
+         │读写     │读写                  │发布       │订阅
+     ┌───┴──┐  ┌───┴──┐              ┌───┴──┐   ┌───┴──┐
+     │智能体1│  │智能体2│              │发布者│   │订阅者│
+     └──────┘  └──────┘              └──────┘   └──────┘
+   (谁都不知道谁存在)                (按兴趣过滤, 只管主题)
+</code></pre></div>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>直接消息 = 知道对方是谁；黑板/发布订阅 = 不需要知道对方是谁</strong>。前者适合紧密协作（如编队），后者适合开放性系统（如传感器网络、事件驱动架构）。选错会导致"要么耦合过紧、要么找不到人"。第 07 章的黑板与发布订阅会从<strong>分布式协调与一致性</strong>的角度深入这两套机制（含并发写冲突、订阅风暴、消息顺序等问题），本章只做通信范式层面的引入。</p>
+</blockquote>
+<h3 id="54-mcp">5.4 MCP：工具能力标准化</h3>
+<p><strong>MCP（Model Context Protocol）</strong> 是 2024 年由 Anthropic 提出的开放协议，目标是<strong>标准化"语言模型 ↔ 外部工具/数据源"的连接</strong>。它解决的核心问题：每个 LLM 框架都有自己的工具调用格式，"M 个模型 × N 个工具"需要 <span class="arithmatex">\(M \times N\)</span> 个适配器；MCP 把它降为 <span class="arithmatex">\(M + N\)</span>（模型实现 MCP 客户端，工具实现 MCP 服务端）。</p>
+<p>MCP 的核心概念：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>作用</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Host</strong></td>
+<td>宿主应用（如 IDE、Agent 框架）</td>
+<td>操作系统</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>宿主内的连接器</td>
+<td>驱动程序</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td>暴露能力的工具/数据服务</td>
+<td>外设</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>可被调用的函数（有副作用）</td>
+<td>RPC 方法</td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>可读的数据（无副作用）</td>
+<td>文件/HTTP GET</td>
+</tr>
+<tr>
+<td><strong>Prompts</strong></td>
+<td>可复用的提示模板</td>
+<td>宏</td>
+</tr>
+<tr>
+<td><strong>Transport</strong></td>
+<td>stdio / HTTP+SSE</td>
+<td>传输层</td>
+</tr>
+</tbody>
+</table>
+<p>MCP 的哲学是<strong>能力发现（capability discovery）</strong>：客户端启动时向服务端请求"你有哪些工具"，动态获得工具清单，再让模型选择调用。这与第 02 章的智能体架构（BDI 的"能力/意图"）和第 07 章的任务分配（谁能做什么）在抽象层是同一件事。</p>
+<div class="highlight"><pre><span></span><code>┌──────────── Host (如 IDE / Agent 框架) ────────────┐
+│  ┌──────────┐        ┌──────────┐                 │
+│  │ LLM 核心 │◄──────►│ Client A │──┐              │
+│  └──────────┘        └──────────┘  │ stdio/HTTP   │
+│  ┌──────────┐        ┌──────────┐  │              │
+│  │ 工具选择 │◄──────►│ Client B │──┤              │
+│  └──────────┘        └──────────┘  │              │
+└────────────────────────────────────┼──────────────┘
+                                     ▼
+                    ┌────────────────────────────┐
+                    │ Server A: 文件系统 (tools)  │
+                    │ Server B: 数据库   (resources)│
+                    │ Server C: 搜索 API (tools)  │
+                    └────────────────────────────┘
+</code></pre></div>
+<h3 id="55-a2aagent-card">5.5 A2A：Agent Card、任务委派、流式结果</h3>
+<p><strong>A2A（Agent2Agent Protocol）</strong> 是 2025 年 Google 等提出的开放协议，目标是<strong>标准化智能体 ↔ 智能体的互操作</strong> —— 让不同厂商、不同框架的智能体能够发现彼此、委派任务、交换结果。它与 MCP 是互补的：<strong>MCP 管"智能体 ↔ 工具"，A2A 管"智能体 ↔ 智能体"</strong>。</p>
+<p>A2A 的核心概念：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>作用</th>
+<th>关键设计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agent Card</strong></td>
+<td>智能体的"名片"</td>
+<td>声明名称、能力、技能、端点、认证方式（机器可读）</td>
+</tr>
+<tr>
+<td><strong>Task</strong></td>
+<td>委派的工作单元</td>
+<td>有生命周期：submitted → working → completed/failed</td>
+</tr>
+<tr>
+<td><strong>Message</strong></td>
+<td>任务内的消息</td>
+<td>role（user/agent）+ parts（文本/文件/结构化）</td>
+</tr>
+<tr>
+<td><strong>Artifact</strong></td>
+<td>任务的产出</td>
+<td>文档、数据、文件</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>流式结果</td>
+<td>SSE 推送中间状态</td>
+</tr>
+<tr>
+<td><strong>Push Notification</strong></td>
+<td>异步回调</td>
+<td>长任务的完成通知</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agent Card</strong> 是 A2A 最有辨识度的设计：它让智能体<strong>在交互前就能自我描述能力</strong>，从而实现<strong>动态发现与匹配</strong>。这直接对应第 07 章的任务分配问题 —— "谁能做什么"不再靠中心规划，而靠能力声明 + 匹配。</p>
+<div class="highlight"><pre><span></span><code>   发现阶段                      委派阶段                     执行阶段
+┌──────────┐   GET Agent Card ┌──────────┐  tasks/send  ┌──────────┐
+│ 智能体 A │ ───────────────► │ 智能体 B │ ───────────► │ 智能体 B │
+│ (委派方) │ ◄─────────────── │ (服务方) │              │ 执行任务 │
+└──────────┘   (能力清单)      └──────────┘              └────┬─────┘
+      ▲                                                       │
+      │          流式结果 (SSE) / Artifact / 完成通知          │
+      └───────────────────────────────────────────────────────┘
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>MCP</th>
+<th>A2A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接对象</td>
+<td>模型 ↔ 工具/数据</td>
+<td>智能体 ↔ 智能体</td>
+</tr>
+<tr>
+<td>核心抽象</td>
+<td>Tools / Resources / Prompts</td>
+<td>Agent Card / Task / Artifact</td>
+</tr>
+<tr>
+<td>交互粒度</td>
+<td>单次函数调用</td>
+<td>长周期任务（有状态）</td>
+</tr>
+<tr>
+<td>典型问题</td>
+<td>我怎么调这个工具</td>
+<td>我怎么把事交给别人并追踪</td>
+</tr>
+<tr>
+<td>状态性</td>
+<td>基本无状态</td>
+<td>有任务生命周期</td>
+</tr>
+</tbody>
+</table>
+<h3 id="56">5.6 层次对照表与选型建议</h3>
+<p>把四代协议放在一张表里对照，能看到<strong>一条清晰的"抽象上移"路径</strong>：从"定义语义"到"定义能力"。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>协议/机制</th>
+<th>时间</th>
+<th>解决的问题</th>
+<th>抽象对象</th>
+<th>今日状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>语义层</strong></td>
+<td>KQML / FIPA-ACL</td>
+<td>1993–2000</td>
+<td>消息的<strong>意思</strong>（performative + content）</td>
+<td>言语行为</td>
+<td>学术遗产</td>
+</tr>
+<tr>
+<td><strong>协调层</strong></td>
+<td>黑板 / 发布-订阅</td>
+<td>1980s–</td>
+<td>谁和谁说话（解耦）</td>
+<td>共享状态 / 主题</td>
+<td>广泛在用</td>
+</tr>
+<tr>
+<td><strong>能力层（工具）</strong></td>
+<td>MCP</td>
+<td>2024</td>
+<td>模型如何用工具</td>
+<td>能力清单</td>
+<td>快速扩散</td>
+</tr>
+<tr>
+<td><strong>能力层（智能体）</strong></td>
+<td>A2A</td>
+<td>2025</td>
+<td>智能体如何互相委派</td>
+<td>Agent Card / Task</td>
+<td>快速扩散</td>
+</tr>
+<tr>
+<td><strong>组织层</strong></td>
+<td>合同网 / FIPA 交互协议</td>
+<td>1980–</td>
+<td>多步协商流程</td>
+<td>会话协议</td>
+<td>与 07 章融合</td>
+</tr>
+</tbody>
+</table>
+<p><strong>选型建议</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>你的场景</th>
+<th>推荐</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单模型 + 少量确定性工具</td>
+<td>直接函数调用</td>
+<td>引入 MCP 是过度设计</td>
+</tr>
+<tr>
+<td>单模型 + 大量异构工具/数据源</td>
+<td><strong>MCP</strong></td>
+<td>统一能力发现，<span class="arithmatex">\(M+N\)</span> 适配</td>
+</tr>
+<tr>
+<td>多个异构智能体协作</td>
+<td><strong>A2A</strong></td>
+<td>Agent Card 解决发现，Task 解决追踪</td>
+</tr>
+<tr>
+<td>松耦合、事件驱动系统</td>
+<td><strong>发布-订阅</strong></td>
+<td>身份与时间全解耦</td>
+</tr>
+<tr>
+<td>需要共享推理状态</td>
+<td><strong>黑板</strong></td>
+<td>多智能体共同演化假设</td>
+</tr>
+<tr>
+<td>需要严格语义保证</td>
+<td><strong>FIPA-ACL 思想</strong></td>
+<td>但只取 performative 分层，不取形式语义</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一个真实可用的消息 schema 示例</strong>（A2A 风格的任务委派）：</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;jsonrpc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;req-7f3a-9c21&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tasks/send&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;task-2026-0914-001&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;sessionId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sess-abc-123&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;parts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;把这份财报摘要成 5 条要点，并给出风险提示。&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;q3-report.pdf&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;mimeType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/pdf&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;trace_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trace-88&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;normal&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;deadline_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;acceptedOutputModes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>配套的 <strong>Agent Card</strong>（服务方自我描述，供发现阶段使用）：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Agent Card: 智能体的机器可读&quot;名片&quot; (A2A 风格)</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">financial-summarizer</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.0</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">财报摘要与风险提示智能体</span>
+<span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://agents.example.com/fin-sum</span>
+<span class="nt">protocolVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.2.1&quot;</span>
+<span class="nt">preferredTransport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HTTP+JSON</span>
+<span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">streaming</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># 支持 SSE 流式返回</span>
+<span class="w">  </span><span class="nt">pushNotifications</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># 支持异步完成通知</span>
+<span class="w">  </span><span class="nt">stateTransitionHistory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">defaultInputModes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">text/plain</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">application/pdf</span><span class="p p-Indicator">]</span>
+<span class="nt">defaultOutputModes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">text/plain</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">application/json</span><span class="p p-Indicator">]</span>
+<span class="nt">skills</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">summarize-report</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">财报摘要</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">输入财报文件，输出 N 条要点</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">finance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">summarization</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">examples</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;把这份年报摘要成</span><span class="nv"> </span><span class="s">5</span><span class="nv"> </span><span class="s">条要点&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">risk-alert</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">风险提示</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">识别财报中的潜在风险点</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">finance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">risk</span><span class="p p-Indicator">]</span>
+<span class="nt">authentication</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schemes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bearer</span><span class="p p-Indicator">]</span><span class="w">        </span><span class="c1"># 认证方式: Bearer Token</span>
+</code></pre></div>
+<blockquote>
+<p><strong>核心思想</strong>：从 FIPA-ACL 到 A2A，四十年的协议演化只做了一件事 —— <strong>把"智能体需要事先知道对方"变成"智能体可以动态发现对方能力"</strong>。Agent Card 之于 A2A，正如 WSDL 之于 SOAP、OpenAPI 之于 REST：<strong>机器可读的自我描述，是任何开放多智能体系统的基础设施</strong>。这与第 08 章 LLM 多智能体把自然语言当作通信协议的做法形成互补 —— <strong>自然语言解决"开放语义"，协议解决"可靠结构与能力发现"</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="_4">六、通信失败模式与诊断</h2>
+<p>通信系统坏起来有多种方式，把它们与诊断手段一一对应，是工程落地的关键。</p>
+<h3 id="61">6.1 通信坍塌（所有人发同一个符号）</h3>
+<p><strong>症状</strong>：所有智能体的消息高度相似甚至完全相同，消息熵 <span class="arithmatex">\(H(M) \to 0\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>期望</th>
+<th>坍塌时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>消息熵 <span class="arithmatex">\(H(M)\)</span></td>
+<td>显著大于 0</td>
+<td>接近 0</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(I(M;S)\)</span></td>
+<td>显著大于 0</td>
+<td>接近 0</td>
+</tr>
+<tr>
+<td>消息维度方向的相关性</td>
+<td>各不相同</td>
+<td>高度相关（余弦≈1）</td>
+</tr>
+<tr>
+<td>门控开度</td>
+<td>部分打开</td>
+<td>全部关闭或全部打开但内容相同</td>
+</tr>
+</tbody>
+</table>
+<p><strong>成因与对策</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>成因</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信不被需要（信息冗余）</td>
+<td>换更难的任务，或降低自身观测质量</td>
+</tr>
+<tr>
+<td>梯度稀释（均值聚合）</td>
+<td>改用注意力聚合（TarMAC）、去掉均值</td>
+</tr>
+<tr>
+<td>探索不足</td>
+<td>加大熵正则、多随机种子训练</td>
+</tr>
+<tr>
+<td>惩罚过强</td>
+<td>减小通信成本 <span class="arithmatex">\(\lambda\)</span></td>
+</tr>
+<tr>
+<td>消息维度太小</td>
+<td>增大 <span class="arithmatex">\(d_m\)</span>，或改用离散符号（DIAL）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62">6.2 消息被忽略（信道存在但未被使用）</h3>
+<p>有时协议没坍塌，但<strong>策略根本不看消息</strong> —— 信道通了却空转。诊断方法是<strong>同时测消息对状态和对动作的互信息</strong>：</p>
+<div class="arithmatex">\[
+\underbrace{I(M;S) &gt; 0}_{\text{消息确实带信息}} \quad \text{但} \quad \underbrace{I(M;A) \approx 0}_{\text{动作却没用到}}
+\]</div>
+<p>下面实跑这个诊断：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># §6.2 消息是否被使用: 用消息-动作互信息诊断&quot;信道存在但被忽略&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mi</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;离散互信息 I(A;B), 单位 bit.&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="n">pab</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">((</span><span class="n">c</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">((</span><span class="n">c</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">pa</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)))</span>
+               <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pab</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">6000</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>                        <span class="c1"># 只有伙伴观测到的私有信息</span>
+<span class="c1"># 伙伴把私有信息编码成消息, 以 90% 保真度传出</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">extra</span><span class="p">)</span>
+
+<span class="n">act_listen</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>                              <span class="c1"># 场景1: 智能体听消息</span>
+<span class="n">act_ignore</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>                   <span class="c1"># 场景2: 忽略消息, 动作与消息无关</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;E)          = </span><span class="si">{</span><span class="n">mi</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">extra</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit  (消息确实携带信息)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;A) 听取     = </span><span class="si">{</span><span class="n">mi</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">act_listen</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit  (消息进入决策)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I(M;A) 忽略     = </span><span class="si">{</span><span class="n">mi</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">act_ignore</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> bit  (信道空转)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;诊断: I(M;E)&gt;0 但 I(M;A)≈0 =&gt; 信道通, 但没人听&quot;</span><span class="p">)</span>
+
+<span class="c1"># 预期输出:</span>
+<span class="c1"># I(M;E)          = 0.5312 bit  (消息确实携带信息)</span>
+<span class="c1"># I(M;A) 听取     = 1.0000 bit  (消息进入决策)</span>
+<span class="c1"># I(M;A) 忽略     = 0.0000 bit  (信道空转)</span>
+<span class="c1"># 诊断: I(M;E)&gt;0 但 I(M;A)≈0 =&gt; 信道通, 但没人听</span>
+</code></pre></div>
+<p><strong>结果解读</strong>：伙伴的私有信息以 90% 保真度编码进消息，<span class="arithmatex">\(I(M;E)=0.5312\)</span> bit（因为 10% 噪声，信息有损）。听取场景下 <span class="arithmatex">\(I(M;A)=1\)</span> bit（动作完全由消息决定）；忽略场景下 <span class="arithmatex">\(I(M;A)=0\)</span> bit。</p>
+<table>
+<thead>
+<tr>
+<th>诊断指标</th>
+<th>健康系统</th>
+<th>坍塌系统</th>
+<th><strong>被忽略系统</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(I(M;S)\)</span></td>
+<td>高</td>
+<td>低</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(I(M;A)\)</span></td>
+<td>高</td>
+<td>低</td>
+<td><strong>≈0</strong> ← 关键区别</td>
+</tr>
+<tr>
+<td>只看 <span class="arithmatex">\(I(M;A)\)</span> 能区分吗</td>
+<td>—</td>
+<td>能（低）</td>
+<td><strong>能（低）</strong></td>
+</tr>
+<tr>
+<td>只看 <span class="arithmatex">\(I(M;S)\)</span> 能区分吗</td>
+<td>—</td>
+<td>能（低）</td>
+<td><strong>不能（高）</strong> ← 会误判</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>诊断"信道是否被使用"，要看 <span class="arithmatex">\(I(M;A)\)</span>，不能只看 <span class="arithmatex">\(I(M;S)\)</span></strong>。一个高信息量的消息如果对决策没有任何影响，等价于没通信。这正是"通信坍塌"与"消息被忽略"的区别：前者消息没内容，后者消息有内容但被浪费。</p>
+</blockquote>
+<p><strong>消息被忽略的常见成因</strong>：① 自身观测已足够（消息边际价值≈0）；② 训练时消息噪声大，策略学会不信任它；③ 聚合方式把消息"淹没"在大量其他输入里；④ 信用分配失败，发送者没得到奖励。</p>
+<h3 id="63">6.3 信道成为作弊通道（泄露全局状态导致奖励黑客）</h3>
+<p>这是最隐蔽也最危险的失败模式：<strong>信道被用来泄露不该泄露的信息，从而"作弊"完成任务</strong>。</p>
+<p>典型情形：</p>
+<ul>
+<li><strong>中央 Critic 式作弊</strong>：消息层意外成为"共享全局状态"的通道，智能体不再真正学协作，而是靠消息"偷看"全局真值。脱离该信道后性能崩溃（本质是<strong>过拟合信道</strong>）。</li>
+<li><strong>奖励黑客（reward hacking）</strong>：如果消息参与奖励计算，智能体可能学会用消息"制造"高奖励（如互相盖章确认），而非真正完成任务。</li>
+<li><strong>信息泄露被对手利用</strong>：在对抗场景，广播消息让对手轻易推断己方意图。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>作弊类型</th>
+<th>机理</th>
+<th>检测</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>泄露全局状态</td>
+<td>消息隐含全局真值</td>
+<td>去除通信后性能骤降</td>
+<td>加信息瓶颈、限制消息信息量</td>
+</tr>
+<tr>
+<td>奖励黑客</td>
+<td>消息制造虚假成功</td>
+<td>奖励与真实指标脱钩</td>
+<td>消息不直接参与奖励；独立评估</td>
+</tr>
+<tr>
+<td>意图泄露</td>
+<td>对手读取己方消息</td>
+<td>对抗评估</td>
+<td>门控静默、加密、私有信道</td>
+</tr>
+<tr>
+<td>信道过拟合</td>
+<td>依赖特定信道特性</td>
+<td>换信道/加噪声测试</td>
+<td>随机丢包/延迟训练</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>判断"是否作弊"的黄金测试</strong>：<strong>通信消融实验（ablation）</strong>。把通信维度减半、加噪声、随机丢包，观察性能下降曲线。<strong>健康的通信方案在轻度扰动下性能平稳下降；作弊方案会断崖式崩溃</strong>。这个测试应该成为任何通信式 MARL 提交结果前的标配。</p>
+</blockquote>
+<h3 id="64-">6.4 诊断清单（症状-病因-对策表）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>症状</th>
+<th>可能的病因</th>
+<th>首选对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>消息全相同（熵≈0）</td>
+<td>符号坍塌</td>
+<td>增大 <span class="arithmatex">\(d_m\)</span>/减 <span class="arithmatex">\(\lambda\)</span>/加熵正则</td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="arithmatex">\(I(M;S)\)</span> 高但 <span class="arithmatex">\(I(M;A)\)</span>≈0</td>
+<td>消息被忽略</td>
+<td>提高消息容量权重/检查信用分配</td>
+</tr>
+<tr>
+<td>3</td>
+<td>加通信后无提升</td>
+<td>信息本已足够</td>
+<td>换更难任务；确认 <span class="arithmatex">\(\Delta_i&gt;0\)</span></td>
+</tr>
+<tr>
+<td>4</td>
+<td>换伙伴性能骤降</td>
+<td>过拟合伙伴</td>
+<td>种群训练/Other-Play/公共约定</td>
+</tr>
+<tr>
+<td>5</td>
+<td>去通信后性能崩溃</td>
+<td>信道泄露全局状态</td>
+<td>信息瓶颈/受限带宽</td>
+</tr>
+<tr>
+<td>6</td>
+<td>训练不稳、方差大</td>
+<td><span class="arithmatex">\(\tau\)</span> 退火太快/梯度方差</td>
+<td>放慢退火、加大 batch、梯度裁剪</td>
+</tr>
+<tr>
+<td>7</td>
+<td>丢包后性能差</td>
+<td>未做鲁棒训练</td>
+<td>训练注入丢包/重传/前向纠错</td>
+</tr>
+<tr>
+<td>8</td>
+<td>延迟导致性能差</td>
+<td>用了过期消息</td>
+<td>打时间戳 + 记忆区分新旧</td>
+</tr>
+<tr>
+<td>9</td>
+<td>通信量随 <span class="arithmatex">\(n\)</span> 爆炸</td>
+<td>全广播</td>
+<td>TarMAC 注意力/IC3Net 门控/聚类</td>
+</tr>
+<tr>
+<td>10</td>
+<td>门控永久关闭</td>
+<td>惩罚过强</td>
+<td>减小 <span class="arithmatex">\(\lambda\)</span>/课程学习</td>
+</tr>
+<tr>
+<td>11</td>
+<td>消息维度增大反而变差</td>
+<td>过拟合/噪声</td>
+<td>降维/量化/正则</td>
+</tr>
+</tbody>
+</table>
+<p><strong>系统性诊断流程</strong>：</p>
+<div class="highlight"><pre><span></span><code>   ① 消融: 关闭通信 → 性能掉多少?        掉得多 = 通信在起作用 (继续)
+                                         掉得少 = 通信没被用 (查 §6.2)
+   ② 信息量: 测 I(M;S) 与 I(M;A)
+        ├─ 都低 → 符号坍塌 (§6.1)
+        ├─ I(M;S)高, I(M;A)低 → 消息被忽略 (§6.2)
+        └─ 都高 → 通信健康 (继续优化)
+   ③ 鲁棒性: 加丢包/延迟/噪声 → 是否断崖?
+        ├─ 平稳下降 → 健康
+        └─ 断崖崩溃 → 过拟合信道/泄露 (§6.3)
+   ④ 泛化: 换伙伴/换规模 → 是否迁移?
+        ├─ 能迁移 → 协议通用
+        └─ 不能 → 过拟合伙伴 (§3.2), 需 ZSC 方法
+</code></pre></div>
+<hr />
+<h2 id="_5">附：本章速查表</h2>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>核心结论</th>
+<th>一句话记忆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>为什么通信</td>
+<td>通信是对"信息赤字"<span class="arithmatex">\(\Delta_i = H(S\mid\tau_i) - H(S\mid\tau_{\text{joint}})\)</span> 的偿付</td>
+<td>先问谁缺哪一比特</td>
+</tr>
+<tr>
+<td>三种价值</td>
+<td>消歧（传信息）/ 协调（选均衡）/ 承诺（改激励）</td>
+<td>消歧靠内容，协调靠公共信号，承诺靠激励</td>
+</tr>
+<tr>
+<td>三大约束</td>
+<td>带宽（香农上界）/ 延迟（数据处理不等式）/ 丢包（<span class="arithmatex">\(p^n\)</span>）</td>
+<td>不是免费，也不是越多越好</td>
+</tr>
+<tr>
+<td>CommNet</td>
+<td>连续广播 + 均值聚合</td>
+<td>简单但无选择无寻址</td>
+</tr>
+<tr>
+<td>DIAL</td>
+<td>离散符号 + Gumbel-Softmax 直通</td>
+<td>离散可微，训练软执行硬</td>
+</tr>
+<tr>
+<td>IC3Net</td>
+<td>门控决定"何时说话"</td>
+<td>学会闭嘴 = 学会省带宽与保密</td>
+</tr>
+<tr>
+<td>TarMAC</td>
+<td>注意力选听（query-key-value）</td>
+<td>通信拓扑 = 注意力权重</td>
+</tr>
+<tr>
+<td>最小实验</td>
+<td>有通信 0.0053 vs 无通信 0.5159</td>
+<td>通信收益可精确量化</td>
+</tr>
+<tr>
+<td>语义度量</td>
+<td>互信息（有效性）/ 探针（可读性）/ 组合性（泛化）</td>
+<td>互信息高≠可解释</td>
+</tr>
+<tr>
+<td>符号坍塌</td>
+<td><span class="arithmatex">\(I(M;S)\to 0\)</span></td>
+<td>消息熵为零</td>
+</tr>
+<tr>
+<td>消息被忽略</td>
+<td><span class="arithmatex">\(I(M;S)&gt;0\)</span> 但 <span class="arithmatex">\(I(M;A)\approx 0\)</span></td>
+<td>信道通但没人听</td>
+</tr>
+<tr>
+<td>信息瓶颈</td>
+<td><span class="arithmatex">\(\min I(M;S) - \beta I(M;\text{Task})\)</span></td>
+<td>只留与任务相关的</td>
+</tr>
+<tr>
+<td>丢包鲁棒</td>
+<td>3 轮重传：<span class="arithmatex">\(p{=}0.1\)</span> 降到 <span class="arithmatex">\(0.001\)</span>，<span class="arithmatex">\(p{=}0.9\)</span> 仍有 <span class="arithmatex">\(0.73\)</span></td>
+<td>低丢包重传好，高丢包要换策略</td>
+</tr>
+<tr>
+<td>ACL 教训</td>
+<td>语义过度形式化 + 标准先于生态 = 失败</td>
+<td>先有应用，再沉淀约定</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>模型↔工具，Tools/Resources/Prompts</td>
+<td>能力发现，<span class="arithmatex">\(M+N\)</span> 适配</td>
+</tr>
+<tr>
+<td>A2A</td>
+<td>智能体↔智能体，Agent Card/Task</td>
+<td>机器可读的自我描述</td>
+</tr>
+<tr>
+<td>诊断黄金法则</td>
+<td>消融 + 信息量 + 鲁棒 + 泛化</td>
+<td>加通信无提升 → 先查 <span class="arithmatex">\(I(M;A)\)</span></td>
+</tr>
+<tr>
+<td>作弊检测</td>
+<td>通信消融实验（减半/加噪/丢包）</td>
+<td>健康方案平稳降，作弊方案断崖崩</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_6">七、理论进阶：通信复杂度与信息瓶颈</h2>
+<h3 id="71">7.1 通信复杂度模型与下界技巧</h3>
+<p><strong>通信复杂度（communication complexity）</strong> 研究：为了计算某个函数 <span class="arithmatex">\(f(x, y)\)</span>，两个各持一半输入的智能体至少需要交换多少比特？这一理论给出了通信式 MARL 的<strong>信息论下界</strong>，避免我们追求不可能达到的效率。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>设定</th>
+<th>代表下界技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>确定性（Yao, 1979）</strong></td>
+<td>双方确定性协议</td>
+<td>矩形分解、秩方法</td>
+</tr>
+<tr>
+<td><strong>随机化</strong></td>
+<td>允许随机，要求高成功概率</td>
+<td>Yao 极小极大原理</td>
+</tr>
+<tr>
+<td><strong>量子</strong></td>
+<td>允许量子通信</td>
+<td>量子通信复杂度</td>
+</tr>
+<tr>
+<td><strong>多方可信 / 分布</strong></td>
+<td><span class="arithmatex">\(k\)</span> 方或分布式</td>
+<td>组合矩形、差异法</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心下界技巧</strong>：</p>
+<p><strong>(1) 矩形分解（rectangle argument）</strong>：确定性协议把输入空间 <span class="arithmatex">\(X \times Y\)</span> 分解成<strong>矩形</strong> <span class="arithmatex">\(A_i \times B_i\)</span>，每个矩形对应一种"通信轨迹"。若函数 <span class="arithmatex">\(f\)</span> 的矩阵（输入对 → 输出）无法用少量单色矩形覆盖，则通信量下界高。形式上通信复杂度 <span class="arithmatex">\(D(f)\)</span> 满足：</p>
+<div class="arithmatex">\[
+D(f) \ge \log_2\!\big(\text{覆盖 } f \text{ 矩阵所需的最少单色矩形数}\big)
+\]</div>
+<p><strong>(2) 秩方法（rank method）</strong>：把函数看作矩阵 <span class="arithmatex">\(M_f\)</span>，其通信复杂度至少是 <span class="arithmatex">\(\log_2 \operatorname{rank}(M_f)\)</span>：</p>
+<div class="arithmatex">\[
+D(f) \;\ge\; \log_2 \operatorname{rank}(M_f)
+\]</div>
+<p><strong>应用到下界</strong>（例如内积函数 <span class="arithmatex">\(\mathrm{IP}(x,y) = \sum_i x_i y_i \bmod 2\)</span>）：</p>
+<div class="arithmatex">\[
+D(\mathrm{IP}) = n \quad \text{(确定性)}, \qquad R(\mathrm{IP}) = \Omega(n) \quad \text{(随机化)}
+\]</div>
+<p>即<strong>计算内积至少需要 <span class="arithmatex">\(\Omega(n)\)</span> 比特通信</strong>。这个结果直接告诉我们：需要全局内积/一致性的任务，通信量不可能亚线性 —— 除非允许近似（这也是分布式一致性问题（第 07 章）里 FLP/CAP 之所以"难"的同源根源）。</p>
+<blockquote>
+<p><strong>核心思想</strong>：通信复杂度的价值在于<strong>给出不可能性结果</strong>。当你设计一个通信方案时，先看目标任务的下界是多少；如果你的方案通信量远低于下界，那它一定在<strong>偷偷用了额外信息</strong>（如共享随机性、全局状态）—— 分析 §6.3 的"作弊"时，这个视角极为有用。</p>
+</blockquote>
+<h3 id="72-ims-beta-ima">7.2 信息瓶颈目标 <span class="arithmatex">\(I(M;S)-\beta I(M;A)\)</span> 与拉格朗日推导</h3>
+<p>把"消息要够任务用、又要够省"写成优化问题，就是信息瓶颈。这里我们给出一个<strong>通信视角的推导</strong>，把目标写成拉格朗日形式。</p>
+<p><strong>问题设定</strong>：发送方需要传递关于状态 <span class="arithmatex">\(S\)</span> 的信息以帮助接收方行动 <span class="arithmatex">\(A\)</span>。我们希望在<strong>限制消息的信息量</strong>的前提下，<strong>最大化消息对动作/任务的相关性</strong>。</p>
+<p>目标：</p>
+<div class="arithmatex">\[
+\min_{\phi}\ \ \mathcal{J}(\phi) = I_\phi(M; S) - \beta\, I_\phi(M; A)
+\]</div>
+<p>其中 <span class="arithmatex">\(\phi\)</span> 是编码器参数，第一项是"省"（消息不携带多余信息），第二项是"用"（消息要能预测/影响动作 <span class="arithmatex">\(A\)</span>）。写成约束优化并用拉格朗日乘子 <span class="arithmatex">\(\lambda\)</span>：</p>
+<div class="arithmatex">\[
+\max_{p(m\mid s)}\ I(M;A) \quad \text{s.t.} \quad I(M;S) \le B
+\]</div>
+<p>拉格朗日函数：</p>
+<div class="arithmatex">\[
+\mathcal{L}[p(m\mid s),\, \lambda] = I(M;A) - \lambda\big(I(M;S) - B\big)
+\]</div>
+<p>对 <span class="arithmatex">\(p(m\mid s)\)</span> 求变分，得到最优解形式（自洽方程）：</p>
+<div class="arithmatex">\[
+p^\star(m \mid s) = \frac{p(m)}{Z(s,\lambda)} \exp\!\left(-\lambda\, D_{\mathrm{KL}}\big[p(a\mid s, m)\,\|\, p(a\mid s)\big]\right)
+\]</div>
+<p>其中 <span class="arithmatex">\(Z(s,\lambda)\)</span> 是归一化因子，<span class="arithmatex">\(D_{\mathrm{KL}}\)</span> 衡量"知道消息后对动作的信念改变了多少"。<strong>这个方程的含义极其优雅</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>直觉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(p(m\mid s)\)</span></td>
+<td>给定状态发什么消息</td>
+<td>编码器</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(p(m)\)</span></td>
+<td>消息的边缘分布</td>
+<td>先验偏好（越集中越省）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\exp(-\lambda D_{\mathrm{KL}})\)</span></td>
+<td>消息的"价值"</td>
+<td>消息改变动作分布越多，越值得发</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(Z(s,\lambda)\)</span></td>
+<td>归一化</td>
+<td>温度由 <span class="arithmatex">\(\lambda\)</span> 控制</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong>：最优通信协议<strong>不是无条件传递状态，而是传递"能改变接收者行为的那部分状态"</strong>。<span class="arithmatex">\(\lambda\)</span> 越大越省（消息越趋近先验 <span class="arithmatex">\(p(m)\)</span>），<span class="arithmatex">\(\lambda \to 0\)</span> 时不省（完美传递状态）。这正是通信式 MARL 里给消息加正则项的理论依据 —— <strong>正则不是启发式，而是带约束优化的拉格朗日乘子</strong>。</p>
+<blockquote>
+<p>⚠️ 实践提醒：<span class="arithmatex">\(I(M;S)\)</span> 与 <span class="arithmatex">\(I(M;A)\)</span> 的<strong>精确估计极难</strong>（高维连续分布）。常用估计器有 MINE、InfoNCE、变分上界等，方差大且对 batch 敏感。工程上更常用的替代是<strong>便宜的代理量</strong>：消息维度、<span class="arithmatex">\(L_1\)</span> 范数、向量量化码本大小 —— 它们不精确，但稳定、可控。</p>
+</blockquote>
+<h3 id="73">7.3 涌现语言的可解释性理论（系统性/组合性）</h3>
+<p><strong>"涌现语言"是否真的具有类语言的系统性（systematicity）与组合性（compositionality）？</strong> 这是认知科学与 AI 交叉的核心问题（Hockett 的语言设计特征、Fodor &amp; Pylyshyn 的系统性论证）。</p>
+<p><strong>系统性（systematicity）</strong>：如果系统能理解"红球在蓝方块左边"，就应能理解"蓝方块在红球左边" —— 语义的可重组性。</p>
+<p><strong>组合性（compositionality）</strong>：复杂表达式 <span class="arithmatex">\(e = f(a, b)\)</span> 的意义由其部分 <span class="arithmatex">\(a, b\)</span> 与组合规则 <span class="arithmatex">\(f\)</span> 决定：</p>
+<div class="arithmatex">\[
+\text{meaning}(e) = f\big(\text{meaning}(a),\ \text{meaning}(b)\big)
+\]</div>
+<p><strong>度量组合性的常用指标</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义（直觉）</th>
+<th>高值含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>拓扑相似性（topological similarity）</strong></td>
+<td>消息空间距离 vs 语义空间距离的相关性</td>
+<td>语义相似→消息相似</td>
+</tr>
+<tr>
+<td><strong>组合性误差（positional disentanglement）</strong></td>
+<td>分解后属性是否各占消息的固定维度</td>
+<td>属性可分解</td>
+</tr>
+<tr>
+<td><strong>可迁移准确率（zero-shot）</strong></td>
+<td>训练未见的组合上的正确率</td>
+<td>组合规则可外推</td>
+</tr>
+<tr>
+<td><strong>∆（compositionality/accuracy trade-off）</strong></td>
+<td>组合性 vs 任务表现的权衡</td>
+<td>二者常冲突</td>
+</tr>
+</tbody>
+</table>
+<p>关键实证发现（来自语言涌现研究，如 Mordatch &amp; Abbeel 2018、Lazaridou &amp; Baroni 2020）：</p>
+<ol>
+<li><strong>组合性与任务表现常冲突</strong>：随机指定符号匹配（permutation）能提高组合性，但短期降低任务效率。</li>
+<li><strong>压力促进组合性</strong>：带宽受限、伙伴众多、需要泛化的环境，逼出更组合的协议（对应 §4.1 信息瓶颈）。</li>
+<li><strong>种群训练诱导系统性</strong>：与多样化伙伴交互的系统更易发展出可迁移语言（对应 §3.3 ZSC）。</li>
+</ol>
+<div class="arithmatex">\[
+\underbrace{\text{带宽压力}}_{\S 4.1} + \underbrace{\text{种群多样性}}_{\S 3.3} + \underbrace{\text{泛化需求}}_{\S 3.3} \;\Longrightarrow\; \underbrace{\text{组合性涌现}}_{\text{可迁移协议}}
+\]</div>
+<blockquote>
+<p><strong>核心思想</strong>：<strong>"涌现语言"通常不是"语言"，而是"约定"</strong> —— 它可能有效（高任务回报）、可能可读（高探针准确率），但未必具备人类语言那样的<strong>系统性、组合性与可迁移性</strong>。要得到"像语言"的协议，必须在训练目标里<strong>显式注入组合性压力</strong>，或干脆用<strong>人类语言本身</strong>（这正是第 08 章 LLM 多智能体把自然语言当作通信协议的根本理由：自然语言是人类已经演化好的、高度组合、高度可迁移的协议，直接拿来用比让智能体从零"发明语言"划算得多）。</p>
+</blockquote>
+<hr />
+<blockquote>
+<p><strong>下一步</strong>：通信解决了"说什么、对谁说"，但真实的多智能体系统还需要在<strong>没有中心调度</strong>时完成<strong>任务分解、协商与达成一致</strong> —— 这正是 <a href="../07-coordination-negotiation/">第 07 章 协调与协商</a> 的主题（DCOP、合同网、分布式一致性、黑板与发布订阅的深入、群体智能）。若你更关心用语言模型做智能体，请直接跳到第 08 章 LLM 多智能体，那里会展示"自然语言作为通信协议"的全部收益与失败模式。</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "toc.follow", "navigation.top", "search.suggest", "search.highlight"], "search": "../../javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
