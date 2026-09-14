@@ -1,5 +1,5 @@
-# 源文件仅本地保留，仓库只放 build 产物
-docs/
+# 源文件（docs/）与 build 产物均入库
+# 仅排除本地临时/生成产物
 scripts/
 site/
 __pycache__/
