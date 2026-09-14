@@ -175,14 +175,15 @@
 
 .md-typeset blockquote,
 .md-typeset .admonition,
-.md-typeset details  {
+.md-typeset details {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  background: transparent;
+  background: transparent;   /* 关键：父元素不要有背景 */
+  padding: 0;                /* 如果有 padding，改到内容层 */
 }
 
-/* 外层：渐变 */
+/* 渐变层 */
 .md-typeset blockquote::before,
 .md-typeset .admonition::before,
 .md-typeset details::before {
@@ -196,19 +197,19 @@
   z-index: 0;
 }
 
-/* 内层：白色，往内缩 2px 形成边框 */
+/* 白色内层，缩进 2px 形成边框 */
 .md-typeset blockquote::after,
 .md-typeset .admonition::after,
 .md-typeset details::after {
   content: "";
   position: absolute;
-  inset: 2px;                /* 边框粗细，可调 */
-  background: #fff;          /* 中间白色 */
-  border-radius: 14px;       /* 16px - 2px */
+  inset: 2px;
+  background: #fff;
+  border-radius: 14px;
   z-index: 1;
 }
 
-/* 内容要盖在白色内层之上 */
+/* 所有内容必须浮在白色内层之上 */
 .md-typeset blockquote > *,
 .md-typeset .admonition > *,
 .md-typeset details > * {
