@@ -176,62 +176,86 @@
 
   .md-typeset blockquote {
 
-    margin: 1.5em 0 !important;
+    position: relative;
 
-    padding: 1em 1.2em !important;
+    margin: 1.5em 0;
 
-
-    /* 去掉 Material 默认左边竖线 */
-    border-left: none !important;
+    padding: 1em 1.2em;
 
 
-    /* 四周透明边框 */
-    border: 3px solid transparent !important;
+    border: none !important;
 
+    border-radius: 16px;
 
-    border-radius: 16px !important;
-
-
-    /*
-       第一层：内容背景
-       第二层：渐变边框
-    */
 
     background:
         linear-gradient(
             var(--md-default-bg-color),
             var(--md-default-bg-color)
-        ) padding-box,
-
-        var(--nebula-gradient) border-box;
+        );
 
 
-    background-size:
-        auto,
-        300% 300%;
+}
+
+
+/* 外层渐变边框 */
+
+.md-typeset blockquote::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+
+    border-radius: inherit;
+
+
+    padding: 3px;
+
+
+    background:
+        linear-gradient(
+            120deg,
+            #8b5cf6,
+            #6366f1,
+            #06b6d4,
+            #ec4899
+        );
+
+
+    background-size: 300% 300%;
 
 
     animation:
-        nebula-flow 10s ease infinite;
+        nebula-flow 8s ease infinite;
+
+
+    -webkit-mask:
+
+        linear-gradient(#fff 0 0)
+        content-box,
+
+        linear-gradient(#fff 0 0);
+
+
+    -webkit-mask-composite:
+        xor;
+
+
+    mask-composite:
+        exclude;
+
 
 }
 
 
-/* 清除 Material 默认伪元素 */
+/* 清除默认伪元素 */
 
-.md-typeset blockquote::before,
 .md-typeset blockquote::after {
 
-    content: none !important;
-
-}
-
-
-/* 段落间距 */
-
-.md-typeset blockquote p {
-
-    margin:0 !important;
+    display:none !important;
 
 }
 
