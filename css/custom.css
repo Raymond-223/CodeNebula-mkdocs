@@ -178,21 +178,42 @@
 .md-typeset details {
   position: relative;
   border-radius: 16px;
-  background: rgba(15, 23, 42, 0.6);
   overflow: hidden;
+  background: transparent;
 }
 
+/* 外层：渐变 */
 .md-typeset blockquote::before,
 .md-typeset .admonition::before,
 .md-typeset details::before {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   background: var(--nebula-gradient);
   background-size: 300% 300%;
   animation: nebula-flow 10s ease infinite;
-  z-index: -1;
   border-radius: inherit;
+  z-index: 0;
+}
+
+/* 内层：白色，往内缩 2px 形成边框 */
+.md-typeset blockquote::after,
+.md-typeset .admonition::after,
+.md-typeset details::after {
+  content: "";
+  position: absolute;
+  inset: 2px;                /* 边框粗细，可调 */
+  background: #fff;          /* 中间白色 */
+  border-radius: 14px;       /* 16px - 2px */
+  z-index: 1;
+}
+
+/* 内容要盖在白色内层之上 */
+.md-typeset blockquote > *,
+.md-typeset .admonition > *,
+.md-typeset details > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* ======================================================
