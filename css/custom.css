@@ -176,45 +176,52 @@
 .md-typeset blockquote,
 .md-typeset .admonition,
 .md-typeset details {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  background: transparent;   /* 关键：父元素不要有背景 */
-  padding: 0;                /* 如果有 padding，改到内容层 */
+    position: relative;
+    border-radius: 16px;
+    background: transparent;
+    padding: 1em 1.2em;
+    overflow: hidden;
 }
 
-/* 渐变层 */
+/* 渐变边框层 */
 .md-typeset blockquote::before,
 .md-typeset .admonition::before,
 .md-typeset details::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--nebula-gradient);
-  background-size: 300% 300%;
-  animation: nebula-flow 10s ease infinite;
-  border-radius: inherit;
-  z-index: 0;
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: var(--nebula-gradient);
+    background-size: 300% 300%;
+    animation: nebula-flow 10s ease infinite;
+
+    border-radius: inherit;
+    z-index: 0;
 }
 
-/* 白色内层，缩进 2px 形成边框 */
+
+/* 挖空内部，只保留边框 */
 .md-typeset blockquote::after,
 .md-typeset .admonition::after,
 .md-typeset details::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  background: #fff;
-  border-radius: 14px;
-  z-index: 1;
+    content: "";
+    position: absolute;
+
+    inset: 2px;
+
+    background: var(--md-default-bg-color);
+
+    border-radius: 14px;
+    z-index: 1;
 }
 
-/* 所有内容必须浮在白色内层之上 */
+
+/* 内容浮在上面 */
 .md-typeset blockquote > *,
 .md-typeset .admonition > *,
 .md-typeset details > * {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 /* ======================================================
