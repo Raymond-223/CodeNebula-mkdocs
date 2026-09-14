@@ -173,41 +173,65 @@
    5. 引用块 & Admonition
    ====================================================== */
 
-.md-typeset blockquote {
 
-    position: relative;
+  .md-typeset blockquote {
 
-    border-radius: 16px;
+    margin: 1.5em 0 !important;
 
-    background: transparent !important;
+    padding: 1em 1.2em !important;
 
-    border: 2px solid transparent;
 
-    background-image:
+    /* 去掉 Material 默认左边竖线 */
+    border-left: none !important;
+
+
+    /* 四周透明边框 */
+    border: 3px solid transparent !important;
+
+
+    border-radius: 16px !important;
+
+
+    /*
+       第一层：内容背景
+       第二层：渐变边框
+    */
+
+    background:
         linear-gradient(
             var(--md-default-bg-color),
             var(--md-default-bg-color)
-        ),
-        var(--nebula-gradient);
+        ) padding-box,
 
-    background-origin: border-box;
+        var(--nebula-gradient) border-box;
 
-    background-clip:
-        padding-box,
-        border-box;
 
-    padding: 1em 1.2em;
+    background-size:
+        auto,
+        300% 300%;
 
-    overflow: hidden;
+
+    animation:
+        nebula-flow 10s ease infinite;
+
 }
 
 
-/* 删除旧渐变层 */
+/* 清除 Material 默认伪元素 */
 
 .md-typeset blockquote::before,
 .md-typeset blockquote::after {
 
     content: none !important;
+
+}
+
+
+/* 段落间距 */
+
+.md-typeset blockquote p {
+
+    margin:0 !important;
 
 }
 
@@ -221,14 +245,3 @@
   100% { background-position: 0% 50%; }
 }
 
-.md-typeset blockquote::before {
-    display: none !important;
-}
-
-.md-typeset blockquote::after {
-    display: none !important;
-}
-
-.md-typeset blockquote {
-    background: transparent !important;
-}
