@@ -1,103 +1,144 @@
 site_name: CodeNebula
-site_url: https://CodeNebula.github.io/
-
-
-nav:
-  - Home: index.md
-  - 软件开发:
-    - 概览: assets/software-development/index.md
-    - 前端开发: assets/software-development/01-frontend.md
-    - 后端开发: assets/software-development/02-backend.md
-    - 数据库与存储: assets/software-development/03-database.md
-    - 版本控制: assets/software-development/04-version-control.md
-    - DevOps与部署: assets/software-development/05-devops.md
-    - 软件架构: assets/software-development/06-architecture.md
-    - 测试与质量: assets/software-development/07-testing.md
-    - 安全基础: assets/software-development/08-security.md
-  - 强化学习:
-    - 概览: assets/reinforcement-learning/index.md
-    - 多臂老虎机: assets/reinforcement-learning/00-bandit.md
-    - MDP与数学基础: assets/reinforcement-learning/01-mdp-foundations.md
-    - 动态规划: assets/reinforcement-learning/02-dynamic-programming.md
-    - 蒙特卡洛方法: assets/reinforcement-learning/03-monte-carlo-methods.md
-    - 时序差分学习: assets/reinforcement-learning/04-temporal-difference.md
-    - 值函数逼近与DQN: assets/reinforcement-learning/05-value-approximation.md
-    - 策略梯度与Actor-Critic: assets/reinforcement-learning/06-policy-gradient.md
-    - 连续控制: assets/reinforcement-learning/07-continuous-control.md
-    - 环境与工具链: assets/reinforcement-learning/08-tools-environments.md
-    - 进阶专题: assets/reinforcement-learning/09-advanced-topics.md
-    - 工程实践: assets/reinforcement-learning/10-engineering-practice.md
-  - 多智能体系统:
-    - 概览: assets/multi-agent-systems/index.md
-    - 系统基础: assets/multi-agent-systems/01-foundations.md
-    - 智能体架构: assets/multi-agent-systems/02-agent-architectures.md
-    - 博弈论基础: assets/multi-agent-systems/03-game-theory.md
-    - 机制设计与社会选择: assets/multi-agent-systems/04-mechanism-design.md
-    - 多智能体强化学习: assets/multi-agent-systems/05-marl.md
-    - 通信与协同: assets/multi-agent-systems/06-communication.md
-    - 协调与协商: assets/multi-agent-systems/07-coordination-negotiation.md
-    - LLM多智能体: assets/multi-agent-systems/08-llm-multi-agent.md
-    - 工具与环境: assets/multi-agent-systems/09-tools-environments.md
-    - 应用与前沿: assets/multi-agent-systems/10-applications-frontier.md
-  - Algorithm: inex.md
-  - Paper Interpretion: idex.md
-  - Mathematics: 
-    - Overview: Mathematics/index.md
-    - Game Theory:
-      - Overview: Mathematics/Game Theory/index.md
-      - Four First Lessons: Mathematics/Game Theory/Four First Lessons.md
-      - Iterative Deletion: Mathematics/Game Theory/Iterative Deletion.md
-  
-theme: 
+site_description: A minimal, learnable knowledge map for AI, robotics, and autonomous systems.
+site_url: https://raymond-223.github.io/CodeNebula-mkdocs/
+theme:
   name: material
-  darkMode: class
+  language: en
+  font: false
   palette:
-    
-    # Palette toggle for light mode
-    - scheme: default
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to the dark mode
-      
-    # Palette toggle for dark mode
-    - scheme: slate
-      toggle:
-        icon: material/weather-night
-        name: Switch to light mode
-   
-
-  font:
-    text: Roboto
-    code: Roboto Mono
-
-
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    toggle:
+      icon: material/weather-sunny
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    toggle:
+      icon: material/weather-night
+      name: Switch to light mode
   features:
-    - navigation.instant
-    - navigation.instant.prefetch 
-    - navigation.instant.progress 
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.expand
-    - navigation.path
-    - navigation.indexes 
-    - toc.follow
-    - navigation.top 
-    - search.suggest 
-    - search.highlight
-  
-extra_css:
-  - css/custom.css
-
-# mkdocs.yml
+  - navigation.instant
+  - navigation.instant.prefetch
+  - navigation.instant.progress
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.expand
+  - navigation.path
+  - navigation.indexes
+  - navigation.top
+  - toc.follow
+  - search.suggest
+  - search.highlight
+nav:
+- Home: index.md
+- Foundations:
+  - Mathematics for Intelligent Systems:
+    - Overview: mathematics/index.md
+    - Linear Algebra & Calculus Essentials: mathematics/01-linear-algebra-calculus.md
+    - Numerical Computation Essentials: mathematics/02-numerical-computation.md
+    - Probability & Random Variables: mathematics/03-probability-random-variables.md
+    - Conditional Probability & Bayes: mathematics/04-conditional-bayes.md
+    - Markov Processes: mathematics/05-markov-processes.md
+    - Optimization, Constraints & Uncertainty: mathematics/06-optimization-under-uncertainty.md
+- Intelligent Systems:
+  - Reinforcement Learning:
+    - Overview: reinforcement-learning/index.md
+    - MDP & Bellman Equation: reinforcement-learning/01-mdp-bellman.md
+    - Value-Based Methods: reinforcement-learning/02-value-based.md
+    - Policy Gradient & Actor-Critic: reinforcement-learning/03-policy-actor-critic.md
+    - Exploration & Partial Observability: reinforcement-learning/04-exploration-pomdp.md
+    - Model-Based vs Model-Free RL: reinforcement-learning/05-model-based-vs-model-free.md
+    - Safe, Robust & Offline RL: reinforcement-learning/06-safe-robust-offline.md
+  - Game Theory:
+    - Overview: game-theory/index.md
+    - Game Models & Classification: game-theory/01-game-models.md
+    - Best Response & Nash Equilibrium: game-theory/02-best-response-nash.md
+    - Zero-Sum & Minimax: game-theory/03-zero-sum-minimax.md
+    - Sequential & Bayesian Games: game-theory/04-sequential-bayesian.md
+    - Repeated Games & Learning in Games: game-theory/05-repeated-learning.md
+  - Multi-Agent Systems:
+    - Overview: multi-agent-systems/index.md
+    - Agents & Architectures: multi-agent-systems/01-agents-architectures.md
+    - Cooperation, Competition & Coordination: multi-agent-systems/02-coordination.md
+    - Communication & Information Sharing: multi-agent-systems/03-communication.md
+    - Task Allocation & Distributed Decision Making: multi-agent-systems/04-allocation-distributed-decision.md
+    - Multi-Agent Learning & CTDE: multi-agent-systems/05-multi-agent-learning.md
+- Robotics:
+  - Control Theory:
+    - Overview: control-theory/index.md
+    - Dynamic Models & State Space: control-theory/01-modeling-state-space.md
+    - Feedback & Stability: control-theory/02-feedback-stability.md
+    - PID Control: control-theory/03-pid.md
+    - 'Optimal Control: LQR': control-theory/04-lqr.md
+    - Model Predictive Control: control-theory/05-mpc.md
+  - Robotics:
+    - Overview: robotics/index.md
+    - Robot Models, Kinematics & Dynamics: robotics/01-models-kinematics-dynamics.md
+    - Sensors & State Estimation: robotics/02-sensing-estimation.md
+    - Mapping & SLAM: robotics/03-mapping-slam.md
+    - Path & Motion Planning: robotics/04-path-motion-planning.md
+    - Navigation & Robot Control: robotics/05-navigation-control.md
+  - Perception:
+    - Overview: perception/index.md
+    - Image & Camera Basics: perception/01-image-camera-basics.md
+    - Feature-Based Vision: perception/02-feature-vision.md
+    - Detection & Segmentation: perception/03-detection-segmentation.md
+    - Depth, 3D Vision & Point Clouds: perception/04-depth-point-cloud.md
+    - Multi-Modal Perception: perception/05-multimodal.md
+- Systems:
+  - Distributed Systems & Networking:
+    - Overview: distributed-systems/index.md
+    - Networks & Message Passing: distributed-systems/01-network-messaging.md
+    - Distributed Systems, Time & Asynchrony: distributed-systems/02-distributed-time.md
+    - Consistency & Distributed State: distributed-systems/03-consistency-state.md
+    - Fault Tolerance: distributed-systems/04-fault-tolerance.md
+    - 'Middleware: DDS & ROS2': distributed-systems/05-middleware-ros2-dds.md
+  - Software Engineering:
+    - Overview: software-engineering/index.md
+    - Requirements & Architecture: software-engineering/01-requirements-architecture.md
+    - Modular Design & APIs: software-engineering/02-modular-apis.md
+    - Version Control: software-engineering/03-version-control.md
+    - Testing & Debugging: software-engineering/04-testing-debugging.md
+    - Containers, Deployment & Reliability: software-engineering/05-deployment-reliability.md
+- Advanced Autonomous Systems:
+  - Simulation & Sim2Real:
+    - Overview: simulation-sim2real/index.md
+    - Modeling & Physics Simulation: simulation-sim2real/01-modeling-physics.md
+    - Robot & Sensor Simulation: simulation-sim2real/02-robot-sensor-simulation.md
+    - Reality Gap & Domain Randomization: simulation-sim2real/03-reality-gap-randomization.md
+    - Sim2Real & Real2Sim: simulation-sim2real/04-sim2real-real2sim.md
+  - Robustness & Safety:
+    - Overview: robustness-safety/index.md
+    - Uncertainty & Distribution Shift: robustness-safety/01-uncertainty-shift.md
+    - Robustness, Risk & Reliability: robustness-safety/02-robustness-risk.md
+    - Safety Constraints: robustness-safety/03-safety-constraints.md
+    - Fault Detection & Fault Tolerance: robustness-safety/04-fault-tolerance.md
+    - Safe Learning & Runtime Safety: robustness-safety/05-safe-learning-runtime.md
+  - Human–AI Interaction:
+    - Overview: human-ai-interaction/index.md
+    - Human–AI Interaction & Automation Levels: human-ai-interaction/01-human-ai-automation.md
+    - Human-in-the-Loop: human-ai-interaction/02-human-in-loop.md
+    - Shared Autonomy: human-ai-interaction/03-shared-autonomy.md
+    - Trust & Explainability: human-ai-interaction/04-trust-explainability.md
+    - Intervention & Takeover: human-ai-interaction/05-intervention-takeover.md
 markdown_extensions:
-  - pymdownx.arithmatex:
-      generic: true  # 使用通用模式，兼容性更好
-  - admonition  # 支持 !!!
-  - pymdownx.details  # 支持 ???
-  - pymdownx.superfences
-  - attr_list
-  - md_in_html
-  - pymdownx.emoji
-
+- admonition
+- attr_list
+- md_in_html
+- tables
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.emoji
+- pymdownx.arithmatex:
+    generic: true
+extra_css:
+- stylesheets/extra.css
 extra_javascript:
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+- javascripts/mathjax.js
+- https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+plugins:
+- search:
+    lang:
+    - zh
+    - en
+strict: true

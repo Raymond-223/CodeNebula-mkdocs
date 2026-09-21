@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="Sensor simulation pipeline">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Inter,Arial,sans-serif;fill:#172033}.t{font-size:30px;font-weight:700}.s{font-size:20px;font-weight:600}.m{font-size:15px;fill:#5f6b7a}.box{fill:#f4f7fb;stroke:#8aa0b5;stroke-width:2}.a{fill:#dce8f5;stroke:#8aa0b5;stroke-width:2}.g{fill:#e8f1e8;stroke:#8aa0b5;stroke-width:2}.w{fill:#f7eee1;stroke:#8aa0b5;stroke-width:2}.arrow{stroke:#8aa0b5;stroke-width:3;fill:none;marker-end:url(#arr)}</style>
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8aa0b5"/></marker></defs>
+<text x="60" y="58" class="t">Sensor simulation pipeline</text>
+<rect x="60.0" y="135" rx="16" ry="16" width="249.0" height="145" class="a"/>
+<text x="184.5" y="183" text-anchor="middle" class="s">Ground truth</text>
+<text x="184.5" y="217" text-anchor="middle" class="m">simulator state</text>
+<path d="M 309.0 207.5 L 331.0 207.5" class="arrow"/>
+<rect x="337.0" y="135" rx="16" ry="16" width="249.0" height="145" class="box"/>
+<text x="461.5" y="183" text-anchor="middle" class="s">Sampling</text>
+<text x="461.5" y="217" text-anchor="middle" class="m">rate / FoV</text>
+<path d="M 586.0 207.5 L 608.0 207.5" class="arrow"/>
+<rect x="614.0" y="135" rx="16" ry="16" width="249.0" height="145" class="w"/>
+<text x="738.5" y="183" text-anchor="middle" class="s">Noise + bias</text>
+<text x="738.5" y="217" text-anchor="middle" class="m">measurement model</text>
+<path d="M 863.0 207.5 L 885.0 207.5" class="arrow"/>
+<rect x="891.0" y="135" rx="16" ry="16" width="249.0" height="145" class="g"/>
+<text x="1015.5" y="183" text-anchor="middle" class="s">Observation</text>
+<text x="1015.5" y="217" text-anchor="middle" class="m">algorithm input</text>
+</svg>

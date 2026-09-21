@@ -1,6 +1,5 @@
-# 源文件（docs/）与 build 产物均入库
-# 仅排除本地临时/生成产物
-scripts/
 site/
+.cache/
 __pycache__/
-*.pyc
+*.py[cod]
+.DS_Store

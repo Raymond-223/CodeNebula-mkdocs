@@ -1,72 +1,48 @@
-# CodeNebula — 技术知识体系
+# CodeNebula — AI & Robotics Knowledge Map
 
-> 一个面向专业开发者与自学者的系统性技术知识库。覆盖从底层原理到工程实践的完整技术栈。
-> 目前包含三大板块：**软件开发** · **强化学习** · **多智能体系统**。
+> 目标不是收录最多，而是用尽可能少的核心知识建立完整的 AI、机器人与自主系统认知框架。
 
----
+<figure markdown="span">
+  ![CodeNebula minimum sufficient knowledge map](assets/diagrams/knowledge-map.svg)
+  <figcaption>全站只保留五个知识域和十二个 Section；高级分支不进入主路径。</figcaption>
+</figure>
 
-## 章节目录
+## Learning philosophy
 
-### 软件开发
+这版不再强制每个 Section 都有相同章节数，而遵循四个判断：
 
-| 章节 | 核心内容 |
-|------|---------|
-| [**概览**](./assets/software-development/index.md) | 软件工程全景、SDLC、技术栈选型、学习路径 |
-| [**前端开发**](./assets/software-development/01-frontend.md) | HTML5/CSS3/JavaScript/TypeScript, React/Vue/Angular, 构建工具 |
-| [**后端开发**](./assets/software-development/02-backend.md) | Python/Node.js/Java/Go/Rust 生态, 框架对比, API 设计 |
-| [**数据库与存储**](./assets/software-development/03-database.md) | 关系型/非关系型数据库, SQL 进阶, ORM, 缓存, 存储引擎 |
-| [**版本控制**](./assets/software-development/04-version-control.md) | Git 原理与工作流, 分支策略, 协作规范 |
-| [**DevOps 与部署**](./assets/software-development/05-devops.md) | Docker/K8s, CI/CD 流水线, 云服务, 监控告警 |
-| [**软件架构**](./assets/software-development/06-architecture.md) | 架构风格, 设计模式, 系统设计原则, 微服务 |
-| [**测试与质量**](./assets/software-development/07-testing.md) | 测试金字塔, TDD/BDD, 代码审查, 重构 |
-| [**安全基础**](./assets/software-development/08-security.md) | 认证授权, 加密体系, Web 安全, 安全编码 |
+- **能合并就合并**：如果两个主题只有放在一起才能形成完整逻辑，就不拆成两个页面。
+- **必须独立才独立**：状态估计、SLAM、规划这类会在后续反复被引用的能力节点保留独立章节。
+- **代表方法只服务于理解**：Q-Learning、PPO、PID、LQR、A*、EKF 等用于建立方法直觉，不扩展成算法百科。
+- **工程知识必须能落地**：涉及控制、机器人、网络、软件、仿真的地方保留少量短代码；数学则加入够用的数值计算，帮助理解公式如何真正运行。
 
-### 强化学习
+## Knowledge map
 
-| 章节 | 核心内容 |
-|------|---------|
-| [**概览**](./assets/reinforcement-learning/index.md) | 奖励假设、三大范式、探索与利用、技术全景、学习路径 |
-| [**多臂老虎机**](./assets/reinforcement-learning/00-bandit.md) | 探索-利用、ε-greedy/UCB/Thompson 采样、遗憾界 |
-| [**MDP 与数学基础**](./assets/reinforcement-learning/01-mdp-foundations.md) | 马尔可夫决策过程、贝尔曼方程、压缩映射与不动点 |
-| [**动态规划**](./assets/reinforcement-learning/02-dynamic-programming.md) | 策略迭代、价值迭代、策略改进定理 |
-| [**蒙特卡洛方法**](./assets/reinforcement-learning/03-monte-carlo-methods.md) | MC 预测与控制、重要性采样、MCTS |
-| [**时序差分学习**](./assets/reinforcement-learning/04-temporal-difference.md) | TD 预测/控制、SARSA/Q-Learning、TD(λ) 与资格迹 |
-| [**值函数逼近与 DQN**](./assets/reinforcement-learning/05-value-approximation.md) | 半梯度、死亡三角、经验回放、DQN 家族 |
-| [**策略梯度与 Actor-Critic**](./assets/reinforcement-learning/06-policy-gradient.md) | 策略梯度定理、REINFORCE、A2C/PPO、TRPO |
-| [**连续控制**](./assets/reinforcement-learning/07-continuous-control.md) | DDPG/TD3/SAC、最大熵框架 |
-| [**环境与工具链**](./assets/reinforcement-learning/08-tools-environments.md) | Gymnasium、MuJoCo、训练框架与实验评估 |
-| [**进阶专题**](./assets/reinforcement-learning/09-advanced-topics.md) | 模仿学习、Model-based、MARL、RLHF、离线 RL、探索机制 |
-| [**工程实践**](./assets/reinforcement-learning/10-engineering-practice.md) | 环境设计、调试、训练稳定性、部署与收敛判据 |
+| Domain | Section | Core question |
+|---|---|---|
+| **Foundations** | [Mathematics for Intelligent Systems](mathematics/index.md) | 如何描述不确定性、动态过程与优化？ |
+| **Intelligent Systems** | [Reinforcement Learning](reinforcement-learning/index.md) | 智能体如何通过交互学习决策？ |
+|  | [Game Theory](game-theory/index.md) | 多个策略主体相互影响时如何分析行为？ |
+|  | [Multi-Agent Systems](multi-agent-systems/index.md) | 多个 Agent 如何组织、通信、分工与学习？ |
+| **Robotics** | [Control Theory](control-theory/index.md) | 如何让动态系统稳定地达到目标？ |
+|  | [Robotics](robotics/index.md) | 如何把建模、定位、规划和控制串成实体闭环？ |
+|  | [Perception](perception/index.md) | 如何把图像和点云变成可用于决策的环境表示？ |
+| **Systems** | [Distributed Systems & Networking](distributed-systems/index.md) | 多节点如何可靠通信、同步与容错？ |
+|  | [Software Engineering](software-engineering/index.md) | 如何把算法变成可维护、可部署、可验证的软件？ |
+| **Advanced Autonomous Systems** | [Simulation & Sim2Real](simulation-sim2real/index.md) | 如何让仿真与真实系统形成迭代闭环？ |
+|  | [Robustness & Safety](robustness-safety/index.md) | 不确定、故障和风险下如何维持安全行为？ |
+|  | [Human–AI Interaction](human-ai-interaction/index.md) | 人如何监督、共享控制并在必要时接管？ |
 
-### 多智能体系统
+## Recommended order
 
-| 章节 | 核心内容 |
-|------|---------|
-| [**概览**](./assets/multi-agent-systems/index.md) | 设计哲学、五条研究路线、技术全景、学习路径 |
-| [**系统基础**](./assets/multi-agent-systems/01-foundations.md) | MAS 定义与分类、与单智能体的本质差别、信息结构、解概念地图 |
-| [**智能体架构**](./assets/multi-agent-systems/02-agent-architectures.md) | 反应式/慎思式/BDI、经典架构、现代 LLM Agent 架构 |
-| [**博弈论基础**](./assets/multi-agent-systems/03-game-theory.md) | 正则型/扩展型/随机博弈、各类均衡、均衡求解算法 |
-| [**机制设计与社会选择**](./assets/multi-agent-systems/04-mechanism-design.md) | 投票、拍卖与 VCG、稳定匹配、Shapley 值、声誉与信任 |
-| [**多智能体强化学习**](./assets/multi-agent-systems/05-marl.md) | Markov Game、非平稳性、值分解、COMA、MADDPG/MAPPO、自博弈 |
-| [**通信与协同**](./assets/multi-agent-systems/06-communication.md) | 通信协议、涌现语言、通信受限、MCP/A2A/FIPA-ACL |
-| [**协调与协商**](./assets/multi-agent-systems/07-coordination-negotiation.md) | DCOP、任务分配、协商协议、分布式一致性、群体智能 |
-| [**LLM 多智能体**](./assets/multi-agent-systems/08-llm-multi-agent.md) | 编排范式、框架对比、社会仿真、失败模式、何时该用 |
-| [**工具与环境**](./assets/multi-agent-systems/09-tools-environments.md) | PettingZoo/MARLlib/SMAC、训练框架、评估指标与复现 |
-| [**应用与前沿**](./assets/multi-agent-systems/10-applications-frontier.md) | 应用地图、异构群体智能、可扩展性、多智能体安全与开放问题 |
+**Mathematics → Reinforcement Learning / Game Theory → Multi-Agent Systems → Control / Robotics / Perception → Distributed Systems / Software Engineering → Simulation / Safety / Human–AI Interaction**
 
----
+这不是严格先修图。第一次学习时只沿主线前进；遇到项目需求再从 Further Reading 回补。
 
-## 目标读者
+## How to use the website
 
-- **初学者**：想系统学习软件开发、构建完整知识体系
-- **中级开发者**：需要查漏补缺、深入原理
-- **算法与 AI 方向学习者**：想系统掌握强化学习、多智能体系统的理论与工程
-- **转行者**：从零开始、需要清晰的学习路径
+每章只保留必要模块：**Why it matters → Core ideas → Key theory → Representative methods → Worked example**。
 
----
+数学基础额外保留一章 **Numerical Computation Essentials**，只覆盖有限精度、差分、线性求解、最小二乘、积分和迭代停止条件；不进入完整数值分析。
 
-## 如何使用
-
-按顺序阅读，或有针对性地选择章节。每章末尾有"下一章"链接。代码示例均为**可运行**的真实代码。
-
-> 🚧 持续更新中。欢迎贡献内容。
+只有当代码能明显帮助理解“公式如何变成实现”时才加入 **Minimal code**；只有当空间结构、数据流或闭环关系用文字难以表达时才加入图。这样图片和代码都服务于理解，而不是装饰页面。

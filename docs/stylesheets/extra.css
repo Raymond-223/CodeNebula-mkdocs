@@ -1,0 +1,147 @@
+/* CodeNebula — stable Material overrides
+   Goal: readable typography, no image/text overlap, scrollable math/tables/code,
+   and a lightweight nebula visual identity without fragile negative z-index tricks. */
+
+:root {
+  --nebula-gradient: linear-gradient(120deg, #7c3aed, #4f46e5, #0891b2, #db2777);
+  --nebula-border: rgba(99, 102, 241, 0.28);
+  --nebula-soft: rgba(99, 102, 241, 0.08);
+}
+
+[data-md-color-scheme="slate"] {
+  --nebula-border: rgba(129, 140, 248, 0.38);
+  --nebula-soft: rgba(129, 140, 248, 0.10);
+}
+
+html { scroll-behavior: smooth; }
+body, input { font-family: Inter, "Noto Sans SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+.md-header, .md-tabs {
+  background: var(--nebula-gradient);
+  background-size: 220% 220%;
+  animation: nebula-flow 14s ease infinite;
+}
+.md-header { box-shadow: 0 4px 22px rgba(0,0,0,.18); }
+.md-tabs__link { color: rgba(255,255,255,.86); }
+.md-tabs__link:hover, .md-tabs__link--active { color: #fff; }
+
+/* Typography: keep headings visible even if background-clip is unsupported. */
+.md-typeset { line-height: 1.82; }
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4 {
+  line-height: 1.35;
+  scroll-margin-top: 5rem;
+  overflow-wrap: anywhere;
+}
+@supports (-webkit-background-clip: text) {
+  .md-typeset h1, .md-typeset h2 {
+    background: var(--nebula-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+.md-typeset h2 { margin-top: 2.4em; padding-top: .1em; }
+.md-typeset h2::after {
+  content: ""; display: block; width: 4.5rem; height: 3px; margin-top: .35rem;
+  border-radius: 999px; background: var(--nebula-gradient);
+}
+.md-typeset h3 { margin-top: 1.9em; }
+.md-typeset p { margin: .85em 0; }
+.md-typeset li + li { margin-top: .25em; }
+
+/* Images: reserve their own line and never let adjacent text float into them. */
+.md-typeset p > img,
+.md-typeset figure img,
+.md-typeset .md-content__inner > img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(72vh, 920px);
+  object-fit: contain;
+  margin: 1.5rem auto;
+  clear: both;
+  border-radius: .65rem;
+}
+.md-typeset figure { margin: 1.6rem auto; max-width: 100%; overflow: hidden; }
+.md-typeset figcaption { margin-top: -.7rem; font-size: .82rem; line-height: 1.55; }
+
+/* Tables: horizontal scrolling on narrow screens instead of colliding with text. */
+.md-typeset__table { display: block; width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.md-typeset table:not([class]) { width: max-content; min-width: 100%; }
+.md-typeset table:not([class]) th, .md-typeset table:not([class]) td {
+  vertical-align: top; line-height: 1.55; overflow-wrap: normal; word-break: normal;
+}
+
+/* MathJax: large equations scroll inside the article; never cover sidebars/text. */
+.md-typeset mjx-container[jax="CHTML"][display="true"] {
+  display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden;
+  padding: .35rem .1rem .55rem; margin: 1.1rem 0;
+  text-align: left !important;
+  -webkit-overflow-scrolling: touch;
+}
+.md-typeset mjx-container:not([display="true"]) { max-width: 100%; }
+
+/* Code: no overflow:hidden and no negative z-index pseudo-element. */
+.md-typeset pre {
+  border: 1px solid var(--nebula-border);
+  border-radius: .75rem;
+  overflow: auto;
+  box-shadow: 0 6px 22px rgba(15,23,42,.06);
+}
+.md-typeset pre > code { white-space: pre; overflow: visible; }
+.md-typeset :not(pre) > code {
+  padding: .08em .35em; border-radius: .3rem;
+  background: var(--nebula-soft); overflow-wrap: anywhere;
+}
+
+/* Quotes / bridge notes */
+.md-typeset blockquote {
+  margin: 1.25rem 0; padding: .75rem 1rem;
+  border-left: 4px solid #6366f1;
+  border-radius: 0 .65rem .65rem 0;
+  background: var(--nebula-soft);
+}
+.md-typeset blockquote p:first-child { margin-top: 0; }
+.md-typeset blockquote p:last-child { margin-bottom: 0; }
+
+/* Anchor targets should not sit under sticky header. */
+:target { scroll-margin-top: 6rem; }
+
+/* Smaller screens: reduce whitespace, preserve readable content width. */
+@media (max-width: 44.9844em) {
+  .md-typeset { line-height: 1.72; }
+  .md-typeset h1 { font-size: 1.75rem; }
+  .md-typeset h2 { font-size: 1.35rem; margin-top: 2rem; }
+  .md-typeset p > img, .md-typeset figure img { max-height: 62vh; margin: 1.1rem auto; }
+}
+
+@media print {
+  .md-typeset h1, .md-typeset h2 { background: none !important; color: #111 !important; }
+  .md-typeset pre, .md-typeset table, .md-typeset mjx-container { break-inside: avoid; }
+}
+
+@keyframes nebula-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+/* V3 teaching visuals: figures are content, not decoration. */
+.md-typeset figure {
+  padding: .8rem;
+  border: 1px solid var(--nebula-border);
+  border-radius: .9rem;
+  background: color-mix(in srgb, var(--nebula-soft) 55%, transparent);
+}
+.md-typeset figure img { margin: 0 auto 1rem; }
+.md-typeset figcaption {
+  margin: 0 auto; max-width: 54rem; text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset h2 + figure { margin-top: .7rem; }
+.md-typeset pre { margin: 1rem 0 1.3rem; }
+@media (min-width: 60em) {
+  .md-typeset figure img { max-height: min(62vh, 720px); }
+}
