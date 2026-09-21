@@ -17,7 +17,8 @@ EXPECTED_SECTIONS = [
     'human-ai-interaction',
 ]
 EXPECTED_DOMAINS = [
-    '数学基础', '理论方法', '算法理解', '工程实现', '真实系统',
+    'Mathematics', 'Theoretical Methods', 'Algorithmic Understanding',
+    'Engineering Implementation', 'Real-World Systems',
 ]
 ENGINEERING_SECTIONS = {
     'robotics', 'perception', 'distributed-systems', 'software-engineering',
@@ -67,6 +68,9 @@ top_keys = [next(iter(x)) for x in nav if isinstance(x, dict)]
 for domain in EXPECTED_DOMAINS:
     if domain not in top_keys:
         errors.append(f'Missing top navigation domain: {domain}')
+for label in labels:
+    if re.search(r'[\u4e00-\u9fff]', label):
+        errors.append(f'Navigation label is not English-only: {label}')
 
 # Curriculum size: guard both bloat and accidental over-compression.
 section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css'}]

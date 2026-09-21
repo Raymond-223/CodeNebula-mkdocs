@@ -30,96 +30,96 @@ theme:
   - search.suggest
   - search.highlight
 nav:
-- 首页: index.md
-- 数学基础:
-  - 数学总览: mathematics/index.md
-  - 线性代数与微积分: mathematics/01-linear-algebra-calculus.md
-  - 数值计算: mathematics/02-numerical-computation.md
-  - 概率与随机变量: mathematics/03-probability-random-variables.md
-  - 条件概率与 Bayes: mathematics/04-conditional-bayes.md
-  - Markov 过程: mathematics/05-markov-processes.md
-  - 优化、约束与不确定性: mathematics/06-optimization-under-uncertainty.md
-- 理论方法:
-  - 博弈论:
-    - 总览: game-theory/index.md
-    - 博弈模型与分类: game-theory/01-game-models.md
-    - 最佳响应与 Nash 均衡: game-theory/02-best-response-nash.md
-    - 零和与 Minimax: game-theory/03-zero-sum-minimax.md
-    - 序贯与 Bayesian 博弈: game-theory/04-sequential-bayesian.md
-    - 重复博弈与学习: game-theory/05-repeated-learning.md
-  - 多智能体系统:
-    - 总览: multi-agent-systems/index.md
-    - Agent 与系统架构: multi-agent-systems/01-agents-architectures.md
-    - 合作、竞争与协调: multi-agent-systems/02-coordination.md
-    - 通信与信息共享: multi-agent-systems/03-communication.md
-    - 任务分配与分布式决策: multi-agent-systems/04-allocation-distributed-decision.md
-    - 多智能体学习与 CTDE: multi-agent-systems/05-multi-agent-learning.md
-  - 控制理论:
-    - 总览: control-theory/index.md
-    - 动态模型与状态空间: control-theory/01-modeling-state-space.md
-    - 反馈与稳定性: control-theory/02-feedback-stability.md
-    - PID 原理: control-theory/03-pid.md
-    - 最优控制 LQR: control-theory/04-lqr.md
-    - 模型预测控制 MPC: control-theory/05-mpc.md
-- 算法理解:
-  - 强化学习:
-    - 总览: reinforcement-learning/index.md
-    - MDP 与 Bellman 方程: reinforcement-learning/01-mdp-bellman.md
-    - 价值方法: reinforcement-learning/02-value-based.md
-    - 策略梯度与 Actor–Critic: reinforcement-learning/03-policy-actor-critic.md
-    - 探索与部分可观测: reinforcement-learning/04-exploration-pomdp.md
-    - Model-Based 与 Model-Free: reinforcement-learning/05-model-based-vs-model-free.md
-    - 安全、鲁棒与离线 RL: reinforcement-learning/06-safe-robust-offline.md
-- 工程实现:
-  - 机器人学:
-    - 总览: robotics/index.md
-    - 模型、运动学与动力学: robotics/01-models-kinematics-dynamics.md
-    - 传感与状态估计: robotics/02-sensing-estimation.md
-    - 建图与 SLAM: robotics/03-mapping-slam.md
-    - 路径与运动规划: robotics/04-path-motion-planning.md
-    - 导航与控制: robotics/05-navigation-control.md
-  - 感知:
-    - 总览: perception/index.md
-    - 图像与相机基础: perception/01-image-camera-basics.md
-    - 特征视觉: perception/02-feature-vision.md
-    - 检测与分割: perception/03-detection-segmentation.md
-    - 深度、三维视觉与点云: perception/04-depth-point-cloud.md
-    - 多模态感知: perception/05-multimodal.md
-  - 分布式系统:
-    - 总览: distributed-systems/index.md
-    - 网络与消息传递: distributed-systems/01-network-messaging.md
-    - 时间与异步: distributed-systems/02-distributed-time.md
-    - 一致性与分布式状态: distributed-systems/03-consistency-state.md
-    - 容错: distributed-systems/04-fault-tolerance.md
-    - DDS 与 ROS2: distributed-systems/05-middleware-ros2-dds.md
-  - 软件工程:
-    - 总览: software-engineering/index.md
-    - 需求与架构: software-engineering/01-requirements-architecture.md
-    - 模块与 API: software-engineering/02-modular-apis.md
-    - Git 工作流: software-engineering/03-version-control.md
-    - pytest 与调试: software-engineering/04-testing-debugging.md
-    - Docker、CI 与可靠性: software-engineering/05-deployment-reliability.md
-- 真实系统:
-  - 仿真与 Sim2Real:
-    - 总览: simulation-sim2real/index.md
-    - 建模与物理仿真: simulation-sim2real/01-modeling-physics.md
-    - 机器人与传感器仿真: simulation-sim2real/02-robot-sensor-simulation.md
-    - Reality Gap 与域随机化: simulation-sim2real/03-reality-gap-randomization.md
-    - Sim2Real 与 Real2Sim: simulation-sim2real/04-sim2real-real2sim.md
-  - 鲁棒与安全:
-    - 总览: robustness-safety/index.md
-    - 不确定性与分布漂移: robustness-safety/01-uncertainty-shift.md
-    - 鲁棒性、风险与可靠性: robustness-safety/02-robustness-risk.md
-    - 安全约束: robustness-safety/03-safety-constraints.md
-    - 故障检测与容错: robustness-safety/04-fault-tolerance.md
-    - 安全学习与运行时保护: robustness-safety/05-safe-learning-runtime.md
-  - 人机协作:
-    - 总览: human-ai-interaction/index.md
-    - 人机交互与自动化等级: human-ai-interaction/01-human-ai-automation.md
+- Home: index.md
+- Mathematics:
+  - Overview: mathematics/index.md
+  - Linear Algebra & Calculus: mathematics/01-linear-algebra-calculus.md
+  - Numerical Computation: mathematics/02-numerical-computation.md
+  - Probability & Random Variables: mathematics/03-probability-random-variables.md
+  - Conditional Probability & Bayes: mathematics/04-conditional-bayes.md
+  - Markov Processes: mathematics/05-markov-processes.md
+  - Optimization, Constraints & Uncertainty: mathematics/06-optimization-under-uncertainty.md
+- Theoretical Methods:
+  - Game Theory:
+    - Overview: game-theory/index.md
+    - Game Models & Classification: game-theory/01-game-models.md
+    - Best Response & Nash Equilibrium: game-theory/02-best-response-nash.md
+    - Zero-Sum Games & Minimax: game-theory/03-zero-sum-minimax.md
+    - Sequential & Bayesian Games: game-theory/04-sequential-bayesian.md
+    - Repeated Games & Learning: game-theory/05-repeated-learning.md
+  - Multi-Agent Systems:
+    - Overview: multi-agent-systems/index.md
+    - Agents & System Architectures: multi-agent-systems/01-agents-architectures.md
+    - Cooperation, Competition & Coordination: multi-agent-systems/02-coordination.md
+    - Communication & Information Sharing: multi-agent-systems/03-communication.md
+    - Task Allocation & Distributed Decision Making: multi-agent-systems/04-allocation-distributed-decision.md
+    - Multi-Agent Learning & CTDE: multi-agent-systems/05-multi-agent-learning.md
+  - Control Theory:
+    - Overview: control-theory/index.md
+    - Dynamic Models & State Space: control-theory/01-modeling-state-space.md
+    - Feedback & Stability: control-theory/02-feedback-stability.md
+    - PID Principles: control-theory/03-pid.md
+    - Optimal Control & LQR: control-theory/04-lqr.md
+    - Model Predictive Control: control-theory/05-mpc.md
+- Algorithmic Understanding:
+  - Reinforcement Learning:
+    - Overview: reinforcement-learning/index.md
+    - MDP & Bellman Equation: reinforcement-learning/01-mdp-bellman.md
+    - Value-Based Methods: reinforcement-learning/02-value-based.md
+    - Policy Gradient & Actor–Critic: reinforcement-learning/03-policy-actor-critic.md
+    - Exploration & Partial Observability: reinforcement-learning/04-exploration-pomdp.md
+    - Model-Based vs Model-Free RL: reinforcement-learning/05-model-based-vs-model-free.md
+    - Safe, Robust & Offline RL: reinforcement-learning/06-safe-robust-offline.md
+- Engineering Implementation:
+  - Robotics:
+    - Overview: robotics/index.md
+    - Models, Kinematics & Dynamics: robotics/01-models-kinematics-dynamics.md
+    - Sensing & State Estimation: robotics/02-sensing-estimation.md
+    - Mapping & SLAM: robotics/03-mapping-slam.md
+    - Path & Motion Planning: robotics/04-path-motion-planning.md
+    - Navigation & Control: robotics/05-navigation-control.md
+  - Perception:
+    - Overview: perception/index.md
+    - Image & Camera Basics: perception/01-image-camera-basics.md
+    - Feature-Based Vision: perception/02-feature-vision.md
+    - Detection & Segmentation: perception/03-detection-segmentation.md
+    - Depth, 3D Vision & Point Clouds: perception/04-depth-point-cloud.md
+    - Multi-Modal Perception: perception/05-multimodal.md
+  - Distributed Systems:
+    - Overview: distributed-systems/index.md
+    - Networks & Message Passing: distributed-systems/01-network-messaging.md
+    - Time & Asynchrony: distributed-systems/02-distributed-time.md
+    - Consistency & Distributed State: distributed-systems/03-consistency-state.md
+    - Fault Tolerance: distributed-systems/04-fault-tolerance.md
+    - DDS & ROS2: distributed-systems/05-middleware-ros2-dds.md
+  - Software Engineering:
+    - Overview: software-engineering/index.md
+    - Requirements & Architecture: software-engineering/01-requirements-architecture.md
+    - Modular Design & APIs: software-engineering/02-modular-apis.md
+    - Git Workflow: software-engineering/03-version-control.md
+    - pytest & Debugging: software-engineering/04-testing-debugging.md
+    - Docker, CI & Reliability: software-engineering/05-deployment-reliability.md
+- Real-World Systems:
+  - Simulation & Sim2Real:
+    - Overview: simulation-sim2real/index.md
+    - Modeling & Physics Simulation: simulation-sim2real/01-modeling-physics.md
+    - Robot & Sensor Simulation: simulation-sim2real/02-robot-sensor-simulation.md
+    - Reality Gap & Domain Randomization: simulation-sim2real/03-reality-gap-randomization.md
+    - Sim2Real & Real2Sim: simulation-sim2real/04-sim2real-real2sim.md
+  - Robustness & Safety:
+    - Overview: robustness-safety/index.md
+    - Uncertainty & Distribution Shift: robustness-safety/01-uncertainty-shift.md
+    - Robustness, Risk & Reliability: robustness-safety/02-robustness-risk.md
+    - Safety Constraints: robustness-safety/03-safety-constraints.md
+    - Fault Detection & Tolerance: robustness-safety/04-fault-tolerance.md
+    - Safe Learning & Runtime Safety: robustness-safety/05-safe-learning-runtime.md
+  - Human–AI Interaction:
+    - Overview: human-ai-interaction/index.md
+    - Interaction & Levels of Automation: human-ai-interaction/01-human-ai-automation.md
     - Human-in-the-Loop: human-ai-interaction/02-human-in-loop.md
-    - 共享自治: human-ai-interaction/03-shared-autonomy.md
-    - 信任与可解释性: human-ai-interaction/04-trust-explainability.md
-    - 干预与接管: human-ai-interaction/05-intervention-takeover.md
+    - Shared Autonomy: human-ai-interaction/03-shared-autonomy.md
+    - Trust & Explainability: human-ai-interaction/04-trust-explainability.md
+    - Intervention & Takeover: human-ai-interaction/05-intervention-takeover.md
 markdown_extensions:
 - admonition
 - attr_list
