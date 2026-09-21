@@ -1,81 +1,70 @@
-# Containers, Deployment & Reliability
+# 容器、部署与运行可靠性
 
-> **Section:** Software Engineering
+代码在开发机上跑通，只说明“程序可以运行”；部署要解决的是：**换一台机器后还能不能按同样方式启动，出错后能不能快速发现和恢复**。
 
-## Why it matters
+![容器边界](../assets/diagrams/container-boundary.svg)
 
-交付不仅是“能启动”，还包括依赖隔离、配置管理、健康检查、日志监控和故障后的恢复能力。
+## 一、Docker 解决的是运行环境一致性
 
-## Visual intuition
+容器镜像把应用和依赖一起描述，使开发、测试和部署使用同一套环境。
 
-<figure markdown="span">
-  ![可靠交付需要让代码变更、自动验证、部署和运行观测形成闭环。](../assets/diagrams/ci-loop.svg)
-  <figcaption>可靠交付需要让代码变更、自动验证、部署和运行观测形成闭环。</figcaption>
-</figure>
-
-<figure markdown="span">
-  ![容器隔离依赖，但设备、网络、数据和配置仍必须显式连接到运行环境。](../assets/diagrams/container-boundary.svg)
-  <figcaption>“装进容器”不会自动解决设备权限、GPU、ROS/DDS 网络或持久化数据问题。</figcaption>
-</figure>
-
-## Core ideas
-
-- **Image**：应用及其依赖的不可变模板。
-- **Container**：镜像的运行实例。
-- **Environment**：运行时配置、设备与网络。
-- **CI/CD**：自动构建、测试和交付流程。
-- **Monitoring**：观察系统状态与趋势。
-- **Fallback**：主路径失败时的受限替代行为。
-
-## Key theory
-
-### Containers & Deployment
-
-容器解决的是依赖隔离与可重复运行，不是虚拟机的完全替代。部署还必须显式处理 GPU、设备、网络、数据卷、权限和版本。
-
-### Reliability & Maintenance
-
-可靠性不是“永不失败”，而是让失败**可检测、影响受控、能够恢复、不会静默扩散**。维护阶段还需要兼顾依赖升级、配置漂移和接口兼容。
-
-## Representative methods
-
-- Dockerfile：固定系统/语言依赖。
-- CI pipeline：每次提交自动测试并构建。
-- Health check + logging：确认服务是否健康并能定位问题。
-- Rollback / safe mode：失败后恢复到已知可用状态。
-
-## Minimal code
-
-一个可复现镜像的起点通常很短：固定基础环境、复制依赖、安装、再复制应用。复杂编排放到真正需要时再学。
+一个最小 Python Dockerfile：
 
 ```dockerfile
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY src/ ./src/
-CMD ["python", "-m", "src.main"]
+COPY . .
+CMD ["python", "main.py"]
 ```
 
-## Worked example
+镜像是静态模板，容器是镜像启动后的运行实例。真正需要长期保存的数据不要只写在容器内部，而应使用挂载目录、数据库或对象存储。
 
-**Containers & Deployment：**把规划模块放入容器后，需要明确挂载配置、暴露 ROS/DDS 网络、GPU/设备访问；“镜像能启动”不等于“系统能集成”。
+## 二、容器边界不能替代系统边界
 
-**Reliability & Maintenance：**规划服务异常时，地面站应看到明确状态；底盘进入预设安全模式；修复版本上线后还能回滚到上一稳定版本。
+“把两个程序放进不同容器”并不会自动让架构变好。容器之间仍然需要清楚的端口、协议、数据格式和故障处理。
 
-## Connections
+对于 ROS/机器人项目，容器化特别适合隔离复杂依赖，但还要额外考虑：设备映射、GPU、网络模式、DDS/ROS_DOMAIN_ID、时钟和宿主机权限。
 
-- → Distributed Systems：容器之间仍通过网络通信。
-- → Simulation：仿真环境也应版本化。
-- → Robustness & Safety。
-- → Human-AI Interaction：人在环需要可理解的状态和接管入口。
+## 三、CI 把重复检查自动化
 
-## Further Reading
+持续集成最小流程可以只有四步：
 
-- Compose/Kubernetes、SRE、SBOM 与更完整供应链安全。
+```text
+Push / PR → Install → Test → Build
+```
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+![CI 流程](../assets/diagrams/ci-loop.svg)
 
-## Learning path
+CI 的核心价值不是“自动部署”，而是让每次合并都经过同一套检查。最值得自动化的是：单元测试、静态检查、文档构建和制品打包。
 
-[← Section overview](index.md) · [← Testing & Debugging](04-testing-debugging.md)
+一个极简 GitHub Actions 片段：
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+  - run: pip install -r requirements.txt
+  - run: pytest -q
+```
+
+## 四、程序活着不等于系统健康
+
+部署后至少需要知道三类信息：
+
+- **日志**：具体发生了什么；
+- **指标**：延迟、错误率、队列长度、CPU/GPU 等是否异常；
+- **健康状态**：服务是否还能完成关键功能。
+
+一个进程即使没有崩溃，也可能已经无法连接数据库或无法收到传感器数据。因此健康检查最好验证关键依赖，而不是只检查 PID 是否存在。
+
+## 五、故障处理首先要设计“安全退化”
+
+可靠性不意味着永不失败，而是失败时行为可控。例如：
+
+- 网络断开时停止接受新任务；
+- 规划器超时时保持停车而不是继续沿旧路径高速行驶；
+- 非关键模块异常时允许核心功能继续运行；
+- 重启前保存必要状态，避免任务重复执行。
+
+工程上最重要的不是背监控平台名字，而是形成运行意识：**部署后系统仍然需要被观察、被诊断、被恢复**。

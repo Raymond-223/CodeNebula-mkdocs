@@ -1,51 +1,124 @@
-# Multi-Agent Learning & CTDE
+# 多智能体学习与 CTDE
 
-> **Section:** Multi-Agent Systems
+多智能体强化学习（MARL）不是简单让每个 Agent 各跑一个 PPO。关键矛盾是：**训练时希望利用更多全局信息，部署时每个 Agent 又必须独立行动。** CTDE（Centralized Training, Decentralized Execution）就是最常见的解决框架。
 
-## Why it matters
+![CTDE](../assets/diagrams/ctde.svg)
 
-MARL 的最小框架是理解非平稳性、信用分配与 CTDE；具体算法只作为这些问题的代表解法。
+## 一、分散执行意味着什么
 
-## Visual intuition
+执行阶段，第 $i$ 个主体只能根据自己的信息选择动作：
 
-<figure markdown="span">
-  ![CTDE 在训练时利用全局信息，在执行时保留每个 Agent 的局部策略。](../assets/diagrams/ctde.svg)
-  <figcaption>CTDE 在训练时利用全局信息，在执行时保留每个 Agent 的局部策略。</figcaption>
-</figure>
+$$
+a_i\sim\pi_i(\cdot\mid\tau_i),
+$$
 
-## Core ideas
+其中 $\tau_i$ 可以包含局部观测历史和收到的消息。
 
-- **Non-stationarity**：其他 agent 学习导致你的环境分布变化。
-- **Credit assignment**：团队奖励难分解到个体行为。
-- **Joint action**：联合动作组合随 agent 数量快速增长。
-- **CTDE**：训练时用全局信息，执行时保持局部策略。
+如果部署时拿不到全局状态，就不能把全局状态作为 Actor 的必需输入。否则训练指标再好，也无法真正部署。
 
-## Key theory
+但训练阶段通常可以使用集中采集的数据，因此 Critic 可以看到更多信息：
 
-CTDE 的基本思想是：训练阶段允许 Critic 或价值分解模块看到更多全局信息，以缓解非平稳性和信用分配；部署时每个 agent 仍只依赖可获得的局部信息。
+$$
+Q_i(s,\mathbf a)
+$$
 
-它不是“把环境重新变成静止”，也不自动保证收敛。
+或团队价值 $Q_{tot}(s,\mathbf a)$。这就是 CTDE 的基本分工。
 
-## Representative methods
+## 二、为什么独立学习容易不稳定
 
-- MAPPO：集中 Critic 的策略梯度代表。
-- QMIX：合作任务的价值分解代表。
+如果每个主体把其他学习者当成环境的一部分，那么其他策略一更新，自己的转移与奖励分布也跟着变。
 
-## Worked example
+因此同一条旧经验
 
-训练三车协作时，Critic 可以读取三车状态评价联合结果；部署后每车 Actor 只用自己的观测和允许的消息。
+$$
+(s,a_i,r_i,s')
+$$
 
-## Connections
+可能是在完全不同的对手策略下产生的。经验回放、价值估计和策略更新都会因此更难稳定。
 
-- ← Reinforcement Learning / Actor-Critic。
-- → Game Theory：竞争或一般和任务还需要明确解概念。
+CTDE 并不能把环境“重新变成严格静止”，但集中式 Critic 可以把更多影响结果的变量显式纳入价值估计，减少把其他主体行为当成不可解释噪声的程度。
 
-## Further Reading
+## 三、合作任务里的信用分配
 
-- MADDPG、COMA、mean-field MARL、self-play。
+共享团队奖励只告诉我们“这次整体好不好”，却不直接告诉每个主体自己的动作贡献有多大。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+一种思路是使用反事实基线：固定其他主体动作，只对主体 $i$ 的动作做边际化：
 
-## Learning path
+$$
+A_i(s,\mathbf a)
+=
+Q(s,\mathbf a)
+-
+\sum_{a_i'}\pi_i(a_i'\mid\tau_i)
+Q(s,(\mathbf a_{-i},a_i')).
+$$
 
-[← Section overview](index.md) · [← Task Allocation & Distributed Decision Making](04-allocation-distributed-decision.md)
+它回答的是：**在其他人不变时，我当前动作比我自己的平均选择好多少？**
+
+不需要记住所有信用分配算法，但要记住问题本身：团队奖励越稀疏、主体越多，单一全局回报越难提供清晰学习信号。
+
+## 四、值分解：让团队价值可以支持分散决策
+
+合作 MARL 的一个代表思路是把团队价值写成个体价值的组合。
+
+### 4.1 VDN：直接相加
+
+$$
+Q_{tot}=\sum_i Q_i(\tau_i,a_i).
+$$
+
+这种假设简单，但无法表达复杂的非线性协同。
+
+### 4.2 QMIX：单调混合
+
+QMIX 使用一个 mixing network 组合个体价值，并限制
+
+$$
+\frac{\partial Q_{tot}}{\partial Q_i}\ge 0.
+$$
+
+这样如果每个主体各自选择让 $Q_i$ 最大的动作，就能与联合价值的贪心选择保持一致。
+
+需要注意：单调性是一种**结构假设**，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。
+
+## 五、策略梯度路线：MAPPO 代表了什么
+
+另一条路线直接学习分散 Actor，同时使用集中式 Critic。
+
+MAPPO 可以理解为：
+
+```text
+local observation → shared/decentralized actor → action
+                         ↑
+training only: global state → centralized critic
+```
+
+Actor 仍然只吃部署时能获得的信息；Critic 在训练时利用全局状态，给 Actor 提供更好的 advantage 估计。
+
+训练核心仍然是 PPO 的 clipped objective，只是价值估计引入了多智能体全局信息。因此学 MAPPO 时最重要的是先掌握 PPO 和 CTDE，而不是背实现细节。
+
+## 六、参数共享什么时候有用
+
+如果多个主体结构相同、动作语义相同，可以共享 Actor 参数：
+
+$$
+\pi_1=\pi_2=\cdots=\pi_n=\pi_\theta.
+$$
+
+这样能显著减少参数量并共享经验。但如果不同主体角色差异很大，共享一个完全相同的策略可能反而限制表达能力。
+
+常见做法是共享主干网络，同时增加 agent ID、角色 embedding 或局部任务信息，让同一网络仍能表现出不同角色行为。
+
+## 七、训练 MARL 时先看这四件事
+
+1. **执行信息是否泄漏**：Actor 有没有偷偷使用部署时不存在的全局信息；
+2. **奖励是否可归因**：团队奖励是否稀疏到几乎无法学习；
+3. **联合行为是否退化**：所有主体是否学成同一动作、互相等待或反复抢同一任务；
+4. **评估是否只看总回报**：还要看碰撞、任务覆盖、负载均衡和策略稳定性。
+
+多智能体学习真正需要建立的框架只有两条代表路线：
+
+- **价值分解：QMIX** —— 解决合作价值怎样分解并支持分散执行；
+- **策略梯度：MAPPO** —— 用集中式 Critic 帮助多个分散 Actor 学习。
+
+其他 MARL 算法可以在遇到具体限制时再扩展，不需要在第一次学习时形成算法名单。

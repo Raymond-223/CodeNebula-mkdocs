@@ -1,60 +1,52 @@
-# Middleware: DDS & ROS2
+# 中间件、DDS 与 ROS2
 
-> **Section:** Distributed Systems & Networking
-
-## Why it matters
-
-中间件把发现、序列化、传输、QoS 和接口抽象封装起来，让应用代码聚焦于数据和任务。
+机器人软件通常包含定位、感知、规划、控制和硬件驱动等多个进程。中间件的作用是让这些模块能够交换数据，而不要求每个模块自己重新实现发现、序列化、网络传输和通信质量控制。
 
 <figure markdown="span">
-  ![QoS 不是“越可靠越好”，而是根据数据流的重要性、频率和时效性选择策略。](../assets/diagrams/qos-choice.svg)
-  <figcaption>高频传感器流与关键低频状态通常需要不同的 QoS。</figcaption>
+  ![DDS/ROS2 的 QoS 需要根据数据语义选择。](../assets/diagrams/qos-choice.svg)
+  <figcaption>高速传感器流和关键状态事件对可靠性、历史深度和时延的要求不同。</figcaption>
 </figure>
 
-## Core ideas
+## 一、ROS2 把模块间通信抽象成几个基本原语
 
-- **Middleware**：位于应用与网络之间的通信抽象。
-- **DDS**：ROS2 默认使用的 data-centric pub-sub 标准族。
-- **QoS**：可靠性、历史深度、deadline 等通信策略。
-- **ROS graph**：节点、topic、service、action 的逻辑连接。
+**Topic** 适合持续数据流，例如 `/odom`、`/scan`；**Service** 适合一次请求、一次响应；**Action** 适合耗时任务，需要反馈、取消和最终结果。
 
-## Key theory
+这三种接口反映的是交互时序差异，而不是“哪个更高级”。
 
-ROS2 的价值不是“替代 TCP/UDP”，而是把发现、类型、消息传输和 QoS 组织成统一接口。不同数据流应设置不同 QoS，而不是全局一个配置。
+## 二、DDS 让通信语义可以被显式配置
 
-## Representative methods
+ROS2 默认依赖 DDS/RTPS 体系。DDS 不只是传输数据，还提供 reliability、history、durability、deadline 等 QoS 语义。
 
-- Best effort：高频传感器常见。
-- Reliable：关键低频状态/命令常见。
-- Durability/history：决定晚加入节点能否拿到历史样本。
+高频 LiDAR 数据偶尔丢一帧通常可以接受，重点是最新数据尽快到达；任务模式切换则可能要求可靠送达。不同 Topic 使用同一 QoS 并不一定合理。
 
-## Minimal code
+## 三、QoS 不匹配会出现“Topic 看得到但收不到”
 
-ROS2 中 QoS 是接口语义的一部分。下面只展示一个常见的“保留最近 5 条、尽力而为”配置。
+发布者和订阅者即使名字完全一致，如果 reliability 或 durability 等策略不兼容，也可能无法通信。这是 ROS2 实机调试中非常常见的问题。
+
+因此排查顺序应包含：节点是否存在、Topic 名称/类型是否一致、QoS 是否兼容、网络发现是否正常。
+
+## 四、ROS2 消息仍然需要好的数据契约
+
+中间件解决“怎么传”，不解决“字段语义是否合理”。一个状态消息应明确单位、坐标系、时间戳和有效范围。
 
 ```python
-from rclpy.qos import QoSProfile, ReliabilityPolicy
+# Topic：持续发布带明确单位的速度命令
+cmd = Twist()
+cmd.linear.x = 0.4       # m/s
+cmd.angular.z = -0.2     # rad/s
+velocity_publisher.publish(cmd)
 
-sensor_qos = QoSProfile(depth=5)
-sensor_qos.reliability = ReliabilityPolicy.BEST_EFFORT
-# publisher/subscription 创建时把 sensor_qos 传进去
+# Service：一次请求、一次响应
+future = reset_client.call_async(Trigger.Request())
+future.add_done_callback(handle_reset_result)
 ```
 
-## Worked example
+若单位和 frame 没有统一，即使通信 100% 可靠，系统仍然会产生错误动作。
 
-相机图像可以 best effort 降低阻塞风险；地图或关键配置常更适合 reliable，并根据场景决定是否保留历史。
+Topic 回调应快速处理持续数据；Service 适合有明确完成结果的短操作。耗时导航任务应使用 Action，以便反馈进度和取消，而不是让 Service 长时间阻塞。
 
-## Connections
+## 五、ROS2/DDS 的价值在于解耦，而不是隐藏所有系统问题
 
-- → Robotics：导航栈通过 ROS2 中间件连接。
-- → MAS：P2P 状态共享可以建立在 DDS topic 上。
+定位节点不需要知道规划器运行在哪台机器，规划器只需要订阅符合契约的位姿数据。但网络延迟、带宽和节点故障仍然存在，不能因为用了 ROS2 就假设通信等同于本地函数调用。
 
-## Further Reading
-
-- DDS discovery tuning、其他机器人中间件。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Fault Tolerance](04-fault-tolerance.md)
+真正稳定的机器人系统会同时设计接口语义、QoS、超时和失联后的退化行为。

@@ -1,62 +1,41 @@
-# Reality Gap & Domain Randomization
+# Reality Gap 与域随机化
 
-> **Section:** Simulation & Sim2Real
-
-## Why it matters
-
-Reality Gap 是仿真假设与真实世界的系统性差异；校准减少已知偏差，随机化降低对未知变化的敏感性。
-
-## Visual intuition
+仿真中的策略到了实机性能下降，通常不是因为“仿真没有价值”，而是因为训练过程中依赖了某些在真实世界并不稳定的细节。Reality Gap 就是**仿真分布与真实分布之间会影响任务行为的差异**。
 
 <figure markdown="span">
-  ![校准减少已知误差，随机化让策略对剩余不确定性更不敏感。](../assets/diagrams/domain-rand.svg)
-  <figcaption>校准减少已知误差，随机化让策略对剩余不确定性更不敏感。</figcaption>
+  ![域随机化通过训练时改变关键参数，让策略不要依赖单一精确仿真条件。](../assets/diagrams/domain-rand.svg)
+  <figcaption>随机化应覆盖真实系统可能出现的合理变化，而不是无边界增加难度。</figcaption>
 </figure>
 
-## Core ideas
+## 一、Reality Gap 可以来自模型、传感和执行三个层面
 
-- **Dynamics gap**：质量、摩擦和执行器响应不同。
-- **Perception gap**：纹理、光照、噪声和传感器模型不同。
-- **Timing gap**：延迟、频率和异步行为不同。
-- **Domain randomization**：训练时主动覆盖可能的参数变化。
-- **Calibration / adaptation**：利用真实数据修正已知系统性偏差。
-- **Coverage**：随机化必须覆盖真实变化，但不能无限放大范围。
+常见差异包括：质量和摩擦参数不准、执行器响应和延迟不一致、相机光照/纹理不同、IMU 偏置、轮胎打滑以及控制频率变化。
 
-## Key theory
+先把这些差异分类，比笼统地说“仿真不真实”更容易定位问题。
 
-### Reality Gap
+## 二、最危险的是策略学会利用仿真器的偶然细节
 
-Reality gap 不是一个单一误差。应按**动力学、感知、时间、环境和交互主体**拆分，再通过真实数据定位最主要差异。
+如果摩擦系数永远固定为某个精确值，策略可能形成对这个值高度敏感的动作；如果所有纹理和光照完全一致，视觉模型可能记住仿真外观而非任务结构。
 
-### Domain Randomization & Adaptation
+这类“仿真捷径”在训练指标上看不出来，部署时才暴露。
 
-随机化不是“参数越乱越鲁棒”。合理做法是根据真实误差来源定义分布，并验证真实参数是否处于训练覆盖范围内。
+## 三、域随机化让训练覆盖一组可能的世界
 
-## Representative methods
+训练时随机变化质量、摩擦、延迟、噪声、光照等，使策略必须在多个环境实例中都工作。目标不是让环境无限困难，而是让策略对**真实系统会发生的变化**不敏感。
 
-- Real-vs-sim trajectory / sensor comparison：先量化差距。
-- Dynamics / visual randomization：覆盖主要变化来源。
-- Calibration / adaptation：对已知系统性偏差做修正。
+随机化范围最好来自实机测量、厂家参数或合理工程范围。
 
-## Worked example
+## 四、范围太窄和太宽都会出问题
 
-**Reality Gap：**仿真路径跟踪很好，实车转弯总过冲：先比较转向执行器延迟和最大角速度，而不是立刻重训策略。
+太窄无法覆盖真实参数；太宽则会让学习问题不必要地困难，甚至逼迫策略变得过度保守。最有效的方法通常是先做简单实机实验，找出哪些参数真正影响闭环行为，再重点随机化。
 
-**Domain Randomization & Adaptation：**实车轮胎摩擦在 0.6–0.9 间变化，则围绕该范围随机化比从 0.01 到 3.0 无依据乱采样更合理。
+## 五、域随机化不是校准的替代品
 
-## Connections
+如果模拟器中的轮距写错一倍，不应该指望“随机化足够大”来掩盖。能测量的固定参数应先校准，剩余不可避免的不确定性再通过随机化处理。
 
-- → Robustness：跨域误差就是分布偏移。
-- → Real2Sim：用真实数据反向校准。
-- ← Stochastic & Robust Optimization。
-- → Robustness & Safety。
+## 六、先用小实验测出最敏感的参数
 
-## Further Reading
+可以分别改变摩擦、延迟、质量或噪声，观察任务指标变化。如果摩擦变化对策略几乎没有影响，就没必要给它很宽的随机范围；如果 50 ms 延迟就让控制明显恶化，延迟模型就应该重点校准。
 
-- Adversarial randomization、representation/domain adaptation。
+这种 sensitivity analysis 能让域随机化更有针对性。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Robot & Sensor Simulation](02-robot-sensor-simulation.md) · [Sim2Real & Real2Sim →](04-sim2real-real2sim.md)

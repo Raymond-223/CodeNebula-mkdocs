@@ -1,60 +1,48 @@
-# Game Models & Classification
+# 博弈、策略与收益
 
-> **Section:** Game Theory
+博弈论研究的不是“怎样打游戏”，而是**当多个决策者的结果彼此依赖时，怎样描述每个人的选择和利益。** 与普通优化最大的不同是：你的最佳动作取决于别人会做什么。
 
-## Why it matters
+<figure markdown="span">
+  ![博弈模型由参与者、可选策略、信息和收益共同决定。](../assets/diagrams/game-map.svg)
+  <figcaption>先把参与者、行动、收益、时序和信息结构写清，才能讨论均衡。</figcaption>
+</figure>
 
-先学会把问题写成“谁参与、能做什么、得到什么”，再区分合作/非合作、零和/一般和、静态/动态等结构。
+## 一、一个博弈至少要说明三件事
 
-## Core ideas
-
-- **Player / action / strategy**：谁做决策，以及一次选择和完整决策规则分别是什么。
-- **Payoff**：玩家如何评价联合结果。
-- **Interest structure**：合作/非合作、零和/一般和描述目标关系。
-- **Timing structure**：静态或动态决定是否存在行动顺序与历史。
-- **Information structure**：完全/不完全信息决定玩家知道哪些关键参数。
-
-## Key theory
-
-### Games, Strategies & Payoffs
-
-有限正则型博弈可写为
+有限博弈可写成
 
 $$
-G=(\mathcal N,\{\mathcal A_i\},\{u_i\}).
+G=(\mathcal N,\{\mathcal A_i\},\{u_i\}),
 $$
 
-其中 $u_i(\mathbf a)$ 取决于所有玩家的联合动作。博弈论的关键变化是：**你的最优动作取决于别人怎么做**。
+其中 $\mathcal N$ 是玩家集合，$\mathcal A_i$ 是玩家 $i$ 可选动作，$u_i(\mathbf a)$ 给出联合动作 $\mathbf a$ 下玩家 $i$ 的收益。
 
-### Game Classification
+收益不是“物理奖励”本身，而是对结果偏好的数学表达。
 
-分类不是标签游戏，而是决定解法。零和博弈可用 minimax；一般和博弈往往需要 Nash 等稳定概念；动态博弈必须考虑历史与未来反应；不完全信息需要对未知类型建模。
+## 二、动作和策略不是同一个概念
 
-## Representative methods
+动作是某一次选择，例如“左转”；策略是完整决策规则，例如“如果对方先占 A 区域，我就转向 B”。在一次同时行动的简单博弈里，纯策略可以退化成一个动作；在动态博弈中，策略必须说明不同历史下如何行动。
 
-- Payoff matrix：两人有限博弈最直观表示。
-- Mixed strategy：当确定动作不足以描述策略时，对动作分配概率。
+## 三、收益关系决定主体是合作还是竞争
 
-## Worked example
+零和博弈满足一方收益增加等量对应另一方减少；一般和博弈则可能既竞争又共享利益。两个机器人抢同一资源时可能竞争，但如果团队任务完成还有共同奖励，就不是严格零和。
 
-**Games, Strategies & Payoffs：**剪刀石头布中不存在一个永远最好的纯动作；“最佳选择”取决于对手策略，因此需要混合策略。
+这类结构决定后面能否使用 minimax，还是需要更一般的 Nash 均衡。
 
-**Game Classification：**两个机器人争同一资源且一方收益就是另一方损失，可近似零和；若两者既竞争资源又共享完成任务奖励，则是一般和。
+## 四、行动顺序会改变博弈本身
 
-## Connections
+同时行动时，玩家做决定时看不到对方本轮动作；顺序行动时，后行动者可能已经观察到先行动者选择。
 
-- → Multi-Agent Systems：把收益结构放进动态环境。
-- → Reinforcement Learning：学习可以作为求策略的一种方式。
-- → Game Theory 后续各章。
-- → MAS：合作/竞争/混合任务的组织方式不同。
+因此同样一组收益，在 simultaneous game 和 sequential game 中可能出现完全不同的最优策略。
 
-## Further Reading
+## 五、信息结构决定玩家知道什么
 
-- 严格支配、混合策略存在性证明。
-- Potential games、congestion games。
+完全信息并不等于“看见对方动作”。它通常指玩家知道博弈结构和收益；不完全信息则可能连对手类型、成本或目标都不知道，需要用信念描述未知信息。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+建模时要把**时序**和**信息**分开：先后行动和隐藏类型是两个不同维度。
 
-## Learning path
+## 六、收益矩阵只是最简单表示
 
-[← Section overview](index.md) · [Best Response & Nash Equilibrium →](02-best-response-nash.md)
+两人、有限动作、一次同时决策时，可以用矩阵列出所有联合动作收益；顺序博弈更适合博弈树；隐藏类型需要增加概率和信念。
+
+所以遇到现实问题时，先问“谁、能做什么、知道什么、何时行动、各自想要什么”，再选择博弈模型。

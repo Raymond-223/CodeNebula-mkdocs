@@ -1,72 +1,138 @@
-# Policy Gradient & Actor-Critic
+# 策略梯度、Actor–Critic 与 PPO
 
-> **Section:** Reinforcement Learning
+价值方法先估计“动作有多好”，再选最大值；策略方法则直接学习一个参数化策略 $\pi_\theta(a\mid s)$。这使它天然适合随机策略和连续动作，但也带来更高的梯度方差。
 
-## Why it matters
+## 一、策略梯度直接优化什么
 
-策略梯度直接优化策略；Actor-Critic 用价值估计给策略更新提供更低方差的反馈，因此两者应作为一条连续路线理解。
-
-## Visual intuition
-
-<figure markdown="span">
-  ![价值方法和策略方法不是算法清单，而是两种不同的学习对象；Actor-Critic 把两者组合。](../assets/diagrams/value-vs-policy.svg)
-  <figcaption>价值方法和策略方法不是算法清单，而是两种不同的学习对象；Actor-Critic 把两者组合。</figcaption>
-</figure>
-
-## Core ideas
-
-- **Policy $\pi_\theta(a\mid s)$**：直接参数化动作分布。
-- **Policy gradient**：沿提高期望回报的方向更新策略。
-- **Actor–Critic**：Actor 产生动作，Critic 用价值/优势信号指导更新。
-- **Bootstrapping**：Critic 利用下一状态估计减少纯 Monte Carlo 的方差。
-- **PPO ratio $\rho_t$**：限制新旧策略一次更新不要变化过大。
-- **Entropy**：在需要时维持一定探索。
-
-## Key theory
-
-### Policy-Based Methods
-
-REINFORCE 的基本形式为
+目标可以写成期望回报：
 
 $$
-\nabla_\theta J(\theta)=\mathbb E\left[\nabla_\theta\log\pi_\theta(a_t\mid s_t)G_t\right].
+J(\theta)=\mathbb E_{\tau\sim\pi_\theta}[G_0].
 $$
 
-PPO 不改变“策略梯度”的本质，而是通过 clipped surrogate objective 限制单次策略更新过大，提高工程稳定性。
-
-### Actor-Critic Methods
-
-Actor-Critic 常用 TD advantage
+策略梯度的核心形式为
 
 $$
-\hat A_t=r_{t+1}+\gamma V_\phi(s_{t+1})-V_\phi(s_t)
+\nabla_\theta J(\theta)
+=
+\mathbb E\left[
+\nabla_\theta\log\pi_\theta(a_t\mid s_t)
+\,Q^{\pi}(s_t,a_t)
+\right].
 $$
 
-近似“这个动作比当前状态的平均水平好多少”。SAC 进一步最大化“回报 + 熵”，适合连续控制并支持 off-policy 数据复用。
+直观理解很简单：
 
-## Representative methods
+- 如果一次动作带来较高长期回报，就提高它在类似状态下的概率；
+- 如果表现差，就降低它的概率。
 
-- PPO：常用 on-policy actor-critic 代表。
-- SAC：连续动作、off-policy actor-critic 代表。
+这里使用 $\nabla\log\pi$ 的好处，是不需要知道环境转移模型的导数，只需要能从策略采样。
 
-## Worked example
+## 二、为什么要减去 Baseline
 
-**Policy-Based Methods：**若某动作最终带来高回报，$G_t>0$ 会提高该动作在相似状态下的概率；若回报低，则概率会被压低。
+直接使用回报做权重通常方差很大。可以减去一个只依赖状态的 baseline：
 
-**Actor-Critic Methods：**机器人转向角是连续变量时，Actor 可以输出高斯策略参数；Critic 评价该状态下动作的长期效果。相比枚举所有转向角，更自然。
+$$
+Q^\pi(s,a)-V^\pi(s)=A^\pi(s,a).
+$$
 
-## Connections
+$A^\pi(s,a)$ 称为 advantage，表示“这个动作相比当前状态下的平均水平好多少”。
 
-- ← Optimization Basics。
-- → Control Theory：连续控制中策略输出直接对应控制量。
-- → Multi-Agent Learning：MAPPO/MADDPG 延续 actor-critic 结构。
+只要 baseline 不依赖当前采样动作，它不会改变策略梯度的期望方向，却能明显降低方差。因此 $V^\pi(s)$ 是最自然的 baseline。
 
-## Further Reading
+## 三、Actor–Critic：一个负责做，一个负责评
 
-- REINFORCE、GAE、TRPO、DDPG/TD3。
+Actor–Critic 把两件事拆开：
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+- **Actor**：策略 $\pi_\theta$，决定动作；
+- **Critic**：价值函数 $V_\phi$ 或 $Q_\phi$，评价当前策略。
 
-## Learning path
+![Actor-Critic 架构](../img/06-actor-critic.png)
 
-[← Section overview](index.md) · [← Value-Based Methods](02-value-based.md) · [Exploration & Partial Observability →](04-exploration-pomdp.md)
+最简单情况下，Critic 的 TD error
+
+$$
+\delta_t=r_{t+1}+\gamma V_\phi(s_{t+1})-V_\phi(s_t)
+$$
+
+可以作为 advantage 的一个低成本估计，然后 Actor 使用
+
+$$
+\theta\leftarrow
+\theta+\alpha\,\delta_t\nabla_\theta\log\pi_\theta(a_t\mid s_t).
+$$
+
+它的逻辑可以写成两条互相配合的更新：
+
+$$
+\delta_t=r_{t+1}+\gamma V_\phi(s_{t+1})-V_\phi(s_t),
+$$
+
+$$
+\theta\leftarrow\theta+\alpha_\theta\delta_t
+\nabla_\theta\log\pi_\theta(a_t\mid s_t),
+\qquad
+\phi\leftarrow\phi-\alpha_\phi\nabla_\phi\delta_t^2.
+$$
+
+Critic 先用 TD error 衡量“结果比预期好还是差”，Actor 再据此提高或降低所选动作的概率。两者共享同一个评价信号，但优化的对象不同。
+
+Critic 引入了自举偏差，但换来了更低方差和更高样本利用率。
+
+## 四、PPO 为什么要限制一次更新幅度
+
+策略梯度最大的问题之一，是参数一步改得过大时，采样数据很快变成“旧策略的数据”，性能甚至可能突然崩掉。
+
+PPO 先定义新旧策略对同一动作的概率比：
+
+$$
+\rho_t(\theta)=
+\frac{\pi_\theta(a_t\mid s_t)}
+{\pi_{\theta_{old}}(a_t\mid s_t)}.
+$$
+
+再使用裁剪目标：
+
+$$
+L^{CLIP}(\theta)=
+\mathbb E_t\left[
+\min\left(
+\rho_t(\theta)\hat A_t,
+\operatorname{clip}(\rho_t(\theta),1-\varepsilon,1+\varepsilon)\hat A_t
+\right)
+\right].
+$$
+
+![PPO 裁剪目标函数](../img/06-ppo-clip.png)
+
+当某个更新已经把概率比推得很远时，继续沿“让代理目标更大”的方向推进不会继续得到同样收益，因此梯度会被抑制。
+
+需要注意：**clip 不是硬约束**。它不能保证所有状态动作上的概率比始终落在 $[1-\varepsilon,1+\varepsilon]$ 内，只是用一个简单的代理目标降低过大更新的风险。
+
+## 五、优势估计为什么需要偏差—方差折中
+
+只看一步 TD error 方差低，但偏差依赖 Critic；直接使用完整回报偏差小，但方差大。GAE 用参数 $\lambda$ 把多步 TD error 加权起来：
+
+$$
+\hat A_t^{GAE}
+=
+\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}.
+$$
+
+因此它的作用不是增加一个新的学习目标，而是**给 PPO/Actor–Critic 提供更平滑的 advantage 估计**。
+
+## 六、连续动作为什么常用 Actor–Critic
+
+在连续动作空间里，无法像 DQN 那样枚举所有动作并取最大值。Actor 可以直接输出动作分布参数，例如高斯分布的均值和方差，再从中采样控制量。
+
+SAC 是一个代表性方法：它在回报目标之外加入策略熵，鼓励策略在学习阶段保持一定随机性：
+
+$$
+J(\pi)=\mathbb E\left[\sum_t
+\gamma^t\big(r_{t+1}+\alpha\mathcal H(\pi(\cdot\mid s_t))\big)
+\right].
+$$
+
+对入门学习而言，不需要继续展开 DDPG、TD3、TRPO 等算法谱系。真正需要掌握的是：
+
+> **Policy Gradient 给出方向；Critic 降低估计方差；PPO 控制更新尺度；SAC 展示连续控制中的随机 Actor–Critic。**

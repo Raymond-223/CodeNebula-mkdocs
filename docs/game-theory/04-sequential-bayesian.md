@@ -1,67 +1,41 @@
-# Sequential & Bayesian Games
+# 序贯博弈与贝叶斯博弈
 
-> **Section:** Game Theory
-
-## Why it matters
-
-同时行动、完全信息是最简单情形；一旦行动有先后或信息不完整，就必须把时间顺序和信念纳入策略。
-
-## Visual intuition
+现实决策经常同时包含两种复杂性：有人先行动、有人后行动；同时玩家又可能不知道对方的真实类型或成本。序贯博弈解决**行动顺序**，贝叶斯博弈解决**隐藏信息**，两者需要分开理解。
 
 <figure markdown="span">
-  ![顺序博弈需要把先后关系和可观察信息显式放进决策结构。](../assets/diagrams/game-tree.svg)
-  <figcaption>顺序博弈需要把先后关系和可观察信息显式放进决策结构。</figcaption>
+  ![博弈树把行动顺序和后续响应显式展开。](../assets/diagrams/game-tree.svg)
+  <figcaption>顺序行动使后行动者能够根据已经发生的动作做响应。</figcaption>
 </figure>
 
-## Core ideas
+## 一、顺序行动要用博弈树描述历史
 
-- **Extensive form / information set**：表示行动顺序以及玩家当时知道什么。
-- **Backward induction**：在完全信息有限树上从终局倒推。
-- **Stackelberg game**：领导者先承诺，跟随者随后回应。
-- **Type & prior**：用私有类型和先验表示不完全信息。
-- **Bayes-Nash equilibrium**：策略依赖类型时的最佳回应稳定点。
+博弈树节点表示当前历史，边表示可选动作，叶节点给出最终收益。策略不再只是一个动作，而要说明玩家在自己可能遇到的每个决策节点怎样行动。
 
-## Key theory
+## 二、逆向归纳从最后一步往前推
 
-### Sequential Games
+有限完全信息博弈中，可以先看最后行动者会选择什么，再把这个结果代回前一个节点，逐步向根节点回推。
 
-顺序改变策略空间：先行动者需要预测后行动者的最佳回应。Stackelberg 问题可写成
+这种 backward induction 的逻辑是：早期玩家做决定时，会预见后续玩家的理性响应。
 
-$$
-\max_{a_L}u_L(a_L,BR_F(a_L)).
-$$
+## 三、Stackelberg 结构体现领导者与跟随者
 
-它与同时行动 Nash 的解概念不同。
+领导者先承诺策略，跟随者观察后做最佳响应。领导者选择时必须把这个响应考虑进去。
 
-### Incomplete Information & Bayesian Games
+这与同时行动 Nash 的差别在于：**先行动本身可以形成战略优势或劣势。**
 
-Bayesian game 把收益写成 $u_i(a,\theta)$，玩家对未知类型按信念取期望。核心不是“猜对别人”，而是在给定信息结构下选择期望最优策略。
+## 四、不完全信息需要引入“类型”和信念
 
-## Representative methods
+如果卖家不知道买家的真实估值，可以把估值视为类型 $\theta$，并维护概率 $P(\theta)$。观察到动作后，再用 Bayes 规则更新对类型的信念。
 
-- Backward induction：完全信息有限树。
-- Leader-follower optimization：Stackelberg。
-- Bayesian best response。
+因此最优策略不仅依赖当前局面，也依赖“我认为对方是什么类型”。
 
-## Worked example
+## 五、顺序和隐藏信息常在真实系统中同时出现
 
-**Sequential Games：**两台机器人抢充电桩：若 A 先公布预约时间，B 再避开冲突，这是领导者—跟随者结构；若同时选时段，则是静态博弈。
+攻防、谈判、拍卖和非合作机器人都可能存在“我先行动，同时我不知道对方能力”。入门阶段不需要学习所有精炼均衡，只需要掌握两条主线：**顺序 → 预测后续响应；隐藏信息 → 维护并更新信念。**
 
-**Incomplete Information & Bayesian Games：**车辆不知道对方是“激进”还是“保守”，只能根据先验和已观察行为更新判断，再决定是否让行。
+## 六、能不能观察到前一步动作会改变解法
 
-## Connections
+顺序行动并不自动意味着后手看得见前手动作。若行动历史被隐藏，就形成 imperfect information，不能直接使用普通逆向归纳。
 
-- → Control / planning：决策顺序也会形成树搜索。
-- → Human-AI Interaction：人机协作中常出现 leader/follower 角色。
-- ← Conditional Probability & Bayes。
-- → MAS Communication：消息可能传递私有信息，也可能被策略性操纵。
+因此建模时除了写清“谁先动”，还要写清“后行动者在决策时到底知道什么”。这也是博弈树中 information set 存在的原因。
 
-## Further Reading
-
-- Subgame perfect equilibrium、signaling games、mechanism design。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Zero-Sum & Minimax](03-zero-sum-minimax.md) · [Repeated Games & Learning in Games →](05-repeated-learning.md)

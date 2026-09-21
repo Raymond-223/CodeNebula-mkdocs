@@ -1,46 +1,64 @@
-# Navigation & Robot Control
+# 机器人导航与控制
 
-> **Section:** Robotics
+导航不是某一个规划算法，而是一条持续运行的闭环：**定位机器人 → 理解环境 → 生成路径 → 产生局部动作 → 执行 → 再次观测。** 任何一环失效，最终表现都可能只是“机器人不走”。
 
-## Why it matters
+<figure markdown="span">
+  ![机器人导航把定位、地图、规划和控制闭合成一个持续循环。](../assets/diagrams/robot-stack.svg)
+  <figcaption>导航系统需要把状态估计、全局规划、局部控制和底盘执行连成闭环。</figcaption>
+</figure>
 
-导航不是某一个算法，而是定位、地图、规划、局部避障和控制形成的闭环系统。
+## 一、导航首先依赖可信的机器人状态
 
-## Core ideas
+规划器需要知道当前位置和朝向。如果定位已经漂移 2 m，后续路径即使数学上完美，也会在真实世界走错位置。因此导航问题的第一输入不是目标，而是**可靠的当前位姿**。
 
-- **Global planning**：较低频生成到目标的大方向。
-- **Local planning**：根据局部障碍和动力学实时修正。
-- **Tracking controller**：让真实机器人跟随参考轨迹。
-- **Recovery / fallback**：局部失败时安全退化。
+地图、局部障碍和机器人尺寸也必须使用一致坐标系。
 
-## Key theory
+## 二、全局规划回答“总体怎么到”，局部控制回答“现在怎么走”
 
-导航不是一个算法，而是一条闭环：
+全局规划使用较稳定地图寻找从当前区域到目标的可行路线；局部控制频率更高，根据当前速度和最新障碍生成短时间速度或转向命令。
 
-**Localization → Global Plan → Local Trajectory → Controller → Robot → Sensors → Localization**。
+这种分层避免了两个极端：所有动态变化都让全局规划器重算会太慢，只靠局部避障又容易陷入局部最优。
 
-任何一环的坐标、时间戳或频率出错，都可能表现成“规划算法不好”。
+## 三、局部控制不仅要跟路径，还要满足底盘约束
 
-## Representative methods
+差速车不能直接横移，车辆有最小转弯半径，机械平台还可能有速度和加速度限制。因此局部控制器不是简单把“下一个路径点减当前位置”当作速度命令，而要输出机器人真实可执行的控制。
 
-- Pure Pursuit / PID：简单轨迹跟踪。
-- MPC：带动力学与约束的跟踪。
+### 一个带限幅的 PID 控制循环
 
-## Worked example
+理论页解释 PID 为什么成立；工程层更关心采样、状态保存和执行器限幅：
 
-机器人发现动态障碍时，通常不需要每次重算整张全局图；局部规划先绕行，只有路线真正不可达时再触发全局重规划。
+```python
+integral = 0.0
+previous_error = 0.0
 
-## Connections
+while robot_enabled:
+    error = target_speed - measured_speed()
+    integral += error * dt
+    derivative = (error - previous_error) / dt
+    command = kp * error + ki * integral + kd * derivative
+    send_motor_command(max(-limit, min(limit, command)))
+    previous_error = error
+```
 
-- → Distributed Systems：ROS2/DDS 连接各导航节点。
-- → Human-AI Interaction：人可以监督目标和接管边界。
+真实实现还应处理积分饱和、传感器超时和固定周期调度；这段代码只展示闭环中的数据流。
 
-## Further Reading
+## 四、动态障碍会触发短期避让或重新规划
 
-- Behavior tree、Nav2 internals、whole-body control。
+局部层通常先尝试绕开突然出现的障碍；若前方通道持续被封堵、路径已经明显不可达，则需要通知全局层重新规划。是否重规划可以依据局部控制失败时间、路径阻塞程度或进度停滞判断。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 五、导航调试要沿数据流逐层定位
 
-## Learning path
+机器人不动时，可以按顺序检查：
 
-[← Section overview](index.md) · [← Path & Motion Planning](04-path-motion-planning.md)
+1. 定位是否稳定；
+2. 目标是否在正确坐标系；
+3. 全局路径是否生成；
+4. 局部控制器是否输出速度；
+5. 安全层是否把命令拦截；
+6. 底盘是否执行实际命令。
+
+这样比直接更换规划算法有效得多。很多导航故障最后只是 TF、时间戳或控制接口问题。
+
+## 六、真正可靠的导航还需要恢复行为
+
+现实中会出现局部地图异常、机器人被卡住、目标暂时不可达。系统应能够检测“长时间没有进度”，并执行清障、后退、重新定位、重新规划或请求人工干预。恢复机制不是附属功能，而是让机器人从一次性 Demo 变成长时间自主系统的关键。

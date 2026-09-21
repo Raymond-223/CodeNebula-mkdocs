@@ -1,60 +1,46 @@
-# Conditional Probability & Bayes
+# 条件概率与贝叶斯推断
 
-> **Section:** Mathematics for Intelligent Systems
-
-## Why it matters
-
-条件概率解决“已知新信息后如何更新判断”，Bayes 则把这种更新写成统一规则。
-
-## Visual intuition
+条件概率回答的是：**已经知道一些信息后，原来的判断应该怎样改变。** 这正是传感器融合、目标跟踪和机器人定位不断在做的事情。
 
 <figure markdown="span">
-  ![Bayes 规则把先验和新证据组合成后验，是状态估计和概率推断的共同直觉。](../assets/diagrams/bayes-update.svg)
-  <figcaption>Bayes 规则把先验和新证据组合成后验，是状态估计和概率推断的共同直觉。</figcaption>
+  ![Bayes 更新把先验与新观测结合成后验。](../assets/diagrams/bayes-update.svg)
+  <figcaption>先验表示观测前的信念，似然描述观测与假设的匹配程度，后验是更新后的信念。</figcaption>
 </figure>
 
-## Core ideas
-
-- **条件概率**：已知 $B$ 发生后 $A$ 的概率。
-- **独立性**：知道一个事件不会改变另一个事件的概率。
-- **Bayes 公式**：由先验和证据得到后验。
-- **似然**：在给定假设下看到数据的可能性。
-
-## Key theory
-
-条件概率为
+## 一、条件概率把背景信息写进概率
 
 $$
 P(A\mid B)=\frac{P(A\cap B)}{P(B)}.
 $$
 
-Bayes 公式把推断方向反过来：
+$P(A)$ 和 $P(A\mid B)$ 可以差很多，因为 $B$ 提供了新的上下文。例如“前方是障碍”的概率，在 LiDAR 已经测到近距离回波后会明显增加。
+
+## 二、Bayes 公式把“观测在某状态下多合理”反过来推状态
 
 $$
-P(H\mid D)=\frac{P(D\mid H)P(H)}{P(D)}.
+P(x\mid z)=\frac{P(z\mid x)P(x)}{P(z)}.
 $$
 
-核心不是背公式，而是区分**先验、证据、似然、后验**。
+其中 $P(x)$ 是 prior，$P(z\mid x)$ 是 likelihood，$P(x\mid z)$ 是 posterior。
 
-## Representative methods
+对推断而言，常写成比例形式
 
-- Bayesian update：持续融合新观测。
+$$p(x\mid z)\propto p(z\mid x)p(x).$$
 
-## Worked example
+## 三、先验不是主观随便猜，而是已有信息的数学表达
 
-假设传感器报警在“真的有障碍”时有 95% 概率触发，但障碍本身很少出现。即使报警，也不能直接说“95% 一定有障碍”；还必须乘上障碍的先验概率。
+机器人上一时刻的位置估计、地图约束、目标运动模型都可以形成 prior。新传感器观测只是新增证据，不应每次把过去信息全部丢掉。
 
-## Connections
+Bayes 递推正是“旧后验成为新先验”的循环。
 
-- → Perception：观测是证据，不等于真实状态。
-- → Game Theory：Bayesian Game 用类型概率描述不完全信息。
+## 四、最大似然和最大后验回答不同问题
 
-## Further Reading
+Maximum Likelihood 只寻找让观测最可能的参数；Maximum A Posteriori 还考虑 prior。数据很充分时二者可能接近，数据少或噪声大时先验影响更明显。
 
-- 共轭先验、变分推断。
+这解释了为什么“最像当前观测的状态”不一定是“综合所有信息后最可信的状态”。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 五、一个离散更新例子
 
-## Learning path
+假设机器人在 A/B 两个位置的先验概率分别为 0.7/0.3，传感器看到门。若在 A 看到门的概率为 0.2，在 B 为 0.9，则 Bayes 更新后 B 的概率会显著增加。
 
-[← Section overview](index.md) · [← Probability & Random Variables](03-probability-random-variables.md) · [Markov Processes →](05-markov-processes.md)
+不需要复杂算法，核心只是**先验 × 观测可信度，再归一化**。

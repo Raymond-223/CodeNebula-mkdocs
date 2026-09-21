@@ -1,63 +1,48 @@
-# Robot & Sensor Simulation
+# 机器人与传感器仿真
 
-> **Section:** Simulation & Sim2Real
-
-## Why it matters
-
-机器人仿真不仅要模拟刚体运动，还要模拟控制周期、传感器噪声、延迟和观测接口。
-
-## Visual intuition
+机器人仿真不仅要让刚体会运动，还要让软件看到与实机相似的传感器接口。只有这样，定位、规划和控制代码才能在仿真与实机之间尽量少改动。
 
 <figure markdown="span">
-  ![传感器仿真应从真实量经过采样、噪声、偏置和延迟后再交给算法。](../assets/diagrams/sensor-simulation.svg)
-  <figcaption>算法看到的应是“模拟观测”，而不是直接读取仿真器里的真值。</figcaption>
+  ![传感器仿真不仅生成理想真值，还要加入采样、噪声、延迟和坐标语义。](../assets/diagrams/sensor-simulation.svg)
+  <figcaption>传感器接口越接近实机，后续 Sim2Real 的软件改动越少。</figcaption>
 </figure>
 
-## Core ideas
+## 一、机器人本体模型至少要包含可运动结构
 
-- **Sensor model**：真实量到模拟观测的映射。
-- **Noise**：随机测量误差。
-- **Bias/drift**：随时间累积的系统误差。
-- **Latency**：采样与使用之间的时间延迟。
+移动机器人需要底盘尺寸、轮子位置、关节约束和执行器接口；机械臂需要连杆、关节和限位。碰撞几何可以比视觉模型更简单，只要能正确近似实际碰撞范围。
 
-## Key theory
+仿真模型的目标是支撑算法，不是做 CAD 展示。
 
-理想传感器会让算法在仿真中“作弊”。有效仿真至少应考虑分辨率、频率、视场、量化、噪声和延迟；对 IMU 还需关注 bias/drift。
+## 二、理想传感器只能用于最早期验证
 
-## Representative methods
+理想 LiDAR 每个测距都精确、IMU 没有偏置、相机没有曝光问题，这种环境适合先验证算法逻辑，但不能代表实机难度。
 
-- Camera rendering。
-- LiDAR ray casting。
-- IMU/encoder noise model。
+真实传感器至少存在随机噪声、固定偏置、量化、采样频率和延迟。
 
-## Minimal code
+## 三、噪声、偏置和延迟是三种不同误差
 
-噪声模型不需要一开始就很复杂；先显式区分真值、偏置和随机噪声即可。
+白噪声每次随机变化；bias 会长期把测量推向一个方向；latency 则让数据到达时已经过时。三者对算法的影响不同。
 
 ```python
-import random
+import numpy as np
 
-def measure(true_value, bias=0.05, sigma=0.02):
-    return true_value + bias + random.gauss(0.0, sigma)
-
-print(measure(1.0))
+def simulate_imu(true_acc, stamp, bias=0.03, sigma=0.02):
+    noise = np.random.normal(0.0, sigma, size=3)
+    return {"stamp": stamp,
+            "frame_id": "imu_link",
+            "linear_acceleration": np.asarray(true_acc) + bias + noise}
 ```
 
-## Worked example
+滤波可以减弱随机噪声，却不会自动修正未知固定 bias；延迟则会直接影响融合和控制相位。让仿真接口同时输出测量值、时间戳和坐标系，才能检验下游模块真正依赖的语义。
 
-若仿真里 LiDAR 永远无遮挡、零噪声，SLAM 在仿真中的成功率对实车几乎没有解释力。
+## 四、坐标系和时间戳应尽量复现实机语义
 
-## Connections
+如果实机 `/scan` 使用 `laser_frame`，仿真也应保持同样 frame 逻辑；如果实机 IMU 以 100 Hz 发布，仿真不应无意中以每个物理 step 无限频率输出。
 
-- → Perception / State Estimation。
-- → Domain Randomization。
+接口一致性比“仿真画面是否逼真”更直接影响代码迁移成本。
 
-## Further Reading
+## 五、故障仿真比单纯加噪声更有价值
 
-- Photorealistic rendering、sensor-specific calibration。
+真实系统会出现短时丢帧、遮挡、饱和和传感器离线。若安全和容错模块只在完美数据下测试，就无法验证异常路径。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Modeling & Physics Simulation](01-modeling-physics.md) · [Reality Gap & Domain Randomization →](03-reality-gap-randomization.md)
+可以逐步增加难度：先理想传感器验证功能，再加入统计噪声，最后加入延迟、丢包和特定故障。

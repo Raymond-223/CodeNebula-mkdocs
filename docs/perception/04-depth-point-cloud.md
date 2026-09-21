@@ -1,79 +1,63 @@
-# Depth, 3D Vision & Point Clouds
+# 深度、三维视觉与点云
 
-> **Section:** Perception
-
-## Why it matters
-
-深度把二维像素恢复为空间距离，点云则把这些空间测量组织成可直接用于几何推理的三维表示。
-
-## Visual intuition
+二维图像告诉我们像素位置和外观，却没有直接告诉“离相机多远”。深度和点云把视觉从二维投影重新扩展到三维几何，是机器人避障、建图和抓取的基础。
 
 <figure markdown="span">
-  ![深度既可以来自几何，也可以来自主动传感或学习；不同来源的误差结构不同。](../assets/diagrams/depth-modalities.svg)
-  <figcaption>深度既可以来自几何，也可以来自主动传感或学习；不同来源的误差结构不同。</figcaption>
+  ![深度可以来自双目、主动传感器或学习模型，并最终形成三维点。](../assets/diagrams/depth-modalities.svg)
+  <figcaption>不同深度来源误差特性不同，但都要经过坐标变换进入机器人几何空间。</figcaption>
 </figure>
 
-## Core ideas
+## 一、深度可以来自不同物理机制
 
-- **Depth**：相机射线方向上的距离。
-- **Stereo disparity**：左右图像匹配位移。
-- **Triangulation**：由多视角几何恢复 3D。
-- **RGB-D**：每像素同时有颜色和深度。
-- **Point cloud**：3D 离散点集合。
+常见来源包括：
 
-## Key theory
+- 双目视差：利用两个相机的几何三角关系；
+- RGB-D / ToF：主动测量光的传播或调制信息；
+- LiDAR：直接测距形成稀疏或较密集三维点；
+- 单目深度网络：从图像外观学习相对或绝对深度。
 
-### Depth & 3D Vision
+它们的量程、噪声、密度和失败场景都不同。
 
-双目中在理想针孔模型下，深度与视差近似满足
+## 二、已知深度后，像素可以反投影成三维点
+
+相机内参为 $(f_x,f_y,c_x,c_y)$，像素 $(u,v)$ 的深度为 $Z$，则
 
 $$
-Z=\frac{fB}{d},
+X=(u-c_x)\frac{Z}{f_x},\qquad
+Y=(v-c_y)\frac{Z}{f_y}.
 $$
-
-其中 $f$ 是焦距，$B$ 是基线，$d$ 是视差。视差越小，远距离深度越敏感。
-
-### Point Cloud Perception
-
-点云没有规则像素网格，处理方法通常围绕**邻域、体素、投影或稀疏卷积**构造结构。机器人基础阶段最重要的是坐标变换、滤波和几何分割。
-
-## Representative methods
-
-- Stereo / RGB-D：两种直接获得深度的代表。
-- Voxel/downsample：降低点云计算量。
-- Geometric clustering：把邻近 3D 点形成障碍候选。
-
-## Minimal code
-
-把每个像素的深度反投影到三维坐标，就能形成点云；后续再做滤波、分割和几何拟合。
 
 ```python
-def backproject(u, v, depth, fx, fy, cx, cy):
-    x = (u - cx) * depth / fx
-    y = (v - cy) * depth / fy
-    z = depth
+def back_project(u, v, z, fx, fy, cx, cy):
+    x = (u - cx) * z / fx
+    y = (v - cy) * z / fy
     return x, y, z
 ```
 
-## Worked example
+这一步把图像坐标重新映射到相机三维坐标系。
 
-**Depth & 3D Vision：**同样 1 像素视差误差，在远处对应的米制深度误差通常比近处大，因此远距离几何要更谨慎。
+## 三、点云必须放到统一坐标系才能融合
 
-**Point Cloud Perception：**室外 LiDAR 每帧数十万点，先体素降采样再去地面，可显著减少后续障碍聚类计算量。
+LiDAR 点在 `lidar` frame，相机反投影点在 `camera` frame，机器人规划通常使用 `base` 或 `map` frame。不同来源的点云若没有正确外参，就无法直接叠加。
 
-## Connections
+因此点云处理几乎总伴随刚体变换 $p_B=T^B_Ap_A$。
 
-- ← Camera Basics。
-- → Point Cloud Perception / SLAM。
-- → Robotics / Mapping。
-- → Multi-Modal Perception：点云与相机互补。
+## 四、点云处理通常先做“减少无用数据”
 
-## Further Reading
+原始点云可能包含数十万点。体素下采样、距离裁剪、地面去除等预处理可以显著减少后续计算量。关键是保留任务需要的几何结构，而不是追求所有点都留下。
 
-- Monocular depth、3D detection、PointNet/sparse convolution、BEV perception。
+一个典型处理接口按固定顺序组织步骤：
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+```python
+def prepare_cloud(cloud, transform):
+    cloud = cloud.remove_non_finite()
+    cloud = cloud.crop(min_range=0.2, max_range=30.0)
+    cloud = cloud.voxel_downsample(voxel_size=0.05)
+    return transform.apply(cloud)
+```
 
-## Learning path
+先清理非法值和任务外范围，再下采样，最后转换到统一坐标系，可以避免后续模块重复处理原始大点云。
 
-[← Section overview](index.md) · [← Detection & Segmentation](03-detection-segmentation.md) · [Multi-Modal Perception →](05-multimodal.md)
+## 五、深度误差会随距离和传感方式变化
+
+双目在远距离时视差变小，深度误差迅速增大；LiDAR 可能在玻璃、强反射或雨雾条件下产生异常；单目网络则可能受训练分布影响。规划器不应把所有深度值都当成同等可靠的精确真值。

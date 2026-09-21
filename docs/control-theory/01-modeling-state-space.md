@@ -1,82 +1,103 @@
-# Dynamic Models & State Space
+# 动态系统建模与状态空间
 
-> **Section:** Control Theory
+控制问题的第一步不是选 PID、LQR 或 MPC，而是回答：**系统现在处于什么状态，输入会怎样改变它，下一时刻会发生什么。** 动态模型就是把这三个问题写成数学关系。
 
-## Why it matters
+<figure markdown="span">
+  ![状态、输入和输出构成动态系统的基本关系。](../assets/diagrams/control-map.svg)
+  <figcaption>控制理论从“状态如何随输入演化”开始，再讨论反馈和控制器。</figcaption>
+</figure>
 
-动态系统描述“状态如何随输入和时间变化”；状态空间只是把这种动态关系写成适合分析和计算的统一形式。
+## 一、静态关系不能描述“系统会怎样变化”
 
-## Core ideas
+代数关系 $y=f(u)$ 只说明当前输入和当前输出的对应关系，但真实机器人、电机和车辆都有惯性：同样的油门，在不同速度下产生的后果不同；同样的位置误差，在不同速度方向下也需要不同控制。
 
-- **State & dynamics**：状态必须足以描述系统未来如何演化。
-- **Input / output**：控制器施加什么，以及系统测量什么。
-- **State-space equations**：用 $x_{t+1}=Ax_t+Bu_t$、$y_t=Cx_t+Du_t$ 统一表示线性动态。
-- **Controllability**：输入是否有能力影响需要控制的状态。
-- **Observability**：测量是否包含足够信息估计内部状态。
+因此控制系统必须引入**状态（state）**。状态是一组足以预测未来演化的变量，例如小车的位置和速度
 
-## Key theory
+$$
+x=\begin{bmatrix}p\\v\end{bmatrix}.
+$$
 
-### Dynamic Systems & Modeling
+给定当前 $x(t)$ 和控制输入 $u(t)$，模型就能描述下一瞬间状态如何改变。
 
-连续系统常写为
+## 二、连续系统通常写成微分方程
+
+一般形式为
 
 $$
 \dot x=f(x,u),\qquad y=h(x,u),
 $$
 
-线性系统写为 $\dot x=Ax+Bu$。模型不是越复杂越好，而是要保留与控制目标有关的动态。
-
-### State-Space Methods
-
-线性状态空间模型统一了多变量动力学。可控性矩阵
+其中 $x$ 是状态，$u$ 是控制输入，$y$ 是可测或关心的输出。若系统在工作点附近近似线性，可以写成
 
 $$
-\mathcal C=[B,AB,\ldots,A^{n-1}B]
+\dot x=Ax+Bu,\qquad y=Cx+Du.
 $$
 
-满秩时，线性系统在经典条件下可控。观测性有对偶结构。
+矩阵 $A$ 描述“系统自身怎样演化”，$B$ 描述“输入怎样作用于状态”。这两个矩阵比某个具体控制器更基础，因为后面的稳定性、LQR 和 MPC 都直接依赖它们。
 
-## Representative methods
+## 三、状态空间把高阶方程改写成一阶系统
 
-- First-principles modeling：由力学、电路等规律建立。
-- System identification：由输入输出数据估计模型。
-- State feedback：直接使用 $u=-Kx$。
+考虑质量—弹簧—阻尼系统
 
-## Minimal code
+$$
+m\ddot p+c\dot p+kp=u.
+$$
 
-离散状态空间最小实现就是一次矩阵更新。代码的价值在于把 $x_{k+1}=Ax_k+Bu_k$ 从符号变成“输入什么、输出什么”。
+令 $x_1=p$、$x_2=\dot p$，就得到
 
-```python
-import numpy as np
+$$
+\begin{aligned}
+\dot x_1 &= x_2,\\
+\dot x_2 &= -\frac{k}{m}x_1-\frac{c}{m}x_2+\frac{1}{m}u.
+\end{aligned}
+$$
 
-A = np.array([[1.0, 0.1], [0.0, 1.0]])
-B = np.array([[0.005], [0.1]])
-x = np.array([0.0, 1.0])          # position, velocity
-u = np.array([0.5])               # acceleration command
-x_next = A @ x + (B @ u).ravel()
-print(x_next)
-```
+也就是
 
-## Worked example
+$$
+\dot x=
+\begin{bmatrix}
+0&1\\
+-k/m&-c/m
+\end{bmatrix}x+
+\begin{bmatrix}
+0\\1/m
+\end{bmatrix}u.
+$$
 
-**Dynamic Systems & Modeling：**小车一维运动若只关心低速，可用 $\dot p=v,\ \dot v=u$ 近似；若研究轮胎极限，就需要更复杂模型。
+这一步很重要：无论原方程是二阶还是更高阶，都可以通过增加状态变量统一成一阶向量形式。
 
-**State-Space Methods：**两轮车的“位置、速度、姿态”相互耦合，仅根据一个位置误差调 PID 往往不够，状态反馈可以同时考虑多个变量。
+## 四、数字控制需要离散模型
 
-## Connections
+控制器运行在计算机上，只能每隔 $\Delta t$ 更新一次。连续模型因此要变成
 
-- → Robotics / Kinematics & Dynamics。
-- → Simulation：仿真器本质上也是动态模型。
-- → Robotics / State Estimation。
-- → LQR：在状态空间中系统化选择反馈矩阵。
+$$
+x_{k+1}=A_dx_k+B_du_k.
+$$
 
-## Further Reading
+最简单的欧拉离散化是
 
-- Nonlinear system identification、hybrid systems。
-- Canonical forms、observer design。
+$$
+x_{k+1}\approx x_k+\Delta t\,f(x_k,u_k).
+$$
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+它直观但步长太大时误差会明显，因此仿真和控制中必须把**采样周期**当成模型的一部分，而不是随便选一个数。对线性系统，精确离散化满足
 
-## Learning path
+$$
+A_d=e^{A\Delta t},\qquad
+B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
+$$
 
-[← Section overview](index.md) · [Feedback & Stability →](02-feedback-stability.md)
+欧拉法则用 $A_d\approx I+A\Delta t$、$B_d\approx B\Delta t$ 近似它。这个关系解释了离散模型为何依赖采样周期，以及过大的 $\Delta t$ 为什么会改变模型的稳定性。
+
+## 五、状态不是“能测到的所有量”
+
+状态需要足够预测未来，但不要求全部直接测到。车辆的速度可以由编码器估计，姿态可以由 IMU 与视觉融合得到。反过来，把大量与未来无关的量都塞进状态，只会增加估计和控制复杂度。
+
+实际建模时可以按三步检查：
+
+1. **是否缺变量**：同样的状态和输入是否可能产生明显不同的未来？
+2. **是否能获得**：状态是直接测量，还是需要估计？
+3. **模型是否够用**：当前控制频率和任务精度是否真的需要更复杂的动力学？
+
+模型的目标不是最大程度还原物理世界，而是以足够低的复杂度支持预测和控制。

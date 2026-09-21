@@ -1,69 +1,138 @@
-# Agents & Architectures
+# Agent 与多智能体系统
 
-> **Section:** Multi-Agent Systems
+单个 Agent 只需要考虑“环境怎样响应我的动作”；多个 Agent 同时决策后，**别人的动作也会改变我的结果**。多智能体系统真正增加的不是“多几个程序”，而是耦合、局部信息和协调问题。
 
-## Why it matters
+## 一、从单智能体 MDP 到 Markov Game
 
-“Agent 是什么”和“Agent 内部怎么组织决策”本质上是同一个入口问题，因此合并为一章。
-
-## Visual intuition
-
-<figure markdown="span">
-  ![Agent 之间的边可以代表通信、共同观测或任务依赖；MAS 的难点来自这些耦合。](../assets/diagrams/mas-network.svg)
-  <figcaption>Agent 之间的边可以代表通信、共同观测或任务依赖；MAS 的难点来自这些耦合。</figcaption>
-</figure>
-
-## Core ideas
-
-- **Agent & environment**：主体感知环境并通过动作实现目标。
-- **Interaction / joint action**：多个主体的结果依赖彼此行为。
-- **Reactive**：观测直接映射到动作，响应快。
-- **Deliberative**：维护模型/目标并规划。
-- **Hybrid**：低层快速反应 + 高层规划，是常见工程结构。
-- **State / memory**：在需要历史信息时保留内部状态。
-
-## Key theory
-
-### Agents & Multi-Agent Systems
-
-单智能体中环境动力学常被视为固定；多智能体中，其他 agent 也在决策和学习，因此同一动作的结果会依赖联合策略。
-
-动态多智能体决策常用 Markov Game：
+单智能体 MDP 的转移写成
 
 $$
-(\mathcal N,\mathcal S,\{\mathcal A_i\},P,\{\mathcal R_i\},\gamma).
+P(s'\mid s,a).
 $$
 
-### Agent Architectures
+有 $n$ 个主体时，联合动作记为
 
-架构选择本质上是**响应速度、模型复杂度与规划深度**之间的权衡。没有一种架构对所有 agent 都最好。
+$$
+\mathbf a=(a_1,\ldots,a_n),\qquad a_i\in\mathcal A_i,
+$$
 
-机器人系统中常见混合结构：安全避障在低层快速执行，高层负责目标分解和路径规划。
+转移变成
 
-## Representative methods
+$$
+P(s'\mid s,\mathbf a).
+$$
 
-- Reactive：直接从观测到动作，适合低延迟响应。
-- Deliberative：显式维护目标/模型并规划。
-- Hybrid：低层快速响应，高层负责规划与任务。
+每个主体还可能有自己的奖励
 
-## Worked example
+$$
+r_i=\mathcal R_i(s,\mathbf a,s').
+$$
 
-**Agents & Multi-Agent Systems：**三个机器人搬箱子：单个机器人能否移动并不只取决于自己的动作，还取决于另外两台是否同步施力。问题已经不是“单体规划复制三份”。
+于是同一个状态下，主体 $i$ 的动作好不好，不只取决于 $a_i$，还取决于其他主体的 $\mathbf a_{-i}$。
 
-**Agent Architectures：**遇到突然出现的人时，机器人不应等待高层规划器重新搜索整条路线；低层先刹停，高层再重新规划。
+这就是多智能体问题的第一层本质：**决策相互耦合。**
 
-## Connections
+## 二、局部观测让每个 Agent 看到的世界不同
 
-- ← Game Theory：提供收益与稳定性语言。
-- → Control Theory：低层控制负责快速稳定。
-- → Software Engineering：模块边界与接口影响 agent 可维护性。
+现实系统里，一个 Agent 往往只能获得局部观测 $o_i$，而不是完整状态 $s$。例如仓库机器人知道自己位置和附近障碍物，却不一定知道所有机器人当前任务。
 
-## Further Reading
+因此要区分：
 
-- BDI、Dec-POMDP、LLM-agent orchestration。
+- **state**：描述整个环境的真实变量；
+- **observation**：某个主体实际拿到的信息；
+- **message**：其他主体主动传来的信息；
+- **history**：主体过去的观测与动作。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+如果当前观测不足以决定下一步，就需要历史、记忆或通信，而不是简单把一个单智能体算法复制 $n$ 份。
 
-## Learning path
+## 三、多智能体为什么比单智能体难
 
-[← Section overview](index.md) · [Cooperation, Competition & Coordination →](02-coordination.md)
+### 3.1 非平稳性
+
+主体 $i$ 学习时，其他主体的策略也在变化。即使物理环境没有变，从 $i$ 的角度看，同一个 $(s,a_i)$ 对应的结果分布仍可能持续改变。
+
+这会破坏很多单智能体算法默认的“环境动力学稳定”直觉。
+
+### 3.2 信用分配
+
+完全合作时，所有主体可能共享同一个团队奖励。但“奖励相同”不代表每个动作贡献相同。
+
+例如三台机器人共同搬运，如果任务成功只给一个总奖励，就需要区分：是谁完成关键动作，谁只是恰好在场。否则学习信号会很模糊。
+
+### 3.3 联合空间增长
+
+如果每个主体有 $m$ 个动作，联合动作组合数量就是
+
+$$
+|\mathcal A_{joint}|=\prod_{i=1}^{n}|\mathcal A_i|,
+$$
+
+在同构情形下约为 $m^n$。因此枚举全部联合动作会很快变得不可行。
+
+这三个困难——**目标在移动、奖励难归因、组合数量增长**——基本解释了为什么 MARL 需要额外结构。
+
+## 四、Agent 架构只需要掌握三类
+
+### 4.1 Reactive：看到什么就立即反应
+
+反应式 Agent 可以写成观测到动作的直接映射：
+
+$$
+\pi(o)=
+\begin{cases}
+\text{停止}, & d(o)<d_{safe},\\
+\text{前进}, & d(o)\ge d_{safe}.
+\end{cases}
+$$
+
+优点是快、可预测，适合避障和安全保护；缺点是缺少长期规划。
+
+### 4.2 Deliberative：先维护状态，再规划
+
+慎思式 Agent 会维护内部世界模型，根据目标搜索动作序列。它适合任务规划，但计算更慢，而且依赖模型质量。
+
+### 4.3 Hybrid：高层规划，低层反应
+
+现实机器人最常见的是混合结构：
+
+```text
+Mission / Planner
+       ↓
+Local Controller
+       ↓
+Safety / Reactive Layer
+```
+
+高层负责“去哪、做什么”，低层负责“怎么稳定执行”，安全层负责在紧急情况下覆盖上层命令。
+
+## 五、把现实问题建模成 MAS 时先回答五个问题
+
+以多车任务分配为例：
+
+1. **主体是谁？** 每台车是否独立决策？
+2. **每个主体能看到什么？** 位置、任务、局部地图还是全局状态？
+3. **动作是什么？** 移动、接受任务、等待、通信？
+4. **目标是什么？** 总时间、能耗、安全，还是各自不同目标？
+5. **哪些变量需要共享？** 当前任务、剩余资源、局部发现？
+
+只有这些问题明确后，才有意义讨论通信协议、任务分配或 MARL。
+
+## 六、一个仓库机器人例子
+
+假设有 4 台 AGV 和多个搬运任务。
+
+- 每台车知道自己的位置、电量、当前任务；
+- 调度信息通过低带宽网络共享；
+- 同一任务不能被两台车重复执行；
+- 路口可能发生局部冲突；
+- 总目标是缩短完成时间，同时避免碰撞和电量耗尽。
+
+这里其实包含三个层次：
+
+```text
+Task allocation      谁去做哪个任务
+Coordination         多车动作怎样避免冲突
+Navigation/control   每台车怎样真正到达目标
+```
+
+把这三个层次分开，比直接说“做一个多智能体算法”更容易设计系统，也更容易定位失败发生在哪一层。

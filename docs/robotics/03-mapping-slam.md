@@ -1,50 +1,40 @@
-# Mapping & SLAM
+# 地图构建与 SLAM
 
-> **Section:** Robotics
-
-## Why it matters
-
-建图回答“环境长什么样”，定位回答“我在哪里”；SLAM 把两者耦合起来共同估计。
-
-## Visual intuition
+SLAM（Simultaneous Localization and Mapping）解决一个循环依赖：**机器人需要地图才能知道自己在哪，但又需要知道自己在哪才能把观测放进正确的地图位置。**
 
 <figure markdown="span">
-  ![SLAM 中位姿与地图互相依赖，回环检测用于纠正长期累计漂移。](../assets/diagrams/slam-loop.svg)
-  <figcaption>SLAM 中位姿与地图互相依赖，回环检测用于纠正长期累计漂移。</figcaption>
+  ![SLAM 由前端估计、地图约束和后端优化形成闭环。](../assets/diagrams/slam-loop.svg)
+  <figcaption>前端不断产生相对运动，后端利用长期约束修正累积漂移。</figcaption>
 </figure>
 
-## Core ideas
+## 一、单纯积分里程计为什么一定会漂
 
-- **Map**：环境的几何或语义表示。
-- **Mapping**：已知/估计轨迹下构建地图。
-- **SLAM**：轨迹和地图相互依赖，需要联合估计。
-- **Loop closure**：再次到达旧地点时纠正累计漂移。
+假设每一步位姿增量都只有很小误差，连续累积几百、几千步后，位置和角度误差仍会越来越大。尤其角度误差会改变后续平移方向，使轨迹逐渐偏离真实路径。
 
-## Key theory
+因此 SLAM 不能只靠“上一帧到下一帧”的局部估计，还需要长期约束。
 
-SLAM 的循环依赖是：位姿更准才能建好地图，地图更准又能反过来修正位姿。因此核心是数据关联与全局一致性，而不是“把传感器点画出来”。
+## 二、前端负责建立局部运动和数据关联
 
-## Representative methods
+视觉 SLAM 会从图像中找特征或直接利用像素信息，LiDAR SLAM 会做点云/扫描匹配。前端的任务是估计“我从上一时刻移动到了哪里”，并判断当前观测对应地图中的哪些结构。
 
-- Occupancy grid：最常用的二维环境表示。
-- Odometry：提供局部运动约束。
-- Pose graph optimization：利用回环等约束修正全局漂移。
+前端输出快、频率高，但它本身无法避免长期漂移。
 
-## Worked example
+## 三、后端把整条轨迹当成一个优化问题
 
-机器人绕一圈回到起点，如果估计位置没有闭合，loop closure 会增加约束并调整整条历史轨迹。
+后端可以把机器人不同时刻的位姿作为节点，把里程计、扫描匹配和闭环关系作为约束。若两个时刻实际上处于同一地点，闭环约束会告诉优化器：这两个位姿应该重合或接近。
 
-## Connections
+优化的结果不是简单修改当前位置，而是把误差在整条轨迹中重新分配，使所有约束尽可能一致。
 
-- ← Perception / Feature-Based Vision：视觉匹配可提供运动约束。
-- → Planning：地图是规划的环境模型。
+## 四、闭环检测为什么既重要又危险
 
-## Further Reading
+机器人走一圈回到旧地点时，正确闭环可以显著修正漂移；错误闭环则会把两个不同地点强行拉到一起，导致地图整体变形。
 
-- ORB-SLAM、LIO-SAM 等具体系统实现。
+因此闭环检测通常需要比普通帧间匹配更谨慎的验证，例如几何一致性、点云匹配得分或多帧确认。**错误闭环往往比没有闭环更糟。**
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 五、地图表示由任务决定
 
-## Learning path
+二维导航常用 occupancy grid；三维避障可能使用体素、点云或局部高度图；视觉系统还可能维护稀疏 landmark。地图不是越精细越好，分辨率越高意味着存储、匹配和更新成本也越高。
 
-[← Section overview](index.md) · [← Sensors & State Estimation](02-sensing-estimation.md) · [Path & Motion Planning →](04-path-motion-planning.md)
+## 六、SLAM 调试先沿数据链排查
+
+地图撕裂、轨迹跳变时，应先检查时间戳、TF、传感器外参和前端匹配；后端优化通常不是第一个怀疑对象。实机 SLAM 的大量问题来自**坐标和数据关联**，而不是优化公式本身。

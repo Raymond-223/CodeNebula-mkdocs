@@ -12,8 +12,8 @@
 <text x="323.0" y="198" text-anchor="middle" class="m">pose &amp; uncertainty</text>
 <path d="M 401.3333333333333 205.0 L 423.3333333333333 205.0" class="arrow"/>
 <rect x="429.3333333333333" y="130" rx="16" ry="16" width="156.66666666666666" height="150" class="accent"/>
-<text x="507.66666666666663" y="168" text-anchor="middle" class="s">Map / world model</text>
-<text x="507.66666666666663" y="198" text-anchor="middle" class="m">spatial context</text>
+<text x="507.66666666666663" y="160" text-anchor="middle" class="s"><tspan x="507.66666666666663" dy="0">Map / world</tspan><tspan x="507.66666666666663" dy="23">model</tspan></text>
+<text x="507.66666666666663" y="216" text-anchor="middle" class="m">spatial context</text>
 <path d="M 586.0 205.0 L 608.0 205.0" class="arrow"/>
 <rect x="614.0" y="130" rx="16" ry="16" width="156.66666666666666" height="150" class="box"/>
 <text x="692.3333333333334" y="168" text-anchor="middle" class="s">Planner</text>

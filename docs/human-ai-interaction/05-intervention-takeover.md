@@ -1,49 +1,41 @@
-# Intervention & Takeover
+# 人工干预与接管
 
-> **Section:** Human–AI Interaction
-
-## Why it matters
-
-接管流程必须设计上下文传递、权限切换和失败回退，否则“有人可以接管”并不等于“可以安全接管”。
-
-## Visual intuition
+接管不是一个按钮，而是一段**检测风险 → 告警 → 交接状态 → 人获得控制 → 系统降级或恢复**的状态迁移。真正危险的往往不是“没有接管功能”，而是接管发生得太晚或边界不清。
 
 <figure markdown="span">
-  ![安全接管必须传递当前状态、意图和风险，并明确何时完成权限切换。](../assets/diagrams/takeover.svg)
-  <figcaption>安全接管必须传递当前状态、意图和风险，并明确何时完成权限切换。</figcaption>
+  ![接管应被设计成检测、告警、交接、确认和恢复组成的状态过程。](../assets/diagrams/takeover.svg)
+  <figcaption>人工接管必须给人足够状态信息和理解时间。</figcaption>
 </figure>
 
-## Core ideas
+## 一、系统应该在完全失控以前发出接管请求
 
-- **Trigger**：触发接管的风险/能力边界。
-- **Handover**：控制权转移过程。
-- **Reaction time**：人需要时间理解状态并行动。
-- **Fallback**：人未响应时系统的保底行为。
+如果定位已经彻底丢失才请求人工接管，人可能来不及理解场景。更合理的是设置预警阈值：能力下降但仍可控时就提示，真正越过安全阈值时自动进入减速或停车。
 
-## Key theory
+## 二、接管前必须把关键状态交给人
 
-接管不是一个按钮，而是一段过程：**Detect boundary → Alert → Provide context → Transfer authority → Confirm control → Recover**。高风险系统还必须定义“人没有及时接管”时的安全动作。
+操作者需要知道当前速度、位置、障碍、任务目标、系统故障原因和自动控制最后准备做什么。没有上下文的“请立即接管”会把风险直接转移给人。
 
-## Representative methods
+## 三、控制权切换必须可确认
 
-- Clear alert + control-ownership indicator。
-- Minimal-risk fallback：人未及时接管时系统先保底。
+系统发出接管请求不等于人已经成功接管。界面应确认输入设备有效、控制模式已经切换、自动控制是否停止输出。
 
-## Worked example
+否则可能出现人和机器同时控制，或双方都以为对方在控制。
 
-机器人检测到定位置信度持续下降：先提示操作者；若跌破安全阈值则减速并请求接管；超时无人响应则停车，而不是继续盲走。
+## 四、安全降级应独立于人工响应速度
 
-## Connections
+人可能没有及时操作，因此系统仍需要 fallback：减速、保持姿态、停车或进入安全区域。人工接管是重要恢复路径，但不应成为唯一安全机制。
 
-- → Fault Detection。
-- → Levels of Automation。
+## 五、恢复自动模式也需要条件
 
-## Further Reading
+故障短暂消失后不应立即抢回控制。恢复前至少应确认定位、感知、通信和执行器重新达到要求，并明确由谁触发切换。
 
-- Takeover time modeling、adaptive autonomy。
+## 六、接管记录应该用于后续改进
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+每次接管都包含宝贵的“系统能力边界”信息。记录触发原因、接管前状态和人工操作，可以用于重新设计阈值、补充训练数据和验证恢复策略。
 
-## Learning path
+## 七、接管流程必须通过演练验证
 
-[← Section overview](index.md) · [← Trust & Explainability](04-trust-explainability.md)
+只有真正模拟“定位失效、障碍突然出现、通信中断”等场景，才能知道告警是否足够早、界面信息是否够用、操作者是否知道下一步做什么。接管机制若从未被触发测试，往往会在真正事故时暴露模式切换、输入设备或权限问题。
+
+因此人工接管也需要像故障恢复一样定期测试，而不是只在 UI 上保留一个按钮。
+

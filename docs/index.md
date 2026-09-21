@@ -1,48 +1,38 @@
-# CodeNebula — AI & Robotics Knowledge Map
+# CodeNebula — 智能系统研究与工程实践知识地图
 
-> 目标不是收录最多，而是用尽可能少的核心知识建立完整的 AI、机器人与自主系统认知框架。
+CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科全书。它是一套面向智能系统研究与工程实践的**最小充分知识地图**：先回答方法为什么成立，再说明算法如何组织，最后进入工程接口与真实系统。
 
 <figure markdown="span">
   ![CodeNebula minimum sufficient knowledge map](assets/diagrams/knowledge-map.svg)
-  <figcaption>全站只保留五个知识域和十二个 Section；高级分支不进入主路径。</figcaption>
+  <figcaption>学习路径从数学解释出发，经过理论与算法，最终落到工程实现和真实系统。</figcaption>
 </figure>
 
-## Learning philosophy
+## 阅读主线
 
-这版不再强制每个 Section 都有相同章节数，而遵循四个判断：
+$$
+\text{数学}\longrightarrow\text{理论方法}\longrightarrow\text{算法理解}
+\longrightarrow\text{工程实现}\longrightarrow\text{真实系统}
+$$
 
-- **能合并就合并**：如果两个主题只有放在一起才能形成完整逻辑，就不拆成两个页面。
-- **必须独立才独立**：状态估计、SLAM、规划这类会在后续反复被引用的能力节点保留独立章节。
-- **代表方法只服务于理解**：Q-Learning、PPO、PID、LQR、A*、EKF 等用于建立方法直觉，不扩展成算法百科。
-- **工程知识必须能落地**：涉及控制、机器人、网络、软件、仿真的地方保留少量短代码；数学则加入够用的数值计算，帮助理解公式如何真正运行。
+### 数学：为什么这些方法成立
 
-## Knowledge map
+线性代数、微积分、数值计算、概率、Bayes、Markov 过程和优化用于解释空间、变化、不确定性、递推与最优性。这里不提供 Python 数值库或调参教程。
 
-| Domain | Section | Core question |
-|---|---|---|
-| **Foundations** | [Mathematics for Intelligent Systems](mathematics/index.md) | 如何描述不确定性、动态过程与优化？ |
-| **Intelligent Systems** | [Reinforcement Learning](reinforcement-learning/index.md) | 智能体如何通过交互学习决策？ |
-|  | [Game Theory](game-theory/index.md) | 多个策略主体相互影响时如何分析行为？ |
-|  | [Multi-Agent Systems](multi-agent-systems/index.md) | 多个 Agent 如何组织、通信、分工与学习？ |
-| **Robotics** | [Control Theory](control-theory/index.md) | 如何让动态系统稳定地达到目标？ |
-|  | [Robotics](robotics/index.md) | 如何把建模、定位、规划和控制串成实体闭环？ |
-|  | [Perception](perception/index.md) | 如何把图像和点云变成可用于决策的环境表示？ |
-| **Systems** | [Distributed Systems & Networking](distributed-systems/index.md) | 多节点如何可靠通信、同步与容错？ |
-|  | [Software Engineering](software-engineering/index.md) | 如何把算法变成可维护、可部署、可验证的软件？ |
-| **Advanced Autonomous Systems** | [Simulation & Sim2Real](simulation-sim2real/index.md) | 如何让仿真与真实系统形成迭代闭环？ |
-|  | [Robustness & Safety](robustness-safety/index.md) | 不确定、故障和风险下如何维持安全行为？ |
-|  | [Human–AI Interaction](human-ai-interaction/index.md) | 人如何监督、共享控制并在必要时接管？ |
+### 理论方法：问题应该怎样被描述
 
-## Recommended order
+博弈论、多智能体系统和控制理论定义收益、信息、反馈、稳定性与约束。理论页使用公式、关系图和模型边界，不承担工程实现教学。
 
-**Mathematics → Reinforcement Learning / Game Theory → Multi-Agent Systems → Control / Robotics / Perception → Distributed Systems / Software Engineering → Simulation / Safety / Human–AI Interaction**
+### 算法理解：更新规则怎样连接概念
 
-这不是严格先修图。第一次学习时只沿主线前进；遇到项目需求再从 Further Reading 回补。
+强化学习用 Bellman 关系、TD error、策略梯度等公式级伪代码解释“当前估计、目标值和更新方向”，避免把算法章节变成某个框架的使用手册。
 
-## How to use the website
+### 工程实现：代码只解决接口与系统问题
 
-每章只保留必要模块：**Why it matters → Core ideas → Key theory → Representative methods → Worked example**。
+Robotics、Perception、Distributed Systems 和 Software Engineering 保留必要代码：坐标变换、PID 循环、路径规划、图像与点云处理、推理接口、TCP/UDP、Pub/Sub、ROS2、API、pytest、Docker 与 CI。
 
-数学基础额外保留一章 **Numerical Computation Essentials**，只覆盖有限精度、差分、线性求解、最小二乘、积分和迭代停止条件；不进入完整数值分析。
+### 真实系统：面对误差、故障和现实差距
 
-只有当代码能明显帮助理解“公式如何变成实现”时才加入 **Minimal code**；只有当空间结构、数据流或闭环关系用文字难以表达时才加入图。这样图片和代码都服务于理解，而不是装饰页面。
+Simulation & Sim2Real、Robustness & Safety、Human–AI Interaction 处理部署后才会暴露的问题：仿真和现实不一致、环境分布变化、组件故障、安全边界，以及人类如何监督、共享控制并在必要时接管。
+
+!!! note "内容边界"
+    每个 Section 只保留能连接上下游的核心概念。代码只出现在工程实现与真实系统；图片优先使用几何解释图、状态空间图、概率关系图、优化曲面图、架构图、数据流图、系统连接图和实验结果图。

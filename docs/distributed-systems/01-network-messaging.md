@@ -1,59 +1,64 @@
-# Networks & Message Passing
+# 网络通信与消息传递
 
-> **Section:** Distributed Systems & Networking
-
-## Why it matters
-
-先理解 TCP/UDP 等传输差异，再理解请求-响应和发布-订阅等消息模式，才能正确设计节点之间的接口。
-
-## Visual intuition
+分布式系统的第一事实是：**另一个节点不在本进程里，所有协作都必须经过网络。** 网络会延迟、丢包、重复、断开，因此“调用远端函数”和“调用本地函数”从根本上不是同一件事。
 
 <figure markdown="span">
-  ![请求—响应适合明确服务调用，发布—订阅适合松耦合的数据流。](../assets/diagrams/pubsub.svg)
-  <figcaption>请求—响应适合明确服务调用，发布—订阅适合松耦合的数据流。</figcaption>
+  ![发布订阅把发送者和接收者通过主题解耦。](../assets/diagrams/pubsub.svg)
+  <figcaption>请求响应适合一次性交互，发布订阅适合持续状态流和事件广播。</figcaption>
 </figure>
 
-## Core ideas
+## 一、TCP 和 UDP 提供的是不同传输语义
 
-- **Latency / bandwidth / loss**：网络有时延、容量上限和丢包，不应被当成理想总线。
-- **TCP vs UDP**：理解可靠有序字节流与低开销数据报的基本差异。
-- **Request-response**：适合明确的一次调用。
-- **Publish-subscribe**：适合连续数据流和松耦合广播。
-- **Topic / message contract**：消息需要按语义和数据契约组织。
+TCP 提供可靠、有序的**字节流**。它会重传丢失数据，但不替应用定义消息边界：连续两次 `send()` 在接收端可能被一次 `recv()` 读到，也可能被拆开。
 
-## Key theory
+UDP 保留数据报边界、延迟更直接，但可能丢包、乱序或重复。它适合对最新数据更敏感、允许偶尔丢失旧包的场景，例如部分高频状态流。
 
-### Network Communication Basics
+因此协议选择本质是**可靠性、时延和数据语义**之间的权衡。
 
-分布式程序必须默认存在延迟、重传、乱序和断连。TCP 提供可靠有序字节流，但不保证应用消息边界；UDP 保留数据报边界但不保证交付。
+### TCP/UDP 的最小接口差异
 
-### Message Passing & Publish-Subscribe
+```python
+import socket
 
-机器人系统常用 pub-sub 处理连续状态流，用 request/service 处理一次性查询，用 action/task 处理有进度和可取消的长任务。接口语义应跟交互模式一致。
+tcp = socket.create_connection((host, port), timeout=1.0)
+tcp.sendall(frame_message(payload))       # 应用层负责消息边界
 
-## Representative methods
+udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+udp.sendto(payload, (host, port))         # 一次发送对应一个数据报
+```
 
-- TCP / UDP：理解可靠性、时延和丢包之间的基本取舍。
-- Pub-sub：传感器和状态流。
-- Service / action：一次性查询与长时间任务。
+这只是发送侧骨架。生产系统还要定义长度前缀或帧格式、超时、重连、包大小和身份验证。
 
-## Worked example
+## 二、应用层仍然必须定义“什么是一条消息”
 
-**Network Communication Basics：**激光雷达 10 Hz 流偶尔丢一帧通常比“等待重传导致整条链路阻塞”更可接受；任务指令则通常不能静默丢失。
+无论 TCP 还是 UDP，系统都需要定义序列化格式、字段、版本和错误行为。一个任务消息至少要说明任务 ID、发送者、时间戳和状态，而不能只发送一个模糊字符串。
 
-**Message Passing & Publish-Subscribe：**相机图像适合 topic；“保存地图”适合 service；“导航到目标点”需要进度、取消和最终结果，更适合 action。
+JSON 便于调试，Protobuf/IDL 更适合严格接口和高效传输。格式本身不是重点，**双方对字段语义有共同契约**才是重点。
 
-## Connections
+## 三、Request/Response 适合问答，Publish/Subscribe 适合数据流
 
-- → Middleware / DDS / ROS2：把消息模式落实成可配置的数据接口。
-- → MAS Communication：传输机制与协作协议是不同层次，协议选择要服务于信息需求。
+查询参数、请求一次规划结果通常适合 request/response：调用方明确等待一个结果。
 
-## Further Reading
+里程计、传感器和状态事件则更适合 publish/subscribe：发布者只负责把数据发到 Topic，不需要知道有多少订阅者。这样可以降低模块耦合。
 
-- QUIC、拥塞控制、message broker internals。
+```python
+subscribers = {"robot.pose": [localizer, recorder]}
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+def publish(topic, message):
+    for consume in subscribers.get(topic, []):
+        consume(message)
+```
 
-## Learning path
+这个内存示例只说明解耦关系；跨进程系统还需要 broker 或 DDS、序列化、背压和交付语义。
 
-[← Section overview](index.md) · [Distributed Systems, Time & Asynchrony →](02-distributed-time.md)
+## 四、网络消息必须考虑“旧数据是否还有意义”
+
+机器人位置即使可靠送达，如果延迟两秒才到，可能已经没有使用价值。因此很多实时系统更关心**新鲜度**而不是“每一条都不能丢”。
+
+消息里常需要时间戳、序列号或 TTL。接收方应能丢弃过期数据，而不是把“收到”误认为“可用”。
+
+## 五、网络故障后系统要有明确退化模式
+
+链路断开时，系统可以缓存、重试、切换本地控制或进入安全状态，但不能无限阻塞等待远端恢复。尤其机器人控制链中，失联应该触发安全减速或本地自治，而不是继续执行旧指令。
+
+分布式设计最重要的习惯之一是：**任何远程调用都可能失败。**

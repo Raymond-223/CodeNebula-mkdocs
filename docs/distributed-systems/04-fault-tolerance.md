@@ -1,62 +1,50 @@
-# Fault Tolerance
+# 故障与容错
 
-> **Section:** Distributed Systems & Networking
+分布式系统中的节点会重启、进程会崩、网络会断、消息会超时。容错的目标不是让故障永远不发生，而是让**局部故障不会立刻变成整个系统失效**。
 
-## Why it matters
+## 一、超时只能说明“我没有按时收到结果”
 
-容错不是让故障消失，而是提前规定检测、隔离、降级、重试和恢复后的系统行为。
+请求超时可能因为服务真的宕机，也可能只是网络拥塞、GC 暂停或响应包丢失。观察者通常无法立即区分。
 
-## Core ideas
+因此超时是一种 failure suspicion，而不是绝对证明。设得太短会误判，设得太长又拖慢恢复。
 
-- **Fault**：部件出现异常。
-- **Failure**：系统无法提供预期服务。
-- **Redundancy**：通过副本/备份提高容错能力。
-- **Graceful degradation**：失败后降低能力，而不是完全崩溃。
+## 二、重试必须和幂等一起设计
 
-## Key theory
+最危险的情况是：服务端已经执行成功，但响应丢了。客户端超时后重试，如果操作会重复产生副作用，就可能出现重复扣款、重复建任务或机器人动作被执行两次。
 
-容错的基本链是
+请求 ID、幂等键和去重表都是为了让“同一个逻辑请求被传输多次”仍只产生一次效果。
 
-**Detect → Isolate → Recover / Reconfigure → Verify**。
+## 三、冗余的价值在于减少单点失效
 
-心跳只能说明“最近是否收到消息”，不能区分节点宕机、网络分区或严重拥塞。
+备用节点、双传感器、多个网络链路都属于冗余。但如果它们共享同一电源、同一交换机或同一软件 bug，故障仍可能同时发生。
 
-## Representative methods
+有效冗余要考虑**共同失效模式**，而不仅是组件数量。
 
-- Heartbeat + timeout。
-- Retry with idempotency。
-- Failover / fallback mode。
+## 四、恢复策略应明确系统进入什么状态
 
-## Minimal code
+故障后可以重启服务、切换备用节点、重新选举、降级运行或进入安全模式。关键是恢复过程中不要产生新的不一致。
 
-幂等命令让网络重试更安全：同一个 `command_id` 重复到达时，不重复产生副作用。
+例如机器人失去云端连接后，可以继续本地避障并停止接受新任务；这比不断阻塞重连更安全。
+
+## 五、故障隔离比“全局重启”更重要
+
+模块化系统应该尽量让一个组件失败只影响它负责的能力。感知服务失败时，日志和急停仍应可用；一个机器人掉线不应阻塞整个车队的状态更新。
+
+容错架构的目标就是把故障边界控制在可接受范围。
+
+## 六、连续失败时不要无限高频重试
+
+远端服务已经故障时，几十个客户端立即高频重试会制造更大负载，形成 retry storm。常见做法是指数退避、随机抖动和最大重试次数，让系统给故障组件恢复时间。
+
+这类机制不是为了“保证最终一定成功”，而是为了让恢复过程不会因为重试本身再次压垮系统。
 
 ```python
-executed = set()
-
-def handle(command_id, action):
-    if command_id in executed:
-        return "duplicate ignored"
-    action()
-    executed.add(command_id)
-    return "done"
+for attempt in range(max_attempts):
+    try:
+        return call_remote(request, timeout=1.0)
+    except TimeoutError:
+        wait(min(base_delay * 2**attempt, max_delay) + random_jitter())
+enter_degraded_mode()
 ```
 
-## Worked example
-
-高层规划节点失联时，底盘不应继续执行无限期旧指令；本地控制器可进入限速、停车或返航等预定义安全模式。
-
-## Connections
-
-- → Robustness & Safety / Fault Detection。
-- → Human-AI Interaction / takeover。
-
-## Further Reading
-
-- Raft/Paxos、Byzantine fault tolerance。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Consistency & Distributed State](03-consistency-state.md) · [Middleware: DDS & ROS2 →](05-middleware-ros2-dds.md)
+有限重试之后进入明确的降级状态，通常比无限等待更容易让系统保持可预测。

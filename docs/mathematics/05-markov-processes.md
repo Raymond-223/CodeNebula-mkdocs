@@ -1,48 +1,47 @@
-# Markov Processes
+# 马尔可夫过程
 
-> **Section:** Mathematics for Intelligent Systems
+Markov 性是一种状态建模假设：**给定当前状态以后，预测下一步不再需要更久以前的历史。** 强化学习的 MDP、很多状态估计模型都建立在这个思想上。
 
-## Why it matters
+## 一、“只看现在”成立的前提是状态足够完整
 
-Markov 过程是从静态概率走向序列决策的最短桥梁：只保留状态、转移和稳态等后续会用到的核心概念。
-
-## Core ideas
-
-- **Markov property**：给定当前状态后，未来与更早历史条件独立。
-- **Transition matrix $P$**：离散 Markov Chain 的一步转移。
-- **State**：必须包含做未来预测所需的信息。
-
-## Key theory
-
-Markov 性写作
+Markov 性写成
 
 $$
 P(S_{t+1}\mid S_t,S_{t-1},\ldots)=P(S_{t+1}\mid S_t).
 $$
 
-它并不等于“系统没有记忆”，而是说明**记忆已经被压缩进当前状态**。如果当前状态缺少速度、历史观测等信息，模型可能就不是 Markov 的。
+它不是说现实世界天然没有记忆，而是说我们定义的 $S_t$ 已经包含预测未来所需的信息。
 
-## Representative methods
+单张图像往往无法判断速度，把前几帧或显式速度加入状态后，过程才更接近 Markov。
 
-- Markov Chain：没有控制动作。
-- MDP：在 Markov 状态上加入动作与奖励。
-- POMDP：真实状态不可直接观测。
+## 二、有限状态 Markov 链由转移矩阵描述
 
-## Worked example
+若状态集合为 $\{1,\ldots,n\}$，转移矩阵
 
-只用机器人的当前位置描述运动通常不够，因为下一位置还取决于速度。把“位置 + 速度”一起作为状态后，模型更接近 Markov。
+$$P_{ij}=P(S_{t+1}=j\mid S_t=i)$$
 
-## Connections
+每一行和为 1。
 
-- → Reinforcement Learning：MDP 是 RL 的基础模型。
-- → Control Theory：状态空间模型同样依赖“状态足够性”。
+当前分布为行向量 $\mu_t$ 时，下一步分布为
 
-## Further Reading
+$$\mu_{t+1}=\mu_tP.$$
 
-- Stationary distribution、遍历性、Markov Chain Monte Carlo。
+## 三、多步预测来自矩阵的重复作用
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+$$\mu_{t+k}=\mu_tP^k.$$
 
-## Learning path
+这说明很多轨迹概率可以通过线性代数统一计算，而不需要逐条枚举所有路径。
 
-[← Section overview](index.md) · [← Conditional Probability & Bayes](04-conditional-bayes.md) · [Optimization, Constraints & Uncertainty →](06-optimization-under-uncertainty.md)
+## 四、长期行为不等于每条样本轨迹都一样
+
+某些 Markov 链经过足够长时间会趋近 stationary distribution，但单条轨迹仍然随机。长期分布描述的是访问频率和概率，不是“系统最终停在某个固定状态”。
+
+入门阶段知道这个区别即可，不需要展开完整遍历性理论。
+
+## 五、MDP 只是在 Markov 过程上加入动作和奖励
+
+当转移概率还受到动作影响
+
+$$P(s'\mid s,a),$$
+
+并且每一步产生奖励，就进入 Markov Decision Process。理解 Markov 状态后，MDP 的结构会自然很多。

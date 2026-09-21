@@ -1,54 +1,62 @@
-# Version Control
+# Git 与版本协作
 
-> **Section:** Software Engineering
+Git 最重要的不是命令数量，而是理解三个动作：**保存一个可回退的版本、在独立分支上修改、把变化安全合并回来**。
 
-## Why it matters
+## 一、Commit 是一次有意义的状态快照
 
-版本控制不是备份工具，而是让变更可追踪、可评审、可回滚，并为并行协作提供共同历史。
+工作区文件不断变化，`git add` 选择本次要记录的变化，`git commit` 把它们保存为一个可追踪版本。
 
-## Core ideas
-
-- **Commit**：一次有意义的变更快照。
-- **Branch**：独立开发线。
-- **Merge/Rebase**：整合历史的两种方式。
-- **Remote**：团队共享仓库。
-
-## Key theory
-
-Git 的重点不是命令数量，而是保持历史可理解：**小而完整的提交、明确提交信息、代码审查前可重现**。不要把大文件、密钥、构建产物随意放进仓库。
-
-## Representative methods
-
-- Small commits + review：让变更可理解、可回滚。
-- Tag/release：把代码版本与实验/交付绑定。
-- `.gitignore`：排除缓存、密钥、生成物。
-
-## Minimal commands
-
-版本控制真正需要先掌握的命令很少：检查状态、只暂存本次变更、提交、查看差异。
+最小工作流：
 
 ```bash
 git status
-git diff
-git add path/to/file
-git commit -m "fix: handle stale sensor timestamp"
+git add src/ tests/
+git commit -m "fix planner boundary handling"
 ```
 
-## Worked example
+好的 commit 应该只做一件相对完整的事。把“改 UI、重构算法、更新依赖、修测试”全部塞进一次提交，会让代码审查和回退都变困难。
 
-一次提交同时改 20 个无关文件很难审查；把“修传感器时间戳”和“重构 UI”分成两个提交，回滚和定位问题都更容易。
+## 二、Branch 的意义是隔离正在进行的修改
 
-## Connections
+创建功能分支：
 
-- → Reliability：可回滚是工程恢复能力。
-- → Experiment reproducibility：代码版本必须和结果绑定。
+```bash
+git switch -c feature/task-api
+# 修改并提交
+git switch main
+git merge feature/task-api
+```
 
-## Further Reading
+分支并不是完整复制一份项目，而是让不同提交历史可以暂时分开发展。它最有价值的场景是：主分支继续保持可用，同时新功能、实验或修复可以独立进行。
 
-- Rebase/merge 策略、monorepo tooling。
+## 三、冲突不是 Git 出错，而是 Git 无法替你做决定
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+两个人修改同一段代码时，Git 可能无法自动判断应该保留哪一边。此时需要人工理解上下文，然后重新测试。
 
-## Learning path
+处理冲突的顺序应该是：
 
-[← Section overview](index.md) · [← Modular Design & APIs](02-modular-apis.md) · [Testing & Debugging →](04-testing-debugging.md)
+1. 看清双方分别改了什么；
+2. 决定最终代码应该表达什么；
+3. 删除冲突标记；
+4. 运行测试；
+5. 再提交合并结果。
+
+不要只为了让冲突消失而随便选择 “ours” 或 “theirs”。
+
+## 四、Pull Request 是一次可审查的变化集合
+
+多人协作时，常见流程是：
+
+```text
+Issue/Task → Branch → Commits → Pull Request → Review → Merge
+```
+
+代码审查主要看四件事：逻辑是否正确、接口是否清楚、测试是否覆盖关键行为、是否引入不必要复杂度。
+
+一个 PR 如果大到审查者无法建立完整心智模型，通常说明它应该继续拆小。
+
+## 五、Git 最重要的安全能力是“可追溯、可回退”
+
+遇到问题时，先用 `git diff`、`git log` 看变化，再决定恢复方式。不要养成“出错就手动复制旧文件覆盖”的习惯，否则历史会失去可信度。
+
+对于学习和科研项目，掌握 `status / add / commit / switch / merge / pull / push / diff / log` 已经足够覆盖大多数场景。更复杂的 rebase、cherry-pick 等操作可以在真正需要时再学。

@@ -1,42 +1,58 @@
-# Detection & Segmentation
+# 目标检测与图像分割
 
-> **Section:** Perception
+检测和分割都属于语义感知，但输出粒度不同。选择方法前应先问：**后续模块到底需要知道“有没有”“在哪里”，还是需要精确到每个像素的区域？**
 
-## Why it matters
+## 一、四类常见视觉输出不要混在一起
 
-检测回答“目标在哪里”，分割回答“哪些像素属于它”；具体 CNN/Transformer 只是实现这种映射的模型。
+- **Classification**：整张图属于什么类别；
+- **Detection**：图中有哪些目标，以及每个目标的边界框；
+- **Semantic segmentation**：每个像素属于什么语义类别；
+- **Instance segmentation**：除了像素类别，还区分同类的不同个体。
 
-## Core ideas
+它们不是简单的“高级程度”排序，而是回答不同问题。
 
-- **Classification**：整图类别。
-- **Detection**：类别 + 边界框。
-- **Semantic segmentation**：每像素类别，不区分同类实例。
-- **Instance segmentation**：每个实例独立掩膜。
+## 二、检测器的共同任务是“分类 + 定位”
 
-## Key theory
+现代检测器结构差异很大，但输出都要解决两个部分：候选区域属于什么类别，以及位置参数是什么。训练损失通常也同时包含分类误差和框回归误差。
 
-任务选择由下游需求决定：只需要“前方有人”可用检测；需要精确可行驶区域边界时，分割通常更合适。不要围绕某个网络名字组织知识，而应围绕输出表示组织。
+机器人如果只需要粗略障碍位置，边界框可能已经足够；若机械臂要沿物体轮廓抓取，实例掩码才更合适。
 
-## Representative methods
+## 三、分割把空间边界表达得更细
 
-- Object detector：输出类别和位置。
-- Segmentation model：输出像素级区域。
+语义分割会给每个像素一个类别，例如可行驶区域、墙面、天空；实例分割进一步把“两个相邻的人”分成不同实例。
 
-## Worked example
+这种精细输出需要更昂贵的像素级标注和计算，因此不要为了“模型更先进”而使用超过下游需求的表示。
 
-导航系统只需知道障碍物大致框时，检测足够；机械臂抓取需要目标精确轮廓时，实例分割更有用。
+## 四、IoU 同时衡量位置和区域重合程度
 
-## Connections
+对预测区域 $B_p$ 和真实区域 $B_g$，常用
 
-- → Robotics / Planning：感知输出最终要转为障碍/语义约束。
-- → Robustness：检测置信度不等于安全概率。
+$$
+\operatorname{IoU}(B_p,B_g)=\frac{|B_p\cap B_g|}{|B_p\cup B_g|}.
+$$
 
-## Further Reading
+IoU 越大，预测和真实区域越接近。检测评测还会结合 precision、recall 和不同 IoU 阈值，但入门阶段先理解：**检测正确不仅是“类别认对”，还要“位置足够准”。**
 
-- YOLO、DETR、SAM 等具体模型家族。
+## 五、置信度阈值直接改变漏检和误检的权衡
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+阈值太高，会丢掉低置信度但真实的目标；阈值太低，又会产生大量误报。因此“模型分数”必须结合任务风险选择阈值。自动驾驶对行人漏检的代价，和普通图片搜索的漏检代价完全不同。
 
-## Learning path
+## 六、检测、分割和跟踪是连续系统中的不同角色
 
-[← Section overview](index.md) · [← Feature-Based Vision](02-feature-vision.md) · [Depth, 3D Vision & Point Clouds →](04-depth-point-cloud.md)
+检测只处理当前帧“有什么”；跟踪还要判断下一帧哪个目标是同一个实体，并维持速度和身份。检测器本身并不天然解决身份连续性。
+
+工程设计应先明确后续规划器需要框、掩码还是持续 ID，再决定感知输出，不要把所有能力堆在一个模型里。
+
+## 七、推理接口应隔离模型细节
+
+下游模块最好只依赖稳定的输入输出契约，而不是依赖某个训练框架：
+
+```python
+class Detector:
+    def predict(self, image) -> list[dict]:
+        """Return {label, score, box_xyxy} records in image coordinates."""
+        raw = self.backend.run(self.preprocess(image))
+        return self.postprocess(raw, image.shape)
+```
+
+这样可以单独替换推理后端，同时让阈值、坐标恢复和输出字段保持可测试。

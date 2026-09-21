@@ -1,69 +1,81 @@
-# Task Allocation & Distributed Decision Making
+# 任务分配与分布式决策
 
-> **Section:** Multi-Agent Systems
+当多个 Agent 都能执行多个任务时，系统必须回答：**谁去做什么，以及谁来决定这件事。** 这既是组合优化问题，也可能受到通信、私有信息和故障的限制。
 
-## Why it matters
+## 一、先把任务分配写成代价矩阵
 
-多智能体协作最终要落到两个问题：**谁负责什么**，以及**每个 agent 在只掌握局部信息时怎样继续做决定**。把任务分配和分布式决策放在一起，更接近真实系统的工作链。
+假设 $c_{ij}$ 表示 Agent $i$ 执行任务 $j$ 的代价，例如距离、时间或能耗。
 
-## Core ideas
-
-- **Task / resource**：需要执行的工作与时间、能量、车辆、带宽等有限资源。
-- **Assignment**：任务到 agent 的映射。
-- **Cost / utility**：评估分配质量。
-- **Local information**：每个 agent 只能访问部分状态。
-- **Decentralized decision**：执行时不依赖中心节点实时给出每一步动作。
-- **Consensus / coordination**：节点通过必要的信息交换减少冲突。
-
-## Key theory
-
-典型分配问题可以写成
+一对一分配可以写成：
 
 $$
-\min_x \sum_{i,j} c_{ij}x_{ij},
+\min_x\sum_{i,j}c_{ij}x_{ij}
 $$
 
-再加上“一个任务只能分给允许的 agent”“资源不能超限”等约束。真正部署后，即使初始分配来自中心节点，每个 agent 仍要面对延迟、局部观测和任务变化，因此需要本地决策和有限通信。
+满足每个任务最多分给一个主体、每个主体的容量限制等约束。
 
-主线原则是：**中心化便于使用全局信息，分布式执行提高扩展性与故障隔离；二者可以组合，而不是二选一。**
+如果所有代价都可以集中获得，标准线性分配问题可以通过组合优化方法求解。其关键不是某个库函数，而是二元变量 $x_{ij}\in\{0,1\}$ 是否准确表达“主体 $i$ 接受任务 $j$”，以及容量、唯一性等约束是否完整。
 
-## Representative methods
+这里最重要的不是算法名字，而是先把“谁做哪个任务”变成明确的**决策变量、代价和约束**。
 
-- Centralized assignment：信息充分、规模较小时最直接。
-- Auction / bidding：用局部成本或效用做分配。
-- Local policy + shared state：分配后由各 agent 本地执行并共享必要状态。
+## 二、为什么真实系统不总能集中求最优
 
-## Minimal code
+集中式方法默认一个中心节点能拿到所有信息，并且计算结果能可靠下发。现实中常遇到：
 
-这个贪心例子只帮助理解“任务—资源—代价”的结构，不代表真实系统的最优算法。
+- 每个 Agent 只知道自己的成本；
+- 网络存在延迟或断连；
+- 任务持续动态出现；
+- 中心节点可能成为单点故障；
+- 某些主体有自己的目标，而不是完全合作。
 
-```python
-tasks = {"T1": 4, "T2": 7, "T3": 2}
-agents = {"A1": 0, "A2": 0}
+因此工程上常接受“局部计算 + 少量通信 + 足够好的结果”，而不是不惜代价追求一次性的全局最优。
 
-for task, load in sorted(tasks.items(), key=lambda x: -x[1]):
-    agent = min(agents, key=agents.get)
-    agents[agent] += load
-    print(task, "->", agent)
+## 三、市场式分配的核心是“报价”
+
+如果主体能估计自己执行任务的代价，就可以发送 bid：
+
+```text
+task announced
+    ↓
+agents compute local bid
+    ↓
+select winner
+    ↓
+confirm assignment
 ```
 
-## Worked example
+合同网（Contract Net）就是一个典型流程：管理者发布任务，候选 Agent 根据局部状态报价，管理者选择合适方案并确认。
 
-三台机器人抢占多个目标点时，可先根据距离、剩余电量和能力分配任务；执行过程中，每台车只交换目标占用状态和邻车位置，局部重规划即可，不必持续上传全部原始传感器。
+它的价值在于：**全局节点不需要知道每个 Agent 内部怎样计算成本。**
 
-## Connections
+拍卖机制还能进一步处理自利主体，但这时需要考虑“主体是否会虚报成本”。机制设计是一个更大的主题；在 MAS 主线里只要知道：当主体目标不一致时，单纯求组合最优已经不够，还必须考虑规则是否能诱导真实行为。
 
-- → Optimization：分配问题通常是约束组合优化。
-- → Distributed Systems：消息延迟、一致性和故障会改变可执行策略。
-- → Robotics：分配完成后进入单车规划与控制。
-- → MARL：学习方法可以替代部分人工规则，但不会消除通信与执行约束。
+## 四、动态任务需要不断重新分配
 
-## Further Reading
+机器人系统里的任务通常不是一次性静态列表。新任务到来、机器人故障、电量下降都会改变原来的分配。
 
-- Hungarian algorithm、DCOP、CBBA、distributed MPC。
+因此分配算法还要考虑**重规划成本**：理论上更优的新方案，如果需要所有机器人立刻换目标，实际执行可能更差。
 
-> 主学习路径只要求分清“全局分配”和“局部执行”两个层次。
+一个实用策略是定义事件集合
 
-## Learning path
+$$
+E=E_{failure}\cup E_{priority}\cup E_{cost},
+$$
 
-[← Section overview](index.md) · [← Communication & Information Sharing](03-communication.md) · [Multi-Agent Learning & CTDE →](05-multi-agent-learning.md)
+仅当故障、新高优先级任务，或代价变化超过阈值时触发重新分配。这样把“何时重算”也纳入决策模型，避免系统因小扰动频繁切换任务。
+
+这比每个控制周期都重新求一次全局分配更稳定。
+
+## 五、分配与路径规划不要混在一起
+
+“任务 A 分给机器人 2”只回答了**谁做**；机器人 2 怎样绕开其他机器人到达目标，是另一个协调和导航问题。
+
+典型层次可以写成：
+
+```text
+Task allocation  →  Who does what?
+Coordination     →  How to avoid mutual conflict?
+Planning/control →  How does each robot execute it?
+```
+
+如果把三层全部塞进一个巨大优化器，模型会迅速变复杂，也更难调试。最小充分的工程设计是先把层次分开，再在必要处交换代价、路径占用或任务状态。

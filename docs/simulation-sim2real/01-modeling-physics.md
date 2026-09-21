@@ -1,73 +1,60 @@
-# Modeling & Physics Simulation
+# 建模与物理仿真
 
-> **Section:** Simulation & Sim2Real
+物理仿真不是把现实世界“完整复制”进计算机，而是构造一个足够准确、可以快速计算的近似模型。真正需要问的是：**哪些物理因素会影响当前任务，哪些可以忽略。**
 
-## Why it matters
+## 一、模型永远是现实的有目的简化
 
-仿真首先是选择抽象层级：哪些物理必须保留，哪些可以忽略；数值积分和接触模型只是这种抽象的实现。
+低速移动机器人导航时，可能只需要刚体运动、轮地摩擦和碰撞；研究机械臂抓取时，接触、摩擦和关节动力学就更重要；研究视觉感知时，纹理和光照又会成为主要因素。
 
-## Visual intuition
+因此模型复杂度应由研究问题决定，而不是“参数越多越真实”。
 
-<figure markdown="span">
-  ![Sim2Real 不是一次“从仿真导出模型”，而是现实数据不断反向校准仿真的循环。](../assets/diagrams/sim2real-loop.svg)
-  <figcaption>Sim2Real 不是一次“从仿真导出模型”，而是现实数据不断反向校准仿真的循环。</figcaption>
-</figure>
+## 二、仿真器把连续动力学离散成一步一步更新
 
-## Core ideas
+连续系统满足
 
-- **Model / simulator**：模型定义规律，仿真器按模型推进状态并生成观测。
-- **Fidelity & validation**：只要求对当前任务足够准确，并用真实数据验证。
-- **Integrator / timestep**：连续动力学如何在离散时间中推进。
-- **Contact**：碰撞、摩擦和约束会显著改变机器人行为。
-- **Numerical stability**：时间步和参数不能让数值误差不断放大。
+$$\dot x=f(x,u).$$
 
-## Key theory
+计算机只能用有限步长 $\Delta t$ 推进。最简单的显式欧拉法为
 
-### Modeling & Simulation
-
-仿真建模的原则是**按用途决定精度**。用于路径规划的底盘模型不一定需要轮胎有限元；用于抓取接触稳定性时，接触参数又可能非常关键。
-
-### Physics Simulation
-
-更小 timestep 通常提高数值精度但增加计算量；接触刚度、摩擦和求解器设置会显著影响移动/抓取行为。仿真“看起来不卡”不代表动力学正确。
-
-## Representative methods
-
-- Start simple：先建立最小可用模型。
-- Validate against measurements：用真实数据检查模型是否够用。
-- Timestep / contact tuning：只调整会影响任务结果的关键仿真参数。
-
-## Minimal code
-
-数值积分把连续动力学变成离散更新。时间步过大时，速度和接触过程都会产生明显数值误差。
+$$x_{k+1}=x_k+\Delta t\,f(x_k,u_k).$$
 
 ```python
-def euler_step(x, v, force, mass, dt):
-    a = force / mass
-    v_next = v + a * dt
-    x_next = x + v_next * dt
-    return x_next, v_next
+def euler_step(position, velocity, acceleration, dt):
+    velocity = velocity + acceleration * dt
+    position = position + velocity * dt
+    return position, velocity
 ```
 
-## Worked example
+步长越小通常越接近连续系统，但计算量也越大。步长过大可能引入明显数值误差甚至不稳定。
 
-**Modeling & Simulation：**如果目标是验证三车任务分配，先准确建模速度、转向、通信延迟即可；螺丝位置和外壳纹理通常不是首要误差源。
+## 三、接触和摩擦往往比自由运动更难模拟
 
-**Physics Simulation：**轮子在仿真中不断打滑，可能不是控制器问题，而是摩擦系数、接触几何或积分步长设置不合理。
+物体悬空运动只需要积分动力学；一旦轮子接触地面、机械手抓住物体，就需要处理法向力、摩擦、碰撞恢复和约束。
 
-## Connections
+不同引擎采用的接触模型和求解器不同，因此“同一组参数”在不同模拟器中不一定产生完全相同结果。不要把仿真器输出当作绝对物理真值。
 
-- → Robotics / Dynamics。
-- → Robustness：模型误差必须显式考虑。
-- → Control：控制频率必须与仿真时间尺度匹配。
-- → Sim2Real：接触参数误差是典型 reality gap。
+## 四、模型参数必须有物理尺度
 
-## Further Reading
+质量、惯量、摩擦、执行器最大力矩和控制周期不应随意填写。即使无法精确测量，也应该根据真实硬件尺寸、数据手册或简单实验给出合理范围。
 
-- High-fidelity multiphysics、advanced contact / soft-body simulation。
+一个模型如果几何外观很漂亮，但质量和摩擦完全不合理，对控制和 Sim2Real 的价值仍然很低。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 五、仿真精度要和任务指标对应
 
-## Learning path
+如果任务只比较规划算法的路径长度，不一定需要精细轮胎模型；如果要评估高速控制器，动力学和延迟就必须更准确。
 
-[← Section overview](index.md) · [Robot & Sensor Simulation →](02-robot-sensor-simulation.md)
+评估仿真是否“够用”时，最好比较任务相关量：转弯半径、制动距离、里程计漂移、传感器量程，而不是只看动画是否逼真。
+
+## 六、MuJoCo/Gazebo 环境交互的共同循环
+
+不同模拟器的 API 不同，但控制循环都遵循“读状态—算控制—施加动作—推进仿真”：
+
+```python
+while simulation.is_running():
+    observation = simulation.read_state()
+    action = controller(observation)
+    simulation.apply_control(action)
+    simulation.step()
+```
+
+MuJoCo 通常直接操作模型与数据对象，Gazebo 常通过插件或 ROS2 接口交换状态和命令。将模拟器差异封装在 `simulation` 适配层，可让控制与评测逻辑保持一致。

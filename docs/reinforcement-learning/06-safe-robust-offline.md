@@ -1,19 +1,17 @@
-# Safe, Robust & Offline RL
+# 安全、鲁棒与离线强化学习
 
-> **Section:** Reinforcement Learning
 
-## Why it matters
 
 当在线自由试错不可接受时，需要从数据来源、约束和分布偏移三个方向重新定义学习问题。
 
-## Core ideas
+## 一、为什么在线试错有时不可接受
 
 - **Safe RL**：决策过程必须满足成本或安全约束。
 - **Robust RL**：面对模型、观测或动力学扰动仍保持性能。
 - **Offline RL**：只使用固定数据集训练，不能继续探索环境。
 - **Distribution shift**：策略选择的数据外动作可能导致估计失真。
 
-## Key theory
+## 二、Offline RL 与数据分布
 
 三类问题关注不同限制：Safe RL 关心**不能违反什么**，Robust RL 关心**环境变化后是否还能工作**，Offline RL 关心**只能从历史数据学什么**。
 
@@ -23,26 +21,30 @@ $$
 \max_\pi J_R(\pi)\quad \text{s.t.}\quad J_C(\pi)\le d.
 $$
 
-## Representative methods
+## 三、鲁棒性与扰动
 
 - Constrained objective：把性能目标与成本/安全约束分开建模。
 - Conservative offline learning：避免对数据外动作过度乐观。
 
-## Worked example
+## 四、安全约束与风险
 
 自动驾驶日志很多，但不能为了探索让车辆在线随机尝试危险动作，因此“离线数据 + 安全约束 + 上线前鲁棒验证”往往同时出现。
 
-## Connections
+## 五、三类问题不要混在一起
 
-- → Robustness & Safety：提供不确定性、风险和运行时安全框架。
-- → Simulation & Sim2Real：先在仿真中扩展覆盖，再谨慎迁移。
+Offline RL 主要解决“不能继续在线采样，只能利用已有数据”；Robust RL 主要解决“环境参数或观测会变化”；Safe RL 主要解决“即使探索，也不能违反安全约束”。三者经常同时出现，但技术目标并不相同。
 
-## Further Reading
+例如真实机器人只有历史日志可用，这是 offline；电机摩擦系数会变化，这是 robustness；机械臂不能进入人的安全区域，这是 safety。先分清问题来源，才能决定是改数据、改目标函数、加约束，还是增加运行时保护层。
 
-- CQL、IQL、CMDP theory；更系统的鲁棒性见 Robustness & Safety。
+## 六、Offline RL 最大的风险是“数据里没见过”
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+离线数据只覆盖行为策略访问过的区域。若新策略选择数据集中几乎没有出现的动作，价值网络就可能在没有证据的地方给出过高估计，这类 distribution shift 是 Offline RL 的核心困难。因此离线算法往往会限制策略不要偏离数据分布太远，或对分布外动作保持保守估计。
 
-## Learning path
+## 七、鲁棒、安全和离线分别解决不同问题
 
-[← Section overview](index.md) · [← Model-Based vs Model-Free RL](05-model-based-vs-model-free.md)
+- **Offline**：不能继续在线采样，只能利用固定数据。
+- **Robust**：环境参数、观测或扰动会变化，希望性能不要快速崩溃。
+- **Safe**：存在不可接受的状态或风险，要求策略满足约束。
+
+三者可以同时出现，但不应混成一个概念。例如“用旧日志训练机器人”首先是离线问题，“地面摩擦变化”首先是鲁棒问题，“绝不能进入禁区”首先是安全约束问题。
+

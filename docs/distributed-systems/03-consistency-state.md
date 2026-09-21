@@ -1,49 +1,47 @@
-# Consistency & Distributed State
+# 一致性与分布式状态
 
-> **Section:** Distributed Systems & Networking
-
-## Why it matters
-
-多个节点拥有同一对象的副本后，必须定义更新顺序、冲突处理和“何时算一致”。
-
-## Visual intuition
+只要同一份逻辑状态存在多个副本，就会出现一个问题：**什么时候这些副本可以被认为“足够一致”？** 不同数据对一致性的要求不同，不能用一个协议解决所有状态。
 
 <figure markdown="span">
   ![副本越多，状态同步就越需要明确顺序、延迟与冲突解决规则。](../assets/diagrams/consistency-flow.svg)
-  <figcaption>副本越多，状态同步就越需要明确顺序、延迟与冲突解决规则。</figcaption>
+  <figcaption>一致性问题来自传播延迟和并发写入，而不仅仅是“数据有没有同步”。</figcaption>
 </figure>
 
-## Core ideas
+## 一、先区分“读到旧值”和“发生写冲突”
 
-- **Strong consistency**：读操作看到满足严格一致语义的状态。
-- **Eventual consistency**：没有新更新时副本最终趋于一致。
-- **Conflict**：并发更新可能互相覆盖。
-- **CAP context**：网络分区期间无法同时保证强一致语义与所有请求都可用。
+副本传播需要时间，因此节点 B 暂时没看到 A 的最新写入，这是**stale read**。如果 A 和 B 同时修改同一对象，之后必须决定哪次写入有效或怎样合并，这才是**write conflict**。
 
-## Key theory
+两者都表现为“状态不同”，但处理机制并不相同。
 
-一致性是**对读写行为的语义保证**，不是“数据有没有同步”。机器人任务状态、地图版本、资源所有权对一致性需求不同，不能统一用一种协议。
+## 二、强一致和最终一致描述的是可见语义
 
-## Representative methods
+强一致类模型希望读操作看到满足明确全局顺序的状态；最终一致允许副本短暂不同，只要停止新写入后最终能够收敛。
 
-- Single writer：最简单的冲突规避方式。
-- Version / CAS：检测并发更新。
+机器人急停状态、任务唯一归属通常不能容忍随意冲突；遥测历史、统计指标往往可以晚一点同步。**一致性应该按数据语义选择。**
 
-## Worked example
+## 三、版本号可以把静默覆盖变成显式冲突
 
-“当前急停状态”必须快速且明确；“累计统计日志”可以稍后最终一致。二者不应使用同一一致性要求。
+若两个节点都读取 version=7，之后分别写回，接口可以要求“只有当前版本仍为 7 才允许更新”。第一个成功后版本变为 8，第二个就能发现自己基于旧数据操作。
 
-## Connections
+```python
+def update_if_version(record, expected, new_owner):
+    if record["version"] != expected:
+        return False
+    record["owner"] = new_owner
+    record["version"] += 1
+    return True
+```
 
-- → MAS Task Allocation：共享资源冲突必须有一致语义。
-- → Fault Tolerance。
+这类 compare-and-swap 思想并没有消灭并发，而是让并发冲突变得可检测。
 
-## Further Reading
+## 四、最简单的冲突处理方式往往是避免多人同时写
 
-- Linearizability、serializability、CRDT。
+若业务允许，可以规定某类状态只有一个权威 writer，其他节点只订阅。这比设计复杂合并规则更容易验证。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+只有在确实需要多点写入时，才需要版本、锁、事务、共识或可合并数据结构等更复杂机制。
 
-## Learning path
+## 五、CAP 讨论的是网络分区期间的取舍
 
-[← Section overview](index.md) · [← Distributed Systems, Time & Asynchrony](02-distributed-time.md) · [Fault Tolerance →](04-fault-tolerance.md)
+当网络已经分区，系统无法同时保证所有请求都立即得到成功响应，并且所有节点仍保持强一致语义。它不是“任何分布式系统永远只能在 C/A/P 里选两个”的简单口号。
+
+工程上更有用的问题是：**分区发生时，这类数据宁愿拒绝部分请求，还是允许短暂不一致？**

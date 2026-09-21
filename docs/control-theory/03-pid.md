@@ -1,66 +1,56 @@
-# PID Control
+# PID 控制
 
-> **Section:** Control Theory
+PID 是最常见的反馈控制器之一，因为它不要求精确动力学模型，却能分别利用**当前误差、累计误差和误差变化趋势**来形成控制量。
 
-## Why it matters
+## 一、P、I、D 分别利用哪一部分信息
 
-PID 是最值得掌握的经典控制器，因为它把当前误差、累计误差和变化趋势分别映射成三种控制作用。
-
-## Core ideas
-
-- **P**：按当前误差纠正。
-- **I**：积累历史误差，消除稳态偏差。
-- **D**：看误差变化趋势，增加阻尼。
-- **Saturation**：执行器有物理上限。
-
-## Key theory
-
-PID 控制律为
+连续时间 PID 写成
 
 $$
-u(t)=K_Pe(t)+K_I\int e(t)dt+K_D\dot e(t).
+u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
 $$
 
-P 太大可能振荡；I 太强会 windup；D 对噪声敏感。理解这三个现象比死记调参口诀重要。
+三项作用不同：
 
-## Representative methods
+- **P** 看现在偏了多少，误差越大，修正越强；
+- **I** 看过去是否长期偏在同一方向，用来消除稳态误差；
+- **D** 看误差变化有多快，用来提前抑制过快趋势。
 
-- Manual tuning：先 P，再 I，最后少量 D。
-- Anti-windup：执行器饱和时限制积分累积。
+理解这三个信息来源，比记一套“万能调参表”更重要。
 
-## Minimal code
+## 二、只用比例控制为什么常留下稳态误差
 
-实现时还要考虑积分饱和、微分滤波和输出限幅；这段代码只保留 P/I/D 三项的结构。
+某些系统需要持续输入才能维持目标。例如车辆上坡时，即使已经接近目标速度，仍需要额外驱动力抵消坡度。如果比例控制误差趋近零，控制量也趋近零，于是系统可能稳定在“略低于目标”的位置。
 
-```python
-class PID:
-    def __init__(self, kp, ki, kd):
-        self.kp, self.ki, self.kd = kp, ki, kd
-        self.integral = 0.0
-        self.prev_error = 0.0
+积分项会累积这个长期小误差，持续增加控制直到偏差被消除。这就是 I 项最核心的意义。
 
-    def step(self, error, dt):
-        self.integral += error * dt
-        derivative = (error - self.prev_error) / dt
-        self.prev_error = error
-        return self.kp*error + self.ki*self.integral + self.kd*derivative
-```
+## 三、微分项为什么能抑制过冲
 
-## Worked example
+如果误差正在快速减小，系统很可能已经以较大速度冲向目标。D 项根据变化率产生反向作用，相当于增加阻尼。因此它能减少超调，但同时会放大高频测量噪声，实际实现常对微分项加低通滤波。
 
-温控器只用 P 时可能长期差 1°C；加入 I 后可以逐渐消除这个稳态偏差。
+## 四、离散 PID 为什么仍然带有状态
 
-## Connections
+采样周期为 $\Delta t$ 时，可写成
 
-- → Robot Control：底盘速度、关节位置常用 PID。
-- → Filtering：D 项通常需要滤波。
+$$
+I_k=I_{k-1}+e_k\Delta t,\qquad
+D_k=\frac{e_k-e_{k-1}}{\Delta t},
+$$
 
-## Further Reading
+$$
+u_k=K_pe_k+K_iI_k+K_dD_k.
+$$
 
-- Derivative filtering、2-DOF PID、系统化整定方法。
+因此 PID 不是一个只看当前误差的静态函数：积分项保存累计历史，微分项至少需要上一次误差。具体循环实现放在 Robotics 的导航与控制页面。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 五、积分饱和是实机最常见的坑之一
 
-## Learning path
+执行器存在上限。若误差很大而输出已经饱和，积分项仍持续累积，等系统终于接近目标时，巨大的积分量会让控制继续“用力”，产生明显超调。这就是 integral windup。
 
-[← Section overview](index.md) · [← Feedback & Stability](02-feedback-stability.md) · [Optimal Control: LQR →](04-lqr.md)
+常见处理方式是在输出饱和时暂停积分，或使用 anti-windup 反馈修正积分器。这个细节往往比继续增加 $K_d$ 更有效。
+
+## 六、调参时先观察现象，再判断该动哪一项
+
+一个实用顺序是先用 P 获得基本响应，再少量加入 I 消除长期偏差，最后根据过冲和噪声决定是否需要 D。若系统严重延迟、模型本身不适合 PID，继续调三个增益通常不会解决根本问题。
+
+PID 适合单回路、目标明确、约束较少的控制任务；当需要显式预测未来或同时处理很多约束时，LQR 和 MPC 更自然。

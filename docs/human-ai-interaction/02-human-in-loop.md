@@ -1,55 +1,49 @@
 # Human-in-the-Loop
 
-> **Section:** Human–AI Interaction
+Human-in-the-Loop（HITL）不是简单“最后让人点确认”，而是在系统闭环中选择**人类判断最有价值的位置**，让人的反馈真正改变模型、决策或执行。
 
-## Why it matters
+## 一、人在环首先要说明“人插在哪一环”
 
-人在环必须明确介入点、频率和权限：人适合处理目标、异常和价值判断，不适合逐毫秒审批低层控制量。
+人可以出现在多个位置：
 
-## Core ideas
+- 数据层：修正标注、筛选异常样本；
+- 决策层：批准或拒绝关键动作；
+- 目标层：修改任务优先级和约束；
+- 异常恢复层：系统能力不足时接管。
 
-- **Training feedback**：人在训练阶段标注、偏好或纠正。
-- **Decision approval**：关键决策执行前由人确认。
-- **Runtime correction**：运行中人修改目标/约束。
-- **Escalation**：系统不确定时主动请求帮助。
+不同位置的响应时间和责任完全不同。
 
-## Key theory
+## 二、人应该介入机器最不确定或风险最高的地方
 
-“人在环”必须说明人在哪个环节、以什么频率、拥有何种权限。让人每 50 ms 审批控制量不现实；让人审批高层目标则可行。
+如果系统对 99% 普通样本都很稳定，让人逐个审核只会增加成本。更有效的是根据置信度、风险或异常检测结果，把少数关键案例交给人。
 
-## Representative methods
+这也是 active learning 和人工审核系统背后的共同思想：**让有限的人力覆盖最有信息价值的样本。**
 
-- Human approval gate：高风险决策前确认。
-- Exception handling / escalation：系统不确定时主动交给人。
+## 三、反馈必须能改变后续系统行为
 
-## Minimal code
+如果人每次都修正同一种错误，但系统从不更新规则、数据或模型，那么它只是“人工补洞”，而不是闭环。
 
-HITL 的关键是把需要人的条件写成可执行策略，而不是简单增加一个“确认”按钮。
+反馈可以被记录为新标签、约束、案例库或恢复策略，之后用于训练、评估或直接规则修正。
+
+## 四、确认操作必须提供足够上下文
+
+“是否批准？Yes/No”往往不够。人至少需要知道系统准备做什么、为什么、可能风险以及如果不批准会发生什么。
 
 ```python
-def execute(plan, risk_score, approved=False):
-    if risk_score < 0.3:
-        return "auto_execute"
-    if approved:
-        return "human_approved_execute"
-    return "pause_and_request_review"
+review = {
+    "action": "enter_zone_B",
+    "reason": "shortest route",
+    "risk": "localization uncertainty high",
+    "alternatives": ["wait", "reroute"]
+}
 ```
 
-## Worked example
+真正需要的不是这段代码，而是这种信息结构。
 
-任务规划器自动分配车辆；当需要进入禁区附近时，系统暂停并请求人确认，而低层避障仍自动运行。
+## 五、人在环有自己的延迟和错误率
 
-## Connections
+人不是完美 oracle。疲劳、信息不足和界面设计都会影响判断，因此不能假设“交给人就一定安全”。高频实时控制通常不适合等待人工确认，人更适合高层目标和异常决策。
 
-- → MAS / task allocation。
-- → Software Engineering / requirements。
+## 六、审计记录是 HITL 系统的一部分
 
-## Further Reading
-
-- Preference feedback、RLHF、interactive imitation learning。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Human–AI Interaction & Automation Levels](01-human-ai-automation.md) · [Shared Autonomy →](03-shared-autonomy.md)
+应记录当时状态、模型建议、触发原因、人类决定和最终结果。这样才能区分模型错误、界面误导和人工覆盖，并把经验沉淀回系统。

@@ -1,47 +1,60 @@
-# Model Predictive Control
+# 模型预测控制
 
-> **Section:** Control Theory
+MPC（Model Predictive Control）的核心是：**先用模型预测未来若干步，找一段满足约束且代价最小的控制序列，只执行第一步，然后重新测量并再次优化。**
 
-## Why it matters
+## 一、普通反馈只看当前，MPC 会显式看未来
 
-MPC 每个时刻都在有限预测窗口内求解优化问题，因此能自然处理输入、状态和安全约束。
+比例控制或 LQR 都可以根据当前状态立即计算控制量。MPC 则把未来 $H$ 步一起考虑：如果现在急转会导致两秒后越界，当前就会提前选择更缓和的动作。
 
-## Core ideas
+这使它特别适合车辆、无人机和过程控制等“动作后果会延迟显现”的系统。
 
-- **Prediction horizon**：向未来预测有限步。
-- **Receding horizon**：每次只执行当前最优序列的第一步。
-- **Constraints**：速度、加速度、碰撞等直接进入优化。
-- **Model mismatch**：预测模型与真实系统永远有差异。
+## 二、预测过程来自系统模型
 
-## Key theory
+对离散线性模型
 
-MPC 每个时刻求解
+$$x_{k+1}=Ax_k+Bu_k,$$
+
+给定当前状态 $x_0$ 和候选控制序列 $u_0,\ldots,u_{H-1}$，可以逐步得到
+
+$$x_1,x_2,\ldots,x_H.$$
+
+因此控制序列的好坏可以通过整段预测轨迹来评价，而不是只看下一步。
+
+## 三、约束是 MPC 与普通最优反馈的重要区别
+
+典型 MPC 问题写成
 
 $$
 \min_{u_{0:H-1}}\sum_{k=0}^{H-1}\ell(x_k,u_k)
 $$
 
-并满足动力学与约束，然后只执行 $u_0$，下一时刻重新测量和优化。
+并满足
 
-## Representative methods
+$$
+x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal X,\quad u_k\in\mathcal U.
+$$
 
-- Linear MPC：最适合作为“预测 + 约束 + 滚动优化”的入门代表。
+速度上限、转角限制、加速度约束、道路边界都可以直接放进 $\mathcal X$ 和 $\mathcal U$。相比“违反后再在奖励里罚”，这种表达更明确。
 
-## Worked example
+## 四、滚动时域让预测不断被真实测量纠正
 
-自动驾驶车辆规划未来 2 秒转向/加速度，加入道路边界和最大横向加速度约束；执行 0.1 秒后重新规划。
+MPC 并不会一次执行整段最优控制。它只执行第一个输入 $u_0$，下一周期重新测量真实状态，再求一次新的优化问题。
 
-## Connections
+因此即使模型不完美，每个控制周期都能用新测量修正预测。这就是 receding horizon 的核心。
 
-- → Robotics / Navigation & Control。
-- → Safe Learning：MPC 可作为安全过滤器的一部分。
+<figure markdown="span">
+  ![LQR 与 MPC 都基于模型，但 MPC 会显式预测未来并处理约束。](../assets/diagrams/lqr-vs-mpc.svg)
+  <figcaption>MPC 可以理解为“带约束、有限时域、每步重新求解”的最优控制。</figcaption>
+</figure>
 
-## Further Reading
+## 五、预测时域不是越长越好
 
-- Nonlinear MPC、robust/tube MPC。
+时域太短，看不到远期后果；时域过长，优化变量增多、计算量变大，而且模型误差会持续累积。工程上要在**控制频率、求解时间、模型可信度和任务预见性**之间平衡。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+车辆控制常用几秒内的有限时域，并以几十毫秒到几百毫秒周期重复求解，而不是预测几十秒以后所有细节。
 
-## Learning path
+## 六、MPC 最重要的工程问题是“能不能按时解完”
 
-[← Section overview](index.md) · [← Optimal Control: LQR](04-lqr.md)
+控制周期为 50 ms，就意味着优化最好稳定地在这个时间预算内完成。偶尔求出更优但经常超时的控制器，实际效果可能不如一个稍保守但确定能按时运行的方案。
+
+入门阶段掌握线性 MPC 就足够。非线性 MPC、鲁棒 MPC 等只是同一框架在更复杂模型和不确定性下的扩展，不需要为了理解主线先全部学习。

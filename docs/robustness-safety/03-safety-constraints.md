@@ -1,48 +1,42 @@
-# Safety Constraints
+# 安全约束
 
-> **Section:** Robustness & Safety
+性能目标可以权衡，但安全底线通常不能只靠“给一个很大的负奖励”表达。安全约束的作用是明确：**哪些状态、动作或风险水平原则上不允许越过。**
 
-## Why it matters
+## 一、硬约束和软约束表达不同优先级
 
-安全约束不是“希望系统表现好”，而是明确哪些状态、动作或风险水平不可越过。
+硬约束例如最大速度、禁入区域、最低障碍距离；软约束例如偏离中心线、能耗偏高，可以和其他性能指标权衡。
 
-## Core ideas
+把二者都塞进同一个奖励函数，会让“到底多大惩罚才算绝对不能违反”变得模糊。
 
-- **Hard constraint**：原则上不可违反。
-- **Soft constraint**：可在代价中权衡。
-- **Safe set**：允许系统状态所在的集合。
-- **Safety margin**：与危险边界的余量。
+## 二、约束可以直接进入优化问题
 
-## Key theory
-
-仅给危险行为一个大负奖励，并不能保证学习策略永不违反安全条件。更清晰的建模是
+例如控制问题可以写成
 
 $$
-\max_\pi J(\pi)\quad\text{s.t.}\quad C(\pi)\le d,
+\min_u J(u)\quad\text{s.t.}\quad g(x,u)\le 0.
 $$
 
-或直接定义状态/控制可行集。
+其中 $g$ 可以表示速度上限、碰撞距离或温度限制。相比事后惩罚，这种形式更明确地告诉求解器哪些区域不可行。
 
-## Representative methods
+## 三、运行时安全层可以独立检查策略输出
 
-- Hard limits：速度、区域、温度等直接工程约束。
-- Safety filter / constrained optimization：在执行前过滤不安全动作。
+学习策略先给出建议 $u_{nom}$，安全层再检查是否满足边界；若不满足，就限制、投影或替换为安全控制。
 
-## Worked example
+```python
+def limit_speed(v_cmd, v_max):
+    return max(-v_max, min(v_cmd, v_max))
+```
 
-移动机器人可以允许规划器自由优化时间，但最终速度命令必须通过速度上限和碰撞距离检查。
+真实安全过滤器会复杂得多，但结构相同：**性能控制负责“想怎么做”，安全层负责“哪些不能做”。**
 
-## Connections
+## 四、安全余量用来应对估计误差和响应延迟
 
-- → Control / MPC。
-- → Safe RL。
+机器人距离障碍 0.5 m 并不意味着可以把安全阈值也设为 0.5 m。定位误差、制动距离和控制延迟都需要 margin。
 
-## Further Reading
+安全边界因此应基于最坏合理误差，而不是理想模型中的精确几何距离。
 
-- Control barrier functions、formal reachability。
+## 五、安全约束必须贯穿规划、控制和执行
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+规划器避开禁区，但底盘驱动若没有速度限制，仍可能因控制异常发生危险；反过来，只在最底层限速也无法阻止高层持续规划进入危险区域。
 
-## Learning path
-
-[← Section overview](index.md) · [← Robustness, Risk & Reliability](02-robustness-risk.md) · [Fault Detection & Fault Tolerance →](04-fault-tolerance.md)
+可靠系统通常在不同层级设置互补约束，而不是只依赖单一模块。

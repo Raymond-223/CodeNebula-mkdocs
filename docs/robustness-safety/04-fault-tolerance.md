@@ -1,69 +1,43 @@
-# Fault Detection & Fault Tolerance
+# 故障检测与容错
 
-> **Section:** Robustness & Safety
-
-## Why it matters
-
-故障处理至少包含检测、隔离、诊断和恢复，真正的系统设计还要明确降级模式和安全状态。
-
-## Visual intuition
+故障是组件偏离正常工作状态，失效则是系统无法完成要求的功能。容错的目标是：**单个组件出问题时，系统还能检测、隔离，并进入可接受的降级状态。**
 
 <figure markdown="span">
-  ![容错必须从检测走到恢复和验证，而不只是打印一条错误日志。](../assets/diagrams/fault-chain.svg)
-  <figcaption>容错必须从检测走到恢复和验证，而不只是打印一条错误日志。</figcaption>
+  ![故障从发生到系统失效之间可以通过检测、隔离和恢复打断。](../assets/diagrams/fault-chain.svg)
+  <figcaption>容错不是“没有故障”，而是阻止局部故障演变成系统级失效。</figcaption>
 </figure>
 
-<figure markdown="span">
-  ![watchdog 只负责检测超时，随后还需要进入明确的降级或安全状态。](../assets/diagrams/watchdog-fallback.svg)
-  <figcaption>检测到异常之后必须有动作：隔离、降级、停车或切换备份。</figcaption>
-</figure>
+## 一、故障检测首先需要“正常行为”的参考
 
-## Core ideas
+可以检查传感器是否超出物理范围、多个传感器是否互相矛盾、控制循环是否按时运行、模型残差是否突然增大。
 
-- **Detection**：发现行为偏离正常范围。
-- **Isolation**：定位故障来源。
-- **Redundancy**：用替代部件/信息源继续工作。
-- **Recovery**：恢复正常或进入安全状态。
+单个阈值适合简单故障；复杂系统常结合多个信号降低误报。
 
-## Key theory
+## 二、检测之后还要判断“谁出了问题”
 
-故障处理必须区分“异常数据”与“模块真的失效”。传感器冲突时，可通过一致性检查、物理约束和冗余信息判断，而不是简单多数投票。
+两个编码器读数不一致，只能说明至少一个有问题。结合 IMU、车辆运动模型或第三个传感器，才能进一步做 fault isolation。
 
-## Representative methods
+没有隔离就直接丢弃某个传感器，可能反而删除了正确数据。
 
-- Watchdog / heartbeat。
-- Residual-based detection。
-- Fallback sensor / safe stop。
+## 三、恢复策略通常以降级为目标
 
-## Minimal code
-
-watchdog 的核心判断很简单；真正重要的是超时后执行什么安全动作。
+故障后不一定还能继续完成原任务。更安全的目标可能是减速、停车、返航或切换人工控制。
 
 ```python
-import time
-
-def stale(last_update, timeout=0.5):
-    return time.monotonic() - last_update > timeout
-
-if stale(last_update=time.monotonic() - 1.0):
-    mode = "SAFE_STOP"
+def fallback(localization_ok, lidar_ok):
+    if not localization_ok:
+        return "STOP_AND_RELOCALIZE"
+    if not lidar_ok:
+        return "LOW_SPEED_CAMERA_ONLY"
+    return "NORMAL"
 ```
 
-## Worked example
+## 四、冗余要避免共同失效模式
 
-编码器速度突然跳到 100 m/s，而 IMU/LiDAR 都不支持这一变化，可先标记编码器异常并限制其权重，再进入降级模式。
+两只同型号传感器共用同一电源，并不能抵御电源故障；两套软件副本共享同一个 bug，也不会因为“有两个实例”就更可靠。
 
-## Connections
+有效冗余应尽量在物理原理、供电、通信和软件路径上减少共同故障。
 
-- → Distributed Systems / Fault Tolerance。
-- → Robotics / Sensor Fusion。
+## 五、故障演练应该成为测试的一部分
 
-## Further Reading
-
-- Fault diagnosis、reconfigurable control。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Safety Constraints](03-safety-constraints.md) · [Safe Learning & Runtime Safety →](05-safe-learning-runtime.md)
+可以主动断开传感器、延迟网络、杀死节点或篡改输入，观察系统是否进入预期安全状态。只有故障路径真正被运行过，容错设计才不只是架构图上的假设。

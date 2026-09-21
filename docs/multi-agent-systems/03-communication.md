@@ -1,44 +1,54 @@
-# Communication & Information Sharing
+# 多智能体通信与信息共享
 
-> **Section:** Multi-Agent Systems
 
-## Why it matters
 
 通信的价值不是“越多越好”，而是在成本、时延和信息增益之间找到足够的共享机制。
 
-## Core ideas
+## 一、什么时候真的需要通信
 
 - **Message**：agent 间显式传递的信息。
 - **Shared observation**：多个 agent 直接获得相同环境信息。
 - **Bandwidth/latency**：通信不是免费且即时的。
 - **Common knowledge**：大家知道且知道别人也知道的信息。
 
-## Key theory
+## 二、消息应该传什么
 
 通信的作用通常是弥补局部观测、共享意图或同步状态，但**不是协调的唯一来源**：共享观测、公共信号、预先约定也可以支持协调。
 
 工程设计先问三件事：消息是否必要？频率多高？延迟/丢包后系统是否还能退化运行？
 
-## Representative methods
+## 三、带宽、延迟与丢包
 
 - Event-driven messaging：有变化再发。
 - Publish-subscribe：解耦发送者与接收者。
 
-## Worked example
+## 四、发布订阅与事件驱动
 
 多车共享“我正在去目标 X”比持续广播完整传感器流便宜得多，却可能已经足够避免重复分配。
 
-## Connections
+## 五、消息设计通常比“发得更多”更重要
 
-- → Distributed Systems：提供网络、pub-sub、容错机制。
-- → MARL：通信可以作为策略网络的一部分。
+多智能体系统最容易走向“所有 Agent 广播所有状态”。这种方案实现简单，却会迅速增加带宽、处理延迟和无效信息。更好的问题是：**接收方为了做决定，真正缺哪一部分信息？**
 
-## Further Reading
+例如任务分配时，Agent 往往只需要共享当前位置、当前任务、剩余资源和少量置信度，而不需要持续广播完整传感器流。再进一步，消息应带时间戳和有效期，否则一个“正确但已经过期”的状态可能比没有消息更危险。
 
-- Learned / emergent communication、information bottleneck。
+<figure markdown="span">
+  ![多智能体通信应围绕必要状态、意图和事件组织，而不是广播所有原始信息。](../assets/diagrams/mas-network.svg)
+  <figcaption>通信的核心问题是“谁需要知道什么，以及信息多久以后就失效”。</figcaption>
+</figure>
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 六、一条工程消息至少要回答四件事
 
-## Learning path
+真正可用的消息通常不仅有 payload，还要包含**发送者、时间戳、语义类型和有效期**。可把一条消息抽象为
 
-[← Section overview](index.md) · [← Cooperation, Competition & Coordination](02-coordination.md) · [Task Allocation & Distributed Decision Making →](04-allocation-distributed-decision.md)
+$$
+m=(\text{sender},\text{type},\text{payload},t_{send},\text{ttl}).
+$$
+
+接收时若 $t_{now}-t_{send}>\text{ttl}$，消息在语义上已经失效。这里讨论的是信息模型；具体序列化和网络接口放在 Distributed Systems 章节。
+
+接收方不仅要判断“内容是什么”，还要判断“这条消息现在是否还有效”。在移动机器人里，旧位置、旧任务归属和旧障碍物信息都可能比缺失信息更危险。
+
+## 七、通信失效时系统仍要有退化行为
+
+通信不应成为所有决策的单点前提。短时丢包时可以使用最近状态并降低速度；持续失联时可以释放共享任务、回到安全区域或进入本地自治模式。**能通信时提高协作效率，不能通信时仍保持安全**，比追求零丢包更符合真实系统。

@@ -1,90 +1,64 @@
-# Optimization, Constraints & Uncertainty
+# 优化、约束与不确定性
 
-> **Section:** Mathematics for Intelligent Systems
-
-## Why it matters
-
-智能系统里的优化通常同时面对三件事：**目标要变好、约束不能违反、数据和模型又不完全确定**。这三类问题放在同一章理解，比把每个优化分支拆成独立课程更适合主学习路径。
-
-## Visual intuition
+优化的本质是：**在允许的选择中，找到让目标函数尽可能好的那一个。** 控制、规划、模型训练和资源分配都可以用这个统一语言描述。
 
 <figure markdown="span">
-  ![优化先明确变量、目标和可行域，再决定如何处理不确定性。](../assets/diagrams/optimization-constraints.svg)
-  <figcaption>先问“优化什么、允许什么”，再问“随机性和最坏情况要怎样处理”。</figcaption>
+  ![优化是在目标函数和可行域之间寻找最优点。](../assets/diagrams/optimization-constraints.svg)
+  <figcaption>目标函数决定“好坏”，约束决定“哪些解允许被选择”。</figcaption>
 </figure>
 
-## Core ideas
+## 一、优化问题由变量、目标和约束组成
 
-- **Objective & gradient**：定义要优化什么，以及局部往哪个方向改。
-- **Constraint & feasible set**：定义哪些解允许被选择。
-- **Stochastic objective**：目标依赖随机样本或环境变化。
-- **Risk**：不仅看平均值，也关注坏结果。
-- **Robust objective**：要求在给定扰动范围内仍保持可接受表现。
-
-## Key theory
-
-无约束的一阶更新常写为
+一般形式为
 
 $$
-\theta_{k+1}=\theta_k-\alpha_k\nabla J(\theta_k).
+\min_x f(x)\quad\text{s.t.}\quad g_i(x)\le0,\;h_j(x)=0.
 $$
 
-带约束的问题可写为
+$x$ 是决策变量，$f$ 是目标函数，$g/h$ 定义可行域。建模时最常见的错误不是不会求解，而是把“希望更好”和“绝不能违反”混在一个目标函数里。
+
+## 二、为什么负梯度是局部下降方向
+
+若 $f$ 可微，梯度下降更新
+
+$$x_{k+1}=x_k-\alpha\nabla f(x_k).$$
+
+对一个很小的位移 $\Delta x$，一阶近似给出
 
 $$
-\min_x f(x)\quad \text{s.t.}\quad g_i(x)\le 0.
+f(x+\Delta x)\approx f(x)+\nabla f(x)^\top\Delta x.
 $$
 
-当问题含随机性时，常见目标是期望性能：
+在长度固定的所有微小位移中，$\Delta x$ 与 $-\nabla f(x)$ 同向时，内积下降得最多。因此负梯度是局部最陡下降方向。步长 $\alpha$ 太小会前进缓慢，太大则可能越过有效的局部近似区域。
+
+## 三、局部最优为什么不等于全局最优
+
+局部最优只要求在某个邻域内没有更好的可行点；全局最优则必须优于整个可行域中的所有点。凸问题的关键价值在于：任一局部最优同时也是全局最优。非凸问题存在多个谷底、鞍点与平坦区域，只依赖局部信息的方法通常无法证明自己找到了全局最低点。
+
+## 四、约束决定哪些数学最优其实不可执行
+
+车辆最快路径可能需要超速，机械臂最短动作可能超过关节限位。约束优化的价值是把物理、安全和资源限制直接写进问题。
+
+对等式约束 $h(x)=0$，可行移动必须沿约束面的切向方向。最优点处，目标函数沿这些切向方向都不能再下降，因此 $\nabla f$ 必须与约束面的法向量 $\nabla h$ 平行：
 
 $$
-\min_x \mathbb E_\xi[f(x,\xi)].
+\nabla f(x^*)+\lambda\nabla h(x^*)=0.
 $$
 
-若更关注最坏情况，则可能采用
+拉格朗日乘子 $\lambda$ 正是把“沿可行方向无法继续改善”写成方程的系数，也可解释为约束放宽一单位时最优目标值的边际变化。
+
+## 五、不确定性意味着参数不是一个精确常数
+
+摩擦、需求、传感器误差可能只知道一个范围或分布。处理方式可以是使用期望目标、加入安全 margin，或要求在一组可能参数下都保持可接受。
+
+不必先学习完整 robust optimization 理论，关键是不要把未知参数伪装成完全精确。
+
+## 六、一个有边界的最优化例子
+
+设控制量 $u$ 的执行器范围为 $-1\le u\le1$，代价为
 
 $$
-\min_x \max_{\xi\in\mathcal U} f(x,\xi).
+J(u)=(u-0.35)^2+0.1u^2.
 $$
 
-主线只需理解这些目标在“平均表现、约束、安全余量”之间的区别，不要求推导完整对偶理论。
-
-## Representative methods
-
-- Gradient descent / SGD：一阶优化代表。
-- Projection / penalty / Lagrangian：处理约束的代表思路。
-- Sample average：用有限样本近似期望目标。
-
-## Minimal code
-
-```python
-def projected_gradient(x, grad, lr=0.1, low=-1.0, high=1.0):
-    x = x - lr * grad(x)
-    return min(high, max(low, x))
-
-x = 0.0
-for _ in range(50):
-    x = projected_gradient(x, lambda z: 2 * (z - 3))
-print(x)  # 无约束最优是 3，但约束把结果限制在 1
-```
-
-## Worked example
-
-移动机器人希望路径短，但速度和障碍距离必须满足安全约束；如果定位误差还存在，则只优化“名义情况下最短”并不足够，还需要为误差保留安全余量。
-
-## Connections
-
-- → RL：策略梯度优化期望回报。
-- → Control：LQR/MPC 都是结构化优化问题。
-- → Robustness & Safety：chance constraint、CVaR 和鲁棒集合在这里复用。
-- → Sim2Real：域随机化可以看作对模型不确定性的采样覆盖。
-
-## Further Reading
-
-- KKT / duality、chance constraints、CVaR、distributionally robust optimization。
-
-> 主线目标是会“写出问题”，不是熟练掌握所有优化求解器。
-
-## Learning path
-
-[← Section overview](index.md) · [← Markov Processes](05-markov-processes.md)
+无约束驻点由 $J'(u)=0$ 得到；若驻点落在可行区间内，它就是这个凸问题的全局最优。若驻点越过边界，最优解只能落在最近的可行边界上。这个例子同时展示了决策变量、目标函数、可行域，以及约束如何改变最优解。

@@ -1,59 +1,48 @@
-# Shared Autonomy
+# 共享自主
 
-> **Section:** Human–AI Interaction
-
-## Why it matters
-
-共享自治不是人和机器人同时抢控制权，而是根据任务阶段、风险和置信度在意图与自动控制之间仲裁。
-
-## Visual intuition
+共享自主（Shared Autonomy）不是人和机器“各控制 50%”，而是让**人保留目标和意图，自动系统负责补足稳定性、安全性或精细动作**，并根据场景动态调整控制权。
 
 <figure markdown="span">
-  ![共享自治的核心是控制权仲裁，而不是简单把人的输入和机器指令相加。](../assets/diagrams/shared-autonomy.svg)
-  <figcaption>共享自治的核心是控制权仲裁，而不是简单把人的输入和机器指令相加。</figcaption>
+  ![共享自主把人类输入和自主系统建议按状态动态融合。](../assets/diagrams/shared-autonomy.svg)
+  <figcaption>控制权应该随风险、置信度和任务阶段变化，而不是固定平均。</figcaption>
 </figure>
 
-## Core ideas
+## 一、人和自动系统通常控制不同层级
 
-- **Human intent**：操作者想完成的目标。
-- **Autonomy assistance**：系统补足稳定、避障或精细控制。
-- **Blending**：组合人和自动控制输入。
-- **Conflict**：人和系统意图不一致时的处理规则。
+遥操作机械臂时，人可以决定“抓哪个物体”，系统负责避障和末端稳定；轮椅用户给出大致方向，系统负责局部避障。
 
-## Key theory
+这比直接混合两个速度向量更自然，因为人和机器各自承担最擅长的部分。
 
-共享自主的目标不是简单做加权平均，而是在**保留人类目标控制权**的同时，让自动系统承担高频、精细或安全相关的部分。
+## 二、最简单的融合可以写成加权控制
 
-## Representative methods
+$$
+u=\alpha u_h+(1-\alpha)u_a,
+$$
 
-- Assistive / constraint-based control：人给目标或方向，系统负责稳定与安全。
-- Goal inference：当人只给部分意图时估计其目标。
+其中 $u_h$ 是人的输入，$u_a$ 是自主建议。但真正困难的是 $\alpha$ 怎么变化，而不是公式本身。
 
-## Minimal code
+风险升高、机器置信度下降时，可以增大人的控制权；人的输入明显危险时，安全层仍可以限制最终动作。
 
-最简单的共享控制可以先理解为“仲裁权重”，但真实系统的权重必须受安全约束和置信度控制。
+## 三、共享自主必须推断“人真正想做什么”
+
+摇杆向右不一定意味着用户最终目标就是右侧，可能只是绕开当前障碍。高级共享自主会从一段历史输入估计目标，但目标推断错误也会导致机器“过度帮忙”。
+
+因此系统应该保留明显的人工覆盖方式。
+
+## 四、控制冲突是共享自主最常见的问题
+
+如果人持续左转，而自动系统不断向右修正，人会进一步加大左转输入，双方就形成对抗。解决办法不是隐藏自动修正，而是让规则可预测：哪些区域机器会限制？什么时候会完全交还控制？
+
+## 五、安全约束应独立于融合权重
+
+无论 $\alpha$ 取多少，最终命令都应经过速度、碰撞和执行器边界检查。否则“人拥有最高权重”可能直接绕过系统安全底线。
 
 ```python
-def shared_command(human, autonomy, alpha):
-    alpha = max(0.0, min(1.0, alpha))
-    return alpha * human + (1 - alpha) * autonomy
+def shared_command(human, auto, alpha, limit=1.0):
+    u = alpha * human + (1 - alpha) * auto
+    return max(-limit, min(limit, u))
 ```
 
-## Worked example
+## 六、必要时清晰切换模式比长期模糊融合更好
 
-人用摇杆指向大致方向，系统自动保持安全距离并绕过小障碍；人仍决定去哪，AI 决定如何安全到达。
-
-## Connections
-
-- → Control Theory / feedback。
-- → Robotics / navigation。
-
-## Further Reading
-
-- POMDP-based shared autonomy、intent inference。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Human-in-the-Loop](02-human-in-loop.md) · [Trust & Explainability →](04-trust-explainability.md)
+如果系统无法可靠推断人的意图，明确进入“人工模式”或“自动模式”可能比不断隐式抢控制更安全。共享自主的目标是降低人的负担，不是让责任边界变得更模糊。

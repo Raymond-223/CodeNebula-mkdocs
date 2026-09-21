@@ -1,66 +1,71 @@
-# Testing & Debugging
+# 测试与调试
 
-> **Section:** Software Engineering
+测试回答“这个行为以后还能不能保持正确”，调试回答“它现在为什么不正确”。两者结合，才能把一次修复变成长期可靠的系统。
 
-## Why it matters
+![调试闭环](../assets/diagrams/debugging-loop.svg)
 
-测试提供可重复证据，调试则通过复现、观测和假设逐步定位根因；二者应形成闭环。
+## 一、测试不是越多越好，而是覆盖不同边界
 
-## Visual intuition
+最常用的三层测试：
 
-<figure markdown="span">
-  ![调试闭环从复现开始，以回归测试结束。](../assets/diagrams/debugging-loop.svg)
-  <figcaption>不要边猜边改；先稳定复现，再缩小范围、验证假设，并留下回归测试。</figcaption>
-</figure>
+- **单元测试**：验证一个函数或模块；
+- **集成测试**：验证模块之间的接口；
+- **端到端测试**：从真实入口走完整流程。
 
-## Core ideas
+越靠下的测试运行越快、定位越容易；越靠上的测试越接近真实系统，但成本更高。因此大多数项目应让单元/集成测试承担主要数量，只保留少量关键端到端流程。
 
-- **Unit test**：验证小模块。
-- **Integration test**：验证模块之间的真实接口。
-- **Regression test**：防止修过的问题再次出现。
-- **Observability**：日志、指标、追踪帮助解释系统行为。
+## 二、单元测试先覆盖“正常、边界、错误”三类情况
 
-## Key theory
-
-调试主线应是
-
-**Reproduce → Minimize → Observe → Hypothesize → Verify → Add regression test**。
-
-测试覆盖率不是质量本身；关键路径、边界条件和失败模式比追求一个百分比更重要。
-
-## Representative methods
-
-- Unit tests：纯函数/算法。
-- Integration tests：数据库、ROS topic、网络接口。
-- Fault injection：验证超时、断连、异常输入。
-
-## Minimal code
-
-好的测试应针对可观察行为和边界条件，而不是把内部实现细节写死。
+例如一个限速函数：
 
 ```python
-def stopping_distance(v, decel):
-    return v * v / (2 * decel)
+def clamp_speed(v, limit=1.0):
+    return max(-limit, min(limit, v))
 
-def test_stopping_distance():
-    assert stopping_distance(10.0, 5.0) == 10.0
+
+def test_clamp_speed():
+    assert clamp_speed(0.4) == 0.4
+    assert clamp_speed(2.0) == 1.0
+    assert clamp_speed(-2.0) == -1.0
 ```
 
-## Worked example
+测试的价值不是证明“代码永远正确”，而是在需求已经明确的地方建立自动检查。
 
-机器人偶发不动时，先固定输入和日志复现，再判断是规划没输出、消息没到、还是控制器拒绝执行；不要同时改三个模块。
+## 三、集成测试专门抓“单独都对，接起来就错”
 
-## Connections
+很多工程故障发生在边界：字段名不一致、单位不同、超时策略冲突、数据库事务没有提交、ROS 消息坐标系不同。
 
-- → Robustness & Safety：故障注入与安全验证。
-- → Distributed Systems：超时和重试必须测试。
+因此集成测试最应该覆盖**模块之间真正传递的数据**。例如规划模块输出的是米，控制模块却按厘米解释，这类错误单元测试很难发现。
 
-## Further Reading
+## 四、调试要从现象走向最小复现
 
-- Property-based testing、fuzzing。
+一个有效的调试闭环是：
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+```text
+复现问题 → 缩小范围 → 提出假设 → 收集证据 → 修复 → 回归测试
+```
 
-## Learning path
+最常见的低效方式是“哪里可疑就加一堆 print”。更好的做法是先确定：输入是否正确？错误第一次出现在哪一层？问题是否稳定复现？
 
-[← Section overview](index.md) · [← Version Control](03-version-control.md) · [Containers, Deployment & Reliability →](05-deployment-reliability.md)
+```python
+assert state.shape == (6,), state.shape
+assert np.isfinite(state).all(), state
+```
+
+这种小断言往往比几十行日志更快定位数值和接口问题。
+
+## 五、日志要帮助回答“发生了什么”
+
+日志至少应包含时间、关键实体 ID、事件和必要上下文。例如：
+
+```text
+10:31:22 task=42 robot=r3 event=planning_failed reason=no_path
+```
+
+不要记录无法行动的信息，如“Error happened”。也不要把高频传感器数据全部塞进普通日志；大量原始数据更适合独立记录或指标系统。
+
+## 六、修复之后一定补回归测试
+
+如果一个 bug 能稳定复现，最理想的结束方式不是“现在运行正常”，而是先把它写成失败测试，再修到测试通过。这样同一类错误以后重新出现时，CI 可以在合并前直接拦住。
+
+测试与调试最终形成的是一个闭环：**错误先变成可复现行为，再变成自动化约束**。

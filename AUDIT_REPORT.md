@@ -1,141 +1,90 @@
-# CodeNebula V5 — Section-by-Section Minimality Audit
+# CodeNebula V6 — Theory-to-System Content Audit
 
-## Final result
+## 1. 本轮修正目标
 
-This pass reviewed all **12 Sections one by one** using a strict minimum-sufficient rule:
-
-1. keep it if later Sections depend on it;
-2. keep it if it repeatedly appears in real engineering work;
-3. remove or move it to Further Reading if it is mainly a variant, specialist branch, or duplicate of another Section.
-
-Final scale:
-
-- **12 Sections** in 5 domains
-- **61 core chapters**
-- **74 Markdown pages** including Home + 12 Section overviews
-- **49 local SVG teaching diagrams**
-- **24 short Python examples**, plus small Bash/Docker snippets
-- English navigation; Chinese teaching content with standard English terminology
-
-## Section-by-section decisions
-
-### 1. Mathematics for Intelligent Systems — 6 chapters
-
-**Kept:** vectors/matrices, gradients/Jacobians, numerical computation, probability, Bayes, Markov property, optimization and constraints.
-
-**Removed from the main path:** stationary distributions, MLE, Binomial as a separate named method, Adam, CVaR/chance constraints, detailed DRO variants, Newton/quasi-Newton and Runge–Kutta families.
-
-**Why:** the remaining material is exactly what RL, control, robotics, perception and simulation reuse. Numerical computation stays core because discretization, linear solves and numerical integration are prerequisites downstream.
-
-### 2. Reinforcement Learning — 6 chapters
-
-**Kept:** MDP/Bellman, Q-Learning/DQN, policy gradient/Actor–Critic, PPO/SAC as representatives, exploration/POMDP, model-based vs model-free, safe/offline RL concepts.
-
-**Moved out of the main path:** Double DQN, A2C, REINFORCE as a named algorithm, Dyna, specific world-model families, TRPO/DDPG/TD3 and detailed offline-RL variants.
-
-**Why:** the learner needs algorithm families and the reason each family exists, not an algorithm catalogue.
-
-### 3. Game Theory — 5 chapters
-
-**Kept:** players/strategies/payoffs, game classification, best response/Nash, minimax, sequential/Stackelberg, Bayesian games, repeated interaction.
-
-**Removed from the main path:** support enumeration, signaling as a main method, PPAD complexity and detailed equilibrium-solving machinery.
-
-**Why:** these are useful later, but they do not improve the first-pass mental model enough to justify the learning cost.
-
-### 4. Multi-Agent Systems — 5 chapters
-
-**Kept:** agent architectures, coordination, communication, task allocation + distributed execution, MARL/CTDE.
-
-**Moved out of the main path:** BDI-specific details, learned communication, consensus-allocation variants, MADDPG and extra MARL algorithm families.
-
-**Why:** the Section should explain how multiple agents are organized and coordinated before exposing algorithm variants.
-
-### 5. Control Theory — 5 chapters
-
-**Kept:** dynamic/state-space models, feedback/stability, PID, LQR and MPC.
-
-**Removed from the main path:** pole placement, feedforward-control variants, finite/infinite LQR taxonomy, nonlinear/robust MPC branches and named PID tuning recipes.
-
-**Why:** model → feedback → stability → PID → optimal control → constrained predictive control is already a complete control skeleton.
-
-### 6. Robotics — 5 chapters
-
-**Kept:** coordinate/kinematic models, sensing/state estimation, SLAM, planning, navigation/control.
-
-**Moved out of the main path:** Ackermann/manipulator-specific branches, Particle Filter as a core estimator, NeRF/3D Gaussian mapping, Behavior Tree as a navigation prerequisite, and specific planner variants.
-
-**Why:** the remaining five chapters form the full physical-robot loop without becoming a robotics encyclopaedia.
-
-### 7. Perception — 5 chapters
-
-**Kept:** camera model, feature matching, detection/segmentation, depth/point cloud, multimodal fusion.
-
-**Removed as a duplicate chapter:** **Visual Odometry & SLAM**. Visual matching stays in Perception, but VO/SLAM is taught once in Robotics.
-
-**Also pruned:** detailed detector architecture families, monocular-depth/3D-network catalogues and low-level point-cloud method lists.
-
-**Why:** Perception should explain how observations become geometry/semantics; localization and map consistency belong to Robotics.
-
-### 8. Distributed Systems & Networking — 5 chapters
-
-**Kept:** network limits, TCP/UDP intuition, request-response/pub-sub, distributed time/asynchrony, consistency, fault tolerance, ROS2/DDS.
-
-**Removed from the main path:** queue/backpressure as separate concepts, replication/partitioning method lists, CRDT as a core technique, QUIC/event-sourcing details.
-
-**Why:** multi-node robotics mainly needs communication semantics, timing, state consistency, failures and middleware.
-
-### 9. Software Engineering — 5 chapters
-
-**Kept:** requirements/architecture, modular APIs, version control, testing/debugging, containers/deployment/reliability.
-
-**Removed from the main path:** long architecture-style lists, SLO terminology, technical-debt theory, Compose as a required concept, SBOM/chaos-engineering/SRE details.
-
-**Why:** the core should make research systems reproducible, testable, deployable and maintainable—not teach a full enterprise software curriculum.
-
-### 10. Simulation & Sim2Real — 4 chapters
-
-**Kept:** modeling/physics simulation, robot/sensor simulation, reality gap/randomization, Sim2Real/Real2Sim validation loop.
-
-**Removed as a core chapter:** **Digital Twin**.
-
-**Why:** Digital Twin is useful in some industrial workflows but is not a prerequisite for understanding simulation, reality gap or transfer. It remains a Further Reading concept.
-
-### 11. Robustness & Safety — 5 chapters
-
-**Kept:** uncertainty/distribution shift, robustness/risk/reliability, safety constraints, fault detection/tolerance, runtime safety.
-
-**Compressed:** aleatoric/epistemic, shift/OOD and risk terms are grouped rather than taught as long taxonomies; CVaR, H-infinity and formal methods remain optional.
-
-**Why:** the learner needs to recognize uncertainty, define safety boundaries, detect failures and design fallbacks—not memorize every safety-analysis framework.
-
-### 12. Human–AI Interaction — 5 chapters
-
-**Kept:** human/system roles and automation, HITL, shared autonomy, trust/explainability, intervention/takeover.
-
-**Compressed:** long lists of interface techniques and feedback methods are reduced to status/alerts, authority allocation, escalation and safe handover.
-
-**Why:** for autonomous systems, the essential question is who has authority, when the human enters the loop, and how control is safely transferred.
-
-## Two whole chapters removed
-
-1. `Perception / Visual Odometry & SLAM` — duplicated `Robotics / Mapping & SLAM`.
-2. `Simulation / Digital Twin` — useful specialization, not a prerequisite for the main Sim2Real chain.
-
-This reduced the curriculum from **63 to 61 core chapters** without removing any prerequisite node.
-
-## Code and image policy after pruning
-
-No code was removed merely to reduce counts. Engineering examples remain where they expose a real implementation idea: state update, PID, Kalman update, A*, ROS2 QoS, idempotency, Docker/API contracts, noisy sensors, watchdogs and safety filters.
-
-Likewise, diagrams remain for loops, geometry, pipelines, information flow and system boundaries. The duplicate VO/SLAM diagram was removed with its duplicate chapter.
-
-## Validation
-
-Current offline checks pass:
+V6 的目标重新定义为“面向智能系统研究与工程实践的知识地图”，而不是 AI 编程入门网站。内容依赖链为：
 
 ```text
-Documentation checks passed: 12 sections, 61 core chapters, 74 Markdown pages, 49 diagrams, 24 Python examples.
+数学 → 理论方法 → 算法理解 → 工程实现 → 真实系统
 ```
 
-The checker validates navigation, local links, math delimiters, SVG XML, Python syntax, chapter-count bounds and bounded code/image density. V5 also adds a per-page cognitive-load guard: no chapter may expose more than **6 core concepts** or **4 representative methods** in the main path. GitHub Actions still runs `mkdocs build --strict` in a fully provisioned environment.
+代码归属执行以下约束：
+
+- Mathematics、Game Theory、Reinforcement Learning、Multi-Agent Systems 与 Control Theory 不含可执行代码；
+- RL 使用公式级更新规则，明确当前估计、目标值与更新方向；
+- Robotics、Perception、Distributed Systems、Software Engineering 与 Simulation 承担工程示例；
+- 图片用于几何关系、状态空间、概率/优化关系、架构、数据流和系统连接，不使用代码或软件界面截图。
+
+## 2. 当前规模
+
+- **12 Sections** / 5 layers
+- **61 core chapters**
+- **74 Markdown pages**
+- **47 local SVG teaching diagrams**
+- 理论层可执行代码块为 **0**
+- 导航以中文学习路径组织，保留必要英文术语
+
+## 3. 逐 Section 复核结果
+
+### Mathematics for Intelligent Systems
+
+保留线性代数/微积分、数值计算、概率、Bayes、Markov、优化六个节点。重点解释负梯度、局部/全局最优、Lagrange multiplier、离散化、误差来源和稳定性，不再出现 NumPy 或工具调用。
+
+### Reinforcement Learning
+
+保留 MDP/Bellman、Value-Based、Policy/Actor-Critic、探索与部分可观测、Model-Based vs Model-Free、安全/鲁棒/离线 RL。实现片段已改为数学更新式与算法关系，不依赖 PyTorch 或训练框架。
+
+### Game Theory
+
+围绕参与者、策略、收益、信息、行动顺序与重复交互展开。收益矩阵改为数学表示，不包含求解器代码。
+
+### Multi-Agent Systems
+
+保留 Agent 架构、协调、通信、任务分配/分布式决策、MARL/CTDE。理论消息、任务触发和反应式策略均改为形式化描述，网络实现移到 Distributed Systems。
+
+### Control Theory
+
+保持建模与状态空间 → 反馈与稳定性 → PID → LQR → MPC 的连续逻辑。离散更新和 PID 的可执行实现移到 Robotics，理论页只解释机制与成立条件。
+
+### Robotics
+
+保留坐标变换、差速运动、状态估计、A*、PID 控制循环等小型工程例子，并明确坐标系、单位、时间戳与执行器边界。
+
+### Perception
+
+保留图像读取与预处理、投影/反投影、点云处理流程和模型推理接口。代码围绕稳定的数据契约，不扩展为框架教程。
+
+### Distributed Systems & Networking
+
+保留 TCP/UDP、Pub/Sub、版本更新、退避容错、ROS2 Topic/Service 与 DDS QoS。实现服务于通信语义，不扩展 Raft/Paxos/CRDT。
+
+### Software Engineering
+
+只保留需求/架构、模块/API、Git、pytest、Docker、CI 与必要调试示例，不继续扩展企业级工具清单。
+
+### Simulation & Sim2Real
+
+保留物理推进、MuJoCo/Gazebo 抽象交互循环、传感器模拟接口、Reality Gap/随机化和 Sim2Real/Real2Sim 闭环。
+
+### Robustness & Safety
+
+按不确定性/分布偏移 → 风险/可靠性 → 安全约束 → 故障处理 → Runtime Safety 展开，强调条件、指标和退化模式。
+
+### Human–AI Interaction
+
+只保留自动化权限、人机在环、共享自治、信任/解释、干预/接管，重点解释控制权与安全交接。
+
+## 4. 图片与代码策略
+
+图片总量控制在 47 张，主要用于闭环、数据流、几何关系、系统架构和算法结构。Section 首页保留概念总图，正文只在可视化确实降低理解成本时使用。
+
+工程代码覆盖坐标变换、PID 循环、ROS2 Topic/Service、A*、图像预处理、点云流程、推理接口、TCP/UDP、Pub/Sub、容错、API、pytest、Docker、CI、MuJoCo/Gazebo 抽象循环和传感器模拟。理论层不再使用可执行代码。
+
+## 5. 最终静态验收
+
+- 所有导航目标均存在且无孤立 Markdown 页面；
+- 无失效旧交叉引用或同页重复图片；
+- 无 LaTeX 控制字符损坏；
+- 所有本地图片和页面链接均可解析；
+- Python 示例通过语法解析；
+- `mkdocs build --strict` 已在本机完整通过。

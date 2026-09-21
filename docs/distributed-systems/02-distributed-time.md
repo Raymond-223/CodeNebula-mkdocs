@@ -1,59 +1,46 @@
-# Distributed Systems, Time & Asynchrony
+# 分布式系统中的时间与异步
 
-> **Section:** Distributed Systems & Networking
+单机程序很容易说“先发生 A，再发生 B”。多个节点以后，这句话变得复杂：网络延迟不固定、各机器时钟不完全一致，甚至两个事件之间根本不存在一个所有节点都同意的绝对顺序。
 
-## Why it matters
+## 一、消息延迟使“现在”在不同节点上不一样
 
-分布式系统的根本难点不是“机器多”，而是没有统一时钟、消息有延迟、节点可能独立失败。
+节点 A 已经更新任务状态，不代表节点 B 立刻知道。B 在消息到达前继续使用旧状态并不是程序逻辑错误，而是分布式系统的正常现象。
 
-<figure markdown="span">
-  ![多源数据通常依靠时间戳和缓冲区近似对齐，而不是等待所有消息严格同时到达。](../assets/diagrams/time-alignment.svg)
-  <figcaption>工程上更常见的是“按时间戳对齐一个窗口”，而不是假设存在完美全局时钟。</figcaption>
-</figure>
+因此系统不能假设“我写完以后，所有人同时看到新值”。
 
-## Core ideas
+## 二、墙上时钟不能直接证明因果顺序
 
-- **Partial failure**：某些节点或链路异常时，其他部分仍可能继续运行。
-- **No global clock**：不同节点的时间不能假设完全一致。
-- **Concurrency / ordering**：事件可能并发发生，观察到的顺序不唯一。
-- **Synchronous vs asynchronous**：等待统一节奏更易推理，独立推进更符合真实网络。
-- **Timeout**：只是“等待超过阈值”的工程信号，不等价于对方确定失效。
+机器时钟可能有偏差，也可能被 NTP 调整。A 的日志写着 10:00:00.100，B 的日志写着 10:00:00.080，不足以证明 B 的事件更早发生。
 
-## Key theory
+Lamport clock 解决的是另一个问题：如果事件 $A$ 确实因果先于 $B$，则逻辑时间满足
 
-### Distributed Systems
+$$L(A)<L(B).$$
 
-单机失败通常是“程序停了”；分布式系统更麻烦的是**一部分正常、一部分超时、一部分消息还在路上**。因此超时不能简单等于“对方一定死了”。
+它不告诉我们真实相差多少毫秒，只提供一致的因果排序线索。
 
-### Synchronization & Asynchrony
+## 三、并发意味着两个事件可能根本没有先后关系
 
-异步系统更符合真实网络，但需要显式处理消息晚到、重复和乱序。同步结构更容易推理，但可能被最慢节点拖住。
+两个节点在互不知情时同时修改不同对象，这两个事件可以视为 concurrent。分布式系统不应强行给所有事件构造“真实唯一顺序”，而应只在业务需要时建立排序规则。
 
-## Representative methods
+这也是一致性协议、版本向量和共识算法存在的原因之一。
 
-- Idempotency：重复请求不应产生重复副作用。
-- Sequence number：识别旧消息。
-- Timestamp + buffer：对齐异步数据。
+## 四、超时应该使用单调时钟
 
-## Worked example
+计算“请求已经等待多久”时，应使用 monotonic clock，而不是可能跳变的 wall clock。墙上时间适合记录日志和展示；单调时钟适合测量持续时间和 deadline。
 
-**Distributed Systems：**给机器人发送“增加速度 0.1”若因重试执行两次会出错；改为“将速度设为 0.5”更容易设计成幂等命令。
+工程中把这两个概念混用，会出现“系统时间被校准后超时突然失效”的隐蔽问题。
 
-**Synchronization & Asynchrony：**相机 30 Hz、LiDAR 10 Hz、IMU 200 Hz，不可能要求所有传感器每次严格同时到达；通常用时间戳和缓冲区近似对齐。
+## 五、时间戳的价值来自语义清楚
 
-## Connections
+传感器时间戳通常表示采样时刻，消息接收时间则表示数据什么时候到达，它们不是同一个值。机器人多传感器融合时应尽量依据采样时间，而不是简单使用“收到消息的当前时间”。
 
-- → Fault Tolerance。
-- → Software Engineering / APIs。
-- → Perception / Multi-Modal：时间同步是融合前提。
-- → Control：控制环对延迟尤其敏感。
+## 六、异步系统设计要避免依赖固定延迟假设
 
-## Further Reading
+“消息一定 50 ms 内到”如果不是系统真实保证，就不能成为正确性的前提。可以用超时做故障怀疑，但应准备消息更晚到达、重复到达甚至永远不到的处理逻辑。
 
-- Replication/partitioning、logical clocks、backpressure、real-time scheduling。
+## 七、序列号可以解决“新旧消息谁应该覆盖谁”
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+对同一来源的连续状态，可以给消息附递增 sequence number。即使网络乱序，接收端也能丢弃比当前版本更旧的包。序列号不能解决跨节点的全局因果问题，但对机器人状态流、控制指令和日志重放非常实用。
 
-## Learning path
+时间戳回答“什么时候采样”，序列号回答“这是第几次更新”，二者经常需要同时存在。
 
-[← Section overview](index.md) · [← Networks & Message Passing](01-network-messaging.md) · [Consistency & Distributed State →](03-consistency-state.md)

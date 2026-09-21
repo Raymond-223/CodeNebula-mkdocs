@@ -17,12 +17,15 @@ EXPECTED_SECTIONS = [
     'human-ai-interaction',
 ]
 EXPECTED_DOMAINS = [
-    'Foundations', 'Intelligent Systems', 'Robotics', 'Systems',
-    'Advanced Autonomous Systems',
+    '数学基础', '理论方法', '算法理解', '工程实现', '真实系统',
 ]
 ENGINEERING_SECTIONS = {
-    'control-theory', 'robotics', 'distributed-systems', 'software-engineering',
-    'simulation-sim2real', 'robustness-safety',
+    'robotics', 'perception', 'distributed-systems', 'software-engineering',
+    'simulation-sim2real',
+}
+THEORY_SECTIONS = {
+    'mathematics', 'game-theory', 'reinforcement-learning',
+    'multi-agent-systems', 'control-theory',
 }
 
 
@@ -64,12 +67,9 @@ top_keys = [next(iter(x)) for x in nav if isinstance(x, dict)]
 for domain in EXPECTED_DOMAINS:
     if domain not in top_keys:
         errors.append(f'Missing top navigation domain: {domain}')
-for label in labels:
-    if re.search(r'[\u4e00-\u9fff]', label):
-        errors.append(f'Navigation label is not English-only: {label}')
 
 # Curriculum size: guard both bloat and accidental over-compression.
-section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'css'}]
+section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css'}]
 actual_sections = sorted(p.name for p in section_dirs)
 if actual_sections != sorted(EXPECTED_SECTIONS):
     errors.append(f'Section directories mismatch: {actual_sections}')
@@ -100,11 +100,13 @@ if orphans:
     errors.append('Markdown pages missing from nav: ' + ', '.join(orphans))
 
 link_re = re.compile(r'(!?)\[[^\]]*\]\(([^)]+)\)')
-required_headings = [
+forbidden_headings = [
     '## Why it matters', '## Core ideas', '## Key theory',
-    '## Representative methods', '## Worked example',
-    '## Connections', '## Further Reading', '## Learning path',
+    '## Representative methods', '## Worked example', '## Connections',
+    '## Further Reading', '## Further Study', '## Learning path',
+    '## 基本概念', '## 核心原理', '## 常用方法', '## 一个简单例子',
 ]
+
 python_blocks = []
 section_code_counts = {s: 0 for s in EXPECTED_SECTIONS}
 section_image_counts = {s: 0 for s in EXPECTED_SECTIONS}
@@ -138,22 +140,29 @@ for p in DOCS.rglob('*.md'):
             errors.append(f'Possible damaged LaTeX token "{broken}": {rel}')
 
     if p.name != 'index.md' and p.parent != DOCS:
-        for h in required_headings:
-            if h not in raw:
-                errors.append(f'Missing chapter heading {h!r}: {rel}')
+        for h in forbidden_headings:
+            if h in raw:
+                errors.append(f'Forbidden template heading {h!r}: {rel}')
 
-        # Per-page cognitive-load guard: keep the main path compact.
-        current = None
-        counts = {'Core ideas': 0, 'Representative methods': 0}
-        for line in raw.splitlines():
-            if line.startswith('## '):
-                current = line[3:]
-            elif line.startswith('- ') and current in counts:
-                counts[current] += 1
-        if counts['Core ideas'] > 6:
-            errors.append(f'Too many core concepts in one chapter ({counts["Core ideas"]}): {rel}')
-        if counts['Representative methods'] > 4:
-            errors.append(f'Too many representative methods in one chapter ({counts["Representative methods"]}): {rel}')
+        # Article-style guard: enough structure to explain a topic, but not a giant outline.
+        h2_count = len(re.findall(r'^##\s+', raw, flags=re.M))
+        if h2_count < 4:
+            errors.append(f'Chapter is too outline-thin (only {h2_count} H2 sections): {rel}')
+        if h2_count > 10:
+            errors.append(f'Chapter is over-sectioned ({h2_count} H2 sections): {rel}')
+        line_count = len(raw.splitlines())
+        if line_count < 40:
+            errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
+        if line_count > 220:
+            errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
+
+    # Do not repeat the same image in one article.
+    local_images = [target.strip().split('#', 1)[0] for flag, target in link_re.findall(clean) if flag == '!']
+    seen_images = set()
+    for image in local_images:
+        if image in seen_images:
+            errors.append(f'Duplicate image in one article: {rel} -> {image}')
+        seen_images.add(image)
 
     for _, target in link_re.findall(clean):
         target = target.strip().split('#', 1)[0]
@@ -169,10 +178,14 @@ for p in DOCS.rglob('*.md'):
     except Exception:
         section = None
     if section in section_code_counts:
-        section_code_counts[section] += len(re.findall(r'^```(?:python|bash|dockerfile|yaml|json|cpp|text)\s*$', raw, flags=re.M))
+        section_code_counts[section] += len(re.findall(r'^```(?:python|bash|dockerfile|yaml|json|cpp)\s*$', raw, flags=re.M))
         section_image_counts[section] += len(re.findall(r'!\[[^\]]*\]\([^)]+\)', raw))
     for m in re.finditer(r'```python\s*\n(.*?)\n```', raw, flags=re.S):
-        python_blocks.append((rel, m.group(1)))
+        code = m.group(1)
+        nonblank = sum(1 for line in code.splitlines() if line.strip())
+        if nonblank > 16:
+            errors.append(f'Python example is too long for a concept page ({nonblank} lines): {rel}')
+        python_blocks.append((rel, code))
 
 # Validate Python syntax.
 for rel, code in python_blocks:
@@ -196,16 +209,20 @@ if not 40 <= len(diagram_files) <= 55:
 if len(set(diagram_refs)) != len(diagram_files):
     errors.append(f'Not every generated diagram is used: {len(set(diagram_refs))}/{len(diagram_files)} referenced')
 for section, n in section_image_counts.items():
-    if not 2 <= n <= 7:
+    if not 2 <= n <= 12:
         errors.append(f'{section}: image density out of range, found {n}')
 
-# Code density: enough implementation intuition, but no tutorial bloat.
-if not 18 <= len(python_blocks) <= 30:
-    errors.append(f'Python example density guard expected 18-30 blocks, found {len(python_blocks)}')
+# Code ownership: theory explains with equations/pseudocode; executable examples live in engineering.
+for section in THEORY_SECTIONS:
+    n = section_code_counts[section]
+    if n:
+        errors.append(f'{section}: theory section contains {n} executable code blocks')
+if not 12 <= len(python_blocks) <= 28:
+    errors.append(f'Python example density guard expected 12-28 blocks, found {len(python_blocks)}')
 for section in ENGINEERING_SECTIONS:
     n = section_code_counts[section]
-    if not 2 <= n <= 7:
-        errors.append(f'{section}: engineering code density out of range, found {n} blocks')
+    if not 2 <= n <= 12:
+        errors.append(f'{section}: engineering implementation-code density out of range, found {n} blocks')
 
 if errors:
     print('Documentation checks failed:')
@@ -216,5 +233,5 @@ if errors:
 print(
     f'Documentation checks passed: 12 sections, {chapter_total} core chapters, '
     f'{len(all_md)} Markdown pages, {len(diagram_files)} diagrams, '
-    f'{len(python_blocks)} Python examples.'
+    f'{len(python_blocks)} Python examples; theory sections contain no executable code.'
 )

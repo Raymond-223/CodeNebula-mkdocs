@@ -1,71 +1,59 @@
-# Path & Motion Planning
+# 路径规划与运动规划
 
-> **Section:** Robotics
-
-## Why it matters
-
-规划的最小区分是：路径只关心几何可达，运动规划还要考虑机器人动力学、时间和碰撞约束。
-
-## Visual intuition
+规划解决的是：**从当前状态到目标状态，如何找到一条可行、尽量安全且代价合适的运动方案。** “路径能连通”和“机器人真的能沿它运动”是两个不同层次。
 
 <figure markdown="span">
-  ![高层目标逐步被压缩成可执行轨迹，最终由控制器跟踪。](../assets/diagrams/planning-pipeline.svg)
-  <figcaption>高层目标逐步被压缩成可执行轨迹，最终由控制器跟踪。</figcaption>
+  ![规划从环境表示、可行性检查到轨迹输出形成完整数据流。](../assets/diagrams/planning-pipeline.svg)
+  <figcaption>地图只给出环境，规划还必须考虑碰撞、运动约束和代价。</figcaption>
 </figure>
 
-## Core ideas
+## 一、图搜索适合已经离散化的空间
 
-- **Path**：几何路线，不一定带时间。
-- **Trajectory**：带时间、速度/加速度约束的运动。
-- **Configuration space**：把机器人几何碰撞转成状态空间障碍。
-- **Cost**：长度、时间、安全距离、平滑度等。
+栅格地图中，每个格子可以看作节点，相邻可通行格子之间形成边。Dijkstra 根据累计代价扩展节点；A* 在此基础上加入启发函数 $h(n)$，优先搜索更可能靠近目标的方向：
 
-## Key theory
+$$f(n)=g(n)+h(n).$$
 
-图搜索适合离散地图，采样规划适合高维连续空间。规划器的输入至少要明确：**起点、目标、地图/障碍、运动约束、代价函数**。
+只要启发函数不高估真实剩余代价，A* 仍能保持最优性，同时通常比 Dijkstra 少扩展大量无关区域。
 
-## Representative methods
+## 二、采样规划适合高维连续空间
 
-- A*：离散地图图搜索代表。
-- RRT：高维连续空间采样规划代表。
-- Local trajectory optimization：把动力学和障碍一起考虑。
+机械臂有很多关节，自由空间难以完整离散化。RRT 一类方法通过随机采样逐步构造可达树，不需要先显式建立整个配置空间网格。
 
-## Minimal code
+入门阶段不必记住所有 RRT 变体，只要理解：**图搜索先有离散图再搜索；采样规划边探索边构图。**
 
-A* 的关键不是代码本身，而是评价函数 $f=g+h$：已有代价保证真实累计，启发式估计把搜索引向目标。
+## 三、路径与轨迹不完全相同
+
+路径主要描述几何位置序列；轨迹还包含时间、速度和加速度。一个几何上不碰障碍的急转弯，车辆可能因为最小转弯半径而无法执行。
+
+因此真实规划通常要把机器人尺寸、最大速度、转向约束和安全距离加入可行性检查。
+
+## 四、一个最小 A* 可以把算法主线看清
 
 ```python
-from heapq import heappush, heappop
+import heapq
 
 def astar(start, goal, neighbors, h):
-    frontier = [(h(start, goal), 0, start)]
-    best = {start: 0}
-    while frontier:
-        _, g, node = heappop(frontier)
-        if node == goal:
-            return g
-        for nxt, cost in neighbors(node):
-            ng = g + cost
-            if ng < best.get(nxt, float("inf")):
-                best[nxt] = ng
-                heappush(frontier, (ng + h(nxt, goal), ng, nxt))
+    q = [(0, start)]
+    cost, parent = {start: 0}, {start: None}
+    while q:
+        _, u = heapq.heappop(q)
+        if u == goal: break
+        for v, w in neighbors(u):
+            new = cost[u] + w
+            if v not in cost or new < cost[v]:
+                cost[v], parent[v] = new, u
+                heapq.heappush(q, (new + h(v, goal), v))
+    return parent
 ```
 
-## Worked example
+实际工程还需要重建路径、处理障碍膨胀和动态更新，但核心仍是“累计代价 + 对目标的估计”。
 
-仓库 AGV 可先用 A* 找全局栅格路径，再由局部规划器根据实时障碍生成可执行速度轨迹。
+## 五、动态环境需要规划与控制共同处理
 
-## Connections
+行人、其他车辆和临时障碍会让静态最短路快速失效。局部控制器可以处理短期小变化；当局部绕行无法继续或全局通道被堵塞时，再触发重新规划。
 
-- → Control Theory：规划给参考，控制负责跟踪。
-- → Robustness：地图/定位误差会使名义安全路径失效。
+如果每个新障碍都重新跑完整全局规划，系统会反应过慢；如果永不重规划，局部控制又可能陷入死胡同。
 
-## Further Reading
+## 六、规划失败时先区分“无路”还是“表示有问题”
 
-- Dijkstra、RRT*、Hybrid A*、CHOMP/TrajOpt。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Mapping & SLAM](03-mapping-slam.md) · [Navigation & Robot Control →](05-navigation-control.md)
+地图膨胀过大、坐标变换错误、机器人半径设置不合理，都可能让规划器认为不存在路径。调试时应先可视化起点、终点、障碍和可行空间，再调整算法参数。

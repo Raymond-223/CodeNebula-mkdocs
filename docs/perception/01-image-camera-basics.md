@@ -1,73 +1,81 @@
-# Image & Camera Basics
+# 图像与相机模型基础
 
-> **Section:** Perception
-
-## Why it matters
-
-理解相机投影、内外参和图像采样，是后续所有视觉几何和视觉学习方法的共同基础。
-
-## Visual intuition
+视觉算法最终处理的是像素，但像素来自真实三维世界经过相机成像后的投影。要理解检测、深度、SLAM 或多模态融合，首先要知道**一个三维点怎样变成二维像素**。
 
 <figure markdown="span">
-  ![视觉系统先经历物理投影与采样，再进入特征、学习和几何推理。](../assets/diagrams/camera-pipeline.svg)
-  <figcaption>视觉系统先经历物理投影与采样，再进入特征、学习和几何推理。</figcaption>
+  ![三维点经过相机坐标变换和投影后落到图像平面。](../assets/diagrams/camera-pipeline.svg)
+  <figcaption>视觉几何的主线是：世界坐标 → 相机坐标 → 归一化平面 → 像素。</figcaption>
 </figure>
 
-## Core ideas
+## 一、数字图像首先是规则采样的数值阵列
 
-- **Pixel**：图像离散采样位置。
-- **Intrinsics**：焦距、主点等相机内部参数。
-- **Extrinsics**：相机与其他坐标系之间的位姿。
-- **Projection**：3D 点如何映射到 2D 图像。
+灰度图可以写成 $I(u,v)$，彩色图通常在每个像素保存 RGB 三个通道。分辨率只说明采样数量，并不直接等于几何精度；曝光、运动模糊、噪声和镜头畸变都会改变像素值。
 
-## Key theory
+视觉算法因此既受**几何关系**影响，也受**成像质量**影响。
 
-针孔模型核心关系为
+## 二、针孔模型描述最基本的透视投影
+
+设相机坐标系中的三维点为 $(X,Y,Z)$，焦距为 $f$，理想投影满足
 
 $$
-s\begin{bmatrix}u\\v\\1\end{bmatrix}=K[R\mid t]
-\begin{bmatrix}X\\Y\\Z\\1\end{bmatrix}.
+x=f\frac{X}{Z},\qquad y=f\frac{Y}{Z}.
 $$
 
-标定的目的就是让像素、相机坐标和机器人坐标能够互相对应。
+同一个物体离相机越远，$Z$ 越大，投影尺寸越小。这就是透视关系的来源。
 
-## Representative methods
+实际像素还需要考虑主点和不同方向的像素尺度：
 
-- Intrinsic calibration。
-- Extrinsic calibration。
-- Undistortion。
+$$
+\begin{bmatrix}u\\v\\1\end{bmatrix}
+\sim
+K\begin{bmatrix}X/Z\\Y/Z\\1\end{bmatrix},
+\qquad
+K=\begin{bmatrix}f_x&0&c_x\\0&f_y&c_y\\0&0&1\end{bmatrix}.
+$$
 
-## Minimal code
+$K$ 就是相机内参矩阵。
 
-这就是针孔相机模型的计算核心：三维点经过内参矩阵后除以深度得到像素坐标。
+## 三、内参和外参解决的是两类完全不同的问题
+
+**内参**描述相机自身成像几何：焦距、主点、畸变等；**外参**描述相机相对机器人或世界坐标系的位置和姿态。
+
+即使目标在图像中检测得非常准，如果外参错误，转换到机器人坐标系后仍会落在错误位置。机器人视觉里，“检测正确但导航方向不对”经常是外参或 TF 问题。
+
+## 四、畸变会让理想针孔模型偏离真实镜头
+
+广角镜头尤其明显：直线靠近图像边缘会弯曲。标定过程通常同时估计内参和畸变参数，再把原图校正到更接近针孔模型的坐标。
+
+标定不是“只做一次就永远正确”。镜头重新安装、焦距改变或机械结构变形后，参数可能需要重新估计。
+
+## 五、一个像素投影函数就能把公式落到代码
 
 ```python
-import numpy as np
-
-def project(K, point_xyz):
-    x = K @ point_xyz
-    return x[:2] / x[2]
-
-K = np.array([[500, 0, 320], [0, 500, 240], [0, 0, 1]])
-uv = project(K, np.array([1.0, 0.2, 4.0]))
-print(uv)
+def project_point(X, Y, Z, fx, fy, cx, cy):
+    if Z <= 0:
+        raise ValueError("point is behind camera")
+    u = fx * X / Z + cx
+    v = fy * Y / Z + cy
+    return u, v
 ```
 
-## Worked example
+这段代码没有畸变、没有外参，但已经体现了投影最核心的 $X/Z$、$Y/Z$ 关系。
 
-检测框中心只是一个像素点 $(u,v)$；没有深度与标定，它不能直接变成“目标距离机器人 2 m”。
+### 图像读取与预处理接口
 
-## Connections
+进入模型前应显式固定颜色空间、尺寸和数值范围：
 
-- → Robotics / Coordinate Systems。
-- → Depth & 3D Vision。
+```python
+import cv2
 
-## Further Reading
+image = cv2.imread("frame.png")
+if image is None:
+    raise FileNotFoundError("frame.png")
+rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+tensor_input = cv2.resize(rgb, (640, 384)).astype("float32") / 255.0
+```
 
-- Lens models、rolling shutter。
+预处理参数必须与训练阶段一致；“模型能运行”不代表输入语义正确。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 六、视觉几何最容易错在坐标约定
 
-## Learning path
-
-[← Section overview](index.md) · [Feature-Based Vision →](02-feature-vision.md)
+不同库对相机轴方向、图像原点和旋转表示可能不同。工程中必须明确：$+Z$ 是否朝前、像素原点在哪里、外参是 world-to-camera 还是 camera-to-world。很多“公式差一个负号”的问题，本质是坐标约定没写清。

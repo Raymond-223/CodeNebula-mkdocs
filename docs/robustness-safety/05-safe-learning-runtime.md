@@ -1,61 +1,46 @@
-# Safe Learning & Runtime Safety
+# 安全学习与运行时安全
 
-> **Section:** Robustness & Safety
-
-## Why it matters
-
-训练阶段的安全约束不能替代运行时保护。关键系统通常还需要独立监控、过滤或接管机制。
-
-## Visual intuition
+训练阶段加入安全目标，并不能保证部署后模型永远不会遇到新场景。运行时安全的核心思想是：**学习策略之外再保留一层独立监控和回退机制。**
 
 <figure markdown="span">
-  ![关键系统可在高性能策略之外增加独立监控和安全过滤层。](../assets/diagrams/runtime-safety.svg)
-  <figcaption>关键系统可在高性能策略之外增加独立监控和安全过滤层。</figcaption>
+  ![运行时安全层持续检查学习策略输出，并在越界时触发过滤或回退。](../assets/diagrams/runtime-safety.svg)
+  <figcaption>主策略追求任务性能，独立安全层负责监控、限制和紧急回退。</figcaption>
 </figure>
 
-## Core ideas
+## 一、运行时监控关注的是“当前还能不能信任主策略”
 
-- **Offline validation**：上线前覆盖关键场景。
-- **Runtime monitor**：运行时检查状态与输出。
-- **Shield / safety layer**：阻止明显不安全动作。
-- **Fallback policy**：异常时切换到已验证行为。
+监控信号可以包括定位协方差、传感器更新时间、控制循环频率、动作是否越界以及模型置信度。
 
-## Key theory
+系统不需要先知道主策略为什么出错，只要检测到关键安全前提已经失效，就应该降低自动化程度。
 
-安全学习系统通常需要分层：**学习策略负责性能，运行时保护层负责最后边界**。保护层本身也必须验证，不能因为有“安全模块”就认为系统自动安全。
+## 二、安全过滤器可以修改不安全动作
 
-## Representative methods
+策略输出 $u_{nom}$ 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。
 
-- Physical limits + runtime constraint check。
-- Fallback / emergency stop：越界或不确定时进入已知安全行为。
+这种结构让学习算法不必独自承担“永远不犯错”的责任。
 
-## Minimal code
+## 三、watchdog 处理的是“系统是否还活着”
 
-真实运行时安全过滤器通常还会检查状态约束、碰撞距离或控制屏障函数；限幅只是最简单的结构示例。
+如果控制节点超过 500 ms 没有心跳，继续使用最后一条速度命令非常危险。watchdog 可以直接触发停车或备用控制。
 
 ```python
-def safety_filter(command, min_cmd, max_cmd):
-    return max(min(command, max_cmd), min_cmd)
-
-nominal = 1.4
-safe = safety_filter(nominal, -0.8, 0.8)
+def watchdog(now, last_update, timeout=0.5):
+    return "STOP" if now - last_update > timeout else "OK"
 ```
 
-## Worked example
+## 四、回退策略必须比主策略更简单、更可信
 
-学习策略给出高速穿越狭窄区域的动作，runtime safety layer 检测预测碰撞风险后拒绝该动作并触发减速。
+安全回退不追求完成最优任务，而是把系统带回可控状态。停车、悬停、保持姿态、低速返航或请求人工接管都是常见选择。
 
-## Connections
+如果备用策略和主策略依赖相同模型、相同传感器和相同复杂软件链，就可能在同一故障下同时失效。
 
-- → Human-AI Interaction / Intervention。
-- → Sim2Real / staged validation。
+## 五、运行时安全最终需要明确状态机
 
-## Further Reading
+正常运行、警告、降级、紧急停止、人工接管和恢复自动控制之间应有清晰切换条件。这样才能避免故障时多个模块同时“抢着处理”或者没有任何模块负责。
 
-- Formal verification of neural policies、runtime assurance architectures。
+## 六、安全状态机要避免频繁来回切换
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+若定位质量在阈值附近波动，系统可能在 NORMAL 和 DEGRADED 之间不断切换。常见做法是加入 hysteresis：进入降级状态使用更严格阈值，恢复正常则要求更长时间稳定满足条件。
 
-## Learning path
+安全机制不仅要能触发，还要保证触发后的行为稳定、可预测。
 
-[← Section overview](index.md) · [← Fault Detection & Fault Tolerance](04-fault-tolerance.md)

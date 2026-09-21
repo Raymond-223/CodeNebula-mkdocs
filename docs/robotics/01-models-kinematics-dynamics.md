@@ -1,82 +1,88 @@
-# Robot Models, Kinematics & Dynamics
+# 机器人模型、运动学与动力学
 
-> **Section:** Robotics
+机器人要在真实世界运动，至少要解决三件事：**它在哪里、它会怎样运动、要产生这种运动需要什么力或力矩。** 坐标系、运动学和动力学分别对应这三个层次。
 
-## Why it matters
+## 一、坐标系先解决“相对谁来描述”
 
-坐标系解决“在哪里”，运动学解决“怎么动”，动力学解决“为什么这样动”。三者合起来才构成机器人物理模型。
+同一个点可以在相机坐标系、机器人底盘坐标系和地图坐标系下得到完全不同的数值。机器人系统因此不会只说“目标在 $(2,1)$”，而要说明“目标在 camera frame 还是 map frame”。
 
-## Core ideas
-
-- **Frame & pose**：定义“相对哪个坐标系，机器人在哪里、朝哪”。
-- **Transform**：在不同坐标系之间变换位置和姿态。
-- **Kinematics**：描述执行变量与机器人运动之间的几何关系。
-- **Jacobian**：描述小的执行变化如何映射成速度变化。
-- **Dynamics**：进一步考虑质量、惯量和力/力矩。
-
-## Key theory
-
-### Robot Models & Coordinate Systems
-
-三维刚体变换常写为
+刚体位姿通常由旋转 $R$ 和平移 $t$ 表示，齐次变换写成
 
 $$
-T=\begin{bmatrix}R&t\\0&1\end{bmatrix},
+T=\begin{bmatrix}R&t\\0&1\end{bmatrix}.
 $$
 
-并按链式关系组合：$T^A_C=T^A_BT^B_C$。机器人中最常见错误不是公式不会，而是**坐标系方向和时间戳不一致**。
+若已知 $T^A_B$ 和 $T^B_C$，则
 
-### Kinematics & Dynamics
+$$T^A_C=T^A_BT^B_C.$$
 
-运动学不考虑力，只讨论几何与速度关系；动力学进一步写成
+这条链式关系就是机器人 TF 系统的数学基础。
 
-$$
-M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau.
-$$
-
-移动底盘入门阶段只需掌握差速/阿克曼等运动学模型。
-
-## Representative methods
-
-- 2D/3D pose 与坐标变换。
-- Differential-drive kinematics：移动机器人最小代表。
-- Jacobian：理解“执行变量变化如何映射到末端/车体运动”。
-
-## Minimal code
-
-齐次变换把旋转和平移放进一个矩阵，是 TF、定位、运动学链条最常见的坐标表达。
+在工程层，一个二维坐标变换的小例子可以把“先旋转、再平移”的顺序固定下来：
 
 ```python
-import numpy as np
+import math
 
-def transform_2d(x, y, yaw):
-    c, s = np.cos(yaw), np.sin(yaw)
-    return np.array([[c, -s, x],
-                     [s,  c, y],
-                     [0,  0, 1]])
-
-T_world_robot = transform_2d(2.0, 1.0, 0.5)
+def transform_point(px, py, tx, ty, yaw):
+    c, s = math.cos(yaw), math.sin(yaw)
+    return c * px - s * py + tx, s * px + c * py + ty
 ```
 
-## Worked example
+这里输入点位于局部坐标系，`tx, ty, yaw` 描述该坐标系相对目标坐标系的位姿。实际系统还要同时传递 frame 名称和时间戳。
 
-**Robot Models & Coordinate Systems：**相机检测到目标在 camera frame 前方 2 m；要让底盘导航过去，必须通过外参把点变换到 base/map frame。
+## 二、运动学只关心“动作变量怎样变成运动”
 
-**Kinematics & Dynamics：**差速车左右轮同速则直行，速度不同则产生角速度；这属于运动学，不需要先计算轮胎受力。
+运动学不考虑质量和受力，只研究几何关系。对差速小车，左右轮线速度为 $v_l,v_r$，轮距为 $L$，车体线速度和角速度近似为
 
-## Connections
+$$
+v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
+$$
 
-- → Perception：视觉输出必须落到统一坐标系。
-- → ROS2/DDS：TF 负责传播坐标变换关系。
-- → Control Theory：模型进入控制器。
-- → Simulation：仿真器实现更完整动力学。
+因此两轮同速时直行，速度不同则转弯。对机械臂，关节变量 $q$ 通过正运动学映射到末端位姿；Jacobian 则描述关节速度和末端速度的局部关系
 
-## Further Reading
+$$\dot x=J(q)\dot q.$$
 
-- Ackermann / manipulator kinematics、SE(2)/SE(3)、完整刚体动力学。
+运动学回答的是“怎么动”，不是“为什么能这样动”。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 三、动力学把质量、惯性和力加入模型
 
-## Learning path
+当控制任务需要考虑加速度、负载或高速运动时，只靠运动学就不够。机械系统常写成
 
-[← Section overview](index.md) · [Sensors & State Estimation →](02-sensing-estimation.md)
+$$
+M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
+$$
+
+其中 $M$ 表示惯性，$C$ 表示速度相关项，$g$ 表示重力，$\tau$ 是执行器力矩。
+
+移动机器人低速导航时，简单运动学模型往往已经够用；机械臂高速轨迹控制、无人机姿态控制则更依赖动力学。**模型复杂度要由任务决定。**
+
+## 四、差速车的位姿怎样随速度更新
+
+二维差速车位姿为 $(x,y,\theta)$，在短时间 $\Delta t$ 内可近似更新为
+
+$$
+\begin{aligned}
+x_{k+1}&=x_k+v\cos\theta_k\Delta t,\\
+y_{k+1}&=y_k+v\sin\theta_k\Delta t,\\
+\theta_{k+1}&=\theta_k+\omega\Delta t.
+\end{aligned}
+$$
+
+```python
+import math
+
+def diff_drive_step(x, y, yaw, vl, vr, wheel_base, dt):
+    v = 0.5 * (vl + vr)
+    w = (vr - vl) / wheel_base
+    return (x + v * math.cos(yaw) * dt,
+            y + v * math.sin(yaw) * dt,
+            yaw + w * dt)
+```
+
+这段代码没有考虑轮胎打滑、执行器动态和地形，因此适合低速平面运动，不应被当成真实车辆的完整物理模型。
+
+## 五、模型使用时最容易错的是坐标、单位和时间
+
+很多“算法错误”其实来自模型接口不一致：角度一处用 degree、一处用 radian；位置来自旧时间戳；相机外参方向写反；把 `map → base` 当成 `base → map` 使用。
+
+因此机器人模型落地时应明确三个约定：**坐标系方向、单位、时间戳**。公式本身往往比这些工程约定更简单。

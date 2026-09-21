@@ -1,58 +1,132 @@
-# Value-Based Methods
+# 价值学习：Q-Learning 与 DQN
 
-> **Section:** Reinforcement Learning
+价值学习不直接输出“应该做什么”，而是先学习**每个动作的长期价值**，再从价值中选动作。Q-Learning 是最典型的表格方法，DQN 则把同一思想扩展到高维状态。
 
-## Why it matters
+## 一、TD 学习：不用等到一局结束
 
-价值方法先回答“这个状态/动作有多好”，再根据价值选择动作；Q-Learning 和 DQN 只是这一思想的代表。
-
-## Core ideas
-
-- **Q-value**：$Q(s,a)$ 评价在状态 $s$ 采取动作 $a$ 的长期价值。
-- **TD target**：用一步奖励和下一状态估计构造学习目标。
-- **Off-policy**：行为策略与目标策略可以不同。
-- **Function approximation**：用神经网络近似大规模 $Q$。
-
-## Key theory
-
-表格 Q-Learning 更新为
+如果直接用完整回报 $G_t$ 更新 $V(s_t)$，必须等未来真正发生。TD 的做法是只走一步，就用当前估计构造目标：
 
 $$
-Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha\left[r_{t+1}+\gamma\max_a Q(s_{t+1},a)-Q(s_t,a_t)\right].
+y_t=r_{t+1}+\gamma V(s_{t+1}).
 $$
 
-DQN 只是把表格 $Q$ 换成神经网络，并加入经验回放与目标网络来降低训练相关性和目标漂移。
+TD 误差为
 
-## Representative methods
+$$
+\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),
+$$
 
-- Q-Learning：离散小状态空间。
-- DQN：用神经网络把 Q-Learning 扩展到高维状态。
+然后更新
 
-## Minimal code
+$$
+V(s_t)\leftarrow V(s_t)+\alpha\delta_t.
+$$
 
-这一行更新就是 tabular Q-Learning 的核心；DQN 只是用神经网络近似 Q，并加入 replay buffer、target network 等稳定化机制。
+它一半来自真实采样，一半来自自己的估计，因此称为 **bootstrapping（自举）**。优点是可以在线更新，代价是目标本身也在变化。
 
-```python
-def q_update(q, s, a, r, s_next, alpha=0.1, gamma=0.99):
-    target = r + gamma * max(q[s_next])
-    q[s][a] += alpha * (target - q[s][a])
-```
+## 二、Q-Learning：直接学习“这个动作值多少”
 
-## Worked example
+Q-Learning 用最优下一动作构造 TD 目标：
 
-在网格世界中，Q 表可以直接存储“每个格子 × 每个动作”的价值；换成图像输入后无法列出所有状态，需要 DQN 由像素预测每个离散动作的 Q 值。
+$$
+y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a').
+$$
 
-## Connections
+更新为
 
-- → Exploration：value-based 方法仍需要探索策略。
-- → Actor-Critic：连续动作时不方便对所有动作取 $\max$。
+$$
+Q(s_t,a_t)\leftarrow Q(s_t,a_t)
++\alpha\left[y_t-Q(s_t,a_t)\right].
+$$
 
-## Further Reading
+把更新拆开看更清楚：
 
-- Double DQN、Dueling DQN、Prioritized Replay、Rainbow。
+$$
+\underbrace{Q(s_t,a_t)}_{\text{当前估计}}
+\leftarrow
+\underbrace{Q(s_t,a_t)}_{\text{当前估计}}
++\alpha
+\underbrace{\left(
+\overbrace{r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')}^{\text{目标值}}
+-Q(s_t,a_t)
+\right)}_{\text{更新方向：TD error}}.
+$$
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+当前估计回答“现在认为这个动作值多少”，目标值混合了即时奖励与下一状态的最优估计，二者之差决定应该上调还是下调。
 
-## Learning path
+这里最容易混淆的是：**执行时可以探索，学习目标仍然使用下一状态的最大 Q 值**。这就是它被称为 off-policy 的原因之一。
 
-[← Section overview](index.md) · [← MDP & Bellman Equation](01-mdp-bellman.md) · [Policy Gradient & Actor-Critic →](03-policy-actor-critic.md)
+## 三、探索为什么不能直接取消
+
+如果每次都选择当前 $Q$ 最大的动作，早期一次错误估计可能让其他动作永远得不到尝试。
+
+最常见的入门方法是 $\varepsilon$-greedy：
+
+$$
+a_t\sim
+\begin{cases}
+\text{在动作集合中随机选择}, & \text{概率 }\varepsilon,\\
+\arg\max_a Q(s_t,a), & \text{概率 }1-\varepsilon.
+\end{cases}
+$$
+
+探索解决“没有数据”的问题，价值更新解决“如何利用数据”的问题。两者不要混在一起理解。
+
+在经典有限表格设定下，Q-Learning 的收敛需要包括状态—动作对持续被访问、合适的学习率序列和稳定 MDP 等条件；“用了 Q-Learning”本身并不自动保证收敛。
+
+## 四、为什么表格方法会失效
+
+假设状态由 20 个连续量组成，就不可能给每种状态都单独存一个 Q 表条目。更重要的是，彼此相近的状态本应共享经验。
+
+因此把表格替换为参数化函数：
+
+$$
+Q(s,a;\theta)\approx Q^*(s,a).
+$$
+
+神经网络的价值不只是“容量大”，而是能在相似输入之间形成**泛化**。
+
+![DQN 网络结构](../img/05-dqn-network.png)
+
+## 五、DQN 仍然是在做同一个 Bellman 更新
+
+DQN 的目标没有变，只是 Q 值由网络输出：
+
+$$
+y=r+\gamma\max_{a'}Q(s',a';\theta^-).
+$$
+
+在线网络参数是 $\theta$，目标网络参数是 $\theta^-$。训练损失可以写成
+
+$$
+L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].
+$$
+
+真正让 DQN 比“直接拿神经网络替 Q 表”稳定的，是两个工程结构。
+
+### 5.1 Experience Replay
+
+把交互得到的 $(s,a,r,s')$ 先放进 replay buffer，再随机抽样，使训练样本更接近独立抽样。对一批样本，仍然最小化 Bellman 目标与当前预测之间的平方误差：
+
+$$
+L(\theta)=\frac{1}{|B|}\sum_{(s,a,r,s')\in B}
+\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2.
+$$
+
+随机抽样可以降低连续轨迹样本之间的强相关，并提高历史数据利用率。
+
+### 5.2 Target Network
+
+如果同一个网络既产生预测值又立即产生学习目标，参数每更新一次，目标也跟着移动。目标网络用一份较慢更新的参数 $\theta^-$ 生成 TD target，让目标暂时更稳定。
+
+它们不能从理论上保证深度 Q-Learning 一定收敛，但显著改善了实际训练稳定性。
+
+## 六、什么时候应该用价值方法
+
+价值方法特别适合**离散动作**：例如左/右/前进/停止，或有限个策略选项。得到 $Q(s,a)$ 后，只需比较各动作价值即可决策。
+
+如果动作本身是连续值，例如转向角、力矩、速度，直接枚举 $\arg\max_a Q(s,a)$ 会变困难，这时策略方法通常更自然。
+
+所以从 Q-Learning 到 DQN 最需要记住的不是算法名字，而是一条主线：
+
+> **Bellman target → TD error → 价值更新 → 用价值选择动作。**

@@ -1,19 +1,17 @@
-# Exploration & Partial Observability
+# 探索与部分可观测问题
 
-> **Section:** Reinforcement Learning
 
-## Why it matters
 
 探索解决“没试过”，部分可观测解决“看不全”。两者都表现为不确定，但处理方式完全不同。
 
-## Core ideas
+## 一、为什么“没试过”和“看不全”是两种问题
 
 - **Exploration**：为获得信息而尝试当前不确定的动作。
 - **Exploitation**：使用当前认为最优的动作。
 - **POMDP**：真实状态不可完全观测。
 - **Belief / memory**：用历史信息补偿当前观测不足。
 
-## Key theory
+## 二、探索与利用
 
 探索处理的是知识不足；部分可观测处理的是信息本身不完整。二者不能混为一谈。
 
@@ -25,27 +23,27 @@ $$
 
 其中 $\tau_t$ 是观测—动作历史，实际可用 RNN/Transformer 压缩历史。
 
-## Representative methods
+## 三、部分可观测与信念状态
 
 - $\varepsilon$-greedy：简单随机探索。
 - Entropy bonus：鼓励随机策略。
 - Recurrent policy：用记忆处理部分可观测。
 
-## Worked example
+## 四、记忆如何补足状态信息
 
 门后目标不可见：随机尝试不同门属于探索；传感器被墙遮挡导致当前看不到目标属于部分可观测。
 
-## Connections
+## 五、探索不足和状态不完整要分开处理
 
-- → Perception：更好的观测降低 POMDP 难度。
-- → Multi-Agent Systems：其他 agent 的行为也会造成部分可观测。
+“Agent 不知道该做什么”可能有两个完全不同的原因。第一种是某些动作还没充分尝试，这是探索问题；第二种是当前观测本身不足以判断真实状态，这是部分可观测问题。前者可以通过随机探索或不确定性驱动探索缓解，后者则需要历史、记忆或信念状态。
 
-## Further Reading
+例如机器人站在两个外观相同的走廊里，反复尝试更多动作并不能告诉它自己到底在哪；它需要记住之前经过的路口或结合地图定位。把 POMDP 问题误当成“探索不够”，往往只会得到更随机而不是更聪明的策略。
 
-- UCB/Thompson Sampling、intrinsic motivation、belief-state planning。
+## 六、一个简单诊断：随机探索能否解决问题
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+如果增加 $\varepsilon$-greedy 的随机动作后性能改善，问题很可能是“没探索到”；如果无论怎么探索，智能体在相同观测下仍需要做不同动作，说明观测本身不够，属于部分可观测问题。后者通常需要历史窗口、RNN 或 belief state，而不是更大的探索噪声。
 
-## Learning path
+## 七、记忆的作用是恢复隐藏状态，不是自动提升智能
 
-[← Section overview](index.md) · [← Policy Gradient & Actor-Critic](03-policy-actor-critic.md) · [Model-Based vs Model-Free RL →](05-model-based-vs-model-free.md)
+RNN/Transformer 可以把历史压缩成内部状态，但只有当历史中真的包含有用线索时才有帮助。若关键变量从未被任何传感器观测，记忆也无法凭空恢复它。实践中先检查观测设计，再决定是否需要更复杂的记忆模型。
+

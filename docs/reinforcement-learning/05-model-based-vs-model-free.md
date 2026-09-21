@@ -1,26 +1,23 @@
-# Model-Based vs Model-Free RL
+# Model-Based 与 Model-Free 强化学习
 
-> **Section:** Reinforcement Learning
 
-## Why it matters
 
 是否显式学习或使用环境模型，是 RL 最重要的结构分界之一：模型换来规划能力，也引入模型偏差。
 
-## Visual intuition
 
 <figure markdown="span">
   ![是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。](../assets/diagrams/model-based-vs-free.svg)
   <figcaption>是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。</figcaption>
 </figure>
 
-## Core ideas
+## 一、两条路线的根本区别
 
 - **Model-free**：直接学价值或策略，不显式预测下一状态。
 - **Model-based**：使用 $P(s'\mid s,a)$、奖励模型或 learned dynamics。
 - **Planning**：利用模型在真实交互之外进行搜索/优化。
 - **Model bias**：模型误差会在多步 rollout 中累积。
 
-## Key theory
+## 二、Model-Free：直接从经验学习
 
 Model-free 把真实交互直接变成参数更新；Model-based 则多了一层
 
@@ -30,26 +27,25 @@ $$
 
 前者结构简单，后者通常更节省真实交互，但必须管理模型误差。
 
-## Representative methods
+## 三、Model-Based：先学模型再规划
 
 - Learned dynamics + MPC：用预测模型滚动规划。
 - Model-generated rollouts：用模型补充真实交互数据。
 
-## Worked example
+## 四、模型偏差与计算代价
 
 真实机器人试错昂贵时，可先用少量轨迹拟合动力学，再在模型中筛掉明显差的动作，只把候选动作放到实车。
 
-## Connections
+## 五、真正的选择是“要不要把经验变成可预测模型”
 
-- → Simulation & Sim2Real：模拟器可以作为已知或近似模型。
-- → Control Theory / MPC：model-based 决策的经典形式。
+Model-Free 方法直接从经验更新价值或策略，结构简单，但每条数据通常只能通过更新规则间接影响未来决策。Model-Based 方法则尝试学习或使用 $p(s'\mid s,a)$ 和奖励模型，再利用模型进行规划或生成额外经验，因此数据利用率往往更高。
 
-## Further Reading
+代价是模型会错。规划次数越多，模型误差越可能被反复放大。因此工程上常见折中不是二选一，而是让模型只负责短期预测、候选筛选或安全检查，把最终策略仍交给 Model-Free 部分。
+## 六、模型真正提供的是“可以在脑内试错”的能力
 
-- Dyna、MuZero、Dreamer、MBPO。
+有模型以后，智能体可以在不执行真实动作的情况下预测后果、比较候选方案或生成额外训练数据。这能显著节省真实交互，但收益取决于模型是否准确。模型错误会在多步预测中积累，产生所谓 model bias。
 
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
+## 七、工程上常用的是混合方案
 
-## Learning path
+很多系统并不纯粹属于二者之一：低层控制使用已知动力学模型，高层策略用 Model-Free RL；或者用真实数据学习短期模型，只在很短预测时域内规划。理解这条连续谱，比背“某算法属于哪一派”更重要。
 
-[← Section overview](index.md) · [← Exploration & Partial Observability](04-exploration-pomdp.md) · [Safe, Robust & Offline RL →](06-safe-robust-offline.md)

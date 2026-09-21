@@ -1,85 +1,57 @@
-# Probability & Random Variables
+# 概率与随机变量
 
-> **Section:** Mathematics for Intelligent Systems
+智能系统中的很多不确定性不能用一个确定值描述：传感器有噪声、策略会随机采样、环境转移也可能不确定。概率论提供的是一套**描述不确定结果及其平均行为**的语言。
 
-## Why it matters
+## 一、概率描述“事件发生有多可能”
 
-概率描述事件的可能性，随机变量把随机结果变成可以计算的数值；两者放在一起学习，才能自然进入期望、方差和分布。
+事件 $A$ 的概率满足 $0\le P(A)\le1$。多个互斥结果的概率之和等于整体概率。
 
-## Core ideas
+机器人中常见的例子是“当前位置落在某区域的概率”“检测框属于行人的概率”“动作后进入某状态的概率”。
 
-- **Event & probability**：事件是可能结果的集合，$P(A)$ 描述其发生可能性。
-- **Random variable**：把随机结果映射为可以计算的数值。
-- **PMF / PDF**：描述离散或连续随机变量的分布。
-- **Expectation**：描述平均行为。
-- **Variance / covariance**：描述单变量波动和多变量共同变化。
+## 二、随机变量把随机结果映射成数值
 
-## Key theory
+随机变量 $X$ 可以是离散的，例如目标类别；也可以是连续的，例如测距误差。
 
-### Probability Basics
+分布告诉我们不同取值出现的概率。入门阶段最常见的是 Bernoulli/Categorical 和 Gaussian，不需要把大量分布名称都背下来。
 
-概率论解决的不是“预测每一次随机结果”，而是描述长期规律。最常用的三条规则是
+## 三、期望描述平均水平，方差描述离散程度
+
+离散随机变量的期望为
 
 $$
-P(A^c)=1-P(A),\qquad P(A\cup B)=P(A)+P(B)-P(A\cap B),
+\mathbb E[X]=\sum_x xP(X=x).
 $$
 
-以及线性期望
+方差
 
 $$
-\mathbb E[aX+bY]=a\mathbb E[X]+b\mathbb E[Y].
+\operatorname{Var}(X)=\mathbb E[(X-\mathbb E[X])^2]
 $$
 
-后续 RL 中的“期望回报”、控制中的“噪声均值”、可靠性中的“失效概率”都从这里出发。
+描述结果围绕均值波动多大。
 
-### Random Variables & Distributions
+两个传感器均值都无偏，但方差更小的那个通常测量更稳定。
 
-常见分布只需掌握“什么时候用”：Bernoulli 描述一次成败，Gaussian 常用于连续噪声近似，Categorical 描述有限动作选择。
+## 四、Gaussian 为什么在状态估计里特别常见
+
+许多小而独立的扰动叠加后近似 Gaussian，而且 Gaussian 只需要均值和协方差就能描述。Kalman Filter 正是利用这一结构获得简洁递推。
+
+协方差矩阵不仅表示每个变量的不确定性，还表示变量之间如何共同变化。
+
+## 五、独立和不相关不是完全同一个概念
+
+独立意味着联合分布可以分解；协方差为零只说明线性相关性消失。一般情况下“不相关”并不自动推出“独立”。
+
+这类区别在推导概率模型时很重要，不能仅凭协方差矩阵对角就假设所有随机变量完全独立。
+
+## 六、样本统计量为什么能够估计总体
+
+对独立同分布样本 $X_1,\ldots,X_n$，样本均值为
 
 $$
-\mathrm{Var}(X)=\mathbb E[(X-\mathbb E[X])^2].
+\bar X_n=\frac{1}{n}\sum_{i=1}^{n}X_i.
 $$
 
-向量随机变量进一步使用协方差矩阵 $\Sigma$ 表示不同维度的不确定性。
+大数定律说明，在适当条件下，样本数量增加时 $\bar X_n$ 会趋近期望 $\mathbb E[X]$。但有限样本仍有随机波动，其标准误差通常按 $1/\sqrt n$ 的量级缩小。
 
-## Representative methods
-
-- 用频率估计概率：大量独立重复试验中，频率趋近真实概率。
-- 用期望描述平均收益，用方差描述波动大小。
-- Categorical：离散动作或类别。
-- Gaussian：连续噪声与状态估计中最常见。
-
-## Minimal code
-
-代码只用于建立“大数下频率接近概率”的直觉，不需要把统计模拟当成概率定义。
-
-```python
-import random
-
-# 用频率理解概率：Bernoulli(0.3) 的样本均值会逐渐接近 0.3
-samples = [1 if random.random() < 0.3 else 0 for _ in range(10_000)]
-print(sum(samples) / len(samples))
-```
-
-## Worked example
-
-**Probability Basics：**机器人传感器一次测距可能偏大也可能偏小。若误差 $\varepsilon$ 满足 $\mathbb E[\varepsilon]=0$，多次独立测量取平均可降低随机误差；但系统性偏差不会靠平均消失。
-
-**Random Variables & Distributions：**若二维定位误差近似高斯，均值给出“最可能中心”，协方差椭圆给出“不确定性朝哪个方向更大”。这比只报一个误差标量更有信息。
-
-## Connections
-
-- → Robustness & Safety：概率用于描述风险而不是消除风险。
-- → Robotics：Kalman Filter 直接传播均值与协方差。
-- → RL：随机策略本质上是条件分布。
-
-## Further Reading
-
-- 大数定律与中心极限定理的严格证明。
-- 指数族、矩母函数、重尾分布。
-
-> 这一部分不属于主学习路径；需要做论文、项目或深入证明时再回来查。
-
-## Learning path
-
-[← Section overview](index.md) · [← Numerical Computation Essentials](02-numerical-computation.md) · [Conditional Probability & Bayes →](04-conditional-bayes.md)
+因此“样本越多越可靠”并不是经验口号，而来自估计量方差随样本量下降；同时它也提醒我们，少量数据得出的均值本身仍需要置信区间来表达不确定性。
