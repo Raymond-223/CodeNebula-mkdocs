@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-label="Software engineering: from intent to maintainable delivery">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Inter,Arial,sans-serif;fill:#172033}.t{font-size:30px;font-weight:700}.s{font-size:20px;font-weight:600}.b{font-size:17px}.m{font-size:15px;fill:#5f6b7a}.box{fill:#f4f7fb;stroke:#8aa0b5;stroke-width:2}.accent{fill:#dce8f5;stroke:#8aa0b5;stroke-width:2}.accent2{fill:#e8f1e8;stroke:#8aa0b5;stroke-width:2}.warn{fill:#f7eee1;stroke:#8aa0b5;stroke-width:2}.arrow{stroke:#8aa0b5;stroke-width:3;fill:none;marker-end:url(#a)} </style>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8aa0b5"/></marker></defs>
+<text x="60" y="58" class="t">Software engineering: from intent to maintainable delivery</text>
+<rect x="60.0" y="130" rx="16" ry="16" width="193.6" height="150" class="accent"/>
+<text x="156.8" y="168" text-anchor="middle" class="s">Requirements</text>
+<text x="156.8" y="198" text-anchor="middle" class="m">what to build</text>
+<path d="M 253.6 205.0 L 275.6 205.0" class="arrow"/>
+<rect x="281.6" y="130" rx="16" ry="16" width="193.6" height="150" class="box"/>
+<text x="378.40000000000003" y="168" text-anchor="middle" class="s">Architecture</text>
+<text x="378.40000000000003" y="198" text-anchor="middle" class="m">boundaries</text>
+<path d="M 475.20000000000005 205.0 L 497.20000000000005 205.0" class="arrow"/>
+<rect x="503.2" y="130" rx="16" ry="16" width="193.6" height="150" class="accent"/>
+<text x="600.0" y="168" text-anchor="middle" class="s">Interfaces</text>
+<text x="600.0" y="198" text-anchor="middle" class="m">contracts</text>
+<path d="M 696.8 205.0 L 718.8 205.0" class="arrow"/>
+<rect x="724.8" y="130" rx="16" ry="16" width="193.6" height="150" class="box"/>
+<text x="821.5999999999999" y="168" text-anchor="middle" class="s">Tests</text>
+<text x="821.5999999999999" y="198" text-anchor="middle" class="m">evidence</text>
+<path d="M 918.4 205.0 L 940.4 205.0" class="arrow"/>
+<rect x="946.4" y="130" rx="16" ry="16" width="193.6" height="150" class="accent"/>
+<text x="1043.2" y="168" text-anchor="middle" class="s">Delivery</text>
+<text x="1043.2" y="198" text-anchor="middle" class="m">deploy &amp; operate</text></svg>

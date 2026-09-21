@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-label="Equilibrium concepts">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Inter,Arial,sans-serif;fill:#172033}.t{font-size:30px;font-weight:700}.s{font-size:20px;font-weight:600}.b{font-size:17px}.m{font-size:15px;fill:#5f6b7a}.box{fill:#f4f7fb;stroke:#8aa0b5;stroke-width:2}.accent{fill:#dce8f5;stroke:#8aa0b5;stroke-width:2}.accent2{fill:#e8f1e8;stroke:#8aa0b5;stroke-width:2}.warn{fill:#f7eee1;stroke:#8aa0b5;stroke-width:2}.arrow{stroke:#8aa0b5;stroke-width:3;fill:none;marker-end:url(#a)} </style>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8aa0b5"/></marker></defs>
+<text x="60" y="55" class="t">Equilibrium concepts</text><rect x="80" y="115" rx="16" ry="16" width="430" height="310" class="accent"/>
+<text x="295.0" y="153" text-anchor="middle" class="s">Nash</text><rect x="690" y="115" rx="16" ry="16" width="430" height="310" class="accent2"/>
+<text x="905.0" y="153" text-anchor="middle" class="s">Minimax</text><text x="120" y="185" class="b">• no unilateral profitable deviation</text><text x="120" y="233" class="b">• general-sum capable</text><text x="120" y="281" class="b">• can be multiple</text><text x="730" y="185" class="b">• zero-sum structure</text><text x="730" y="233" class="b">• worst-case opponent</text><text x="730" y="281" class="b">• value of the game</text></svg>

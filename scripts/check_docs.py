@@ -69,7 +69,7 @@ for label in labels:
         errors.append(f'Navigation label is not English-only: {label}')
 
 # Curriculum size: guard both bloat and accidental over-compression.
-section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets'}]
+section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'css'}]
 actual_sections = sorted(p.name for p in section_dirs)
 if actual_sections != sorted(EXPECTED_SECTIONS):
     errors.append(f'Section directories mismatch: {actual_sections}')

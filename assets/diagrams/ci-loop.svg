@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-label="Delivery and maintenance loop">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Inter,Arial,sans-serif;fill:#172033}.t{font-size:30px;font-weight:700}.s{font-size:20px;font-weight:600}.b{font-size:17px}.m{font-size:15px;fill:#5f6b7a}.box{fill:#f4f7fb;stroke:#8aa0b5;stroke-width:2}.accent{fill:#dce8f5;stroke:#8aa0b5;stroke-width:2}.accent2{fill:#e8f1e8;stroke:#8aa0b5;stroke-width:2}.warn{fill:#f7eee1;stroke:#8aa0b5;stroke-width:2}.arrow{stroke:#8aa0b5;stroke-width:3;fill:none;marker-end:url(#a)} </style>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8aa0b5"/></marker></defs>
+<text x="60" y="55" class="t">Delivery and maintenance loop</text><circle cx="600" cy="300" r="78" fill="#dce8f5" stroke="#8aa0b5" stroke-width="2"/><text x="600" y="308" text-anchor="middle" class="s">Main branch</text>
+<rect x="495.0" y="65.0" rx="16" ry="16" width="210" height="100" class="box"/>
+<text x="600.0" y="103.0" text-anchor="middle" class="s">Commit</text>
+<text x="600.0" y="133.0" text-anchor="middle" class="m">change</text>
+<rect x="680.0" y="250.0" rx="16" ry="16" width="210" height="100" class="box"/>
+<text x="785.0" y="288.0" text-anchor="middle" class="s">CI</text>
+<text x="785.0" y="318.0" text-anchor="middle" class="m">build/test</text>
+<rect x="495.0" y="435.0" rx="16" ry="16" width="210" height="100" class="box"/>
+<text x="600.0" y="473.0" text-anchor="middle" class="s">Deploy</text>
+<text x="600.0" y="503.0" text-anchor="middle" class="m">release</text>
+<rect x="310.0" y="250.0" rx="16" ry="16" width="210" height="100" class="box"/>
+<text x="415.0" y="288.0" text-anchor="middle" class="s">Observe</text>
+<text x="415.0" y="318.0" text-anchor="middle" class="m">logs/metrics</text><path d="M 600.0 115.0 Q 600 300 785.0 300.0" class="arrow" opacity="0.55"/><path d="M 785.0 300.0 Q 600 300 600.0 485.0" class="arrow" opacity="0.55"/><path d="M 600.0 485.0 Q 600 300 415.0 300.0" class="arrow" opacity="0.55"/><path d="M 415.0 300.0 Q 600 300 600.0 115.0" class="arrow" opacity="0.55"/></svg>
