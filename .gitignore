@@ -1,4 +1,5 @@
-site/
+# 源文件（docs/）与 build 产物（site/）均入库
+# 仅排除本地临时/生成产物
 .cache/
 __pycache__/
 *.py[cod]
