@@ -805,7 +805,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        长期行为不等于每条样本轨迹都一样
+        长期行为不等于每条样本轨迹都不一样
       
     </span>
   </a>
@@ -828,6 +828,39 @@
     <span class="md-ellipsis">
       
         状态设计决定 Markov 性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        平稳分布与收敛条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#markov_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        连续时间 Markov 链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        吸收态与首次到达时间
       
     </span>
   </a>
@@ -3688,7 +3721,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        长期行为不等于每条样本轨迹都一样
+        长期行为不等于每条样本轨迹都不一样
       
     </span>
   </a>
@@ -3711,6 +3744,39 @@
     <span class="md-ellipsis">
       
         状态设计决定 Markov 性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        平稳分布与收敛条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#markov_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        连续时间 Markov 链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        吸收态与首次到达时间
       
     </span>
   </a>
@@ -3810,31 +3876,527 @@
 
 <h1 id="markov-processes">Markov Processes</h1>
 <p>Markov 性是一种状态建模假设：<strong>给定当前状态以后，预测下一步不再需要更久以前的历史。</strong> 强化学习的 MDP、很多状态估计模型都建立在这个思想上。</p>
+<p>它之所以重要，不是因为现实世界真的没有记忆，而是因为它把「记住全部历史」这件做不到的事，替换成「把历史压缩进一个状态向量」这件可以做到的事。一旦这个替换成立，长期预测、最优控制与可靠性分析都可以只围绕一个转移算子展开，计算结构从「依赖全部过去」变成「依赖现在」。</p>
 <h2 id="markov">Markov 性与状态完整性</h2>
-<p>Markov 性写成</p>
+<p>Markov 性写成条件独立的形式：</p>
 <div class="arithmatex">\[
 P(S_{t+1}\mid S_t,S_{t-1},\ldots)=P(S_{t+1}\mid S_t).
 \]</div>
-<p>它不是说现实世界天然没有记忆，而是说我们定义的 <span class="arithmatex">\(S_t\)</span> 已经包含预测未来所需的信息。</p>
-<p>单张图像往往无法判断速度，把前几帧或显式速度加入状态后，过程才更接近 Markov。</p>
+<p>它不是说现实世界天然没有记忆，而是说我们定义的 <span class="arithmatex">\(S_t\)</span> 已经包含预测未来所需的全部信息。这个性质也被称为条件独立性：给定 <span class="arithmatex">\(S_t\)</span> 之后，<span class="arithmatex">\(S_{t+1}\)</span> 与 <span class="arithmatex">\(S_{t-1},\ldots,S_0\)</span> 条件独立。</p>
+<p>「状态完整性」是理解一切的钥匙。判断一个状态表示是否满足 Markov 性，只需做一个实验性提问：<strong>是否存在两个不同的历史，它们在当前时刻的状态取值相同，但未来的条件分布不同？</strong> 若存在，状态就不完整，这时用任何基于当前状态的预测都会有系统性偏差。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>状态表示</th>
+<th>是否满足 Markov</th>
+<th>反例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>匀速直线运动</td>
+<td>仅位置 <span class="arithmatex">\(p\)</span></td>
+<td>否</td>
+<td>同一位置，向左与向右的未来完全不同</td>
+</tr>
+<tr>
+<td>匀速直线运动</td>
+<td>位置与速度 <span class="arithmatex">\((p,v)\)</span></td>
+<td>近似是</td>
+<td>加速度噪声仍会破坏，但影响有限</td>
+</tr>
+<tr>
+<td>机器人定位</td>
+<td>仅当前观测</td>
+<td>否</td>
+<td>同一观测可能来自不同历史位置</td>
+</tr>
+<tr>
+<td>机器人定位</td>
+<td>位姿加地图</td>
+<td>是（地图固定时）</td>
+<td>动态障碍物会破坏该假设</td>
+</tr>
+<tr>
+<td>排队系统</td>
+<td>仅队长</td>
+<td>否</td>
+<td>同一队长，服务时间分布可能不同</td>
+</tr>
+<tr>
+<td>M/M/1 队列</td>
+<td>队长</td>
+<td>是</td>
+<td>到达与服务时间均为指数分布</td>
+</tr>
+</tbody>
+</table>
+<p>单张图像往往无法判断速度，把前几帧或显式速度加入状态后，过程才更接近 Markov。状态维度越高，Markov 性通常越容易满足，但离散化后的状态数按维数指数增长，这个张力是整章的核心代价来源。</p>
+<p>破坏 Markov 性的来源可以分成四类，区分它们有助于决定该补哪个状态变量。</p>
+<table>
+<thead>
+<tr>
+<th>破坏来源</th>
+<th>具体表现</th>
+<th>是否随时间累积</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态遗漏关键变量</td>
+<td>只看位置不看速度</td>
+<td>是，预测误差随步数放大</td>
+</tr>
+<tr>
+<td>观测存在未建模偏差</td>
+<td>传感器缓慢零漂</td>
+<td>是，缓慢累积且不易察觉</td>
+</tr>
+<tr>
+<td>纯随机噪声</td>
+<td>逐帧独立扰动</td>
+<td>否，不累积但降低精度</td>
+</tr>
+<tr>
+<td>动作延迟未建模</td>
+<td>指令与实际执行差一帧</td>
+<td>是，表现为持续相位滞后</td>
+</tr>
+</tbody>
+</table>
+<p>因此发现历史信息仍能显著改善预测时，正确的第一反应不是加复杂模型，而是检查状态向量里少了什么。多数情况下补一个速度项或一帧延迟项就能恢复近似 Markov 性。</p>
 <h2 id="markov_1">有限状态 Markov 链由转移矩阵描述</h2>
-<p>若状态集合为 <span class="arithmatex">\(\{1,\ldots,n\}\)</span>，转移矩阵</p>
-<div class="arithmatex">\[P_{ij}=P(S_{t+1}=j\mid S_t=i)\]</div>
-<p>每一行和为 1。</p>
-<p>当前分布为行向量 <span class="arithmatex">\(\mu_t\)</span> 时，下一步分布为</p>
-<div class="arithmatex">\[\mu_{t+1}=\mu_tP.\]</div>
+<p>若状态集合为 <span class="arithmatex">\(\{1,\ldots,n\}\)</span>，转移矩阵定义为</p>
+<div class="arithmatex">\[
+P_{ij}=P(S_{t+1}=j\mid S_t=i).
+\]</div>
+<p>矩阵的每一行对应一个当前状态，每一列对应一个下一状态，因此每一行和为 1：<span class="arithmatex">\(\sum_{j=1}^{n}P_{ij}=1\)</span> 且 <span class="arithmatex">\(P_{ij}\ge0\)</span>。满足这两条性质的矩阵称为随机矩阵，注意是行和为 1 而不是列和为 1，这个约定决定了后续公式中分布写成行向量还是列向量，本文统一采用行向量约定。</p>
+<table>
+<thead>
+<tr>
+<th>矩阵性质</th>
+<th>数学表达</th>
+<th>违反时的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>非负性</td>
+<td><span class="arithmatex">\(P_{ij}\ge0\)</span></td>
+<td>出现负概率，模型无意义</td>
+</tr>
+<tr>
+<td>行归一</td>
+<td>每行之和为 1</td>
+<td>概率质量凭空产生或泄漏</td>
+</tr>
+<tr>
+<td>对角元</td>
+<td>停留概率 <span class="arithmatex">\(P_{ii}\)</span></td>
+<td>自环越大概率越粘滞</td>
+</tr>
+<tr>
+<td>稀疏零元</td>
+<td>直接不可达</td>
+<td>可用图算法加速求解</td>
+</tr>
+</tbody>
+</table>
+<p>当前分布为行向量 <span class="arithmatex">\(\mu_t\)</span> 时，下一步分布为 <span class="arithmatex">\(\mu_{t+1}=\mu_tP\)</span>，逐项写成 <span class="arithmatex">\((\mu_{t+1})_j=\sum_i \mu_{t,i}P_{ij}\)</span>，含义是「所有可能的上一步状态各自按转移概率贡献到 j」。计算每个分量需要 <span class="arithmatex">\(n\)</span> 次乘法，全部分量共 <span class="arithmatex">\(n^2\)</span> 次。</p>
+<p>一个具体例子：状态为晴天与雨天，晴转晴 0.8、晴转雨 0.2、雨转晴 0.3、雨转雨 0.7。</p>
+<table>
+<thead>
+<tr>
+<th>当前状态</th>
+<th>转晴概率</th>
+<th>转雨概率</th>
+<th>行和</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>晴</td>
+<td>0.8</td>
+<td>0.2</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>雨</td>
+<td>0.3</td>
+<td>0.7</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>从晴天出发，即 <span class="arithmatex">\(\mu_0=(1,0)\)</span>，明天是 <span class="arithmatex">\(\mu_1=(0.8,0.2)\)</span>，后天是</p>
+<div class="arithmatex">\[
+\mu_2=\big(0.8\times0.8+0.2\times0.3,\;0.8\times0.2+0.2\times0.7\big)=(0.70,0.30).
+\]</div>
+<p>注意 <span class="arithmatex">\(\mu_1\)</span> 恰好等于矩阵第一行，这并非巧合：当初始分布是单位向量时，第一步分布就是矩阵的对应行。</p>
 <h2 id="_1">多步预测来自矩阵的重复作用</h2>
-<div class="arithmatex">\[\mu_{t+k}=\mu_tP^k.\]</div>
-<p>这说明很多轨迹概率可以通过线性代数统一计算，而不需要逐条枚举所有路径。</p>
-<h2 id="_2">长期行为不等于每条样本轨迹都一样</h2>
-<p>某些 Markov 链经过足够长时间会趋近 stationary distribution，但单条轨迹仍然随机。长期分布描述的是访问频率和概率，不是“系统最终停在某个固定状态”。</p>
-<p>入门阶段知道这个区别即可，不需要展开完整遍历性理论。</p>
+<p>k 步之后的分布由矩阵的 k 次幂给出：</p>
+<div class="arithmatex">\[
+\mu_{t+k}=\mu_tP^k,\qquad (P^k)_{ij}=P(S_{t+k}=j\mid S_t=i).
+\]</div>
+<p>这说明很多轨迹概率可以通过线性代数统一计算，而不需要逐条枚举所有路径：从状态 i 出发走 k 步共有 <span class="arithmatex">\(n^k\)</span> 条路径，而矩阵乘法只需要 <span class="arithmatex">\(\mathcal{O}(n^3 k)\)</span> 或配合快速幂的 <span class="arithmatex">\(\mathcal{O}(n^3\log k)\)</span>。</p>
+<p>把所有可能的中间状态求和，就得到 Chapman–Kolmogorov 方程 <span class="arithmatex">\(P^{k+m}=P^kP^m\)</span>，逐元素形式是 <span class="arithmatex">\((P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}\)</span>。它说明「先走 k 步再走 m 步」与「一次走 k+m 步」等价。注意 <span class="arithmatex">\(P^k\)</span> 与 <span class="arithmatex">\(P^m\)</span> 可交换，而不同矩阵之间的乘积一般不可交换，这对应真实过程中「时间不可逆序」的性质。</p>
+<p>多步预测在风险累积估算中格外有用，常见关注量及其计算方式如下。</p>
+<table>
+<thead>
+<tr>
+<th>关注量</th>
+<th>计算式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k 步后处于危险状态</td>
+<td><span class="arithmatex">\((\mu_tP^k)\)</span> 在危险分量上的取值</td>
+<td>提前预警与轨迹筛选</td>
+</tr>
+<tr>
+<td>k 步内至少进入一次某集合</td>
+<td>把该集合改为吸收态后计算</td>
+<td>故障可达性分析</td>
+</tr>
+<tr>
+<td>长期平均代价</td>
+<td>平稳分布加权求和</td>
+<td>稳态性能评估</td>
+</tr>
+<tr>
+<td>首次到达时间分布</td>
+<td>用吸收态改造矩阵</td>
+<td>见后文吸收态专节</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">长期行为不等于每条样本轨迹都不一样</h2>
+<p>某些 Markov 链经过足够长时间会趋近平稳分布，但单条轨迹仍然随机。长期分布描述的是访问频率和概率，不是「系统最终停在某个固定状态」。为把这两件事分清，引入两个不同的量：</p>
+<div class="arithmatex">\[
+\pi_j=\lim_{t\to\infty}P(S_t=j),\qquad \frac{1}{T}\sum_{t=1}^{T}\mathbf{1}\{S_t=j\}\to\pi_j.
+\]</div>
+<p>前者是某一时刻处于 j 的概率，后者是一条很长轨迹中停留在 j 的时间比例。遍历定理保证两者相等，即时间平均等于空间平均。对晴雨例子，两条轨迹可能一条连着下雨、一条连着晴，但只要足够长，各自的停留比例都会收敛到同一组 <span class="arithmatex">\(\pi\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>常见混淆</th>
+<th>错误理解</th>
+<th>正确陈述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收敛的含义</td>
+<td>系统会停在某个状态</td>
+<td>状态仍在跳，只是频率稳定</td>
+</tr>
+<tr>
+<td>收敛的对象</td>
+<td>单条轨迹的具体位置</td>
+<td>概率分布或时间平均</td>
+</tr>
+<tr>
+<td>收敛的速度</td>
+<td>一定很快</td>
+<td>由混合时间决定，可能极慢</td>
+</tr>
+<tr>
+<td>收敛的普遍性</td>
+<td>所有链都收敛</td>
+<td>周期链或多类链不收敛</td>
+</tr>
+</tbody>
+</table>
+<p>入门阶段知道这个区别即可：不要用「稳态」去预测某台具体设备下一分钟的确切状态，它只能告诉你长期出现的比例。若过程存在多个互不连通的闭合类，连比例都会依赖初始状态，这种情况在后文平稳分布专节讨论。</p>
 <h2 id="markov-mdp">从 Markov 过程到 MDP</h2>
-<p>当转移概率还受到动作影响</p>
-<div class="arithmatex">\[P(s'\mid s,a),\]</div>
-<p>并且每一步产生奖励，就进入 Markov Decision Process。理解 Markov 状态后，MDP 的结构会自然很多。</p>
+<p>当转移概率还受到动作影响，并且每一步产生奖励，就进入 Markov Decision Process。形式化地，MDP 由五元组定义，与纯 Markov 链的差别集中在新增的决策与回报维度。</p>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>含义</th>
+<th>与纯 Markov 链的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\mathcal{S}\)</span></td>
+<td>状态集合</td>
+<td>完全相同</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathcal{A}\)</span></td>
+<td>动作集合</td>
+<td>链中没有，是新增的决策维度</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(P(s'\mid s,a)\)</span></td>
+<td>转移概率</td>
+<td>依赖动作，形成一个条件分布族</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R(s,a)\)</span></td>
+<td>奖励函数</td>
+<td>链中没有，是新增的标量反馈</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\gamma\in[0,1)\)</span></td>
+<td>折扣因子</td>
+<td>链中没有，用于定义长期回报</td>
+</tr>
+</tbody>
+</table>
+<p>理解 Markov 状态后，MDP 的结构会自然很多。核心差别是：Markov 链只有一个转移矩阵，而 MDP 对每个动作都有一个转移矩阵 <span class="arithmatex">\(P_a\)</span>，因此 MDP 可以看成「一族 Markov 链加一个选择规则」。策略 <span class="arithmatex">\(\pi(a\mid s)\)</span> 的作用就是决定在每个状态上如何混合使用这些矩阵：</p>
+<div class="arithmatex">\[
+P^{\pi}_{ss'}=\sum_{a}\pi(a\mid s)\,P(s'\mid s,a).
+\]</div>
+<p>这个式子是连接两章的桥梁：给定策略之后，MDP 就退化成一个普通 Markov 链，于是可以用本章全部工具分析它的长期行为。策略评估之所以能写成线性方程组，正是因为这件事。Bellman 方程的完整推导与求解方法见 <a href="../../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a>。</p>
 <h2 id="markov_2">状态设计决定 Markov 性</h2>
-<p>Markov 性不是环境天然附带的标签，而是相对于状态表示而言。若只记录位置而忽略速度，同一位置的未来可能完全不同；把速度加入状态后，转移才可能近似只依赖当前状态。因此发现历史信息仍能显著改善预测时，应首先检查状态是否遗漏了关键变量。</p>
+<p>Markov 性不是环境天然附带的标签，而是相对于状态表示而言的。只记录位置而忽略速度时，同一位置的未来可能完全不同；把速度加入状态后，转移才可能近似只依赖当前状态。因此发现历史信息仍能显著改善预测时，应首先检查状态是否遗漏了关键变量。</p>
+<table>
+<thead>
+<tr>
+<th>补充项</th>
+<th>解决的失效模式</th>
+<th>状态维度代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>速度与角速度</td>
+<td>位置重复但运动方向不同</td>
+<td>增加 2 到 3 维</td>
+</tr>
+<tr>
+<td>上一动作</td>
+<td>执行延迟与指令排队</td>
+<td>增加 1 到动作数维</td>
+</tr>
+<tr>
+<td>障碍物相对位置</td>
+<td>动态环境破坏静态假设</td>
+<td>随障碍数线性增长</td>
+</tr>
+<tr>
+<td>传感器偏差项</td>
+<td>零漂导致的系统性误差</td>
+<td>随传感器数线性增长</td>
+</tr>
+</tbody>
+</table>
+<p>状态设计的取舍有清晰的量化趋势：维数 <span class="arithmatex">\(d\)</span> 每增加 1，若用表格表示则参数量按 <span class="arithmatex">\(|\mathcal{S}|\)</span> 的倍数增长；若用函数逼近，样本需求大致按 <span class="arithmatex">\(d\)</span> 线性到二次增长，而离散化时的状态数按 <span class="arithmatex">\(2^d\)</span> 增长。因此「加变量换 Markov 性」的收益必须与维数灾难的代价一起权衡。</p>
+<p>一个实用的折中做法是承认状态不完整，用观测历史或信念状态代替真实状态。用固定长度的观测窗口作为伪状态，在很多系统中可以恢复近似 Markov 性，代价是连续维数上升；用信念状态 <span class="arithmatex">\(b_t=P(s_t\mid z_{1:t})\)</span> 则过程严格满足 Markov 性（信念 MDP），但信念空间是单纯形，维数高于原始状态。相关的不确定性处理见 <a href="../../robustness-safety/01-uncertainty-shift/">../robustness-safety/01-uncertainty-shift.md</a>。</p>
+<h2 id="_3">平稳分布与收敛条件</h2>
+<p>平稳分布是满足</p>
+<div class="arithmatex">\[
+\pi=\pi P,\qquad \sum_j\pi_j=1,\quad \pi_j\ge0
+\]</div>
+<p>的分布。它的含义是：若当前分布已经是 <span class="arithmatex">\(\pi\)</span>，则经过任意多步仍然保持 <span class="arithmatex">\(\pi\)</span>。因此 <span class="arithmatex">\(\pi\)</span> 是转移矩阵的左特征向量，对应特征值 1。</p>
+<p>特征值视角能把一切说清楚。随机矩阵总有特征值 1，其余特征值满足模不超过 1。设 <span class="arithmatex">\(\lambda_2\)</span> 为模第二大的特征值，它的模决定长期行为。</p>
+<table>
+<thead>
+<tr>
+<th>第二特征值模</th>
+<th>长期行为</th>
+<th>典型结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>严格小于 1</td>
+<td>从任意初始分布收敛到唯一 <span class="arithmatex">\(\pi\)</span></td>
+<td>不可约且非周期</td>
+</tr>
+<tr>
+<td>等于 1 且为负实数</td>
+<td>分布振荡，不收敛</td>
+<td>周期链，例如确定型两状态交替</td>
+</tr>
+<tr>
+<td>多个特征值模为 1</td>
+<td>收敛到多个平稳分布之一</td>
+<td>可约链，存在多个闭合类</td>
+</tr>
+</tbody>
+</table>
+<p>周期性的定义是所有可能返回步数的最大公约数大于 1。最简单的周期链是确定型两状态交替：从晴必然转雨、从雨必然转晴，转移矩阵对应行为 <span class="arithmatex">\((0,1)\)</span> 与 <span class="arithmatex">\((1,0)\)</span>，此时 <span class="arithmatex">\(\mu\)</span> 在两组取值之间往复，永不收敛。但只要在任一状态加上极小的自环，例如把晴转晴概率从 0 改为 0.001，模第二大的特征值立刻降到略小于 1，链变成非周期并开始收敛。这解释了为什么实际系统几乎总有停留或噪声，从而消除了严格的周期性。</p>
+<p>遍历性指不可约、非周期且正常返，它一次性保证三件事：唯一平稳分布存在、从任意初始分布收敛到它、时间平均等于空间平均。收敛速度由混合时间刻画，在总变差距离意义下有</p>
+<div class="arithmatex">\[
+t_{\mathrm{mix}}(\varepsilon)\lesssim\frac{\log(1/\varepsilon)}{1-|\lambda_2|}.
+\]</div>
+<p>这个不等式给出了可操作的诊断：模第二特征值越接近 1，收敛越慢，所需步数与 <span class="arithmatex">\(1/(1-|\lambda_2|)\)</span> 成正比。</p>
+<table>
+<thead>
+<tr>
+<th>特征值间隙</th>
+<th>大致混合时间（精度 0.01）</th>
+<th>工程含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.9</td>
+<td>约 5 步</td>
+<td>快速混合，短预热即可</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>约 46 步</td>
+<td>中等，需要在预算内预热</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>约 460 步</td>
+<td>慢，短任务中看起来不收敛</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>约 4605 步</td>
+<td>极慢，实践中近似不可收敛</td>
+</tr>
+</tbody>
+</table>
+<p>数值上还有一点值得注意：<span class="arithmatex">\(P^k\)</span> 可以迭代计算，但代入很大的 k 时浮点误差会累积，实践中常每若干步重新归一化以维持每行之和为 1。</p>
+<h2 id="markov_3">连续时间 Markov 链</h2>
+<p>离散链的每一步都有明确时间索引，而许多物理系统的状态变化发生在随机时刻。连续时间 Markov 链用速率矩阵（生成元）<span class="arithmatex">\(Q\)</span> 描述，非对角元表示瞬时转移速率：</p>
+<div class="arithmatex">\[
+Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
+\]</div>
+<p>注意最后一条：<span class="arithmatex">\(Q\)</span> 的每一行和为 0，这与离散链每行和为 1 形成对照。概率分布满足微分方程，其解用矩阵指数表示：</p>
+<div class="arithmatex">\[
+\frac{d\mu(t)}{dt}=\mu(t)Q,\qquad \mu(t)=\mu(0)e^{Qt}.
+\]</div>
+<p>这里的矩阵指数 <span class="arithmatex">\(e^{Qt}\)</span> 取代了离散链中的 <span class="arithmatex">\(P^k\)</span>，两种模型可以逐项对应。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>离散时间链</th>
+<th>连续时间链</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本算子</td>
+<td><span class="arithmatex">\(P\)</span>，每行和为 1</td>
+<td><span class="arithmatex">\(Q\)</span>，每行和为 0</td>
+</tr>
+<tr>
+<td>状态演化</td>
+<td><span class="arithmatex">\(\mu_{t+1}=\mu_tP\)</span></td>
+<td><span class="arithmatex">\(d\mu/dt=\mu Q\)</span></td>
+</tr>
+<tr>
+<td>多步或长时间</td>
+<td><span class="arithmatex">\(\mu_t=\mu_0P^t\)</span></td>
+<td><span class="arithmatex">\(\mu(t)=\mu_0e^{Qt}\)</span></td>
+</tr>
+<tr>
+<td>停留时间分布</td>
+<td>几何分布，均值由对角元决定</td>
+<td>指数分布，均值等于 $1/</td>
+</tr>
+<tr>
+<td>平稳条件</td>
+<td><span class="arithmatex">\(\pi=\pi P\)</span></td>
+<td><span class="arithmatex">\(\pi Q=0\)</span></td>
+</tr>
+<tr>
+<td>嵌入链</td>
+<td>就是 <span class="arithmatex">\(P\)</span> 本身</td>
+<td>由 <span class="arithmatex">\(Q\)</span> 的非对角项按行归一化得到</td>
+</tr>
+</tbody>
+</table>
+<p>「无记忆」在连续时间中的含义更强：停留时间必须服从指数分布。原因是指数分布是唯一满足 <span class="arithmatex">\(P(T&gt;s+t\mid T&gt;s)=P(T&gt;t)\)</span> 的连续分布，而 Markov 性要求不看已经停留了多久。若某设备寿命服从威布尔分布而非指数分布，严格来说它就不是连续时间 Markov 链。</p>
+<p>生灭过程是最常用的特例，状态为非负整数，只允许相邻转移，向上速率记为出生率、向下速率记为死亡率。对 M/M/1 队列，到达率恒为 <span class="arithmatex">\(\lambda\)</span>、服务率恒为 <span class="arithmatex">\(\mu\)</span>，令利用率 <span class="arithmatex">\(\rho=\lambda/\mu\)</span>，平稳分布有闭式解 <span class="arithmatex">\(\pi_i=(1-\rho)\rho^i\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>利用率</th>
+<th>空队列概率</th>
+<th>平均队长</th>
+<th>平均逗留时间（服务时间单位）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>0.50</td>
+<td>1.0</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>0.8</td>
+<td>0.20</td>
+<td>4.0</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>0.9</td>
+<td>0.10</td>
+<td>9.0</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td>0.99</td>
+<td>0.01</td>
+<td>99.0</td>
+<td>100.0</td>
+</tr>
+</tbody>
+</table>
+<p>这张表说明了排队系统的非线性恶化：利用率从 0.9 提到 0.99，平均队长翻了十倍以上。若到达率不小于服务率，队列不稳定，平稳分布根本不存在，这就是平稳分布存在的前提条件。</p>
+<h2 id="_4">吸收态与首次到达时间</h2>
+<p>吸收态是指一旦进入就不再离开的状态，即该行只有一个非零元。它天然地表示终局状态。</p>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>吸收态的含义</th>
+<th>为什么用吸收态建模</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可靠性</td>
+<td>设备故障且不可修复</td>
+<td>关心到达时间而非长期分布</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>碰撞或越界已经发生</td>
+<td>一旦发生系统已失败，过程终止</td>
+</tr>
+<tr>
+<td>任务与博弈</td>
+<td>目标达成或主动放弃</td>
+<td>回合结束，不再转移</td>
+</tr>
+<tr>
+<td>医学随访</td>
+<td>死亡或康复</td>
+<td>后续不再属于研究人群</td>
+</tr>
+</tbody>
+</table>
+<p>要把问题写成线性方程组，先按结构划分状态。把状态分成瞬态集合与吸收集合，重排后的转移矩阵具有分块形式，其中瞬态之间的转移子矩阵记为 <span class="arithmatex">\(Q\)</span>，从瞬态直接进入吸收态的概率向量记为 <span class="arithmatex">\(r\)</span>。</p>
+<p>设 <span class="arithmatex">\(f\)</span> 为从各瞬态出发最终被吸收的概率，对它做一步分析得到 <span class="arithmatex">\(f=Qf+r\)</span>，于是</p>
+<div class="arithmatex">\[
+f=(I-Q)^{-1}r.
+\]</div>
+<p>设 <span class="arithmatex">\(t\)</span> 为从各瞬态出发进入吸收态所需步数的期望，每步计数加 1，得到</p>
+<div class="arithmatex">\[
+t=Q\,t+\mathbf{1},\qquad t=(I-Q)^{-1}\mathbf{1}.
+\]</div>
+<p>若关心的是到达某个特定状态而非任意吸收态，只需把该状态当作吸收态处理，在子矩阵中删去它的行列即可。矩阵 <span class="arithmatex">\(I-Q\)</span> 可逆的充要条件是从每个瞬态出发都有正概率最终被吸收；若存在既能被吸收又能在内部无限游走的闭合类，<span class="arithmatex">\(I-Q\)</span> 奇异，期望时间发散，对应「系统可能永远不故障」的情形。</p>
+<p>一个两状态可靠性例子：正常态每步故障概率为 0.01，故障态为吸收态，则期望到达时间为 <span class="arithmatex">\((1-0.99)^{-1}=100\)</span> 步。加入中间退化态后寿命会显著缩短，例如正常转退化概率 0.02、退化转故障 0.1、退化转正常 0.05，解对应的线性方程组得退化态期望约 11.8 步、正常态期望约 31 步。系统整体寿命从 100 步降到 31 步，这正是引入中间状态的价值：它把缓慢劣化这一过程显式建模出来。</p>
+<blockquote>
+<p><strong>下一步</strong>：读 <a href="../06-optimization-under-uncertainty/">./06-optimization-under-uncertainty.md</a> 看如何在这些随机过程上做最优决策；MDP 的 Bellman 推导见 <a href="../../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a>；若关心状态估计中 Markov 性假设如何落实，回到 <a href="../04-conditional-bayes/">./04-conditional-bayes.md</a>。</p>
+</blockquote>
 
 
 

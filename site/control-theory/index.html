@@ -3542,7 +3542,73 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        内容
+        本节要解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五章的推进逻辑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与其他章节的接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从理论到实机的差距
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阅读顺序建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导航
       
     </span>
   </a>
@@ -3641,20 +3707,316 @@
 
 
 <h1 id="control-theory">Control Theory</h1>
-<p>控制理论解决“怎样根据系统状态持续施加输入，使系统按期望方式运动”。主线是模型、反馈、稳定性、PID、LQR 与 MPC。</p>
+<p>控制理论解决的是：<strong>怎样根据系统当前状态持续施加输入，让系统按期望方式运动，并且在扰动、误差与约束下仍然稳定。</strong> 从动态系统的状态空间模型出发，经过反馈与稳定性分析，再到 PID、LQR、MPC 三条控制律路线，本章覆盖了机器人、自动驾驶与过程控制中最常用的控制工具链。</p>
 <figure>
   <img alt="control-theory overview" src="../assets/diagrams/control-map.svg" />
 <br />
 <figcaption>Control Theory 的核心概念关系。</figcaption>
 </figure>
-<h2 id="_1">内容</h2>
+<h2 id="_1">本节要解决的问题</h2>
+<p>控制理论回答的是一类反复出现的问题：给定一个会动、会漂、会被干扰的系统，怎么让它听话。具体拆成四个子问题：</p>
+<ul>
+<li><strong>建模</strong>：系统的状态是什么？状态如何随时间演化？输入如何影响状态？没有模型，后续分析全是猜测。</li>
+<li><strong>反馈与稳定</strong>：开环系统为什么不可靠？闭环为什么能抵抗扰动？什么条件下系统会发散？</li>
+<li><strong>控制律设计</strong>：从最简单的 PID，到多状态最优的 LQR，再到带约束、带预测的 MPC，什么场景用哪一种？</li>
+<li><strong>可实施性</strong>：采样周期、算力预算、传感器噪声、模型误差，怎样把纸面上的控制器变成能跑的代码？</li>
+</ul>
+<p>这四个子问题并不平行，而是层层递进：建模决定你能写出什么样的控制器，稳定性决定控制器是否可用，控制律决定性能，工程约束决定性能能否在真实设备上兑现。本章的目标不是让读者记住公式，而是建立"看到一个问题，知道该用哪一层工具"的判断力。</p>
+<p>一个常见的入门误解是把控制等同于"调 PID 参数"。当系统只有一个输入一个输出、模型未知时，这个理解大致够用；但只要系统有多个耦合状态、存在硬约束、或需要前瞻多步后果，经验调参就会迅速触顶，此时必须回到建模与最优控制的正轨。</p>
+<table>
+<thead>
+<tr>
+<th>子问题</th>
+<th>核心输出</th>
+<th>典型失效</th>
+<th>对应章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建模</td>
+<td>状态空间 <span class="arithmatex">\((A,B,C)\)</span> 或 <span class="arithmatex">\(f(x,u)\)</span></td>
+<td>模型与真实系统不符</td>
+<td><a href="01-modeling-state-space/">01 建模与状态空间</a></td>
+</tr>
+<tr>
+<td>稳定性</td>
+<td>闭环极点位置、Lyapunov 判据</td>
+<td>增益过高导致振荡发散</td>
+<td><a href="02-feedback-stability/">02 反馈与稳定性</a></td>
+</tr>
+<tr>
+<td>控制律</td>
+<td>增益或优化问题</td>
+<td>调参无依据、约束被忽略</td>
+<td><a href="03-pid/">03 PID</a> / <a href="04-lqr/">04 LQR</a> / <a href="05-mpc/">05 MPC</a></td>
+</tr>
+<tr>
+<td>可实施性</td>
+<td>采样、算力、抗饱和方案</td>
+<td>丢拍、饱和、噪声放大</td>
+<td>全章工程讨论</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">五章的推进逻辑</h2>
+<p>五章沿"建模 → 反馈与稳定 → PID → LQR → MPC"排列，是一条由浅入深、由通用到专用的路线。</p>
+<p><strong>第一步建模</strong>：把物理系统写成 <span class="arithmatex">\(\dot x=f(x,u)\)</span> 或离散的 <span class="arithmatex">\(x_{k+1}=Ax_k+Bu_k\)</span>，明确状态、输入、输出的含义与量纲。这一步决定了后面能用的数学工具：线性模型能用 LQR，非线性模型要么线性化，要么上非线性 MPC。</p>
+<p><strong>第二步反馈与稳定</strong>：引入测量的闭环，讨论为什么开环不可靠，以及如何用极点、特征值、Lyapunov 函数判断稳定性。这一步给出的稳定性判据是所有控制器设计的底线。</p>
+<p><strong>第三步 PID</strong>：不依赖完整模型的经验型控制律，用比例、积分、微分三项分别处理"当前误差、历史误差、误差变化趋势"。它是工业界覆盖率最高的控制器，也是理解反馈直觉的最佳入口。</p>
+<p><strong>第四步 LQR</strong>：在拥有线性模型、关心多状态耦合时，用二次代价把"状态偏差"和"控制力度"的权衡变成优化问题，离线解出唯一最优增益。</p>
+<p><strong>第五步 MPC</strong>：当存在速度上限、转角限制、障碍等硬约束，且需要前瞻多步后果时，把控制变成每个周期在线求解一个带约束的优化问题。</p>
+<p>这条顺序并非历史的偶然：它同时是按"所需信息量"递增排列的。PID 只需要误差，LQR 需要状态与模型，MPC 还需要约束与算力；每往上一层，性能上限更高，但对前置条件的依赖也更强。因此从后往前补知识是可行的，从前往后建能力才是稳妥的。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>新增能力</th>
+<th>付出的代价</th>
+<th>前提条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 建模</td>
+<td>可预测系统演化</td>
+<td>需要物理知识与辨识</td>
+<td>无</td>
+</tr>
+<tr>
+<td>02 反馈 + 稳定</td>
+<td>抗扰动、可判稳</td>
+<td>需要可测输出</td>
+<td>有模型或至少辨识</td>
+</tr>
+<tr>
+<td>03 PID</td>
+<td>无需精确模型即可调</td>
+<td>多回路需解耦、约束弱</td>
+<td>单回路较简单</td>
+</tr>
+<tr>
+<td>04 LQR</td>
+<td>MIMO 最优、稳定性有保证</td>
+<td>需要线性模型、无约束</td>
+<td>系统可线性化</td>
+</tr>
+<tr>
+<td>05 MPC</td>
+<td>显式硬约束、多步前瞻</td>
+<td>每步在线求解、算力</td>
+<td>模型准、算力够</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">概念地图</h2>
+<p>图中是一条从左到右的单向主线，六个节点依次是 Model、Feedback、Stability、PID、LQR、MPC。它们不是并列的知识点，而是"前一个为后一个提供前提"的依赖链：</p>
+<ul>
+<li><strong>Model（state-space）</strong>：整条链的起点。状态空间形式把所有控制器统一在同一套符号下：A 描述自然演化，B 描述输入作用。没有它，LQR 与 MPC 无从谈起。</li>
+<li><strong>Feedback（error loop）</strong>：把测量结果反送回控制器，用误差驱动输入。反馈让系统对参数误差不敏感，是"稳定"得以实现的前提。</li>
+<li><strong>Stability（bounded behavior）</strong>：反馈不是自动稳定的，错误的增益会让系统发散。稳定性节点回答"什么样的闭环是安全的"。</li>
+<li><strong>PID（classical）</strong>：最经典的反馈实现，把误差的比例、积分、微分线性组合成控制量，是"反馈 + 稳定"最直接的产品。</li>
+<li><strong>LQR（optimal）</strong>：从"经验调参"升级到"按二次代价求最优"，用模型把多状态耦合一次性处理。</li>
+<li><strong>MPC（constrained）</strong>：在最优控制之上叠加有限时域预测与显式约束，是这条链目前工程能力最强的一环。</li>
+</ul>
+<p>读这张图时要注意两点：一是箭头是单向的，右侧节点的正确性依赖左侧全部节点，跳过建模直接看 MPC 往往会卡在"状态从哪来、约束怎么写"；二是图中的三条控制律（PID、LQR、MPC）是并列选项，不是必须依次使用的升级路径，实际项目中常常只用其中一种。</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>图中副标题</th>
+<th>一句话职责</th>
+<th>输入</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>state-space</td>
+<td>描述系统如何演化</td>
+<td>物理方程/数据</td>
+<td><span class="arithmatex">\(A,B,C\)</span> 或 <span class="arithmatex">\(f\)</span></td>
+</tr>
+<tr>
+<td>Feedback</td>
+<td>error loop</td>
+<td>用误差驱动输入</td>
+<td>测量与参考</td>
+<td>误差信号</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>bounded behavior</td>
+<td>判断闭环是否有界</td>
+<td>闭环系统</td>
+<td>稳定/不稳定</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>classical</td>
+<td>经验反馈律</td>
+<td>误差</td>
+<td>控制量</td>
+</tr>
+<tr>
+<td>LQR</td>
+<td>optimal</td>
+<td>二次代价最优反馈</td>
+<td>状态与权重</td>
+<td>增益 <span class="arithmatex">\(K\)</span></td>
+</tr>
+<tr>
+<td>MPC</td>
+<td>constrained</td>
+<td>带约束在线优化</td>
+<td>状态、模型、约束</td>
+<td>首步输入</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">与其他章节的接口</h2>
+<p>控制理论不是孤岛：它向下依赖数学工具，向上服务机器人与自动驾驶，旁边还与感知、安全模块交互。理解这些接口，才能把某一章的知识放进完整系统里。</p>
+<p>具体地说，状态估计与控制构成"感知—决策"回路：感知模块提供状态，控制器据此生成输入，输入作用于物理系统后又被感知重新观测，闭环的稳定性同时取决于控制器增益与估计器延迟。因此控制章节里的"模型"往往不是从零推导的物理方程，而是从 <a href="../perception/01-image-camera-basics/">图像与相机基础</a> 等感知模块延伸出来的可测量量。</p>
+<table>
+<thead>
+<tr>
+<th>控制概念</th>
+<th>用在哪章</th>
+<th>解决什么问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态空间建模</td>
+<td><a href="01-modeling-state-space/">动态系统建模与状态空间</a></td>
+<td>把物理系统写成可计算的形式</td>
+</tr>
+<tr>
+<td>稳定性判据</td>
+<td><a href="02-feedback-stability/">反馈控制与稳定性</a></td>
+<td>判断闭环是否发散</td>
+</tr>
+<tr>
+<td>误差反馈直觉</td>
+<td><a href="03-pid/">PID 控制</a></td>
+<td>无需精确模型即可调参</td>
+</tr>
+<tr>
+<td>可控性 / 可稳性</td>
+<td><a href="04-lqr/">最优控制与 LQR</a></td>
+<td>判断能否用状态反馈镇定</td>
+</tr>
+<tr>
+<td>有限时域与终端代价</td>
+<td><a href="05-mpc/">模型预测控制</a></td>
+<td>保证滚动优化的稳定性</td>
+</tr>
+<tr>
+<td>约束优化与不确定性</td>
+<td><a href="../mathematics/06-optimization-under-uncertainty/">约束下优化</a></td>
+<td>QP 与鲁棒问题求解</td>
+</tr>
+<tr>
+<td>参考轨迹跟踪</td>
+<td><a href="../robotics/04-path-motion-planning/">路径与运动规划</a></td>
+<td>把规划结果转成控制目标</td>
+</tr>
+<tr>
+<td>导航闭环</td>
+<td><a href="../robotics/05-navigation-control/">导航与控制</a></td>
+<td>定位—规划—控制串成回路</td>
+</tr>
+<tr>
+<td>状态估计接口</td>
+<td><a href="../perception/01-image-camera-basics/">图像与相机基础</a></td>
+<td>控制器拿到的状态来自感知</td>
+</tr>
+<tr>
+<td>硬约束与安全边界</td>
+<td><a href="../robustness-safety/03-safety-constraints/">安全约束</a></td>
+<td>约束如何被形式化与保证</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">从理论到实机的差距</h2>
+<p>教科书里的控制器通常在"理想仿真"中诞生：连续时间、无噪声、模型精确、算力无限。实机上这四条假设几乎全部不成立。理解差距在哪里，比多记一条公式更重要。</p>
+<ul>
+<li><strong>采样与延迟</strong>：理论模型常用连续时间，实机却是离散采样。控制周期 <span class="arithmatex">\(\Delta t\)</span> 引入的相位滞后会降低稳定裕度，<span class="arithmatex">\(\Delta t\)</span> 越大、可控带宽越低。</li>
+<li><strong>噪声与量化</strong>：编码器有噪声，微分项会把它放大成剧烈抖动的输入，必须滤波或改用微分状态。</li>
+<li><strong>模型误差</strong>：质量、摩擦、时延都难以精确辨识，纯状态反馈会留下稳态误差，LQR 需要配积分项。</li>
+<li><strong>执行器限制</strong>：电机有转矩上限、舵机有转角上限，饱和会让 LQR 的最优性失效，甚至引发积分饱和。</li>
+<li><strong>算力约束</strong>：MPC 每步要解 QP，算力不足时会丢拍，性能反而不如稳定的 PID。</li>
+</ul>
+<p>这些差距不是"实现细节"，而是决定成败的主因。经验上，从仿真到实机后需要重新整定的部分，往往集中在采样率、滤波与饱和处理三处；若忽略它们，纸面性能再好也可能在现场直接发散。</p>
+<table>
+<thead>
+<tr>
+<th>仿真里有的假设</th>
+<th>实机上通常缺失</th>
+<th>后果</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续时间模型</td>
+<td>离散采样</td>
+<td>相位滞后、带宽下降</td>
+<td>提高采样率、降增益</td>
+</tr>
+<tr>
+<td>无噪声测量</td>
+<td>传感器噪声</td>
+<td>微分放大抖动</td>
+<td>滤波、观测器</td>
+</tr>
+<tr>
+<td>模型精确</td>
+<td>参数与时延误差</td>
+<td>稳态偏差、动态偏移</td>
+<td>积分作用、鲁棒化</td>
+</tr>
+<tr>
+<td>执行器无上限</td>
+<td>转矩/转角饱和</td>
+<td>最优性丧失、饱和振荡</td>
+<td>抗饱和、改 MPC</td>
+</tr>
+<tr>
+<td>算力无限</td>
+<td>计算预算有限</td>
+<td>MPC 丢拍</td>
+<td>限 <span class="arithmatex">\(N\)</span>、warm start</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">阅读顺序建议</h2>
+<p>不同背景的读者不必按同一顺序读，可用下面三条路径之一：</p>
+<ul>
+<li><strong>零基础入门</strong>：按 <a href="01-modeling-state-space/">01</a> → <a href="02-feedback-stability/">02</a> → <a href="03-pid/">03</a> 顺序读，先把"建模—反馈—调参"的直觉建立起来，再进入 <a href="04-lqr/">04 LQR</a> 与 <a href="05-mpc/">05 MPC</a>。</li>
+<li><strong>有控制基础、想补最优控制</strong>：可跳过 PID 细节，直接从 <a href="01-modeling-state-space/">01 建模</a> 快速过一遍状态空间，再精读 <a href="04-lqr/">04 LQR</a> 与 <a href="05-mpc/">05 MPC</a> 的 Riccati、QP 与稳定性部分。</li>
+<li><strong>做机器人项目、想快速落地</strong>：从 <a href="03-pid/">03 PID</a> 和 <a href="04-lqr/">04 LQR</a> 入手把闭环跑通，再对照 <a href="05-mpc/">05 MPC</a> 的"何时该用 MPC"表格判断是否需要升级，同时参考 <a href="../robotics/05-navigation-control/">导航与控制</a> 的整机回路。</li>
+</ul>
+<p>三条路径的共同底线相同：必须理解 §建模 与 §稳定性，否则任何控制器都只是抄来的代码。选择哪条路径取决于你手上是"没有模型"还是"已有模型但缺控制律"。若时间有限、只想先让东西动起来，可以先用 §PID 拿到一个能跑的基线，再回头补 §稳定性 来解释它为什么在某些参数下会震荡。</p>
+<p>如果暂时拿不定主意，可以按下面的问题自测：</p>
+<ul>
+<li>你的系统有可辨识的物理模型吗？有 → 可考虑 LQR/MPC；没有 → 先 PID。</li>
+<li>有必须满足的速度、转角或几何约束吗？有 → 指向 MPC。</li>
+<li>控制周期在 1 ms 量级吗？是 → 偏向 PID/LQR。</li>
+<li>有多个强耦合状态吗？有 → 放弃单回路 PID。</li>
+</ul>
+<h2 id="_7">本章导航</h2>
 <ol>
-<li><a href="01-modeling-state-space/">动态系统建模与状态空间</a></li>
-<li><a href="02-feedback-stability/">反馈控制与稳定性</a></li>
-<li><a href="03-pid/">PID 控制</a></li>
-<li><a href="04-lqr/">最优控制与 LQR</a></li>
-<li><a href="05-mpc/">模型预测控制</a></li>
+<li><a href="01-modeling-state-space/">动态系统建模与状态空间</a>——状态、输入、输出的形式化，线性化与离散化。</li>
+<li><a href="02-feedback-stability/">反馈控制与稳定性</a>——闭环为什么抗扰动，如何判断与保证稳定。</li>
+<li><a href="03-pid/">PID 控制</a>——比例、积分、微分的分工、调参方法与失效模式。</li>
+<li><a href="04-lqr/">最优控制与 LQR</a>——二次代价、Riccati 方程、Bryson 规则与积分作用。</li>
+<li><a href="05-mpc/">模型预测控制</a>——有限时域预测、约束、QP 形式与终端代价。</li>
 </ol>
+<blockquote>
+<p><strong>下一步</strong>：从 <a href="01-modeling-state-space/">动态系统建模与状态空间</a> 开始，先建立"状态如何演化"的直觉；如果你已有模型、只想选控制律，可直接跳到 <a href="04-lqr/">最优控制与 LQR</a>；若你的系统存在硬约束，优先阅读 <a href="05-mpc/">模型预测控制</a>；把整套控制回路放进机器人系统的例子见 <a href="../robotics/05-navigation-control/">导航与控制</a>。</p>
+</blockquote>
 
 
 

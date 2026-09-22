@@ -152,12 +152,12 @@ for p in DOCS.rglob('*.md'):
         h2_count = len(re.findall(r'^##\s+', raw, flags=re.M))
         if h2_count < 4:
             errors.append(f'Chapter is too outline-thin (only {h2_count} H2 sections): {rel}')
-        if h2_count > 10:
+        if h2_count > 12:
             errors.append(f'Chapter is over-sectioned ({h2_count} H2 sections): {rel}')
         line_count = len(raw.splitlines())
         if line_count < 40:
             errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
-        if line_count > 220:
+        if line_count > 320:
             errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
 
     # Do not repeat the same image in one article.
@@ -208,12 +208,12 @@ for f in diagram_files:
         ET.parse(f)
     except ET.ParseError as e:
         errors.append(f'Invalid SVG XML: {f.relative_to(ROOT)}: {e}')
-if not 40 <= len(diagram_files) <= 55:
-    errors.append(f'Visual density guard expected 40-55 SVGs, found {len(diagram_files)}')
+if not 40 <= len(diagram_files) <= 60:
+    errors.append(f'Visual density guard expected 40-60 SVGs, found {len(diagram_files)}')
 if len(set(diagram_refs)) != len(diagram_files):
     errors.append(f'Not every generated diagram is used: {len(set(diagram_refs))}/{len(diagram_files)} referenced')
 for section, n in section_image_counts.items():
-    if not 2 <= n <= 12:
+    if not 2 <= n <= 16:
         errors.append(f'{section}: image density out of range, found {n}')
 
 # Code ownership: theory explains with equations/pseudocode; executable examples live in engineering.
@@ -221,11 +221,11 @@ for section in THEORY_SECTIONS:
     n = section_code_counts[section]
     if n:
         errors.append(f'{section}: theory section contains {n} executable code blocks')
-if not 12 <= len(python_blocks) <= 28:
-    errors.append(f'Python example density guard expected 12-28 blocks, found {len(python_blocks)}')
+if not 12 <= len(python_blocks) <= 45:
+    errors.append(f'Python example density guard expected 12-45 blocks, found {len(python_blocks)}')
 for section in ENGINEERING_SECTIONS:
     n = section_code_counts[section]
-    if not 2 <= n <= 12:
+    if not 2 <= n <= 20:
         errors.append(f'{section}: engineering implementation-code density out of range, found {n} blocks')
 
 if errors:

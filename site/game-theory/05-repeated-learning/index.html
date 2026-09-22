@@ -1594,7 +1594,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        重复不等于一定产生合作
+        贴现因子与长期收益
       
     </span>
   </a>
@@ -1605,7 +1605,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        学习规则描述玩家怎样根据经验调整策略
+        重复不等于一定产生合作
       
     </span>
   </a>
@@ -1616,7 +1616,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定收益不代表已经收敛到某个均衡
+        学习规则描述玩家怎样根据经验调整策略
       
     </span>
   </a>
@@ -1627,7 +1627,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        对工程系统最重要的是历史会改变对手
+        无遗憾学习与收敛性质
       
     </span>
   </a>
@@ -1638,7 +1638,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实验里最好检查单边偏离还能赚多少
+        稳定收益不代表已经收敛到某个均衡
       
     </span>
   </a>
@@ -1647,6 +1647,39 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对工程系统最重要的是历史会改变对手
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多智能体学习中的非平稳性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验里最好检查单边偏离还能赚多少
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         把一次收益和长期关系分开
@@ -3699,7 +3732,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        重复不等于一定产生合作
+        贴现因子与长期收益
       
     </span>
   </a>
@@ -3710,7 +3743,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        学习规则描述玩家怎样根据经验调整策略
+        重复不等于一定产生合作
       
     </span>
   </a>
@@ -3721,7 +3754,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定收益不代表已经收敛到某个均衡
+        学习规则描述玩家怎样根据经验调整策略
       
     </span>
   </a>
@@ -3732,7 +3765,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        对工程系统最重要的是历史会改变对手
+        无遗憾学习与收敛性质
       
     </span>
   </a>
@@ -3743,7 +3776,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实验里最好检查单边偏离还能赚多少
+        稳定收益不代表已经收敛到某个均衡
       
     </span>
   </a>
@@ -3752,6 +3785,39 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对工程系统最重要的是历史会改变对手
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多智能体学习中的非平稳性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验里最好检查单边偏离还能赚多少
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         把一次收益和长期关系分开
@@ -3853,31 +3919,458 @@
 
 
 <h1 id="repeated-games-learning">Repeated Games &amp; Learning</h1>
-<p>一次博弈只看当前收益，重复互动则让<strong>历史和未来后果</strong>进入今天的决策。同一个静态博弈，重复以后可能产生完全不同的行为。</p>
+<p>一次博弈只看当前收益，重复互动则让<strong>历史和未来后果进入今天的决策</strong>：同一个静态博弈，重复以后可以产生完全不同的行为。判断的关键不是「玩了几轮」，而是贴现因子有多高、行为是否可观察、惩罚是否可信。本页从历史依赖策略出发，量化贴现因子对合作的门槛、无遗憾学习的收敛性质，以及多智能体学习中环境非平稳带来的收敛失效。</p>
 <h2 id="_1">历史依赖策略</h2>
-<p>玩家不再只选择“合作/背叛”，而可以使用规则：“如果对方过去合作，我继续合作；如果它背叛，我改变策略。”</p>
-<p>因此历史本身成为策略输入。</p>
-<h2 id="_2">未来越重要，当前行为越可能考虑长期关系</h2>
-<p>常用折扣因子 <span class="arithmatex">\(\delta\in[0,1)\)</span> 表示对未来收益的重视程度：</p>
+<p>在重复博弈里，玩家不再只选择「合作 / 背叛」这一个动作，而是选择一条把历史映射到动作的规则：</p>
 <div class="arithmatex">\[
-U=\sum_{t=0}^{\infty}\delta^t u_t.
+s_i : \mathcal{H}^{t} \to \mathcal{A}_i,
 \]</div>
-<p><span class="arithmatex">\(\delta\)</span> 越大，未来惩罚或未来合作收益越重要。一次性占便宜可能不再值得。</p>
-<h2 id="_3">重复不等于一定产生合作</h2>
-<p>合作能否维持还取决于行为是否可观察、互动是否足够长期、惩罚是否可信。若玩家知道下一轮就是最后一轮，激励结构可能再次发生变化。</p>
-<p>因此不要把“重复博弈支持合作”误解成“多玩几轮自然会合作”。</p>
-<h2 id="_4">学习规则描述玩家怎样根据经验调整策略</h2>
-<p>玩家可能根据历史频率形成对手模型，也可能使用 regret-based 更新或强化学习。学习动态告诉我们策略怎样变化，而 Nash 均衡告诉我们某个策略组合是否稳定。</p>
-<p>这两个问题相关，但不能混为一谈。</p>
-<h2 id="_5">稳定收益不代表已经收敛到某个均衡</h2>
-<p>仿真中几条收益曲线变平，可能只是学习率变小、策略陷入循环或探索减少。要声称达到某类均衡，需要检查相应的偏离收益或 exploitability，而不是只看 reward 不再变化。</p>
-<h2 id="_6">对工程系统最重要的是历史会改变对手</h2>
-<p>多智能体在线学习时，对手或队友也会根据过去互动更新策略，因此环境会随学习而改变。重复博弈提供了理解这种长期相互适应的基本视角。</p>
-<h2 id="_7">实验里最好检查单边偏离还能赚多少</h2>
-<p>如果要判断一个稳定策略是否接近均衡，可以固定其他玩家策略，让某个玩家单独搜索更好的响应。如果它还能显著提高收益，当前策略组合就仍然可被利用。</p>
-<p>这比单纯观察 reward 曲线是否变平，更接近均衡定义本身。</p>
-<h2 id="_8">把一次收益和长期关系分开</h2>
-<p>重复博弈中，当前动作既产生即时收益，也改变对手对未来的预期。折扣因子越高，未来惩罚或合作回报越重要。分析实验结果时，应同时记录短期收益、策略变化和对历史的响应，否则无法判断合作来自激励结构还是偶然同步。</p>
+<p>其中 <span class="arithmatex">\(\mathcal{H}^{t} = (a^0, a^1, \dots, a^{t-1})\)</span> 是到时刻 <span class="arithmatex">\(t\)</span> 为止的公开行动历史，<span class="arithmatex">\(\mathcal{A}_i\)</span> 是玩家的动作集合。历史本身因此成为策略的输入，而不仅仅是观察记录。不同的历史函数可以在一维动作空间里产生完全不同的长期结果，即使它们在一步博弈里选择的是同一个动作。</p>
+<p>用经典囚徒困境作为基准，收益取「背叛诱惑 <span class="arithmatex">\(T = 5\)</span>、共同合作 <span class="arithmatex">\(R = 3\)</span>、共同背叛 <span class="arithmatex">\(P = 1\)</span>、被骗 <span class="arithmatex">\(S = 0\)</span>」，满足 <span class="arithmatex">\(T &gt; R &gt; P &gt; S\)</span> 与 <span class="arithmatex">\(2R &gt; T + S\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>动作组合</th>
+<th>玩家 1</th>
+<th>玩家 2</th>
+<th>是否帕累托最优</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合作 / 合作</td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td>是</td>
+</tr>
+<tr>
+<td>背叛 / 合作</td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td>否（一方被榨取）</td>
+</tr>
+<tr>
+<td>合作 / 背叛</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td>否</td>
+</tr>
+<tr>
+<td>背叛 / 背叛</td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td>否（一次性 Nash 均衡）</td>
+</tr>
+</tbody>
+</table>
+<p>一次性博弈的唯一均衡是双方都背叛，收益 <span class="arithmatex">\((1,1)\)</span>，但重复后可能出现合作。四种常见历史规则的行为差异如下：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>历史规则</th>
+<th>对背叛的响应</th>
+<th>主要弱点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Always Defect</td>
+<td>永远背叛</td>
+<td>无</td>
+<td>无法建立合作</td>
+</tr>
+<tr>
+<td>Tit-for-Tat</td>
+<td>复制对手上一轮动作</td>
+<td>立即回敬一轮</td>
+<td>噪声下陷入互相报复</td>
+</tr>
+<tr>
+<td>Grim Trigger</td>
+<td>一旦被背叛则永久背叛</td>
+<td>永久惩罚</td>
+<td>一次误判永久毁掉合作</td>
+</tr>
+<tr>
+<td>Win-Stay-Lose-Shift</td>
+<td>收益下降就换动作</td>
+<td>主动纠偏</td>
+<td>对随机噪声敏感</td>
+</tr>
+</tbody>
+</table>
+<p>策略的复杂度本身也影响可被学习性：Tit-for-Tat 只依赖对手最近一轮的动作（记忆长度 <span class="arithmatex">\(1\)</span>），Grim Trigger 需要记住「是否发生过背叛」（记忆长度 <span class="arithmatex">\(T\)</span>），而最优策略的记忆需求随博弈规模增长。历史规则越复杂，对手越难推断你的意图，你自己也越难在噪声下保持稳定。</p>
+<h2 id="_2">未来越重要，当前行为越可能考虑长期关系</h2>
+<p>重复博弈的目标函数是贴现收益和，常用折扣因子 <span class="arithmatex">\(\delta \in [0,1)\)</span> 表示对未来收益的重视程度：</p>
+<div class="arithmatex">\[
+U_i = \sum_{t=0}^{\infty} \delta^{t} u_i(t), \qquad \sum_{t=0}^{\infty} \delta^{t} = \frac{1}{1-\delta}.
+\]</div>
+<p><span class="arithmatex">\(\delta\)</span> 越接近 <span class="arithmatex">\(1\)</span>，未来项衰减越慢，远期收益在总和中占比越大。<span class="arithmatex">\(\delta = 0\)</span> 表示只看当下，等价于一次性博弈；<span class="arithmatex">\(\delta \to 1\)</span> 表示近乎无限耐心。这一条量化了直觉：<strong>一次性占便宜（<span class="arithmatex">\(T - R\)</span>）换来的即时收益，要与未来失去合作（<span class="arithmatex">\(R - P\)</span>）的损失做比较</strong>，比较结果完全由 <span class="arithmatex">\(\delta\)</span> 决定。</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\delta\)</span></th>
+<th>几何和的乘子 <span class="arithmatex">\(1/(1-\delta)\)</span></th>
+<th>10 步后的权重 <span class="arithmatex">\(\delta^{10}\)</span></th>
+<th>决策倾向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(0.0\)</span></td>
+<td><span class="arithmatex">\(1.00\)</span></td>
+<td><span class="arithmatex">\(0.000\)</span></td>
+<td>只关心当前</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\)</span></td>
+<td><span class="arithmatex">\(2.00\)</span></td>
+<td><span class="arithmatex">\(0.001\)</span></td>
+<td>短期即短视</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.9\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+<td><span class="arithmatex">\(0.349\)</span></td>
+<td>长期关系显著</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.99\)</span></td>
+<td><span class="arithmatex">\(100.00\)</span></td>
+<td><span class="arithmatex">\(0.904\)</span></td>
+<td>近乎完全耐心</td>
+</tr>
+</tbody>
+</table>
+<p>注意 <span class="arithmatex">\(\delta = 0.9\)</span> 时第 10 步的权重仍有 <span class="arithmatex">\(0.349\)</span>，而 <span class="arithmatex">\(\delta = 0.5\)</span> 时衰减到 <span class="arithmatex">\(0.001\)</span>，量级差了三百多倍。这在工程上对应「交互频率」：如果对手每 10 轮就换一次，<span class="arithmatex">\(\delta = 0.5\)</span> 的系统几乎看不到长期关系，而 <span class="arithmatex">\(\delta = 0.9\)</span> 的系统仍然会为一个远期回报让利。</p>
+<h2 id="_3">贴现因子与长期收益</h2>
+<p>在 Grim Trigger 下可以解析地解出「合作可以维持」的临界贴现因子。合作路径的贴现总收益是</p>
+<div class="arithmatex">\[
+V_{\text{coop}} = R + \delta R + \delta^{2} R + \cdots = \frac{R}{1-\delta}.
+\]</div>
+<p>若在某一轮背叛，则当轮拿到 <span class="arithmatex">\(T\)</span>，之后永久进入惩罚期，每轮只有 <span class="arithmatex">\(P\)</span>：</p>
+<div class="arithmatex">\[
+V_{\text{defect}} = T + \delta P + \delta^{2} P + \cdots = T + \frac{\delta P}{1-\delta}.
+\]</div>
+<p>合作可维持的条件是 <span class="arithmatex">\(V_{\text{coop}} \ge V_{\text{defect}}\)</span>，整理后得到临界值</p>
+<div class="arithmatex">\[
+\delta^{\star} = \frac{T - R}{T - P}.
+\]</div>
+<p>代入 <span class="arithmatex">\(T = 5\)</span>、<span class="arithmatex">\(R = 3\)</span>、<span class="arithmatex">\(P = 1\)</span>，得 <span class="arithmatex">\(\delta^{\star} = (5-3)/(5-1) = 0.5\)</span>。也就是说只要 <span class="arithmatex">\(\delta &gt; 0.5\)</span>，长期合作就是可自持的均衡。三个具体数值的对比：</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\delta\)</span></th>
+<th>合作总收益 <span class="arithmatex">\(V_{\text{coop}}\)</span></th>
+<th>背叛总收益 <span class="arithmatex">\(V_{\text{defect}}\)</span></th>
+<th>是否维持合作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(0.9\)</span></td>
+<td><span class="arithmatex">\(30.00\)</span></td>
+<td><span class="arithmatex">\(14.00\)</span></td>
+<td>是，安全裕度 <span class="arithmatex">\(16.00\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\)</span></td>
+<td><span class="arithmatex">\(6.00\)</span></td>
+<td><span class="arithmatex">\(6.00\)</span></td>
+<td>临界，恰好无差异</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.4\)</span></td>
+<td><span class="arithmatex">\(5.00\)</span></td>
+<td><span class="arithmatex">\(5.67\)</span></td>
+<td>否，背叛更赚</td>
+</tr>
+</tbody>
+</table>
+<p>这张表说明两件事：一是 <span class="arithmatex">\(0.9\)</span> 与 <span class="arithmatex">\(0.5\)</span> 的差别不是「好一点」，而是合作安全裕度从 <span class="arithmatex">\(16\)</span> 掉到 <span class="arithmatex">\(0\)</span>；二是临界点附近的策略极脆弱，任何观测噪声或 <span class="arithmatex">\(\delta\)</span> 的估计误差都可能把合作推下悬崖。临界值对参数的敏感度是</p>
+<div class="arithmatex">\[
+\frac{\partial \delta^{\star}}{\partial T} = \frac{R - P}{(T-P)^{2}} &gt; 0,
+\]</div>
+<p>即诱惑值 <span class="arithmatex">\(T\)</span> 越大，合作门槛越高；若 <span class="arithmatex">\(T = 8\)</span>（例如一次大额违约能带来八倍收益），门槛升到 <span class="arithmatex">\((8-3)/(8-1) \approx 0.714\)</span>，此时 <span class="arithmatex">\(\delta = 0.5\)</span> 的系统必然破裂。</p>
+<h2 id="_4">重复不等于一定产生合作</h2>
+<p>「重复博弈支持合作」这句话有大量前提，缺一不可：行为必须可被观察到（否则无法惩罚）、互动必须足够长期（<span class="arithmatex">\(\delta\)</span> 足够高）、惩罚必须可信（对手愿意执行）。任何一个条件破裂，合作都可能消失。</p>
+<table>
+<thead>
+<tr>
+<th>前提条件</th>
+<th>破裂后的后果</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>行为可观察</td>
+<td>无法定位背叛者，惩罚落空</td>
+<td>共享资源的隐蔽滥用</td>
+</tr>
+<tr>
+<td>轮次足够长</td>
+<td><span class="arithmatex">\(\delta &lt; \delta^{\star}\)</span>，单次背叛更划算</td>
+<td>项目临近结束</td>
+</tr>
+<tr>
+<td>惩罚可信</td>
+<td>威胁被忽略，回到一次性均衡</td>
+<td>无成本的口头警告</td>
+</tr>
+<tr>
+<td>身份稳定</td>
+<td>对手每轮换人，声誉无从积累</td>
+<td>匿名在线交易</td>
+</tr>
+</tbody>
+</table>
+<p>特别重要的是「最后一轮效应」：如果玩家知道第 <span class="arithmatex">\(T\)</span> 轮就是终点，逆向归纳会让合作在最后一轮崩塌，并向前逐轮传染直到合作完全消失——这意味着<strong>有限且已知终点的重复博弈，无论 <span class="arithmatex">\(\delta\)</span> 多高都无法维持合作</strong>。现实改法是引入「继续概率」：若每轮结束后以概率 <span class="arithmatex">\(p\)</span> 继续，则等效贴现因子为</p>
+<div class="arithmatex">\[
+\delta_{\text{eff}} = \delta \cdot p .
+\]</div>
+<p>取 <span class="arithmatex">\(\delta = 0.9\)</span>、<span class="arithmatex">\(p = 0.95\)</span>，得 <span class="arithmatex">\(\delta_{\text{eff}} = 0.855 &gt; 0.5\)</span>，合作仍可维持；但若 <span class="arithmatex">\(p = 0.5\)</span>，则 <span class="arithmatex">\(\delta_{\text{eff}} = 0.45 &lt; 0.5\)</span>，合作崩溃。这解释了为什么「长期合作框架」比「明确到期日的一次性合约」更容易产生合作行为。</p>
+<h2 id="_5">学习规则描述玩家怎样根据经验调整策略</h2>
+<p>重复博弈里的均衡概念是静态的（「什么策略组合稳定」），而学习规则描述的是动态过程（「策略如何随时间变化」）。两者相关但不能混为一谈。常见的学习规则：</p>
+<table>
+<thead>
+<tr>
+<th>学习规则</th>
+<th>更新量</th>
+<th>需要的对手模型</th>
+<th>收敛性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fictitious Play</td>
+<td>按观测频率估计对手策略并对它最佳响应</td>
+<td>需要经验频率</td>
+<td>零和、势博弈中收敛到 Nash</td>
+</tr>
+<tr>
+<td>Regret Matching</td>
+<td>按累计正遗憾成比例提高动作概率</td>
+<td>不需要显式模型</td>
+<td>平均策略趋近粗相关均衡</td>
+</tr>
+<tr>
+<td>表格 Q-Learning</td>
+<td>用时序差分更新状态-动作价值</td>
+<td>把自己的转移当环境</td>
+<td>单智能体平稳 MDP 下收敛</td>
+</tr>
+<tr>
+<td>策略梯度</td>
+<td>沿回报梯度更新参数化策略</td>
+<td>需要基线估计</td>
+<td>平稳环境下收敛到局部最优</td>
+</tr>
+</tbody>
+</table>
+<p>区别要点：Fictitious Play 与 Regret Matching 是<strong>博弈论驱动</strong>、有理论收敛保证的规则；Q-Learning 与策略梯度来自单智能体 RL，其收敛证明建立在「环境平稳」的假设上，一旦对手同时学习，这个假设就破裂（见后文非平稳性一节）。实践上一个常见做法是把两类方法混用：用无遗憾学习保证长期平均不被利用，用 Q-Learning 处理有状态转移的部分。</p>
+<h2 id="_6">无遗憾学习与收敛性质</h2>
+<p>无遗憾（no-regret）学习给了「学习会不会到均衡」一个可量化的答案。玩家 <span class="arithmatex">\(i\)</span> 在第 <span class="arithmatex">\(T\)</span> 轮之后的累计外部遗憾定义为</p>
+<div class="arithmatex">\[
+\mathcal{R}_T = \max_{a \in \mathcal{A}_i} \sum_{t=1}^{T} \Big( \, u_i\big(a,\, a_{-i}^{t}\big) - u_i\big(a_i^{t},\, a_{-i}^{t}\big) \, \Big),
+\]</div>
+<p>它衡量的是「如果整段历史都固定选某个动作 <span class="arithmatex">\(a\)</span>，能比实际多拿多少收益」。若 <span class="arithmatex">\(\mathcal{R}_T / T \to 0\)</span>，即平均遗憾趋于 <span class="arithmatex">\(0\)</span>，则该玩家是 no-regret 的。</p>
+<p>Regret Matching 是构造这种策略的标准方式。设第 <span class="arithmatex">\(t\)</span> 轮动作 <span class="arithmatex">\(a\)</span> 的累计遗憾为 <span class="arithmatex">\(R_t(a)\)</span>，取正部分后归一化得到下一轮策略：</p>
+<div class="arithmatex">\[
+\sigma_{t+1}(a) = \frac{\big[ R_t(a) \big]^{+}}{\sum_{a' \in \mathcal{A}_i} \big[ R_t(a') \big]^{+}}, \qquad [x]^{+} = \max(x, 0).
+\]</div>
+<p>其理论性质是：在 <span class="arithmatex">\(T\)</span> 轮后累计遗憾上界为 <span class="arithmatex">\(O(\sqrt{T})\)</span>，因此平均遗憾以 <span class="arithmatex">\(O(1/\sqrt{T})\)</span> 趋近 <span class="arithmatex">\(0\)</span>。数值上，<span class="arithmatex">\(T = 10^{4}\)</span> 时平均遗憾量级约为 <span class="arithmatex">\(10^{-2}\)</span>，<span class="arithmatex">\(T = 10^{6}\)</span> 时约为 <span class="arithmatex">\(10^{-3}\)</span>——收敛很慢但确实发生。</p>
+<p>收敛到哪类均衡需要注意：两个都使用 no-regret 学习的玩家，其<strong>经验平均策略</strong>趋于一个粗相关均衡（coarse correlated equilibrium），这比 Nash 均衡更弱（Nash 均衡是它的特例）。也就是说 no-regret 保证的是「长期平均不被利用」，而不是「最终每个时刻都处在 Nash」。还有一个实用细节：如果两个玩家用<strong>相同</strong>的学习规则且完全对称，可能长期停在同一条循环轨迹上，此时时间平均收敛但瞬时策略不收敛。与零和结构里博弈值的对应关系见 <a href="../03-zero-sum-minimax/">零和博弈与 Minimax</a>。</p>
+<h2 id="_7">稳定收益不代表已经收敛到某个均衡</h2>
+<p>仿真中几条收益曲线变平，可能只是学习率变小、探索率衰减、策略陷入循环或奖励被平滑，而不代表已经到达均衡。要声称达到某类均衡，必须检查对应的<strong>偏离收益</strong>，而不是只看 reward 是否不再变化。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能的真实原因</th>
+<th>是否需要继续排查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收益曲线变平</td>
+<td>学习率 <span class="arithmatex">\(\alpha_t \to 0\)</span></td>
+<td>是，检查探索是否仍在进行</td>
+</tr>
+<tr>
+<td>收益周期性波动</td>
+<td>策略在循环中（非平稳）</td>
+<td>是，检查时间平均是否稳定</td>
+</tr>
+<tr>
+<td>双方收益稳定但很低</td>
+<td>落入共同次优陷阱</td>
+<td>是，检查是否存在互利的单边偏离</td>
+</tr>
+<tr>
+<td>收益稳定且可利用度低</td>
+<td>接近均衡</td>
+<td>否，但需报告置信区间</td>
+</tr>
+</tbody>
+</table>
+<p>判断的量化指标是可利用度（exploitability）：固定其他玩家的策略，让某个玩家单独做最佳响应，若提升量超过阈值 <span class="arithmatex">\(\epsilon\)</span>（例如收益尺度的 <span class="arithmatex">\(1\%\)</span>），则当前组合仍可被利用。这与 Nash 均衡的定义（不存在有利的单边偏离）直接对应，比「曲线是否变平」更接近问题本质。</p>
+<h2 id="_8">对工程系统最重要的是历史会改变对手</h2>
+<p>单智能体视角下，其他玩家通常被当成环境的一部分。但在多智能体在线学习时，对手或队友也会根据过去的互动更新策略，因此「环境」会随你的行为而改变。重复博弈提供了理解这种长期相互适应的基本视角，也解释了为什么同一个算法在离线数据上有效、在在线对抗中却失效。</p>
+<table>
+<thead>
+<tr>
+<th>视角</th>
+<th>对手被建模为</th>
+<th>环境是否随自己变化</th>
+<th>理论保证来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单智能体 RL</td>
+<td>平稳转移核的一部分</td>
+<td>否（假设平稳）</td>
+<td>MDP 收敛定理</td>
+</tr>
+<tr>
+<td>重复博弈</td>
+<td>有策略的理性玩家</td>
+<td>是</td>
+<td>均衡与贴现比较</td>
+</tr>
+<tr>
+<td>多智能体学习</td>
+<td>同时学习的策略集合</td>
+<td>是，且非平稳</td>
+<td>均衡近似 / 博弈论保证</td>
+</tr>
+</tbody>
+</table>
+<p>一个具体的量级感受：两个机器人竞争任务分配时，若一方把「对方固定抢占资源」当成环境规律写进策略，则对方一旦改用退让策略，自己的收益会从预期值骤降。这类失败的根源不是算法弱，而是<strong>建模假设（环境平稳）与现实（对手在学）不一致</strong>。因此工程上需要显式记录的不只是收益，还包括策略本身的演化轨迹：动作分布、对历史模式的响应、以及对不同对手的适应速度。否则无法区分「合作来自稳定的激励结构」还是「偶然的同步」。</p>
+<h2 id="_9">多智能体学习中的非平稳性</h2>
+<p>单智能体 RL 的收敛保证依赖一个核心假设：转移核 <span class="arithmatex">\(P(s' \mid s, a)\)</span> 不随时间变化。当多个智能体同时用 Q-Learning 或策略梯度学习时，第 <span class="arithmatex">\(i\)</span> 个玩家看到的环境其实是</p>
+<div class="arithmatex">\[
+P_i^{t}(s' \mid s, a_i) = \sum_{a_{-i}} P\big(s' \mid s, a_i, a_{-i}\big)\, \pi_{-i}^{t}(a_{-i} \mid s),
+\]</div>
+<p>而 <span class="arithmatex">\(\pi_{-i}^{t}\)</span> 随轮次 <span class="arithmatex">\(t\)</span> 变化，于是 <span class="arithmatex">\(P_i^{t}\)</span> 是<strong>非平稳</strong>的。这直接破坏了 Q-Learning 收敛证明里的不动点论证：Bellman 算子的目标值每轮都在移动，价值估计可能持续震荡甚至发散。</p>
+<table>
+<thead>
+<tr>
+<th>非平稳来源</th>
+<th>对学习的影响</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对手策略持续更新</td>
+<td>转移核随时间漂移</td>
+<td>集中训练分散执行（CTDE）</td>
+</tr>
+<tr>
+<td>探索噪声变化</td>
+<td>经验分布失真</td>
+<td>共享经验回放、对手建模</td>
+</tr>
+<tr>
+<td>奖励相互耦合</td>
+<td>信用分配困难</td>
+<td>反事实基线、差分奖励</td>
+</tr>
+<tr>
+<td>策略循环</td>
+<td>无法收敛到不动点</td>
+<td>平均策略、元博弈求解</td>
+</tr>
+</tbody>
+</table>
+<p>常用的缓解思路是把「学习什么」和「怎么用」分离：集中训练阶段允许看到全局状态和他人动作以稳定学习目标，执行阶段只用自己的局部观测。即便如此，收敛保证通常退化为「收敛到某类近似均衡集合」，而不是单智能体意义上的唯一最优点。另一种思路是把学习目标从「找不动点」换成「让平均遗憾趋近零」，用上一节的 no-regret 性质替代单智能体的收敛保证。更完整的算法与失效分析见 <a href="../../multi-agent-systems/05-multi-agent-learning/">多智能体学习</a>。</p>
+<h2 id="_10">实验里最好检查单边偏离还能赚多少</h2>
+<p>判断一个稳定策略是否接近均衡，最贴近定义的做法是构造单边偏离测试：固定其他玩家的策略 <span class="arithmatex">\(\pi_{-i}\)</span>，让玩家 <span class="arithmatex">\(i\)</span> 单独搜索最佳响应</p>
+<div class="arithmatex">\[
+\Delta_i = \max_{\pi_i'} \; \mathbb{E}\Big[ \, u_i\big(\pi_i', \pi_{-i}\big) \, \Big] - \mathbb{E}\Big[ \, u_i\big(\pi_i, \pi_{-i}\big) \, \Big].
+\]</div>
+<p>若 <span class="arithmatex">\(\Delta_i\)</span> 显著为正，说明当前策略组合仍可被利用，稳定只是假象。举一个数值感受：若当前共同收益是每轮 <span class="arithmatex">\(3\)</span>，而单边背叛能吃一次 <span class="arithmatex">\(5\)</span>，则 <span class="arithmatex">\(\Delta_i = 5 - 3 = 2\)</span>；配合上一节的贴现比较，只有当 <span class="arithmatex">\(\delta &gt; 0.5\)</span> 时这 <span class="arithmatex">\(2\)</span> 个单位的即时诱惑才会被未来损失抵消。</p>
+<table>
+<thead>
+<tr>
+<th>测试项</th>
+<th>度量</th>
+<th>判定阈值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单边偏离收益</td>
+<td><span class="arithmatex">\(\Delta_i\)</span></td>
+<td><span class="arithmatex">\(\le \epsilon \cdot \text{收益尺度}\)</span></td>
+<td>直接对应 Nash 定义</td>
+</tr>
+<tr>
+<td>可利用度</td>
+<td><span class="arithmatex">\(\max_i \Delta_i\)</span></td>
+<td>越接近 <span class="arithmatex">\(0\)</span> 越好</td>
+<td>整体均衡质量</td>
+</tr>
+<tr>
+<td>平均遗憾</td>
+<td><span class="arithmatex">\(\mathcal{R}_T / T\)</span></td>
+<td><span class="arithmatex">\(O(1/\sqrt{T})\)</span> 量级</td>
+<td>无遗憾学习进度</td>
+</tr>
+<tr>
+<td>收益方差</td>
+<td><span class="arithmatex">\(\mathrm{Var}(u_i)\)</span></td>
+<td>突然升高提示非平稳</td>
+<td>策略漂移信号</td>
+</tr>
+</tbody>
+</table>
+<p>实践建议：每次报告「收敛」结论时，同时给出 <span class="arithmatex">\(\Delta_i\)</span>、收益方差和探索率曲线三项证据，否则无法排除「学习率衰减造成的假稳定」。</p>
+<h2 id="_11">把一次收益和长期关系分开</h2>
+<p>重复博弈中，当前动作同时产生两种后果：即时收益，以及对对手未来预期的影响。贴现因子越高，后一种效应越重要。分析实验时应当把这两部分显式拆开：</p>
+<div class="arithmatex">\[
+U_i = \underbrace{u_i^{t}}_{\text{即时收益}} + \underbrace{\frac{\delta}{1-\delta}\, \bar{u}_i^{\text{future}}}_{\text{关系价值}} .
+\]</div>
+<p>用前面的数字感受量级差异：<span class="arithmatex">\(\delta = 0.9\)</span> 时 <span class="arithmatex">\(\delta/(1-\delta) = 9\)</span>，意味着未来平均每轮 <span class="arithmatex">\(1\)</span> 单位的收益变动，在今天的等价价值是 <span class="arithmatex">\(9\)</span>；而 <span class="arithmatex">\(\delta = 0.5\)</span> 时这个倍率只有 <span class="arithmatex">\(1\)</span>。所以同一个「暂时让利 <span class="arithmatex">\(2\)</span> 以换取长期合作」，在 <span class="arithmatex">\(\delta = 0.9\)</span> 下的等价收益是 <span class="arithmatex">\(9 \times 1 - 2\)</span>（净赚），在 <span class="arithmatex">\(\delta = 0.5\)</span> 下则变成 <span class="arithmatex">\(1 \times 1 - 2 = -1\)</span>（亏本）。</p>
+<table>
+<thead>
+<tr>
+<th>记录项</th>
+<th>用途</th>
+<th>不记录的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>即时收益 <span class="arithmatex">\(u_i^{t}\)</span></td>
+<td>衡量当期表现</td>
+<td>无法区分让利与失败</td>
+</tr>
+<tr>
+<td>策略变化轨迹</td>
+<td>判断是否在适应对手</td>
+<td>误把循环当成收敛</td>
+</tr>
+<tr>
+<td>对历史的响应</td>
+<td>检验是否真在使用历史</td>
+<td>无法判断合作是否来自激励</td>
+</tr>
+<tr>
+<td>贴现因子估计</td>
+<td>计算关系价值</td>
+<td>无法评估长期决策是否合理</td>
+</tr>
+</tbody>
+</table>
+<p>三个失败模式值得单独标记：一是把短期高收益误读为策略优越（很可能只是榨取了对手的一次失误）；二是把长期低收益误读为算法不行（可能是为了维持关系主动让利）；三是在 <span class="arithmatex">\(\delta\)</span> 估计错误时做出错误的合作 / 背叛决策，因为临界值 <span class="arithmatex">\(\delta^{\star} = (T-R)/(T-P)\)</span> 对 <span class="arithmatex">\(T\)</span> 和 <span class="arithmatex">\(P\)</span> 的估计非常敏感——<span class="arithmatex">\(P\)</span> 从 <span class="arithmatex">\(1\)</span> 降到 <span class="arithmatex">\(0.5\)</span> 时，门槛就从 <span class="arithmatex">\(0.5\)</span> 升到 <span class="arithmatex">\(0.556\)</span>。</p>
+<blockquote>
+<p><strong>下一步</strong>：回到零和结构与对抗鲁棒性的对应，见 <a href="../03-zero-sum-minimax/">零和博弈与 Minimax</a>；复习顺序行动与承诺可信度对重复关系的制约，见 <a href="../04-sequential-bayesian/">序贯与贝叶斯博弈</a>；如果关心多智能体学习的算法细节与收敛失效，见 <a href="../../multi-agent-systems/05-multi-agent-learning/">多智能体学习</a>；如果关心单智能体 MDP 的收敛前提，见 <a href="../../reinforcement-learning/01-mdp-bellman/">MDP 与 Bellman 方程</a>。</p>
+</blockquote>
 
 
 

@@ -1510,7 +1510,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        纯策略均衡的矩阵检查
+        不动点视角
       
     </span>
   </a>
@@ -1521,7 +1521,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        混合策略的必要性
+        纯策略均衡的矩阵检查
       
     </span>
   </a>
@@ -1532,7 +1532,18 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        均衡与社会效率
+        混合策略的必要性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2x2 混合策略均衡的计算
       
     </span>
   </a>
@@ -1541,6 +1552,28 @@
       
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        均衡与社会效率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重均衡与协调问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡检查的三个层次
@@ -3677,7 +3710,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        纯策略均衡的矩阵检查
+        不动点视角
       
     </span>
   </a>
@@ -3688,7 +3721,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        混合策略的必要性
+        纯策略均衡的矩阵检查
       
     </span>
   </a>
@@ -3699,7 +3732,18 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        均衡与社会效率
+        混合策略的必要性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2x2 混合策略均衡的计算
       
     </span>
   </a>
@@ -3708,6 +3752,28 @@
       
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        均衡与社会效率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重均衡与协调问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡检查的三个层次
@@ -3810,34 +3876,452 @@
 
 <h1 id="best-response-nash-equilibrium">Best Response &amp; Nash Equilibrium</h1>
 <p>纳什均衡描述一种稳定状态：<strong>在其他人的策略保持不变时，没有任何玩家愿意单独改变自己的策略。</strong> 它不保证结果公平、高效或唯一，只保证“单边偏离没有好处”。</p>
+<p>这一章把「稳定性」从直觉变成一个可以逐格验算的对象：手算 2×2 博弈的全部均衡、写出均衡的不动点方程、并说清为什么存在性定理不能直接当算法用。</p>
 <h2 id="_1">最佳响应</h2>
 <p>对玩家 <span class="arithmatex">\(i\)</span>，给定其他玩家策略 <span class="arithmatex">\(a_{-i}\)</span>，最佳响应集合为</p>
 <div class="arithmatex">\[
 BR_i(a_{-i})=\arg\max_{a_i}u_i(a_i,a_{-i}).
 \]</div>
-<p>如果对方选择不同策略，你的最佳响应也可能改变。因此博弈论没有一个脱离对手行为的“永远最优动作”。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>取值域</th>
+<th>易错点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(a_i\)</span></td>
+<td>玩家 <span class="arithmatex">\(i\)</span> 的动作</td>
+<td><span class="arithmatex">\(\mathcal A_i\)</span></td>
+<td>混淆动作与策略（见上一章）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(a_{-i}\)</span></td>
+<td>除 <span class="arithmatex">\(i\)</span> 外所有人的联合动作</td>
+<td><span class="arithmatex">\(\prod_{j\ne i}\mathcal A_j\)</span></td>
+<td>忘记它是联合量，不是单个值</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u_i\)</span></td>
+<td>收益函数</td>
+<td><span class="arithmatex">\(\mathbb R\)</span></td>
+<td>序数效用时不能做加权和</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(BR_i\)</span></td>
+<td>最佳响应<strong>集合</strong>（可能多值）</td>
+<td><span class="arithmatex">\(2^{\mathcal A_i}\)</span></td>
+<td>当成单值函数会导致求交点困难</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(BR_i\)</span> 是多值映射（对应关系），这一点在混合策略下变得关键：如果 <span class="arithmatex">\(a_i\)</span> 和 <span class="arithmatex">\(a_i'\)</span> 收益相同，两者都在 <span class="arithmatex">\(BR_i\)</span> 中；<span class="arithmatex">\(\lvert BR_i\rvert\ge 2\)</span> 时均衡通常不止一个。如果对方选择不同策略，你的最佳响应也可能改变 —— 博弈论没有脱离对手行为的“永远最优动作”。</p>
+<p>对连续动作，最佳响应由一阶条件刻画（<span class="arithmatex">\(u_i\)</span> 可微且关于 <span class="arithmatex">\(a_i\)</span> 凹）：</p>
+<div class="arithmatex">\[
+\frac{\partial u_i(a_i,a_{-i})}{\partial a_i}=0
+\quad\text{且}\quad
+\frac{\partial^2 u_i}{\partial a_i^2}&lt;0.
+\]</div>
+<p>一阶条件只给出候选点，凹性才保证它是全局最大。缺少二阶检查会把极小值或鞍点误认成最佳响应，这是连续博弈中最常见的计算失误。求解流程固定为三步：列收益表达式 → 固定对手策略做一元最大化 → 检查边界（<span class="arithmatex">\(\mathcal A_i\)</span> 有界时最大值可能在端点取到）。</p>
 <h2 id="nash">Nash 均衡条件</h2>
 <p>联合策略 <span class="arithmatex">\(\mathbf a^*\)</span> 是 Nash 均衡，当且仅当</p>
 <div class="arithmatex">\[
-u_i(a_i^*,a_{-i}^*)\ge u_i(a_i,a_{-i}^*),\qquad \forall i,a_i.
+u_i(a_i^*,a_{-i}^*)\ge u_i(a_i,a_{-i}^*),\qquad \forall i,\ \forall a_i\in\mathcal A_i.
 \]</div>
-<p>这意味着任何单个玩家改策略都不能提高自己的收益。</p>
-<h2 id="_2">纯策略均衡的矩阵检查</h2>
+<p>这意味着任何单个玩家改策略都不能提高自己的收益。等价写法有三种：</p>
+<table>
+<thead>
+<tr>
+<th>等价形式</th>
+<th>表达式</th>
+<th>适合用来做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收益不等式</td>
+<td><span class="arithmatex">\(u_i(a_i^*,a_{-i}^*)\ge u_i(a_i,a_{-i}^*)\)</span></td>
+<td>逐格验算</td>
+</tr>
+<tr>
+<td>最佳响应对应</td>
+<td><span class="arithmatex">\(a_i^*\in BR_i(a_{-i}^*)\)</span></td>
+<td>找均衡（求交集）</td>
+</tr>
+<tr>
+<td>不动点形式</td>
+<td><span class="arithmatex">\(\mathbf a^*\in BR(\mathbf a^*)\)</span></td>
+<td>证明存在性</td>
+</tr>
+</tbody>
+</table>
+<p>注意条件里<strong>只有单边偏离</strong>，没有联合偏离。这正是 Nash 均衡与「全局最优」的分水岭：</p>
+<div class="arithmatex">\[
+\mathbf a^*\ \text{是 Nash}\ \not\Longrightarrow\ \mathbf a^*\ \text{最大化}\ \sum_i u_i.
+\]</div>
+<p>囚徒困境里双方联合偏离到合作能给两人都带来更高收益，但因为存在单边获利偏离，它不是 Nash 均衡。混合策略下的推广条件是期望收益意义下的：</p>
+<div class="arithmatex">\[
+\mathbb E_{\sigma}[u_i(s_i,\sigma_{-i})]\ge \mathbb E_{\sigma}[u_i(s_i',\sigma_{-i})],\quad \forall s_i'\in\mathcal S_i.
+\]</div>
+<p>在均衡处，<strong>被赋予正概率的纯策略必须收益相等</strong>，否则玩家会调整概率，这条支撑后面的等收益计算法。</p>
+<h2 id="_2">不动点视角</h2>
+<p>把所有人的最佳响应拼起来，得到整体最佳响应对应 <span class="arithmatex">\(BR(\mathbf a)=\prod_{i\in\mathcal N}BR_i(a_{-i})\)</span>，均衡条件就重写为</p>
+<div class="arithmatex">\[
+\mathbf a^*\in BR(\mathbf a^*),
+\]</div>
+<p>即 <span class="arithmatex">\(\mathbf a^*\)</span> 是 <span class="arithmatex">\(BR\)</span> 的<strong>不动点</strong>。这一步重构的价值在于把「找均衡」从经济学问题转成拓扑学问题。</p>
+<table>
+<thead>
+<tr>
+<th>定理</th>
+<th>适用条件</th>
+<th>结论</th>
+<th>是否构造性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nash（1950），基于 Kakutani</td>
+<td>有限博弈，<span class="arithmatex">\(\Delta(\mathcal S_i)\)</span> 紧凸，<span class="arithmatex">\(BR\)</span> 上半连续且值为凸集</td>
+<td>至少存在一个混合策略均衡</td>
+<td>非构造性</td>
+</tr>
+<tr>
+<td>Brouwer 不动点</td>
+<td><span class="arithmatex">\(BR\)</span> 单值连续，定义在紧凸集上</td>
+<td>存在 <span class="arithmatex">\(x=f(x)\)</span></td>
+<td>非构造性</td>
+</tr>
+<tr>
+<td>Glicksberg</td>
+<td>无限动作、收益连续且拟凹</td>
+<td>存在混合均衡</td>
+<td>非构造性</td>
+</tr>
+</tbody>
+</table>
+<p>为什么必须用混合策略才能保证存在性？因为纯策略集 <span class="arithmatex">\(\mathcal A\)</span> 是有限离散集，不凸，<span class="arithmatex">\(BR\)</span> 可能有空洞。取混合策略空间</p>
+<div class="arithmatex">\[
+\Delta(\mathcal A_i)=\Big\{\sigma_i\ \Big|\ \sigma_i(a)\ge 0,\ \sum_{a\in\mathcal A_i}\sigma_i(a)=1\Big\},
+\]</div>
+<p>它是紧凸多胞形，Kakutani 的条件才可能满足。<strong>存在性定理之所以是「不动点定理」而不是构造性算法，是因为它只断言不动点存在，不给到达路径。</strong> 这与数值分析中的存在–收敛分离是同一件事。</p>
+<p>失效模式很具体：最佳响应动力学 <span class="arithmatex">\(\mathbf a^{t+1}=BR(\mathbf a^t)\)</span> 在石头剪刀布中周期为 3 地循环，永不收敛。因此实际算法（虚拟对局、fictitious play、遗憾最小化）都改成对<strong>历史平均</strong>做最佳响应。</p>
+<h2 id="_3">纯策略均衡的矩阵检查</h2>
 <p>假设两台机器人选择任务 A/B，若两者选不同任务团队效率最高，但每台车都更喜欢离自己近的目标。可以在每个格子上分别标出行玩家和列玩家的最佳响应；两个标记同时出现的位置就是纯策略 Nash 候选。</p>
 <p>设行玩家与列玩家的收益矩阵分别为</p>
 <div class="arithmatex">\[
 U_r=\begin{bmatrix}3&amp;5\\1&amp;2\end{bmatrix},\qquad
 U_c=\begin{bmatrix}3&amp;1\\5&amp;2\end{bmatrix}.
 \]</div>
-<p>检查时固定列动作，在该列标出行玩家收益最大的格子；再固定行动作，在该行标出列玩家收益最大的格子。两个标记重合处就是纯策略 Nash 候选。这个过程直接对应最佳响应的定义，而不是一个求解器技巧。</p>
-<h2 id="_3">混合策略的必要性</h2>
-<p>石头剪刀布中，任何固定动作都有克制它的动作，因此不存在纯策略 Nash。此时策略需要随机化，即使用 mixed strategy。</p>
-<p>混合策略均衡不是“人为加点随机性”，而是为了让对手无法通过单边调整获得更高期望收益。</p>
-<h2 id="_4">均衡与社会效率</h2>
+<p>联合收益摆成下表（每格写作「行收益，列收益」）：</p>
+<table>
+<thead>
+<tr>
+<th>行 \ 列</th>
+<th>L（近目标）</th>
+<th>R（远目标）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T</td>
+<td><span class="arithmatex">\(3,\,3\)</span></td>
+<td><span class="arithmatex">\(5,\,1\)</span></td>
+</tr>
+<tr>
+<td>B</td>
+<td><span class="arithmatex">\(1,\,5\)</span></td>
+<td><span class="arithmatex">\(2,\,2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>检查时固定列动作，在该列标出行玩家收益最大的格子；再固定行动作，在该行标出列玩家收益最大的格子；两个标记重合处就是候选。本例固定 L 时行选 T（<span class="arithmatex">\(3&gt;1\)</span>），固定 R 时行仍选 T（<span class="arithmatex">\(5&gt;2\)</span>）；固定 T 时列选 L（<span class="arithmatex">\(3&gt;1\)</span>），固定 B 时列仍选 L（<span class="arithmatex">\(5&gt;2\)</span>）。因此 <span class="arithmatex">\((T,L)\)</span> 是唯一纯策略 Nash 均衡，收益 <span class="arithmatex">\((3,3)\)</span>。这个过程直接对应最佳响应的定义，而不是求解器技巧。</p>
+<p>它同时暴露一个结构：T 对两个列动作都是最佳响应，即</p>
+<div class="arithmatex">\[
+u_r(T,L)&gt;u_r(B,L)\ \text{且}\ u_r(T,R)&gt;u_r(B,R)\ \Longrightarrow\ T\ \text{严格占优}.
+\]</div>
+<p>同理 L 对列玩家严格占优。<strong>存在严格占优策略时，均衡不需要解方程，只需逐格比较</strong>；这也解释了本例为何没有混合策略均衡 —— 占优策略概率为 1 时任何混合都严格更差。反向用法：逐格检查后若没有任何格子同时出现两个标记，则<strong>不存在纯策略均衡</strong>，必须进入混合策略，这是可机械执行的判定。</p>
+<h2 id="_4">混合策略的必要性</h2>
+<p>石头剪刀布中，任何固定动作都有克制它的动作，因此不存在纯策略 Nash，策略需要随机化。混合策略空间为</p>
+<div class="arithmatex">\[
+\Delta(\mathcal A_i)=\Big\{\sigma_i\ \Big|\ \sigma_i(a)\ge 0,\ \sum_{a\in\mathcal A_i}\sigma_i(a)=1\Big\},
+\]</div>
+<p>玩家的期望收益为</p>
+<div class="arithmatex">\[
+\mathbb E[u_i]=\sum_{a_i}\sum_{a_{-i}}\sigma_i(a_i)\,\sigma_{-i}(a_{-i})\,u_i(a_i,a_{-i}).
+\]</div>
+<p>混合均衡的核心性质是<strong>支持集等收益</strong>：</p>
+<div class="arithmatex">\[
+\Pr_{\sigma_i}(a)&gt;0\ \Longrightarrow\ \mathbb E[u_i(a,\sigma_{-i})]=\max_{a'\in\mathcal A_i}\mathbb E[u_i(a',\sigma_{-i})].
+\]</div>
+<p>直觉是：如果某个被使用的纯策略期望收益严格更低，玩家就该把概率挪给更好的那个，从而严格提高期望收益，破坏均衡。</p>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>是否存在纯策略均衡</th>
+<th>混合策略的作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存在严格占优策略</td>
+<td>存在，且唯一</td>
+<td>均衡退化为占优策略，概率为退化分布</td>
+</tr>
+<tr>
+<td>协调博弈</td>
+<td>存在两个纯策略均衡</td>
+<td>额外存在一个混合均衡（通常效率更低）</td>
+</tr>
+<tr>
+<td>石头剪刀布类循环博弈</td>
+<td>不存在</td>
+<td>混合策略是唯一均衡</td>
+</tr>
+<tr>
+<td>零和博弈</td>
+<td>可能不存在纯策略鞍点</td>
+<td>由 Minimax 定理保证混合均衡存在</td>
+</tr>
+</tbody>
+</table>
+<p>混合策略均衡不是“人为加点随机性”，而是为了让对手无法通过单边调整获得更高期望收益。它的随机性是<strong>均衡的副产品</strong>，不是设计者的主观选择。</p>
+<h2 id="2x2">2x2 混合策略均衡的计算</h2>
+<p>下面给出完整推导。取一个无纯策略均衡的 2×2 博弈：行玩家可选 T / B，列玩家可选 L / R。</p>
+<table>
+<thead>
+<tr>
+<th>行 \ 列</th>
+<th>L</th>
+<th>R</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T</td>
+<td><span class="arithmatex">\(0,\,2\)</span></td>
+<td><span class="arithmatex">\(2,\,0\)</span></td>
+</tr>
+<tr>
+<td>B</td>
+<td><span class="arithmatex">\(1,\,0\)</span></td>
+<td><span class="arithmatex">\(0,\,1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>第一步：确认没有纯策略均衡。</strong> 逐格检查单边偏离：<span class="arithmatex">\((T,L)\)</span> 下行玩家改 B 得 <span class="arithmatex">\(1&gt;0\)</span>；<span class="arithmatex">\((T,R)\)</span> 下列玩家改 L 得 <span class="arithmatex">\(2&gt;0\)</span>；<span class="arithmatex">\((B,L)\)</span> 下列玩家改 R 得 <span class="arithmatex">\(1&gt;0\)</span>；<span class="arithmatex">\((B,R)\)</span> 下行玩家改 T 得 <span class="arithmatex">\(2&gt;0\)</span>。四处都至少有一方愿意偏离，出现 L→B→R→T→L 的循环，必须求混合均衡。</p>
+<p><strong>第二步：设行玩家的混合策略。</strong> 令行玩家以概率 <span class="arithmatex">\(p\)</span> 选 T、以 <span class="arithmatex">\(1-p\)</span> 选 B。关键是让<strong>列玩家</strong>在两个纯策略间无差异，因为这样列玩家才失去调整动机。列玩家选 L 的期望收益（<span class="arithmatex">\((T,L)=2\)</span>，<span class="arithmatex">\((B,L)=0\)</span>）：</p>
+<div class="arithmatex">\[
+\mathbb E[u_c(L)]=p\cdot 2+(1-p)\cdot 0=2p.
+\]</div>
+<p>选 R 的期望收益（<span class="arithmatex">\((T,R)=0\)</span>，<span class="arithmatex">\((B,R)=1\)</span>）：</p>
+<div class="arithmatex">\[
+\mathbb E[u_c(R)]=p\cdot 0+(1-p)\cdot 1=1-p.
+\]</div>
+<p>等收益条件 <span class="arithmatex">\(\mathbb E[u_c(L)]=\mathbb E[u_c(R)]\)</span> 给出</p>
+<div class="arithmatex">\[
+2p=1-p\ \Longrightarrow\ p=\frac{1}{3}.
+\]</div>
+<p><strong>第三步：对称地求列玩家概率。</strong> 令列玩家以概率 <span class="arithmatex">\(q\)</span> 选 L。行玩家选 T 的期望收益为</p>
+<div class="arithmatex">\[
+\mathbb E[u_r(T)]=q\cdot 0+(1-q)\cdot 2=2-2q,
+\]</div>
+<p>选 B 为 <span class="arithmatex">\(\mathbb E[u_r(B)]=q\cdot 1+(1-q)\cdot 0=q\)</span>，等收益条件给出</p>
+<div class="arithmatex">\[
+2-2q=q\ \Longrightarrow\ q=\frac{2}{3}.
+\]</div>
+<p><strong>第四步：验证。</strong> 均衡是一对混合策略 <span class="arithmatex">\(\sigma_r^*=(\tfrac{1}{3},\tfrac{2}{3})\)</span>、<span class="arithmatex">\(\sigma_c^*=(\tfrac{2}{3},\tfrac{1}{3})\)</span>，交叉验证期望收益：</p>
+<div class="arithmatex">\[
+\mathbb E[u_r]=2-2\cdot\tfrac{2}{3}=\tfrac{2}{3},\qquad
+\mathbb E[u_c]=2\cdot\tfrac{1}{3}=\tfrac{2}{3}.
+\]</div>
+<p>两者相等，与「支持集等收益」一致。注意混合均衡的收益 <span class="arithmatex">\(2/3\)</span> 低于任一方的最好单格收益（行 <span class="arithmatex">\(1\)</span>、列 <span class="arithmatex">\(2\)</span>），因为 <span class="arithmatex">\(2/3\)</span> 是期望而不是单格结果。</p>
+<p>失效模式：<strong>直接把 <span class="arithmatex">\(p=1/2\)</span> 当作默认</strong>。等收益条件通常给出非均匀概率，只有对称零和博弈（如匹配硬币）才恰好是 <span class="arithmatex">\(1/2\)</span>。另一个常见错法是把「让对手的收益相等」写成「让自己的收益相等」——等收益条件必须对<strong>对手</strong>在两个被用策略之间取等。</p>
+<h2 id="_5">均衡与社会效率</h2>
 <p>囚徒困境的 Nash 均衡可能让双方收益都低于合作结果。多重均衡中，不同均衡的整体效率也可能差异很大。</p>
-<p>因此在多智能体系统中，“收敛到稳定行为”和“得到我们想要的团队行为”是两个问题。机制、通信和奖励设计就是为了改变激励结构或帮助选择更好的均衡。</p>
-<h2 id="_5">均衡检查的三个层次</h2>
+<table>
+<thead>
+<tr>
+<th>效率概念</th>
+<th>定义</th>
+<th>判定方式</th>
+<th>与 Nash 的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pareto 最优</td>
+<td>不存在使所有人都不变差的改进</td>
+<td>逐格比较</td>
+<td>Nash 与 Pareto 最优无包含关系</td>
+</tr>
+<tr>
+<td>收益占优</td>
+<td>所有玩家收益都更高的均衡</td>
+<td>两均衡逐人比较收益</td>
+<td>多个均衡时的选择依据之一</td>
+</tr>
+<tr>
+<td>风险占优</td>
+<td>偏离损失更小、更「稳妥」的均衡</td>
+<td>比较偏离激励大小</td>
+<td>可能与收益占优冲突</td>
+</tr>
+<tr>
+<td>社会最优</td>
+<td>最大化 <span class="arithmatex">\(\sum_i u_i\)</span> 的联合动作</td>
+<td>求联合动作上的最大和</td>
+<td>可能不是任何均衡</td>
+</tr>
+</tbody>
+</table>
+<p>囚徒困境中，双方合作的社会总和高于均衡总和，但两人都不能单方面维持合作 —— 这正是机制设计要解决的问题：<strong>改变收益结构本身，而不是求解方法。</strong></p>
+<p>因此在多智能体系统中，“收敛到稳定行为”和“得到我们想要的团队行为”是两个问题。机制、通信和奖励设计就是为了改变激励结构或帮助选择更好的均衡。需要强调：均衡的存在性完全不依赖效率，一个博弈可以有唯一均衡，而该均衡是所有结局里最差的那个。<strong>Nash 均衡是预测工具，不是评价标准。</strong></p>
+<h2 id="_6">多重均衡与协调问题</h2>
+<p>当博弈有两个以上均衡时，「会收敛到哪一个」不属于 Nash 均衡的定义范畴，需要额外判据。以 Stag Hunt（猎鹿博弈）为例，两名玩家同时选择合作抓捕（Stag）或各自抓兔（Hare）：</p>
+<table>
+<thead>
+<tr>
+<th>行 \ 列</th>
+<th>Stag</th>
+<th>Hare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stag</td>
+<td><span class="arithmatex">\(4,\,4\)</span></td>
+<td><span class="arithmatex">\(0,\,3\)</span></td>
+</tr>
+<tr>
+<td>Hare</td>
+<td><span class="arithmatex">\(3,\,0\)</span></td>
+<td><span class="arithmatex">\(3,\,3\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>先数均衡。</strong> 逐格检查单边偏离：<span class="arithmatex">\((Stag,Stag)\)</span> 中任一玩家改 Hare 得 <span class="arithmatex">\(3&lt;4\)</span>，无人偏离；<span class="arithmatex">\((Hare,Hare)\)</span> 中任一玩家改 Stag 得 <span class="arithmatex">\(0&lt;3\)</span>，无人偏离；<span class="arithmatex">\((Stag,Hare)\)</span> 下行玩家改 Hare 得 <span class="arithmatex">\(3&gt;0\)</span>，偏离；<span class="arithmatex">\((Hare,Stag)\)</span> 同理偏离。因此存在两个纯策略均衡。</p>
+<p><strong>再求混合均衡。</strong> 令行玩家以概率 <span class="arithmatex">\(p\)</span> 选 Stag。列玩家选 Stag 的期望收益为 <span class="arithmatex">\(4p\)</span>，选 Hare 的期望收益为 <span class="arithmatex">\(3p+3(1-p)=3\)</span>。等收益给出</p>
+<div class="arithmatex">\[
+4p=3\ \Longrightarrow\ p=\frac{3}{4},
+\]</div>
+<p>对称地 <span class="arithmatex">\(q=\frac{3}{4}\)</span>，因此存在第三个（混合）均衡 <span class="arithmatex">\(\sigma^*=(\tfrac{3}{4}Stag,\tfrac{1}{4}Hare)\)</span>，期望收益 <span class="arithmatex">\(\mathbb E[u]=3\)</span>。</p>
+<p><strong>收益占优 vs 风险占优的冲突。</strong> 两个纯策略均衡给出的收益是 <span class="arithmatex">\((4,4)\)</span> 与 <span class="arithmatex">\((3,3)\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>判据</th>
+<th><span class="arithmatex">\((Stag,Stag)\)</span></th>
+<th><span class="arithmatex">\((Hare,Hare)\)</span></th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收益占优</td>
+<td><span class="arithmatex">\(4\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\((Stag,Stag)\)</span> 占优</td>
+</tr>
+<tr>
+<td>选 Stag 却遇 Hare 时</td>
+<td>得 <span class="arithmatex">\(0\)</span>，相对 <span class="arithmatex">\(3\)</span> 损失 <span class="arithmatex">\(3\)</span></td>
+<td>—</td>
+<td>Stag 风险大</td>
+</tr>
+<tr>
+<td>风险占优判据 <span class="arithmatex">\(u_{11}-u_{21}\)</span> vs <span class="arithmatex">\(u_{22}-u_{12}\)</span></td>
+<td><span class="arithmatex">\(4-3=1\)</span></td>
+<td><span class="arithmatex">\(3-0=3\)</span></td>
+<td><span class="arithmatex">\((Hare,Hare)\)</span> 风险占优</td>
+</tr>
+<tr>
+<td>混合均衡期望收益</td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td>与 Hare 收益相等</td>
+</tr>
+</tbody>
+</table>
+<p>结论：<strong>收益占优的均衡不是风险占优的均衡。</strong> 如果你相信对手会抓兔，最稳妥的选择也是抓兔；只有在你相信对手会猎鹿时，猎鹿才成立。这就是协调问题的本质 —— 每个人都需预期别人也选择高效均衡。</p>
+<p><strong>焦点解（focal point）。</strong> 当均衡无法由收益唯一确定时，玩家会借助与收益无关的显著特征做选择：默认位置、命名、历史惯例、上次成功的动作。在多机器人系统里，这对应「使用约定的默认分工」；焦点解在理论上不是均衡的精炼，但在工程上是可用的选择机制（见 <a href="../../multi-agent-systems/02-coordination/">../multi-agent-systems/02-coordination.md</a>）。注意混合均衡的期望收益 <span class="arithmatex">\(3\)</span> 恰等于 <span class="arithmatex">\((Hare,Hare)\)</span> 的收益：<strong>当混合均衡与某个纯策略均衡效率相同时，它的唯一优势是不被对手预测。</strong></p>
+<h2 id="_7">均衡检查的三个层次</h2>
 <p>检查候选均衡时先确认每个玩家的可选策略，再固定其他玩家策略计算单边偏离收益，最后判断所有玩家是否同时没有获利偏离。若只看到策略长期稳定便称其为 Nash 均衡，可能把惯性、协调失败或学习尚未收敛误认为均衡。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>要回答的问题</th>
+<th>具体操作</th>
+<th>漏掉后会出现什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 模型层</td>
+<td>动作集、信息集、收益是否写对？</td>
+<td>重申 <span class="arithmatex">\(\mathcal A_i\)</span>、<span class="arithmatex">\(\mathcal H_i\)</span>、<span class="arithmatex">\(u_i\)</span></td>
+<td>在错误的博弈上得到正确的解</td>
+</tr>
+<tr>
+<td>2. 单边层</td>
+<td>每个玩家能否通过改策略获益？</td>
+<td>固定 <span class="arithmatex">\(a_{-i}^*\)</span>，遍历 <span class="arithmatex">\(a_i\)</span> 比较 <span class="arithmatex">\(u_i\)</span></td>
+<td>把非均衡当成均衡</td>
+</tr>
+<tr>
+<td>3. 联合层</td>
+<td>所有玩家是否<strong>同时</strong>无获利偏离？</td>
+<td>逐人检查，要求全部通过</td>
+<td>只验一人，漏掉另一人的偏离动机</td>
+</tr>
+</tbody>
+</table>
+<p>必须区分的失败模式：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>是 Nash 均衡吗</th>
+<th>如何区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>策略长期不变</td>
+<td>不一定</td>
+<td>检查是否存在未尝试的获利偏离</td>
+</tr>
+<tr>
+<td>双方满意但存在更好的联合选项</td>
+<td>是（若单边无法改进）</td>
+<td>检查联合偏离，区分效率问题</td>
+</tr>
+<tr>
+<td>学习算法仍在震荡</td>
+<td>不是</td>
+<td>观察值未收敛，检查遍历性</td>
+</tr>
+<tr>
+<td>混合策略概率在波动</td>
+<td>可能已收敛到混合均衡附近</td>
+<td>比较样本频率与理论概率</td>
+</tr>
+<tr>
+<td>双方陷入相互惩罚</td>
+<td>是（若惩罚后无人愿偏离）</td>
+<td>检查惩罚是否可信（动态博弈中可能不可信）</td>
+</tr>
+</tbody>
+</table>
+<p>一条可执行的收尾规则：<strong>Nash 均衡是对模型的陈述，不是对现实的陈述。</strong> 验证时必须先在模型层自洽，再谈单边偏离；顺序颠倒会让你在意外的场景里得到「稳定但不合理」的结论。</p>
+<blockquote>
+<p><strong>下一步</strong>：接着读 <a href="../03-zero-sum-minimax/">零和博弈与 Minimax</a> 看零和结构下如何用鞍点替换均衡条件；遇到隐藏类型与时序推理时进入 <a href="../04-sequential-bayesian/">序贯博弈与 Bayesian 更新</a>；长期交互下均衡如何随重复与学习改变见 <a href="../05-repeated-learning/">重复博弈与学习</a>；多智能体系统里如何选择与稳定某个均衡见 <a href="../../multi-agent-systems/02-coordination/">../multi-agent-systems/02-coordination.md</a>。</p>
+</blockquote>
 
 
 

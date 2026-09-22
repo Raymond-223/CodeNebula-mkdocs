@@ -699,7 +699,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续导数和积分需要离散近似
+        浮点数的实际误差量级
       
     </span>
   </a>
@@ -710,7 +710,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性求解与最小二乘
+        连续导数和积分需要离散近似
       
     </span>
   </a>
@@ -721,7 +721,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代算法必须有停止条件
+        线性求解与最小二乘
       
     </span>
   </a>
@@ -743,7 +743,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        数值稳定性
+        病态问题的识别与处理
       
     </span>
   </a>
@@ -754,7 +754,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        量纲和尺度影响问题的可计算性
+        迭代算法必须有停止条件
       
     </span>
   </a>
@@ -763,6 +763,39 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        迭代法的收敛率对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数值稳定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量纲和尺度影响问题的可计算性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         误差预算比小数位数更重要
@@ -3688,7 +3721,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续导数和积分需要离散近似
+        浮点数的实际误差量级
       
     </span>
   </a>
@@ -3699,7 +3732,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性求解与最小二乘
+        连续导数和积分需要离散近似
       
     </span>
   </a>
@@ -3710,7 +3743,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代算法必须有停止条件
+        线性求解与最小二乘
       
     </span>
   </a>
@@ -3732,7 +3765,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        数值稳定性
+        病态问题的识别与处理
       
     </span>
   </a>
@@ -3743,7 +3776,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        量纲和尺度影响问题的可计算性
+        迭代算法必须有停止条件
       
     </span>
   </a>
@@ -3752,6 +3785,39 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        迭代法的收敛率对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数值稳定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量纲和尺度影响问题的可计算性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         误差预算比小数位数更重要
@@ -3853,47 +3919,626 @@
 
 
 <h1 id="numerical-computation">Numerical Computation</h1>
-<p>数学公式最终要在有限精度计算机上运行。控制、仿真、SLAM 和优化中，很多“算法问题”其实来自步长、条件数、迭代停止或浮点误差。因此数值计算是必要基础，但只需要掌握工程上最常出现的几件事。</p>
+<p><strong>公式写在纸上是精确的，跑在机器上是有误差的：数值计算的核心工作不是消灭误差，而是知道误差有多大、从哪里来、会不会被放大。</strong></p>
+<p>控制、仿真、SLAM 和优化里，大量看似“算法不收敛”“结果不稳定”的问题，真正原因其实是步长选得不合适、条件数太大、迭代没有正经的停止条件，或者浮点误差被累积放大。这一章只讲工程上真正会踩到的那几件事：有限精度的量级、离散化与积分格式、条件数与病态处理、收敛率、误差预算。判断一个数值结果能不能用，比算出一个具体数字更重要，因为不可信的答案比没有答案更危险——它会被当作事实写进仿真结论和控制器参数里。</p>
 <figure>
   <img alt="数值计算把连续问题离散化，再通过有限精度算法得到近似结果。" src="../../assets/diagrams/numerical-computation.svg" />
 <br />
 <figcaption>核心不是追求绝对精确，而是知道误差来自哪里、是否在可接受范围。</figcaption>
 </figure>
 <h2 id="_1">有限精度与舍入误差</h2>
-<p>计算机只能用有限位数表示连续的实数，因此绝大多数实数都必须被舍入为邻近的可表示值。连续运算中的每一步都可能引入舍入误差；当大量运算串联，或问题本身对扰动敏感时，这些微小误差就可能被放大。</p>
-<p>这不是某种编程语言的缺陷，而是有限信息表示连续量的必然后果。因此数值判断通常讨论“在给定容差内是否一致”，而不是要求两个近似量绝对相等。</p>
-<h2 id="_2">连续导数和积分需要离散近似</h2>
-<p>有限差分可近似导数：</p>
+<p>误差在运算中的传播可以用一条近似规则把握：加减法放大绝对误差，乘除法放大相对误差。若 <span class="arithmatex">\(y=x_1\cdot x_2\)</span>，则相对误差近似相加，<span class="arithmatex">\(\frac{\delta y}{y}\approx\frac{\delta x_1}{x_1}+\frac{\delta x_2}{x_2}\)</span>，所以连续乘法链（例如姿态矩阵反复相乘）会让相对误差按运算次数线性累积；若 <span class="arithmatex">\(y=x_1-x_2\)</span> 且 <span class="arithmatex">\(x_1\approx x_2\)</span>，绝对误差不变而结果本身接近零，相对误差因此爆炸——这就是灾难性抵消（catastrophic cancellation）。</p>
+<p>对付抵消的常见手段有四个：改写公式以避免相减（例如用 <span class="arithmatex">\(\frac{-b}{a+\sqrt{b^2-4ac}}\)</span> 形式替代 <span class="arithmatex">\(\frac{a}{-b+\sqrt{b^2-4ac}}\)</span> 中的小量相减）；改用补偿求和（Kahan 求和，把一个低位补偿项单独累计，使 <span class="arithmatex">\(n\)</span> 项求和的误差不再随 <span class="arithmatex">\(n\)</span> 线性增长）；对方差等统计量使用 Welford 递推（增量式更新，不构造 <span class="arithmatex">\(n\sum x^2-(\sum x)^2\)</span> 这种两个大数相减的形式）；以及在自定义损失/残差计算里先做中心化。这些改写不改变数学定义，却能把误差量级压低好几个数量级。</p>
+<p>计算机用有限位数表示连续的实数，绝大多数实数必须被舍入到邻近的可表示值。IEEE 754 双精度（float64）分配 1 位符号、11 位指数、52 位尾数，能精确表示的有效十进制位数约 15–16 位；单精度（float32）只有 7–8 位。这不是某种编程语言的缺陷，而是用有限信息表示连续量的必然后果，换语言、换库都无法消除，只能管理。</p>
+<p>四类误差必须分开处理，因为它们对结果的影响方式和补救手段完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>误差来源</th>
+<th>具体表现</th>
+<th>是否随时间累积</th>
+<th>补救手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建模误差</td>
+<td>模型假设与真实物理不符</td>
+<td>是，随预测步数增长</td>
+<td>改模型、在线辨识</td>
+</tr>
+<tr>
+<td>离散误差</td>
+<td>Euler 截断、有限差分截断</td>
+<td>是，与步长和系统刚性有关</td>
+<td>减小步长、换高阶格式</td>
+</tr>
+<tr>
+<td>测量误差</td>
+<td>传感器噪声与偏差</td>
+<td>随机部分不累积，偏差会</td>
+<td>滤波、标定</td>
+</tr>
+<tr>
+<td>舍入误差</td>
+<td>每次浮点运算引入约 <span class="arithmatex">\(u\)</span> 相对误差</td>
+<td>是，随运算次数累积</td>
+<td>换算法、重排运算顺序</td>
+</tr>
+<tr>
+<td>截断误差</td>
+<td>人为限定迭代次数/长度</td>
+<td>是，固定偏差</td>
+<td>迭代到容差而非固定次数</td>
+</tr>
+</tbody>
+</table>
+<p>舍入误差是<strong>相对</strong>误差，这一点决定了它的破坏方式。float64 下单位舍入 <span class="arithmatex">\(u\approx1.11\times10^{-16}\)</span>，意味着量级为 <span class="arithmatex">\(10^{6}\)</span> 的数，绝对误差可以到 <span class="arithmatex">\(10^{-10}\)</span>；而对两个接近的数做减法，有效位会被抵消：若 <span class="arithmatex">\(a=1.000000001\)</span>、<span class="arithmatex">\(b=1.000000000\)</span>，<span class="arithmatex">\((a-b)\)</span> 的 9 位有效数字里只剩 8 位来自原始信息，其余被舍入噪声占据。这就是“大数相减”危险的原因，也是方差计算推荐用 <span class="arithmatex">\(\mathbb E[X^2]-(\mathbb E[X])^2\)</span> 之外的稳定形式（如 Welford 递推）的原因。</p>
+<h2 id="_2">浮点数的实际误差量级</h2>
+<p>递推过程是累积误差最容易放大的地方。若迭代 <span class="arithmatex">\(x_{k+1}=\gamma x_k\)</span>，第 <span class="arithmatex">\(k\)</span> 步的相对误差约为 <span class="arithmatex">\(k\,u\cdot\frac{\gamma+1}{|\gamma-1|}\)</span> 量级；<span class="arithmatex">\(\gamma=1.01\)</span>、迭代 <span class="arithmatex">\(10^{4}\)</span> 步时，相对误差可累积到 <span class="arithmatex">\(10^{-12}\)</span> 量级——仍可接受，但若同时乘的不是标量而是矩阵、且该矩阵条件数为 <span class="arithmatex">\(10^{6}\)</span>，同一段代码就会给出完全不同量级的误差。判断办法是给关键递推做一次“单精度 vs 双精度”对照实验：结果差异显著就说明误差受舍入支配，此后再调算法才有意义。</p>
+<p>实践中最容易做错的是容差的形式。绝对容差 <span class="arithmatex">\(|a-b|\le10^{-6}\)</span> 在描述位置的变量上等价于 1 微米（合理），在描述某个归一化相关系数上却等价于 100% 误差（荒谬）。因此所有阈值都应写成 <span class="arithmatex">\(\text{tol}\cdot\max(1,|a|,|b|)\)</span> 或类似形式，让容差随量级缩放；同时把 <span class="arithmatex">\(\varepsilon_{\text{mach}}\)</span> 相关的常数放在实现里可见的位置，而不是散落在各个模块中。</p>
+<p>工程判断靠的是记住数量级，而不是推导机器表示。机器 epsilon（1 附近相邻可表示数的间距）与单位舍入的关系是</p>
 <div class="arithmatex">\[
-f'(x)\approx\frac{f(x+h)-f(x)}{h}.
+\varepsilon_{\text{mach,64}}\approx2.22\times10^{-16},\qquad u=\frac{\varepsilon_{\text{mach}}}{2}\approx1.11\times10^{-16}.
 \]</div>
-<p>动态系统最简单的 Euler 积分为</p>
-<div class="arithmatex">\[x_{k+1}=x_k+\Delta t\,f(x_k,u_k).\]</div>
-<p><span class="arithmatex">\(\Delta t\)</span> 太大，离散误差明显；太小则计算量增加，而且浮点舍入也可能积累。步长选择是一种精度—计算成本权衡。</p>
-<h2 id="_3">线性求解与最小二乘</h2>
-<p>状态估计、标定和优化里常见</p>
-<div class="arithmatex">\[Ax=b\]</div>
-<p>或观测带噪声时的</p>
-<div class="arithmatex">\[\min_x\|Ax-b\|_2^2.\]</div>
-<p>当观测多于未知量时，方程通常无法被每一条观测同时精确满足。最小二乘于是选择让总平方残差最小的解。几何上，它把观测向量投影到 <span class="arithmatex">\(A\)</span> 的列空间：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>尾数位</th>
+<th><span class="arithmatex">\(\varepsilon_{\text{mach}}\)</span></th>
+<th>十进制有效位</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float16</td>
+<td>10</td>
+<td><span class="arithmatex">\(\approx9.77\times10^{-4}\)</span></td>
+<td>约 3 位</td>
+<td>推理加速，需误差分析</td>
+</tr>
+<tr>
+<td>float32</td>
+<td>23</td>
+<td><span class="arithmatex">\(\approx1.19\times10^{-7}\)</span></td>
+<td>约 7 位</td>
+<td>图形、嵌入式控制</td>
+</tr>
+<tr>
+<td>float64</td>
+<td>52</td>
+<td><span class="arithmatex">\(\approx2.22\times10^{-16}\)</span></td>
+<td>约 16 位</td>
+<td>仿真、估计、优化默认选择</td>
+</tr>
+<tr>
+<td>float128</td>
+<td>112</td>
+<td><span class="arithmatex">\(\approx1.93\times10^{-34}\)</span></td>
+<td>约 34 位</td>
+<td>极端病态问题（慢，少用）</td>
+</tr>
+</tbody>
+</table>
+<p>累积误差的量级直觉：把 <span class="arithmatex">\(n\)</span> 个数顺序相加，最坏情况相对误差约 <span class="arithmatex">\(n u\)</span>，随机符号的误差相互抵消时典型误差约 <span class="arithmatex">\(\sqrt n\,u\)</span>。</p>
 <div class="arithmatex">\[
-x^*=\arg\min_x\|Ax-b\|_2^2,
-\qquad A^\top(Ax^*-b)=0.
+n=10^{6}\ \text{项求和}\ \Rightarrow\ \text{最坏相对误差}\approx n u\approx1.1\times10^{-10},\quad \text{典型}\approx\sqrt n\,u\approx1.1\times10^{-13}.
 \]</div>
-<p>第二个关系说明最优残差与可解释方向正交，也解释了为什么最小二乘是一个投影问题。</p>
-<h2 id="_4">迭代算法必须有停止条件</h2>
-<p>梯度下降、非线性优化、图优化都会重复更新参数。停止条件通常看：目标函数变化足够小、参数变化足够小、残差达到阈值，或者迭代次数达到上限。</p>
-<p>“迭代 100 次”本身不是收敛证明，只是一个计算预算。</p>
+<p>这两个数字说明两件事。第一，百万项求和的相对误差在 <span class="arithmatex">\(10^{-13}\sim10^{-10}\)</span> 量级，对多数工程问题无关紧要；但如果答案本身只有 6 位有效数字（例如某个接近零的差值、某个小方差），误差已经把它吞掉了。第二，减少误差的可行手段是改变求和顺序：分块/树形求和把 <span class="arithmatex">\(n u\)</span> 换成 <span class="arithmatex">\(\log_2 n\cdot u\)</span>，百万项时从 <span class="arithmatex">\(10^{-10}\)</span> 降到 <span class="arithmatex">\(4\times10^{-15}\)</span> 量级——同一算法、不同实现顺序，就能差三个数量级。</p>
+<p>还有一个反直觉的事实：浮点数之间比较相等几乎没有意义。正确写法是判断 <span class="arithmatex">\(|a-b|\le \text{tol}\cdot\max(1,|a|,|b|)\)</span>，即用相对容差而非绝对容差，否则量级为 <span class="arithmatex">\(10^{-3}\)</span> 和量级为 <span class="arithmatex">\(10^{6}\)</span> 的量会被同一把尺子衡量；这也意味着任何硬编码的绝对阈值都要附带一句“在什么量级下成立”。</p>
+<h2 id="_3">连续导数和积分需要离散近似</h2>
+<p>积分格式除了精度，还要看守恒性与长期行为。显式 Euler 在守恒系统（无阻尼摆、轨道运动）上会让能量单调漂移，仿真久了表现为振幅逐渐增大或衰减，这种偏差不是噪声而是格式的系统性缺陷；辛格式（如半隐式 Euler、Verlet、蛙跳）在同样步长下保持能量近似有界，代价是精度阶不高。选择原则因此不是“阶数越高越好”，而是看任务关心短时精度（选高阶 RK）还是长时定性行为（选辛格式）。</p>
+<p>自适应步长是另一件几乎必需的工程手段：在误差估计大的区间自动缩小 <span class="arithmatex">\(\Delta t\)</span>，在平坦区间放大步长，从而把精度预算花在最需要的地方。判断是否需要用自适应（或隐式）方法的信号是刚性：若状态里最大与最小时间尺度之比超过 <span class="arithmatex">\(10^{2}\)</span>，固定步长的显式方法要么步长被最快尺度锁死（计算量爆炸），要么不稳定。用系统 Jacobian 的特征值谱跨度量级，或直接做步长减半实验看是否发散，都能得到这个判断。</p>
+<p>有限差分是导数的直接近似，两种常用格式的截断误差阶数不同：</p>
+<div class="arithmatex">\[
+f'(x)\approx\frac{f(x+h)-f(x)}{h}\ (O(h)),\qquad
+f'(x)\approx\frac{f(x+h)-f(x-h)}{2h}\ (O(h^2)).
+\]</div>
+<p>总误差是截断误差与舍入误差之和，因此存在一个最优步长——这是数值计算里少数能给出解析公式的地方：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>截断误差</th>
+<th>总误差量级</th>
+<th>最优步长 <span class="arithmatex">\(h^\star\)</span></th>
+<th>最优时的相对误差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前向差分</td>
+<td><span class="arithmatex">\(O(h)\)</span></td>
+<td><span class="arithmatex">\(\frac{u}{h}+\frac{M_2}{2}h\)</span></td>
+<td><span class="arithmatex">\(\approx\sqrt u\approx10^{-8}\)</span></td>
+<td><span class="arithmatex">\(\approx10^{-8}\)</span></td>
+</tr>
+<tr>
+<td>中心差分</td>
+<td><span class="arithmatex">\(O(h^2)\)</span></td>
+<td><span class="arithmatex">\(\frac{u}{h}+\frac{M_3}{6}h^2\)</span></td>
+<td><span class="arithmatex">\(\approx u^{1/3}\approx6\times10^{-6}\)</span></td>
+<td><span class="arithmatex">\(\approx10^{-11}\)</span></td>
+</tr>
+<tr>
+<td>复数步长法</td>
+<td><span class="arithmatex">\(O(h^2)\)</span>，无相减抵消</td>
+<td>无抵消项</td>
+<td><span class="arithmatex">\(\approx u\approx10^{-16}\)</span></td>
+<td><span class="arithmatex">\(\approx10^{-16}\)</span>（接近机器精度）</td>
+</tr>
+</tbody>
+</table>
+<p>注意 <span class="arithmatex">\(h\)</span> 不能取到 <span class="arithmatex">\(10^{-16}\)</span>：那时 <span class="arithmatex">\(x+h\)</span> 与 <span class="arithmatex">\(x\)</span> 在浮点下已经相等，分子变成 0，导数算成 0。这是“步长越小越准”这一直觉的失效点，也是自动微分优于手工差分的根本原因：自动微分按链式法则组合局部导数，不引入相减抵消。</p>
+<p>动态系统的离散化同理。最简单的显式 Euler 为</p>
+<div class="arithmatex">\[
+x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
+\]</div>
+<p>单步局部截断误差 <span class="arithmatex">\(O(\Delta t^2)\)</span>，<span class="arithmatex">\(N\)</span> 步累积全局误差 <span class="arithmatex">\(O(\Delta t)\)</span>。步长受两个方向夹击：太大则离散误差明显、甚至让原本稳定的系统离散后发散；太小则计算量线性增长，舍入误差被更多步数累积。对刚性系统（时间尺度相差几个数量级，例如含接触或快慢耦合的动力学），显式 Euler 需要 <span class="arithmatex">\(\Delta t\)</span> 远小于最快时间尺度对应的步长才稳定，此时应改隐式方法或自适应步长的 RK45。</p>
+<h2 id="_4">线性求解与最小二乘</h2>
+<p>状态估计、标定和优化最后常归结为 <span class="arithmatex">\(Ax=b\)</span>，或观测带噪时的最小二乘 <span class="arithmatex">\(\min_x \|Ax-b\|_2^2\)</span>。当观测多于未知量时，方程一般无法被每条观测同时精确满足，最小二乘选择让总平方残差最小的解，其最优性条件是残差与列空间正交：</p>
+<div class="arithmatex">\[
+x^\star=\arg\min_x\|Ax-b\|_2^2,\qquad A^\top (Ax^\star-b)=0 .
+\]</div>
+<p>数值层面，求解路径的选择比公式本身更重要，因为不同路径的误差特征能差出一半的有效位数：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>适用条件</th>
+<th>相对代价</th>
+<th>数值风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正规方程 + Cholesky</td>
+<td><span class="arithmatex">\(A\)</span> 满秩、条件数可接受</td>
+<td>最低（<span class="arithmatex">\(\frac{1}{3}n^3\)</span>）</td>
+<td><span class="arithmatex">\(\kappa\)</span> 被平方，损失一半有效位</td>
+</tr>
+<tr>
+<td>QR 分解</td>
+<td>一般满秩最小二乘</td>
+<td>约 <span class="arithmatex">\(2\times\)</span>，<span class="arithmatex">\(O(mn^2)\)</span></td>
+<td>稳定，工程默认</td>
+</tr>
+<tr>
+<td>SVD</td>
+<td>秩亏、需判断数值秩</td>
+<td>最贵（约 <span class="arithmatex">\(4\times\)</span>）</td>
+<td>最稳，可给伪逆与截断</td>
+</tr>
+<tr>
+<td>正规方程 + 直接求逆</td>
+<td>—</td>
+<td>最贵且最不稳</td>
+<td>应避免，见 <a href="../01-linear-algebra-calculus/">线性代数与微积分</a></td>
+</tr>
+<tr>
+<td>迭代法（CG/LSQR）</td>
+<td>稀疏、大 <span class="arithmatex">\(n\)</span></td>
+<td>每步 <span class="arithmatex">\(O(n^2)\)</span> 或更低</td>
+<td>需预处理，否则收敛慢</td>
+</tr>
+</tbody>
+</table>
+<p>秩亏或高度病态时，SVD 给出伪逆解 <span class="arithmatex">\(x^\star=U\Sigma^{+}V^\top b\)</span>，其中小于阈值 <span class="arithmatex">\(\tau=\max(m,n)\,\varepsilon_{\text{mach}}\,\sigma_1\)</span> 的奇异值被置零，等于自动丢弃不可信方向。这是“承认某些方向没有信息”的正式表达，也是判断“我到底能从数据里识别出几个参数”的标准做法：奇异值谱里有多少个大于 <span class="arithmatex">\(\tau\)</span>，就有多少个可信参数方向。</p>
+<p>一个实践细节值得单独强调：<strong>加权最小二乘的权重必须来自噪声模型。</strong> 只有当 <span class="arithmatex">\(W=\Sigma^{-1}\)</span> 时，<span class="arithmatex">\(\min_x\|W^{1/2}(Ax-b)\|_2^2\)</span> 的解才是最大似然解；凭手感填的权重会让结果看起来残差更小而实际上对齐了错误的量纲，并让协方差估计失去意义。</p>
 <h2 id="_5">条件数与误差放大</h2>
-<p>某些线性系统中，输入只变化一点点，解却变化很多，这类问题称为 ill-conditioned。此时即使算法实现正确，有限精度和测量噪声也会被放大。</p>
-<p>因此数值稳定性不仅是代码问题，也反映了问题本身是否容易求解。</p>
-<h2 id="_6">数值稳定性</h2>
-<p>离散化不仅产生单步近似误差，还改变系统随时间传播误差的方式。若微小误差在每一步被放大，即使单步公式看起来准确，长时间结果仍会失真；若误差逐步衰减，计算才具有数值稳定性。</p>
-<p>因此离散方法不能只比较“单步谁更准”，还要结合步长、系统时间尺度和误差传播来判断。</p>
-<h2 id="_7">量纲和尺度影响问题的可计算性</h2>
-<p>位置、角度、时间代表不同物理量；若变量尺度相差几个数量级，同样大小的数值误差可能具有完全不同的意义。无量纲化和合理尺度能让误差比较、条件数与稳定性分析更可信。</p>
-<h2 id="_8">误差预算比小数位数更重要</h2>
-<p>一次计算的误差通常由建模误差、离散误差、测量误差和舍入误差共同组成。继续提高浮点精度只会改善最后一项；如果步长或模型本身占主导，增加小数位并不会让结果更可信。工程上应先估计各项误差的量级，再决定把计算资源投入哪里。</p>
+<p>条件数衡量问题本身对扰动的敏感度，与算法实现无关。对方阵及最小二乘问题分别有</p>
+<div class="arithmatex">\[
+\kappa(A)=\|A\|\,\|A^{-1}\|=\frac{\sigma_{\max}}{\sigma_{\min}},\qquad
+\kappa(A^\top A)=\kappa(A)^2 .
+\]</div>
+<p>误差放大有明确的不等式：若 <span class="arithmatex">\(Ax=b\)</span> 的解受扰动变为 <span class="arithmatex">\(x+\delta x\)</span>，则相对误差满足 <span class="arithmatex">\(\frac{\|\delta x\|}{\|x\|}\le\kappa(A)\frac{\|\delta b\|}{\|b\|}\)</span>，即输入端相对误差最多被放大 <span class="arithmatex">\(\kappa(A)\)</span> 倍。<span class="arithmatex">\(\kappa=1\)</span> 是理想情形（正交矩阵、单位矩阵），<span class="arithmatex">\(\kappa=10^{6}\)</span> 表示可能损失 6 位有效数字。</p>
+<table>
+<thead>
+<tr>
+<th>条件数量级</th>
+<th>几何含义</th>
+<th>对求解的影响</th>
+<th>检查手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(1\)</span></td>
+<td>各方向等尺度（正交）</td>
+<td>无放大</td>
+<td>—</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{0}\sim10^{3}\)</span></td>
+<td>轻微各向异性</td>
+<td>可忽略</td>
+<td>直接求解</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{4}\sim10^{6}\)</span></td>
+<td>明显各向异性</td>
+<td>精度降 4–6 位</td>
+<td>看奇异值谱跨度</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{7}\sim10^{9}\)</span></td>
+<td>近奇异</td>
+<td>float32 不可用</td>
+<td>换 QR/SVD + 正则化</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(&gt;10^{10}\)</span></td>
+<td>数值秩亏风险</td>
+<td>结果不可信</td>
+<td>截断、正则、重新参数化</td>
+</tr>
+</tbody>
+</table>
+<p>两条推论要记住。第一，条件数针对<strong>问题</strong>而非代码：同一个方程组换语言、换库都不会改变 <span class="arithmatex">\(\kappa\)</span>，这说明“换个求解器”通常救不了病态问题，只有换模型、加正则或重新参数化才行。第二，条件数随变量尺度变化：把某一列乘以 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 就可能剧增，因此在标定、参数辨识等场景中先把变量无量纲化是提高 <span class="arithmatex">\(\kappa\)</span> 最便宜的手段，代价几乎为零。</p>
+<h2 id="_6">病态问题的识别与处理</h2>
+<p>判断一个方程是否病态，可以看三个可计算的信号：<span class="arithmatex">\(\kappa\)</span> 的量级、SVD 中奇异值跨越几个数量级、以及残差是否已经降到噪声水平以下。下表给出条件数与有效数字损失的经验对照：</p>
+<table>
+<thead>
+<tr>
+<th>条件数 <span class="arithmatex">\(\kappa(A)\)</span></th>
+<th>float64 丢失位数</th>
+<th>剩余有效位</th>
+<th>工程判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(10^{0}\sim10^{3}\)</span></td>
+<td>0–3</td>
+<td>13–16</td>
+<td>安全</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{4}\sim10^{6}\)</span></td>
+<td>4–6</td>
+<td>10–12</td>
+<td>可用，需留意</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{7}\sim10^{9}\)</span></td>
+<td>7–9</td>
+<td>7–9</td>
+<td>float32 不可用，float64 勉强</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{10}\sim10^{12}\)</span></td>
+<td>10–12</td>
+<td>4–6</td>
+<td>需正则化或重新参数化</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10^{13}\sim10^{16}\)</span></td>
+<td>13–16</td>
+<td>0–3</td>
+<td>数值上不可信</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(&gt;10^{16}\)</span></td>
+<td>全部</td>
+<td>0</td>
+<td>方程与数据无法支撑求解</td>
+</tr>
+</tbody>
+</table>
+<p>处理病态的标准处方是 Tikhonov 正则化（岭回归），把最小奇异值抬高、条件数压下去：</p>
+<div class="arithmatex">\[
+\min_x\ \|Ax-b\|_2^2+\lambda\|x\|_2^2,\qquad
+x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
+\]</div>
+<p>条件数从 <span class="arithmatex">\(\sigma_1/\sigma_n\)</span> 变为 <span class="arithmatex">\(\big((\sigma_1^2+\lambda)/(\sigma_n^2+\lambda)\big)\)</span> 的平方根量级，<span class="arithmatex">\(A^\top A+\lambda I\)</span> 对称正定，可用 Cholesky 稳定求解。代价是引入偏差：<span class="arithmatex">\(\lambda\)</span> 越大解越平滑、越鲁棒，但对数据拟合越差；<span class="arithmatex">\(\lambda\to0\)</span> 回到原问题（含病态），<span class="arithmatex">\(\lambda\to\infty\)</span> 回到 <span class="arithmatex">\(x\to0\)</span>。选择 <span class="arithmatex">\(\lambda\)</span> 的常见依据是 L 曲线法（以 <span class="arithmatex">\(\|x_\lambda\|\)</span> 对残差作图取拐点）或广义交叉验证。</p>
+<table>
+<thead>
+<tr>
+<th>处理手段</th>
+<th>适用信号</th>
+<th>代价</th>
+<th>副作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tikhonov 正则化</td>
+<td>奇异值缓慢衰减</td>
+<td>引入偏差</td>
+<td>需调 <span class="arithmatex">\(\lambda\)</span></td>
+</tr>
+<tr>
+<td>截断 SVD</td>
+<td>奇异值谱有明确断点</td>
+<td>丢弃小方向</td>
+<td>可能连有效信息一起丢</td>
+</tr>
+<tr>
+<td>重新参数化</td>
+<td>参数高度相关</td>
+<td>需建模功夫</td>
+<td>新参数物理含义可能变弱</td>
+</tr>
+<tr>
+<td>加权/白化</td>
+<td>噪声量级差异大</td>
+<td>需噪声统计</td>
+<td>权重错了反而不如不加</td>
+</tr>
+<tr>
+<td>提高浮点精度</td>
+<td>仅舍入主导</td>
+<td>慢数倍</td>
+<td>对条件数问题几乎无效</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行需要强调：<strong>提高精度对病态问题几乎无用。</strong> <span class="arithmatex">\(\kappa=10^{10}\)</span> 时，float64（16 位）剩 6 位、float128（34 位）剩 24 位——如果物理噪声只允许 3 位精度，换精度解决不了任何实际问题，因为它放大的是数据里的噪声而不是舍入。</p>
+<h2 id="_7">迭代算法必须有停止条件</h2>
+<p>梯度下降、非线性优化、图优化都靠重复更新逼近解，停止条件不是形式要求，而是决定结果是否可信的关键。四类常见准则及失效模式：</p>
+<table>
+<thead>
+<tr>
+<th>停止准则</th>
+<th>判据形式</th>
+<th>优点</th>
+<th>失效模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标函数变化</td>
+<td>$</td>
+<td>f_k-f_{k-1}</td>
+<td>\le\varepsilon_f$</td>
+</tr>
+<tr>
+<td>参数变化</td>
+<td><span class="arithmatex">\(\|\Delta x_k\|\le\varepsilon_x(1+\|x_k\|)\)</span></td>
+<td>反映解已稳定</td>
+<td>病态问题中 <span class="arithmatex">\(x\)</span> 还在漂移就已很小</td>
+</tr>
+<tr>
+<td>梯度/残差范数</td>
+<td><span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g\)</span></td>
+<td>有最优性含义</td>
+<td>不同问题梯度尺度不同，阈值难统一</td>
+</tr>
+<tr>
+<td>迭代次数上限</td>
+<td><span class="arithmatex">\(k\le k_{\max}\)</span></td>
+<td>保证有限时间返回</td>
+<td>不是收敛证明，只是计算预算</td>
+</tr>
+<tr>
+<td>相对改进率</td>
+<td>$\frac{</td>
+<td>f_k-f_{k-1}</td>
+<td>}{1+</td>
+</tr>
+</tbody>
+</table>
+<p>最重要的原则是：<strong>“迭代 100 次”不是收敛证明，只是计算预算；而“目标函数几乎不变”可能是收敛，也可能是卡在数值噪声平台上。</strong> 可靠的实现会同时使用梯度/残差范数 + 迭代上限两个准则，并在二者冲突时报警，因为残差降到测量噪声水平后继续迭代只会把噪声拟合进解。</p>
+<p>还要注意尺度问题：绝对阈值必须写成相对形式。判据 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g\)</span> 中的 <span class="arithmatex">\(\varepsilon_g\)</span> 依赖目标函数量纲，把代价函数乘以 <span class="arithmatex">\(10^{6}\)</span> 会直接改变收敛判定，而物理问题本身并没有变。稳妥写法是 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g(1+|f_k|)\)</span>，让容差随目标量级缩放。同理，参数变化判据也要用 <span class="arithmatex">\(\max(1,\|x_k\|)\)</span> 归一化，否则变量量级变化会让同一个阈值时而过松时而过紧。</p>
+<h2 id="_8">迭代法的收敛率对比</h2>
+<p>收敛速率的分母是条件数，因此预处理是最划算的优化手段：对角缩放（把各变量除以典型尺度）、不完全 Cholesky 预条件、以及把变量重新参数化（相关参数改为差分）都能显著降低有效 <span class="arithmatex">\(\kappa\)</span>，而且比换更高级的迭代算法便宜得多。经验上，条件数从 <span class="arithmatex">\(10^{6}\)</span> 降到 <span class="arithmatex">\(10^{2}\)</span> 带来的步数收益，等价于从普通梯度下降换成共轭梯度的收益，但实现复杂度低得多。</p>
+<p>非线性问题还需要在“牛顿步”与“梯度步”之间做插值，这就是 Levenberg–Marquardt / 信赖域的做法：用 <span class="arithmatex">\((J^\top J+\lambda I)\Delta=-g\)</span> 求解步长，<span class="arithmatex">\(\lambda\)</span> 大时退化为梯度下降（稳健但慢），<span class="arithmatex">\(\lambda\)</span> 小时接近 Gauss–Newton（快但可能过冲）。自适应规则是每步试算：若新点使目标下降则接受并减小 <span class="arithmatex">\(\lambda\)</span>，否则拒绝并增大 <span class="arithmatex">\(\lambda\)</span>。这个“先保守、再激进”的策略解释了为什么这类方法在初值较远时也能收敛。</p>
+<p>收敛率决定“需要迭代多少步”，其量级差异比常数因子重要得多。线性收敛指误差每步按固定比率缩小 <span class="arithmatex">\(\|e_{k+1}\|\le c\|e_k\|\)</span>（<span class="arithmatex">\(0&lt;c&lt;1\)</span>）；二次收敛指缩小比率本身随误差减小：</p>
+<div class="arithmatex">\[
+\text{线性}:\ \|e_{k+1}\|\approx c\|e_k\|;\qquad
+\text{二次}:\ \|e_{k+1}\|\approx C\|e_k\|^2 .
+\]</div>
+<p>二次收敛的含义是有效位数每步翻倍：误差从 <span class="arithmatex">\(10^{-1}\)</span> 到 <span class="arithmatex">\(10^{-2}\)</span>、再到 <span class="arithmatex">\(10^{-4}\)</span>、<span class="arithmatex">\(10^{-8}\)</span>，只需 3–4 步。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>收敛类型</th>
+<th>每步误差缩小倍数</th>
+<th>从 <span class="arithmatex">\(10^{0}\)</span> 到 <span class="arithmatex">\(10^{-8}\)</span> 的步数</th>
+<th>每步代价</th>
+<th>依赖条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定点迭代</td>
+<td>线性，比率 $</td>
+<td>g'(x^\star)</td>
+<td>$</td>
+<td><span class="arithmatex">\(c=0.9\)</span> 时缩小 0.9</td>
+<td><span class="arithmatex">\(\approx175\)</span></td>
+</tr>
+<tr>
+<td>梯度下降</td>
+<td>线性，比率 <span class="arithmatex">\(\approx1-\mu/L\)</span></td>
+<td><span class="arithmatex">\(\kappa=100\)</span> 时约 0.99</td>
+<td><span class="arithmatex">\(\approx1830\)</span></td>
+<td>一次梯度</td>
+<td>步长 <span class="arithmatex">\(\alpha&lt;2/L\)</span></td>
+</tr>
+<tr>
+<td>共轭梯度</td>
+<td>超线性（谱依赖）</td>
+<td>历史方向组合</td>
+<td><span class="arithmatex">\(\approx\sqrt\kappa\ln(1/\varepsilon)\approx92\)</span></td>
+<td>一次矩阵向量乘</td>
+<td><span class="arithmatex">\(A\)</span> 对称正定</td>
+</tr>
+<tr>
+<td>牛顿法</td>
+<td>二次</td>
+<td>有效位每步翻倍</td>
+<td><span class="arithmatex">\(\approx4\)</span></td>
+<td>Hessian + 线性求解</td>
+<td>初值近、Hessian 非奇异</td>
+</tr>
+<tr>
+<td>Gauss–Newton</td>
+<td>接近二次</td>
+<td>残差小时翻倍</td>
+<td><span class="arithmatex">\(\approx4\sim8\)</span></td>
+<td>Jacobian + 线性求解</td>
+<td>残差小、<span class="arithmatex">\(J\)</span> 满秩</td>
+</tr>
+<tr>
+<td>Adam/动量法</td>
+<td>线性 + 噪声底</td>
+<td>比率接近 1</td>
+<td>通常到不了 <span class="arithmatex">\(10^{-8}\)</span></td>
+<td>一次梯度</td>
+<td>随机优化，只求期望意义收敛</td>
+</tr>
+</tbody>
+</table>
+<p>读表要注意三件事。第一，梯度下降的速率由条件数决定，<span class="arithmatex">\(1-\mu/L=1-1/\kappa\)</span>，所以 <span class="arithmatex">\(\kappa\)</span> 从 <span class="arithmatex">\(10^{2}\)</span> 增到 <span class="arithmatex">\(10^{4}\)</span> 会让所需步数近似增加 100 倍——这正是预条件（把问题变成近似单位条件数）存在的理由。第二，牛顿法步数少但每步贵：一次牛顿步需要构造 <span class="arithmatex">\(n\times n\)</span> Hessian 并求解线性系统，<span class="arithmatex">\(n\)</span> 很大时单步代价直接压倒节省下来的步数；准牛顿法（BFGS、L-BFGS）用历史梯度近似 Hessian，是对这个权衡的工程折中。第三，随机优化的收敛是期望意义上的，噪声底由 batch 大小决定，把容差设得比噪声底更小只会得到“永远不收敛”的假象。</p>
+<h2 id="_9">数值稳定性</h2>
+<p>把误差传播写成矩阵形式会更清楚：若每步的局部扰动为 <span class="arithmatex">\(\epsilon_k\)</span>，则 <span class="arithmatex">\(N\)</span> 步后总误差近似为 <span class="arithmatex">\(\sum_{k}\Phi_{N,k}\epsilon_k\)</span>，其中 <span class="arithmatex">\(\Phi\)</span> 是状态转移矩阵的累积乘积。误差是否被放大取决于 <span class="arithmatex">\(\|\Phi\|\)</span> 是否随 <span class="arithmatex">\(k\)</span> 增长——稳定系统里它衰减，不稳定系统里它指数增长。这也说明为什么“单步公式精确”不能保证整体可靠：单步误差再小，只要放大因子大于 1，长时间后依然会淹没结果。</p>
+<p>长时间仿真还有一类特有的问题：约束漂移。旋转矩阵在反复相乘后不再严格正交（<span class="arithmatex">\(\|R^\top R-I\|\)</span> 逐渐增大），于是“纯旋转”开始隐含缩放，坐标系慢慢变形。标准对策是周期性重正化：每若干步对 <span class="arithmatex">\(R\)</span> 做一次 Gram–Schmidt 或 SVD 投影，把它强制拉回正交群的最近点；也可以直接用四元数并在每步归一化。这类操作不改变物理、开销极小，却能让仿真从“几小时后开始出现诡异漂移”变成长期稳定。</p>
+<p>离散化不仅产生单步近似误差，还改变系统随时间传播误差的方式。稳定性的定义是：<strong>每步引入的微小扰动不会被后续步骤无限放大。</strong> 对同一连续系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>（<span class="arithmatex">\(\lambda&lt;0\)</span>，真实解单调衰减），不同格式的稳定步长上限差别很大：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>迭代式</th>
+<th>稳定条件</th>
+<th>精度阶</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显式 Euler</td>
+<td><span class="arithmatex">\(x_{k+1}=(1+\lambda\Delta t)x_k\)</span></td>
+<td>$</td>
+<td>1+\lambda\Delta t</td>
+</tr>
+<tr>
+<td>隐式 Euler</td>
+<td><span class="arithmatex">\(x_{k+1}=\frac{1}{1-\lambda\Delta t}x_k\)</span></td>
+<td>对任意 <span class="arithmatex">\(\Delta t\)</span> 稳定</td>
+<td>1</td>
+</tr>
+<tr>
+<td>梯形法</td>
+<td><span class="arithmatex">\(x_{k+1}=\frac{1+\lambda\Delta t/2}{1-\lambda\Delta t/2}x_k\)</span></td>
+<td>A-稳定</td>
+<td>2</td>
+</tr>
+<tr>
+<td>显式 RK4</td>
+<td>多级组合</td>
+<td>$\Delta t\lesssim2.8/</td>
+<td>\lambda</td>
+</tr>
+<tr>
+<td>蛙跳/辛格式</td>
+<td>交错的半步更新</td>
+<td>条件稳定，保能量近似</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>一个例子足以说明问题：若 <span class="arithmatex">\(|\lambda|=1000\)</span>，显式 Euler 要求 <span class="arithmatex">\(\Delta t\le0.002\)</span>，而隐式 Euler 在 <span class="arithmatex">\(\Delta t=0.1\)</span> 下依然稳定（虽然精度差）。稳定与精确是两件事——隐式方法步长可以很大，但大步长下的解依然不准，稳定只保证不发散。</p>
+<p>“稳定但错误”是工程上最危险的组合，因为结果看起来平滑、没有毛刺，很容易被当作可用结果。判断方法是做步长减半实验：把 <span class="arithmatex">\(\Delta t\)</span> 减半再算一遍，若结果变化远大于你估计的截断误差量级，说明误差由离散偏差而非舍入主导，此时该换格式而不是继续减步长；若结果几乎不变，说明已经进入渐近收敛区，可以放心使用。这个实验只需两倍计算量，却能一次性排除大部分“看起来正常但不可信”的仿真结果。</p>
+<h2 id="_10">量纲和尺度影响问题的可计算性</h2>
+<p>位置、角度、时间、力代表不同物理量，若变量尺度相差几个数量级，同样大小的数值误差具有完全不同的意义。更直接的影响是：<strong>尺度直接改变条件数，进而改变可计算性。</strong> 一个具体例子：优化变量里同时包含位置（<span class="arithmatex">\(\sim10^{0}\)</span> m）、角度（<span class="arithmatex">\(\sim10^{-1}\)</span> rad）和刚度（<span class="arithmatex">\(\sim10^{6}\)</span> N/m），若不做处理，Jacobian 的列范数相差 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 至少是同量级，梯度下降会在各方向上前进速度差百万倍，表现为“收敛图像像一条折线”。</p>
+<p>标准做法是无量纲化/重参数化：<span class="arithmatex">\(\tilde x_i=(x_i-x_i^{\text{ref}})/s_i\)</span>，<span class="arithmatex">\(s_i\)</span> 取该变量的典型变化尺度，使所有 <span class="arithmatex">\(\tilde x_i\)</span> 的量级统一在 <span class="arithmatex">\(O(1)\)</span>。这等价于对 Jacobian 做对角预条件，直接降低有效条件数。</p>
+<table>
+<thead>
+<tr>
+<th>处理手段</th>
+<th>作用对象</th>
+<th>效果</th>
+<th>副作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无量纲化</td>
+<td>输入变量</td>
+<td>降低 <span class="arithmatex">\(\kappa\)</span>，梯度各方向可比</td>
+<td>需知道典型尺度</td>
+</tr>
+<tr>
+<td>对角预条件</td>
+<td>Jacobian/矩阵</td>
+<td>拉平列范数</td>
+<td>尺度估计不准时反而变差</td>
+</tr>
+<tr>
+<td>残差加权</td>
+<td>观测项</td>
+<td>让不同单位的残差可比</td>
+<td>权重取自噪声方差才有物理意义</td>
+</tr>
+<tr>
+<td>归一化输入</td>
+<td>神经网络特征</td>
+<td>改善训练稳定性</td>
+<td>需保存变换参数用于部署</td>
+</tr>
+<tr>
+<td>相对误差判据</td>
+<td>停止条件</td>
+<td>判定与量纲无关</td>
+<td>接近零的目标值附近失效</td>
+</tr>
+</tbody>
+</table>
+<p>加权最小二乘里 <span class="arithmatex">\(W\)</span> 不能凭手感填：只有当 <span class="arithmatex">\(W=\Sigma^{-1}\)</span> 时，解才是最大似然解。凭直觉给权重会让残差数字变好，却对错了量纲；更严重的是，用错误权重算出的协方差矩阵会给出过窄的不确定度，让后续决策过度自信。</p>
+<h2 id="_11">误差预算比小数位数更重要</h2>
+<p>一套可操作的数值诊断流程是：先检查残差是否降到噪声量级（若已经降到，不应继续迭代）；再看奇异值谱跨度判断有效参数个数；接着做步长（或网格）减半实验估计离散误差；最后对关键量做单精度/双精度对照，判断舍入是否主导。四项检查各只需一次额外运算，却能定位误差来自建模、离散、数据还是舍入，避免把时间浪费在“换个库试试”上。</p>
+<p>这章的内容在后续章节里以不同面貌重复出现：控制里的采样周期选择就是步长与稳定性的权衡，估计里的协方差更新必须保持对称正定（否则 Cholesky 失败），优化里的收敛判据直接沿用本章的相对容差原则。数值计算不是独立的前置知识，而是横穿所有章节的执行层约束。</p>
+<p>一次计算的误差由建模误差、离散误差、测量误差和舍入误差共同组成，它们的量级往往相差极大。继续提高浮点精度只改善最后一项；如果步长或模型本身占主导，多印几位小数不会让结果更可信。</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>典型量级</th>
+<th>控制手段</th>
+<th>是否值得投入更多算力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传感器噪声</td>
+<td><span class="arithmatex">\(10^{-2}\sim10^{-1}\)</span> 相对</td>
+<td>滤波、多传感融合</td>
+<td>是（提高信噪比）</td>
+</tr>
+<tr>
+<td>模型简化误差</td>
+<td><span class="arithmatex">\(10^{-2}\sim10^{-1}\)</span></td>
+<td>辨识、在线校正</td>
+<td>是（通常最划算）</td>
+</tr>
+<tr>
+<td>离散误差</td>
+<td><span class="arithmatex">\(10^{-6}\sim10^{-3}\)</span></td>
+<td>高阶格式、自适应步长</td>
+<td>视问题而定</td>
+</tr>
+<tr>
+<td>迭代停止容差</td>
+<td>自选</td>
+<td>与物理误差对齐</td>
+<td>只需降到必要时</td>
+</tr>
+<tr>
+<td>浮点舍入</td>
+<td><span class="arithmatex">\(\approx10^{-16}\)</span></td>
+<td>换算法、重排顺序</td>
+<td>几乎从不值得</td>
+</tr>
+</tbody>
+</table>
+<p>工程做法是先列这样一张预算表，再决定把算力投到哪一层。一个可执行的原则：<strong>迭代容差设为物理误差量级的十分之一即可，再往下压不会有实际收益。</strong> 若传感器噪声是 <span class="arithmatex">\(10^{-2}\)</span>，把优化容差从 <span class="arithmatex">\(10^{-4}\)</span> 压到 <span class="arithmatex">\(10^{-12}\)</span> 只是让解去拟合噪声，风险反而更高。</p>
+<p>一个常见的误判是“结果不稳定，所以是精度不够”。更可能的顺序是：条件数太大（放大已有误差）→ 步长或格式不当（离散偏差）→ 模型不匹配（系统性偏差）→ 最后才轮到舍入误差。排查顺序应该按这个优先级，从影响最大的那一项开始，而不是一上来就把 float32 换成 float64——后者通常既慢又没有效果。</p>
+<blockquote>
+<p><strong>下一步</strong>：回到 <a href="../01-linear-algebra-calculus/">线性代数与微积分</a> 补上条件数与投影的矩阵视角，接着读 <a href="../03-probability-random-variables/">概率与随机变量</a> 理解测量噪声为什么用协方差描述；数值稳定的实际收益见 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a> 与 <a href="../../robotics/02-sensing-estimation/">感知与状态估计</a>。</p>
+</blockquote>
 
 
 

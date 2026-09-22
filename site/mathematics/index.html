@@ -3542,7 +3542,73 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        内容
+        本节要解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六章的依赖顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        后续章节的接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阅读顺序建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见误解
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导航
       
     </span>
   </a>
@@ -3642,20 +3708,373 @@
 
 <h1 id="mathematics">Mathematics</h1>
 <p>这里只保留后续强化学习、控制、机器人和优化反复使用的数学工具。目标不是完成一门数学专业课程，而是能够读懂公式、理解推导并进行基本计算。</p>
+<p><strong>核心判断标准只有一条：当你在后面的章节里看到一个公式时，能不能说出「这个符号是什么、它为什么要出现在这里、它的取值范围和单位是什么」。</strong> 三条都能答上，这一节可以快速过；答不上，就回对应章节补齐。下面给出依赖顺序、概念地图、向后接口、阅读路径和常见误区，读完这一页你应该能自己决定读哪几章、跳过哪几章。</p>
 <figure>
   <img alt="mathematics overview" src="../assets/diagrams/math-map.svg" />
 <br />
 <figcaption>Mathematics 的核心概念关系。</figcaption>
 </figure>
-<h2 id="_1">内容</h2>
+<h2 id="_1">本节要解决的问题</h2>
+<p>后面每一章都会遇到「看起来懂、实际不会用」的知识断层。断层通常不出在公式本身，而出在下面四类问题上。</p>
+<table>
+<thead>
+<tr>
+<th>断层类型</th>
+<th>典型症状</th>
+<th>具体例子</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>符号语义不明</td>
+<td>认得出符号，说不出口径</td>
+<td><span class="arithmatex">\(p(s'\mid s,a)\)</span> 是概率还是密度？</td>
+<td>把「概率为零」和「不可能」混为一谈</td>
+</tr>
+<tr>
+<td>可微 ≠ 可解</td>
+<td>令梯度为零就当成最优点</td>
+<td><span class="arithmatex">\(\nabla_\theta J(\theta)=0\)</span> 只是必要条件</td>
+<td>停在鞍点上，或误判极值类型</td>
+</tr>
+<tr>
+<td>有限精度被忽略</td>
+<td>数学等价的变形数值上不等价</td>
+<td><span class="arithmatex">\(\exp(1000)\)</span> 直接溢出为 <span class="arithmatex">\(\infty\)</span></td>
+<td>算法发散，且原因不明显</td>
+</tr>
+<tr>
+<td>多重目标冲突</td>
+<td>期望最优、最坏最优混用</td>
+<td>期望最优对尾部风险不敏感</td>
+<td>高风险场景下性能崩溃</td>
+</tr>
+</tbody>
+</table>
+<p>逐一展开：</p>
 <ol>
-<li><a href="01-linear-algebra-calculus/">线性代数与微积分基础</a></li>
-<li><a href="02-numerical-computation/">数值计算基础</a></li>
-<li><a href="03-probability-random-variables/">概率与随机变量</a></li>
-<li><a href="04-conditional-bayes/">条件概率与贝叶斯推断</a></li>
-<li><a href="05-markov-processes/">马尔可夫过程</a></li>
-<li><a href="06-optimization-under-uncertainty/">优化、约束与不确定性</a></li>
+<li><strong>符号先于语义。</strong> 离散分布用概率质量函数，求和恒为 1；连续分布用概率密度，积分才为 1，而密度本身可以大于 1。把两者混用会导致把「概率为零」和「不可能」混为一谈 —— 连续分布下每个点的概率都是零，但事件确实会发生。</li>
+<li><strong>可微与可解是两回事。</strong> <span class="arithmatex">\(\nabla_\theta J(\theta)=0\)</span> 是必要条件而非充分条件；只有凸性才能把它升级为充要条件。非凸问题上，梯度为零的点可能是极小、极大或鞍点。</li>
+<li><strong>有限精度是真实约束。</strong> 数学上的等价变形在浮点下可能数值不稳定。例如 <span class="arithmatex">\(\text{softmax}\)</span> 对 <span class="arithmatex">\(10^3\)</span> 量级输入直接取指数会溢出，工程实现要减去最大值；再如大数相减会造成有效位抵消。</li>
+<li><strong>不确定性与约束同时存在时，优化问题不再有单一答案。</strong> 期望最优、最坏情况最优、鲁棒最优是三个不同目标，对应不同的解。</li>
 </ol>
+<p>本节六章分别对应上述断层的具体位置。<strong>建议的用法是：带着一个你手上真实存在的公式来读，逐条对照，而不是按目录顺序读完。</strong></p>
+<h2 id="_2">六章的依赖顺序</h2>
+<p>六章不是并列的，而是有明确的前置关系。跳过前置章节会在后面卡住。</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>前置章节</th>
+<th>若跳过前置会卡在哪里</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="01-linear-algebra-calculus/">线性代数与微积分基础</a></td>
+<td>无（起点）</td>
+<td>一切。<span class="arithmatex">\(\nabla_\theta J\)</span>、雅可比、特征值都无从谈起</td>
+</tr>
+<tr>
+<td><a href="02-numerical-computation/">数值计算基础</a></td>
+<td>线性代数</td>
+<td>知道 LQR 要解 Riccati 方程，但不知道求解器为何不收敛</td>
+</tr>
+<tr>
+<td><a href="03-probability-random-variables/">概率与随机变量</a></td>
+<td>微积分</td>
+<td>期望 <span class="arithmatex">\(\mathbb E[X]=\int x\,p(x)\,dx\)</span> 的积分号看不懂</td>
+</tr>
+<tr>
+<td><a href="04-conditional-bayes/">条件概率与贝叶斯推断</a></td>
+<td>概率与随机变量</td>
+<td>无法理解 posterior、belief state、POMDP 的信念更新</td>
+</tr>
+<tr>
+<td><a href="05-markov-processes/">马尔可夫过程</a></td>
+<td>条件概率与贝叶斯</td>
+<td>无法理解 Bellman 方程为什么可以去掉历史</td>
+</tr>
+<tr>
+<td><a href="06-optimization-under-uncertainty/">优化、约束与不确定性</a></td>
+<td>线性代数 + 概率</td>
+<td>无法理解对偶、KKT、风险约束、分布鲁棒</td>
+</tr>
+</tbody>
+</table>
+<p>依赖链条可以压缩成一句话：</p>
+<div class="arithmatex">\[
+\text{线性代数} \to \text{数值计算} \to \text{概率} \to \text{贝叶斯} \to \text{马尔可夫} \to \text{优化}.
+\]</div>
+<p>注意数值计算被放在第二位，是因为它服务于后面全部章节：任何理论结论最终都要落到一个能在有限精度下跑出来的算法。把它放到最后学的代价是，你会在前三章一直写不出可信的实现。</p>
+<p>三条最容易被低估的边：</p>
+<ul>
+<li><strong>线性代数 → 数值计算。</strong> 特征值分解本身是解析概念，但 <span class="arithmatex">\(\lambda_{\max}/\lambda_{\min}\)</span> 的比值（条件数 <span class="arithmatex">\(\kappa(A)\)</span>）决定误差被放大多少倍。</li>
+<li><strong>贝叶斯 → 马尔可夫。</strong> 马尔可夫性的严格表述依赖条件独立，而条件独立是用条件概率定义的。</li>
+<li><strong>概率 → 优化。</strong> 只在期望意义上的最优需要把随机目标写成 <span class="arithmatex">\(\mathbb E[f(x,\xi)]\)</span>，这就把概率对象塞进了优化问题。</li>
+</ul>
+<h2 id="_3">概念地图</h2>
+<p>图上的节点可以按「输入 — 变换 — 输出」三类理解。每个节点在主标签下还带一个子标签，说明它负责的具体对象。</p>
+<table>
+<thead>
+<tr>
+<th>图上节点</th>
+<th>子标签</th>
+<th>它在说什么</th>
+<th>关键量化关系</th>
+<th>直接服务于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear algebra</td>
+<td>vectors / matrices</td>
+<td>用矩阵表达线性变换与坐标系选择</td>
+<td><span class="arithmatex">\(A\mathbf x=\lambda\mathbf x\)</span> 定义特征方向；<span class="arithmatex">\(A=P\Lambda P^{-1}\)</span> 对角化</td>
+<td>状态空间模型、LQR、协方差传播</td>
+</tr>
+<tr>
+<td>Probability</td>
+<td>random variables</td>
+<td>用分布描述未知量</td>
+<td><span class="arithmatex">\(\mathbb E[X]=\sum_x x\,p(x)\)</span> 或 <span class="arithmatex">\(\int x\,p(x)\,dx\)</span>；<span class="arithmatex">\(\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2\)</span></td>
+<td>奖励期望、噪声建模</td>
+</tr>
+<tr>
+<td>Bayes</td>
+<td>conditioning</td>
+<td>观测之后如何更新对未知量的看法</td>
+<td><span class="arithmatex">\(p(\theta\mid x)=\frac{p(x\mid\theta)p(\theta)}{p(x)}\)</span></td>
+<td>信念更新、状态估计、POMDP</td>
+</tr>
+<tr>
+<td>Markov</td>
+<td>state evolution</td>
+<td>无记忆的随机演化</td>
+<td><span class="arithmatex">\(p(s_{t+1}\mid s_t,\dots)=p(s_{t+1}\mid s_t)\)</span>；稳态 <span class="arithmatex">\(\pi P=\pi\)</span></td>
+<td>Bellman 方程、MDP 建模</td>
+</tr>
+<tr>
+<td>Optimization</td>
+<td>objectives / constraints</td>
+<td>在约束下选决策</td>
+<td><span class="arithmatex">\(\min_x f(x)\ \text{s.t.}\ g(x)\le 0\)</span>；KKT 条件</td>
+<td>策略优化、MPC</td>
+</tr>
+<tr>
+<td>Uncertainty</td>
+<td>stochastic / robust</td>
+<td>在未知存在时该优化什么</td>
+<td><span class="arithmatex">\(\min_x \mathbb E[f(x,\xi)]\)</span> 与 <span class="arithmatex">\(\min_x \max_{\xi\in\mathcal U} f(x,\xi)\)</span></td>
+<td>鲁棒控制、安全约束</td>
+</tr>
+</tbody>
+</table>
+<p>图的走向可以读成两条主干：</p>
+<ol>
+<li><strong>确定性主干</strong>：Linear algebra → Optimization。适合控制类问题，特征是 <span class="arithmatex">\(\dot x=Ax+Bu\)</span> 这类可解析对象。</li>
+<li><strong>随机性主干</strong>：Probability → Bayes → Markov → Uncertainty。适合学习与估计类问题，特征是目标里含期望。</li>
+</ol>
+<p>两条主干在 Optimization 的交汇点就是「随机优化」：</p>
+<div class="arithmatex">\[
+\min_x\ \mathbb E_{\xi\sim p}[f(x,\xi)]\quad\text{与}\quad \min_x\ \max_{\xi\in\mathcal U} f(x,\xi).
+\]</div>
+<p>前者用于已知分布、可以平均的场景；后者用于分布未知或不可信、必须防最坏的场景。<strong>选错这一条，后面所有结论都针对另一个问题。</strong> 读图的方法是：先确定你手上的问题属于哪一类输入（确定 / 随机 / 带约束），再顺着箭头找它需要哪几个节点。</p>
+<h2 id="_4">后续章节的接口</h2>
+<p>本节不追求自成一体的完整性，它存在的意义是给后面五节提供接口。下表列出最常用的几条。</p>
+<table>
+<thead>
+<tr>
+<th>本节概念</th>
+<th>被哪一章使用</th>
+<th>用来解决什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>特征值与稳定性</td>
+<td><a href="../control-theory/01-modeling-state-space/">../control-theory/01-modeling-state-space.md</a></td>
+<td>由 <span class="arithmatex">\(\dot x=Ax\)</span> 判断稳定性：全部 <span class="arithmatex">\(\operatorname{Re}\lambda_i(A)&lt;0\)</span></td>
+</tr>
+<tr>
+<td>矩阵求逆与条件数</td>
+<td><a href="../control-theory/04-lqr/">../control-theory/04-lqr.md</a></td>
+<td>判断 LQR 的 Riccati 迭代是否数值可信</td>
+</tr>
+<tr>
+<td>期望与方差</td>
+<td><a href="../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a></td>
+<td>定义回报 <span class="arithmatex">\(G_t=\sum_{k=0}^{\infty}\gamma^k r_{t+k}\)</span> 的期望与方差</td>
+</tr>
+<tr>
+<td>条件概率与贝叶斯</td>
+<td><a href="../game-theory/04-sequential-bayesian/">../game-theory/04-sequential-bayesian.md</a></td>
+<td>由观测更新对对手类型的信念</td>
+</tr>
+<tr>
+<td>条件概率与贝叶斯</td>
+<td><a href="../multi-agent-systems/02-coordination/">../multi-agent-systems/02-coordination.md</a></td>
+<td>通信受限时用共享观测维持一致的局势估计</td>
+</tr>
+<tr>
+<td>马尔可夫性与稳态分布</td>
+<td><a href="../multi-agent-systems/05-multi-agent-learning/">../multi-agent-systems/05-multi-agent-learning.md</a></td>
+<td>分析多智能体联合策略的收敛行为</td>
+</tr>
+<tr>
+<td>约束优化与 KKT</td>
+<td><a href="../control-theory/05-mpc/">../control-theory/05-mpc.md</a></td>
+<td>有限时域滚动优化的可行性与最优性条件</td>
+</tr>
+<tr>
+<td>不确定性建模与风险度量</td>
+<td><a href="../robustness-safety/02-robustness-risk/">../robustness-safety/02-robustness-risk.md</a></td>
+<td>在分布偏移下给出可验证的性能下界</td>
+</tr>
+<tr>
+<td>概率与集中不等式基础</td>
+<td><a href="../robustness-safety/02-robustness-risk/">../robustness-safety/02-robustness-risk.md</a></td>
+<td>用有限样本估计泛化误差与风险上界</td>
+</tr>
+</tbody>
+</table>
+<p>一条经验规则：<strong>如果某章的公式你认不出符号来源，先回本节查接口表，再回对应章节。</strong> 反向也成立 —— 本节任何一章如果你说不出它被谁用，说明你还没找到它的用途，可以先跳。</p>
+<h2 id="_5">阅读顺序建议</h2>
+<p>不同目标的读者不需要读完全部六章。三种路径如下。</p>
+<p><strong>路径 A：只要够用（约 2 小时）。</strong> 只读 <a href="01-linear-algebra-calculus/">线性代数与微积分基础</a> 的梯度与矩阵部分，以及 <a href="03-probability-random-variables/">概率与随机变量</a> 的期望、方差、常见分布。目标是看懂符号，不追求推导。适合只理解概念、不做实现的读者。判断可以停下的信号：你能正确读出 <span class="arithmatex">\(\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2\)</span> 中每一项的含义。</p>
+<p><strong>路径 B：做控制（建议全读，顺序固定）。</strong> 线性代数 → 数值计算 → 概率 → 优化。控制侧最重要的是特征值、条件数、二次型与约束优化。贝叶斯和马尔可夫可以先跳，回头补。读到 <a href="../control-theory/04-lqr/">../control-theory/04-lqr.md</a> 和 <a href="../control-theory/05-mpc/">../control-theory/05-mpc.md</a> 时再回来查公式。最关键的两条量化结论是：稳定性由 <span class="arithmatex">\(\max_i\operatorname{Re}\lambda_i(A)\)</span> 的符号决定；数值可信度由 <span class="arithmatex">\(\kappa(A)\)</span> 的量级决定。</p>
+<p><strong>路径 C：做学习与优化（建议全读，且必须读状态估计相关部分）。</strong> 概率 → 贝叶斯 → 马尔可夫 → 优化，最后回补数值计算。学习侧的核心是期望回报、优势函数、策略梯度，全部建立在条件期望之上。马尔可夫性是 Bellman 方程成立的前提，跳过它会导致后面把「用历史做决策」和「用状态做决策」混淆。策略梯度的典型形式</p>
+<div class="arithmatex">\[
+\nabla_\theta J(\theta)=\mathbb E_{\tau\sim p_\theta}\Big[\sum_t \nabla_\theta\log\pi_\theta(a_t\mid s_t)\,\hat A_t\Big]
+\]</div>
+<p>里同时出现了期望、条件概率、梯度三样东西，正是路径 C 三个模块的组合。</p>
+<table>
+<thead>
+<tr>
+<th>读者类型</th>
+<th>必读章节</th>
+<th>可跳过</th>
+<th>典型受卡点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只要够用</td>
+<td>1、3</td>
+<td>2、4、5</td>
+<td>分不清分布与密度</td>
+</tr>
+<tr>
+<td>做控制</td>
+<td>1、2、3、6</td>
+<td>4、5</td>
+<td>Riccati 迭代不收敛不知原因</td>
+</tr>
+<tr>
+<td>做学习与优化</td>
+<td>3、4、5、6</td>
+<td>1（若已熟）</td>
+<td>Bellman 方程的期望写法</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">常见误解</h2>
+<p>下面六条是本节最常出现的错误认识。每条都给出可验证的修正方式。</p>
+<table>
+<thead>
+<tr>
+<th>错误说法</th>
+<th>为什么错</th>
+<th>正确说法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「概率密度可以大于 1，所以一定写错了」</td>
+<td>密度不是概率，只有积分才是概率</td>
+<td><span class="arithmatex">\(p(x)\)</span> 可以任意大，只要 <span class="arithmatex">\(\int p=1\)</span>；概率 <span class="arithmatex">\(P(X\in A)=\int_A p\)</span> 才必须 <span class="arithmatex">\(\le 1\)</span></td>
+</tr>
+<tr>
+<td>「梯度为零就是最小值」</td>
+<td>梯度为零只说明一阶导数为零，是必要条件</td>
+<td>需配合二阶条件 <span class="arithmatex">\(\nabla^2 f\succ 0\)</span> 才能判定极小；鞍点同样梯度为零</td>
+</tr>
+<tr>
+<td>「数值上等于零就是零」</td>
+<td>浮点运算存在舍入与抵消误差</td>
+<td>应比较与容差的关系，如 $</td>
+</tr>
+<tr>
+<td>「期望最优即最坏情况也不错」</td>
+<td>期望对小概率高损失事件不敏感</td>
+<td>期望最优可能在高风险场景崩溃，需要 CVaR 或最坏情况目标</td>
+</tr>
+<tr>
+<td>「马尔可夫性意味着过程没有结构」</td>
+<td>无记忆只针对「给定当前状态后的未来」</td>
+<td>未来仍可依赖当前状态，只是不依赖更早历史</td>
+</tr>
+<tr>
+<td>「贝叶斯更新需要大量数据才有意义」</td>
+<td>先验本身参与推断，小样本下先验影响更大</td>
+<td>小样本时结果由先验主导，这既是风险也是可利用的信息</td>
+</tr>
+</tbody>
+</table>
+<p>补充三点容易被忽略的推论：</p>
+<ul>
+<li>第 2 条的实践后果：非凸优化里不能只用梯度范数作为停止条件，应同时观察目标值是否还在下降。</li>
+<li>第 3 条的实践后果：矩阵求逆若 <span class="arithmatex">\(\kappa(A)\)</span> 达到 <span class="arithmatex">\(10^{10}\)</span>，双精度下有效位只剩约 6 位，此时应改用分解法而非显式求逆。</li>
+<li>第 4 条的实践后果：安全关键场景应显式写出风险度量，而不是在期望目标上加惩罚项凑效果。</li>
+</ul>
+<h2 id="_7">本章导航</h2>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>主题</th>
+<th>解决什么问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="01-linear-algebra-calculus/">线性代数与微积分基础</a></td>
+<td>矩阵、特征值、梯度、雅可比</td>
+<td>提供描述线性变换与变化率的基本语言</td>
+</tr>
+<tr>
+<td><a href="02-numerical-computation/">数值计算基础</a></td>
+<td>浮点误差、条件数、迭代收敛</td>
+<td>保证理论公式在有限精度下可执行、可信</td>
+</tr>
+<tr>
+<td><a href="03-probability-random-variables/">概率与随机变量</a></td>
+<td>分布、期望、方差、常见分布</td>
+<td>为随机奖励、噪声与不确定性提供度量</td>
+</tr>
+<tr>
+<td><a href="04-conditional-bayes/">条件概率与贝叶斯推断</a></td>
+<td>条件分布、Bayes 公式、信念更新</td>
+<td>回答「观测之后该怎么改变判断」</td>
+</tr>
+<tr>
+<td><a href="05-markov-processes/">马尔可夫过程</a></td>
+<td>状态转移、无记忆性、稳态</td>
+<td>为动态规划与 Bellman 方程提供前提</td>
+</tr>
+<tr>
+<td><a href="06-optimization-under-uncertainty/">优化、约束与不确定性</a></td>
+<td>凸性、KKT、对偶、风险与鲁棒</td>
+<td>在约束与不确定下选出可执行的决策</td>
+</tr>
+</tbody>
+</table>
+<p>六章合起来覆盖的对象是：<strong>向量与矩阵、随机变量、条件分布、状态演化、约束目标、不确定性六类数学对象</strong>，正好对应图上六个节点。读完这一节，你不需要成为数学专业者，但应该能在任意一篇后续材料里，快速定位某个公式属于哪一类对象、依赖哪条前置结论。</p>
+<p>每章的自检标准可以直接量化：第 1 章看能否手算 <span class="arithmatex">\(2\times2\)</span> 矩阵的特征值；第 2 章看能否解释为什么 <span class="arithmatex">\(1/3\)</span> 在双精度下存储不精确；第 3 章看能否区分概率质量函数与密度；第 4 章看能否手推一次 Bayes 更新；第 5 章看能否写出转移矩阵的稳态方程；第 6 章看能否写出一个含不等式约束的 KKT 条件组。全部都答得上，这一节可以视为完成。</p>
+<blockquote>
+<p><strong>下一步</strong>：先读 <a href="01-linear-algebra-calculus/">线性代数与微积分基础</a> 建立语言，再用 <a href="03-probability-random-variables/">概率与随机变量</a> 掌握随机性度量；若目标是控制，随后跳到 <a href="../control-theory/01-modeling-state-space/">../control-theory/01-modeling-state-space.md</a>；若目标是学习与优化，则从 <a href="../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a> 开始。</p>
+</blockquote>
 
 
 

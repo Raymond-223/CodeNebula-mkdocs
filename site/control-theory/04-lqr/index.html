@@ -1059,6 +1059,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#riccati" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Riccati 方程与反馈增益
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bryson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bryson 规则与权重初值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lqr_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        积分作用与 LQR 的结合
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3717,6 +3750,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#riccati" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Riccati 方程与反馈增益
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bryson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bryson 规则与权重初值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lqr_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        积分作用与 LQR 的结合
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3809,36 +3875,422 @@
 
 
 <h1 id="optimal-control-lqr">Optimal Control &amp; LQR</h1>
-<p>PID 主要从误差形状出发调节输入，LQR 则先问一个更系统的问题：<strong>怎样在“状态偏差小”和“控制动作不要太激烈”之间找到最优折中？</strong></p>
-<h2 id="lqr">LQR 代价函数</h2>
-<p>考虑离散线性系统</p>
-<div class="arithmatex">\[x_{k+1}=Ax_k+Bu_k.\]</div>
-<p>LQR 使用二次代价</p>
-<div class="arithmatex">\[
-J=\sum_{k=0}^{\infty}\left(x_k^\top Qx_k+u_k^\top Ru_k\right).
-\]</div>
-<p>第一项惩罚状态偏离目标，第二项惩罚控制输入过大。<span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 不只是数学参数，它们表达了设计者真正关心的权衡。</p>
-<h2 id="_1">最优控制的反馈形式</h2>
-<p>对上述线性系统和二次代价，可以证明最优控制具有</p>
-<div class="arithmatex">\[u_k=-Kx_k\]</div>
-<p>的形式。也就是说，虽然问题是“优化整段未来代价”，结果却可以压缩成一个实时线性反馈矩阵 <span class="arithmatex">\(K\)</span>。<span class="arithmatex">\(K\)</span> 由 Riccati 方程求得。</p>
-<p>这正是 LQR 的吸引力：离线完成矩阵求解，在线只需要一次矩阵乘法。</p>
-<h2 id="q-r"><span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 决定控制器怕什么</h2>
-<p>若 <span class="arithmatex">\(Q\)</span> 中位置误差权重大，控制器会更积极把位置拉回目标；若 <span class="arithmatex">\(R\)</span> 很大，控制器会更节制使用执行器，动作更平滑但响应也可能更慢。</p>
-<p>因此调 LQR 时不应直接手工调 <span class="arithmatex">\(K\)</span>，而应先问：哪些状态最重要？执行器动作成本有多大？不同变量量纲是否需要归一化？</p>
-<h2 id="lqr_1">LQR 依赖一个可以信任的线性模型</h2>
-<p>LQR 最自然的使用场景是系统本身近似线性，或围绕某个工作点做了局部线性化。例如无人机悬停附近、小车小角度姿态控制、机械系统平衡点附近。</p>
-<p>若状态远离线性化工作点，模型可能不再准确；若存在严格速度、转角或碰撞约束，LQR 本身也无法直接表达这些不等式条件。</p>
+<p>PID 从误差形状出发调输入，LQR 先问一个更系统的问题：<strong>在"状态偏差小"与"控制动作不要太激烈"之间，怎样找到可证明最优的折中？</strong> 它的答案是先写出一个二次代价，再让 Riccati 方程一次性求出唯一的最优反馈增益。本章沿"代价函数 → 最优反馈形式 → 权重工程化（Bryson 规则）→ 积分作用"这条主线展开。</p>
 <figure>
   <img alt="LQR 与 MPC 都利用模型，但处理未来和约束的方式不同。" src="../../assets/diagrams/lqr-vs-mpc.svg" />
 <br />
 <figcaption>LQR 用固定反馈增益实现最优线性控制；MPC 则在每个周期显式优化未来轨迹。</figcaption>
 </figure>
+<h2 id="lqr">LQR 代价函数</h2>
+<p>考虑离散线性时不变系统</p>
+<div class="arithmatex">\[x_{k+1}=A x_k + B u_k,\qquad x_k\in\mathbb{R}^{n},\ u_k\in\mathbb{R}^{m}.\]</div>
+<p>这里 <span class="arithmatex">\(A\in\mathbb{R}^{n\times n}\)</span> 描述状态如何自然演化，<span class="arithmatex">\(B\in\mathbb{R}^{n\times m}\)</span> 描述输入如何作用到状态。LQR 的目标是让如下无穷时域二次代价最小：</p>
+<div class="arithmatex">\[J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).\]</div>
+<p><span class="arithmatex">\(Q\in\mathbb{R}^{n\times n}\)</span> 为半正定对称矩阵，罚状态偏差；<span class="arithmatex">\(R\in\mathbb{R}^{m\times m}\)</span> 为正定对称矩阵，罚输入幅值。第一项要求系统尽快回到原点，第二项要求执行器别太费力，两者的相对大小决定最终策略。代价能收敛（<span class="arithmatex">\(J&lt;\infty\)</span>）的前提是闭环渐近稳定；若控制器让状态发散，<span class="arithmatex">\(J\)</span> 直接趋于无穷，这个候选解就被淘汰，因此"稳定性"其实被隐式编码进了最小化目标里。</p>
+<p>为什么偏偏选二次代价？因为它同时满足三个条件：对状态可微，能解析求导得到线性最优解；物理上常对应"能量"或"平方误差"，量纲自然；并且二次型在 Bellman 运算下保持封闭，使得 cost-to-go 仍是二次型。换成绝对值代价 <span class="arithmatex">\(\|x\|_1\)</span> 或最大偏差代价 <span class="arithmatex">\(\|x\|_{\infty}\)</span>，最优解会退化成 bang-bang 或多面体切换形式，工程上更难实时求。</p>
+<p>一个标量直觉：若 <span class="arithmatex">\(Q=1\)</span>、<span class="arithmatex">\(R=1\)</span>，那么"偏差 1 个单位停留一个采样周期"与"施加 1 个单位输入持续一个采样周期"代价相等；把 <span class="arithmatex">\(R\)</span> 改成 100，控制器会把输入压到约 1/100 的量级，宁可慢慢收敛也不激进。若要表达"远期偏差不那么要紧"，可引入折扣因子 <span class="arithmatex">\(\gamma\in(0,1)\)</span>：</p>
+<div class="arithmatex">\[J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),\]</div>
+<p>效果等价于给输入加了一个随时间增长的隐性成本，收敛更快但稳态精度略降。</p>
+<p>在动手调权重之前，先确认 LQR 是否适用于你的问题。它的成立前提可以列成一张清单：</p>
+<ul>
+<li>系统在当前工作范围内可用线性时不变模型近似；</li>
+<li>所有被加权的状态都可测，或能由状态估计器实时给出；</li>
+<li>代价确实能写成状态与输入的二次型，而不是"绝不允许越界"的硬要求；</li>
+<li>不存在必须严格满足的不等式约束；</li>
+<li>无穷时域近似成立，即控制问题没有明确的"最后一步"；</li>
+<li>执行器在正常工作区间内不会饱和。</li>
+</ul>
+<p>以上任一条严重不成立，LQR 的"最优"保证就会被削弱，应改用带抗饱和的 LQR 或直接上 MPC。</p>
+<table>
+<thead>
+<tr>
+<th>矩阵</th>
+<th>维度</th>
+<th>物理含义</th>
+<th>调节直觉</th>
+<th>典型取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(Q\)</span></td>
+<td><span class="arithmatex">\(n\times n\)</span></td>
+<td>状态偏差代价</td>
+<td>调大→响应更快、更贴目标</td>
+<td>由 <span class="arithmatex">\(1/x_{\max}^2\)</span> 起步</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R\)</span></td>
+<td><span class="arithmatex">\(m\times m\)</span></td>
+<td>输入幅值代价</td>
+<td>调大→动作更省、更平滑</td>
+<td>由 <span class="arithmatex">\(1/u_{\max}^2\)</span> 起步</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\gamma\)</span></td>
+<td>标量</td>
+<td>折扣因子</td>
+<td>调小→更看重近期</td>
+<td><span class="arithmatex">\(0.95\sim 1.0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(Q,R\)</span> 同乘 <span class="arithmatex">\(\alpha\)</span></td>
+<td>—</td>
+<td>只放大 <span class="arithmatex">\(J\)</span> 数值</td>
+<td>不改变最优 <span class="arithmatex">\(K\)</span></td>
+<td>缩放不变</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">最优控制的反馈形式</h2>
+<p>一个看起来"要优化无穷多步"的问题，答案却异常简单：最优输入是状态的线性反馈</p>
+<div class="arithmatex">\[u_k=-K x_k,\qquad K\in\mathbb{R}^{m\times n}.\]</div>
+<p>推导使用动态规划。设从状态 <span class="arithmatex">\(x\)</span> 出发的最优剩余代价（cost-to-go）为二次型 <span class="arithmatex">\(V(x)=x^{\top}P x\)</span>，其中 <span class="arithmatex">\(P\)</span> 对称半正定。之所以敢假设 <span class="arithmatex">\(V\)</span> 是二次型，是因为系统线性、代价二次，而二次型族在 Bellman 运算下封闭：把一个二次型最优值代回一步代价，结果仍是二次型。Bellman 最优性方程要求</p>
+<div class="arithmatex">\[V(x)=\min_{u}\left[x^{\top}Q x+u^{\top}R u+V(Ax+Bu)\right].\]</div>
+<p>把 <span class="arithmatex">\(V(Ax+Bu)\)</span> 展开并对 <span class="arithmatex">\(u\)</span> 求导置零，得到最优输入</p>
+<div class="arithmatex">\[u^{\star}=-\left(R+B^{\top}P B\right)^{-1}B^{\top}P A\,x,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.\]</div>
+<p>把 <span class="arithmatex">\(u^{\star}\)</span> 代回并令二次项系数相等，就得到关于 <span class="arithmatex">\(P\)</span> 的不动点方程（下一节细讲），离线迭代即可确定 <span class="arithmatex">\(P\)</span> 与常数矩阵 <span class="arithmatex">\(K\)</span>。在线阶段，控制器每周期只做一次 <span class="arithmatex">\(m\times n\)</span> 的矩阵—向量乘法，代价近乎可忽略。值得注意的是，这个解在无约束情形下是<strong>唯一</strong>的：只要 <span class="arithmatex">\(R\)</span> 正定，代价关于 <span class="arithmatex">\(u\)</span> 严格凸，最优输入不会出现多个局部极小。</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>计算内容</th>
+<th>何时执行</th>
+<th>复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Riccati 迭代</td>
+<td>解出 <span class="arithmatex">\(P\)</span>、<span class="arithmatex">\(K\)</span></td>
+<td>设计时一次（离线）</td>
+<td>每次迭代 <span class="arithmatex">\(O(n^3)\)</span></td>
+</tr>
+<tr>
+<td>在线反馈</td>
+<td><span class="arithmatex">\(u=-Kx\)</span></td>
+<td>每个控制周期</td>
+<td><span class="arithmatex">\(O(mn)\)</span></td>
+</tr>
+<tr>
+<td>增益调度</td>
+<td>多工作点各解一次 <span class="arithmatex">\(K\)</span></td>
+<td>离线，运行时插值查表</td>
+<td>每点 <span class="arithmatex">\(O(mn)\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="q-r"><span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 决定控制器怕什么</h2>
+<p><span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 不是数学装饰，它们编码的是"设计者最怕什么"。<span class="arithmatex">\(Q\)</span> 里某个状态的权重越大，控制器越愿意牺牲输入去压这个状态；<span class="arithmatex">\(R\)</span> 越大，控制器越舍不得动执行器。</p>
+<p>一个关键性质是<strong>缩放不变性</strong>：把 <span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 同时乘以正数 <span class="arithmatex">\(\alpha\)</span>，最优增益 <span class="arithmatex">\(K\)</span> 完全不变，因为 Bellman 方程两边同乘 <span class="arithmatex">\(\alpha\)</span> 不改变最优解。所以真正起作用的是比值 <span class="arithmatex">\(Q/R\)</span>，而不是各自的绝对值。因此反复微调绝对值毫无意义，应该直接思考权重之间的相对比例。</p>
+<p>举例：某状态权重 <span class="arithmatex">\(Q_{ii}\)</span> 从 1 提到 100（<span class="arithmatex">\(R\)</span> 不变），等价于把输入代价降到 1/100，控制器会明显更激进；反过来 <span class="arithmatex">\(R\)</span> 从 1 提到 100，位置回正的时间会显著变长。经验上 <span class="arithmatex">\(Q/R\)</span> 每提高约 10 倍，闭环带宽上升、上升时间缩短，但执行器饱和与噪声放大风险同步上升。</p>
+<p>对双积分器（状态为位置与速度，输入为加速度）可以给出精确的量化关系：</p>
+<div class="arithmatex">\[\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},\]</div>
+<p>其中 <span class="arithmatex">\(q_1\)</span> 是位置权重、<span class="arithmatex">\(q_2\)</span> 是速度权重、<span class="arithmatex">\(r\)</span> 是输入权重，<span class="arithmatex">\(\omega_n\)</span> 为闭环自然频率、<span class="arithmatex">\(\zeta\)</span> 为阻尼比。取 <span class="arithmatex">\(q_1=1,\ r=0.01,\ q_2=0\)</span>，得 <span class="arithmatex">\(q_1/r=100\)</span>、<span class="arithmatex">\(\omega_n=100^{1/4}\approx 3.16\)</span> rad/s、<span class="arithmatex">\(\zeta\approx 0.71\)</span>（近似临界阻尼，几乎无超调）。若把 <span class="arithmatex">\(q_1\)</span> 提高到 16，则 <span class="arithmatex">\(q_1/r=1600\)</span>、<span class="arithmatex">\(\omega_n\approx 6.3\)</span> rad/s，快速性翻倍。这条公式把"权重比"与"闭环带宽"直接对应起来，是调 <span class="arithmatex">\(Q/R\)</span> 时最有用的手感来源。</p>
+<table>
+<thead>
+<tr>
+<th>变化</th>
+<th>闭环带宽</th>
+<th>上升时间</th>
+<th>超调倾向</th>
+<th>执行器应力</th>
+<th>噪声放大</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(Q\)</span> 调大</td>
+<td>升高</td>
+<td>变短</td>
+<td>增大</td>
+<td>增大</td>
+<td>增大</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R\)</span> 调大</td>
+<td>降低</td>
+<td>变长</td>
+<td>减小</td>
+<td>减小</td>
+<td>减小</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(Q,R\)</span> 同乘 <span class="arithmatex">\(\alpha\)</span></td>
+<td>不变</td>
+<td>不变</td>
+<td>不变</td>
+<td>不变</td>
+<td>不变</td>
+</tr>
+</tbody>
+</table>
+<p>注意极端情形的退化：若 <span class="arithmatex">\(R\to 0\)</span>，增益趋于无穷，任何执行器都会饱和；若 <span class="arithmatex">\(Q\to 0\)</span>，闭环趋于不控制，系统只靠自身动态缓慢衰减。这两个极限都不是可用的控制器，只是理解权重作用方向的参照。</p>
+<h2 id="lqr_1">LQR 依赖一个可以信任的线性模型</h2>
+<p>LQR 的推导全部建立在 <span class="arithmatex">\(x_{k+1}=Ax_k+Bu_k\)</span> 之上，而真实系统几乎总是非线性 <span class="arithmatex">\(\dot x=f(x,u)\)</span>。标准做法是选工作点 <span class="arithmatex">\((x^{\star},u^{\star})\)</span> 做一阶线性化：</p>
+<div class="arithmatex">\[A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.\]</div>
+<p>只有当偏差 <span class="arithmatex">\(\delta x=x-x^{\star}\)</span> 足够小，线性模型才可信。无人机悬停、小车小角度平衡、机械臂在某个位形附近都属于这一类；一旦偏离工作点很远（大姿态角、强耦合、进入非线性区），<span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 失配，LQR 的"最优"保证随之失效。常用补救是<strong>增益调度</strong>：在多个工作点分别解 <span class="arithmatex">\(K\)</span>，运行时按当前状态插值。</p>
+<p>判断能否用 LQR，关键不是"系统是否线性"，而是"在任务需要覆盖的状态范围内，线性模型对真实动力学的预测误差是否可接受"。实操上可以在状态网格上逐点比较线性预测 <span class="arithmatex">\(Ax+Bu\)</span> 与非线性一步仿真 <span class="arithmatex">\(f(x,u)\)</span> 的偏差：若在全部工作范围内相对误差都小于约 5%，通常可以放心用单一线性模型；若某些区域误差达到 20% 以上，就需要分段线性化或改用非线性 MPC。</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>触发条件</th>
+<th>现象</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线性化失配</td>
+<td>状态远离工作点</td>
+<td>振荡甚至发散</td>
+<td>增益调度、分段线性化</td>
+</tr>
+<tr>
+<td>约束被忽略</td>
+<td>存在速度/转角硬限</td>
+<td>指令被截断，性能跳变</td>
+<td>改用 MPC 或加抗饱和</td>
+</tr>
+<tr>
+<td>模型参数误差</td>
+<td>质量、摩擦估计不准</td>
+<td>稳态偏差、响应偏慢</td>
+<td>加积分项、鲁棒化设计</td>
+</tr>
+<tr>
+<td>观测器延迟</td>
+<td>状态由估计器给出</td>
+<td>相位滞后、易失稳</td>
+<td>提高估计器带宽、适当降 <span class="arithmatex">\(Q\)</span></td>
+</tr>
+</tbody>
+</table>
 <h2 id="lqr-pidmpc">LQR 与 PID、MPC 的关系</h2>
-<p>PID 不需要完整状态空间模型，适合简单回路；LQR 需要线性模型，但能同时处理多状态、多输入之间的耦合；MPC 进一步把有限时域预测和显式约束纳入在线优化。</p>
-<p>三者不是“新算法替代旧算法”的关系，而是面对不同模型复杂度和约束需求的三种工具。</p>
+<p>三者不是替代关系，而是覆盖不同模型复杂度与约束需求的工具谱。PID 只看误差形状、不需要状态空间模型，单回路简单；LQR 需要线性模型，但天然处理多输入多输出耦合与状态权重；MPC 把有限时域预测与显式不等式约束纳入在线优化。</p>
+<p>一个常见误区是把 LQR 当成"更高级的 PID"。它们的信息来源不同：PID 只看输出误差 <span class="arithmatex">\(e=r-y\)</span>，LQR 看完整状态向量 <span class="arithmatex">\(x\)</span>，因此 LQR 能把耦合通道一起协调；但 LQR 也给不出"速度不得超过 2 m/s"这种硬保证，那需要 MPC 把约束显式写进优化。反过来，PID 在完全不知道模型的情况下仍能调出一个能用的回路，而 LQR 一旦 <span class="arithmatex">\(A,B\)</span> 写错，输出的增益可能直接让系统发散。选择哪一条，取决于你手上是"有可信模型"还是"只有试错空间"。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>PID</th>
+<th>LQR</th>
+<th>MPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需要模型</td>
+<td>不需要</td>
+<td>线性状态空间</td>
+<td>线性/非线性预测模型</td>
+</tr>
+<tr>
+<td>MIMO 耦合</td>
+<td>需人工解耦</td>
+<td>天然处理</td>
+<td>天然处理</td>
+</tr>
+<tr>
+<td>显式约束</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>核心能力</td>
+</tr>
+<tr>
+<td>在线计算</td>
+<td>微秒级</td>
+<td>一次矩阵乘法</td>
+<td>每步解一个 QP</td>
+</tr>
+<tr>
+<td>调参维度</td>
+<td>每回路 3 个增益</td>
+<td><span class="arithmatex">\(Q,R\)</span> 对角（+耦合）</td>
+<td><span class="arithmatex">\(Q,R,N\)</span> 与终端项</td>
+</tr>
+<tr>
+<td>稳定性保证</td>
+<td>局部经验</td>
+<td>线性情形有保证</td>
+<td>需终端代价或终端集</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_2">权重矩阵的设计含义</h2>
-<p><span class="arithmatex">\(Q\)</span> 与 <span class="arithmatex">\(R\)</span> 应反映状态偏差和控制代价的相对尺度。若位置、角度和速度单位差异很大，直接使用相同对角权重会隐含不合理偏好。常见做法是先按允许最大偏差归一化，再通过闭环响应微调权重。</p>
+<p><span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 应反映"状态偏差"与"控制代价"的相对尺度。若位置用米、角度用弧度、速度用米每秒，量纲差异巨大，直接给相同对角权重等于隐含偏好量纲大的变量。正确做法是先按允许最大偏差归一化，再在仿真里按响应微调。</p>
+<p><span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 通常取对角阵，非对角元代表交叉惩罚。若两个状态偏差应当"同号才贵、异号无所谓"（例如横向位置与航向），才考虑非对角项；随意填非对角元会破坏正定性，导致代价函数无下界，Riccati 迭代震荡甚至不收敛。判断非对角项是否合法的最简标准是检查矩阵的所有特征值是否非负。</p>
+<p>把同一物理量的位置与速度分量分别设权，还会带来一个隐性耦合：速度权重越大，控制器越倾向"先把速度压住再纠位置"，表现为响应更平缓；速度权重过小，则容易在目标附近来回冲过，形成欠阻尼振荡。这正是上节双积分器公式中 <span class="arithmatex">\(\zeta\)</span> 随 <span class="arithmatex">\(q_2\)</span> 增大的含义。</p>
+<p>一份可执行的权重设计流程：</p>
+<ol>
+<li>列出每个状态的物理量程，按 <span class="arithmatex">\(1/x_{\max}^2\)</span> 写出初始 <span class="arithmatex">\(Q\)</span>；</li>
+<li>列出每个输入的物理量程，按 <span class="arithmatex">\(1/u_{\max}^2\)</span> 写出初始 <span class="arithmatex">\(R\)</span>；</li>
+<li>仿真观察响应，若太慢则升 <span class="arithmatex">\(Q\)</span> 或降 <span class="arithmatex">\(R\)</span>；</li>
+<li>检查执行器是否饱和，若饱和则升 <span class="arithmatex">\(R\)</span>；</li>
+<li>检查噪声是否被放大，若是则降相应状态权重或先滤波。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>设计问题</th>
+<th>错误做法</th>
+<th>后果</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>量纲不一</td>
+<td>三个状态都取权重 1</td>
+<td>偏好量纲大的变量</td>
+<td>按 <span class="arithmatex">\(1/x_{\max}^2\)</span> 归一</td>
+</tr>
+<tr>
+<td>一味求快</td>
+<td>无限加大 <span class="arithmatex">\(Q\)</span></td>
+<td>执行器饱和、指令抖动</td>
+<td>用 <span class="arithmatex">\(R\)</span> 反映真实输入成本</td>
+</tr>
+<tr>
+<td>噪声敏感</td>
+<td>含高频噪声状态却给高 <span class="arithmatex">\(Q\)</span></td>
+<td>噪声被放大进输入</td>
+<td>降 <span class="arithmatex">\(Q\)</span> 或先滤波</td>
+</tr>
+<tr>
+<td>任意耦合</td>
+<td>随手填非对角元</td>
+<td><span class="arithmatex">\(Q\)</span> 不正定、<span class="arithmatex">\(J\)</span> 无下界</td>
+<td>保持对角或验证正定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="riccati">Riccati 方程与反馈增益</h2>
+<p>前面说"<span class="arithmatex">\(K\)</span> 由 Riccati 方程求得"，这里把方程写清楚。连续时间下，<span class="arithmatex">\(P\)</span> 满足代数 Riccati 方程（ARE）：</p>
+<div class="arithmatex">\[A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.\]</div>
+<p>离散时间下对应离散代数 Riccati 方程（DARE）：</p>
+<div class="arithmatex">\[P=A^{\top}P A-A^{\top}P B\left(R+B^{\top}P B\right)^{-1}B^{\top}P A+Q,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.\]</div>
+<p>两式都是关于 <span class="arithmatex">\(P\)</span> 的非线性代数方程，没有闭式解，但可以用不动点迭代数值求解：从 <span class="arithmatex">\(P_0=Q\)</span> 出发，反复代入</p>
+<div class="arithmatex">\[P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_i A+Q,\]</div>
+<p>在 <span class="arithmatex">\((A,B)\)</span> 可稳、<span class="arithmatex">\((A,Q^{1/2})\)</span> 可检的条件下，序列 <span class="arithmatex">\(\{P_i\}\)</span> 单调收敛到唯一的半正定解 <span class="arithmatex">\(P\)</span>。收敛速度与闭环谱半径相关，通常几十到几百次迭代即可到机器精度。</p>
+<p>递推能否收敛，取决于三个结构性条件：</p>
+<ul>
+<li><span class="arithmatex">\((A,B)\)</span> 可稳：任何不可稳的模态都必须能被输入影响；</li>
+<li><span class="arithmatex">\((A,Q^{1/2})\)</span> 可检：任何不可稳的模态都必须进入代价；</li>
+<li><span class="arithmatex">\(R\)</span> 正定：保证每步的 <span class="arithmatex">\((R+B^{\top}P_i B)^{-1}\)</span> 都可求逆。</li>
+</ul>
+<p>这三条也正是判断"这个系统能不能用 LQR 镇定"的形式化标准。</p>
+<p>"可稳"的意思是系统不可稳的模态都能被输入影响，"可检"的意思是任何不稳定的状态都不会在代价里被完全无视。如果某个发散模态既不受输入控制、又恰好对应 <span class="arithmatex">\(Q\)</span> 中权重为零的状态，那么 Riccati 迭代不会收敛，得到的"解"对应的闭环里那条模态仍在发散——这是设计权重时最隐蔽的坑：漏掉一个必要状态的权重，代价函数表面正常，闭环却可能不稳定。</p>
+<p>关键在于<strong>递推式里完全没有状态 <span class="arithmatex">\(x\)</span></strong>：<span class="arithmatex">\(P\)</span> 和 <span class="arithmatex">\(K\)</span> 只依赖 <span class="arithmatex">\(A,B,Q,R\)</span> 四个常量矩阵，因此可以在设计阶段离线算好、烧进控制器，运行时不再解任何方程。这正是 LQR 能同时做到"最优"与"实时"的原因。反之，一旦想在运行中改变权重，就必须重新解一次 Riccati 方程，这是自适应 LQR 的主要成本来源。</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>方程核心</th>
+<th>增益</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续 ARE</td>
+<td><span class="arithmatex">\(A^{\top}P+PA-PBR^{-1}B^{\top}P+Q=0\)</span></td>
+<td><span class="arithmatex">\(K=R^{-1}B^{\top}P\)</span></td>
+<td>连续模型、解析分析</td>
+</tr>
+<tr>
+<td>离散 DARE</td>
+<td>含 <span class="arithmatex">\(\left(R+B^{\top}PB\right)^{-1}\)</span></td>
+<td><span class="arithmatex">\(K=\left(R+B^{\top}PB\right)^{-1}B^{\top}PA\)</span></td>
+<td>数字控制器、逐拍实现</td>
+</tr>
+<tr>
+<td>有限时域递推</td>
+<td>带终端条件 <span class="arithmatex">\(P_N=Q_f\)</span></td>
+<td>时变 <span class="arithmatex">\(K_k\)</span></td>
+<td>短时程、带终端代价问题</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bryson">Bryson 规则与权重初值</h2>
+<p>面对全新系统，最头疼的是不知道 <span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 从哪起步。<strong>Bryson 规则</strong>给出了一个有物理依据的初值：用每个变量的允许最大幅值做归一化，</p>
+<div class="arithmatex">\[Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).\]</div>
+<p>它的直觉是：让每个状态到达自身最大允许偏差、每个输入达到自身最大幅值时，在代价里贡献相同的量（都等于 1）。这样不同量纲的变量被拉到同一尺度，<span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 的相对大小才有可比性。</p>
+<p>一个具体例子：某小车位置允许最大偏差 <span class="arithmatex">\(x_{\max,1}=1.0\)</span> m，速度允许最大 <span class="arithmatex">\(x_{\max,2}=0.5\)</span> m/s，推力最大 <span class="arithmatex">\(u_{\max,1}=10\)</span> N。按 Bryson 规则，</p>
+<div class="arithmatex">\[Q=\operatorname{diag}\!\left(\frac{1}{1.0^{2}},\ \frac{1}{0.5^{2}}\right)=\operatorname{diag}(1.0,\ 4.0),\qquad R=\operatorname{diag}\!\left(\frac{1}{10^{2}}\right)=\operatorname{diag}(0.01).\]</div>
+<p>即位置权重 1.0、速度权重 4.0、输入权重 0.01。代入数值即可读出相对重视程度：速度权重是位置的 4 倍（因为速度量程更小、同等偏差更危险），输入却被看得很轻（10 N 相对任务需求很宽裕）。可见仅凭"位置 1 m / 速度 0.5 m/s / 推力 10 N"三条规格，就得到一个量纲自洽、能跑通的起点，后续只需在此基础上按响应微调。</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>允许最大幅值</th>
+<th>Bryson 权重初值</th>
+<th>权重解读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位置 <span class="arithmatex">\(x_1\)</span></td>
+<td>1.0 m</td>
+<td><span class="arithmatex">\(Q_{11}=1/1.0^2=1.0\)</span></td>
+<td>基准尺度</td>
+</tr>
+<tr>
+<td>速度 <span class="arithmatex">\(x_2\)</span></td>
+<td>0.5 m/s</td>
+<td><span class="arithmatex">\(Q_{22}=1/0.5^2=4.0\)</span></td>
+<td>量程小，罚得更重</td>
+</tr>
+<tr>
+<td>推力 <span class="arithmatex">\(u_1\)</span></td>
+<td>10 N</td>
+<td><span class="arithmatex">\(R_{11}=1/10^2=0.01\)</span></td>
+<td>量程大，罚得轻</td>
+</tr>
+</tbody>
+</table>
+<p>Bryson 规则只保证"量纲合理、不荒谬"，不保证"性能最优"。它是起点而非终点：若响应太慢就升 <span class="arithmatex">\(Q\)</span> 或降 <span class="arithmatex">\(R\)</span>，若执行器饱和就升 <span class="arithmatex">\(R\)</span>。此外，如果某个变量根本没有物理上界（例如自由积分状态或偏置项），就无法直接套用该规则，需要人为设定一个合理的参考幅值；否则 <span class="arithmatex">\(1/x_{\max}^2\)</span> 会出现除零或无穷大权重，让其他状态在代价里变得无足轻重。</p>
+<h2 id="lqr_2">积分作用与 LQR 的结合</h2>
+<p>纯 LQR 是状态反馈，对<strong>常值扰动</strong>或<strong>模型增益误差</strong>会留下稳态误差：只要模型低估了负载，位置就永远差一点点。想要"无静差"，就把输出误差的积分扩进状态向量，得到 LQI（LQR with Integral action）。设跟踪误差 <span class="arithmatex">\(e_k=r_k-y_k=r_k-Cx_k\)</span>，定义积分状态</p>
+<div class="arithmatex">\[z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).\]</div>
+<p>把 <span class="arithmatex">\(z\)</span> 接到原状态后面，构造增广系统</p>
+<div class="arithmatex">\[\begin{bmatrix}x_{k+1}\\ z_{k+1}\end{bmatrix}=\underbrace{\begin{bmatrix}A&amp;0\\ -C&amp;I\end{bmatrix}}_{\tilde A}\begin{bmatrix}x_k\\ z_k\end{bmatrix}+\underbrace{\begin{bmatrix}B\\ 0\end{bmatrix}}_{\tilde B}u_k+\begin{bmatrix}0\\ I\end{bmatrix}r_k,\]</div>
+<p>再对增广状态 <span class="arithmatex">\([x;z]\)</span> 设计 LQR，得到 <span class="arithmatex">\(u_k=-K_x x_k+K_i z_k\)</span>，其中 <span class="arithmatex">\(K\)</span> 被划分为状态增益 <span class="arithmatex">\(K_x\)</span> 与积分增益 <span class="arithmatex">\(K_i\)</span>。积分状态让任何常值误差不断累积并推动输入，直到误差归零；但代价是积分器引入相位滞后、增大超调，还可能在执行器饱和时累积出巨大的 <span class="arithmatex">\(z\)</span>（积分饱和）。工程上通常给 <span class="arithmatex">\(z\)</span> 一个远小于 <span class="arithmatex">\(Q\)</span> 的权重，并配抗积分饱和（clamping / back-calculation）。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>常值扰动下稳态误差</th>
+<th>状态维数</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯 LQR</td>
+<td>通常非零</td>
+<td><span class="arithmatex">\(n\)</span></td>
+<td>无静差、对增益误差敏感</td>
+</tr>
+<tr>
+<td>LQI</td>
+<td>理论上为零</td>
+<td><span class="arithmatex">\(n+p\)</span></td>
+<td>积分饱和、相位滞后、超调增大</td>
+</tr>
+<tr>
+<td>LQR + 前馈</td>
+<td>模型准确时为零</td>
+<td><span class="arithmatex">\(n\)</span></td>
+<td>依赖精确模型与扰动测量</td>
+</tr>
+</tbody>
+</table>
+<p>值得强调的是，LQI 与 PID 中的积分项来源不同：PID 的积分是围绕单一误差通道的经验修正，LQI 的积分是增广系统上的最优解，会自动与状态反馈协同分配权重。代价是维数上升 <span class="arithmatex">\(p\)</span>（输出个数）以及增广系统需要满足可稳与可检条件，否则 Riccati 方程无有效解。若积分权重给得过大，闭环里会出现一对低频极点，表现为缓慢的往复摆动，需要用 <span class="arithmatex">\(Q_i\)</span> 把这对极点往高频推。</p>
+<blockquote>
+<p><strong>下一步</strong>：若你更关心如何处理速度上限这类硬约束，请继续阅读 <a href="../05-mpc/">模型预测控制</a>；想回到反馈与稳定的基础，看 <a href="../02-feedback-stability/">反馈控制与稳定性</a>；权重设计里用到的线性化来自 <a href="../01-modeling-state-space/">动态系统建模与状态空间</a>；把 LQR 放进真实机器人回路的例子见 <a href="../../robotics/05-navigation-control/">导航与控制</a>。</p>
+</blockquote>
 
 
 

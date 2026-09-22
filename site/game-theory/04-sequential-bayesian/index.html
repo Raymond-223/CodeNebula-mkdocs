@@ -1577,7 +1577,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        不完全信息需要引入类型和信念
+        可观测行动与信息集
       
     </span>
   </a>
@@ -1588,7 +1588,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        顺序和隐藏信息常在真实系统中同时出现
+        子博弈完美与不可信威胁
       
     </span>
   </a>
@@ -1599,7 +1599,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可观测行动与信息集
+        不完全信息需要引入类型和信念
       
     </span>
   </a>
@@ -1610,7 +1610,40 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
+        贝叶斯纳什均衡与信念更新
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         承诺为何能够改变结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        承诺与信息设计的代价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        顺序和隐藏信息常在真实系统中同时出现
       
     </span>
   </a>
@@ -3699,7 +3732,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        不完全信息需要引入类型和信念
+        可观测行动与信息集
       
     </span>
   </a>
@@ -3710,7 +3743,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        顺序和隐藏信息常在真实系统中同时出现
+        子博弈完美与不可信威胁
       
     </span>
   </a>
@@ -3721,7 +3754,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可观测行动与信息集
+        不完全信息需要引入类型和信念
       
     </span>
   </a>
@@ -3732,7 +3765,40 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
+        贝叶斯纳什均衡与信念更新
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         承诺为何能够改变结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        承诺与信息设计的代价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        顺序和隐藏信息常在真实系统中同时出现
       
     </span>
   </a>
@@ -3831,30 +3897,446 @@
 
 
 <h1 id="sequential-bayesian-games">Sequential &amp; Bayesian Games</h1>
-<p>现实决策经常同时包含两种复杂性：有人先行动、有人后行动；同时玩家又可能不知道对方的真实类型或成本。序贯博弈解决<strong>行动顺序</strong>，贝叶斯博弈解决<strong>隐藏信息</strong>，两者需要分开理解。</p>
+<p>现实决策经常同时叠加两种复杂性：有人先行动、有人后行动，同时玩家又可能不知道对方的真实类型或成本。<strong>序贯博弈解决的是「谁先动、后手知道什么」的行动顺序问题，贝叶斯博弈解决的是类型与信念的隐藏信息问题，两者必须分开建模再组合。</strong> 本页先用博弈树和逆向归纳处理顺序，再引入类型、先验与后验处理信息，最后给出承诺可信度、信息设计的代价，以及两者同时出现时的建模链条。</p>
 <figure>
   <img alt="博弈树把行动顺序和后续响应显式展开。" src="../../assets/diagrams/game-tree.svg" />
 <br />
 <figcaption>顺序行动使后行动者能够根据已经发生的动作做响应。</figcaption>
 </figure>
 <h2 id="_1">顺序行动要用博弈树描述历史</h2>
-<p>博弈树节点表示当前历史，边表示可选动作，叶节点给出最终收益。策略不再只是一个动作，而要说明玩家在自己可能遇到的每个决策节点怎样行动。</p>
+<p>博弈树用节点表示历史 <span class="arithmatex">\(h\)</span>，用边表示可选动作 <span class="arithmatex">\(a\)</span>，用叶节点给出各玩家的最终收益。节点的「历史」是从根到该节点的一条动作序列，例如 <span class="arithmatex">\(h = (a^1, a^2)\)</span> 表示玩家 1 先做了 <span class="arithmatex">\(a^1\)</span>、玩家 2 接着做了 <span class="arithmatex">\(a^2\)</span>。</p>
+<p>关键区别在于策略的定义。在同时行动的标准式里，策略就是一个动作；在扩展式里，策略是「玩家在自己可能遇到的每一个决策节点上分别怎么行动」的函数：</p>
+<div class="arithmatex">\[
+s_i : \mathcal{H}_i \to \mathcal{A}_i, \qquad \mathcal{H}_i = \{h : \text{轮到玩家 } i \text{ 行动的历史}\}.
+\]</div>
+<p>这意味着策略空间是各节点动作集合的笛卡尔积，规模随决策点数量指数增长。若某玩家有 <span class="arithmatex">\(k\)</span> 个决策节点、每个节点 <span class="arithmatex">\(2\)</span> 个可选动作，则其纯策略总数为 <span class="arithmatex">\(2^{k}\)</span>；当 <span class="arithmatex">\(k = 10\)</span> 时就是 <span class="arithmatex">\(1024\)</span> 条策略。博弈树的价值也正在此处：它把「后手能看见先手动作并据此响应」这件事显式写进了结构，而不是留给求解器去猜。</p>
+<p>为避免策略空间爆炸，实践中常改用行为策略（behavioral strategy）：在每个信息集上独立指定一个概率分布，而不是对整条纯策略整流形做混合。二者在完美回忆（perfect recall）的博弈中等价，这也是序贯均衡能够直接定义在信息集上的前提。</p>
+<table>
+<thead>
+<tr>
+<th>表达形式</th>
+<th>行动时机</th>
+<th>策略的粒度</th>
+<th>天然支持的均衡概念</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准式矩阵</td>
+<td>同时</td>
+<td>单个动作</td>
+<td>Nash 均衡</td>
+</tr>
+<tr>
+<td>扩展式博弈树</td>
+<td>可先后</td>
+<td>每个决策节点一个动作</td>
+<td>子博弈完美均衡</td>
+</tr>
+<tr>
+<td>信息集扩展式</td>
+<td>可先后且可隐藏</td>
+<td>每个信息集一个动作</td>
+<td>贝叶斯 / 序贯均衡</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_2">逆向归纳从最后一步往前推</h2>
-<p>有限完全信息博弈中，可以先看最后行动者会选择什么，再把这个结果代回前一个节点，逐步向根节点回推。</p>
-<p>这种 backward induction 的逻辑是：早期玩家做决定时，会预见后续玩家的理性响应。</p>
+<p>在有限完全信息博弈中，最后行动的玩家已经没有后续影响，可以直接选对自己最优的动作。把这个结果代回上一个节点，倒数第二个玩家的「后继收益」就确定了，于是可以继续往前推，直到根节点。这一过程称为逆向归纳（backward induction）。</p>
+<p>用两阶段进入博弈具体走一遍。进入者 E 先选择「进入」或「不进入」；若进入，在位者 I 选择「反击」或「默许」。收益记为 <span class="arithmatex">\((u_E, u_I)\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>行动路径</th>
+<th><span class="arithmatex">\(u_E\)</span></th>
+<th><span class="arithmatex">\(u_I\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不进入</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td>进入，I 反击</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td><span class="arithmatex">\(-1\)</span></td>
+</tr>
+<tr>
+<td>进入，I 默许</td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>逐步反推：</p>
+<ol>
+<li>在 I 的决策节点上，默许得到 <span class="arithmatex">\(1\)</span>，反击得到 <span class="arithmatex">\(-1\)</span>，<span class="arithmatex">\(1 &gt; -1\)</span>，故 I 选择默许。</li>
+<li>E 把 I 的选择代入后知道：进入可得 <span class="arithmatex">\(1\)</span>，不进入可得 <span class="arithmatex">\(0\)</span>，<span class="arithmatex">\(1 &gt; 0\)</span>，故 E 选择进入。</li>
+<li>均衡路径为「进入 → 默许」，收益 <span class="arithmatex">\((1, 1)\)</span>，而「反击」这个威胁不会被执行。</li>
+</ol>
+<p>失败条件需要说清楚：逆向归纳要求博弈有限、每个信息集是单节点（完全信息）、且收益是共同知识。一旦存在无限轮次、隐藏动作或不完全信息，直接反推会失效，必须换成不动点求解或信念更新的方法。此外，当存在多个均衡时，逆向归纳只给出「每个子博弈各自最优」的组合，不保证它是收益最高的那个。</p>
 <h2 id="stackelberg">Stackelberg 领导者—跟随者结构</h2>
-<p>领导者先承诺策略，跟随者观察后做最佳响应。领导者选择时必须把这个响应考虑进去。</p>
-<p>这与同时行动 Nash 的差别在于：<strong>先行动本身可以形成战略优势或劣势。</strong></p>
-<h2 id="_3">不完全信息需要引入类型和信念</h2>
-<p>如果卖家不知道买家的真实估值，可以把估值视为类型 <span class="arithmatex">\(\theta\)</span>，并维护概率 <span class="arithmatex">\(P(\theta)\)</span>。观察到动作后，再用 Bayes 规则更新对类型的信念。</p>
-<p>因此最优策略不仅依赖当前局面，也依赖“我认为对方是什么类型”。</p>
-<h2 id="_4">顺序和隐藏信息常在真实系统中同时出现</h2>
-<p>攻防、谈判、拍卖和非合作机器人都可能存在“我先行动，同时我不知道对方能力”。入门阶段不需要学习所有精炼均衡，只需要掌握两条主线：<strong>顺序 → 预测后续响应；隐藏信息 → 维护并更新信念。</strong></p>
-<h2 id="_5">可观测行动与信息集</h2>
-<p>顺序行动并不自动意味着后手看得见前手动作。若行动历史被隐藏，就形成 imperfect information，不能直接使用普通逆向归纳。</p>
-<p>因此建模时除了写清“谁先动”，还要写清“后行动者在决策时到底知道什么”。这也是博弈树中 information set 存在的原因。</p>
-<h2 id="_6">承诺为何能够改变结果</h2>
-<p>领导者先行动时，公开且可信的承诺会改变跟随者的最佳响应，从而改变领导者当前动作的价值。如果承诺可以随时撤销，跟随者就不会按承诺推理。现实系统中的规则、协议和资源预留，常常承担使承诺可信的作用。</p>
+<p>Stackelberg 博弈是最简洁的序贯结构：领导者先承诺策略 <span class="arithmatex">\(x_L\)</span>，跟随者观察到后选择最佳响应 <span class="arithmatex">\(x_F = \mathrm{BR}(x_L)\)</span>。领导者的真实目标不是 <span class="arithmatex">\(\max_{x_L} f_L(x_L, \cdot)\)</span>，而是把这个响应函数代入后的</p>
+<div class="arithmatex">\[
+\max_{x_L} \; f_L\big(x_L,\ \mathrm{BR}(x_L)\big).
+\]</div>
+<p>用一个可手算的产量竞争例子说明先动优势。反需求函数为 <span class="arithmatex">\(P = 12 - (q_1 + q_2)\)</span>，边际成本为 <span class="arithmatex">\(0\)</span>：</p>
+<ul>
+<li>同时行动（Cournot）：双方对称求解，得 <span class="arithmatex">\(q_1 = q_2 = 4\)</span>，价格 <span class="arithmatex">\(P = 4\)</span>，各自利润 <span class="arithmatex">\(16\)</span>。</li>
+<li>领导者先行动（Stackelberg）：跟随者的最优响应是 <span class="arithmatex">\(q_2 = (12 - q_1)/2\)</span>，领导者代入后最大化 <span class="arithmatex">\(q_1\,(6 - q_1/2)\)</span>，得 <span class="arithmatex">\(q_1 = 6\)</span>，<span class="arithmatex">\(q_2 = 3\)</span>，价格 <span class="arithmatex">\(P = 3\)</span>，领导者利润 <span class="arithmatex">\(18\)</span>，跟随者利润 <span class="arithmatex">\(9\)</span>。</li>
+</ul>
+<p>结论很干净：先动让领导者多拿 <span class="arithmatex">\(18 - 16 = 2\)</span>，跟随者少拿 <span class="arithmatex">\(16 - 9 = 7\)</span>，总产量从 <span class="arithmatex">\(8\)</span> 增至 <span class="arithmatex">\(9\)</span>、价格从 <span class="arithmatex">\(4\)</span> 降到 <span class="arithmatex">\(3\)</span>。<strong>先行动本身既能形成战略优势（这里对领导者是优势），也会牺牲一部分行业总利润。</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>同时行动（Cournot）</th>
+<th>Stackelberg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>决策信息</td>
+<td>只知道自己动作</td>
+<td>知道领导者已公开的动作</td>
+</tr>
+<tr>
+<td>领导者优化对象</td>
+<td>对固定对手策略的最佳响应</td>
+<td>对跟随者响应函数 <span class="arithmatex">\(\mathrm{BR}(\cdot)\)</span> 优化</td>
+</tr>
+<tr>
+<td>均衡概念</td>
+<td>Nash 均衡</td>
+<td>子博弈完美均衡 + 先动承诺</td>
+</tr>
+<tr>
+<td>先手效应</td>
+<td>无</td>
+<td>优势或劣势，取决于结构</td>
+</tr>
+<tr>
+<td>本例结果</td>
+<td><span class="arithmatex">\(q = (4, 4)\)</span>，利润 <span class="arithmatex">\((16, 16)\)</span></td>
+<td><span class="arithmatex">\(q = (6, 3)\)</span>，利润 <span class="arithmatex">\((18, 9)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>先动并不总是优势：在顺序版匹配硬币里，后手看到先手的动作后必胜，领导者的价值反而被压到最低。判断依据是跟随者的最佳响应函数是「递增」还是「递减」——递增时先动有利（自身行动被跟随者放大），递减时先动有害（自身行动被跟随者反向抵消）。</p>
+<h2 id="_3">可观测行动与信息集</h2>
+<p>顺序行动并不自动意味着后手看得见前手的动作。若行动历史被隐藏，后手面对的就是一个信息集：一组他无法区分的决策节点</p>
+<div class="arithmatex">\[
+\mathcal{I}_i = \{h, h' : \text{玩家 } i \text{ 无法区分这两条历史}\}.
+\]</div>
+<p>此时策略定义在信息集而非具体节点上，普通逆向归纳不能直接使用，因为「从后往前」要求每个节点能被单独识别。</p>
+<p>信息集的大小直接决定信息结构：单节点信息集意味着完全观测；多节点信息集意味着玩家必须为整组节点选择同一个动作。因此建模时必须写清两件事：<strong>谁先动</strong>（顺序），以及<strong>后动者在决策时到底知道什么</strong>（信息集划分）。只写前者而忽略后者，是序贯博弈建模最常见的漏洞。</p>
+<p>可以用自由参数数量估计建模代价：若某玩家有 <span class="arithmatex">\(d\)</span> 个决策点、每个决策点 <span class="arithmatex">\(k\)</span> 个动作，则纯策略总数为 <span class="arithmatex">\(k^{d}\)</span>，而行为策略只需要 <span class="arithmatex">\(d \times (k-1)\)</span> 个独立参数。取 <span class="arithmatex">\(d = 8\)</span>、<span class="arithmatex">\(k = 3\)</span>，两者分别是 <span class="arithmatex">\(6561\)</span> 与 <span class="arithmatex">\(16\)</span>，相差两个数量级；这正是大规模序贯博弈必须用行为策略表示的原因。</p>
+<table>
+<thead>
+<tr>
+<th>信息集规模</th>
+<th>后手能区分的历史</th>
+<th>可用的求解方法</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每个信息集只有一个节点</td>
+<td>全部分支</td>
+<td>逆向归纳</td>
+<td>国际象棋、公开报价</td>
+</tr>
+<tr>
+<td>存在含多个节点的信息集</td>
+<td>部分历史</td>
+<td>序贯均衡，需对信息集上的信念做一致性检验</td>
+<td>隐藏行动的扑克、部分可观测系统</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">子博弈完美与不可信威胁</h2>
+<p>子博弈完美（subgame perfect）的要求是：策略组合必须在<strong>每一个</strong>子博弈上都构成 Nash 均衡，而不仅仅在整条均衡路径上。它专门用来剔除「不可信威胁」——那些在真实到达该节点时不会被执行的宣告。</p>
+<p>回到两阶段进入博弈。在位者可以对外宣称「只要你进入，我一定反击」，这在全局看来似乎能给 E 造成压力。但检查最后一步的子博弈：I 面对已经进入的事实，反击得到 <span class="arithmatex">\(-1\)</span>，默许得到 <span class="arithmatex">\(1\)</span>，因此反击不是最优的。宣告「我会反击」不满足子博弈完美，属于不可信威胁（non-credible threat）。</p>
+<p>反推的逻辑链是：</p>
+<ol>
+<li>子博弈从 I 的节点开始，其唯一的 Nash 均衡是「默许」。</li>
+<li>任何要求 I 在此节点选反击的策略组合，都在该子博弈上不是均衡。</li>
+<li>E 据此知道反击不会发生，于是选择进入。</li>
+<li>最终收益 <span class="arithmatex">\((1,1)\)</span>，而不是 E 被吓退后的 <span class="arithmatex">\((0,2)\)</span>。</li>
+</ol>
+<p>这条结论的价值在于给出一个可操作的判据：<strong>如果一个威胁所依赖的行动在到达它时对执行者不利，那么在理性假设下它不会改变结果。</strong> 要让威胁变成可信，就必须改变那个节点上的收益，这正是下一节承诺要解决的问题。</p>
+<table>
+<thead>
+<tr>
+<th>威胁类型</th>
+<th>在最后节点上是否最优</th>
+<th>是否影响均衡路径</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可信威胁</td>
+<td>是</td>
+<td>是</td>
+<td>直接纳入反推</td>
+</tr>
+<tr>
+<td>不可信威胁</td>
+<td>否</td>
+<td>否</td>
+<td>用子博弈完美剔除</td>
+</tr>
+<tr>
+<td>有条件可信</td>
+<td>取决于具体状态</td>
+<td>仅在某些状态下</td>
+<td>引入类型与信念后判定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">不完全信息需要引入类型和信念</h2>
+<p>如果卖家不知道买家的真实估值，或攻防双方不知道对方的成本，就把这个未知量建模为类型 <span class="arithmatex">\(\theta \in \Theta\)</span>，并对每种类型维护一个先验概率 <span class="arithmatex">\(\mu_0(\theta)\)</span>，满足 <span class="arithmatex">\(\sum_{\theta} \mu_0(\theta) = 1\)</span>。观察到对方的动作 <span class="arithmatex">\(a\)</span> 之后，用 Bayes 规则更新为后验：</p>
+<div class="arithmatex">\[
+\mu(\theta \mid a) = \frac{P(a \mid \theta)\, \mu_0(\theta)}{\sum_{\theta' \in \Theta} P(a \mid \theta')\, \mu_0(\theta')}.
+\]</div>
+<p>代入一组具体数字：类型为「高能力」的先验 <span class="arithmatex">\(\mu_0(\text{high}) = 0.6\)</span>，「低能力」为 <span class="arithmatex">\(0.4\)</span>；高能力玩家做出动作 <span class="arithmatex">\(a\)</span> 的概率为 <span class="arithmatex">\(0.8\)</span>，低能力为 <span class="arithmatex">\(0.3\)</span>。则后验为</p>
+<div class="arithmatex">\[
+\mu(\text{high} \mid a) = \frac{0.8 \times 0.6}{0.8 \times 0.6 + 0.3 \times 0.4} = \frac{0.48}{0.60} = 0.8.
+\]</div>
+<p>后验从 <span class="arithmatex">\(0.6\)</span> 升到 <span class="arithmatex">\(0.8\)</span>，说明该动作对高能力更有区分度。最优策略因此既依赖当前局面，也依赖「我认为对方是什么类型」。一个关键现象是：若所有类型都会做同一个动作（<span class="arithmatex">\(P(a \mid \text{high}) = P(a \mid \text{low})\)</span>），则该动作不含信息，后验恒等于先验，这叫信号失效或混同（pooling）。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>符号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型</td>
+<td><span class="arithmatex">\(\theta \in \Theta\)</span></td>
+<td>刻画玩家的隐藏特征（成本、估值、能力）</td>
+</tr>
+<tr>
+<td>先验</td>
+<td><span class="arithmatex">\(\mu_0(\theta)\)</span></td>
+<td>交互前对类型的分布判断</td>
+</tr>
+<tr>
+<td>似然</td>
+<td><span class="arithmatex">\(P(a \mid \theta)\)</span></td>
+<td>某种类型做出该动作的概率</td>
+</tr>
+<tr>
+<td>后验</td>
+<td><span class="arithmatex">\(\mu(\theta \mid a)\)</span></td>
+<td>观测动作后更新的类型判断</td>
+</tr>
+<tr>
+<td>信号价值</td>
+<td>后验与先验的差异程度</td>
+<td>动作消除的不确定性大小</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">贝叶斯纳什均衡与信念更新</h2>
+<p>贝叶斯纳什均衡（BNE）把两类问题合在一起：每种类型 <span class="arithmatex">\(\theta_i\)</span> 的策略 <span class="arithmatex">\(s_i(\theta_i)\)</span> 必须是在给定先验和对他人策略的最佳响应下最优的，同时双方的信念在均衡路径上由 Bayes 规则一致地更新：</p>
+<div class="arithmatex">\[
+s_i(\theta_i) \in \arg\max_{a_i} \; \mathbb{E}_{\theta_{-i} \sim \mu(\cdot \mid h)} \Big[ \, u_i\big(a_i,\, s_{-i}(\theta_{-i}),\, \theta_i\big) \, \Big], \qquad \forall \theta_i \in \Theta_i .
+\]</div>
+<p>这说明 BNE 同时约束两件事：<strong>策略在每一种类型上都最优</strong>，且<strong>信念与策略相容</strong>（均衡路径之外的 off-path 信念也必须指定，否则均衡不唯一）。三类信息结构经常被混用，下面这张表把它们分开：</p>
+<p>均衡路径之外的信念为何必须指定？因为当某条路径在均衡中不会被走到时，Bayes 规则无法由观测数据确定后验（分母为零）。序贯均衡的处理方式是对每个信息集强制指定一条信念，并要求它与策略在极限意义上相容，只有这样才能判断该信息集上的动作是否最优。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>完全信息</th>
+<th>不完全信息</th>
+<th>不完美信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>玩家不知道什么</td>
+<td>无</td>
+<td>对手的类型 / 收益 <span class="arithmatex">\(\theta\)</span></td>
+<td>对手过去做了什么动作</td>
+</tr>
+<tr>
+<td>建模工具</td>
+<td>博弈树 + 逆向归纳</td>
+<td>类型 <span class="arithmatex">\(\theta\)</span> + 先验 <span class="arithmatex">\(\mu_0\)</span></td>
+<td>信息集 <span class="arithmatex">\(\mathcal{I}\)</span></td>
+</tr>
+<tr>
+<td>更新对象</td>
+<td>不需要更新</td>
+<td>类型信念 <span class="arithmatex">\(\mu(\theta \mid a)\)</span></td>
+<td>历史 / 状态信念</td>
+</tr>
+<tr>
+<td>标准均衡概念</td>
+<td>子博弈完美均衡</td>
+<td>贝叶斯纳什均衡</td>
+<td>序贯均衡 / 弱完美贝叶斯均衡</td>
+</tr>
+<tr>
+<td>典型例子</td>
+<td>国际象棋</td>
+<td>议价、拍卖、进入博弈</td>
+<td>隐藏行动的扑克、部分可观测系统</td>
+</tr>
+</tbody>
+</table>
+<p>要特别注意术语陷阱：<strong>「不完全信息」与「不完美信息」是两个不同维度</strong>。前者是「不知道对方是谁（类型）」，后者是「不知道对方做了什么（行动）」。前者用类型和先验建模，后者用信息集建模。真实系统常常两者同时存在，需要组合成动态贝叶斯扩展式。</p>
+<h2 id="_7">承诺为何能够改变结果</h2>
+<p>承诺之所以有价值，是因为它改变了<strong>跟随者最佳响应函数</strong>的形状，从而改变了领导者当前动作的价值。在进入博弈里，如果 I 能事先建立一个让「反击」变得有利的机制（例如把价格战成本降到对 I 也划算，使反击收益从 <span class="arithmatex">\(-1\)</span> 变为 <span class="arithmatex">\(1\)</span>），那么 E 面对的最佳响应就从「进入」变成「不进入」，I 的收益从 <span class="arithmatex">\(1\)</span> 提升到 <span class="arithmatex">\(2\)</span>。承诺的价值正好等于这个差：</p>
+<div class="arithmatex">\[
+V_{\text{commit}} - V_{\text{no commit}} = 2 - 1 = 1 .
+\]</div>
+<p>现实系统里让承诺可信的机制包括：签订违约金合同、预留不可退回的产能、把规则写进协议、公开不可撤销的配置。共同点是它们都让「撤销」变得昂贵或不可能，从而把原本不可信的威胁变成物理上可信的行动。</p>
+<table>
+<thead>
+<tr>
+<th>承诺机制</th>
+<th>如何提高可信度</th>
+<th>代价</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>违约金合同</td>
+<td>撤销触发直接损失</td>
+<td>需预付或抵押</td>
+<td>供应协议、服务等级协议</td>
+</tr>
+<tr>
+<td>产能预留</td>
+<td>沉没成本不可回收</td>
+<td>资源占用</td>
+<td>先占市场份额</td>
+</tr>
+<tr>
+<td>公开协议 / 标准</td>
+<td>违约带来声誉损失</td>
+<td>灵活性下降</td>
+<td>跨组织协同、接口冻结</td>
+</tr>
+<tr>
+<td>技术约束</td>
+<td>物理上无法撤销</td>
+<td>工程复杂度</td>
+<td>硬件限速、固件门限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">承诺与信息设计的代价</h2>
+<p>承诺不是免费的：把行动钉死，就意味着放弃了对未来状态的响应能力。这是一个明确的权衡——承诺换来先动优势，灵活性换来适应能力，两者很难同时最大化。</p>
+<p>用收益差来量化：设承诺后跟随者的最佳响应对领导者的价值为 <span class="arithmatex">\(V_c\)</span>，不承诺但保留灵活性时领导者对未来状态的平均价值为 <span class="arithmatex">\(V_f\)</span>，只有当</p>
+<div class="arithmatex">\[
+V_c - \text{cost}_{\text{commit}} \;&gt;\; V_f
+\]</div>
+<p>时才值得承诺，其中 <span class="arithmatex">\(\text{cost}_{\text{commit}}\)</span> 是承诺机制的显性成本（抵押、产能闲置、协议约束）。用进入博弈的数字代进去：<span class="arithmatex">\(V_c = 2\)</span>、<span class="arithmatex">\(V_f = 1\)</span>，因此只要承诺成本低于 <span class="arithmatex">\(1\)</span>，承诺就是划算的；若合同抵押需要付出 <span class="arithmatex">\(1.5\)</span> 的代价，则不如放弃承诺、接受 <span class="arithmatex">\((1,1)\)</span> 的结果。</p>
+<p>信息设计同样有代价：向对手披露类型相关的信号会帮助对手更新信念，若信号过于精确，反而让对手针对性更狠。因此「多发信号」并不永远是好事——信号的边际价值必须在「帮助队友协调」与「帮助对手针对」之间权衡。</p>
+<p>一个可计算的判据是：若披露信号使对手对真实类型的后验从 <span class="arithmatex">\(0.6\)</span> 提升到 <span class="arithmatex">\(0.8\)</span>，而针对该类型的最佳响应会让你每轮损失 <span class="arithmatex">\(3\)</span> 个单位，则只有当该信号带来的协同收益超过 <span class="arithmatex">\(3\)</span> 时才值得披露。实践中常见的折中是带条件的承诺：只在特定状态上承诺、其余状态保留灵活，代价是需要额外的状态判别逻辑。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>强承诺</th>
+<th>保留灵活性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可信度</td>
+<td>高（有成本 / 契约支撑）</td>
+<td>低，威胁常被忽略</td>
+</tr>
+<tr>
+<td>对对手的影响</td>
+<td>能移动其最佳响应函数</td>
+<td>无法移动</td>
+</tr>
+<tr>
+<td>收益特征</td>
+<td>先动优势，收益稳定</td>
+<td>可随机应变，收益波动大</td>
+</tr>
+<tr>
+<td>主要代价</td>
+<td>丧失可选性、沉没成本</td>
+<td>承诺不可信、容易被针对</td>
+</tr>
+<tr>
+<td>适用条件</td>
+<td>对手会观察且响应，交互重复较少</td>
+<td>环境快速变化，对手不观测承诺</td>
+</tr>
+<tr>
+<td>失效模式</td>
+<td>环境变了却无法调整</td>
+<td>对手直接无视你的威胁</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">顺序和隐藏信息常在真实系统中同时出现</h2>
+<p>攻防、谈判、拍卖和非合作多机器人系统几乎都是「我先行动，同时我不知道对方能力」的组合：先动的动作会成为信号，被对手用来更新对类型的信念，而更新后的信念又决定对手的最佳响应。这种动态贝叶斯博弈的整体结构可以概括为一条链：</p>
+<div class="arithmatex">\[
+\text{类型 } \theta \;\longrightarrow\; \text{先动动作 } a \;\longrightarrow\; \text{后验 } \mu(\theta \mid a) \;\longrightarrow\; \text{最佳响应 } \mathrm{BR}(\mu).
+\]</div>
+<p>工程上最常见的错误是把这条链截断：只做「顺序建模」而忽略信念更新，或只做「信念更新」而没有把后验接进响应函数。入门阶段不必掌握全部精炼均衡，只需守住两条主线：<strong>顺序 → 预测后续响应（逆向归纳 / 子博弈完美）；隐藏信息 → 维护并更新信念（Bayes 规则 + 贝叶斯纳什均衡）</strong>，再用上面这条链把两条主线接起来。</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>表现</th>
+<th>根因</th>
+<th>应对</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>忽略行动顺序</td>
+<td>用同时行动矩阵建模实际有序的交互</td>
+<td>未区分标准式与扩展式</td>
+<td>改用博弈树</td>
+</tr>
+<tr>
+<td>采信不可信威胁</td>
+<td>预测结果与实测不一致</td>
+<td>未做子博弈完美检验</td>
+<td>逐节点反推最后一步</td>
+</tr>
+<tr>
+<td>混淆信息维度</td>
+<td>把类型未知当成动作未知处理</td>
+<td>不完全信息与不完美信息混用</td>
+<td>分别引入 <span class="arithmatex">\(\theta\)</span> 与信息集</td>
+</tr>
+<tr>
+<td>信念不更新</td>
+<td>策略不随观测改变</td>
+<td>未接 Bayes 更新</td>
+<td>把后验接入响应函数</td>
+</tr>
+<tr>
+<td>过度披露信号</td>
+<td>被对手精确针对性克制</td>
+<td>未权衡信号收益与代价</td>
+<td>用混同或部分披露降低可辨识度</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>下一步</strong>：回到同时行动与最佳响应的基础，见 <a href="../02-best-response-nash/">最佳响应与 Nash 均衡</a>；把一次性互动扩展到重复与学习，见 <a href="../05-repeated-learning/">重复博弈与学习</a>；如果关心多智能体通信与信念共享的实现，见 <a href="../../multi-agent-systems/03-communication/">多智能体通信</a>；如果关心部分可观测下的信念更新与规划，见 <a href="../../reinforcement-learning/04-exploration-pomdp/">探索与部分可观测</a>。</p>
+</blockquote>
 
 
 

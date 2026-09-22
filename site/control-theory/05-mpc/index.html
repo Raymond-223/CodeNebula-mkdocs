@@ -1098,6 +1098,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mpc-qp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二次型 MPC 与 QP 形式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定性与终端代价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpc_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时该用 MPC、何时不该
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3739,6 +3772,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mpc-qp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二次型 MPC 与 QP 形式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定性与终端代价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpc_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时该用 MPC、何时不该
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3831,42 +3897,504 @@
 
 
 <h1 id="model-predictive-control">Model Predictive Control</h1>
-<p>MPC（Model Predictive Control）的核心是：<strong>先用模型预测未来若干步，找一段满足约束且代价最小的控制序列，只执行第一步，然后重新测量并再次优化。</strong></p>
-<h2 id="mpc">MPC 的有限时域预测</h2>
-<p>比例控制或 LQR 都可以根据当前状态立即计算控制量。MPC 则把未来 <span class="arithmatex">\(H\)</span> 步一起考虑：如果现在急转会导致两秒后越界，当前就会提前选择更缓和的动作。</p>
-<p>这使它特别适合车辆、无人机和过程控制等“动作后果会延迟显现”的系统。</p>
-<h2 id="_1">预测过程来自系统模型</h2>
-<p>对离散线性模型</p>
-<div class="arithmatex">\[x_{k+1}=Ax_k+Bu_k,\]</div>
-<p>给定当前状态 <span class="arithmatex">\(x_0\)</span> 和候选控制序列 <span class="arithmatex">\(u_0,\ldots,u_{H-1}\)</span>，可以逐步得到</p>
-<div class="arithmatex">\[x_1,x_2,\ldots,x_H.\]</div>
-<p>因此控制序列的好坏可以通过整段预测轨迹来评价，而不是只看下一步。</p>
-<h2 id="mpc_1">约束是 MPC 与普通最优反馈的重要区别</h2>
-<p>典型 MPC 问题写成</p>
-<div class="arithmatex">\[
-\min_{u_{0:H-1}}\sum_{k=0}^{H-1}\ell(x_k,u_k)
-\]</div>
-<p>并满足</p>
-<div class="arithmatex">\[
-x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal X,\quad u_k\in\mathcal U.
-\]</div>
-<p>速度上限、转角限制、加速度约束、道路边界都可以直接放进 <span class="arithmatex">\(\mathcal X\)</span> 和 <span class="arithmatex">\(\mathcal U\)</span>。相比“违反后再在奖励里罚”，这种表达更明确。</p>
-<h2 id="_2">滚动时域让预测不断被真实测量纠正</h2>
-<p>MPC 并不会一次执行整段最优控制。它只执行第一个输入 <span class="arithmatex">\(u_0\)</span>，下一周期重新测量真实状态，再求一次新的优化问题。</p>
-<p>因此即使模型不完美，每个控制周期都能用新测量修正预测。这就是 receding horizon 的核心。</p>
+<p>MPC（Model Predictive Control）的核心是：<strong>先用模型预测未来若干步，求出一段满足约束且代价最小的控制序列，只执行第一步，然后重新测量、再次优化。</strong> 它把"约束"从奖励里的软惩罚升级为一等公民，这是它与 LQR、PID 最本质的分界：LQR 让你的动作"不想太猛"，MPC 让你的动作"绝对不许越界"。</p>
 <figure>
   <img alt="LQR 与 MPC 都基于模型，但 MPC 会显式预测未来并处理约束。" src="../../assets/diagrams/lqr-vs-mpc.svg" />
 <br />
-<figcaption>MPC 可以理解为“带约束、有限时域、每步重新求解”的最优控制。</figcaption>
+<figcaption>MPC 可以理解为"带约束、有限时域、每步重新求解"的最优控制。</figcaption>
 </figure>
+<h2 id="mpc">MPC 的有限时域预测</h2>
+<p>比例控制或 LQR 都只根据当前状态立即计算控制量，是"短视"的：它们看不到"现在猛打方向会导致两秒后越界"。MPC 则把未来 <span class="arithmatex">\(N\)</span> 步一起考虑，最小化整段预测轨迹的累计代价</p>
+<div class="arithmatex">\[J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).\]</div>
+<p>其中 <span class="arithmatex">\(N\)</span> 是预测时域（步数），<span class="arithmatex">\(\ell\)</span> 是每步代价（通常为二次型），<span class="arithmatex">\(\ell_f\)</span> 是加在末端状态上的终端代价。关键差异在于：如果现在急转会带来后续约束违反或高代价，优化器会提前选择更缓和的动作，而不是等越界后再补救。</p>
+<p>为什么用"有限"时域而不是像 LQR 那样无穷？因为无穷时域下带约束的优化几乎是不可解的在线问题，而截断到 <span class="arithmatex">\(N\)</span> 步后，问题变成有限维、可实时求解的凸优化。代价是视野被截断，需要终端项来补上"被砍掉的那一段"的近似，详见后文稳定性小节。</p>
+<p>这使 MPC 特别适合车辆、无人机和过程控制等"动作后果延迟显现"的系统。设控制周期 <span class="arithmatex">\(\Delta t\)</span> 与预测步数 <span class="arithmatex">\(N\)</span>，则预测覆盖的总时长为 <span class="arithmatex">\(T_p=N\cdot\Delta t\)</span>：例如 <span class="arithmatex">\(\Delta t=50\)</span> ms、<span class="arithmatex">\(N=20\)</span>，控制器每一步都向前看整整 1 秒。</p>
+<table>
+<thead>
+<tr>
+<th>控制器</th>
+<th>视野</th>
+<th>是否处理未来约束</th>
+<th>是否随预测调整</th>
+<th>在线求解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td>只看当前误差</td>
+<td>否</td>
+<td>否</td>
+<td>无</td>
+</tr>
+<tr>
+<td>LQR</td>
+<td>无穷时域（闭式增益）</td>
+<td>否</td>
+<td>否（增益固定）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>MPC</td>
+<td>有限 <span class="arithmatex">\(N\)</span> 步显式轨迹</td>
+<td>是</td>
+<td>每步重新求解</td>
+<td>每步 QP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">预测过程来自系统模型</h2>
+<p>MPC 的"预测"不是猜，而是用模型逐步递推。对离散线性模型</p>
+<div class="arithmatex">\[x_{k+1}=A x_k+B u_k,\]</div>
+<p>给定当前状态 <span class="arithmatex">\(x_0\)</span> 和候选控制序列 <span class="arithmatex">\(u_0,\ldots,u_{N-1}\)</span>，可以逐步得到</p>
+<div class="arithmatex">\[x_1,x_2,\ldots,x_N.\]</div>
+<p>把整段状态堆成列向量 <span class="arithmatex">\(X=[x_1;x_2;\dots;x_N]\in\mathbb{R}^{nN}\)</span>、整段输入堆成 <span class="arithmatex">\(U=[u_0;u_1;\dots;u_{N-1}]\in\mathbb{R}^{mN}\)</span>，则预测可写成一次线性映射</p>
+<div class="arithmatex">\[X=\Phi\,x_0+\Gamma\,U,\]</div>
+<p>其中</p>
+<div class="arithmatex">\[\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\begin{bmatrix}B&amp;0&amp;\cdots&amp;0\\ AB&amp;B&amp;\cdots&amp;0\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\ A^{N-1}B&amp;A^{N-2}B&amp;\cdots&amp;B\end{bmatrix}.\]</div>
+<p>注意 <span class="arithmatex">\(\Gamma\)</span> 是分块下三角：<span class="arithmatex">\(u_j\)</span> 只影响 <span class="arithmatex">\(x_{j+1}\)</span> 及其之后的状态，这个"因果"结构后面会让 QP 的 <span class="arithmatex">\(H\)</span> 保持稀疏、加快求解。因此一段控制序列的好坏可以通过整段预测轨迹来评价，而不是只看下一步。</p>
+<p>维度感很重要：<span class="arithmatex">\(n=4\)</span>（位置、速度、航向、航向角速度）、<span class="arithmatex">\(m=2\)</span>（油门、转向）、<span class="arithmatex">\(N=20\)</span> 时，<span class="arithmatex">\(U\)</span> 是 40 维、<span class="arithmatex">\(X\)</span> 是 80 维，<span class="arithmatex">\(\Gamma\)</span> 是 <span class="arithmatex">\(80\times 40\)</span> 的稠密块。<span class="arithmatex">\(N\)</span> 每翻倍，<span class="arithmatex">\(U\)</span> 与 <span class="arithmatex">\(X\)</span> 的维数也翻倍，而 <span class="arithmatex">\(\Gamma\)</span> 的元素数按四倍增长，这解释了为什么预测时域不能随便拉长。</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(N\)</span></th>
+<th><span class="arithmatex">\(U\)</span> 维数</th>
+<th><span class="arithmatex">\(X\)</span> 维数</th>
+<th>预测时长（<span class="arithmatex">\(\Delta t=50\)</span> ms）</th>
+<th>直观影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>20</td>
+<td>40</td>
+<td>0.5 s</td>
+<td>反应快、前瞻不足</td>
+</tr>
+<tr>
+<td>20</td>
+<td>40</td>
+<td>80</td>
+<td>1.0 s</td>
+<td>常用折中</td>
+</tr>
+<tr>
+<td>50</td>
+<td>100</td>
+<td>200</td>
+<td>2.5 s</td>
+<td>前瞻足、求解变慢</td>
+</tr>
+<tr>
+<td>100</td>
+<td>200</td>
+<td>400</td>
+<td>5.0 s</td>
+<td>求解易吃满预算</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>量</th>
+<th>维度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(x_0\)</span></td>
+<td><span class="arithmatex">\(n\times 1\)</span></td>
+<td>当前测量状态</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(U\)</span></td>
+<td><span class="arithmatex">\(mN\times 1\)</span></td>
+<td>优化变量（整段输入）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(X\)</span></td>
+<td><span class="arithmatex">\(nN\times 1\)</span></td>
+<td>预测状态轨迹</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Phi\)</span></td>
+<td><span class="arithmatex">\(nN\times n\)</span></td>
+<td>零输入自由响应映射</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Gamma\)</span></td>
+<td><span class="arithmatex">\(nN\times mN\)</span></td>
+<td>输入到状态的传递映射</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mpc_1">约束是 MPC 与普通最优反馈的重要区别</h2>
+<p>典型 MPC 问题写成</p>
+<div class="arithmatex">\[\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)\]</div>
+<p>并满足</p>
+<div class="arithmatex">\[x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal{X},\qquad u_k\in\mathcal{U}.\]</div>
+<p><span class="arithmatex">\(\mathcal{X}\)</span> 与 <span class="arithmatex">\(\mathcal{U}\)</span> 是允许的状态集与输入集，通常就是逐个分量的区间（box 约束）：<span class="arithmatex">\(x_{\min}\le x_k\le x_{\max}\)</span>、<span class="arithmatex">\(u_{\min}\le u_k\le u_{\max}\)</span>。速度上限、转角限制、加速度约束、道路边界都可以直接放进这两个集合，且是<strong>逐时刻</strong>约束，不只是末端约束。相比"违反后再在奖励里罚"的软做法，这种表达更明确：优化器要么给出满足约束的解，要么报告问题不可行。</p>
+<p>约束之所以能同时处理，是因为它们全部归结为对同一个变量 <span class="arithmatex">\(U\)</span> 的线性不等式：输入约束本来就在 <span class="arithmatex">\(U\)</span> 上，状态约束经预测映射 <span class="arithmatex">\(X=\Phi x_0+\Gamma U\)</span> 也变成 <span class="arithmatex">\(U\)</span> 上的约束。这种"把所有要求统一到一个变量上"的能力，正是 MPC 相对 LQR 的核心增量。LQR 想表达同样的边界，只能靠事后饱和，而饱和会破坏最优性、甚至引发极限环。</p>
+<p>一个量化例子：若最大速度 <span class="arithmatex">\(x_{\max,2}=2\)</span> m/s、单步周期 <span class="arithmatex">\(\Delta t=50\)</span> ms，则每步允许的速度变化只有 <span class="arithmatex">\(0.1\)</span> m/s 量级，优化器会把这个"物理可达性"直接当成线性不等式，而不是在仿真里事后发现超速。</p>
+<table>
+<thead>
+<tr>
+<th>约束类型</th>
+<th>数学形式</th>
+<th>落点</th>
+<th>常用处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入幅值</td>
+<td><span class="arithmatex">\(u_{\min}\le u_k\le u_{\max}\)</span></td>
+<td><span class="arithmatex">\(U\)</span> 直接约束</td>
+<td>硬约束</td>
+</tr>
+<tr>
+<td>输入变化率</td>
+<td><span class="arithmatex">\(\Delta u_{\min}\le u_k-u_{k-1}\le\Delta u_{\max}\)</span></td>
+<td><span class="arithmatex">\(U\)</span> 的差分约束</td>
+<td>硬约束，抑制抖动</td>
+</tr>
+<tr>
+<td>状态范围</td>
+<td><span class="arithmatex">\(x_{\min}\le x_k\le x_{\max}\)</span></td>
+<td>经 <span class="arithmatex">\(X=\Phi x_0+\Gamma U\)</span> 转成 <span class="arithmatex">\(U\)</span> 约束</td>
+<td>多为软约束</td>
+</tr>
+<tr>
+<td>终端状态</td>
+<td><span class="arithmatex">\(x_N\le x_{\max}\)</span></td>
+<td>末行约束</td>
+<td>常配终端集</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">滚动时域让预测不断被真实测量纠正</h2>
+<p>MPC 并不会一次执行整段最优控制，它只执行第一个输入 <span class="arithmatex">\(u_0\)</span>，下一周期重新测量真实状态，再求一次新的优化问题。这就是 receding horizon（滚动时域）的核心。</p>
+<p>这个机制带来一个关键好处：<strong>闭环鲁棒性</strong>。如果模型不准，"开环执行整段最优序列"会越走越偏；而每拍重新用真实测量 <span class="arithmatex">\(x_0\)</span> 重新优化，相当于把预测误差在每个周期清零一次。因此 MPC 天然容忍一定程度的模型误差，代价是每周期都要重新求解。</p>
+<p>从数学上看，滚动时域把"开环最优控制问题"变成了一个"闭环反馈律"：控制律 <span class="arithmatex">\(u=\kappa(x_0)\)</span> 由优化问题的解的第一段隐式定义，虽然 <span class="arithmatex">\(\kappa\)</span> 没有闭式表达，但每一点都可求值。这也意味着 MPC 的性能依赖测量质量——如果状态估计有偏，错误会直接被当成真值塞进优化，反而不如对噪声不敏感的低增益 PID。</p>
+<table>
+<thead>
+<tr>
+<th>执行方式</th>
+<th>模型误差累积</th>
+<th>约束保证</th>
+<th>计算负担</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开环整段执行</td>
+<td>随步数线性累积</td>
+<td>仅首步可靠</td>
+<td>一次求解</td>
+</tr>
+<tr>
+<td>滚动时域（只执行首步）</td>
+<td>每步清零</td>
+<td>每步都重新满足</td>
+<td>每步求解</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_3">预测时域的选择</h2>
-<p>时域太短，看不到远期后果；时域过长，优化变量增多、计算量变大，而且模型误差会持续累积。工程上要在<strong>控制频率、求解时间、模型可信度和任务预见性</strong>之间平衡。</p>
-<p>车辆控制常用几秒内的有限时域，并以几十毫秒到几百毫秒周期重复求解，而不是预测几十秒以后所有细节。</p>
+<p>时域太短，看不到远期后果，控制器表现接近短视反馈；时域过长，优化变量 <span class="arithmatex">\(U\)</span> 的维数 <span class="arithmatex">\(mN\)</span> 增大、求解变慢，而且模型误差会在长预测上持续累积，让"看得远"反而变成"看错得远"。</p>
+<p>常用的经验法是让预测覆盖系统的<strong>主导时间常数</strong>：令 <span class="arithmatex">\(T_p=N\Delta t\)</span> 覆盖最慢模态时间常数的 2 到 3 倍，保证从当前状态到目标的关键过渡都在视野内。车辆控制常用 1 到 3 秒内的有限时域，并以几十毫秒到几百毫秒的周期重复求解，而不是预测几十秒以后的所有细节。</p>
+<p>还有一个容易忽略的细节：控制时域（允许变化的输入个数 <span class="arithmatex">\(N_c\)</span>）可以小于预测时域 <span class="arithmatex">\(N\)</span>。常见做法是令 <span class="arithmatex">\(N_c&lt;N\)</span>、末尾若干步保持最后一个输入不变，这样既保留了长视野，又把优化变量从 <span class="arithmatex">\(mN\)</span> 降到 <span class="arithmatex">\(mN_c\)</span>，大幅减轻计算。</p>
+<table>
+<thead>
+<tr>
+<th>时域选择</th>
+<th>表现</th>
+<th>风险</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(T_p\)</span> 过短</td>
+<td>看不到制动距离</td>
+<td>临近障碍才反应</td>
+<td>至少覆盖制动所需时间</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(T_p\)</span> 合适</td>
+<td>兼顾性能与算力</td>
+<td>—</td>
+<td>主导时间常数的 2–3 倍</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(T_p\)</span> 过长</td>
+<td>预测偏乐观</td>
+<td>模型误差累积、维数爆炸</td>
+<td>加终端代价替代长时域</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(N_c\ll N\)</span></td>
+<td>变量少、求解快</td>
+<td>末端动作粗糙</td>
+<td>折中取 <span class="arithmatex">\(N_c\approx N/2\)</span></td>
+</tr>
+</tbody>
+</table>
 <h2 id="mpc_2">MPC 的实时计算约束</h2>
-<p>控制周期为 50 ms，就意味着优化最好稳定地在这个时间预算内完成。偶尔求出更优但经常超时的控制器，实际效果可能不如一个稍保守但确定能按时运行的方案。</p>
-<p>入门阶段掌握线性 MPC 就足够。非线性 MPC、鲁棒 MPC 等只是同一框架在更复杂模型和不确定性下的扩展，不需要为了理解主线先全部学习。</p>
+<p>MPC 最大的工程约束是时间预算。控制周期为 50 ms，就意味着优化最好稳定地在这个预算内完成；偶尔求出更优但经常超时的控制器，实际效果可能不如一个稍保守但确定能按时运行的方案。</p>
+<p>计算量主要随优化变量维数 <span class="arithmatex">\(mN\)</span> 增长，二次型 MPC 每步解一个 <span class="arithmatex">\(mN\)</span> 维的 QP。例如 <span class="arithmatex">\(m=2,\ N=20\)</span> 时 <span class="arithmatex">\(U\)</span> 是 40 维、约束上百条，用稀疏内点法或 active-set 法通常能在几毫秒内解完，远小于 50 ms 预算；但若把 <span class="arithmatex">\(N\)</span> 提到 100，<span class="arithmatex">\(U\)</span> 变成 200 维，求解时间可能随维数立方上升，直接吃满预算。工程上用 warm start（用上一步的解作为初值）、稀疏结构化 QP、以及缩减控制时域来把时间压回预算内。</p>
+<p>入门阶段掌握线性 MPC 就足够。非线性 MPC、鲁棒 MPC 等只是同一框架在更复杂模型和不确定性下的扩展，不需要为了理解主线先全部学习。非线性的代价是每步要迭代求解（SQP 或实时迭代），把原本的"一次 QP"变成"多次 QP"，对算力的要求往往高出一个数量级。</p>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>影响</th>
+<th>缓解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(N\)</span> 增大</td>
+<td>变量维数、求解时间上升</td>
+<td>warm start、稀疏 QP</td>
+</tr>
+<tr>
+<td>控制频率升高</td>
+<td>单周期预算缩短</td>
+<td>降 <span class="arithmatex">\(N\)</span> 或用显式 MPC</td>
+</tr>
+<tr>
+<td>约束数量增多</td>
+<td>QP 行数增加</td>
+<td>合并同类、只保留活跃约束</td>
+</tr>
+<tr>
+<td>非线性模型</td>
+<td>需 SQP/内点迭代</td>
+<td>局部线性化、实时迭代</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_4">不可行问题的处理</h2>
-<p>当初始状态、预测模型和硬约束彼此冲突时，优化器可能找不到可行解。工程 MPC 通常为部分约束引入带高惩罚的松弛变量，并准备上一时刻控制或安全控制作为回退。这样才能区分“优化失败”和“系统完全无法安全运行”。</p>
+<p>当初始状态、预测模型与硬约束彼此冲突时（例如当前速度已经超过上限、或离障碍太近无法在时域内刹停），优化器可能找不到任何满足全部约束的解，此时它不会输出"次优解"，而是直接失败。</p>
+<p>工程 MPC 通常把部分约束（尤其是状态约束）设为<strong>软约束</strong>：引入松弛变量 <span class="arithmatex">\(\varepsilon\ge 0\)</span> 和惩罚权重 <span class="arithmatex">\(\rho\)</span>，把 <span class="arithmatex">\(x_k\le x_{\max}\)</span> 改成 <span class="arithmatex">\(x_k\le x_{\max}+\varepsilon\)</span>，并在代价里加 <span class="arithmatex">\(\rho\|\varepsilon\|\)</span>。这样当冲突轻微时，控制器愿意付出一点违反代价继续工作；当 <span class="arithmatex">\(\rho\)</span> 足够大时，只要有可能，优化器仍会优先满足硬约束。<span class="arithmatex">\(\rho\)</span> 的取值要落在"大到足以压制违反、小到不引起数值病态"之间，工程上常从每步代价量级的 <span class="arithmatex">\(10^3\)</span> 到 <span class="arithmatex">\(10^6\)</span> 倍起步再调。</p>
+<p>除软约束外，还需要准备好回退策略（上一时刻控制、安全停车或安全控制器），才能区分"优化失败"与"系统完全无法安全运行"。通常还要对约束分级：碰撞、速度上限这类安全约束优先级最高，舒适性、轨迹贴合这类性能约束可以先软。</p>
+<p>软约束的设计要点：</p>
+<ul>
+<li>只软化状态约束，输入幅值等物理硬约束保持刚性；</li>
+<li>松弛变量对每一时刻、每一分量单独设置，避免"一处违反、处处放宽"；</li>
+<li>惩罚权重按代价量级的 <span class="arithmatex">\(10^{3}\)</span> 倍以上起步，确保违反只在必要时发生；</li>
+<li>一旦松弛量超过阈值，立即上报上层安全监控，而不是继续输出控制。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>风险</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QP 无解</td>
+<td>硬约束相互冲突</td>
+<td>控制器无输出</td>
+<td>状态约束软化 + 回退</td>
+</tr>
+<tr>
+<td>违反很频繁</td>
+<td><span class="arithmatex">\(\rho\)</span> 太小</td>
+<td>约束形同虚设</td>
+<td>提高 <span class="arithmatex">\(\rho\)</span> 或查模型</td>
+</tr>
+<tr>
+<td>松弛量巨大</td>
+<td>初始状态已不可行</td>
+<td>输出危险动作</td>
+<td>触发安全层接管</td>
+</tr>
+<tr>
+<td>求解超时</td>
+<td>算力不足</td>
+<td>丢拍、抖动</td>
+<td>限迭代次数 + warm start</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mpc-qp">二次型 MPC 与 QP 形式</h2>
+<p>把预测模型代入二次代价，整个 MPC 问题就化成一个标准二次规划（QP）。这是线性 MPC 能在毫秒级求解的根本原因。取每步代价 <span class="arithmatex">\(\ell(x,u)=x^{\top}Qx+u^{\top}Ru\)</span>、终端代价 <span class="arithmatex">\(\ell_f(x)=x^{\top}Q_f x\)</span>，并令</p>
+<div class="arithmatex">\[\bar Q=\operatorname{diag}(Q,\dots,Q,Q_f),\qquad \bar R=\operatorname{diag}(R,\dots,R).\]</div>
+<p>把 <span class="arithmatex">\(X=\Phi x_0+\Gamma U\)</span> 代入代价，<span class="arithmatex">\(x_0\)</span> 视为常量：</p>
+<div class="arithmatex">\[J(U)=\tfrac12 U^{\top}H U+f^{\top}U+\text{const},\]</div>
+<p>其中</p>
+<div class="arithmatex">\[H=2\left(\Gamma^{\top}\bar Q\,\Gamma+\bar R\right),\qquad f=2\,\Gamma^{\top}\bar Q\,\Phi\,x_0.\]</div>
+<p><span class="arithmatex">\(H\)</span> 只依赖模型与权重、与 <span class="arithmatex">\(x_0\)</span> 无关，可以离线预先算好；<span class="arithmatex">\(f\)</span> 每步随测量状态 <span class="arithmatex">\(x_0\)</span> 更新，是唯一需要在线重算的系数。约束部分，输入盒约束直接写成 <span class="arithmatex">\(U\)</span> 的上下界；状态约束 <span class="arithmatex">\(x_{\min}\le X\le x_{\max}\)</span> 经预测映射转为 <span class="arithmatex">\(\Gamma\)</span> 上的不等式</p>
+<div class="arithmatex">\[x_{\min}-\Phi x_0\le\Gamma U\le x_{\max}-\Phi x_0.\]</div>
+<p>于是整个问题写成标准型</p>
+<div class="arithmatex">\[\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.\]</div>
+<p>这里的优化变量就是整段输入轨迹 <span class="arithmatex">\(U\in\mathbb{R}^{mN}\)</span>，维数是 MPC 计算量的直接来源。求解得到的 <span class="arithmatex">\(U^{\star}\)</span> 只取其第一段 <span class="arithmatex">\(u_0^{\star}\)</span> 施加到系统，其余丢弃、下一步重算。</p>
+<p>从结构上看，<span class="arithmatex">\(H\)</span> 正定（因 <span class="arithmatex">\(\bar R\)</span> 正定）保证 QP 有唯一解，<span class="arithmatex">\(\Gamma\)</span> 的块下三角结构让 <span class="arithmatex">\(H\)</span> 呈现带状稀疏，专用求解器可以利用这一点把每条约束的处理成本从 <span class="arithmatex">\(O(N^2)\)</span> 降到接近 <span class="arithmatex">\(O(N)\)</span>。这也是同样规模的 QP，通用求解器与专用 MPC 求解器速度可能差一个数量级的原因。</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>表达式</th>
+<th>维度</th>
+<th>是否每步变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(U\)</span></td>
+<td><span class="arithmatex">\([u_0;\dots;u_{N-1}]\)</span></td>
+<td><span class="arithmatex">\(mN\)</span></td>
+<td>优化变量</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(H\)</span></td>
+<td><span class="arithmatex">\(2(\Gamma^{\top}\bar Q\Gamma+\bar R)\)</span></td>
+<td><span class="arithmatex">\(mN\times mN\)</span></td>
+<td>否（离线）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(f\)</span></td>
+<td><span class="arithmatex">\(2\Gamma^{\top}\bar Q\Phi x_0\)</span></td>
+<td><span class="arithmatex">\(mN\)</span></td>
+<td>是（随 <span class="arithmatex">\(x_0\)</span>）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(A_c,b_c\)</span></td>
+<td>约束矩阵与右端</td>
+<td>约束数 <span class="arithmatex">\(\times mN\)</span></td>
+<td>右端随 <span class="arithmatex">\(x_0\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">稳定性与终端代价</h2>
+<p>一个反直觉的事实：<strong>有限时域 + 无终端约束，并不保证闭环稳定</strong>。因为优化器只对 <span class="arithmatex">\(N\)</span> 步负责，聪明的解可能是"这几步代价很低，但把状态推到很糟的地方交给未来"——Lyapunov 意义下闭环可能振荡甚至发散。</p>
+<p>标准补救是加<strong>终端代价</strong>：令 <span class="arithmatex">\(\ell_f(x)=x^{\top}P x\)</span>，其中 <span class="arithmatex">\(P\)</span> 取无穷时域 LQR 的 Riccati 解（即离散 DARE 的解）。这样终端代价恰好等于"从末端状态出发、无约束条件下未来的累积代价"，于是有限时域代价成为真实无穷代价的上界，最小化它就等价于最小化一个真实的 Lyapunov 函数。更强的做法是再加<strong>终端集</strong> <span class="arithmatex">\(\mathcal{X}_f\)</span>（一个在最优反馈下正不变的集合），约束 <span class="arithmatex">\(x_N\in\mathcal{X}_f\)</span>，从理论上保证递归可行性。</p>
+<p>递归可行性还有一个附带要求：优化问题在每步都要<strong>有解</strong>。若上一步的解在本步被证明仍可行，迭代就不会中途失效；终端集与终端代价正是用来提供这个"可行性自保持"性质的工具。缺少它们时，即使当前步有解，下一步也可能突然不可行。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>稳定性</th>
+<th>保证强度</th>
+<th>额外代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无终端代价</td>
+<td>不保证</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>终端代价 <span class="arithmatex">\(x^{\top}Px\)</span></td>
+<td>通常可证</td>
+<td>中等</td>
+<td>需解一次 DARE</td>
+</tr>
+<tr>
+<td>终端代价 + 终端集</td>
+<td>可证</td>
+<td>强</td>
+<td>增加末行约束，可能更易不可行</td>
+</tr>
+<tr>
+<td>足够长时域</td>
+<td>近似稳定</td>
+<td>依赖 <span class="arithmatex">\(N\)</span></td>
+<td>计算量随 <span class="arithmatex">\(N\)</span> 上升</td>
+</tr>
+</tbody>
+</table>
+<p>工程上，终端代价几乎总是要加的，因为它既提升稳定性、又能让较短的 <span class="arithmatex">\(N\)</span> 达到较长时域的效果；终端集则可以视算力与保守程度取舍。</p>
+<h2 id="mpc_3">何时该用 MPC、何时不该</h2>
+<p>MPC 不是"更高级所以更好"，而是一个有明确适用边界的工具。判断标准可归纳为四条：约束是否强硬且必须满足、模型是否足够准、算力是否够、控制频率是否够低。四条都满足时 MPC 优势显著；任一条严重不满足时，PID 或 LQR 往往更划算。</p>
+<p>一个实用的判断流程：先问"系统是否有必须满足的不等式约束"。若没有，LQR 或 PID 足以达到近似最优，且实现与调试都更简单；若有硬约束但控制频率极高（1 kHz 以上）或处理器只有微控制器级别，则应考虑显式 MPC（离线预计算可行解表）或退回带抗饱和的 LQR；只有当约束强、频率低、算力足、模型准同时成立时，在线 MPC 才是性价比最高的选择。</p>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>倾向 MPC</th>
+<th>倾向 PID / LQR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>约束</td>
+<td>有速度/转角/碰撞等硬约束</td>
+<td>只需避免饱和，软处理即可</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>模型准、可离线辨识</td>
+<td>模型难建或不稳定</td>
+</tr>
+<tr>
+<td>算力</td>
+<td>有足够 CPU/GPU 预算</td>
+<td>微控制器、算力紧张</td>
+</tr>
+<tr>
+<td>控制频率</td>
+<td>低频（几十毫秒以上）且任务需前瞻</td>
+<td>高频（1 kHz 以上）或单回路</td>
+</tr>
+<tr>
+<td>系统规模</td>
+<td>MIMO、强耦合</td>
+<td>单输入单输出</td>
+</tr>
+<tr>
+<td>开发成本</td>
+<td>可接受预测器与 QP 调参</td>
+<td>希望尽快上线</td>
+</tr>
+</tbody>
+</table>
+<p>若只想快速对号入座，可用下面这张最小判断表：</p>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>选择</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单回路、无约束、模型未知</td>
+<td>PID</td>
+<td>无需模型即可调</td>
+</tr>
+<tr>
+<td>多状态、有线性模型、无硬约束</td>
+<td>LQR</td>
+<td>可离线解出最优增益</td>
+</tr>
+<tr>
+<td>有硬约束、算力足、频率低</td>
+<td>MPC</td>
+<td>约束需显式表达</td>
+</tr>
+<tr>
+<td>高频（1 kHz 以上）</td>
+<td>PID / LQR</td>
+<td>MPC 易丢拍</td>
+</tr>
+</tbody>
+</table>
+<p>一句话总结：<strong>约束强、模型准、算力够、频率低，选 MPC；否则先用 PID 或 LQR，把问题收敛到需要多步前瞻与硬约束时再升级。</strong></p>
+<blockquote>
+<p><strong>下一步</strong>：约束的处理方式与 <a href="../../robustness-safety/03-safety-constraints/">安全约束</a> 紧密相关；路径规划给出的参考轨迹正是 MPC 的跟踪目标，见 <a href="../../robotics/04-path-motion-planning/">路径与运动规划</a>；如果你还没读 LQR，请先回到 <a href="../04-lqr/">最优控制与 LQR</a>；不确定该用哪种控制器时，对比 <a href="../03-pid/">PID 控制</a> 与 MPC 的取舍。</p>
+</blockquote>
 
 
 

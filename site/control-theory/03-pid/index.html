@@ -1021,6 +1021,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三项作用的频域解释
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从零到可用的整定流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        串级控制与多环结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pid_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3718,6 +3751,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三项作用的频域解释
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从零到可用的整定流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        串级控制与多环结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pid_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3831,24 +3897,139 @@
 
 
 <h1 id="pid-principles">PID Principles</h1>
-<p>PID 是最常见的反馈控制器之一，因为它不要求精确动力学模型，却能分别利用<strong>当前误差、累计误差和误差变化趋势</strong>来形成控制量。</p>
+<p>PID 是最常见的反馈控制器之一，因为它不要求精确动力学模型，却能分别利用<strong>当前误差、累计误差和误差变化趋势</strong>来形成控制量。这一章的主线是：先把三项作用的机制说清，再看它们在频域上到底改了什么，最后落到可执行的整定流程与串级结构。</p>
 <h2 id="_1">比例、积分与微分作用</h2>
 <p>连续时间 PID 写成</p>
 <div class="arithmatex">\[
-u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
+u(t)=K_pe(t)+K_i\int_0^t e(\tau)\,d\tau+K_d\frac{de(t)}{dt},
 \]</div>
-<p>三项作用不同：</p>
+<p>写成时间常数形式更便于整定：</p>
+<div class="arithmatex">\[
+u(t)=K_p\left[e(t)+\frac{1}{T_i}\int_0^t e(\tau)\,d\tau+T_d\frac{de(t)}{dt}\right],
+\]</div>
+<p>其中 <span class="arithmatex">\(T_i=K_p/K_i\)</span> 是积分时间，<span class="arithmatex">\(T_d=K_d/K_p\)</span> 是微分时间。三项作用机制不同：</p>
 <ul>
-<li><strong>P</strong> 看现在偏了多少，误差越大，修正越强；</li>
-<li><strong>I</strong> 看过去是否长期偏在同一方向，用来消除稳态误差；</li>
-<li><strong>D</strong> 看误差变化有多快，用来提前抑制过快趋势。</li>
+<li><strong>P</strong> 看现在偏了多少，误差越大修正越强，比例增益 <span class="arithmatex">\(K_p\)</span> 决定整体激进程度。</li>
+<li><strong>I</strong> 看过去是否长期偏在同一方向，用 <span class="arithmatex">\(1/T_i\)</span> 的速率累积，最终消除稳态误差。</li>
+<li><strong>D</strong> 看误差变化多快，按变化率提前施加反向作用，等效增加阻尼。</li>
 </ul>
-<p>理解这三个信息来源，比记一套“万能调参表”更重要。</p>
+<p>理解这三条信息来源，比记一套“万能调参表”更重要：它们分别对应频域的低频高增益（I）与相位超前（D），也分别对应两类失效——I 会带来超调与 windup，D 会放大噪声。</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>信息来源</th>
+<th>时域作用</th>
+<th>频域作用</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P</td>
+<td>当前误差</td>
+<td>决定响应速度与刚度</td>
+<td>全频段常数增益</td>
+<td>增益过大引发振荡</td>
+</tr>
+<tr>
+<td>I</td>
+<td>误差历史</td>
+<td>消除稳态误差</td>
+<td>低频增益趋近无穷</td>
+<td>超调、积分饱和</td>
+</tr>
+<tr>
+<td>D</td>
+<td>误差变化率</td>
+<td>增加阻尼、抑制超调</td>
+<td>高频增益上升、相位超前</td>
+<td>放大测量噪声</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_2">比例控制与稳态误差</h2>
-<p>某些系统需要持续输入才能维持目标。例如车辆上坡时，即使已经接近目标速度，仍需要额外驱动力抵消坡度。如果比例控制误差趋近零，控制量也趋近零，于是系统可能稳定在“略低于目标”的位置。</p>
-<p>积分项会累积这个长期小误差，持续增加控制直到偏差被消除。这就是 I 项最核心的意义。</p>
+<p>某些系统需要持续输入才能维持目标。例如车辆上坡时，即使已接近目标速度，仍需要额外驱动力抵消坡度。对于一阶对象 <span class="arithmatex">\(G(s)=\dfrac{K}{\tau s+1}\)</span>，只用比例控制 <span class="arithmatex">\(u=K_pe\)</span> 时闭环直流增益为</p>
+<div class="arithmatex">\[
+\frac{K K_p}{1+K K_p},
+\]</div>
+<p>单位阶跃下的稳态误差是</p>
+<div class="arithmatex">\[
+e_{\mathrm{ss}}=\frac{1}{1+K K_p}.
+\]</div>
+<p>代入具体数字：<span class="arithmatex">\(K=1\)</span> 时，<span class="arithmatex">\(K_p=2\)</span> 得 <span class="arithmatex">\(e_{\mathrm{ss}}=1/3 \approx 33\%\)</span>；<span class="arithmatex">\(K_p=10\)</span> 仍有 <span class="arithmatex">\(9\%\)</span>；要把误差压到 <span class="arithmatex">\(1\%\)</span> 需要 <span class="arithmatex">\(K_p=99\)</span>。但 <span class="arithmatex">\(K_p\)</span> 越大，闭环极点越靠左、带宽越高，噪声放大与执行器饱和的风险同步上升。这正是 I 项存在的理由：它用累积而不是瞬时增益来消除偏差。</p>
+<p>积分项会累积这个长期小误差，持续增加控制直到偏差被消除。<strong>判据是系统类型</strong>：0 型对象加 P 控制存在有界稳态误差，加入 I 后变为 1 型，对阶跃输入稳态误差为零；但若输入是斜坡，1 型系统仍有常数误差，需要再引入一个积分才能消除。</p>
+<table>
+<thead>
+<tr>
+<th>对象类型</th>
+<th>P 控制下阶跃误差</th>
+<th>加 I 后阶跃误差</th>
+<th>斜坡输入误差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 型（无积分）</td>
+<td>有界、<span class="arithmatex">\(1/(1+KK_p)\)</span></td>
+<td>零</td>
+<td>有界常数</td>
+</tr>
+<tr>
+<td>1 型（一个积分）</td>
+<td>零</td>
+<td>零</td>
+<td>有界、<span class="arithmatex">\(1/K_v\)</span></td>
+</tr>
+<tr>
+<td>2 型（两个积分）</td>
+<td>零</td>
+<td>零</td>
+<td>零</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_3">微分作用与阻尼</h2>
-<p>如果误差正在快速减小，系统很可能已经以较大速度冲向目标。D 项根据变化率产生反向作用，相当于增加阻尼。因此它能减少超调，但同时会放大高频测量噪声，实际实现常对微分项加低通滤波。</p>
+<p>如果误差正在快速减小，系统很可能已经以较大速度冲向目标。D 项根据变化率产生反向作用，相当于增加阻尼。对二阶闭环，<span class="arithmatex">\(K_d\)</span> 的效果等价于把阻尼比从 <span class="arithmatex">\(\zeta\)</span> 提升到</p>
+<div class="arithmatex">\[
+\zeta' = \zeta + \frac{K_d \omega_n}{2},
+\]</div>
+<p>因此它能减少超调。但代价是高频增益按 <span class="arithmatex">\(K_d\omega\)</span> 增长，测量噪声 <span class="arithmatex">\(n(t)\)</span> 的幅值被直接放大：若编码器噪声幅度为 <span class="arithmatex">\(0.01\ \text{rad}\)</span>、频率 <span class="arithmatex">\(500\ \text{Hz}\)</span>，<span class="arithmatex">\(K_d=0.5\)</span> 时微分项瞬时输出可达 <span class="arithmatex">\(0.5 \times 0.01 \times 2\pi \times 500 \approx 15.7\)</span>，可能直接顶到执行器上限。</p>
+<p>因此实际实现几乎总要对微分项加一阶低通滤波：</p>
+<div class="arithmatex">\[
+D(s)=\frac{K_d s}{1+s\,T_f},\qquad T_f=\frac{T_d}{N},
+\]</div>
+<p>其中 <span class="arithmatex">\(N\)</span> 一般取 <span class="arithmatex">\(8\sim 20\)</span>，把高频增益封顶在 <span class="arithmatex">\(K_d N/T_d\)</span>，代价是在更高频段不再提供相位超前（最大相位超前角度小于 <span class="arithmatex">\(90^{\circ}\)</span>）。</p>
+<table>
+<thead>
+<tr>
+<th>实现方式</th>
+<th>高频增益</th>
+<th>噪声敏感度</th>
+<th>相位超前</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯微分 <span class="arithmatex">\(K_ds\)</span></td>
+<td>无限增长</td>
+<td>极高</td>
+<td>接近 <span class="arithmatex">\(90^{\circ}\)</span></td>
+</tr>
+<tr>
+<td>带滤波 <span class="arithmatex">\(N=10\)</span></td>
+<td>约 <span class="arithmatex">\(10K_d/T_d\)</span></td>
+<td>中等</td>
+<td>约 <span class="arithmatex">\(55^{\circ}\)</span></td>
+</tr>
+<tr>
+<td>差值形式 <span class="arithmatex">\(K_d(e_k-e_{k-1})/\Delta t\)</span></td>
+<td>随 <span class="arithmatex">\(1/\Delta t\)</span> 增长</td>
+<td>高，且受采样周期影响</td>
+<td>依赖采样</td>
+</tr>
+</tbody>
+</table>
 <h2 id="pid">离散 PID 的内部状态</h2>
 <p>采样周期为 <span class="arithmatex">\(\Delta t\)</span> 时，可写成</p>
 <div class="arithmatex">\[
@@ -3856,17 +4037,324 @@ I_k=I_{k-1}+e_k\Delta t,\qquad
 D_k=\frac{e_k-e_{k-1}}{\Delta t},
 \]</div>
 <div class="arithmatex">\[
-u_k=K_pe_k+K_iI_k+K_dD_k.
+u_k=K_pe_k+K_iI_k+K_dD_k .
 \]</div>
-<p>因此 PID 不是一个只看当前误差的静态函数：积分项保存累计历史，微分项至少需要上一次误差。具体循环实现放在 Robotics 的导航与控制页面。</p>
+<p>因此 PID 不是一个只看当前误差的静态函数：积分项保存累计历史，微分项至少需要上一次误差。<strong>控制器至少有两个内部状态</strong>（<span class="arithmatex">\(I\)</span> 与 <span class="arithmatex">\(e_{k-1}\)</span>），这意味着改采样周期会改变同一组增益的实际行为。</p>
+<p>等价的增量形式更抗饱和，也更常用于实现：</p>
+<div class="arithmatex">\[
+\Delta u_k=K_p(e_k-e_{k-1})+K_i e_k\Delta t+K_d\frac{e_k-2e_{k-1}+e_{k-2}}{\Delta t}.
+\]</div>
+<p>注意微分项在初始时刻会出现 <span class="arithmatex">\(e_0/e_{-1}/e_{-2}\)</span> 的瞬态跳变。常用的“微分先行”是把微分作用在测量值 <span class="arithmatex">\(-y\)</span> 而不是误差 <span class="arithmatex">\(e\)</span> 上，使设定值阶跃不激发微分冲击。具体循环实现放在 Robotics 的导航与控制页面。</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>输出含义</th>
+<th>抗饱和能力</th>
+<th>适用场合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位置式</td>
+<td>直接给 <span class="arithmatex">\(u_k\)</span></td>
+<td>弱，需额外逻辑</td>
+<td>执行器接受绝对指令</td>
+</tr>
+<tr>
+<td>增量式</td>
+<td>给 <span class="arithmatex">\(\Delta u_k\)</span></td>
+<td>较强</td>
+<td>直接驱动增量阀/速度指令</td>
+</tr>
+<tr>
+<td>微分先行</td>
+<td>微分作用于 <span class="arithmatex">\(-y\)</span></td>
+<td>中</td>
+<td>设定值频繁跳变</td>
+</tr>
+</tbody>
+</table>
 <h2 id="anti-windup">积分饱和与 Anti-windup</h2>
 <p>执行器存在上限。若误差很大而输出已经饱和，积分项仍持续累积，等系统终于接近目标时，巨大的积分量会让控制继续“用力”，产生明显超调。这就是 integral windup。</p>
-<p>常见处理方式是在输出饱和时暂停积分，或使用 anti-windup 反馈修正积分器。这个细节往往比继续增加 <span class="arithmatex">\(K_d\)</span> 更有效。</p>
+<p>举例：<span class="arithmatex">\(K_i=2\)</span>、误差恒定 <span class="arithmatex">\(e=5\)</span>、饱和时间 <span class="arithmatex">\(2\ \text{s}\)</span>，积分项会累积到 <span class="arithmatex">\(K_i e t=20\)</span>；当误差归零后，这 <span class="arithmatex">\(20\)</span> 需要约 <span class="arithmatex">\(2\ \text{s}\)</span> 才被反向误差抵消，期间系统持续过冲。</p>
+<p>常见处理方式有三类：</p>
+<ul>
+<li><strong>条件积分</strong>：仅当输出未饱和，或饱和方向与误差方向相同时才继续积分，形式为 <span class="arithmatex">\(I_k=I_{k-1}+e_k\Delta t\cdot \mathbb{1}[\text{not saturated}]\)</span>。</li>
+<li><strong>反算（back-calculation）</strong>：在积分器上加反馈修正，<span class="arithmatex">\(I_k=I_{k-1}+e_k\Delta t+\frac{\Delta t}{T_t}(u_{\text{sat}}-u_{\text{unsat}})\)</span>，<span class="arithmatex">\(T_t\)</span> 取 <span class="arithmatex">\(T_i/2\sim T_i\)</span> 量级，饱和解除后积分量迅速回落。</li>
+<li><strong>输出限幅 + 积分重算</strong>：先算无约束输出，限幅后再按限幅值反推允许的积分值。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>参数</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>条件积分</td>
+<td>仅需饱和标志</td>
+<td>实现简单</td>
+<td>饱和边界的抖振处理需小心</td>
+</tr>
+<tr>
+<td>反算</td>
+<td><span class="arithmatex">\(T_t\)</span></td>
+<td>平滑、可控</td>
+<td>需调一个额外时间常数</td>
+</tr>
+<tr>
+<td>重算</td>
+<td>限幅策略</td>
+<td>强保证、无超调</td>
+<td>实现稍复杂</td>
+</tr>
+</tbody>
+</table>
+<p>这个细节往往比继续增加 <span class="arithmatex">\(K_d\)</span> 更有效：若超调来自 windup，加大 <span class="arithmatex">\(K_d\)</span> 只会同时放大噪声而不解决根因。</p>
+<h2 id="_4">三项作用的频域解释</h2>
+<p>把 PID 写成频率响应的形式：</p>
+<div class="arithmatex">\[
+C(j\omega)=K_p+\frac{K_i}{j\omega}+j\omega K_d .
+\]</div>
+<p>三项对幅频与相频的贡献完全不同：</p>
+<ul>
+<li><strong>比例</strong>：全频段常数增益，不改变相位；</li>
+<li><strong>积分</strong>：幅值 <span class="arithmatex">\(K_i/\omega\)</span>，随频率下降按 <span class="arithmatex">\(-20\ \text{dB/dec}\)</span> 增大，相位恒为 <span class="arithmatex">\(-90^{\circ}\)</span>，即在低频段提供极高增益；</li>
+<li><strong>微分</strong>：幅值 <span class="arithmatex">\(K_d\omega\)</span>，随频率上升按 <span class="arithmatex">\(+20\ \text{dB/dec}\)</span> 增大，相位恒为 <span class="arithmatex">\(+90^{\circ}\)</span>，即提供相位超前。</li>
+</ul>
+<p><strong>穿越频率 <span class="arithmatex">\(\omega_c\)</span></strong> 定义为开环幅值等于 1 的频率，<span class="arithmatex">\(|L(j\omega_c)|=1\)</span>。<strong>相位裕度</strong>是关键安全指标：</p>
+<div class="arithmatex">\[
+\mathrm{PM}=180^{\circ}+\angle L(j\omega_c).
+\]</div>
+<p>它表示在增益再涨多少倍之前闭环才会失稳。一般要求 <span class="arithmatex">\(\mathrm{PM}\ge 45^{\circ}\)</span>，高精度场合取 <span class="arithmatex">\(60^{\circ}\)</span>；当 <span class="arithmatex">\(\mathrm{PM}\)</span> 接近 <span class="arithmatex">\(0\)</span> 时闭环会出现剧烈振荡。数学上 PM 与超调近似成反比，可用经验关系估算：</p>
+<div class="arithmatex">\[
+M_p \approx e^{-\pi \zeta/\sqrt{1-\zeta^{2}}},\qquad \zeta \approx \frac{\mathrm{PM}}{100}.
+\]</div>
+<p>例如 <span class="arithmatex">\(\mathrm{PM}=30^{\circ}\)</span> 对应 <span class="arithmatex">\(\zeta\approx0.3\)</span>、超调约 <span class="arithmatex">\(37\%\)</span>；<span class="arithmatex">\(\mathrm{PM}=60^{\circ}\)</span> 对应 <span class="arithmatex">\(\zeta\approx0.6\)</span>、超调约 <span class="arithmatex">\(9\%\)</span>。</p>
+<p>I 项在提高低频增益的同时把相位往负方向拉，因此<strong>加 I 会降低 PM</strong>。一个具体例子：对象 <span class="arithmatex">\(G(s)=\dfrac{1}{s(s+1)}\)</span>，仅用 <span class="arithmatex">\(K_p=10\)</span> 时穿越频率约 <span class="arithmatex">\(10\ \text{rad/s}\)</span>，<span class="arithmatex">\(\angle L\approx-90^{\circ}-84^{\circ}=-174^{\circ}\)</span>，<span class="arithmatex">\(\mathrm{PM}\approx6^{\circ}\)</span>，几乎临界振荡。加入 <span class="arithmatex">\(K_d\)</span> 提供相位超前、或降低 <span class="arithmatex">\(K_p\)</span>，才能恢复裕度。这正是“先有相位余量，再谈带宽”的原因，背后的根轨迹与裕度理论见 <a href="../02-feedback-stability/">反馈与稳定性</a>。</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>幅频斜率</th>
+<th>相位贡献</th>
+<th>对穿越频率的影响</th>
+<th>对 PM 的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P</td>
+<td><span class="arithmatex">\(0\ \text{dB/dec}\)</span></td>
+<td><span class="arithmatex">\(0^{\circ}\)</span></td>
+<td>直接抬升</td>
+<td>通常降低（若对象相位已很负）</td>
+</tr>
+<tr>
+<td>I</td>
+<td><span class="arithmatex">\(-20\ \text{dB/dec}\)</span></td>
+<td><span class="arithmatex">\(-90^{\circ}\)</span></td>
+<td>降低</td>
+<td>降低</td>
+</tr>
+<tr>
+<td>D</td>
+<td><span class="arithmatex">\(+20\ \text{dB/dec}\)</span></td>
+<td><span class="arithmatex">\(+90^{\circ}\)</span>（受滤波限制）</td>
+<td>提高</td>
+<td>提高</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">从零到可用的整定流程</h2>
+<p>工程上最常用的两条经验路线是 Ziegler–Nichols 的两种方法。<strong>临界比例法</strong>先在纯比例控制下逐步加大 <span class="arithmatex">\(K_p\)</span>，直到系统出现等幅持续振荡，记此时的临界增益 <span class="arithmatex">\(K_u\)</span> 与振荡周期 <span class="arithmatex">\(T_u\)</span>，再按下表取参数：</p>
+<table>
+<thead>
+<tr>
+<th>控制器</th>
+<th><span class="arithmatex">\(K_p\)</span></th>
+<th><span class="arithmatex">\(T_i\)</span></th>
+<th><span class="arithmatex">\(T_d\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P</td>
+<td><span class="arithmatex">\(0.5K_u\)</span></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PI</td>
+<td><span class="arithmatex">\(0.45K_u\)</span></td>
+<td><span class="arithmatex">\(T_u/1.2\)</span></td>
+<td>—</td>
+</tr>
+<tr>
+<td>PID</td>
+<td><span class="arithmatex">\(0.6K_u\)</span></td>
+<td><span class="arithmatex">\(0.5T_u\)</span></td>
+<td><span class="arithmatex">\(0.125T_u\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>反应曲线法</strong>则先做开环阶跃，从响应曲线读出最大斜率 <span class="arithmatex">\(R\)</span> 与等效延迟 <span class="arithmatex">\(L\)</span>，再按下表：</p>
+<table>
+<thead>
+<tr>
+<th>控制器</th>
+<th><span class="arithmatex">\(K_p\)</span></th>
+<th><span class="arithmatex">\(T_i\)</span></th>
+<th><span class="arithmatex">\(T_d\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P</td>
+<td><span class="arithmatex">\(1/(RL)\)</span></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PI</td>
+<td><span class="arithmatex">\(0.9/(RL)\)</span></td>
+<td><span class="arithmatex">\(3.33L\)</span></td>
+<td>—</td>
+</tr>
+<tr>
+<td>PID</td>
+<td><span class="arithmatex">\(1.2/(RL)\)</span></td>
+<td><span class="arithmatex">\(2L\)</span></td>
+<td><span class="arithmatex">\(0.5L\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>注意 Ziegler–Nichols 的初衷是“四分之一衰减比”，超调往往偏大（可达 <span class="arithmatex">\(25\%\)</span> 以上）。若需更保守，可将所得 <span class="arithmatex">\(K_p\)</span> 乘 <span class="arithmatex">\(0.6\sim0.7\)</span>，并把 <span class="arithmatex">\(T_d\)</span> 减半。</p>
+<p>若无法做开环实验，下面这套固定顺序的手动整定更通用，顺序不可颠倒：</p>
+<ol>
+<li><strong>只留 P</strong>：<span class="arithmatex">\(T_i\to\infty\)</span>、<span class="arithmatex">\(T_d=0\)</span>，从较小 <span class="arithmatex">\(K_p\)</span> 起增加，直到出现小幅持续振荡，然后回退到该值的 <span class="arithmatex">\(50\%\)</span>。</li>
+<li><strong>加 I 消除稳态误差</strong>：<span class="arithmatex">\(T_i\)</span> 从主导时间常数的 4 倍开始减小，直到偏差在期望时间内消失；若出现低频振荡说明 <span class="arithmatex">\(T_i\)</span> 太小。</li>
+<li><strong>加 D 抑制超调</strong>：<span class="arithmatex">\(T_d\)</span> 从 <span class="arithmatex">\(T_i/4\)</span> 起试探，逐步加大直到超调降到目标；同时提高微分滤波 <span class="arithmatex">\(N\)</span> 以压制噪声。</li>
+<li><strong>收尾</strong>：确认 anti-windup 生效、采样周期与滤波参数一起记录，再验证大信号与饱和工况。</li>
+</ol>
+<h2 id="_6">串级控制与多环结构</h2>
+<p>当对象由快、慢两个明显不同的环节组成时（典型是机器人关节：速度环快、位置环慢），单环 PID 往往顾此失彼。串级控制把两个环嵌套起来：<strong>外环（位置）输出不作为执行器指令，而作为内环（速度）的设定值</strong>，内环再输出电流/力矩指令。</p>
+<p>结构上可以写成</p>
+<div class="arithmatex">\[
+\omega_{\text{ref}}=K_{p,o}(p_{\text{ref}}-p),\qquad
+u=K_{p,i}(\omega_{\text{ref}}-\omega)+K_{i,i}\int(\omega_{\text{ref}}-\omega)\,dt .
+\]</div>
+<p><strong>内环必须先调好</strong>，原因是内环是外环的“被控对象”：外环看到的是内环闭环特性。若内环尚未稳定，外环的任何参数都建立在会振荡的基座上。带宽分离经验是内环带宽至少为外环的 <span class="arithmatex">\(3\sim10\)</span> 倍，这样外环才能把内环近似为一阶或纯增益环节，简化整定。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>单环 PID</th>
+<th>串级（位置 + 速度）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可测变量</td>
+<td>只需被控量</td>
+<td>需要中间量（速度）</td>
+</tr>
+<tr>
+<td>抗扰</td>
+<td>慢，扰动要先影响位置才被修正</td>
+<td>快，速度环先感知并抑制负载扰动</td>
+</tr>
+<tr>
+<td>整定难度</td>
+<td>低</td>
+<td>高，但每环结构更简单</td>
+</tr>
+<tr>
+<td>对执行器饱和</td>
+<td>易 windup</td>
+<td>内环限幅天然抑制外环积分累积</td>
+</tr>
+<tr>
+<td>带宽</td>
+<td>受最慢环节限制</td>
+<td>可达更高，因内环提升了对外环的等效带宽</td>
+</tr>
+</tbody>
+</table>
+<p>串级的代价是必须能测量中间变量（如编码器微分的速度）。若中间量噪声大，内环反而会放大噪声，此时应改为单环加前馈，或先做好速度估计。</p>
 <h2 id="pid_1">PID 调参与现象诊断</h2>
-<p>一个实用顺序是先用 P 获得基本响应，再少量加入 I 消除长期偏差，最后根据过冲和噪声决定是否需要 D。若系统严重延迟、模型本身不适合 PID，继续调三个增益通常不会解决根本问题。</p>
-<p>PID 适合单回路、目标明确、约束较少的控制任务；当需要显式预测未来或同时处理很多约束时，LQR 和 MPC 更自然。</p>
+<p>一个实用顺序是先用 P 获得基本响应，再少量加入 I 消除长期偏差，最后根据过冲和噪声决定是否需要 D。若系统严重延迟、模型本身不适合 PID（例如纯延迟主导、非最小相位），继续调三个增益通常不会解决根本问题，此时应改用 Smith 预估、MPC 或前馈结构。</p>
+<p>调参本质是现象到原因的反向推理。下表把常见现象与最可能的调整方向对应起来：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>最可能原因</th>
+<th>首先检查</th>
+<th>调整方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>稳态误差消不掉</td>
+<td>需要持续输入维持目标</td>
+<td><span class="arithmatex">\(T_i\)</span> 是否过大</td>
+<td>减小 <span class="arithmatex">\(T_i\)</span></td>
+</tr>
+<tr>
+<td>开始振荡、频率较高</td>
+<td><span class="arithmatex">\(K_p\)</span> 过大</td>
+<td>PM 是否不足</td>
+<td>降 <span class="arithmatex">\(K_p\)</span> 或加 <span class="arithmatex">\(T_d\)</span></td>
+</tr>
+<tr>
+<td>低频振荡、周期长</td>
+<td><span class="arithmatex">\(T_i\)</span> 太小</td>
+<td>积分过强</td>
+<td>增大 <span class="arithmatex">\(T_i\)</span></td>
+</tr>
+<tr>
+<td>超调大且在饱和后出现</td>
+<td>Windup</td>
+<td>积分是否在饱和时继续累积</td>
+<td>启用 anti-windup</td>
+</tr>
+<tr>
+<td>噪声大、执行器抖动</td>
+<td><span class="arithmatex">\(K_d\)</span> 过大或滤波不足</td>
+<td>微分滤波 <span class="arithmatex">\(N\)</span></td>
+<td>降 <span class="arithmatex">\(T_d\)</span> 或加滤波</td>
+</tr>
+<tr>
+<td>响应迟钝、误差收敛慢</td>
+<td>总增益偏低</td>
+<td><span class="arithmatex">\(K_p\)</span>、<span class="arithmatex">\(T_i\)</span></td>
+<td>提高 <span class="arithmatex">\(K_p\)</span>，重调 <span class="arithmatex">\(T_i\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>PID 适合单回路、目标明确、约束较少的控制任务；当需要显式预测未来或同时处理很多约束时，<a href="../04-lqr/">最优控制与 LQR</a> 与 <a href="../05-mpc/">模型预测控制</a> 更自然。</p>
 <h2 id="pid_2">采样与滤波会改变 PID 行为</h2>
-<p>离散控制器中的微分项对高频噪声敏感，积分项又会累积偏置。采样周期改变时，同一组离散增益未必保持相同行为。实际部署需要把采样周期、微分滤波和 anti-windup 与增益一起记录，才能复现实验结果。</p>
+<p>离散控制器中的微分项对高频噪声敏感，积分项又会累积偏置。采样周期改变时，同一组离散增益未必保持相同行为：由 <span class="arithmatex">\(D_k=(e_k-e_{k-1})/\Delta t\)</span> 可见，<span class="arithmatex">\(\Delta t\)</span> 减半会让微分作用翻倍；由 <span class="arithmatex">\(I_k=I_{k-1}+e_k\Delta t\)</span> 可见，<span class="arithmatex">\(\Delta t\)</span> 减半会让每步积分量减半。因此“换了个更快的控制器，同一组参数就振荡了”是常见抱怨——不是控制器坏了，是离散化改变了等效增益。</p>
+<p>工程上正确的做法是把离散参数写成与采样周期无关的形式：用 <span class="arithmatex">\(T_i\)</span>、<span class="arithmatex">\(T_d\)</span> 作为整定量，实现时按</p>
+<div class="arithmatex">\[
+K_i=\frac{K_p}{T_i},\qquad K_d=K_p T_d
+\]</div>
+<p>换算，这样换采样周期时只需重新计算换算系数，而 <span class="arithmatex">\(T_i\)</span>、<span class="arithmatex">\(T_d\)</span> 的物理含义不变。</p>
+<p>同时在部署前应确认三件事：</p>
+<ol>
+<li><strong>微分滤波是否生效</strong>：若未滤波，采样噪声会被 <span class="arithmatex">\(1/\Delta t\)</span> 放大。</li>
+<li><strong>积分限幅是否与执行器上限一致</strong>：否则 anti-windup 无法真正生效。</li>
+<li><strong>采样周期是否远小于闭环带宽对应周期</strong>：经验要求 <span class="arithmatex">\(\Delta t \le \dfrac{1}{10 f_c}\)</span>，其中 <span class="arithmatex">\(f_c\)</span> 为闭环带宽，否则离散化误差会显著改变相位裕度。</li>
+</ol>
+<p>只有把采样周期、微分滤波和 anti-windup 与增益一起记录，才能复现实验结果；只记三个增益的实验记录基本不可复现。</p>
+<blockquote>
+<p><strong>下一步</strong>：想弄清相位裕度为什么决定超调，读 <a href="../02-feedback-stability/">反馈与稳定性</a>；想从 PID 走向带约束的最优控制，读 <a href="../04-lqr/">最优控制与 LQR</a> 与 <a href="../05-mpc/">模型预测控制</a>；把 PID 用到真实机器人上的工程细节见 <a href="../../robotics/05-navigation-control/">导航与控制</a>。</p>
+</blockquote>
 
 
 
