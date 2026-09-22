@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#控制权信任与恢复的量化关系" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         控制权、信任与恢复的量化关系
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#人机系统的常见失败模式" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         人机系统的常见失败模式
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#验收视角人机系统如何被测试" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         验收视角：人机系统如何被测试
@@ -3714,7 +3714,7 @@
 <figcaption>五个主题围绕同一条主线：控制权归谁、如何被理解、怎样安全交还。</figcaption>
 </figure>
 <p>五章不是五个独立话题，而是同一条主线上的五个环节。概念地图里的节点恰好标记了这条主线：<strong>Automation（role split）→ Human input（approval / feedback）→ Shared control（blend authority）→ Trust（calibration）→ Takeover（safe handoff）</strong>。前半部分决定“谁负责什么”，中间决定“人的输入如何进入闭环”，最后决定“出问题时如何把控制权安全地交还”。</p>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>人机系统失败的原因很少是“算法不够强”，而更常见的是一组职责与状态问题。这些问题在开发阶段往往不显现，只有在长时监督、场景突变或故障叠加时才集中暴露，因此越晚处理代价越高。</p>
 <table>
 <thead>
@@ -3792,7 +3792,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
+<h2 id="_2">五章的推进逻辑</h2>
 <p>五章不是并列的知识点，而是有依赖顺序的一条链路。缺掉前面的环节，后面的章节会失去可讨论的前提。</p>
 <table>
 <thead>
@@ -3876,7 +3876,7 @@
 </tbody>
 </table>
 <p>因此阅读顺序建议从 01 开始，即使研究方向偏向接管或信任，也值得先确认责任划分是否已经明确。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <p>概念地图给出的五个节点不是分类标签，而是一条链上的五个状态。理解它们的连接方式，比记住节点名称更重要。</p>
 <table>
 <thead>
@@ -3954,7 +3954,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="控制权信任与恢复的量化关系">控制权、信任与恢复的量化关系</h2>
+<h2 id="_4">控制权、信任与恢复的量化关系</h2>
 <p>这一节的四类设计问题都可以写成显式的量，便于验收而不是靠主观判断。最常用的是共享控制权重、人力利用率、信任校准误差与接管裕量。</p>
 <p>共享控制的权重调度应满足有界变化率，否则会出现前后不一致的操控感：</p>
 <div class="arithmatex">\[\left| \frac{d\alpha}{dt} \right| \le \alpha_{\max}', \qquad \alpha(t) \in [0,1].\]</div>
@@ -4009,7 +4009,7 @@
 </tbody>
 </table>
 <p>这四个量之间并不独立：提高 <span class="arithmatex">\(\alpha\)</span> 会降低 <span class="arithmatex">\(p_{\text{succ}}\)</span> 对自动系统的依赖，却同时抬高 <span class="arithmatex">\(\rho\)</span>；过度解释会降低 <span class="arithmatex">\(e_{\text{trust}}\)</span>，但增加信息量可能拖长理解时间从而压缩 <span class="arithmatex">\(M\)</span>。设计就是在这些约束之间取平衡，而不是分别优化。</p>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_5">与其他章节的接口</h2>
 <p>人机交互不只在界面层，它直接约束运行时安全、通信时延与控制平滑性。下面列出最容易发生接口错配的位置。</p>
 <table>
 <thead>
@@ -4087,7 +4087,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="人机系统的常见失败模式">人机系统的常见失败模式</h2>
+<h2 id="_6">人机系统的常见失败模式</h2>
 <p>失败很少以“算法精度下降”的形式出现，更多是职责、状态与负荷问题。下面这张表可以直接用于上机前的自查。</p>
 <table>
 <thead>
@@ -4166,7 +4166,7 @@
 值得注意的是，失败模式之间会相互放大：负荷过高会加速信任漂移，信任漂移又会让告警被忽略，最终使接管失效。
 因此排查不应止步于定位单个现象，而要沿着“状态可见性 → 反馈生效 → 融合可预测 → 信任校准 → 接管及时”的顺序逐项确认。
 如果某一环的判据无法给出，就说明这一环尚未被真正设计过。</p>
-<h2 id="验收视角人机系统如何被测试">验收视角：人机系统如何被测试</h2>
+<h2 id="_7">验收视角：人机系统如何被测试</h2>
 <p>与算法模块不同，人机系统不能只用精度指标验收。可用的最小验收集合是行为层面的：它要求系统在时间压力与信息不足下仍然表现可接受。</p>
 <table>
 <thead>

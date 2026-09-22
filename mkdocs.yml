@@ -131,9 +131,6 @@ markdown_extensions:
 - pymdownx.emoji
 - pymdownx.arithmatex:
     generic: true
-- toc:
-    slugify: !!python/name:pymdownx.slugs.uslugify
-    permalink: false
 extra_css:
 - stylesheets/extra.css
 - css/custom.css

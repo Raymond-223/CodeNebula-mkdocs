@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#robustness--safety" class="md-skip">
+        <a href="#robustness-safety" class="md-skip">
           Skip to content
         </a>
       
@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑与时间尺度" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑与时间尺度
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#指标分层安全与性能不能混用" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         指标分层：安全与性能不能混用
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#场景化评测矩阵" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         场景化评测矩阵
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#安全论证需要什么证据" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全论证需要什么证据
@@ -3616,7 +3616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#常见失败模式与最小实践基线" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见失败模式与最小实践基线
@@ -3717,7 +3717,7 @@
 
 
 
-<h1 id="robustness--safety">Robustness &amp; Safety</h1>
+<h1 id="robustness-safety">Robustness &amp; Safety</h1>
 <p>这一节处理自主系统里最不能靠“调大奖励”解决的问题：<strong>当条件变化、组件失效、模型不再可信时，系统靠什么保持可接受的行为。</strong></p>
 <figure>
   <img alt="鲁棒性与安全从不确性、风险、约束、故障到运行时保护形成一条防线。" src="../assets/diagrams/safety-map.svg" />
@@ -3725,7 +3725,7 @@
 <figcaption>五层防线从理解不确定性开始，最终落到运行时保护与覆盖。</figcaption>
 </figure>
 <p>概念地图给出的主线是：<strong>Uncertainty（noise / shift）→ Risk（robustness）→ Constraints（safe set）→ Faults（detect &amp; recover）→ Runtime（assure / override）</strong>。这是一条从“认识问题”到“强制保护”的递进链：前半部分回答“什么会让系统变差”，后半部分回答“当它真的变差时，谁能够阻止后果”。</p>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>安全不是一个功能，而是一组可验证条件。下面这些问题如果没有明确答案，系统就还没有被工程化：</p>
 <table>
 <thead>
@@ -3813,7 +3813,7 @@
 </tbody>
 </table>
 <p>注意最后两行的顺序：<strong>检测先于隔离，隔离先于降级</strong>。任何跳步都会让故障在系统内部继续传播，等到降级被触发时，错误状态可能已经被写入地图或控制回路。</p>
-<h2 id="五章的推进逻辑与时间尺度">五章的推进逻辑与时间尺度</h2>
+<h2 id="_2">五章的推进逻辑与时间尺度</h2>
 <table>
 <thead>
 <tr>
@@ -3914,7 +3914,7 @@
 </tbody>
 </table>
 <p>前两行的成本是时间，后三行的成本是算力与复杂度。工程上最常见的不平衡是<strong>把预算全花在离线分析，却让运行时保护缺少独立通道</strong>——一旦模型本身出错，整条链会同时失效，而失效模式无法被同源的方法发现。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <table>
 <thead>
 <tr>
@@ -4009,7 +4009,7 @@
 </tbody>
 </table>
 <p>最后一行是关键设计选择：<strong>紧急动作若需要人工确认，人就成了延迟的一部分</strong>，而人的反应时间通常在 0.5–2 s，远大于制动所需的时间尺度（多为 100–300 ms）。把否决权留给人类，等于把最坏情况下的响应时间交给最不确定的环节。</p>
-<h2 id="指标分层安全与性能不能混用">指标分层：安全与性能不能混用</h2>
+<h2 id="_4">指标分层：安全与性能不能混用</h2>
 <p>一个系统可以同时“性能很好”和“不安全”，也可以“很安全”但“什么都不做”。因此指标必须分层，每层有各自的报告纪律。</p>
 <p>先定义三个量：任务损失 <span class="arithmatex">\(L\)</span>（越小越好）、扰动强度 <span class="arithmatex">\(\epsilon\)</span>（偏离名义条件的程度）、约束函数 <span class="arithmatex">\(g(x,u)\)</span>（<span class="arithmatex">\(g &gt; 0\)</span> 表示越界）。风险度量的标准形式是条件风险价值：</p>
 <div class="arithmatex">\[\mathrm{CVaR}_{\alpha}(L) = \min_{t} \left[ t + \frac{1}{1-\alpha}\,\mathbb{E}\left[(L-t)^{+}\right] \right]\]</div>
@@ -4096,7 +4096,7 @@
 </tbody>
 </table>
 <p><strong>报告纪律</strong>：任何“改善”结论都必须同时给出对应的尾部指标，否则不允许进入结论。</p>
-<h2 id="场景化评测矩阵">场景化评测矩阵</h2>
+<h2 id="_5">场景化评测矩阵</h2>
 <p>评测覆盖度不能靠“跑了多少次”衡量，而要看<strong>场景维度 × 扰动强度的矩阵是否被填满</strong>。定义场景集合 <span class="arithmatex">\(\mathcal{S}\)</span> 与扰动档位集合 <span class="arithmatex">\(\mathcal{E}\)</span>，覆盖率写作</p>
 <div class="arithmatex">\[\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) &gt; 0\}\right|}{\left|\mathcal{S}\right| \cdot \left|\mathcal{E}\right|}\]</div>
 <p>其中 <span class="arithmatex">\(n(s,e)\)</span> 是在场景 <span class="arithmatex">\(s\)</span>、扰动档位 <span class="arithmatex">\(e\)</span> 下的有效试验次数。覆盖率小于 1 时，未填格子对应的是<strong>未知风险</strong>，而不是“安全”。</p>
@@ -4172,7 +4172,7 @@
 <p>矩阵的填法本身也有纪律：同一格子至少要 <span class="arithmatex">\(20\)</span>–<span class="arithmatex">\(30\)</span> 次独立试验，才能对 <span class="arithmatex">\(5\%\)</span> 量级的事件率给出有意义的估计，否则“零失败”只意味着“没看到失败”。若要把零失败结论外推到 <span class="arithmatex">\(10^{-4}\)</span> 的失效概率，靠堆试验数量并不现实，必须引入分析证据或形式化论证。</p>
 <p>两种典型偏差是<strong>只扩场景维度不扩扰动强度</strong>（矩阵很宽但很薄）和<strong>只在最容易的档位堆样本</strong>（矩阵很密但偏斜）。它们共同的后果是：上线后遇到的第一次真实扰动，会成为该系统历史上第一个测试用例。</p>
 <p>矩阵还应标注<strong>哪一格是“上线前必须为绿”的门槛格</strong>。把所有格子同等对待，等于把有限预算平均分给低风险与高风险的组合。</p>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_6">与其他章节的接口</h2>
 <p>安全不是孤立的一层，它需要从其他章节借用形式化工具，并把结论还回去：</p>
 <table>
 <thead>
@@ -4273,7 +4273,7 @@
 </tbody>
 </table>
 <p>账本的价值在于它把“余量被吃掉”变成可检测事件：只要某一行的实测值越界，就应触发余量重算，而不是等到事故后再追溯。</p>
-<h2 id="安全论证需要什么证据">安全论证需要什么证据</h2>
+<h2 id="_7">安全论证需要什么证据</h2>
 <p>“测试了很多次没出事”不是证据。可信的安全论证通常需要四类互补证据，且每类都应能给出量化边界。</p>
 <p>先定义两个统计量：失效概率 <span class="arithmatex">\(p\)</span> 与样本数 <span class="arithmatex">\(n\)</span>。若在 <span class="arithmatex">\(n\)</span> 次试验中观察到零次失效，<span class="arithmatex">\(95\%\)</span> 置信水平下失效概率的上界近似为 <span class="arithmatex">\(\hat{p}_{\mathrm{ub}} \approx 3/n\)</span>。这直接决定了“跑了几百次”只能支持 <span class="arithmatex">\(10^{-2}\)</span> 量级的结论，而任何声称 <span class="arithmatex">\(10^{-6}\)</span> 的说法都必须由设计或分析证据承担。</p>
 <table>
@@ -4356,7 +4356,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="常见失败模式与最小实践基线">常见失败模式与最小实践基线</h2>
+<h2 id="_8">常见失败模式与最小实践基线</h2>
 <p>失败模式值得单独列一张表，因为它们大多不是算法错误，而是<strong>流程缺口</strong>：某种条件从未被定义、被度量或被演练过。</p>
 <table>
 <thead>

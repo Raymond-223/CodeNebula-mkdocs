@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#机器人系统的典型延迟预算" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         机器人系统的典型延迟预算
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#调试顺序" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         调试顺序
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#常见失败模式" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见失败模式
@@ -3616,7 +3616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#本章导航" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3725,7 +3725,7 @@
 <figcaption>五个主题从底层消息逐步走到可依赖的协调机制。</figcaption>
 </figure>
 <p>对机器人系统来说，分布式不是可选架构而是默认现实：感知、规划、控制常运行在不同进程甚至不同主机上，中间隔着网络与调度器。<strong>一旦有网络，就必然有延迟、乱序和分区</strong>，因此这一节的每一章都在回答同一个问题：在这些不完美条件下，系统如何仍然可预测。</p>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>单机程序里“函数调用”是可靠的：同步、有返回值、不会丢。分布式系统打破的正是这些假设：</p>
 <table>
 <thead>
@@ -3885,7 +3885,7 @@
 </tbody>
 </table>
 <p>可以先记一条选择规则：<strong>测量“过了多久”用单调时钟，描述“何时发生”用事件时间，判断“谁先谁后”用逻辑时钟。</strong> 混用这三类基准，是分布式 bug 最常见的来源之一。</p>
-<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
+<h2 id="_2">五章的推进逻辑</h2>
 <table>
 <thead>
 <tr>
@@ -3968,7 +3968,7 @@
 </table>
 <p>这张表也是排查顺序的依据：<strong>当症状出现在第 3 章的层面时，先回头确认第 1、2 章的语义是否已经明确。</strong> 直接在第 3 章内部打补丁，通常只是把问题推迟到更晚、更贵的时候出现。</p>
 <p>如果希望快速定位自己缺的是哪一章，可以按症状反查：<strong>消息偶尔收不到</strong>先看第 1、5 章，<strong>时间相关判断出错</strong>看第 2 章，<strong>状态偶尔变旧</strong>看第 3 章，<strong>故障处置靠临时决定</strong>看第 4 章。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <table>
 <thead>
 <tr>
@@ -4107,7 +4107,7 @@
 </tbody>
 </table>
 <p>可观测性由比值决定，因此有一个不直观的结论：<strong>把 MTTR 从 60 min 压到 6 min，对可用性的改善往往大于把 MTTF 提高十倍</strong>，而前者通常只在软件层面就能做到。</p>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_4">与其他章节的接口</h2>
 <table>
 <thead>
 <tr>
@@ -4214,7 +4214,7 @@
 </tbody>
 </table>
 <p><strong>队列深度是这张表里最容易被忽视的一列</strong>：深度设得过大会把“实时数据”变成“历史回放”，订阅端看起来一直在满负荷处理，处理的却可能是几秒之前的旧帧。</p>
-<h2 id="机器人系统的典型延迟预算">机器人系统的典型延迟预算</h2>
+<h2 id="_5">机器人系统的典型延迟预算</h2>
 <p>分布式设计最终要落到一个总延迟预算上。以 10 Hz 控制回路为例，周期 <span class="arithmatex">\(T_{\text{ctrl}} = 1/f_{\text{ctrl}} = 100\ \mathrm{ms}\)</span>，预算关系可以写成</p>
 <div class="arithmatex">\[d_{\text{total}} = \sum_{i=1}^{n} d_i, \qquad d_{\text{total}} + J_{\max} \le T_{\text{ctrl}},\]</div>
 <p>其中 <span class="arithmatex">\(d_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个环节的延迟，<span class="arithmatex">\(J_{\max}\)</span> 是最坏情况下的抖动。<strong>真正拖垮闭环的往往不是平均延迟而是抖动</strong>：平均 20 ms、抖动 ±40 ms 的链路，其效果接近平均 60 ms，因为个别周期会直接错过截止时间，而闭环性能由最坏周期决定。</p>
@@ -4295,7 +4295,7 @@
 </tbody>
 </table>
 <p>把抖动按来源拆分之后，压缩延迟预算才有明确目标：<strong>先消掉可预测的那部分相位差，再处理调度与内存造成的尾部延迟。</strong></p>
-<h2 id="调试顺序">调试顺序</h2>
+<h2 id="_6">调试顺序</h2>
 <p>分布式故障的排查顺序很重要，因为症状往往出现在与根因不同的节点上：</p>
 <table>
 <thead>
@@ -4381,7 +4381,7 @@
 </tbody>
 </table>
 <p>先怀疑算法通常是最慢的路径：网络层面的问题在日志里表现为“结果偶尔不对”，很容易被误认为算法不稳定。</p>
-<h2 id="常见失败模式">常见失败模式</h2>
+<h2 id="_7">常见失败模式</h2>
 <table>
 <thead>
 <tr>
@@ -4453,7 +4453,7 @@
 <li>分区期间谁降级、谁停机，在部署之前就写进约定。</li>
 </ul>
 <p>这张表同时可以当作检查清单：<strong>如果某个失败模式找不到对应的缓解手段，它的处理目前就只能靠运气。</strong></p>
-<h2 id="本章导航">本章导航</h2>
+<h2 id="_8">本章导航</h2>
 <p>建议按顺序阅读，因为每一章都在使用前一章定义好的概念；如果只有一天时间，优先读第 1、2、4 章，它们覆盖了绝大多数实机通信问题。</p>
 <ul>
 <li><a href="01-network-messaging/">第 1 章 · 网络与消息传递</a>：传输语义、消息契约与交付保证。</li>

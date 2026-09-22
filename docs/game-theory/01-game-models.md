@@ -263,4 +263,4 @@ $$
 | 混淆时序与信息 | 模型类别判错 | 两个维度分别标注 |
 | 忽略重复性 | 低估合作可能或高估惩罚作用 | 引入折扣因子 $\delta$ |
 
-> **下一步**：先用 [博弈分类维度总表](#博弈分类维度总表) 给你的问题打四个标签，再进入 [最佳响应与 Nash 均衡](02-best-response-nash.md) 学习如何求解；若你的博弈是零和结构，直接读 [零和博弈与 Minimax](03-zero-sum-minimax.md)；涉及隐藏类型与时序推理时看 [序贯博弈与 Bayesian 更新](04-sequential-bayesian.md)；长期交互与学习行为见 [重复博弈与学习](05-repeated-learning.md)。
+> **下一步**：先用本章的「博弈分类维度总表」给你的问题打四个标签，再进入 [最佳响应与 Nash 均衡](02-best-response-nash.md) 学习如何求解；若你的博弈是零和结构，直接读 [零和博弈与 Minimax](03-zero-sum-minimax.md)；涉及隐藏类型与时序推理时看 [序贯博弈与 Bayesian 更新](04-sequential-bayesian.md)；长期交互与学习行为见 [重复博弈与学习](05-repeated-learning.md)。

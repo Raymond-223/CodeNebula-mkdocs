@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#术语与符号约定" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         术语与符号约定
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#常见失败模式速查" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见失败模式速查
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其它章节的接口" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其它章节的接口
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#单智能体到多智能体的新增困难" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         单智能体到多智能体的新增困难
@@ -3616,7 +3616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#本章导航" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3724,7 +3724,7 @@
 <br />
 <figcaption>Multi Agent Systems 的核心概念关系。</figcaption>
 </figure>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>单智能体 RL 的世界里，环境动力学 <span class="arithmatex">\(P(s'\mid s,a)\)</span> 是稳定的：策略变了，世界不会跟着变。多智能体系统的第一层困难就是<strong>这个前提被破坏</strong>。设 <span class="arithmatex">\(n\)</span> 个 Agent，联合动作 <span class="arithmatex">\(\mathbf a=(a_1,\dots,a_n)\)</span>，则 Agent <span class="arithmatex">\(i\)</span> 感受到的有效动力学是</p>
 <div class="arithmatex">\[P\big(s'\mid s, a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s, \mathbf a\big)\prod_{j\neq i}\pi_j\big(a_j\mid o_j\big).\]</div>
 <p>等号右侧含其他 Agent 的策略 <span class="arithmatex">\(\pi_j\)</span>，它们全都在学习、都在变。于是从 Agent <span class="arithmatex">\(i\)</span> 的视角看，<strong>"环境"是一个持续移动的目标</strong>。这不是工程实现问题，而是问题结构本身的改变。</p>
@@ -3785,7 +3785,7 @@
 </tbody>
 </table>
 <p>本章不追求一次性给出标准答案，而是给出<strong>判据与失败模式</strong>：在具体系统里，你的失败出在哪一层，以及那一层应该用什么手段。</p>
-<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
+<h2 id="_2">五章的推进逻辑</h2>
 <p>五章不是并列的知识清单，而是一条递进的依赖链：先确定"谁在决策"，才谈得上"怎么协调"；协调需要信息，所以下一步是通信；通信受限后分配问题变成分布式决策；最后才是让这些主体自己学。</p>
 <table>
 <thead>
@@ -3830,7 +3830,7 @@
 </tbody>
 </table>
 <p>推进逻辑中有一个不变的主线：<strong>耦合度</strong>。从"独立 Agent 各自决策"到"共享同一环境的完全耦合"，每往右一步，可分解性下降一级，单智能体方法能直接搬运的部分就少一块。因此读到任何一章，都值得先问：这一章处理的是耦合度多大的场景？</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <p>上图从左到右六个节点，是一条从「个体」到「群体学习」的链路，每个节点都在回答上一个节点留下的缺口。</p>
 <p><strong>Agents / architectures</strong>——系统的最底层是"哪些组件被建模成决策者"。判据是它是否拥有自己的观测 <span class="arithmatex">\(o_i\)</span>、动作 <span class="arithmatex">\(a_i\)</span> 与目标 <span class="arithmatex">\(r_i\)</span>。架构分三档：Reactive（观测到动作的直接映射，快但无规划）、Deliberative（维护内部世界模型并搜索动作序列，慢但可规划）、Hybrid（高层规划 + 低层反应 + 安全层）。</p>
 <p><strong>Coordination / joint behavior</strong>——一旦有多个决策者，个体最优不再等于整体最优。典型例子是两个 Agent 都选择"让对方先过"而同时僵住，或都选择"我先过"而相撞。协调要处理的是联合动作 <span class="arithmatex">\(\mathbf a\)</span> 层面上的问题，而不是单个 <span class="arithmatex">\(a_i\)</span>。</p>
@@ -3889,7 +3889,7 @@
 </tbody>
 </table>
 <p>注意最后一行：学习节点吃进去的是<strong>前面五个节点的结构假设</strong>。这也是为什么"换一个更强的 MARL 算法"经常解决不了问题——若观测结构本身不足，再强的算法也只能在错误信息上做最优拟合。</p>
-<h2 id="术语与符号约定">术语与符号约定</h2>
+<h2 id="_4">术语与符号约定</h2>
 <p>全章统一使用下面的符号，避免在不同章节之间产生歧义。多智能体的符号与单智能体最大的差别在于：<strong>几乎所有量都带上了主体下标，或者依赖他人的策略。</strong></p>
 <table>
 <thead>
@@ -3958,7 +3958,7 @@
 </tbody>
 </table>
 <p>两个容易混淆的写法值得单独强调。第一，<span class="arithmatex">\(\pi_{-i}\)</span> 不是"其他所有 Agent 合起来的一个策略"，而是一组各自独立的策略，因此它是一个联合策略而不是单一函数。第二，观测函数写作 <span class="arithmatex">\(\mathcal O_i\)</span> 时下标在函数上，但真正的观测随机性来自环境状态与联合动作，所以 <span class="arithmatex">\(o_i\)</span> 的信噪比会随队友行为变化——队友动作越剧烈，<span class="arithmatex">\(o_i\)</span> 中包含的动态信息越多，静态信息相对越难提取。</p>
-<h2 id="常见失败模式速查">常见失败模式速查</h2>
+<h2 id="_5">常见失败模式速查</h2>
 <p>下面这张表用于现场定位：先看症状，再看最可能的层次，最后检查对应的设计项。经验上，绝大多数"算法不 work"的多智能体问题都能被前四行覆盖。</p>
 <table>
 <thead>
@@ -4012,7 +4012,7 @@
 </tbody>
 </table>
 <p>使用方式是"排除法"而不是"对症下药"：症状只提示层次，具体原因仍需回到对应章节的机制上验证。例如"回报震荡"可能是非平稳性，也可能只是超参数问题，区分判据是看震荡周期是否与对手策略的更新周期相关。</p>
-<h2 id="与其它章节的接口">与其它章节的接口</h2>
+<h2 id="_6">与其它章节的接口</h2>
 <p>MAS 不是一个孤立模块，它同时借用博弈论（多主体目标的数学语言）、分布式系统（在不可靠通信上做一致的工程手段）、单智能体 RL（学习机制）与机器人学（物理执行约束）。下表是主要的接口点：</p>
 <table>
 <thead>
@@ -4071,7 +4071,7 @@
 </tbody>
 </table>
 <p>接口方向是双向的：MAS 从博弈论拿模型语言，反过来把多主体约束（局部观测、通信受限、实时性）作为新条件反馈给博弈论与 RL；MAS 从分布式系统拿可靠性工程，反过来提出"参与者会理性选择策略"这一分布式系统通常不假设的条件。</p>
-<h2 id="单智能体到多智能体的新增困难">单智能体到多智能体的新增困难</h2>
+<h2 id="_7">单智能体到多智能体的新增困难</h2>
 <p>把单智能体算法复制 <span class="arithmatex">\(n\)</span> 份是最容易犯的错误。下表列出新增的困难，以及为什么单智能体方法不能直接搬。</p>
 <table>
 <thead>
@@ -4108,7 +4108,7 @@
 </tbody>
 </table>
 <p>量化一下增长：<span class="arithmatex">\(m=3\)</span> 时，<span class="arithmatex">\(n=5\)</span> 得 <span class="arithmatex">\(243\)</span> 种组合、<span class="arithmatex">\(n=10\)</span> 得 <span class="arithmatex">\(59049\)</span> 种、<span class="arithmatex">\(n=20\)</span> 得 <span class="arithmatex">\(3.5\times10^{9}\)</span> 种。若每个联合动作需要 1000 次采样才能可靠估计价值，<span class="arithmatex">\(n=20\)</span> 就需要 <span class="arithmatex">\(3.5\times10^{12}\)</span> 次交互——<strong>这条路径在物理系统上等于不可行</strong>，必须靠分解（独立 Q 学习）、结构（参数共享）或集中训练（CTDE）来绕开。</p>
-<h2 id="本章导航">本章导航</h2>
+<h2 id="_8">本章导航</h2>
 <ol>
 <li><a href="01-agents-architectures/">智能体与多智能体系统架构</a>：MDP 到 Markov Game，Reactive/Deliberative/Hybrid 架构选择，建模要素与系统边界判据。</li>
 <li><a href="02-coordination/">合作、竞争与协调</a>：联合动作与协调失败，合作/竞争/混合动机下的目标设置与均衡概念。</li>

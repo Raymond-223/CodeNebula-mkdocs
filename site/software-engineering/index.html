@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#工程实践的代价与收益" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         工程实践的代价与收益
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#技术债与返工成本" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         技术债与返工成本
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#工程实践的最低基线" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         工程实践的最低基线
@@ -3616,7 +3616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#本章导航" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3724,7 +3724,7 @@
 <br />
 <figcaption>Software Engineering 的核心概念关系。</figcaption>
 </figure>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>研究型项目和课堂作业最大的差别，不在于代码量，而在于<strong>代码需要被谁使用、使用多久</strong>。一次性实验脚本可以只有一个文件、没有测试、硬编码路径；而一个要交给下一届学生、要继续发论文、要在实机上反复运行的系统，必须处理完全不同的要求。</p>
 <p>本节要解决的正是从“能跑”到“可维护、可交付”之间的落差，具体包括五类问题：</p>
 <ul>
@@ -3779,7 +3779,7 @@
 </table>
 <p>所以本节的目标不是让你在第一天就搭建完整工程体系，而是让你知道<strong>在什么阶段该引入哪种工程手段</strong>，以及每种手段到底在解决什么。</p>
 <p>本节允许出现代码，因为工程概念只有落到具体命令和目录结构上才有意义；但代码是手段不是目的——本节的重点始终是判断，而不是语法。</p>
-<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
+<h2 id="_2">五章的推进逻辑</h2>
 <p>五章之间的关系是一条从“想清楚”到“跑得住”的直线，每一章都以前一章的产物为输入。</p>
 <p><strong>第一阶段：需求与架构（<a href="01-requirements-architecture/">第 1 章</a>）。</strong> 先回答“系统必须完成什么、哪些质量不能牺牲”，再把这些要求变成模块边界与依赖方向。这一阶段的产出不是代码，而是边界：系统做什么、不做什么，谁依赖谁。</p>
 <p><strong>第二阶段：模块与接口（<a href="02-modular-apis/">第 2 章</a>）。</strong> 边界确定之后，需要把它固化成可被调用的接口：函数签名、数据结构、错误约定。接口是模块之间唯一的合法通道，接口清楚，模块才能独立开发和独立测试。</p>
@@ -3830,7 +3830,7 @@
 </tbody>
 </table>
 <p>这条链条也可以反向使用：当你在后期遇到某个反复出现的麻烦，通常能沿链条往上找到缺失的环节。反复出现的接口错误，往往是第 1 章的边界没定清；反复出现的协作冲突，往往是第 3 章的提交与评审约定缺失。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <p>软件地图这张图把整节的骨架压缩成五个节点，它们不是并列的清单，而是一条有依赖顺序的链条。</p>
 <p><strong>顶层标题 “Software engineering: from intent to maintainable delivery”</strong> 给出了这条链的两端：起点是 intent（意图，即人想做什么），终点是 maintainable delivery（可维护的交付，即系统能被持续修改和运行）。中间的所有概念，都是把意图翻译成可交付物的工具。</p>
 <p><strong>Requirements — what to build。</strong> 第一个节点负责回答“要建什么”。它的关键词是 <em>what</em>，而不是 <em>how</em>；一旦这里滑向技术选型，说明需求还没被真正想清楚。这一节点的产出是明确的功能范围、质量指标和验收条件。</p>
@@ -3882,7 +3882,7 @@
 </tbody>
 </table>
 <p>顺着这五个节点读，可以得到一条完整的判断链：<strong>想清楚要什么 → 划出边界 → 写下契约 → 用证据检查 → 交付并持续观察</strong>。任何一环缺失，后面所有环节的成本都会上升。</p>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_4">与其他章节的接口</h2>
 <p>本章的概念不是自成一体的，它们会作为工具出现在其它章节的语境里。下表给出几个最主要的衔接点：</p>
 <table>
 <thead>
@@ -3973,7 +3973,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="工程实践的代价与收益">工程实践的代价与收益</h2>
+<h2 id="_5">工程实践的代价与收益</h2>
 <p>工程实践最容易被质疑的一点是“现在就做，是不是在浪费时间”。这个问题其实可以算，只是很少人把变量写出来。设某项实践的一次性投入为 <span class="arithmatex">\(C_0\)</span>（小时），它使每次后续变更节省的时间为 <span class="arithmatex">\(s\)</span>（小时/次），项目在可预见范围内还会发生 <span class="arithmatex">\(N\)</span> 次变更，则净收益为</p>
 <div class="arithmatex">\[B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s &gt; C_0.\]</div>
 <p>这里 <span class="arithmatex">\(N\)</span> 是最容易被低估的变量：研究项目常常以为“写完就结束了”，但真实情况是标定要重跑、参数要微调、论文返修要补实验，<span class="arithmatex">\(N\)</span> 往往在几十到几百的量级。<strong>只要 <span class="arithmatex">\(N\)</span> 够大，几乎任何把重复劳动自动化的实践都会回本。</strong></p>
@@ -4034,7 +4034,7 @@
 <li>变更次数 <span class="arithmatex">\(N\)</span> 很小且确定不会再发生；</li>
 <li>该环节已被更外层的检查覆盖（例如已有一条端到端测试兜住）。</li>
 </ul>
-<h2 id="技术债与返工成本">技术债与返工成本</h2>
+<h2 id="_6">技术债与返工成本</h2>
 <p>技术债这个比喻之所以有用，是因为它自带两个变量：<strong>本金</strong>和<strong>利息</strong>。设本金为 <span class="arithmatex">\(V\)</span>（当前实现与“本该有的实现”之间的差距），每次变更因绕过这份差距而多付的成本比例为 <span class="arithmatex">\(r\)</span>，经过 <span class="arithmatex">\(t\)</span> 次变更后的总代价约为</p>
 <div class="arithmatex">\[C_{\text{future}} = V \cdot (1 + r)^{t}.\]</div>
 <p>这个式子最重要的含义是<strong>债务按复利增长</strong>：<span class="arithmatex">\(r = 0.2\)</span>、<span class="arithmatex">\(t = 10\)</span> 时，<span class="arithmatex">\(1.2^{10} \approx 6.2\)</span>，也就是同样一块差距，十次变更之后要多付六倍的代价。因此技术债的处置原则不是“迟早还”，而是<strong>在利息超过本金之前还</strong>。</p>
@@ -4126,7 +4126,7 @@
 </tbody>
 </table>
 <p>最后一行是最危险的：坐标系与单位错误不会报错，只会让结果缓慢地偏离，因此必须在接口层加入显式约束（类型、单位后缀、校验断言），把它从“静默错误”变成“立即失败”。</p>
-<h2 id="工程实践的最低基线">工程实践的最低基线</h2>
+<h2 id="_7">工程实践的最低基线</h2>
 <p>工程实践很容易变成两种极端：要么完全不讲，要么一开始就上全套重流程。更现实的方式是按项目规模设定最低基线——先保证不会因为缺哪一环而崩，再逐步加码。</p>
 <table>
 <thead>
@@ -4207,7 +4207,7 @@
 </tbody>
 </table>
 <p>合理的做法是让流程强度随 <span class="arithmatex">\(n(n-1)/2\)</span> 增长而增长，但不要提前加载：<strong>当某类问题第一次重复出现时引入对应的最小手段，比一开始就上全套重流程更省钱，也比等着它第三次出现更省事。</strong></p>
-<h2 id="本章导航">本章导航</h2>
+<h2 id="_8">本章导航</h2>
 <p>建议按顺序读：每一章都在使用上一章的产出，顺序颠倒会让概念缺少落点。</p>
 <ul>
 <li><a href="01-requirements-architecture/">第 1 章 · 需求、边界与软件架构</a>：从功能与质量要求出发，定义系统边界与依赖方向。</li>

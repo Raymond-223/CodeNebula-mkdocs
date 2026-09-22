@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#五章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#感知误差如何进入下游" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         感知误差如何进入下游
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#调试顺序" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         调试顺序
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#本章导航" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3714,7 +3714,7 @@
 <br />
 <figcaption>Perception 的核心概念关系。</figcaption>
 </figure>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>读感知之前，最常见的困惑是“模型能跑，但不知道结果用在哪、错在哪”。具体表现为三类：</p>
 <ol>
 <li><strong>坐标系断层</strong>：能把目标框画在图像上，但说不出这个框对应世界系中哪个位置、置信度如何影响下游；</li>
@@ -3736,7 +3736,7 @@
 <li><strong>处理频率</strong>：这一环的输出频率能否满足下游的控制周期与延迟要求。</li>
 </ul>
 <p><strong>只要“余量 &gt; 误差”，系统就能工作；一旦反过来，任何算法优化都救不回来。</strong> 举例：定位横向误差 0.25 m、单侧通道余量 0.30 m，理论上还能通过，但只需再叠加 0.10 m 的感知误差就立即越界。此时正确的动作是降速、换更保守的路径或提高定位精度，而不是继续调检测阈值——<strong>感知指标的微小提升，无法补偿余量的结构性不足。</strong></p>
-<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
+<h2 id="_2">五章的推进逻辑</h2>
 <table>
 <thead>
 <tr>
@@ -3788,7 +3788,7 @@
 <p>推进逻辑是<strong>依赖关系而非并列关系</strong>：第 1 章的内参是第 4 章反投影的前提；第 2 章的特征与匹配是视觉里程计、SLAM 和配准的共同基础；第 3 章的语义只有挂到第 4 章的几何上，才能变成“世界里的一个物体”；第 5 章融合的上限由前四章的对齐质量决定。</p>
 <p>反过来说，<strong>上游的错误无法在下游被修复</strong>：内参错了，再准的检测也无法变成正确位置；标定漂了，再强的融合网络也只会把错位的两种数据一起用错。因此本节反复强调一个顺序：<strong>先保证几何与时间正确，再谈模型精度。</strong></p>
 <p>按输入输出看，这条链还有两个特点值得记住。第一，<strong>只有第 3 章产出语义，其余章节都在保证几何与时间正确</strong>——这解释了为什么感知系统的大部分故障都不是模型问题，而是坐标与时序问题。第二，<strong>第 5 章的输出不是“一个更准的框”，而是一份携带健康状态的世界描述</strong>：它必须同时说明“我看到什么”和“我有多可信”，否则下游无法据此选择保守策略。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <p>下图给出感知链路的概览结构，逐节点解释如下。图中的链是 <code>Camera → projection → Features → matching → Recognition → 3D Geometry → Fusion</code>，箭头表示信息流方向。</p>
 <p><strong>Camera / projection（相机与投影）</strong> 是整条链的起点。世界点 <span class="arithmatex">\(X\)</span> 通过内参 <span class="arithmatex">\(K\)</span> 和外参投影到像素：</p>
 <div class="arithmatex">\[
@@ -3846,7 +3846,7 @@ K\begin{bmatrix}R &amp; t\end{bmatrix}
 </tr>
 </tbody>
 </table>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_4">与其他章节的接口</h2>
 <p>感知不是自足的，它的概念大量流向下游章节。关键接口如下：</p>
 <table>
 <thead>
@@ -3900,7 +3900,7 @@ K\begin{bmatrix}R &amp; t\end{bmatrix}
 </tbody>
 </table>
 <p>接口的读法是<strong>双向的</strong>：往上游看，感知要满足下游的精度和频率要求（规划器 10 Hz 就够了，控制器可能需要 100 Hz）；往下游看，感知的错误会以特定形式体现在下游症状里（定位漂移、规划抖动、控制超调）。</p>
-<h2 id="感知误差如何进入下游">感知误差如何进入下游</h2>
+<h2 id="_5">感知误差如何进入下游</h2>
 <p>感知误差不会消失，它只会换一种形式出现。把误差与下游症状对应起来，是调试时最快的定位方法。</p>
 <table>
 <thead>
@@ -3971,7 +3971,7 @@ K\begin{bmatrix}R &amp; t\end{bmatrix}
 <li><strong>控制器高频小幅振荡</strong>：常被归为控制参数问题，但如果感知输出的时间戳抖动较大，控制器会一直追一个“已经过期的目标”，表现为无法收紧的振荡。</li>
 </ul>
 <p><strong>感知的误差一旦进入下游，就换上了下游的“语言”。</strong> 因此排查时应当先问“这个症状随什么变量变化”，而不是从最显眼的模块开始改。</p>
-<h2 id="调试顺序">调试顺序</h2>
+<h2 id="_6">调试顺序</h2>
 <p>当感知系统表现异常时，调试顺序应当是<strong>从物理到算法、从单模态到多模态</strong>，因为物理层错误会让算法层的一切评估失去意义。推荐流程有四步：</p>
 <table>
 <thead>
@@ -4013,7 +4013,7 @@ K\begin{bmatrix}R &amp; t\end{bmatrix}
 <p>第 1 步的验收标准要写得具体：单模态在目标距离区间内的误差是否小于任务余量；单模态的失效条件是否可被检测（能否给出“我现在不可信”的信号）。<strong>一个不能自我报告不可信的模态，不适合参与融合。</strong></p>
 <p>第 2、3 步的核心工具是<strong>注入已知偏差并观察响应</strong>：人为把外参平移 5 cm、或把时间戳统一偏移 20 ms，看下游症状是否按理论量级变化。若症状没有变化，说明该参数根本没有进入计算链（例如被某个模块硬编码覆盖了）；若变化远大于理论值，说明链路上还有别的错误在叠加。<strong>这个“注入—观察—对量级”的循环，比反复读代码更快找到断点。</strong></p>
 <p>第 4 步的验收必须包含“退化可预期”：好的融合系统在模态失效时的性能下降应当是<strong>可控且可预测的</strong>（例如降速后仍能完成避障），而不是随机崩塌。若失效后的行为无法预测，说明系统实际上仍然强依赖于那个模态，融合只是表面上的冗余。</p>
-<h2 id="本章导航">本章导航</h2>
+<h2 id="_7">本章导航</h2>
 <ol>
 <li><a href="01-image-camera-basics/">图像与相机模型基础</a>：成像过程、内参与畸变模型、坐标系约定，是后续所有几何计算的起点。</li>
 <li><a href="02-feature-vision/">特征视觉</a>：关键点、描述子、匹配与鲁棒估计，连接图像与几何。</li>

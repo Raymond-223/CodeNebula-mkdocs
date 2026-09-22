@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#本节要解决的问题" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#六章的推进逻辑" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         六章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#概念地图" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#与其他章节的接口" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         与其他章节的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#从算法到实机的差距" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         从算法到实机的差距
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#阅读顺序建议" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         阅读顺序建议
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#术语与记号速查" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         术语与记号速查
@@ -3616,7 +3616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#本章导航" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3724,7 +3724,7 @@
 <br />
 <figcaption>Reinforcement Learning 的核心概念关系。</figcaption>
 </figure>
-<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<h2 id="_1">本节要解决的问题</h2>
 <p>监督学习里样本是 <span class="arithmatex">\((x,y)\)</span>，损失函数直接告诉你错在哪里。强化学习里样本是 <span class="arithmatex">\((s_t,a_t,r_{t+1},s_{t+1})\)</span>，你只得到一个标量奖励，于是至少有三层麻烦：</p>
 <ol>
 <li><strong>信用分配</strong>：奖励发生在 <span class="arithmatex">\(t+1\)</span>，但可能是 <span class="arithmatex">\(t-5\)</span> 时刻某个动作造成的，也可能是十几步之前埋下的伏笔。要最大化的是累计回报</li>
@@ -3782,7 +3782,7 @@
 </tbody>
 </table>
 <p>因此本节的六章其实在回答同一链条上的六个问题：<strong>奖励如何被形式化？价值如何被估计？策略如何被直接优化？数据从哪里来？能不能不要真实交互？不知道的地方如何保证安全？</strong></p>
-<h2 id="六章的推进逻辑">六章的推进逻辑</h2>
+<h2 id="_2">六章的推进逻辑</h2>
 <table>
 <thead>
 <tr>
@@ -3833,7 +3833,7 @@
 </table>
 <p>推进逻辑可以概括成一句：<strong>先把问题写成方程（01），再决定学值、学策略还是学模型（02 / 03 / 05），最后处理"数据不够真实"这件在工程里必然发生的事（04 / 06）。</strong></p>
 <p>一个常见的错位是跳过 01 直接调算法：这样做在玩具环境里往往能跑通，一旦策略不收敛就无从判断是 <span class="arithmatex">\(\gamma\)</span> 设错、状态不充分，还是更新目标构造函数有误。反过来，把 01 的 Bellman 关系写清楚之后，后面每一章的目标函数都只是它的某种估计形式，调试时也就能逐项对照"偏差从哪来、方差从哪来"。</p>
-<h2 id="概念地图">概念地图</h2>
+<h2 id="_3">概念地图</h2>
 <p>图中六个方框是一条从左到右的箭头链，标题为 "from decision process to constrained learning"，即从"纯决策过程"走向"带约束的学习"。逐节点解释如下：</p>
 <ul>
 <li><strong>MDP / Bellman</strong>（起点）：定义问题本身。五元组 <span class="arithmatex">\(\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma)\)</span> 加上 Bellman 递推</li>
@@ -3896,7 +3896,7 @@
 </tbody>
 </table>
 <p>六个节点之间是<strong>接口关系而非替代关系</strong>：后面每一框都要用到前面框的对象定义，工程上常见的是 02 与 03 混用（离散动作头 + 连续参数），或者 05 提供模型、02 / 03 提供策略。</p>
-<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<h2 id="_4">与其他章节的接口</h2>
 <table>
 <thead>
 <tr>
@@ -3945,7 +3945,7 @@
 </table>
 <p>可以看到，<strong>Bellman 方程把最优控制、动态规划、RL 放在同一张地图上，Nash 均衡把这张地图扩展到多智能体，而运行时保障负责把学到的策略接回真实系统。</strong></p>
 <p>使用这张表时有一点要留意：同一个数学对象在不同章节里承担的职责不同。例如 <span class="arithmatex">\(V\)</span> 在 01 里是 Bellman 算子作用的函数，在 02 里变成回归目标的一部分，在 03 里又被当作降低梯度方差的基线；<span class="arithmatex">\(Q\)</span> 在 <a href="../game-theory/02-best-response-nash/">../game-theory/02-best-response-nash.md</a> 中还额外带上了对手策略这一层依赖。先确认"当前这章把 <span class="arithmatex">\(V\)</span> 当作什么用"，再去看它的估计误差如何传播，读起来会顺很多。</p>
-<h2 id="从算法到实机的差距">从算法到实机的差距</h2>
+<h2 id="_5">从算法到实机的差距</h2>
 <p>教科书设定里成立的假设，在真机上几乎每一条都要重新检查。下表左右两列是同一件事的两种世界：</p>
 <table>
 <thead>
@@ -4008,7 +4008,7 @@
 </tbody>
 </table>
 <p>差距的根源大多落在两端：<strong>后端是数据分布不可控（离线、非平稳、部分可观测），前端是安全与代价不可接受（约束、运行时保障）。</strong> 这两端正是第 <a href="04-exploration-pomdp/">04</a> 与第 <a href="06-safe-robust-offline/">06</a> 章分别处理的对象。</p>
-<h2 id="阅读顺序建议">阅读顺序建议</h2>
+<h2 id="_6">阅读顺序建议</h2>
 <table>
 <thead>
 <tr>
@@ -4042,7 +4042,7 @@
 <li><strong>快速印象</strong>：只用 01 → 02 → 03，读完后回到 <a href="../game-theory/02-best-response-nash/">../game-theory/02-best-response-nash.md</a> 与 <a href="../multi-agent-systems/05-multi-agent-learning/">../multi-agent-systems/05-multi-agent-learning.md</a>，看单智能体设定在多智能体下发生了什么变化。</li>
 </ol>
 <p>一条通用提醒：<strong>每一章最好都用同一个两状态或三状态小例子手算一遍</strong>。RL 里绝大多数难以理解的"不稳定"，都源于对 <span class="arithmatex">\(Q\)</span> 的更新方向与目标构造方式没有具象感。</p>
-<h2 id="术语与记号速查">术语与记号速查</h2>
+<h2 id="_7">术语与记号速查</h2>
 <p>跨章节出现的记号在这一行里含义固定，读到后面若觉得符号混淆，可以回到这张表核对。需要特别注意的是 <span class="arithmatex">\(\gamma\)</span> 与 <span class="arithmatex">\(\alpha\)</span> 的角色完全不同：前者改变<strong>目标函数的定义</strong>，后者只改变<strong>学习速度</strong>，把它们混调是常见的调试误区。</p>
 <table>
 <thead>
@@ -4116,7 +4116,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="本章导航">本章导航</h2>
+<h2 id="_8">本章导航</h2>
 <ol>
 <li><a href="01-mdp-bellman/">MDP 与 Bellman 方程</a> —— 五元组、Markov 性、<span class="arithmatex">\(V^\pi\)</span> / <span class="arithmatex">\(Q^\pi\)</span> / <span class="arithmatex">\(Q^*\)</span>、Bellman 期望与最优方程、折扣因子与有效时域、值迭代与策略迭代、优势函数。</li>
 <li><a href="02-value-based/">价值学习：从 Q-Learning 到 DQN</a> —— TD 与 MC 的偏差—方差权衡、<span class="arithmatex">\(\varepsilon\)</span>-greedy、经验回放与目标网络、半梯度、最大化偏差与 Double DQN。</li>
