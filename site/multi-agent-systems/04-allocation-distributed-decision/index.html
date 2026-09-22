@@ -1831,6 +1831,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#分配问题的形式化与复杂度" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分配问题的形式化与复杂度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#匈牙利算法与拍卖算法" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        匈牙利算法与拍卖算法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#代价估计误差与重分配策略" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        代价估计误差与重分配策略
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3717,6 +3750,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#分配问题的形式化与复杂度" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分配问题的形式化与复杂度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#匈牙利算法与拍卖算法" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        匈牙利算法与拍卖算法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#代价估计误差与重分配策略" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        代价估计误差与重分配策略
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3809,16 +3875,52 @@
 
 
 <h1 id="task-allocation--distributed-decision-making">Task Allocation &amp; Distributed Decision Making</h1>
-<p>当多个 Agent 都能执行多个任务时，系统必须回答：<strong>谁去做什么，以及谁来决定这件事。</strong> 这既是组合优化问题，也可能受到通信、私有信息和故障的限制。</p>
+<p>当多个主体都能执行多个任务时，系统必须回答：<strong>谁去做什么，以及谁来决定这件事。</strong> 这既是组合优化问题，也可能受到通信、私有信息和故障的限制。这一章从代价矩阵出发，逐步说明为什么"算得最优"和"分得可靠"是两件不同的事，并把集中式、市场式与分布式方法放在同一张量尺上比较。</p>
+<p><strong>最核心的一句话：任务分配的本质是求解一个带约束的组合优化问题，但在真实系统里，"及时且够好"几乎总是胜过"最优但迟到"。</strong></p>
 <h2 id="先把任务分配写成代价矩阵">先把任务分配写成代价矩阵</h2>
-<p>假设 <span class="arithmatex">\(c_{ij}\)</span> 表示 Agent <span class="arithmatex">\(i\)</span> 执行任务 <span class="arithmatex">\(j\)</span> 的代价，例如距离、时间或能耗。</p>
+<p>假设 <span class="arithmatex">\(c_{ij}\)</span> 表示 Agent <span class="arithmatex">\(i\)</span> 执行任务 <span class="arithmatex">\(j\)</span> 的代价，例如距离、时间或能耗。全部代价排成矩阵 <span class="arithmatex">\(C=[c_{ij}]\)</span>，行是主体、列是任务。</p>
 <p>一对一分配可以写成：</p>
 <div class="arithmatex">\[
-\min_x\sum_{i,j}c_{ij}x_{ij}
+\min_{x}\sum_{i,j}c_{ij}x_{ij}
 \]</div>
-<p>满足每个任务最多分给一个主体、每个主体的容量限制等约束。</p>
-<p>如果所有代价都可以集中获得，标准线性分配问题可以通过组合优化方法求解。其关键不是某个库函数，而是二元变量 <span class="arithmatex">\(x_{ij}\in\{0,1\}\)</span> 是否准确表达“主体 <span class="arithmatex">\(i\)</span> 接受任务 <span class="arithmatex">\(j\)</span>”，以及容量、唯一性等约束是否完整。</p>
-<p>这里最重要的不是算法名字，而是先把“谁做哪个任务”变成明确的<strong>决策变量、代价和约束</strong>。</p>
+<p>满足每个任务最多分给一个主体、每个主体的容量限制等约束。其关键是二元变量 <span class="arithmatex">\(x_{ij}\in\{0,1\}\)</span> 是否准确表达"主体 <span class="arithmatex">\(i\)</span> 接受任务 <span class="arithmatex">\(j\)</span>"，以及容量、唯一性等约束是否完整。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>取值范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(c_{ij}\)</span></td>
+<td>主体 <span class="arithmatex">\(i\)</span> 执行任务 <span class="arithmatex">\(j\)</span> 的代价</td>
+<td><span class="arithmatex">\([0,\infty)\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(x_{ij}\)</span></td>
+<td>是否把任务 <span class="arithmatex">\(j\)</span> 分给主体 <span class="arithmatex">\(i\)</span></td>
+<td><span class="arithmatex">\(\{0,1\}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(n\)</span></td>
+<td>任务数</td>
+<td>正整数</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(m\)</span></td>
+<td>主体数</td>
+<td>正整数</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u_i\)</span></td>
+<td>主体 <span class="arithmatex">\(i\)</span> 的容量（最多任务数）</td>
+<td>正整数</td>
+</tr>
+</tbody>
+</table>
+<p>这里最重要的不是算法名字，而是先把"谁做哪个任务"变成明确的<strong>决策变量、代价和约束</strong>。一旦这三者清楚，具体求解器只是实现细节；若三者含糊，再强的求解器也会给出无法执行的方案。</p>
 <h2 id="集中式分配的限制">集中式分配的限制</h2>
 <p>集中式方法默认一个中心节点能拿到所有信息，并且计算结果能可靠下发。现实中常遇到：</p>
 <ul>
@@ -3828,39 +3930,462 @@
 <li>中心节点可能成为单点故障；</li>
 <li>某些主体有自己的目标，而不是完全合作。</li>
 </ul>
-<p>因此工程上常接受“局部计算 + 少量通信 + 足够好的结果”，而不是不惜代价追求一次性的全局最优。</p>
+<p>设中心需要的通信量为 <span class="arithmatex">\(O(nm)\)</span> 条代价信息，在 <span class="arithmatex">\(n,m\)</span> 都较大时，光是收集代价就会成为瓶颈。因此工程上常接受"局部计算 + 少量通信 + 足够好的结果"，而不是不惜代价追求一次性的全局最优。</p>
+<table>
+<thead>
+<tr>
+<th>限制来源</th>
+<th>具体表现</th>
+<th>对解的影响</th>
+<th>缓解方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>私有信息</td>
+<td>中心不知道真实 <span class="arithmatex">\(c_{ij}\)</span></td>
+<td>分配次优</td>
+<td>报价 + 机制设计</td>
+</tr>
+<tr>
+<td>通信延迟</td>
+<td>代价收集慢</td>
+<td>基于过期信息求解</td>
+<td>局部拍卖</td>
+</tr>
+<tr>
+<td>单点故障</td>
+<td>中心宕机</td>
+<td>全系统停摆</td>
+<td>分散式/多中心</td>
+</tr>
+<tr>
+<td>动态任务</td>
+<td>列表持续变化</td>
+<td>解很快失效</td>
+<td>事件触发重规划</td>
+</tr>
+</tbody>
+</table>
 <h2 id="市场式分配与报价">市场式分配与报价</h2>
-<p>如果主体能估计自己执行任务的代价，就可以发送 bid：</p>
-<div class="highlight"><pre><span></span><code>task announced
-    ↓
-agents compute local bid
-    ↓
-select winner
-    ↓
-confirm assignment
-</code></pre></div>
-<p>合同网（Contract Net）就是一个典型流程：管理者发布任务，候选 Agent 根据局部状态报价，管理者选择合适方案并确认。</p>
-<p>它的价值在于：<strong>全局节点不需要知道每个 Agent 内部怎样计算成本。</strong></p>
-<p>拍卖机制还能进一步处理自利主体，但这时需要考虑“主体是否会虚报成本”。机制设计是一个更大的主题；在 MAS 主线里只要知道：当主体目标不一致时，单纯求组合最优已经不够，还必须考虑规则是否能诱导真实行为。</p>
+<p>如果主体能估计自己执行任务的代价，就可以发送 bid。合同网（Contract Net）流程可以概括为四个阶段：</p>
+<ol>
+<li>管理者广播任务通告（announce）；</li>
+<li>候选主体计算本地报价（bid）；</li>
+<li>管理者选出最优方案（select winner）；</li>
+<li>双方确认归属（confirm assignment）。</li>
+</ol>
+<p>它的价值在于：<strong>全局节点不需要知道每个 Agent 内部怎样计算成本</strong>，只需要比较报价这一标量。这把 <span class="arithmatex">\(O(nm)\)</span> 的完整代价传递压缩成 <span class="arithmatex">\(O(m)\)</span> 的报价汇聚。</p>
+<p>拍卖机制还能进一步处理自利主体，但这时需要考虑"主体是否会虚报成本"。设主体真实成本为 <span class="arithmatex">\(c\)</span>、报价为 <span class="arithmatex">\(b\)</span>，若虚报 <span class="arithmatex">\(b&lt;c\)</span> 能增加中标概率，理性主体就有动机说谎。机制设计的目标是构造支付规则，使"如实报价"成为占优策略。在 MAS 主线里只需知道：<strong>当主体目标不一致时，单纯求组合最优已经不够，还必须考虑规则是否能诱导真实行为。</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>通信方向</th>
+<th>消息内容</th>
+<th>失效后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通告</td>
+<td>管理者 → 全体</td>
+<td>任务描述</td>
+<td>任务无人知晓</td>
+</tr>
+<tr>
+<td>报价</td>
+<td>主体 → 管理者</td>
+<td>成本标量</td>
+<td>无法比较</td>
+</tr>
+<tr>
+<td>选择</td>
+<td>内部计算</td>
+<td>—</td>
+<td>选错赢家</td>
+</tr>
+<tr>
+<td>确认</td>
+<td>管理者 → 赢家</td>
+<td>归属确认</td>
+<td>重复或漏分配</td>
+</tr>
+</tbody>
+</table>
 <h2 id="动态任务需要不断重新分配">动态任务需要不断重新分配</h2>
-<p>机器人系统里的任务通常不是一次性静态列表。新任务到来、机器人故障、电量下降都会改变原来的分配。</p>
-<p>因此分配算法还要考虑<strong>重规划成本</strong>：理论上更优的新方案，如果需要所有机器人立刻换目标，实际执行可能更差。</p>
+<p>机器人系统里的任务通常不是一次性静态列表。新任务到来、机器人故障、电量下降都会改变原来的分配。因此分配算法还要考虑<strong>重规划成本</strong>：理论上更优的新方案，如果需要所有机器人立刻换目标，实际执行可能更差。</p>
 <p>一个实用策略是定义事件集合</p>
 <div class="arithmatex">\[
-E=E_{failure}\cup E_{priority}\cup E_{cost},
+E=E_{\text{failure}}\cup E_{\text{priority}}\cup E_{\text{cost}},
 \]</div>
-<p>仅当故障、新高优先级任务，或代价变化超过阈值时触发重新分配。这样把“何时重算”也纳入决策模型，避免系统因小扰动频繁切换任务。</p>
-<p>这比每个控制周期都重新求一次全局分配更稳定。</p>
+<p>仅当故障、新高优先级任务，或代价变化超过阈值时触发重新分配：</p>
+<div class="arithmatex">\[
+\text{reallocate} \iff \big(\text{event}\in E\big)\ \text{或}\ \Big(\big|\Delta C\big| &gt; \theta\Big).
+\]</div>
+<p>这样把"何时重算"也纳入决策模型，避免系统因小扰动频繁切换任务。阈值 <span class="arithmatex">\(\theta\)</span> 的选取是一处权衡：<span class="arithmatex">\(\theta\)</span> 太小会导致频繁重分配（抖动），<span class="arithmatex">\(\theta\)</span> 太大则系统对新情况反应迟钝。这比每个控制周期都重新求一次全局分配更稳定。</p>
+<table>
+<thead>
+<tr>
+<th>触发条件</th>
+<th>事件类型</th>
+<th>重分配范围</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主体故障</td>
+<td><span class="arithmatex">\(E_{\text{failure}}\)</span></td>
+<td>局部（只重分其任务）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>高优先级任务</td>
+<td><span class="arithmatex">\(E_{\text{priority}}\)</span></td>
+<td>可能全局</td>
+<td>抢占导致抖动</td>
+</tr>
+<tr>
+<td>代价变化超阈</td>
+<td><span class="arithmatex">\(E_{\text{cost}}\)</span></td>
+<td>局部</td>
+<td>阈值难定</td>
+</tr>
+</tbody>
+</table>
 <h2 id="任务分配与运动规划的边界">任务分配与运动规划的边界</h2>
-<p>“任务 A 分给机器人 2”只回答了<strong>谁做</strong>；机器人 2 怎样绕开其他机器人到达目标，是另一个协调和导航问题。</p>
-<p>典型层次可以写成：</p>
-<div class="highlight"><pre><span></span><code>Task allocation  →  Who does what?
-Coordination     →  How to avoid mutual conflict?
-Planning/control →  How does each robot execute it?
-</code></pre></div>
-<p>如果把三层全部塞进一个巨大优化器，模型会迅速变复杂，也更难调试。最小充分的工程设计是先把层次分开，再在必要处交换代价、路径占用或任务状态。</p>
+<p>"任务 A 分给机器人 2"只回答了<strong>谁做</strong>；机器人 2 怎样绕开其他机器人到达目标，是另一个协调和导航问题。典型层次是：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>回答的问题</th>
+<th>时间尺度</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task allocation</td>
+<td>谁做哪个任务？</td>
+<td>秒 ~ 分钟</td>
+<td>任务—主体映射</td>
+</tr>
+<tr>
+<td>Coordination</td>
+<td>如何避免相互冲突？</td>
+<td>百毫秒 ~ 秒</td>
+<td>占用、时隙、路径约束</td>
+</tr>
+<tr>
+<td>Planning / control</td>
+<td>单个主体如何执行？</td>
+<td>毫秒 ~ 百毫秒</td>
+<td>轨迹、控制量</td>
+</tr>
+</tbody>
+</table>
+<p>如果把三层全部塞进一个巨大优化器，模型会迅速变复杂，也更难调试。最小充分的工程设计是先把层次分开，再在必要处交换代价、路径占用或任务状态。任务层的代价估计依赖运动层的实际路径长度（见 <a href="../../robotics/04-path-motion-planning/">路径与运动规划</a>），而运动层的安全约束又反过来限制任务层可选的分配，二者通过稀疏接口交换信息，而不是合并成一个整体。</p>
+<p>层与层之间的接口应当是一份明确的契约：任务层向规划层交付"目标点 + 时限 + 优先级"，规划层向任务层回报"可行/不可行 + 预计代价 <span class="arithmatex">\(\hat{c}_{ij}\)</span>"。这样即使规划器更换了算法，任务层也无需改动。设任务层分配给出的预测代价为 <span class="arithmatex">\(\hat{c}\)</span>、规划层实际执行代价为 <span class="arithmatex">\(c\)</span>，二者的差 <span class="arithmatex">\(\varepsilon=c-\hat{c}\)</span> 正是分配质量的度量——若 <span class="arithmatex">\(\varepsilon\)</span> 长期系统偏大，说明两层的代价模型脱节，应优先修正接口而非更换任务分配算法。</p>
+<p>需要强调的是，这种分层不是"谁更重要"的排序，而是<strong>时间尺度分离</strong>：任务分配在秒级更新，协调在百毫秒级，控制在毫秒级。不同尺度上的决策互相影响，但更新的频率相差几个量级。正因如此，把三者压成一个优化器会同时承受最慢层的推理延迟和最快层的实时约束，几乎必然在实时性上失败。分层的真正收益，是让每一层都能在自己的时间预算内独立运行。</p>
 <h2 id="分配结果还需要确认协议">分配结果还需要确认协议</h2>
 <p>计算出赢家并不代表任务已经可靠分配。消息丢失可能让两个 Agent 都认为自己获得任务，也可能让任务无人执行。实际协议需要区分提议、确认和执行状态，并使用任务版本或租约处理超时与重新分配。</p>
+<p>设任务 <span class="arithmatex">\(j\)</span> 的租约为 <span class="arithmatex">\((\text{owner}, t_{\text{expire}})\)</span>。持有者在 <span class="arithmatex">\(t&lt;t_{\text{expire}}\)</span> 时拥有独占权，超时则自动释放：</p>
+<div class="arithmatex">\[
+\text{owns}(i,j,t)=\big(\text{owner}_j=i\big)\wedge\big(t&lt;t_{\text{expire},j}\big).
+\]</div>
+<table>
+<thead>
+<tr>
+<th>协议状态</th>
+<th>含义</th>
+<th>超时后行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>proposed</td>
+<td>已提议未确认</td>
+<td>视为未分配</td>
+</tr>
+<tr>
+<td>confirmed</td>
+<td>已确认执行</td>
+<td>续租或释放</td>
+</tr>
+<tr>
+<td>expired</td>
+<td>租约失效</td>
+<td>重新进入拍卖</td>
+</tr>
+</tbody>
+</table>
+<p>引入租约后，即使确认消息丢失，系统也能通过超时自然恢复一致，代价是个别任务会被短暂重复执行。这种"宁可短暂重复，不可永久漏做"的取舍，是分配协议设计的基本立场。</p>
+<h2 id="分配问题的形式化与复杂度">分配问题的形式化与复杂度</h2>
+<p>把分配问题写严格，需要同时给出决策变量、目标与约束。设主体 <span class="arithmatex">\(i\)</span> 的容量为 <span class="arithmatex">\(u_i\)</span>，则标准的一对一（或多对一）分配是</p>
+<div class="arithmatex">\[
+\min_{x}\ \sum_{i=1}^{m}\sum_{j=1}^{n} C_{ij}\,x_{ij}
+\quad\text{s.t.}\quad
+\sum_{i=1}^{m} x_{ij}=1\ (\forall j),\qquad
+\sum_{j=1}^{n} x_{ij}\le u_i\ (\forall i),\qquad
+x_{ij}\in\{0,1\}.
+\]</div>
+<p>约束 <span class="arithmatex">\(\sum_j x_{ij}\le u_i\)</span> 表示每个主体的容量上限；当 <span class="arithmatex">\(u_i=1\)</span> 且 <span class="arithmatex">\(m=n\)</span> 时，这就是经典的线性分配问题，最优解可以通过组合方法在多项式时间内求得。</p>
+<p>但现实问题往往更宽：若任务可以按任意顺序分配给任意机器人、且不做容量限制，则每个任务有 <span class="arithmatex">\(m\)</span> 种归属，共 <span class="arithmatex">\(n\)</span> 个任务，可能的分配方案数为</p>
+<div class="arithmatex">\[
+|\mathcal{X}| = m^{\,n}.
+\]</div>
+<p>这个数随 <span class="arithmatex">\(n\)</span> 指数增长，说明<strong>穷举不可行</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>任务数 <span class="arithmatex">\(n\)</span></th>
+<th>主体数 <span class="arithmatex">\(m\)</span></th>
+<th>方案数 <span class="arithmatex">\(m^n\)</span></th>
+<th>量级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>3,125</td>
+<td>千</td>
+</tr>
+<tr>
+<td>10</td>
+<td>10</td>
+<td><span class="arithmatex">\(10^{10}\)</span></td>
+<td>百亿</td>
+</tr>
+<tr>
+<td>20</td>
+<td>10</td>
+<td><span class="arithmatex">\(10^{20}\)</span></td>
+<td>天文数字</td>
+</tr>
+<tr>
+<td>50</td>
+<td>10</td>
+<td><span class="arithmatex">\(10^{50}\)</span></td>
+<td>远超可枚举</td>
+</tr>
+</tbody>
+</table>
+<p>正是这一指数膨胀，迫使我们放弃暴力搜索，转而使用匈牙利算法（求最优）、拍卖算法（求分布式近似最优），或启发式（求快速可行）。复杂度决定了方法的选择：<strong>当问题规模小且代价集中可得时用精确算法，否则用分布式近似。</strong></p>
+<p>一个常见的误区是"放松为线性规划就能又快又准"。把 <span class="arithmatex">\(x_{ij}\in\{0,1\}\)</span> 放松为 <span class="arithmatex">\(x_{ij}\in[0,1]\)</span> 后，分配问题的约束矩阵是<strong>全幺模</strong>的，其线性松弛的最优解恰好落在整数顶点上，因此可以多项式时间求精确解。但这依赖约束结构完好：一旦引入额外的复杂耦合约束（如路径冲突、时序依赖），全幺模性被破坏，线性松弛就会给出分数解，必须再做取整，往往损失最优性。</p>
+<table>
+<thead>
+<tr>
+<th>问题形态</th>
+<th>约束结构</th>
+<th>求解难度</th>
+<th>推荐方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方阵一对一</td>
+<td>全幺模</td>
+<td>多项式 <span class="arithmatex">\(O(n^3)\)</span></td>
+<td>匈牙利算法</td>
+</tr>
+<tr>
+<td>带容量</td>
+<td>全幺模</td>
+<td>多项式</td>
+<td>运输问题求解</td>
+</tr>
+<tr>
+<td>带时序/路径</td>
+<td>非全幺模</td>
+<td>NP-hard</td>
+<td>拍卖 + 启发式</td>
+</tr>
+<tr>
+<td>动态在线</td>
+<td>随时间变化</td>
+<td>需持续求解</td>
+<td>事件触发重分配</td>
+</tr>
+</tbody>
+</table>
+<h2 id="匈牙利算法与拍卖算法">匈牙利算法与拍卖算法</h2>
+<p>求解分配问题的两种经典路线，代表了两端截然不同的工程哲学。</p>
+<p><strong>匈牙利算法</strong>（Kuhn–Munkres）在 <span class="arithmatex">\(n=m\)</span> 的方阵上求全局最优，时间复杂度为 <span class="arithmatex">\(O(n^3)\)</span>。它需要中心掌握完整代价矩阵 <span class="arithmatex">\(C\)</span>，属于典型的集中式精确解法。</p>
+<p><strong>拍卖算法</strong>（Auction Algorithm）让每个未被分配的主体对当前"最想要"的任务出价，任务价格随竞争上升，直到所有主体都拿到任务或超出预算。它天然分布式：每个主体只需局部信息与报价交换，最终收敛到最优或 <span class="arithmatex">\(\epsilon\)</span>-近似最优，其中 <span class="arithmatex">\(\epsilon\)</span> 是价格增量步长。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>匈牙利算法</th>
+<th>拍卖算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>求解方式</td>
+<td>集中式</td>
+<td>分布式</td>
+</tr>
+<tr>
+<td>最优性</td>
+<td>全局最优</td>
+<td>最优（<span class="arithmatex">\(\epsilon\to0\)</span>）或 <span class="arithmatex">\(\epsilon\)</span>-近似</td>
+</tr>
+<tr>
+<td>通信代价</td>
+<td><span class="arithmatex">\(O(n^2)\)</span> 代价汇总</td>
+<td>每轮 <span class="arithmatex">\(O(m)\)</span> 报价交换</td>
+</tr>
+<tr>
+<td>可扩展性</td>
+<td><span class="arithmatex">\(O(n^3)\)</span>，大规模吃力</td>
+<td>随主体数近似线性扩展</td>
+</tr>
+<tr>
+<td>故障鲁棒性</td>
+<td>中心是单点</td>
+<td>单主体失效影响局部</td>
+</tr>
+<tr>
+<td>适用代价</td>
+<td>完整可得的 <span class="arithmatex">\(C\)</span></td>
+<td>各主体本地可估的 <span class="arithmatex">\(c_{ij}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>选择的判据很直接：若规模小、代价集中、追求严格最优，用匈牙利；若规模大、代价分散、可接受近似且需容错，用拍卖。许多真实系统采用二者的混合——高层用集中式做粗分配，底层用拍卖做微调。</p>
+<p>两种算法的消息复杂度也决定了它们在多机器人上的适用性。设主体数 <span class="arithmatex">\(m\)</span>、任务数 <span class="arithmatex">\(n\)</span>：</p>
+<div class="arithmatex">\[
+\text{msg}_{\text{Hungarian}}=O(n^2),\qquad \text{msg}_{\text{Auction}}=O\!\big(n\cdot k_{\text{iter}}\big),
+\]</div>
+<p>其中 <span class="arithmatex">\(k_{\text{iter}}\)</span> 为拍卖收敛所需的出价轮数，通常远小于 <span class="arithmatex">\(n\)</span>。当 <span class="arithmatex">\(n=1000\)</span>、<span class="arithmatex">\(m=50\)</span> 时，匈牙利需要传递约 <span class="arithmatex">\(10^6\)</span> 个代价项，而拍卖每轮仅需 <span class="arithmatex">\(O(m)\)</span> 条报价，总消息量与主体数近似线性。这正是大规模多机系统倾向拍卖类分布式方法的原因。但要注意，拍卖的 <span class="arithmatex">\(\epsilon\)</span>-近似意味着解可能比最优差一个可控的常数，<span class="arithmatex">\(\epsilon\)</span> 越大收敛越快、解越差，形成又一处"速度—质量"权衡。</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>匈牙利</th>
+<th>拍卖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>消息复杂度</td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+<td><span class="arithmatex">\(O(n\,k_{\text{iter}})\)</span></td>
+</tr>
+<tr>
+<td>解质量</td>
+<td>严格最优</td>
+<td><span class="arithmatex">\(\epsilon\)</span>-近似最优</td>
+</tr>
+<tr>
+<td>收敛速度控制</td>
+<td>固定</td>
+<td>由 <span class="arithmatex">\(\epsilon\)</span> 调节</td>
+</tr>
+<tr>
+<td>典型适用规模</td>
+<td><span class="arithmatex">\(n\lesssim\)</span> 数百</td>
+<td><span class="arithmatex">\(n\)</span> 可达数千</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代价估计误差与重分配策略">代价估计误差与重分配策略</h2>
+<p>代价 <span class="arithmatex">\(c_{ij}\)</span> 从来不是精确值，而是估计值。设真实代价为 <span class="arithmatex">\(c\)</span>、估计值为 <span class="arithmatex">\(\hat{c}=c+\varepsilon\)</span>，其中 <span class="arithmatex">\(\varepsilon\)</span> 为估计误差。误差如何影响分配质量？</p>
+<p>一个关键结论是：<strong>误差的影响取决于代价差距的"安全边际"</strong>。设最优方案与次优方案的代价差为 <span class="arithmatex">\(\Delta\)</span>。若对赢家 <span class="arithmatex">\(i^*\)</span> 的估计误差满足</p>
+<div class="arithmatex">\[
+|\varepsilon| &lt; \frac{\Delta}{2},
+\]</div>
+<p>则分配结果不变；一旦 <span class="arithmatex">\(|\varepsilon|\ge\Delta/2\)</span>，赢家就可能被误判，得到次优分配。代价越接近（<span class="arithmatex">\(\Delta\)</span> 越小），分配对误差越敏感。</p>
+<p>重分配策略正是在"修正误差"与"维持稳定"之间找平衡。频繁重分配能紧跟变化，却会引发<strong>震荡</strong>：系统在两个方案间来回切换，而每次切换又带来新的执行代价。</p>
+<p>考虑一个真实震荡场景：机器人 A 与 B 交替执行任务 1、2。初始时 A 离任务 1 更近，于是 A→1、B→2。执行一段时间后，A 因未完成而离任务 2 反而更近，重分配又把任务换回 B。若重算周期短于任务耗时，二者会持续互换目标：</p>
+<div class="arithmatex">\[
+\text{assign}(t_k)\ne \text{assign}(t_{k-1}),\quad \forall k,
+\]</div>
+<p>系统一步也没往前走。破解手段有三：提高重算阈值 <span class="arithmatex">\(\theta\)</span>、引入<strong>迟滞</strong>（仅当新方案优势超过 <span class="arithmatex">\(\Delta_{\text{hys}}\)</span> 才切换）、或给主体设置<strong>切换次数上限</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>追踪速度</th>
+<th>稳定性</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每周期重分配</td>
+<td>最快</td>
+<td>差（易震荡）</td>
+<td>高度动态、代价差距大</td>
+</tr>
+<tr>
+<td>事件触发重分配</td>
+<td>中</td>
+<td>好</td>
+<td>大部分在线系统</td>
+</tr>
+<tr>
+<td>阈值 + 迟滞</td>
+<td>慢</td>
+<td>最好</td>
+<td>代价接近、易震荡场景</td>
+</tr>
+</tbody>
+</table>
+<p>因此，重分配频率绝不是一个"越高越好"的参数。合理的做法是估计代价误差量级 <span class="arithmatex">\(\sigma_\varepsilon\)</span>，令迟滞阈值 <span class="arithmatex">\(\Delta_{\text{hys}}\approx 2\sigma_\varepsilon\)</span>，这样切换只在信号显著超过噪声时发生，从根上抑制震荡。</p>
+<p>可以用一个简单的期望代价模型量化这两种损失。设重分配周期为 <span class="arithmatex">\(T_r\)</span>，任务切换的固定代价为 <span class="arithmatex">\(c_s\)</span>（重新规划、减速、换向），因延迟跟踪旧方案造成的次优损失为 <span class="arithmatex">\(c_d\)</span>，则总期望代价近似为</p>
+<div class="arithmatex">\[
+J(T_r)\approx \frac{c_s}{T_r} + c_d\, T_r .
+\]</div>
+<p>对 <span class="arithmatex">\(T_r\)</span> 求极小，得最优周期</p>
+<div class="arithmatex">\[
+T_r^{*}=\sqrt{\frac{c_s}{c_d}} .
+\]</div>
+<p>这个结果给出了清晰的工程直觉：切换代价 <span class="arithmatex">\(c_s\)</span> 越大，最优重分配周期越长（越保守）；跟踪误差损失 <span class="arithmatex">\(c_d\)</span> 越大，周期越短（越激进）。当 <span class="arithmatex">\(c_s\)</span> 很大而 <span class="arithmatex">\(c_d\)</span> 很小时（如重型机械），系统应尽量少动；当任务高度动态、旧方案迅速失效时（<span class="arithmatex">\(c_d\)</span> 大），则应提高重分配频率。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>增大时的影响</th>
+<th>典型取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(c_s\)</span></td>
+<td>单次切换代价</td>
+<td><span class="arithmatex">\(T_r^{*}\)</span> 变大（更保守）</td>
+<td>中（含减速）</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(c_d\)</span></td>
+<td>跟踪旧方案的损失率</td>
+<td><span class="arithmatex">\(T_r^{*}\)</span> 变小（更激进）</td>
+<td>视动态性</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sigma_\varepsilon\)</span></td>
+<td>代价估计误差</td>
+<td>迟滞阈值应随之增大</td>
+<td>估计器给出</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\theta\)</span></td>
+<td>重算触发阈值</td>
+<td>过大则迟钝、过小则抖动</td>
+<td><span class="arithmatex">\(\approx 2\sigma_\varepsilon\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>代价估计本身往往依赖运动规划（见 <a href="../../robotics/05-navigation-control/">导航与控制</a>），而其不确定性下的权衡与 <a href="../../reinforcement-learning/06-safe-robust-offline/">安全、鲁棒与离线强化学习</a> 中的鲁棒建模思路相通；多主体协同学习中分配与策略的联合优化，可进一步参考 <a href="../05-multi-agent-learning/">多智能体学习</a>。</p>
+<blockquote>
+<p><strong>下一步</strong>：分配决定了角色与任务归属，而这些决策依赖主体间的信息交换，请阅读 <a href="../03-communication/">通信与信息共享</a>；若关心多主体如何在交互中学习策略，见 <a href="../05-multi-agent-learning/">多智能体学习</a>；单主体的规划与马尔可夫决策基础见 <a href="../../reinforcement-learning/01-mdp-bellman/">MDP 与 Bellman 方程</a>；分配与协调背后的博弈结构见 <a href="../02-coordination/">合作、竞争与协调</a>。</p>
+</blockquote>
 
 
 

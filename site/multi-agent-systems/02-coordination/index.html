@@ -1797,6 +1797,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#协调博弈与均衡选择" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        协调博弈与均衡选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#死锁活锁与振荡" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        死锁、活锁与振荡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#分布式约束与一致性代价" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分布式约束与一致性代价
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3761,6 +3794,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#协调博弈与均衡选择" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        协调博弈与均衡选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#死锁活锁与振荡" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        死锁、活锁与振荡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#分布式约束与一致性代价" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分布式约束与一致性代价
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3853,35 +3919,561 @@
 
 
 <h1 id="cooperation-competition--coordination">Cooperation, Competition &amp; Coordination</h1>
-<p>多主体的核心困难是彼此行为会改变环境。先区分合作、竞争与混合关系，再讨论协调目标。</p>
+<p>多主体系统与单智能体系统最本质的区别，不是"有多个机器人"，而是<strong>每个主体的行为会改变其他主体的最优选择</strong>。当两台机器人共享一个充电桩、一条通道或一个任务队列时，A 的动作直接改变了 B 面临的可行域与代价。这一章要把"协调"从一个模糊的口号拆解成可计算的结构：先看清收益结构，再定义冲突，最后落到可以写进协议、可以设超时、可以检测失败的工程机制。</p>
+<p><strong>最核心的一句话：协调不是要求所有主体做相同的事，而是在存在行为耦合时，让联合行动尽可能接近某个可执行的一致解。</strong></p>
 <h2 id="合作与竞争的收益结构">合作与竞争的收益结构</h2>
+<p>设主体集合为 <span class="arithmatex">\(N=\{1,\dots,n\}\)</span>，每个主体 <span class="arithmatex">\(i\)</span> 选择动作 <span class="arithmatex">\(a_i\in A_i\)</span>，联合动作记为 <span class="arithmatex">\(a=(a_1,\dots,a_n)\)</span>。主体 <span class="arithmatex">\(i\)</span> 的收益（或负代价）写成 <span class="arithmatex">\(R_i(a_i,a_{-i})\)</span>，其中 <span class="arithmatex">\(a_{-i}\)</span> 表示除 <span class="arithmatex">\(i\)</span> 外所有主体的动作。</p>
+<p>关系的性质由收益的耦合方向决定：</p>
 <ul>
-<li><strong>Cooperation</strong>：主体目标高度一致。</li>
-<li><strong>Competition</strong>：主体收益相反或存在资源冲突。</li>
-<li><strong>Mixed motives</strong>：既合作又竞争。</li>
-<li><strong>Coordination</strong>：让行动在时间、空间或资源上相容。</li>
+<li><strong>Cooperation</strong>：<span class="arithmatex">\(\partial R_i/\partial R_j&gt;0\)</span>，他人变好时自己也变好。例如消防机器人共同扑灭火源。</li>
+<li><strong>Competition</strong>：<span class="arithmatex">\(\partial R_i/\partial R_j&lt;0\)</span>，他人收益即以自己为代价。例如争夺单个充电位的两台 AGV。</li>
+<li><strong>Mixed motives</strong>：部分维度互补、部分维度竞争。例如共享地图但争夺任务优先级。</li>
+<li><strong>Coordination</strong>：让 <span class="arithmatex">\(a_i\)</span> 在时间、空间或资源维度上彼此相容，是上述三种情形共有的子问题。</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>关系类型</th>
+<th>收益耦合</th>
+<th>典型场景</th>
+<th>核心难点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯合作</td>
+<td>收益正相关</td>
+<td>共同搬运、编队保持</td>
+<td>观测不一致而非目标冲突</td>
+</tr>
+<tr>
+<td>纯竞争</td>
+<td>零和或负和</td>
+<td>单通道抢占、资源拍卖</td>
+<td>稳定性与策略欺骗</td>
+</tr>
+<tr>
+<td>混合</td>
+<td>局部正、局部负</td>
+<td>共享地图 + 抢任务</td>
+<td>需要约定优先规则</td>
+</tr>
+<tr>
+<td>潜在冲突</td>
+<td>收益无关但动作耦合</td>
+<td>各自巡逻但路径交叉</td>
+<td>只需时空相容，不需收益对齐</td>
+</tr>
+</tbody>
+</table>
+<p>关键观察：<strong>合作意愿强不等于不会冲突</strong>。两个都全力帮助团队的机器人，仍可能因为同时冲向同一物资而重复劳动。</p>
 <h2 id="协调问题的基本形式">协调问题的基本形式</h2>
-<p>合作不等于自动协调。即使所有 agent 奖励相同，如果各自观测不同、通信受限、行动存在耦合，也可能发生冲突。</p>
-<p>协调的核心是减少联合行动中的不一致，而不是强行追求完全相同的动作。</p>
+<p>协调的数学对象是联合动作空间 <span class="arithmatex">\(A=A_1\times A_2\times\cdots\times A_n\)</span>，其规模为 <span class="arithmatex">\(\prod_i|A_i|\)</span>，随主体数指数增长。我们要在其中挑出一个"彼此相容"的元素。</p>
+<p>相容性可以用一个<strong>不一致度量</strong>刻画。对每个共享资源 <span class="arithmatex">\(r\)</span>，设其容量为 <span class="arithmatex">\(K_r\)</span>，主体 <span class="arithmatex">\(i\)</span> 在动作 <span class="arithmatex">\(a_i\)</span> 下占用该资源量为 <span class="arithmatex">\(u_{ir}(a_i)\)</span>，则一致约束为</p>
+<div class="arithmatex">\[
+\sum_{i=1}^{n} u_{ir}(a_i) \le K_r,\quad \forall r.
+\]</div>
+<p>协调问题就是在满足这类约束的集合</p>
+<div class="arithmatex">\[
+\mathcal{F}=\Big\{a\in A \;\Big|\; \sum_i u_{ir}(a_i)\le K_r,\ \forall r\Big\}
+\]</div>
+<p>中寻找高收益解。若 <span class="arithmatex">\(\mathcal{F}=\varnothing\)</span>，说明约束本身不可能同时满足，无论多聪明的算法都无法协调，必须放宽约束（增加资源或允许等待）。</p>
+<p>当每个主体只做局部优化 <span class="arithmatex">\(\max_{a_i}R_i\)</span> 而忽略耦合时，得到的解可能落在 <span class="arithmatex">\(\mathcal{F}\)</span> 之外——这正是重复劳动、路径对冲的根源。</p>
+<p>进一步地，可以定义<strong>耦合度</strong>来量化协调的必要程度。设主体 <span class="arithmatex">\(i\)</span> 的收益对他人动作的敏感度为</p>
+<div class="arithmatex">\[
+\chi_i=\Big|\frac{\partial R_i}{\partial a_{-i}}\Big|,\qquad \chi=\sum_{i=1}^{n}\chi_i .
+\]</div>
+<p>当 <span class="arithmatex">\(\chi\approx 0\)</span> 时各主体互不干扰，根本不需要协调；<span class="arithmatex">\(\chi\)</span> 越大，忽略耦合的代价越高。工程上常用一个经验判据：若路径的时空重叠率超过 <span class="arithmatex">\(20\%\)</span>，就必须引入显式协调，否则单靠被动避障会显著降低整体效率——因为避障只是把冲突从一个位置挪到另一个位置，并没有解决"谁优先"的问题。</p>
+<table>
+<thead>
+<tr>
+<th>耦合度 <span class="arithmatex">\(\chi\)</span></th>
+<th>行为特征</th>
+<th>时空重叠率</th>
+<th>是否需要显式协调</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接近 0</td>
+<td>主体互不影响</td>
+<td><span class="arithmatex">\(&lt;5\%\)</span></td>
+<td>否</td>
+</tr>
+<tr>
+<td>低</td>
+<td>偶发资源重叠</td>
+<td><span class="arithmatex">\(5\%\sim20\%\)</span></td>
+<td>被动避障即可</td>
+</tr>
+<tr>
+<td>中</td>
+<td>频繁共享资源</td>
+<td><span class="arithmatex">\(20\%\sim50\%\)</span></td>
+<td>需要，占用 + 优先级</td>
+</tr>
+<tr>
+<td>高</td>
+<td>强时空耦合</td>
+<td><span class="arithmatex">\(&gt;50\%\)</span></td>
+<td>需要，联合规划</td>
+</tr>
+</tbody>
+</table>
 <h2 id="冲突资源与共同目标">冲突、资源与共同目标</h2>
-<ul>
-<li>Role assignment：不同 agent 承担不同角色。</li>
-<li>Convention：预先约定冲突解决规则。</li>
-<li>Coordination signal：共享少量关键信息。</li>
-</ul>
+<p>冲突可以归纳为三类来源，其处理方式完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>冲突来源</th>
+<th>描述</th>
+<th>需要的信息</th>
+<th>典型机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>资源冲突</td>
+<td>同一 <span class="arithmatex">\(\mathcal{F}\)</span> 内的容量竞争</td>
+<td>谁占用了哪份资源</td>
+<td>占用、租约、队列</td>
+</tr>
+<tr>
+<td>目标冲突</td>
+<td><span class="arithmatex">\(R_i\)</span> 与 <span class="arithmatex">\(R_j\)</span> 方向相反</td>
+<td>各自目标与优先级</td>
+<td>优先级、拍卖、机制设计</td>
+</tr>
+<tr>
+<td>信息冲突</td>
+<td>观测不同导致对状态的判断不同</td>
+<td>状态置信度与时间戳</td>
+<td>状态融合、共识</td>
+</tr>
+</tbody>
+</table>
+<p>共同目标并不自动消除冲突。即使所有主体都接受同一全局收益 <span class="arithmatex">\(R=\sum_i R_i\)</span>，只要观测是局部的、通信是受限的、行动是耦合的，个体最优仍可能与全局最优背离。这就是多智能体区别于单智能体规划的根本点：<strong>优化目标一致，但决策权分散</strong>。</p>
+<p>工程上可以把冲突的代价量化，用来判断"值不值得为协调付出成本"。设冲突发生概率为 <span class="arithmatex">\(p_c\)</span>，单次冲突造成的损失为 <span class="arithmatex">\(c_c\)</span>，机制开销为 <span class="arithmatex">\(c_m\)</span>，则引入协调机制的净收益为</p>
+<div class="arithmatex">\[
+\Delta J = p_c\,c_c - c_m .
+\]</div>
+<p>只有当 <span class="arithmatex">\(\Delta J&gt;0\)</span> 时才应引入该机制。这解释了一个常见现象：对廉价的、可快速恢复的冲突（如重复巡检，<span class="arithmatex">\(c_c\)</span> 很小），复杂的协调机制反而得不偿失；而对高代价冲突（如设备相撞，<span class="arithmatex">\(c_c\)</span> 极大），几乎任何机制的 <span class="arithmatex">\(c_m\)</span> 都值得付出。</p>
 <h2 id="可执行的协调机制">可执行的协调机制</h2>
-<p>两台车都想帮助团队，但如果同时去搬同一个已经被拿走的物资，就会重复劳动；问题是协调，不是“缺乏合作意愿”。</p>
+<p>协调机制的最小构件是<strong>角色分配、约定、协调信号</strong>：</p>
+<ul>
+<li><strong>Role assignment</strong>：给不同主体分配不同角色，使 <span class="arithmatex">\(A_i\)</span> 被限制在不相交的子集上，从而天然降低耦合。例如"一人搬运、一人导航"。</li>
+<li><strong>Convention</strong>：预先约定冲突解决规则，如"编号小者优先"，让任意两个主体在无通信时也能推出同一结论。</li>
+<li><strong>Coordination signal</strong>：共享少量关键信息（如"我正去目标 X"），足以让接收方改变自己的选择。</li>
+</ul>
+<p>形式化地，一个协调信号 <span class="arithmatex">\(s\)</span> 的价值等于它改变了多少主体的决策：</p>
+<div class="arithmatex">\[
+V(s)=\sum_i \big[\,\max_{a_i}R_i(a_i\mid s) - \max_{a_i}R_i(a_i)\,\big].
+\]</div>
+<p>若 <span class="arithmatex">\(V(s)=0\)</span>，这条信号只是消耗带宽，应当被省略。工程上优先选择那些 <span class="arithmatex">\(V(s)\)</span> 大而比特数小的信号：一句"我占了任务 7"往往胜过广播完整位姿流。</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>通信需求</th>
+<th>适用规模</th>
+<th>失效后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>角色分配</td>
+<td>一次性</td>
+<td>小规模、角色固定</td>
+<td>角色僵化、无法应对故障</td>
+</tr>
+<tr>
+<td>约定/规则</td>
+<td>零</td>
+<td>任意</td>
+<td>规则覆盖不到的情形会冲突</td>
+</tr>
+<tr>
+<td>协调信号</td>
+<td>低带宽</td>
+<td>中大规模</td>
+<td>信号丢失导致重复劳动</td>
+</tr>
+</tbody>
+</table>
 <h2 id="协调失败诊断">协调失败诊断</h2>
-<p>多智能体冲突经常来自信息、规则或目标没有对齐。例如两台车同时去拿同一物资，可能不是规划器能力不足，而是系统根本没有“目标占用”这一共享状态；两个 Agent 反复抢同一任务，也可能是缺少确定性的冲突消解规则。</p>
-<p>工程上应先依次检查：是否知道彼此正在做什么、是否有统一优先级、是否能检测冲突、冲突后是否有重新分配机制。只有这些机制仍不足时，才需要更复杂的优化或学习算法。</p>
+<p>多智能体冲突经常不是"规划器不够聪明"，而是信息、规则或目标没有对齐。诊断应按确定的顺序进行，从最便宜的检查开始。</p>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>可能的根因</th>
+<th>检查项</th>
+<th>修复方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>两车取同一物资</td>
+<td>缺少共享占用状态</td>
+<td>是否存在 <code>目标占用</code> 字段</td>
+<td>增加占用声明</td>
+</tr>
+<tr>
+<td>反复争抢同一任务</td>
+<td>无确定性冲突消解规则</td>
+<td>优先级是否全局一致</td>
+<td>约定固定规则</td>
+</tr>
+<tr>
+<td>无法检测冲突</td>
+<td>无冲突检测机制</td>
+<td>是否有状态对比环节</td>
+<td>增加冲突检测</td>
+</tr>
+<tr>
+<td>冲突后无法恢复</td>
+<td>无重分配机制</td>
+<td>是否有重新选择路径</td>
+<td>增加重新分配</td>
+</tr>
+<tr>
+<td>系统周期性抖动</td>
+<td>重规划阈值过低</td>
+<td>触发频率统计</td>
+<td>提高重算阈值</td>
+</tr>
+</tbody>
+</table>
+<p>工程上应依次检查四个问题：<strong>是否知道彼此正在做什么、是否有统一优先级、是否能检测冲突、冲突后是否能重新分配</strong>。只有当这些机制都到位仍不足时，才值得引入更复杂的优化或学习算法。把复杂算法用在本可以用一条约定解决的冲突上，是常见的设计浪费。</p>
+<p>诊断的修复顺序也有代价考量：占用声明的实现成本最低却往往收益最大，优先权约定次之，冲突检测与重分配再次，而学习类方法成本最高、最不透明。因此正确的做法是<strong>自底向上逐级添加</strong>，每加一级就重新度量冲突率，只有当前一级无法把冲突率降到可接受阈值时才升一级。这种"够用即止"的策略，能避免系统被不必要的复杂性拖垮。</p>
 <h2 id="协调机制通常由占用优先级冲突处理组成">协调机制通常由占用、优先级、冲突处理组成</h2>
-<p>以两台机器人争抢同一任务为例，一个足够简单的工程机制可以是：任务先被声明为 <code>free</code>，机器人提交占用请求；若同时请求，则按距离或固定 ID 决定赢家；失败者立即重新选任务。这里没有复杂 MARL，但已经解决了大部分重复劳动。</p>
-<p>这种机制的关键不是某个具体规则，而是<strong>所有参与者对规则有共同理解</strong>。若机器人 A 按距离排序、机器人 B 按剩余电量排序，即使二者都“很智能”，系统仍会反复冲突。</p>
+<p>以两台机器人争抢同一任务为例，一个足够简单却有效的机制是：</p>
+<ol>
+<li>任务初始状态为 <code>free</code>；</li>
+<li>机器人提交占用请求，把状态置为 <code>held</code>；</li>
+<li>若同时请求，则按距离或固定 ID 决定赢家；</li>
+<li>失败者立即在其他任务中重新选择。</li>
+</ol>
+<p>用状态变量表示，任务 <span class="arithmatex">\(j\)</span> 的占用状态 <span class="arithmatex">\(o_j\in\{\text{free},\text{held}\}\)</span>，其转移由声明规则驱动。声明成功的前置条件是 <span class="arithmatex">\(o_j=\text{free}\)</span>，否则必须走冲突消解。这一机制没有用到任何 MARL，却已经消除了大部分重复劳动。</p>
+<p>它的关键不是某个具体规则，而是<strong>所有参与者对规则有共同理解</strong>。若机器人 A 按距离排序、机器人 B 按剩余电量排序，即便两者都"很智能"，排序不一致仍会让系统反复冲突。共同理解（common knowledge）本身就是一种必须被设计和验证的资源。</p>
+<table>
+<thead>
+<tr>
+<th>组成构件</th>
+<th>作用</th>
+<th>需要满足的性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>占用</td>
+<td>标记资源已被认领</td>
+<td>状态可读、可原子更新</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>冲突时的确定性裁决</td>
+<td>全序、可比较、稳定</td>
+</tr>
+<tr>
+<td>冲突处理</td>
+<td>失败方的退路</td>
+<td>终止、可重试、不活锁</td>
+</tr>
+</tbody>
+</table>
 <h2 id="集中协调和分散协调只是信息位置不同">集中协调和分散协调只是信息位置不同</h2>
-<p>中心节点拥有全局状态时，可以统一分配任务；完全分散时，各 Agent 需要通过局部通信或公共规则形成一致决定。二者没有绝对优劣：中心化实现简单但有单点依赖，分散式更鲁棒但协议更复杂。实际系统常采用混合方式——中心给高层任务，局部机器人自行避障和恢复。</p>
+<p>中心化与分散化的差别，本质上是<strong>全局信息存放在一个节点还是分散在多个节点</strong>，而不是"谁更聪明"。</p>
+<p>设全局状态维度为 <span class="arithmatex">\(d\)</span>，主体数为 <span class="arithmatex">\(n\)</span>。</p>
+<ul>
+<li>集中式：状态汇聚到中心，通信量为 <span class="arithmatex">\(O(nd)\)</span> 自底向上、<span class="arithmatex">\(O(nd)\)</span> 自上而下，但中心是单点。</li>
+<li>分散式：每个主体与邻居交换，通信量约为 <span class="arithmatex">\(O(|\mathcal{E}|d)\)</span>，其中 <span class="arithmatex">\(\mathcal{E}\)</span> 为通信图边集，鲁棒但协议复杂。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>集中式</th>
+<th>分散式</th>
+<th>混合式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>信息位置</td>
+<td>单一中心</td>
+<td>各节点本地</td>
+<td>高层中心 + 底层本地</td>
+</tr>
+<tr>
+<td>通信量</td>
+<td><span class="arithmatex">\(O(nd)\)</span> 双向</td>
+<td>$O(</td>
+<td>\mathcal{E}</td>
+</tr>
+<tr>
+<td>单点故障</td>
+<td>有</td>
+<td>无</td>
+<td>部分有</td>
+</tr>
+<tr>
+<td>一致性难易</td>
+<td>易（唯一副本）</td>
+<td>难（需共识）</td>
+<td>分层折中</td>
+</tr>
+<tr>
+<td>适用规模</td>
+<td>中小</td>
+<td>大</td>
+<td>大且异构</td>
+</tr>
+</tbody>
+</table>
+<p>二者没有绝对优劣。实际系统常采用混合方式：中心给高层任务分配，局部机器人自行避障与恢复——把强耦合的弱时效决策下放，把弱耦合的强时效决策上收。参见 <a href="../../distributed-systems/03-consistency-state/">分布式一致性章节</a> 中对一致性与可用性的讨论。</p>
 <h2 id="协调协议需要终止条件">协调协议需要终止条件</h2>
-<p>一个协调过程不仅要规定如何提出方案，还要说明何时确认、超时后怎样处理、冲突时谁拥有优先权。没有终止条件的协商可能在动态环境中持续追赶旧状态。工程协议通常宁可接受次优方案，也要在明确时间内给出可执行决定。</p>
+<p>一个协调过程不仅要规定如何提出方案，还要说明何时确认、超时后怎样处理、冲突时谁拥有优先权。没有终止条件的协商会在动态环境中持续追赶已经变化的状态，永远赶不上。</p>
+<p>设一个方案的提出时刻为 <span class="arithmatex">\(t_0\)</span>，其有效期为 <span class="arithmatex">\(\text{ttl}\)</span>。若在 <span class="arithmatex">\(t_0+\text{ttl}\)</span> 内未达成确认，则视为失败并回退：</p>
+<div class="arithmatex">\[
+\text{decide}(t)=
+\begin{cases}
+\text{accept}, &amp; t-t_0\le \text{ttl} \text{ 且获得多数确认},\\
+\text{abort}, &amp; t-t_0&gt; \text{ttl}.
+\end{cases}
+\]</div>
+<table>
+<thead>
+<tr>
+<th>终止条件类型</th>
+<th>触发条件</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>确认终止</td>
+<td>收到所有必要确认</td>
+<td>丢包时可能永不终止</td>
+</tr>
+<tr>
+<td>超时终止</td>
+<td>超过 <span class="arithmatex">\(\text{ttl}\)</span></td>
+<td><span class="arithmatex">\(\text{ttl}\)</span> 过短导致频繁回退</td>
+</tr>
+<tr>
+<td>优先权终止</td>
+<td>高优先级主体介入</td>
+<td>需要全局可比的优先级</td>
+</tr>
+</tbody>
+</table>
+<p>工程协议通常宁可接受次优方案，也要在明确时间内给出可执行决定。因为在一个持续变化的环境里，"及时且够好"的解，几乎总是优于"最优但迟到"的解。</p>
+<h2 id="协调博弈与均衡选择">协调博弈与均衡选择</h2>
+<p>当多个主体同时做决策时，协调问题就变成一场博弈。这里必须区分两种截然不同的情形：</p>
+<ul>
+<li><strong>纯粹协调（pure coordination）</strong>：各主体利益完全一致，只想"选到同一个"。例如两台机器人约定靠左还是靠右通行。此时任何一致的组合都是均衡，问题只是<strong>选哪一个</strong>。</li>
+<li><strong>冲突协调（coordination with conflict）</strong>：一致固然重要，但各主体偏好的"一致点"不同。例如两条产线谁先占用主线。</li>
+</ul>
+<p>用一个 2×2 的收益矩阵说明两者的差别。设主体 A、B 各在动作 <span class="arithmatex">\(\{L,R\}\)</span> 中选择，矩阵每一格为 <span class="arithmatex">\((R_A,R_B)\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>A \ B</th>
+<th>B: L</th>
+<th>B: R</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A: L</strong></td>
+<td><span class="arithmatex">\((3,3)\)</span></td>
+<td><span class="arithmatex">\((0,2)\)</span></td>
+</tr>
+<tr>
+<td><strong>A: R</strong></td>
+<td><span class="arithmatex">\((2,0)\)</span></td>
+<td><span class="arithmatex">\((2,2)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>这个矩阵是典型的<strong>猎鹿（stag hunt）</strong>结构：两个纯策略 Nash 均衡 <span class="arithmatex">\((L,L)\)</span> 与 <span class="arithmatex">\((R,R)\)</span> 并存。<span class="arithmatex">\((L,L)\)</span> 的总收益 <span class="arithmatex">\((3,3)\)</span> 更高，称为<strong>收益占优（payoff dominant）</strong>；但 <span class="arithmatex">\((R,R)\)</span> 的风险更低——即使对方选错，自己仍能拿到 2，因此它也是<strong>风险占优（risk dominant）</strong>。</p>
+<p>收益占优与风险占优的冲突，正是多机器人协调的真实困境：理性但缺乏信任的主体倾向选择风险占优解，导致系统长期停在次优的 <span class="arithmatex">\((R,R)\)</span>。要跳出这一点，需要额外机制——通信确认、事前约定，或引入重复博弈中的声誉。</p>
+<p>均衡的选择与求解详见 <a href="../../game-theory/02-best-response-nash/">博弈论：最优反应与 Nash 均衡</a> 和 <a href="../../game-theory/03-zero-sum-minimax/">零和博弈与 Minimax</a>。在纯合作、无冲突的排队/路口场景里，问题退化为最简单的"对称破缺"：只要引入任意一个公认的非对称信号（编号、位置、随机种子），冲突即被消除。</p>
+<p>值得强调的是，纯策略均衡不唯一时，系统仍可能通过<strong>混合策略</strong>达到对称均衡。设 <span class="arithmatex">\(q\)</span> 为主体选择 <span class="arithmatex">\(L\)</span> 的概率，在猎鹿矩阵中，混合作使两者无差别的临界点为</p>
+<div class="arithmatex">\[
+3q+0(1-q)=2q+2(1-q)\ \Longrightarrow\ q^{*}=\frac{2}{3}.
+\]</div>
+<p>由于收益占优的 <span class="arithmatex">\((L,L)\)</span> 需要双方同时信任对方，而现实中信任难以自发建立，理性主体往往滑向风险占优的 <span class="arithmatex">\((R,R)\)</span>。这解释了为什么纯靠"大家都聪明"无法跳到最优解，必须借助外部机制。相关性设备（如共享的随机种子、公共时钟）可以引入<strong>相关均衡</strong>，让双方在均衡集上做随机但一致的选择，从而以更低的协调成本逼近收益占优解。</p>
+<table>
+<thead>
+<tr>
+<th>均衡类型</th>
+<th>是否需要通信</th>
+<th>期望收益</th>
+<th>工程代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收益占优（<span class="arithmatex">\(L,L\)</span>）</td>
+<td>需要信任/确认</td>
+<td>最高 <span class="arithmatex">\((3,3)\)</span></td>
+<td>高（依赖共识）</td>
+</tr>
+<tr>
+<td>风险占优（<span class="arithmatex">\(R,R\)</span>）</td>
+<td>无需</td>
+<td>中等 <span class="arithmatex">\((2,2)\)</span></td>
+<td>低</td>
+</tr>
+<tr>
+<td>混合均衡</td>
+<td>无需</td>
+<td>介于两者之间</td>
+<td>低但随机</td>
+</tr>
+<tr>
+<td>相关均衡</td>
+<td>需要公共信号</td>
+<td>接近收益占优</td>
+<td>中（需公共随机源）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="死锁活锁与振荡">死锁、活锁与振荡</h2>
+<p>协调机制失效时，系统会落入三种典型病态状态。它们外观相似——都表现为"系统不动了或反复动"——但机制与破解手段完全不同，必须能区分。</p>
+<ul>
+<li><strong>死锁（deadlock）</strong>：每个主体都在等待他人先释放资源，形成循环等待。设等待关系为有向图，死锁对应图中的环。若 <span class="arithmatex">\(i\)</span> 等 <span class="arithmatex">\(j\)</span>、<span class="arithmatex">\(j\)</span> 等 <span class="arithmatex">\(k\)</span>、<span class="arithmatex">\(k\)</span> 等 <span class="arithmatex">\(i\)</span>，三者都永远等待。</li>
+<li><strong>活锁（livelock）</strong>：主体不断改变动作却无实质进展，因为每次让步都恰好被对方同步让开，陷入"礼让循环"。</li>
+<li><strong>振荡（oscillation）</strong>：分配或路径在两个状态间周期性来回，例如任务归属每周期翻转一次。</li>
+</ul>
+<p>用状态转移看：死锁是"环上的等待"，活锁是"动作在变、状态不变"，振荡是"状态周期性重复"。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>根本原因</th>
+<th>检测信号</th>
+<th>破解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>死锁</td>
+<td>循环资源等待</td>
+<td>等待图的环、超时率骤升</td>
+<td>全局资源排序、超时回退、请求原子化</td>
+</tr>
+<tr>
+<td>活锁</td>
+<td>对称让步</td>
+<td>动作序列发散但进度为零</td>
+<td>引入随机退避、固定优先权打破对称</td>
+</tr>
+<tr>
+<td>振荡</td>
+<td>重规划阈值过低</td>
+<td>状态在两个值间周期切换</td>
+<td>提高切换阈值、加入迟滞（hysteresis）</td>
+</tr>
+<tr>
+<td>饥饿</td>
+<td>优先级永久压制</td>
+<td>某主体长期未被调度</td>
+<td>老化（aging）提升优先级</td>
+</tr>
+</tbody>
+</table>
+<p>区分方法很实用：<strong>记录每个主体最近的进度指标</strong>。若所有主体进度恒为零且互相等待，是死锁；若动作频繁变化而进度不增，是活锁；若状态序列出现周期，是振荡。破解的核心是打破对称——随机化、固定优先权、或给等待加上严格上界。</p>
+<p>以一个三机器人环形等待为例：R1 等 R2 让出通道，R2 等 R3，R3 等 R1。设每个机器人让步的等待超时为 <span class="arithmatex">\(T_w\)</span>。若三者同步让步，则每次让开后立刻又形成新的环，系统在三个状态间循环——这是<strong>活锁而非死锁</strong>，因为动作一直在变。区分的关键量是<strong>净进度速率</strong>：设 <span class="arithmatex">\(k\)</span> 步内完成的子任务数为 <span class="arithmatex">\(P(k)\)</span>，则</p>
+<div class="arithmatex">\[
+\text{progress rate}=\lim_{k\to\infty}\frac{P(k)}{k}.
+\]</div>
+<p>死锁与活锁下该速率均为 0；振荡下虽非零但状态序列自相关呈强周期性。给每个机器人叠加不同量级的随机退避 <span class="arithmatex">\(\text{backoff}_i\sim U(0,\delta_i)\)</span>，并令 <span class="arithmatex">\(\delta_i\)</span> 互质，可几乎必然打破同步，使进度速率回到正数。</p>
+<table>
+<thead>
+<tr>
+<th>病态</th>
+<th>净进度速率</th>
+<th>状态序列特征</th>
+<th>首选破解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>死锁</td>
+<td>0</td>
+<td>恒定不动</td>
+<td>资源全序 + 超时回退</td>
+</tr>
+<tr>
+<td>活锁</td>
+<td>0</td>
+<td>无规律抖动</td>
+<td>随机退避打破对称</td>
+</tr>
+<tr>
+<td>振荡</td>
+<td>非零但低</td>
+<td>强周期性</td>
+<td>迟滞 + 提高阈值</td>
+</tr>
+<tr>
+<td>饥饿</td>
+<td>非零</td>
+<td>个别主体长期停滞</td>
+<td>老化（aging）提升优先级</td>
+</tr>
+</tbody>
+</table>
+<h2 id="分布式约束与一致性代价">分布式约束与一致性代价</h2>
+<p>当协调必须在不完全信息下完成时，问题变成<strong>分布式约束优化（DCOP）</strong>：每个主体只掌握自己相关的约束，却要共同逼近全局最优的可一致解。</p>
+<p>以共享资源为例。设 <span class="arithmatex">\(m\)</span> 个资源，资源 <span class="arithmatex">\(j\)</span> 的容量为 <span class="arithmatex">\(K_j\)</span>，二元变量 <span class="arithmatex">\(x_{ij}\in\{0,1\}\)</span> 表示主体 <span class="arithmatex">\(i\)</span> 是否占用资源 <span class="arithmatex">\(j\)</span>，需求为 <span class="arithmatex">\(d_{ij}\)</span>，则可行域是</p>
+<div class="arithmatex">\[
+\mathcal{F}=\Big\{x \;\Big|\; \sum_i d_{ij}x_{ij}\le K_j,\ \forall j\Big\}.
+\]</div>
+<p>每个主体只能看到自己那一列约束，因此必须通过信息交换才能判断某个 <span class="arithmatex">\(x\)</span> 是否全局可行。</p>
+<p>把 DCOP 的目标写清楚：每个主体 <span class="arithmatex">\(i\)</span> 控制变量 <span class="arithmatex">\(x_i\)</span>，代价函数 <span class="arithmatex">\(f_k\)</span> 只涉及一个小的主体集合 <span class="arithmatex">\(S_k\)</span>，则</p>
+<div class="arithmatex">\[
+\min_{x_1,\dots,x_n}\ \sum_{k} f_k(x_{S_k}),
+\]</div>
+<p>其中 <span class="arithmatex">\(f_k\)</span> 可包含容量约束的罚项。由于没有任何主体能看到全部 <span class="arithmatex">\(f_k\)</span>，算法只能在主体间迭代交换变量取值，逐步逼近一致解。迭代轮数与通信图的直径成正比——图越稀疏、直径越大，收敛越慢、所需消息越多。</p>
+<p>这里存在一个无法回避的权衡：<strong>一致性越高，可用性越低</strong>。要让所有主体对占用状态达成一致，就必须等待消息传播与确认；等待期间系统要么阻塞（牺牲可用性），要么允许冲突（牺牲一致性）。这与分布式系统中的 CAP 权衡同源，详见 <a href="../../distributed-systems/03-consistency-state/">一致性与状态章节</a>。</p>
+<table>
+<thead>
+<tr>
+<th>一致性级别</th>
+<th>冲突概率</th>
+<th>可用性代价</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>强一致（同步确认）</td>
+<td>接近 0</td>
+<td>高（阻塞等待）</td>
+<td>高价值、低频率决策</td>
+</tr>
+<tr>
+<td>最终一致</td>
+<td>中（存在短暂窗口）</td>
+<td>低</td>
+<td>高频状态同步</td>
+</tr>
+<tr>
+<td>无一致（各自本地）</td>
+<td>高</td>
+<td>最低</td>
+<td>可容忍重复的低价值任务</td>
+</tr>
+</tbody>
+</table>
+<p>在 <a href="../../distributed-systems/01-network-messaging/">网络与消息机制</a> 中可以看到，任何一致性协议都要为传播延迟付出代价。协调设计者的任务不是消灭这一代价，而是在给定延迟和可靠性下，选择冲突概率与可用性都可接受的操作点。当冲突可以廉价检测和恢复时（例如重复巡检的浪费很小），放宽一致性往往是更划算的选择；当冲突代价高昂时（例如两台重型设备相撞），必须收紧一致性并接受可用性损失。</p>
+<blockquote>
+<p><strong>下一步</strong>：协调机制决定了"何时谁能做什么"，而主体之间要达成协调通常依赖信息交换。请继续阅读 <a href="../03-communication/">通信与信息共享</a>，再把协调所需的角色分派落到具体算法上：<a href="../04-allocation-distributed-decision/">任务分配与分布式决策</a>；若关心主体内部如何组织感知与决策，可回看 <a href="../01-agents-architectures/">智能体与架构</a>；若想深入博弈层面的均衡分析，见 <a href="../../game-theory/02-best-response-nash/">最优反应与 Nash 均衡</a>。</p>
+</blockquote>
 
 
 

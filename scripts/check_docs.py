@@ -58,7 +58,15 @@ def walk_nav(node, labels, targets):
         targets.append(node)
 
 
-cfg = yaml.safe_load((ROOT / 'mkdocs.yml').read_text(encoding='utf-8'))
+class _MkDocsLoader(yaml.SafeLoader):
+    """SafeLoader that tolerates MkDocs-only YAML tags such as !!python/name:."""
+
+
+_MkDocsLoader.add_multi_constructor(
+    'tag:yaml.org,2002:python/name:', lambda loader, suffix, node: None
+)
+
+cfg = yaml.load((ROOT / 'mkdocs.yml').read_text(encoding='utf-8'), Loader=_MkDocsLoader)
 nav = cfg.get('nav', [])
 labels, targets = [], []
 walk_nav(nav, labels, targets)

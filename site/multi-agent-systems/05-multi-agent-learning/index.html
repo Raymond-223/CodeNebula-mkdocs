@@ -1805,6 +1805,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#集中训练分散执行的信息流" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        集中训练分散执行的信息流
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#独立学习的非平稳性" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1816,10 +1827,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#非平稳性的定量表征" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        非平稳性的定量表征
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#合作任务里的信用分配" class="md-nav__link">
     <span class="md-ellipsis">
       
         合作任务里的信用分配
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#信用分配与反事实基线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        信用分配与反事实基线
       
     </span>
   </a>
@@ -1839,10 +1872,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#41-vdn直接相加" class="md-nav__link">
+  <a href="#vdn直接相加" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1 VDN：直接相加
+        VDN：直接相加
       
     </span>
   </a>
@@ -1850,10 +1883,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-qmix单调混合" class="md-nav__link">
+  <a href="#qmix单调混合" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 QMIX：单调混合
+        QMIX：单调混合
       
     </span>
   </a>
@@ -3713,6 +3746,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#集中训练分散执行的信息流" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        集中训练分散执行的信息流
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#独立学习的非平稳性" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3724,10 +3768,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#非平稳性的定量表征" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        非平稳性的定量表征
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#合作任务里的信用分配" class="md-nav__link">
     <span class="md-ellipsis">
       
         合作任务里的信用分配
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#信用分配与反事实基线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        信用分配与反事实基线
       
     </span>
   </a>
@@ -3747,10 +3813,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#41-vdn直接相加" class="md-nav__link">
+  <a href="#vdn直接相加" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1 VDN：直接相加
+        VDN：直接相加
       
     </span>
   </a>
@@ -3758,10 +3824,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-qmix单调混合" class="md-nav__link">
+  <a href="#qmix单调混合" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 QMIX：单调混合
+        QMIX：单调混合
       
     </span>
   </a>
@@ -3909,30 +3975,186 @@
 
 
 <h1 id="multi-agent-learning--ctde">Multi-Agent Learning &amp; CTDE</h1>
-<p>多智能体强化学习（MARL）不是简单让每个 Agent 各跑一个 PPO。关键矛盾是：<strong>训练时希望利用更多全局信息，部署时每个 Agent 又必须独立行动。</strong> CTDE（Centralized Training, Decentralized Execution）就是最常见的解决框架。</p>
+<p>多智能体强化学习（MARL）不是简单让每个 Agent 各跑一个 PPO。关键矛盾是：<strong>训练时可以合法地使用全局信息，而部署时每个 Agent 必须只靠自己拿得到的东西行动。</strong> CTDE（Centralized Training, Decentralized Execution）不是一个算法，而是一组约束：它规定“信息在哪里可以用、在哪里不可以用”，然后所有具体算法（VDN、QMIX、COMA、MAPPO）都是在这组约束下做出的不同取舍。</p>
+<p>理解 MARL 的正确顺序是：先看清执行期的信息边界，再看独立学习为什么非平稳，再看团队奖励如何拆到个体，最后才看具体算法。反过来先背算法名单，几乎必然会在“训练指标很好、实机无法部署”或“总回报上升、个体行为塌缩”这两类问题上翻车。</p>
 <p><img alt="CTDE" src="../../assets/diagrams/ctde.svg" /></p>
 <h2 id="分散执行的信息约束">分散执行的信息约束</h2>
 <p>执行阶段，第 <span class="arithmatex">\(i\)</span> 个主体只能根据自己的信息选择动作：</p>
 <div class="arithmatex">\[
-a_i\sim\pi_i(\cdot\mid\tau_i),
+a_i\sim\pi_i(\cdot\mid \tau_i),
 \]</div>
-<p>其中 <span class="arithmatex">\(\tau_i\)</span> 可以包含局部观测历史和收到的消息。</p>
-<p>如果部署时拿不到全局状态，就不能把全局状态作为 Actor 的必需输入。否则训练指标再好，也无法真正部署。</p>
-<p>但训练阶段通常可以使用集中采集的数据，因此 Critic 可以看到更多信息：</p>
+<p>其中 <span class="arithmatex">\(\tau_i\)</span> 表示主体 <span class="arithmatex">\(i\)</span> 的局部观测历史，可以包含自身观测、收到的消息和自己过去的动作。这里最容易犯的错误是把 <span class="arithmatex">\(\tau_i\)</span> 悄悄换成全局状态 <span class="arithmatex">\(s\)</span>：训练时一切正常，部署时才发现拿不到。</p>
+<p>形式化的硬约束是三条：</p>
+<ul>
+<li><strong>可观测性约束</strong>：<span class="arithmatex">\(\tau_i\)</span> 必须是由部署时实际可获取的数据流生成的函数，不能依赖任何集中式组件的输出；</li>
+<li><strong>因果约束</strong>：<span class="arithmatex">\(\tau_i\)</span> 只能包含 <span class="arithmatex">\(t\)</span> 时刻及之前的信息，不能包含 <span class="arithmatex">\(t+1\)</span> 的观测或本轮结束后才知道的全局量；</li>
+<li><strong>通信约束</strong>：如果 <span class="arithmatex">\(\tau_i\)</span> 包含其他主体的消息，就必须把消息延迟 <span class="arithmatex">\(\delta\)</span>、丢包率 <span class="arithmatex">\(p_{loss}\)</span> 和带宽上限一起纳入设计，否则 CTDE 只是把泄漏从状态挪到了通信。</li>
+</ul>
+<p>训练阶段通常可以使用集中采集的数据，因此 Critic 可以看到更多信息：个体价值 <span class="arithmatex">\(Q_i(s,\mathbf a)\)</span>，或团队价值 <span class="arithmatex">\(Q_{tot}(s,\mathbf a)\)</span>。这就是 CTDE 的基本分工——Critic 允许“作弊”，Actor 不允许。</p>
+<p>关键判据是：<strong>任何一个进入 Actor 输入的变量，都要能回答“部署时这个数从哪来、延迟多大、缺失时怎么办”。</strong> 回答不了，就说明执行信息泄漏了。</p>
+<h2 id="集中训练分散执行的信息流">集中训练分散执行的信息流</h2>
+<p>CTDE 之所以能同时缓解非平稳性和保留可执行性，原因在于它把“学习信号”和“决策输入”拆成了两条不同的通道。定义三个信息集：</p>
+<ul>
+<li><strong>全局状态 <span class="arithmatex">\(s\)</span></strong>：所有主体的状态与任务上下文，训练期由模拟器或集中式数据收集器提供；</li>
+<li><strong>联合观测 <span class="arithmatex">\(\boldsymbol o=\{o_1,\dots,o_n\}\)</span></strong>：各主体的观测集合，<span class="arithmatex">\(o_i\)</span> 通常只是 <span class="arithmatex">\(s\)</span> 的部分投影；</li>
+<li><strong>局部观测 <span class="arithmatex">\(o_i\)</span>（或历史 <span class="arithmatex">\(\tau_i\)</span>）</strong>：主体 <span class="arithmatex">\(i\)</span> 自己在部署时真正能拿到的全部信息。</li>
+</ul>
+<p>三者的关系满足 <span class="arithmatex">\(o_i\subseteq \boldsymbol o\subseteq s\)</span>（在信息含义上，而非严格集合包含）。下表给出它们在训练与执行两个阶段的可用性：</p>
+<table>
+<thead>
+<tr>
+<th>信息集</th>
+<th>训练期可用</th>
+<th>执行期可用</th>
+<th>典型消费者</th>
+<th>泄漏后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局状态 <span class="arithmatex">\(s\)</span></td>
+<td>是</td>
+<td>否</td>
+<td>集中式 Critic、mixing network</td>
+<td>Actor 依赖 <span class="arithmatex">\(s\)</span> → 无法部署</td>
+</tr>
+<tr>
+<td>联合观测 <span class="arithmatex">\(\boldsymbol o\)</span></td>
+<td>是</td>
+<td>否</td>
+<td>集中式 Critic、参数共享主干</td>
+<td>训练/执行分布不一致</td>
+</tr>
+<tr>
+<td>局部观测 <span class="arithmatex">\(o_i\)</span></td>
+<td>是</td>
+<td>是</td>
+<td>Actor、个体价值头</td>
+<td>无（安全输入）</td>
+</tr>
+<tr>
+<td>通信消息 <span class="arithmatex">\(m_{j\to i}\)</span></td>
+<td>是</td>
+<td>是（受延迟/丢包限制）</td>
+<td>Actor</td>
+<td>需按 <span class="arithmatex">\(\delta,p_{loss}\)</span> 注入噪声训练</td>
+</tr>
+</tbody>
+</table>
+<p>关键在于：<strong>Actor 的策略分布条件在执行期和训练期必须一致</strong>，即</p>
 <div class="arithmatex">\[
-Q_i(s,\mathbf a)
+\pi_i(a_i\mid \tau_i)\ \text{（训练）}= \pi_i(a_i\mid \tau_i)\ \text{（执行）},
 \]</div>
-<p>或团队价值 <span class="arithmatex">\(Q_{tot}(s,\mathbf a)\)</span>。这就是 CTDE 的基本分工。</p>
+<p>而 Critic 的价值估计只在训练期被使用，因此允许以 <span class="arithmatex">\(s\)</span> 为条件。训练期 Critic 看到 <span class="arithmatex">\(s\)</span>，等于把“其他主体的当前状态和意图”从不可解释的噪声变成了显式变量；执行期 Actor 丢掉 <span class="arithmatex">\(s\)</span>，等于保住了可执行性。这就是 CTDE 的核心信息流设计。</p>
+<p>风险也在同一张表里：如果 <span class="arithmatex">\(s\)</span> 与 <span class="arithmatex">\(o_i\)</span> 的信息差距过大（例如 <span class="arithmatex">\(s\)</span> 包含全场目标分配而 <span class="arithmatex">\(o_i\)</span> 只有 5 m 半径），Critic 的准确优势估计会诱导 Actor 去拟合自己根本感知不到的因素，表现为策略抖动——训练回报高、执行回报显著低。判断方法是做<strong>信息消融</strong>：把 Critic 的输入从 <span class="arithmatex">\(s\)</span> 换成 <span class="arithmatex">\(\boldsymbol o\)</span> 再换成 <span class="arithmatex">\(o_i\)</span>，看执行回报下降多少；下降越小，说明策略越不依赖全局信息。</p>
 <h2 id="独立学习的非平稳性">独立学习的非平稳性</h2>
-<p>如果每个主体把其他学习者当成环境的一部分，那么其他策略一更新，自己的转移与奖励分布也跟着变。</p>
-<p>因此同一条旧经验</p>
+<p>如果每个主体把其他学习者当成环境的一部分，那么其他策略一更新，自己的转移与奖励分布也跟着变。写出来就是：主体 <span class="arithmatex">\(i\)</span> 面对的“环境”实际是</p>
 <div class="arithmatex">\[
-(s,a_i,r_i,s')
+P_i(s'\mid s,a_i)=P\big(s'\mid s,a_i,\pi_{-i}\big),
 \]</div>
-<p>可能是在完全不同的对手策略下产生的。经验回放、价值估计和策略更新都会因此更难稳定。</p>
-<p>CTDE 并不能把环境“重新变成严格静止”，但集中式 Critic 可以把更多影响结果的变量显式纳入价值估计，减少把其他主体行为当成不可解释噪声的程度。</p>
+<p>它显式依赖其他主体的联合策略 <span class="arithmatex">\(\pi_{-i}\)</span>。当 <span class="arithmatex">\(\pi_{-i}\)</span> 更新时，<span class="arithmatex">\(P_i\)</span> 就变了，MDP 的平稳性假设直接失效。</p>
+<p>因此同一条旧经验 <span class="arithmatex">\((s,a_i,r_i,s')\)</span> 可能是在完全不同的对手策略下产生的。经验回放、价值估计和策略更新都会因此更难稳定：Q 目标里的 bootstrap 项 <span class="arithmatex">\(r_i+\gamma\max_{a_i'}Q_i(s',a_i')\)</span> 隐含假设 <span class="arithmatex">\(s'\)</span> 之后的动力学不变，而这个假设被 <span class="arithmatex">\(\pi_{-i}\)</span> 的更新破坏。</p>
+<p>常见的缓解手段有三类，代价各不相同：</p>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>机制</th>
+<th>消除非平稳性吗</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>集中式 Critic</td>
+<td>把 <span class="arithmatex">\(\pi_{-i}\)</span> 的影响显式纳入 <span class="arithmatex">\(Q(s,\mathbf a)\)</span></td>
+<td>部分（变成可学习变量）</td>
+<td>训练期需要 <span class="arithmatex">\(s\)</span> 与联合动作</td>
+</tr>
+<tr>
+<td>经验回放</td>
+<td>复用旧样本，提高样本效率</td>
+<td>否，反而放大陈旧样本问题</td>
+<td>样本陈旧导致目标偏差</td>
+</tr>
+<tr>
+<td>对手建模</td>
+<td>显式估计 <span class="arithmatex">\(\hat\pi_{-i}\)</span>，写入状态</td>
+<td>是（若估计准确）</td>
+<td>观测受限时估计误差大</td>
+</tr>
+<tr>
+<td>分阶段更新</td>
+<td>冻结 <span class="arithmatex">\(\pi_{-i}\)</span> 若干步再更新</td>
+<td>只在冻结窗口内成立</td>
+<td>收敛慢、易陷局部均衡</td>
+</tr>
+</tbody>
+</table>
+<p>注意“经验回放”在这里的角色与单智能体不同：单智能体里回放是纯收益，多智能体里它是<strong>收益与偏差并存的交易</strong>。</p>
+<h2 id="非平稳性的定量表征">非平稳性的定量表征</h2>
+<p>要做到“可度量”，可以把非平稳性写成对手策略变化的幅度。设主体 <span class="arithmatex">\(i\)</span> 观察到的对手联合策略在 <span class="arithmatex">\(k\)</span> 步内变化</p>
+<div class="arithmatex">\[
+\Delta_{-i}^{(k)}=\big\| \pi_{-i}^{(t+k)}-\pi_{-i}^{(t)} \big\|_{TV},
+\]</div>
+<p>用总变差距离度量策略分布的移动量。它和价值的更新置信度之间有一个近似关系：若 <span class="arithmatex">\(Q_i\)</span> 的估计误差为 <span class="arithmatex">\(\sigma_Q\)</span>，且 Q 目标在 <span class="arithmatex">\(k\)</span> 步内覆盖的策略变化为 <span class="arithmatex">\(\Delta_{-i}^{(k)}\)</span>，则目标函数的有效偏差量级约为</p>
+<div class="arithmatex">\[
+\big|\,\mathbb E[\hat{Q}_i]-\mathbb E[Q_i^{\pi_{-i}^{(t+k)}}]\,\big|\ \lesssim\ L_Q\,\Delta_{-i}^{(k)}+b_{\text{est}},
+\]</div>
+<p>其中 <span class="arithmatex">\(L_Q\)</span> 是 <span class="arithmatex">\(Q\)</span> 对策略 Lipschitz 常数（协作任务中典型值 1–10，取决于奖励尺度），<span class="arithmatex">\(b_{\text{est}}\)</span> 是函数逼近偏差。这个式子的实用读法：<strong>对手策略动得越快，你手里的旧 Q 就越不可信；Q 越不可信，就应越下调自举权重或缩短回放窗口。</strong></p>
+<p>经验回放的滞后可以用“样本年龄” <span class="arithmatex">\(T_{age}\)</span> 表示（当前步减去样本产生步）。下表给出不同算法依赖下的可容忍滞后经验区间：</p>
+<table>
+<thead>
+<tr>
+<th>算法族</th>
+<th>依赖项</th>
+<th>典型可容忍 <span class="arithmatex">\(T_{age}\)</span></th>
+<th>超标后的现象</th>
+<th>缓解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>独立 Q-learning</td>
+<td><span class="arithmatex">\(Q_i(s,a_i)\)</span> 自举</td>
+<td>5k–20k step</td>
+<td>价值震荡、策略反复横跳</td>
+<td>减小回放、降低学习率</td>
+</tr>
+<tr>
+<td>集中 Q 学习（VDN/QMIX）</td>
+<td><span class="arithmatex">\(Q_{tot}(s,\mathbf a)\)</span> 自举</td>
+<td>20k–100k step</td>
+<td>混网络过拟合旧联合动作</td>
+<td>优先级回放、重采样近期</td>
+</tr>
+<tr>
+<td>集中 Critic 策略梯度（MAPPO）</td>
+<td>GAE 优势 <span class="arithmatex">\(\hat A_i\)</span></td>
+<td>一个 epoch 内（<span class="arithmatex">\(T_{age}\approx 0\)</span>）</td>
+<td>优势估计与当前策略不匹配</td>
+<td>每轮重新收集、限制 epoch</td>
+</tr>
+<tr>
+<td>显式对手模型</td>
+<td><span class="arithmatex">\(\hat\pi_{-i}\)</span> 预测</td>
+<td>1k–10k step</td>
+<td>对手建模滞后，策略被反制</td>
+<td>高预测频率、加不确定性</td>
+</tr>
+</tbody>
+</table>
+<p>定量监测可以只用一个统计量：<strong>归一化创新</strong>式的策略差异，</p>
+<div class="arithmatex">\[
+\chi^2=\frac{1}{N}\sum_{j=1}^{N}\frac{\big(\hat V_i(s_j)-V_i^{\text{ret}}(s_j)\big)^2}{\sigma_{V,i}^2+\epsilon},
+\]</div>
+<p>若 <span class="arithmatex">\(\chi^2\gg 1\)</span> 且随 <span class="arithmatex">\(T_{age}\)</span> 单调上升，就说明回放缓冲里混入了过旧的对策版本。这一步的工程价值在于：它把“感觉训练不稳”变成了一个可以画曲线的诊断量。</p>
 <h2 id="合作任务里的信用分配">合作任务里的信用分配</h2>
-<p>共享团队奖励只告诉我们“这次整体好不好”，却不直接告诉每个主体自己的动作贡献有多大。</p>
+<p>共享团队奖励只告诉我们“这次整体好不好”，却不直接告诉每个主体自己的动作贡献有多大。形式化地，团队回报</p>
+<div class="arithmatex">\[
+G_t=\sum_{l=0}^{\infty}\gamma^{l}\,r_{t+l}^{\text{team}}
+\]</div>
+<p>对每个主体都是同一个数，而主体 <span class="arithmatex">\(i\)</span> 需要的却是 <span class="arithmatex">\(\partial \mathbb E[G\mid a_i\ \text{被替换}]\)</span> 这类反事实量。</p>
 <p>一种思路是使用反事实基线：固定其他主体动作，只对主体 <span class="arithmatex">\(i\)</span> 的动作做边际化：</p>
 <div class="arithmatex">\[
 A_i(s,\mathbf a)
@@ -3942,45 +4164,263 @@ Q(s,\mathbf a)
 \sum_{a_i'}\pi_i(a_i'\mid\tau_i)
 Q(s,(\mathbf a_{-i},a_i')).
 \]</div>
-<p>它回答的是：<strong>在其他人不变时，我当前动作比我自己的平均选择好多少？</strong></p>
-<p>不需要记住所有信用分配算法，但要记住问题本身：团队奖励越稀疏、主体越多，单一全局回报越难提供清晰学习信号。</p>
+<p>它回答的是：<strong>在其他人不变时，我当前动作比我自己的平均选择好多少？</strong> 用这个优势替代团队回报做策略梯度的权重，梯度估计变为</p>
+<div class="arithmatex">\[
+\nabla_\theta J\approx \mathbb E\Big[\nabla_\theta\log\pi_i(a_i\mid\tau_i)\,A_i(s,\mathbf a)\Big],
+\]</div>
+<p>它的期望仍无偏（因为基线项对 <span class="arithmatex">\(a_i\)</span> 的期望为零），但方差显著低于直接用 <span class="arithmatex">\(G_t\)</span>。主体越多、团队奖励越稀疏，这个方差收益越大。</p>
+<h2 id="信用分配与反事实基线">信用分配与反事实基线</h2>
+<p>COMA（Counterfactual Multi-Agent）是上述思想最经典的落地：一个集中式 Critic 输出 <span class="arithmatex">\(Q(s,\mathbf a)\)</span>，然后在求 <span class="arithmatex">\(A_i\)</span> 时对 <span class="arithmatex">\(a_i\)</span> 做枚举边际化。它的核心代价是<strong>每个主体都要在动作空间上做一次完整枚举</strong>，复杂度 <span class="arithmatex">\(O(n\cdot |A|)\)</span> 次 Critic 前向；动作空间离散且小时完全可行，连续动作则必须改用采样近似。</p>
+<p>从团队奖励到个体优势的分解，可以统一写成下面三步：</p>
+<div class="arithmatex">\[
+\underbrace{G_t^{\text{team}}}_{\text{团队回报}}
+\;\longrightarrow\;
+\underbrace{A^{\text{team}}(s,\mathbf a)=Q_{tot}(s,\mathbf a)-V_{tot}(s)}_{\text{团队优势}}
+\;\longrightarrow\;
+\underbrace{A_i(s,\mathbf a)=A^{\text{team}}(s,\mathbf a)\cdot w_i(s,\mathbf a)}_{\text{个体优势}},
+\]</div>
+<p>其中 <span class="arithmatex">\(w_i\)</span> 是贡献权重，<span class="arithmatex">\(w_i\in[0,1]\)</span> 且 <span class="arithmatex">\(\sum_i w_i=1\)</span>。反事实基线相当于令</p>
+<div class="arithmatex">\[
+w_i=\frac{Q(s,\mathbf a)-\sum_{a_i'}\pi_i(a_i')Q(s,(\mathbf a_{-i},a_i'))}{A^{\text{team}}+\epsilon},
+\]</div>
+<p>即用“替换我自己的动作造成的价值差”占“团队优势”的比例来分配功劳。这一步的意义在于：它是<strong>唯一一个不引入额外网络就得到个体级信号的机制</strong>，缺点是依赖 Critic 精度，Critic 一偏，权重就偏。</p>
+<p>四种主流信用分配方法的代价与效果对比：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>信号来源</th>
+<th>计算代价</th>
+<th>偏差/方差</th>
+<th>适用条件</th>
+<th>主要失效模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局团队奖励直传</td>
+<td><span class="arithmatex">\(G_t^{\text{team}}\)</span></td>
+<td>最低（<span class="arithmatex">\(O(1)\)</span>）</td>
+<td>无偏但方差极大</td>
+<td>主体数 <span class="arithmatex">\(\le 3\)</span></td>
+<td>主体多时几乎无梯度信号</td>
+</tr>
+<tr>
+<td>反事实基线（COMA）</td>
+<td><span class="arithmatex">\(Q(s,\mathbf a)\)</span> 边际化</td>
+<td><span class="arithmatex">\(O(n\cdot\lvert A\rvert)\)</span> 次前向</td>
+<td>低方差、依赖 Critic 精度</td>
+<td>离散小动作空间</td>
+<td>动作空间大时不可算</td>
+</tr>
+<tr>
+<td>值分解（VDN/QMIX）</td>
+<td><span class="arithmatex">\(\partial Q_i\)</span> 加权</td>
+<td>一次混网络前向</td>
+<td>受单调性假设约束</td>
+<td>合作、可参数化</td>
+<td>单调性不成立时次优</td>
+</tr>
+<tr>
+<td>差分奖励塑形</td>
+<td>手写局部 reward</td>
+<td>低</td>
+<td>无偏但需人工设计</td>
+<td>任务结构清晰</td>
+<td>塑形不当改变最优策略</td>
+</tr>
+</tbody>
+</table>
+<p>一句话判据：<strong>主体数少、奖励稠密 → 直接用团队回报；动作离散且小 → 反事实基线；纯合作且能接受单调性 → 值分解；任务结构明确可写局部奖励 → 差分塑形。</strong></p>
 <h2 id="值分解让团队价值可以支持分散决策">值分解：让团队价值可以支持分散决策</h2>
-<p>合作 MARL 的一个代表思路是把团队价值写成个体价值的组合。</p>
-<h3 id="41-vdn直接相加">4.1 VDN：直接相加</h3>
+<p>合作 MARL 的一个代表思路是把团队价值写成个体价值的组合，从而让 <span class="arithmatex">\(Q_{tot}\)</span> 的贪心解可以分解成个体贪心解。</p>
+<h3 id="vdn直接相加">VDN：直接相加</h3>
 <div class="arithmatex">\[
 Q_{tot}=\sum_i Q_i(\tau_i,a_i).
 \]</div>
-<p>这种假设简单，但无法表达复杂的非线性协同。</p>
-<h3 id="42-qmix单调混合">4.2 QMIX：单调混合</h3>
+<p>这种假设简单：个体贪心 <span class="arithmatex">\(a_i^*=\arg\max_{a_i}Q_i\)</span> 天然构成团队贪心，因为导数恒为 <span class="arithmatex">\(\partial Q_{tot}/\partial Q_i=1\)</span>。但它无法表达复杂的非线性协同，例如“两人都到位才开门”这类价值函数在 <span class="arithmatex">\(Q_{tot}\)</span> 曲面上是阶跃的，加法无法表示。</p>
+<h3 id="qmix单调混合">QMIX：单调混合</h3>
 <p>QMIX 使用一个 mixing network 组合个体价值，并限制</p>
 <div class="arithmatex">\[
 \frac{\partial Q_{tot}}{\partial Q_i}\ge 0.
 \]</div>
 <p>这样如果每个主体各自选择让 <span class="arithmatex">\(Q_i\)</span> 最大的动作，就能与联合价值的贪心选择保持一致。</p>
-<p>需要注意：单调性是一种<strong>结构假设</strong>，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。</p>
+<p>需要注意：单调性是一种<strong>结构假设</strong>，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。文献中那类必须“牺牲自己换团队最优”的任务（例如一名主体主动承担高代价拦截）会违反单调性，此时 QMIX 结构上就无法精确表达最优 <span class="arithmatex">\(Q_{tot}\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>分解方式</th>
+<th>表达力</th>
+<th>可分散贪心</th>
+<th>参数化形式</th>
+<th>违反时的现象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VDN</td>
+<td>线性加性</td>
+<td>是</td>
+<td><span class="arithmatex">\(Q_{tot}=\sum_i Q_i\)</span></td>
+<td>无法表示协同/门控行为</td>
+</tr>
+<tr>
+<td>QMIX</td>
+<td>单调非线性</td>
+<td>是</td>
+<td>超网络 + 非负权重</td>
+<td>牺牲型最优被排除</td>
+</tr>
+<tr>
+<td>QTRAN</td>
+<td>一般加性投影</td>
+<td>部分（需软约束）</td>
+<td><span class="arithmatex">\(Q_{tot}\)</span> 与 <span class="arithmatex">\(\sum Q_i\)</span> 的误差项</td>
+<td>约束松弛后分解不再严格</td>
+</tr>
+<tr>
+<td>完全集中 Critic</td>
+<td>任意</td>
+<td>否</td>
+<td>直接学 <span class="arithmatex">\(Q_{tot}(s,\mathbf a)\)</span></td>
+<td>需枚举联合动作才能取 max</td>
+</tr>
+</tbody>
+</table>
 <h2 id="策略梯度路线mappo-代表了什么">策略梯度路线：MAPPO 代表了什么</h2>
-<p>另一条路线直接学习分散 Actor，同时使用集中式 Critic。</p>
-<p>MAPPO 可以理解为：</p>
-<div class="highlight"><pre><span></span><code>local observation → shared/decentralized actor → action
-                         ↑
-training only: global state → centralized critic
-</code></pre></div>
-<p>Actor 仍然只吃部署时能获得的信息；Critic 在训练时利用全局状态，给 Actor 提供更好的 advantage 估计。</p>
-<p>训练核心仍然是 PPO 的 clipped objective，只是价值估计引入了多智能体全局信息。因此学 MAPPO 时最重要的是先掌握 PPO 和 CTDE，而不是背实现细节。</p>
+<p>另一条路线直接学习分散 Actor，同时使用集中式 Critic。它的信息流是：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>训练期输入</th>
+<th>执行期输入</th>
+<th>是否可直接部署</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actor <span class="arithmatex">\(\pi_\theta(a_i\mid\tau_i)\)</span></td>
+<td><span class="arithmatex">\(\tau_i\)</span>（仅局部）</td>
+<td><span class="arithmatex">\(\tau_i\)</span></td>
+<td>是</td>
+</tr>
+<tr>
+<td>Critic <span class="arithmatex">\(V_\phi(s)\)</span> 或 <span class="arithmatex">\(V_\phi(\boldsymbol o)\)</span></td>
+<td>全局状态 <span class="arithmatex">\(s\)</span></td>
+<td>不参与</td>
+<td>不适用（训练期专用）</td>
+</tr>
+</tbody>
+</table>
+<p>Actor 仍然只吃部署时能获得的信息；Critic 在训练时利用全局状态，给 Actor 提供更好的 advantage 估计。核心还是 PPO 的 clipped objective：</p>
+<div class="arithmatex">\[
+L^{\text{CLIP}}(\theta)=\mathbb E\Big[\min\big(\rho_t(\theta)\hat A_t,\ \text{clip}(\rho_t(\theta),1-\epsilon,1+\epsilon)\hat A_t\big)\Big],
+\]</div>
+<p>其中 <span class="arithmatex">\(\rho_t(\theta)=\pi_\theta(a_i\mid\tau_i)/\pi_{\theta_{\text{old}}}(a_i\mid\tau_i)\)</span>，<span class="arithmatex">\(\epsilon\)</span> 典型取 0.2。区别只在于 <span class="arithmatex">\(\hat A_t\)</span> 由集中式 Critic 用 GAE 估计，<span class="arithmatex">\(\hat A_t=\sum_{l}\gamma^{l}\lambda^{l}\delta_{t+l}\)</span>，<span class="arithmatex">\(\delta_t=r_t+\gamma V_\phi(s_{t+1})-V_\phi(s_t)\)</span>。</p>
+<p>MAPPO 在实践中有效的原因可以归纳为三点量化事实：使用 <span class="arithmatex">\(s\)</span> 而非 <span class="arithmatex">\(o_i\)</span> 作为 Critic 输入通常把优势估计方差降低一个量级；权值共享使样本效率提升约 <span class="arithmatex">\(n\)</span> 倍；<span class="arithmatex">\(\epsilon=0.2\)</span>、GAE <span class="arithmatex">\(\lambda=0.95\)</span> 这两个默认值对协作任务的敏感性远低于单智能体。因此学习 MAPPO 时最重要的是先掌握 PPO 和 CTDE，而不是背实现细节。</p>
 <h2 id="参数共享什么时候有用">参数共享什么时候有用</h2>
 <p>如果多个主体结构相同、动作语义相同，可以共享 Actor 参数：</p>
 <div class="arithmatex">\[
 \pi_1=\pi_2=\cdots=\pi_n=\pi_\theta.
 \]</div>
-<p>这样能显著减少参数量并共享经验。但如果不同主体角色差异很大，共享一个完全相同的策略可能反而限制表达能力。</p>
-<p>常见做法是共享主干网络，同时增加 agent ID、角色 embedding 或局部任务信息，让同一网络仍能表现出不同角色行为。</p>
+<p>这样能显著减少参数量并共享经验。但如果不同主体角色差异很大，共享一个完全相同的策略可能反而限制表达能力——极端的反例是异质团队（一个侦察 + 一个搬运），共享策略会让网络在两套完全不同的最优行为之间摇摆，表现为每个角色的动作方差都升高。</p>
+<p>常见做法是共享主干网络，同时增加 agent ID、角色 embedding 或局部任务信息，让同一网络仍能表现出不同角色行为：</p>
+<div class="arithmatex">\[
+a_i\sim\pi_\theta\big(\cdot\mid \tau_i,\,e_i\big),
+\]</div>
+<p>其中 <span class="arithmatex">\(e_i\)</span> 是主体的身份/角色编码。判断该不该共享，可以看一个简单指标：<strong>共享与不共享两种设置下的执行回报比</strong>。若比值 <span class="arithmatex">\(\ge 0.95\)</span>，共享的样本效率收益几乎总是值得；若 <span class="arithmatex">\(&lt;0.8\)</span>，说明角色差异被压制，应改为部分共享。</p>
+<table>
+<thead>
+<tr>
+<th>共享策略</th>
+<th>参数量</th>
+<th>样本效率</th>
+<th>异质团队适用性</th>
+<th>典型症状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全共享（无 <span class="arithmatex">\(e_i\)</span>）</td>
+<td>最小</td>
+<td>最高</td>
+<td>差</td>
+<td>角色行为塌缩成一类</td>
+</tr>
+<tr>
+<td>共享主干 + role embedding</td>
+<td>小</td>
+<td>高</td>
+<td>良好</td>
+<td>需调 embedding 维度</td>
+</tr>
+<tr>
+<td>仅共享 Critic</td>
+<td>中</td>
+<td>中</td>
+<td>好</td>
+<td>参数量随 <span class="arithmatex">\(n\)</span> 上升</td>
+</tr>
+<tr>
+<td>完全不共享</td>
+<td>最大</td>
+<td>低</td>
+<td>最好</td>
+<td>小样本下过拟合</td>
+</tr>
+</tbody>
+</table>
 <h2 id="marl-训练检查项">MARL 训练检查项</h2>
 <ol>
-<li><strong>执行信息是否泄漏</strong>：Actor 有没有偷偷使用部署时不存在的全局信息；</li>
-<li><strong>奖励是否可归因</strong>：团队奖励是否稀疏到几乎无法学习；</li>
-<li><strong>联合行为是否退化</strong>：所有主体是否学成同一动作、互相等待或反复抢同一任务；</li>
+<li><strong>执行信息是否泄漏</strong>：Actor 有没有偷偷使用部署时不存在的全局信息；做法是把 <span class="arithmatex">\(\tau_i\)</span> 的构造代码单独拿出来，逐字段核对部署数据流。</li>
+<li><strong>奖励是否可归因</strong>：团队奖励是否稀疏到几乎无法学习；做法是统计“获得非零团队奖励的步数占比”，若低于 1% 且主体数 <span class="arithmatex">\(&gt;4\)</span>，必须先做奖励设计。</li>
+<li><strong>联合行为是否退化</strong>：所有主体是否学成同一动作、互相等待或反复抢同一任务；做法是统计动作熵 <span class="arithmatex">\(H(a_i)\)</span> 与主体间动作相关系数 <span class="arithmatex">\(\rho_{ij}\)</span>，<span class="arithmatex">\(\rho_{ij}\to 1\)</span> 是塌缩信号。</li>
 <li><strong>评估是否只看总回报</strong>：还要看碰撞、任务覆盖、负载均衡和策略稳定性。</li>
 </ol>
+<p>对应的失败模式与首选排查动作：</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>可观测信号</th>
+<th>最可能原因</th>
+<th>首选排查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练回报涨、执行回报崩</td>
+<td>两者差距 <span class="arithmatex">\(&gt;30\%\)</span></td>
+<td>执行信息泄漏</td>
+<td>消融 Critic 输入，逐字段审 <span class="arithmatex">\(\tau_i\)</span></td>
+</tr>
+<tr>
+<td>价值震荡不收敛</td>
+<td><span class="arithmatex">\(\chi^2\gg 1\)</span> 且随 <span class="arithmatex">\(T_{age}\)</span> 上升</td>
+<td>回放样本过旧</td>
+<td>缩短回放窗口、降自举权重</td>
+</tr>
+<tr>
+<td>全员同动作</td>
+<td>动作熵 <span class="arithmatex">\(\to 0\)</span></td>
+<td>奖励无区分度 / 过度参数共享</td>
+<td>加 role embedding、加局部奖励</td>
+</tr>
+<tr>
+<td>反复抢同一任务</td>
+<td>任务分配冲突率高</td>
+<td>信用分配缺失</td>
+<td>引入反事实基线或分配约束</td>
+</tr>
+<tr>
+<td>换队友后性能骤降</td>
+<td>队友替换测试落差 <span class="arithmatex">\(&gt;50\%\)</span></td>
+<td>对特定队友过拟合</td>
+<td>训练期做队友策略随机化</td>
+</tr>
+</tbody>
+</table>
 <p>多智能体学习真正需要建立的框架只有两条代表路线：</p>
 <ul>
 <li><strong>价值分解：QMIX</strong> —— 解决合作价值怎样分解并支持分散执行；</li>
@@ -3988,7 +4428,60 @@ training only: global state → centralized critic
 </ul>
 <p>其他 MARL 算法可以在遇到具体限制时再扩展，不需要在第一次学习时形成算法名单。</p>
 <h2 id="评估不能只看团队总回报">评估不能只看团队总回报</h2>
-<p>团队回报上升可能掩盖个别 Agent 长期闲置、角色塌缩或对特定队友过拟合。评估 MARL 时还应检查个体贡献、策略多样性、队友替换后的表现和通信中断下的退化程度，从而判断学到的是稳定协作还是训练组合的偶然默契。</p>
+<p>团队回报上升可能掩盖个别 Agent 长期闲置、角色塌缩或对特定队友过拟合。一个可用的事实判据是：若第 <span class="arithmatex">\(i\)</span> 个主体被替换成一个随机策略后，团队回报下降不足 5%，说明它的实际贡献接近于零，此时“高回报”来自其余主体。</p>
+<p>评估 MARL 时至少应同时报告下面几类量：</p>
+<table>
+<thead>
+<tr>
+<th>评估维度</th>
+<th>具体指标</th>
+<th>合格线（经验值）</th>
+<th>退化信号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>团队性能</td>
+<td>平均团队回报</td>
+<td>与基线比 <span class="arithmatex">\(\ge 1.0\)</span></td>
+<td>低于随机探索基线</td>
+</tr>
+<tr>
+<td>个体贡献</td>
+<td>反事实替换后的回报落差</td>
+<td>每个主体 <span class="arithmatex">\(\ge 5\%\)</span></td>
+<td>存在主体落差 <span class="arithmatex">\(\approx 0\)</span></td>
+</tr>
+<tr>
+<td>策略多样性</td>
+<td>主体间动作分布距离</td>
+<td>大于 0 且不塌缩</td>
+<td>距离 <span class="arithmatex">\(\to 0\)</span></td>
+</tr>
+<tr>
+<td>队友鲁棒性</td>
+<td>新队友组合下的回报保持率</td>
+<td><span class="arithmatex">\(\ge 0.7\)</span></td>
+<td><span class="arithmatex">\(&lt;0.5\)</span></td>
+</tr>
+<tr>
+<td>通信鲁棒性</td>
+<td>丢包 <span class="arithmatex">\(p_{loss}=0.2\)</span> 下的保持率</td>
+<td><span class="arithmatex">\(\ge 0.8\)</span></td>
+<td>骤降至随机水平</td>
+</tr>
+<tr>
+<td>稳定性</td>
+<td>跨随机种子回报标准差</td>
+<td><span class="arithmatex">\(\le 10\%\)</span> 均值</td>
+<td>种子间差异巨大</td>
+</tr>
+</tbody>
+</table>
+<p>最后一条经验：<strong>能通过队友替换和通信中断测试的策略，才算学到了协作；只能在自己训练组合里跑通的，通常只是巧合。</strong> 评估集必须包含训练期从未出现的队友与通信条件，否则测出来的仍是训练分布内的记忆能力。</p>
+<blockquote>
+<p><strong>下一步</strong>：继续阅读 <a href="../02-coordination/">协作与共识机制</a> 了解策略之上的分配层设计，用 <a href="../03-communication/">通信与信息共享</a> 处理 <span class="arithmatex">\(\tau_i\)</span> 中消息通道的延迟与丢包，回到 <a href="../04-allocation-distributed-decision/">任务分配与分布式决策</a> 看全局目标如何落到个体，并对照 <a href="../01-agents-architectures/">多智能体系统导论</a> 补齐智能体结构前提，算法基础则参考 <a href="../../reinforcement-learning/03-policy-actor-critic/">策略梯度与 Actor-Critic</a>。</p>
+</blockquote>
 
 
 

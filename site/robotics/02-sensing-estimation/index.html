@@ -2033,6 +2033,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#卡尔曼滤波的预测与更新两步" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        卡尔曼滤波的预测与更新两步
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#非线性系统仍然沿同一条思路工作" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2055,6 +2066,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#噪声模型的标定" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        噪声模型的标定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#估计器应该输出不确定性而不只输出一个数" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2070,6 +2092,17 @@
     <span class="md-ellipsis">
       
         一致性比瞬时误差更严格
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#估计失效的典型现象与排查" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        估计失效的典型现象与排查
       
     </span>
   </a>
@@ -3696,6 +3729,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#卡尔曼滤波的预测与更新两步" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        卡尔曼滤波的预测与更新两步
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#非线性系统仍然沿同一条思路工作" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3718,6 +3762,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#噪声模型的标定" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        噪声模型的标定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#估计器应该输出不确定性而不只输出一个数" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3733,6 +3788,17 @@
     <span class="md-ellipsis">
       
         一致性比瞬时误差更严格
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#估计失效的典型现象与排查" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        估计失效的典型现象与排查
       
     </span>
   </a>
@@ -3831,7 +3897,8 @@
 
 
 <h1 id="sensing--state-estimation">Sensing &amp; State Estimation</h1>
-<p>机器人真正需要的是位置、速度、姿态和环境状态，但传感器只能提供带噪声的间接测量。状态估计的任务就是把<strong>模型预测</strong>和<strong>传感器观测</strong>结合起来，得到当前最可信的状态。</p>
+<p>机器人真正需要的是位置、速度、姿态和环境状态，但传感器只能提供带噪声的间接测量。状态估计的任务就是把<strong>模型预测</strong>和<strong>传感器观测</strong>按照各自的不确定度加权结合**，得到当前最可信的状态，并且诚实地报告这个估计有多可信。</p>
+<p>这一章的核心认知链只有一条：<strong>先预测、再用残差修正、并且始终跟踪协方差。</strong> 无论是线性 Kalman、EKF、UKF 还是因子图优化，都只是这条链在不同模型假设下的实现。理解这条链比记住任何具体滤波器的公式都重要。</p>
 <figure>
   <img alt="状态估计在预测与观测之间循环。" src="../../assets/diagrams/state-estimation-loop.svg" />
 <br />
@@ -3840,14 +3907,121 @@
 <h2 id="不同传感器看到的是不同物理量">不同传感器看到的是不同物理量</h2>
 <p>编码器测轮子转动，IMU 测角速度和比力，相机测光强形成的图像，LiDAR 测距离。它们通常都<strong>不直接等于机器人状态</strong>。</p>
 <p>例如编码器可以积分得到位移，但轮胎打滑会造成漂移；IMU 高频但积分误差会快速累积；GNSS 或视觉定位漂移慢，却可能更新较慢或偶尔失效。状态估计正是利用这些互补性。</p>
+<p>互补性的量化表达是每个传感器在“频域”和“误差增长规律”上的位置：</p>
+<table>
+<thead>
+<tr>
+<th>传感器</th>
+<th>直接测量</th>
+<th>典型频率</th>
+<th>主要误差来源</th>
+<th>误差增长</th>
+<th>互补价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轮式编码器</td>
+<td>轮转角</td>
+<td>50–200 Hz</td>
+<td>打滑、轮径误差</td>
+<td>随距离线性 <span class="arithmatex">\(\propto s\)</span></td>
+<td>高频位移</td>
+</tr>
+<tr>
+<td>IMU 陀螺</td>
+<td>角速度</td>
+<td>100–1000 Hz</td>
+<td>零偏 <span class="arithmatex">\(b_g\)</span>、随机游走</td>
+<td>角度误差 <span class="arithmatex">\(\propto t\)</span></td>
+<td>高频姿态</td>
+</tr>
+<tr>
+<td>IMU 加速度计</td>
+<td>比力</td>
+<td>100–1000 Hz</td>
+<td>零偏、重力混叠</td>
+<td>位置误差 <span class="arithmatex">\(\propto t^2\)</span></td>
+<td>短时姿态</td>
+</tr>
+<tr>
+<td>相机（视觉里程计）</td>
+<td>特征像素</td>
+<td>10–30 Hz</td>
+<td>尺度模糊、纹理缺失</td>
+<td>缓慢漂移</td>
+<td>长时平移</td>
+</tr>
+<tr>
+<td>LiDAR</td>
+<td>距离/点云</td>
+<td>10–20 Hz</td>
+<td>几何退化、动态物体</td>
+<td>环境相关</td>
+<td>尺度与结构</td>
+</tr>
+<tr>
+<td>GNSS</td>
+<td>绝对位置</td>
+<td>1–10 Hz</td>
+<td>多路径、遮挡</td>
+<td>无漂移但有跳变</td>
+<td>绝对锚点</td>
+</tr>
+</tbody>
+</table>
+<p>误差增长的阶数是选型的关键判据：位置误差 <span class="arithmatex">\(\propto t^2\)</span> 的传感器（纯加速度积分）只能支撑秒级预测，而误差 <span class="arithmatex">\(\propto t\)</span> 的陀螺可以支撑数十秒姿态推算。这就是为什么惯导系统的“自主导航时长”几乎完全由陀螺零偏决定。</p>
 <h2 id="只有观测不够还要有预测">只有观测不够，还要有预测</h2>
 <p>若上一时刻估计为 <span class="arithmatex">\(\hat x_{k-1}\)</span>，控制输入为 <span class="arithmatex">\(u_{k-1}\)</span>，模型先产生预测</p>
 <div class="arithmatex">\[
 \hat x_k^- = f(\hat x_{k-1},u_{k-1}).
 \]</div>
 <p>随后传感器给出观测</p>
-<div class="arithmatex">\[z_k=h(x_k)+v_k,\]</div>
-<p>估计器根据预测和观测之间的差异进行修正。预测让系统在短时间没有新观测时仍能前进，观测则防止模型误差无限累积。</p>
+<div class="arithmatex">\[
+z_k=h(x_k)+v_k,
+\]</div>
+<p>其中 <span class="arithmatex">\(v_k\sim\mathcal N(0,R_k)\)</span> 是测量噪声。估计器根据预测和观测之间的差异进行修正。预测让系统在短时间没有新观测时仍能前进，观测则防止模型误差无限累积。</p>
+<p>这里有一个容易被忽略的量：<strong>残差（innovation）</strong></p>
+<div class="arithmatex">\[
+\tilde y_k=z_k-h(\hat x_k^-).
+\]</div>
+<p>它同时是“观测与预测的差”和“系统健康度的探针”。如果 <span class="arithmatex">\(\tilde y_k\)</span> 的统计特性与理论上应该有的协方差 <span class="arithmatex">\(S_k\)</span> 不匹配，那么问题一定不在滤波器公式，而在模型或噪声参数。</p>
+<table>
+<thead>
+<tr>
+<th>残差现象</th>
+<th>含义</th>
+<th>后续动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均值非零、持续同号</td>
+<td>存在未建模偏置（外参、零位）</td>
+<td>重新标定或扩展状态维数</td>
+</tr>
+<tr>
+<td>方差明显大于 <span class="arithmatex">\(S_k\)</span></td>
+<td><span class="arithmatex">\(R\)</span> 或 <span class="arithmatex">\(Q\)</span> 设小了</td>
+<td>重估噪声参数</td>
+</tr>
+<tr>
+<td>方差明显小于 <span class="arithmatex">\(S_k\)</span></td>
+<td>估计器过度自信</td>
+<td>上调 <span class="arithmatex">\(Q\)</span> 或 <span class="arithmatex">\(R\)</span></td>
+</tr>
+<tr>
+<td>完全为零或恒定</td>
+<td>观测未被真正使用</td>
+<td>检查门控/丢弃逻辑</td>
+</tr>
+<tr>
+<td>相关性随延迟增长</td>
+<td>时间戳未对齐</td>
+<td>检查时钟与插值</td>
+</tr>
+</tbody>
+</table>
 <h2 id="kalman-filter-的不确定性加权">Kalman Filter 的不确定性加权</h2>
 <p>线性 Gaussian 条件下，Kalman Filter 的更新可以写成</p>
 <div class="arithmatex">\[
@@ -3862,16 +4036,403 @@
     <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_pred</span>
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span>
 </code></pre></div>
+<h2 id="卡尔曼滤波的预测与更新两步">卡尔曼滤波的预测与更新两步</h2>
+<p>把 Kalman 拆成两步是理解它的关键，因为<strong>预测步让协方差变大，更新步让它变小</strong>，这个“呼吸”过程就是信息在流动。</p>
+<p><strong>预测步（时间更新）</strong>：用系统模型把状态和协方差往前推。</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\hat x_k^- &amp;= F_k\hat x_{k-1}+B_ku_{k-1},\\
+P_k^- &amp;= F_kP_{k-1}F_k^\top+Q_k .
+\end{aligned}
+\]</div>
+<p>逐项来源解释：</p>
+<ul>
+<li><span class="arithmatex">\(F_k\)</span> 是状态转移矩阵，由物理模型线性化（或直接离散化）得到，例如匀速模型 <span class="arithmatex">\(F=\begin{bmatrix}1&amp;\Delta t\\0&amp;1\end{bmatrix}\)</span>；</li>
+<li><span class="arithmatex">\(B_k u_{k-1}\)</span> 是已知控制输入项，若控制器输出可信则保留，若本身带噪则应并入 <span class="arithmatex">\(Q\)</span>；</li>
+<li><span class="arithmatex">\(Q_k\)</span> 是<strong>过程噪声协方差</strong>，代表“模型没告诉我们的那部分变化”，它使 <span class="arithmatex">\(P_k^-\)</span> 必然大于上一步的 <span class="arithmatex">\(P_{k-1}\)</span>——这就是不确定性的自然增长；</li>
+<li><span class="arithmatex">\(F_kP_{k-1}F_k^\top\)</span> 表示旧的不确定性如何被动力学放大（例如速度不确定性 <span class="arithmatex">\(\times\Delta t\)</span> 变成位置不确定性）。</li>
+</ul>
+<p><strong>更新步（观测更新）</strong>：用观测把不确定性压回去。</p>
+<div class="arithmatex">\[
+\begin{aligned}
+S_k &amp;= H_kP_k^-H_k^\top+R_k,\\
+K_k &amp;= P_k^-H_k^\top S_k^{-1},\\
+\hat x_k &amp;= \hat x_k^-+K_k\,(z_k-H_k\hat x_k^-),\\
+P_k &amp;= (I-K_kH_k)P_k^- .
+\end{aligned}
+\]</div>
+<p>逐项来源：</p>
+<ul>
+<li><span class="arithmatex">\(H_k\)</span> 是观测矩阵，把状态映射到观测空间（例如位置观测 <span class="arithmatex">\(H=[1\ 0]\)</span>）；</li>
+<li><span class="arithmatex">\(R_k\)</span> 是<strong>测量噪声协方差</strong>，代表传感器本身的不可信程度；</li>
+<li><span class="arithmatex">\(S_k\)</span> 是 innovation 的理论协方差，它把预测不确定性 <span class="arithmatex">\(HP^-H^\top\)</span> 与测量不确定性 <span class="arithmatex">\(R\)</span> 相加；</li>
+<li><span class="arithmatex">\(K_k\)</span> 是二者的相对比例，使估计方差最小（这正是最小二乘解）。</li>
+</ul>
+<p>增益 <span class="arithmatex">\(K\)</span> 的调节含义可以直接从标量情形读出：</p>
+<div class="arithmatex">\[
+K_k=\frac{P_k^-}{P_k^-+R_k},
+\]</div>
+<p>它有明确的边界行为：<span class="arithmatex">\(R_k\to\infty\)</span>（传感器极不可信）时 <span class="arithmatex">\(K\to0\)</span>，估计完全跟随模型；<span class="arithmatex">\(P_k^-\to0\)</span>（模型极可信）时 <span class="arithmatex">\(K\to0\)</span>，同样跟随模型；只有 <span class="arithmatex">\(P_k^-\)</span> 与 <span class="arithmatex">\(R_k\)</span> 可比时 <span class="arithmatex">\(K\approx0.5\)</span>，才真正“融合”。</p>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>关系</th>
+<th><span class="arithmatex">\(K\)</span> 取值</th>
+<th>行为</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传感器可信、模型差</td>
+<td><span class="arithmatex">\(R\ll P^-\)</span></td>
+<td><span class="arithmatex">\(\to1\)</span></td>
+<td>几乎直接采用观测</td>
+<td>模型对异常观测不设防</td>
+</tr>
+<tr>
+<td>模型可信、传感器差</td>
+<td><span class="arithmatex">\(P^-\ll R\)</span></td>
+<td><span class="arithmatex">\(\to0\)</span></td>
+<td>几乎忽略观测</td>
+<td>模型偏差无法被纠正</td>
+</tr>
+<tr>
+<td>二者相当</td>
+<td><span class="arithmatex">\(P^-\approx R\)</span></td>
+<td><span class="arithmatex">\(\approx0.5\)</span></td>
+<td>加权平均</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>稳态滤波</td>
+<td><span class="arithmatex">\(P^-\)</span> 收敛</td>
+<td>常数 <span class="arithmatex">\(K_\infty\)</span></td>
+<td>增益饱和</td>
+<td>参数错则偏差永久存在</td>
+</tr>
+</tbody>
+</table>
+<p>一个常被忽视的量化事实：<strong>滤波精度上限由 <span class="arithmatex">\(P_k^-\)</span> 和 <span class="arithmatex">\(R_k\)</span> 较小的那一个决定</strong>。当 <span class="arithmatex">\(R\)</span> 是 <span class="arithmatex">\(P^-\)</span> 的 100 倍时，即使传感器再准地更新，估计方差也只能改善约 1%；此时真正的收益来自把模型做好，而不是加更多传感器。反过来，如果 <span class="arithmatex">\(R\)</span> 设成真值的 0.01 倍（过度自信），滤波器会疯狂跟随观测噪声，<span class="arithmatex">\(\hat x\)</span> 的抖动幅度反而比只用模型更大。</p>
+<p>协方差收敛还给出一个工程上的甜点：对线性时不变系统，<span class="arithmatex">\(P_k\)</span> 会收敛到 Riccati 方程的不动点，此后 <span class="arithmatex">\(K_\infty\)</span> 变为常数。这意味着<strong>稳态下可以预计算增益，省掉每步的矩阵求逆</strong>，在嵌入式平台上这是最常见的优化手段。</p>
 <h2 id="非线性系统仍然沿同一条思路工作">非线性系统仍然沿同一条思路工作</h2>
-<p>机器人运动和相机观测通常是非线性的。EKF 会在当前估计附近线性化模型；更复杂的方法可以使用 sigma points、粒子或优化。但对初学者最重要的是保持同一认知链：<strong>先用模型预测，再用观测残差纠正。</strong></p>
+<p>机器人运动和相机观测通常是非线性的。EKF 会在当前估计附近线性化模型：</p>
+<div class="arithmatex">\[
+F_k=\left.\frac{\partial f}{\partial x}\right|_{\hat x_{k-1}},\qquad
+H_k=\left.\frac{\partial h}{\partial x}\right|_{\hat x_k^-},
+\]</div>
+<p>然后沿用线性 Kalman 的公式。更复杂的方法可以使用 sigma points、粒子或优化，但对初学者最重要的是保持同一认知链：<strong>先用模型预测，再用观测残差纠正。</strong></p>
+<p>线性化带来两个实际后果：一是估计误差大时线性化点偏离真值，可能出现发散；二是协方差矩阵的数值会因浮点误差失去对称正定性，需要每步做 <span class="arithmatex">\(P\leftarrow (P+P^\top)/2\)</span> 的对称化保护。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>建模假设</th>
+<th>计算量</th>
+<th>适用场景</th>
+<th>主要弱点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KF</td>
+<td>线性、Gaussian</td>
+<td><span class="arithmatex">\(O(n^3)\)</span></td>
+<td>线性系统、状态维数 <span class="arithmatex">\(&lt;50\)</span></td>
+<td>非线性时失配</td>
+</tr>
+<tr>
+<td>EKF</td>
+<td>可微、局部线性</td>
+<td><span class="arithmatex">\(O(n^3)\)</span></td>
+<td>里程计+IMU 融合</td>
+<td>强非线性时发散</td>
+</tr>
+<tr>
+<td>UKF</td>
+<td>无需 Jacobian</td>
+<td><span class="arithmatex">\(O(n^3)\)</span>，常数 <span class="arithmatex">\(\approx 2n+1\)</span> 倍采样</td>
+<td>姿态、强非线性</td>
+<td>高维时采样点过多</td>
+</tr>
+<tr>
+<td>粒子滤波</td>
+<td>任意分布</td>
+<td><span class="arithmatex">\(O(N\cdot n)\)</span>，<span class="arithmatex">\(N\)</span> 常取 <span class="arithmatex">\(10^2\text{–}10^4\)</span></td>
+<td>多峰、全局定位</td>
+<td>维数灾难</td>
+</tr>
+<tr>
+<td>因子图优化</td>
+<td>全轨迹平滑</td>
+<td>迭代求解，批量</td>
+<td>SLAM 后端</td>
+<td>需维护历史，非因果</td>
+</tr>
+</tbody>
+</table>
 <p>具体滤波器只是实现这条逻辑的不同方式。</p>
 <h2 id="多传感器融合的难点往往在滤波器之外">多传感器融合的难点往往在滤波器之外</h2>
 <p>相机、IMU、LiDAR 的时间戳不同、频率不同、坐标系不同。即使 Kalman 公式完全正确，时间没有对齐或外参错误，融合结果仍会漂移甚至发散。</p>
-<p>因此实机调试通常先检查：数据时间是否单调、坐标变换是否正确、噪声参数是否合理、传感器是否存在固定偏置，再调滤波器本身。</p>
+<p>时间对齐的代价可以量化：若两路传感器存在固定延迟 <span class="arithmatex">\(\delta=20\)</span> ms，机器人在 <span class="arithmatex">\(v=1.5\)</span> m/s 下运动，未补偿延迟会引入 <span class="arithmatex">\(v\delta=3\)</span> cm 的系统性位置偏差；在 <span class="arithmatex">\(v=5\)</span> m/s（无人机或高速车）下变成 10 cm，已经超过很多定位精度指标。因此延迟标定与延迟补偿（按速度外推或状态插值）是必修项。</p>
+<table>
+<thead>
+<tr>
+<th>融合层问题</th>
+<th>量化影响</th>
+<th>症状</th>
+<th>排查顺序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间戳未对齐</td>
+<td><span class="arithmatex">\(v\cdot\delta\)</span>，<span class="arithmatex">\(\delta=20\)</span> ms → 3 cm@1.5 m/s</td>
+<td>高速时漂移、低速时正常</td>
+<td>第一优先</td>
+</tr>
+<tr>
+<td>外参错误</td>
+<td>角度误差 <span class="arithmatex">\(\varepsilon\)</span> → 距离 <span class="arithmatex">\(d\)</span> 处偏移 <span class="arithmatex">\(d\cdot\varepsilon\)</span></td>
+<td>远距离目标偏移</td>
+<td>第二优先</td>
+</tr>
+<tr>
+<td>噪声参数错误</td>
+<td><span class="arithmatex">\(R/Q\)</span> 比例错 → <span class="arithmatex">\(K\)</span> 错</td>
+<td>抖动或响应迟滞</td>
+<td>第三优先</td>
+</tr>
+<tr>
+<td>固定偏置</td>
+<td>零偏、轮径误差</td>
+<td>长期单向累积</td>
+<td>第四优先</td>
+</tr>
+<tr>
+<td>坐标系方向反</td>
+<td>镜像/反向</td>
+<td>轨迹呈镜像或倒退</td>
+<td>与第一并列</td>
+</tr>
+</tbody>
+</table>
+<p>因此实机调试通常先检查：数据时间是否单调、坐标变换是否正确、噪声参数是否合理、传感器是否存在固定偏置，再调滤波器本身。顺序错了会在错误的地方浪费大量时间。</p>
+<h2 id="噪声模型的标定">噪声模型的标定</h2>
+<p><span class="arithmatex">\(Q\)</span> 与 <span class="arithmatex">\(R\)</span> 是所有滤波器的“旋钮”，但它们不是拍出来的，而是可以从数据估计出来的。</p>
+<p><strong>测量噪声 <span class="arithmatex">\(R\)</span> 的估计（静态法）</strong>：让机器人静止不动，采集 <span class="arithmatex">\(N\)</span> 个原始观测 <span class="arithmatex">\(z_1,\dots,z_N\)</span>。此时状态不变，观测值的波动完全来自噪声，于是</p>
+<div class="arithmatex">\[
+R\approx \frac{1}{N-1}\sum_{k=1}^{N}(z_k-\bar z)(z_k-\bar z)^\top,\qquad
+\bar z=\frac{1}{N}\sum_{k=1}^{N}z_k.
+\]</div>
+<p><strong>过程噪声 <span class="arithmatex">\(Q\)</span> 的估计（残差法）</strong>：<span class="arithmatex">\(Q\)</span> 代表“模型没预测到的变化”，因此要用模型残差估计。对同一段标定轨迹，比较模型预测 <span class="arithmatex">\(\hat x_k^-\)</span> 与后续真实观测经 <span class="arithmatex">\(H\)</span> 投影后的差异，去掉已由 <span class="arithmatex">\(R\)</span> 解释的部分：</p>
+<div class="arithmatex">\[
+Q\approx \mathrm{Cov}\big(\hat x_k^- - \hat x_{k-1}^{\text{真值}}\big)-F\,\mathrm{Cov}(\hat x_{k-1})\,F^\top .
+\]</div>
+<p>工程上更常用的简化做法：<span class="arithmatex">\(Q\)</span> 的标量倍数从 <span class="arithmatex">\(10^{-6}\)</span> 扫到 <span class="arithmatex">\(10^{-1}\)</span>，选使归一化创新 <span class="arithmatex">\(\chi^2\approx 1\)</span> 的那个值。这比手工猜参数可靠得多。</p>
+<p><strong>数值例子</strong>：设位置传感器读数（单位 m）静止采样 200 次，得到标准差 <span class="arithmatex">\(0.02\)</span> m，则 <span class="arithmatex">\(R=4\times10^{-4}\ \text{m}^2\)</span>。设模型是一维匀速运动，<span class="arithmatex">\(\Delta t=0.1\)</span> s，状态 <span class="arithmatex">\([p,v]\)</span>，则</p>
+<div class="arithmatex">\[
+F=\begin{bmatrix}1&amp;0.1\\0&amp;1\end{bmatrix},\qquad
+Q=q\begin{bmatrix}\Delta t^4/4&amp;\Delta t^3/2\\ \Delta t^3/2&amp;\Delta t^2\end{bmatrix}
+=q\begin{bmatrix}2.5\times10^{-5}&amp;5\times10^{-4}\\ 5\times10^{-4}&amp;10^{-2}\end{bmatrix},
+\]</div>
+<p>其中 <span class="arithmatex">\(q\)</span> 是加速度噪声功率谱密度。若取 <span class="arithmatex">\(q=0.5\ (\text{m/s}^2)^2/\text{Hz}\)</span>，则 <span class="arithmatex">\(Q\)</span> 的对角元约为 <span class="arithmatex">\(1.25\times10^{-5}\)</span>（位置）和 <span class="arithmatex">\(5\times10^{-3}\)</span>（速度）。此时稳态增益大约 <span class="arithmatex">\(K_p\approx 0.28\)</span>、<span class="arithmatex">\(K_v\approx 1.4\)</span>，意味着滤波器<strong>主要相信模型的位置预测，但对速度偏差响应很快</strong>——这正好符合“位置观测准、速度只能靠模型推”的物理直觉。</p>
+<table>
+<thead>
+<tr>
+<th>标定目标</th>
+<th>数据需求</th>
+<th>估计方法</th>
+<th>典型量级</th>
+<th>验收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>测量噪声 <span class="arithmatex">\(R\)</span></td>
+<td>静止 30–60 s</td>
+<td>静态方差</td>
+<td>位置 <span class="arithmatex">\(4\times10^{-4}\ \text{m}^2\)</span></td>
+<td><span class="arithmatex">\(\chi^2\in[0.8,1.2]\)</span></td>
+</tr>
+<tr>
+<td>过程噪声 <span class="arithmatex">\(Q\)</span></td>
+<td>一段标定轨迹</td>
+<td>残差协方差 / 扫参</td>
+<td><span class="arithmatex">\(q\approx0.5\)</span></td>
+<td><span class="arithmatex">\(\chi^2\approx1\)</span></td>
+</tr>
+<tr>
+<td>零偏 <span class="arithmatex">\(b\)</span></td>
+<td>静止长段</td>
+<td>均值</td>
+<td>陀螺 <span class="arithmatex">\(0.01\text{–}0.1°/s\)</span></td>
+<td>漂移 <span class="arithmatex">\(&lt;0.1°/s\)</span></td>
+</tr>
+<tr>
+<td>时间延迟 <span class="arithmatex">\(\delta\)</span></td>
+<td>已知速度往返运动</td>
+<td>互相关峰位</td>
+<td>5–50 ms</td>
+<td>残差无速度相关</td>
+</tr>
+</tbody>
+</table>
+<p>注意一个反直觉但重要的结论：<strong>过度调小 <span class="arithmatex">\(R\)</span> 不会更准</strong>。若把 <span class="arithmatex">\(R\)</span> 设成真值的 <span class="arithmatex">\(10^{-2}\)</span> 倍，<span class="arithmatex">\(K\)</span> 会趋近 1，观测噪声被完整注入状态估计，位置抖动幅度约等于传感器噪声本身，而协方差却报告一个很小的值——这就是下一节要谈的“不一致”。</p>
 <h2 id="估计器应该输出不确定性而不只输出一个数">估计器应该输出不确定性，而不只输出一个数</h2>
 <p>一个位置估计 <span class="arithmatex">\(x=2.0\)</span> m 若没有方差，就无法判断它是非常可靠还是只是粗略猜测。后续规划和安全模块也需要根据不确定性调整行为：定位越不可信，速度和动作范围通常越应该保守。</p>
+<p>协方差的工程用法是把它接进决策，而不是只打印出来：</p>
+<table>
+<thead>
+<tr>
+<th>消费者</th>
+<th>用到的量</th>
+<th>决策规则示例</th>
+<th>退化表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>路径规划</td>
+<td>位置协方差 <span class="arithmatex">\(P_{pp}\)</span></td>
+<td><span class="arithmatex">\(\sigma_p&gt;0.3\)</span> m 时缩小膨胀半径</td>
+<td>无视不确定性 → 撞障碍</td>
+</tr>
+<tr>
+<td>速度控制</td>
+<td>速度协方差</td>
+<td><span class="arithmatex">\(\sigma_v\)</span> 大时降速</td>
+<td>高速下失控</td>
+</tr>
+<tr>
+<td>传感器门控</td>
+<td>innovation 协方差 <span class="arithmatex">\(S_k\)</span></td>
+<td>用 Mahalanobis 距离做外点剔除</td>
+<td>异常观测污染状态</td>
+</tr>
+<tr>
+<td>安全监控</td>
+<td>协方差迹 <span class="arithmatex">\(\mathrm{tr}(P)\)</span></td>
+<td>超过阈值触发降级</td>
+<td>静默失效</td>
+</tr>
+<tr>
+<td>多机协同</td>
+<td>相对协方差</td>
+<td>相对定位差时保持间距</td>
+<td>碰撞</td>
+</tr>
+</tbody>
+</table>
+<p>外点剔除的标准做法是 Mahalanobis 门控：只有当</p>
+<div class="arithmatex">\[
+d^2=\tilde y_k^\top S_k^{-1}\tilde y_k\ \le\ \chi^2_{m,\alpha}
+\]</div>
+<p>时才接受观测，<span class="arithmatex">\(m\)</span> 是观测维数，<span class="arithmatex">\(\alpha\)</span> 取 0.99 时阈值约为 <span class="arithmatex">\(3\sigma\)</span> 对应值（<span class="arithmatex">\(m=2\)</span> 时阈值 9.21）。若门控过严，动态场景下会大量丢弃有效观测，导致估计器“饿死”——表现为缓慢跟随或完全不动。</p>
 <h2 id="一致性比瞬时误差更严格">一致性比瞬时误差更严格</h2>
-<p>估计器偶尔接近真值不代表它可信。若报告的协方差长期小于实际误差，系统会过度相信错误估计。除了位置或姿态误差，还应比较归一化创新等一致性指标，检查估计误差是否与自身声明的不确定性匹配。</p>
+<p>估计器偶尔接近真值不代表它可信。若报告的协方差长期小于实际误差，系统会过度相信错误估计。除了位置或姿态误差，还应比较归一化创新等一致性指标，检查估计误差是否与自身声明的不确定性匹配：</p>
+<div class="arithmatex">\[
+\text{NEES}_k=\big(x_k-\hat x_k\big)^\top P_k^{-1}\big(x_k-\hat x_k\big),\qquad
+\text{NIS}_k=\tilde y_k^\top S_k^{-1}\tilde y_k,
+\]</div>
+<p>在模型与噪声设定正确时，<span class="arithmatex">\(\text{NEES}\)</span> 的期望应等于状态维数 <span class="arithmatex">\(n\)</span>，<span class="arithmatex">\(\text{NIS}\)</span> 的期望应等于观测维数 <span class="arithmatex">\(m\)</span>。判据很直接：<strong>NEES 显著大于 <span class="arithmatex">\(n\)</span> 说明协方差报小了（过度自信），显著小于 <span class="arithmatex">\(n\)</span> 说明报大了（过度保守）。</strong></p>
+<table>
+<thead>
+<tr>
+<th>一致性指标</th>
+<th>期望值</th>
+<th>偏大含义</th>
+<th>偏小含义</th>
+<th>常见根因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEES</td>
+<td><span class="arithmatex">\(=n\)</span></td>
+<td>协方差过小、过度自信</td>
+<td>协方差过大、钝化</td>
+<td><span class="arithmatex">\(Q\)</span> 或 <span class="arithmatex">\(R\)</span> 设错</td>
+</tr>
+<tr>
+<td>NIS</td>
+<td><span class="arithmatex">\(=m\)</span></td>
+<td><span class="arithmatex">\(R\)</span> 过小或模型偏差</td>
+<td><span class="arithmatex">\(R\)</span> 过大</td>
+<td>噪声参数未标定</td>
+</tr>
+<tr>
+<td>ANEES（时序平均）</td>
+<td><span class="arithmatex">\(\in[0.8n,1.2n]\)</span></td>
+<td>系统性低估不确定性</td>
+<td>系统性高估</td>
+<td>未建模动态</td>
+</tr>
+</tbody>
+</table>
+<h2 id="估计失效的典型现象与排查">估计失效的典型现象与排查</h2>
+<p>大多数“滤波器不工作”的现象都可以被归到有限的几类原因上，排查顺序应遵循“先便宜后昂贵”的原则：先看时间戳，再看坐标系，再看噪声参数，最后才怀疑算法。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>最可能原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>估计跟随观测抖动很大</td>
+<td><span class="arithmatex">\(R\)</span> 设得过小，<span class="arithmatex">\(K\to1\)</span></td>
+<td>静止数据估 <span class="arithmatex">\(R\)</span>，看 NIS 是否 <span class="arithmatex">\(\gg m\)</span></td>
+</tr>
+<tr>
+<td>观测几乎不影响估计</td>
+<td><span class="arithmatex">\(R\)</span> 设得过大或 <span class="arithmatex">\(Q\)</span> 极小</td>
+<td>检查 <span class="arithmatex">\(K\)</span> 是否 <span class="arithmatex">\(\ll 1\)</span>，看残差是否长期偏置</td>
+</tr>
+<tr>
+<td>平稳运行时缓慢单向漂移</td>
+<td>未建模偏置（零偏、轮径、外参）</td>
+<td>静止段残差均值是否为 0</td>
+</tr>
+<tr>
+<td>高速时误差变大、低速正常</td>
+<td>时间戳延迟 <span class="arithmatex">\(\delta\)</span></td>
+<td>估计互相关峰位，算 <span class="arithmatex">\(v\delta\)</span></td>
+</tr>
+<tr>
+<td>转弯时误差突增、直行正常</td>
+<td>轮距 <span class="arithmatex">\(L\)</span> 或角速度模型错误</td>
+<td>原地旋转回环误差</td>
+</tr>
+<tr>
+<td>突然跳变然后慢慢恢复</td>
+<td>外点被接受，或状态被重初始化</td>
+<td>检查门控阈值与外点比例</td>
+</tr>
+<tr>
+<td>长期缓慢发散、协方差只减不增</td>
+<td><span class="arithmatex">\(Q\)</span> 过小，模型过度自信</td>
+<td>看 <span class="arithmatex">\(\mathrm{tr}(P)\)</span> 是否单调下降</td>
+</tr>
+<tr>
+<td>数值崩溃（NaN / 非正定）</td>
+<td>矩阵求逆病态或浮点误差累积</td>
+<td>检查 <span class="arithmatex">\(S_k\)</span> 条件数，对 <span class="arithmatex">\(P\)</span> 做对称化</td>
+</tr>
+<tr>
+<td>长时间无观测后估计可信度仍高</td>
+<td>预测步未正确增协方差</td>
+<td>核对 <span class="arithmatex">\(P_k^-=FPF^\top+Q\)</span> 是否真的加了 <span class="arithmatex">\(Q\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>最后一条经验：<strong>先对齐时间，再核对坐标系，再标定噪声，最后才调算法。</strong> 状态估计的绝大多数“算法问题”，其实是接口问题。</p>
+<blockquote>
+<p><strong>下一步</strong>：继续阅读 <a href="../03-mapping-slam/">建图与 SLAM</a> 看估计误差如何在建图中被长期约束，用 <a href="../04-path-motion-planning/">路径与运动规划</a> 了解协方差如何进入规划约束，回到 <a href="../01-models-kinematics-dynamics/">模型、运动学与动力学</a> 补齐预测步所依赖的运动模型，概率基础可参考 <a href="../../mathematics/04-conditional-bayes/">条件概率与 Bayes</a>，时间同步细节见 <a href="../../distributed-systems/02-distributed-time/">分布式时间</a>。</p>
+</blockquote>
 
 
 

@@ -1825,6 +1825,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#带宽需求与消息频率的估算" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        带宽需求与消息频率的估算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#延迟丢包与一致性影响" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延迟、丢包与一致性影响
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#基于信息的决策什么值得发" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基于信息的决策：什么值得发
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3761,6 +3794,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#带宽需求与消息频率的估算" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        带宽需求与消息频率的估算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#延迟丢包与一致性影响" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延迟、丢包与一致性影响
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#基于信息的决策什么值得发" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基于信息的决策：什么值得发
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3853,43 +3919,566 @@
 
 
 <h1 id="communication--information-sharing">Communication &amp; Information Sharing</h1>
-<p>通信的价值不是“越多越好”，而是在成本、时延和信息增益之间找到足够的共享机制。</p>
+<p>通信的价值不是"越多越好"，而是在带宽、时延、丢包和信息增益之间找到一个刚好够用的操作点。多智能体系统里最常见的工程错误，是把通信当成免费的无限资源：先让所有主体广播所有状态，再在带宽爆掉、延迟抬高之后再回头做减法。更聪明的做法从一开始就问——<strong>接收方为了做出决定，究竟缺哪一部分信息，以及这份信息多久以后就失效</strong>。</p>
+<p><strong>最核心的一句话：一条消息只有改变了接收方的决策才有价值，其余比特都是纯开销。</strong></p>
 <h2 id="什么时候真的需要通信">什么时候真的需要通信</h2>
+<p>先区分几个容易混淆的概念：</p>
 <ul>
-<li><strong>Message</strong>：agent 间显式传递的信息。</li>
-<li><strong>Shared observation</strong>：多个 agent 直接获得相同环境信息。</li>
-<li><strong>Bandwidth/latency</strong>：通信不是免费且即时的。</li>
-<li><strong>Common knowledge</strong>：大家知道且知道别人也知道的信息。</li>
+<li><strong>Message</strong>：主体间显式传递的信息，需要带宽、可能丢失、可能延迟。</li>
+<li><strong>Shared observation</strong>：多个主体直接观测到同一环境信息，无需传递即已共享。</li>
+<li><strong>Bandwidth / latency</strong>：通信不是免费且即时的，二者共同决定信息可用性。</li>
+<li><strong>Common knowledge</strong>：不仅"大家知道"，而且"大家都知道别人也知道"，是协调的最强前提。</li>
 </ul>
+<p>通信的四种可能来源决定了我们是否需要真的发消息：</p>
+<table>
+<thead>
+<tr>
+<th>协调信息来源</th>
+<th>通信需求</th>
+<th>适用情形</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>共享观测</td>
+<td>无</td>
+<td>传感器可覆盖同一场景</td>
+<td>距离远时不可行</td>
+</tr>
+<tr>
+<td>公共信号</td>
+<td>无</td>
+<td>有统一时钟或外部广播</td>
+<td>无法表达个体意图</td>
+</tr>
+<tr>
+<td>显式消息</td>
+<td>有</td>
+<td>局部观测、需交换意图</td>
+<td>受带宽与丢包限制</td>
+</tr>
+<tr>
+<td>事前约定</td>
+<td>无</td>
+<td>冲突模式可预先枚举</td>
+<td>无法应对新情形</td>
+</tr>
+</tbody>
+</table>
+<p>只有当"共享观测、公共信号、事前约定"三者都无法覆盖某个决策所需的差异时，才真正需要通信。很多"必须通信"的直觉，其实是被共享观测或约定悄悄替代的。</p>
 <h2 id="消息应该传什么">消息应该传什么</h2>
-<p>通信的作用通常是弥补局部观测、共享意图或同步状态，但<strong>不是协调的唯一来源</strong>：共享观测、公共信号、预先约定也可以支持协调。</p>
-<p>工程设计先问三件事：消息是否必要？频率多高？延迟/丢包后系统是否还能退化运行？</p>
+<p>通信的作用通常是弥补局部观测、共享意图或同步状态，但<strong>它不是协调的唯一来源</strong>。设计时先问三件事：消息是否必要？频率多高？延迟或丢包后系统是否还能退化运行？</p>
+<p>设接收方决策为 <span class="arithmatex">\(a\)</span>，收到消息 <span class="arithmatex">\(m\)</span> 前后的最优决策分别为 <span class="arithmatex">\(a_{\text{after}}\)</span> 和 <span class="arithmatex">\(a_{\text{before}}\)</span>。消息的决策相关性定义为</p>
+<div class="arithmatex">\[
+I(m)=\mathbb{1}\big[a_{\text{after}}\ne a_{\text{before}}\big].
+\]</div>
+<p>只有 <span class="arithmatex">\(I(m)=1\)</span> 的消息才真正改变行为。若某类消息的 <span class="arithmatex">\(I(m)\)</span> 长期为 0，它就是无效负载，应当删除。这一"决策相关性"判据，比"信息是否完整"更贴近工程需求。</p>
+<table>
+<thead>
+<tr>
+<th>消息内容</th>
+<th>典型大小</th>
+<th>决策相关性</th>
+<th>是否值得发</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自身位姿 + 时间戳</td>
+<td>24 B</td>
+<td>高（避障/分配）</td>
+<td>是</td>
+</tr>
+<tr>
+<td>当前任务归属</td>
+<td>8 B</td>
+<td>高（防重复）</td>
+<td>是</td>
+</tr>
+<tr>
+<td>完整点云/图像流</td>
+<td>数百 KB</td>
+<td>低（多数帧不改变决策）</td>
+<td>通常否</td>
+</tr>
+<tr>
+<td>原始 IMU 高频流</td>
+<td>大</td>
+<td>低</td>
+<td>否（本地处理）</td>
+</tr>
+</tbody>
+</table>
 <h2 id="带宽延迟与丢包">带宽、延迟与丢包</h2>
+<p>三者共同决定通信链路的可用性，缺一不可：</p>
 <ul>
-<li>Event-driven messaging：有变化再发。</li>
-<li>Publish-subscribe：解耦发送者与接收者。</li>
+<li><strong>带宽</strong>：单位时间可传的比特数，决定能发多少。</li>
+<li><strong>延迟</strong>：消息从发出到可用的时间，决定信息有多"新鲜"。</li>
+<li><strong>丢包</strong>：消息根本未到达的概率，决定系统要容忍多少缺失。</li>
 </ul>
+<p>设单条消息大小为 <span class="arithmatex">\(b\)</span> 比特，发送频率为 <span class="arithmatex">\(f\)</span> 赫兹，链路带宽为 <span class="arithmatex">\(B\)</span> 比特每秒，则链路利用率</p>
+<div class="arithmatex">\[
+\rho=\frac{n(n-1)\,b\,f}{B},
+\]</div>
+<p>其中 <span class="arithmatex">\(n\)</span> 为主体数（全互联时每条消息有 <span class="arithmatex">\(n-1\)</span> 个接收方）。当 <span class="arithmatex">\(\rho\to 1\)</span> 时队列开始堆积，延迟非线性上升——这是通信系统崩溃的经典前兆。</p>
+<ul>
+<li><strong>Event-driven messaging</strong>：仅在状态变化时发送，可把有效 <span class="arithmatex">\(f\)</span> 从固定高频降到事件率。</li>
+<li><strong>Publish-subscribe</strong>：发送者不关心接收者是谁，接收者按主题订阅，天然支持一对多与解耦。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>物理含义</th>
+<th>恶化后果</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>带宽不足</td>
+<td>队列堆积</td>
+<td>延迟上升、丢包加剧</td>
+<td>降采样、事件驱动、压缩</td>
+</tr>
+<tr>
+<td>延迟过高</td>
+<td>信息过期</td>
+<td>基于旧状态决策</td>
+<td>时间戳 + 有效期</td>
+</tr>
+<tr>
+<td>丢包率高</td>
+<td>状态缺失</td>
+<td>决策依据缺失</td>
+<td>冗余发送、本地预测</td>
+</tr>
+</tbody>
+</table>
 <h2 id="发布订阅与事件驱动">发布订阅与事件驱动</h2>
-<p>多车共享“我正在去目标 X”比持续广播完整传感器流便宜得多，却可能已经足够避免重复分配。</p>
+<p>发布订阅把"谁发"和"谁收"解耦：发布者只把消息投到某个主题（topic），订阅者只声明自己关心的主题。在多机器人系统里，这等价于把通信图从"人人互联"压缩成"按需连接"。</p>
+<p>多车共享"我正在去目标 X"比持续广播完整传感器流便宜得多，却可能已经足够避免重复分配。原因在于：<strong>任务冲突只关心意图，不关心原始像素</strong>。把 <span class="arithmatex">\(O(n^2)\)</span> 的全互联流量压缩成按主题订阅的 <span class="arithmatex">\(O(|\mathcal{E}|)\)</span> 稀疏流量，是分布式中间件的核心贡献（具体实现见 <a href="../../distributed-systems/05-middleware-ros2-dds/">中间件与 ROS 2 / DDS</a>）。</p>
+<p>主题划分的粒度本身就是一处设计决策。设系统有 <span class="arithmatex">\(K\)</span> 个主题，每个主题的平均订阅者数为 <span class="arithmatex">\(s_k\)</span>，则总接收量为</p>
+<div class="arithmatex">\[
+R_{\text{pubsub}}=\sum_{k=1}^{K} f_k\, b_k\, s_k ,
+\]</div>
+<p>其中 <span class="arithmatex">\(f_k\)</span>、<span class="arithmatex">\(b_k\)</span> 分别为该主题的发布频率与消息大小。主题划得太粗（如一个"全部状态"主题）会退化为全广播；划得太细（每个字段一个主题）则订阅管理开销上升。实用经验是让主题边界与<strong>决策粒度</strong>对齐——一次决策所需的信息放在同一主题里。</p>
+<table>
+<thead>
+<tr>
+<th>通信模式</th>
+<th>流量量级</th>
+<th>耦合度</th>
+<th>QoS 需求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全广播</td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+<td>强耦合</td>
+<td>高带宽、尽力而为</td>
+</tr>
+<tr>
+<td>发布订阅</td>
+<td>$O(</td>
+<td>\mathcal{E}</td>
+<td>)$</td>
+</tr>
+<tr>
+<td>事件驱动</td>
+<td>事件率 <span class="arithmatex">\(\lambda\)</span></td>
+<td>松耦合</td>
+<td>低延迟、可容忍丢包</td>
+</tr>
+</tbody>
+</table>
 <h2 id="消息设计通常比发得更多更重要">消息设计通常比发得更多更重要</h2>
-<p>多智能体系统最容易走向“所有 Agent 广播所有状态”。这种方案实现简单，却会迅速增加带宽、处理延迟和无效信息。更好的问题是：<strong>接收方为了做决定，真正缺哪一部分信息？</strong></p>
-<p>例如任务分配时，Agent 往往只需要共享当前位置、当前任务、剩余资源和少量置信度，而不需要持续广播完整传感器流。再进一步，消息应带时间戳和有效期，否则一个“正确但已经过期”的状态可能比没有消息更危险。</p>
+<p>多智能体系统最容易走向"所有主体广播所有状态"。这种方案实现简单，却会迅速增加带宽、处理延迟和无效信息。更好的问题是：<strong>接收方为了做决定，真正缺哪一部分信息？</strong></p>
+<p>例如任务分配时，主体往往只需要共享当前位置、当前任务、剩余资源和少量置信度，而不需要持续广播完整传感器流。再进一步，消息应带时间戳和有效期，否则一个"正确但已经过期"的状态可能比没有消息更危险。</p>
 <figure>
   <img alt="多智能体通信应围绕必要状态、意图和事件组织，而不是广播所有原始信息。" src="../../assets/diagrams/mas-network.svg" />
 <br />
-<figcaption>通信的核心问题是“谁需要知道什么，以及信息多久以后就失效”。</figcaption>
+<figcaption>通信的核心问题是"谁需要知道什么，以及信息多久以后就失效"。</figcaption>
 </figure>
+<p>一条消息的信息含量，可以用接收方状态不确定性的下降量衡量。设接收方对某变量的先验熵为 <span class="arithmatex">\(H(\text{prior})\)</span>、后验熵为 <span class="arithmatex">\(H(\text{post})\)</span>，则信息增益</p>
+<div class="arithmatex">\[
+\Delta H = H(\text{prior}) - H(\text{post}).
+\]</div>
+<p>若 <span class="arithmatex">\(\Delta H\approx 0\)</span>，这条消息几乎没有减少不确定性，不值得发送。设计目标不是最大化送达消息数，而是在给定带宽下最大化 <span class="arithmatex">\(\sum\Delta H\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>设计维度</th>
+<th>差的做法</th>
+<th>好的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内容</td>
+<td>原始数据流</td>
+<td>决策所需的派生量</td>
+</tr>
+<tr>
+<td>频率</td>
+<td>固定高频</td>
+<td>事件触发</td>
+</tr>
+<tr>
+<td>时效</td>
+<td>无时间戳</td>
+<td>带 <span class="arithmatex">\(t_{send}\)</span> 与 ttl</td>
+</tr>
+<tr>
+<td>粒度</td>
+<td>全状态</td>
+<td>最小充分信息</td>
+</tr>
+</tbody>
+</table>
 <h2 id="一条工程消息至少要回答四件事">一条工程消息至少要回答四件事</h2>
 <p>真正可用的消息通常不仅有 payload，还要包含<strong>发送者、时间戳、语义类型和有效期</strong>。可把一条消息抽象为</p>
 <div class="arithmatex">\[
 m=(\text{sender},\text{type},\text{payload},t_{send},\text{ttl}).
 \]</div>
 <p>接收时若 <span class="arithmatex">\(t_{now}-t_{send}&gt;\text{ttl}\)</span>，消息在语义上已经失效。这里讨论的是信息模型；具体序列化和网络接口放在 Distributed Systems 章节。</p>
-<p>接收方不仅要判断“内容是什么”，还要判断“这条消息现在是否还有效”。在移动机器人里，旧位置、旧任务归属和旧障碍物信息都可能比缺失信息更危险。</p>
+<p>接收方不仅要判断"内容是什么"，还要判断"这条消息现在是否还有效"。在移动机器人里，旧位置、旧任务归属和旧障碍物信息都可能比缺失信息更危险。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+<th>缺失后果</th>
+<th>典型取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sender</td>
+<td>溯源与优先权判定</td>
+<td>无法判断冲突来源</td>
+<td>Agent ID</td>
+</tr>
+<tr>
+<td>type</td>
+<td>语义解析</td>
+<td>无法正确反序列化</td>
+<td>枚举类型</td>
+</tr>
+<tr>
+<td>payload</td>
+<td>决策所需内容</td>
+<td>消息无意义</td>
+<td>位姿/任务/资源</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(t_{send}\)</span></td>
+<td>判断新鲜度</td>
+<td>无法识别过期状态</td>
+<td>单调时钟</td>
+</tr>
+<tr>
+<td>ttl</td>
+<td>定义有效期</td>
+<td>过期信息被误用</td>
+<td>100 ms ~ 1 s</td>
+</tr>
+</tbody>
+</table>
 <h2 id="通信失效时系统仍要有退化行为">通信失效时系统仍要有退化行为</h2>
-<p>通信不应成为所有决策的单点前提。短时丢包时可以使用最近状态并降低速度；持续失联时可以释放共享任务、回到安全区域或进入本地自治模式。<strong>能通信时提高协作效率，不能通信时仍保持安全</strong>，比追求零丢包更符合真实系统。</p>
+<p>通信不应成为所有决策的单点前提。系统的行为应随可用信息量单调退化，而不是一下子崩溃。</p>
+<ul>
+<li><strong>短时丢包</strong>：使用最近一次状态，并降低速度（保守化）。</li>
+<li><strong>持续失联</strong>：释放共享任务、回到安全区域、进入本地自治模式。</li>
+<li><strong>完全孤立</strong>：退回单机策略，只保证自身安全，不做跨主体承诺。</li>
+</ul>
+<p>形式化地，设可用邻居比例为 <span class="arithmatex">\(p\in[0,1]\)</span>，则系统性能指标（如吞吐、覆盖率）通常满足</p>
+<div class="arithmatex">\[
+\text{Perf}(p)\ \ge\ \text{Perf}(0)+p\cdot\big(\text{Perf}(1)-\text{Perf}(0)\big),
+\]</div>
+<p>即通信带来效率增益，但 <span class="arithmatex">\(p=0\)</span> 时仍有 <span class="arithmatex">\(\text{Perf}(0)&gt;0\)</span> 的安全底线。<strong>能通信时提高协作效率，不能通信时仍保持安全</strong>，比追求零丢包更符合真实系统。</p>
+<table>
+<thead>
+<tr>
+<th>失联程度</th>
+<th>系统状态</th>
+<th>应对策略</th>
+<th>安全保证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(p\ge 0.8\)</span></td>
+<td>正常协作</td>
+<td>常规协调</td>
+<td>完整</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.3\le p&lt;0.8\)</span></td>
+<td>部分退化</td>
+<td>降速、保守避让</td>
+<td>完整</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0&lt;p&lt;0.3\)</span></td>
+<td>严重退化</td>
+<td>释放任务、回撤</td>
+<td>完整</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(p=0\)</span></td>
+<td>完全孤立</td>
+<td>本地自治</td>
+<td>单机安全</td>
+</tr>
+</tbody>
+</table>
 <h2 id="信息价值与通信成本">信息价值与通信成本</h2>
 <p>一条消息的价值取决于它是否会改变接收者的决策。如果接收后动作完全不变，这条消息大概率只消耗带宽。设计通信机制时，可以比较有消息和无消息时的决策差异，把发送频率与信息价值联系起来。</p>
+<p>设发送一条消息的成本为 <span class="arithmatex">\(c\)</span>（带宽、能耗、延迟占用的折算），收益为 <span class="arithmatex">\(V(s)\)</span>（决策改善量），则只有当</p>
+<div class="arithmatex">\[
+V(s) &gt; c \cdot f(s)
+\]</div>
+<p>时才值得以频率 <span class="arithmatex">\(f(s)\)</span> 发送。当 <span class="arithmatex">\(c\)</span> 较高（如窄带链路或能耗受限的野外机器人）时，阈值抬升，系统自然倾向于稀疏、高价值的消息；当 <span class="arithmatex">\(c\)</span> 极低（如共享内存总线）时，才可能容忍高频冗余。</p>
+<table>
+<thead>
+<tr>
+<th>消息类型</th>
+<th>价值 <span class="arithmatex">\(V\)</span></th>
+<th>成本 <span class="arithmatex">\(c\cdot f\)</span></th>
+<th>是否值得</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务归属变更</td>
+<td>高</td>
+<td>低（事件率低）</td>
+<td>是</td>
+</tr>
+<tr>
+<td>位置更新（避障用）</td>
+<td>高</td>
+<td>中（频率高）</td>
+<td>是（可降采样）</td>
+</tr>
+<tr>
+<td>全量传感器流</td>
+<td>低</td>
+<td>极高</td>
+<td>否</td>
+</tr>
+<tr>
+<td>心跳保活</td>
+<td>低</td>
+<td>极低</td>
+<td>是（用于失联检测）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="带宽需求与消息频率的估算">带宽需求与消息频率的估算</h2>
+<p>工程设计前应先把带宽需求算清楚，而不是等到链路打满才救火。一个实用的估算公式是</p>
+<div class="arithmatex">\[
+B_{\text{need}} = N_{\text{dim}} \times N_{\text{bytes}} \times f \times k \times n,
+\]</div>
+<p>其中 <span class="arithmatex">\(N_{\text{dim}}\)</span> 是状态维度，<span class="arithmatex">\(N_{\text{bytes}}\)</span> 是每个数的字节数，<span class="arithmatex">\(f\)</span> 是发送频率，<span class="arithmatex">\(k\)</span> 是每个主体的接收方数量，<span class="arithmatex">\(n\)</span> 是主体数。</p>
+<p>以 <strong>10 个机器人、20 Hz、全互联</strong> 为例。设每个机器人共享 8 维状态（位置 3 + 速度 3 + 任务 ID 1 + 电量 1），每维 4 字节（float32），则单条消息 32 B = 256 bit。全互联时每个机器人向另外 9 个发送：</p>
+<div class="arithmatex">\[
+B_{\text{need}} = 32\ \text{B}\times 20\ \text{Hz}\times 9 \times 10 = 57{,}600\ \text{B/s} \approx 460.8\ \text{kbit/s}.
+\]</div>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>单条大小</th>
+<th>频率</th>
+<th>总带宽量级</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全广播 8 维状态</td>
+<td>32 B</td>
+<td>20 Hz</td>
+<td>≈ 460 kbit/s</td>
+<td>10 机器人基线</td>
+</tr>
+<tr>
+<td>全广播高清图像</td>
+<td>100 KB</td>
+<td>10 Hz</td>
+<td>≈ 720 Mbit/s</td>
+<td>远超典型无线链路</td>
+</tr>
+<tr>
+<td>事件触发状态</td>
+<td>32 B</td>
+<td>平均 2 Hz</td>
+<td>≈ 46 kbit/s</td>
+<td>仅在变化时发</td>
+</tr>
+<tr>
+<td>意图共享（任务事件）</td>
+<td>16 B</td>
+<td>事件率 0.1 Hz</td>
+<td>≈ 百 bit/s</td>
+<td>极省</td>
+</tr>
+<tr>
+<td>分层（高层 + 底层避障）</td>
+<td>混合</td>
+<td>混合</td>
+<td>≈ 数十 kbit/s</td>
+<td>工程常用</td>
+</tr>
+</tbody>
+</table>
+<p>从表可见，<strong>同样的协调效果，消息设计不同会带来 4 个数量级以上的带宽差异</strong>。当一个系统在 20 Hz 全广播下吃力，把它改成事件触发或分层后，通常能腾出绝大部分带宽。估算时还要留出 2~3 倍余量，因为 <span class="arithmatex">\(\rho\to1\)</span> 时延迟会非线性上升。</p>
+<h2 id="延迟丢包与一致性影响">延迟、丢包与一致性影响</h2>
+<p>延迟对控制回路的破坏是<strong>非线性的</strong>：小延迟几乎无感，超过某个临界值后闭环系统迅速失稳。设控制周期为 <span class="arithmatex">\(T\)</span>，若延迟 <span class="arithmatex">\(\tau\)</span> 满足</p>
+<div class="arithmatex">\[
+\tau &gt; \frac{T}{2},
+\]</div>
+<p>则基于旧状态的决策可能落在完全错误的相位上。对避障、编队等高动态任务，这个门槛尤其严格。</p>
+<table>
+<thead>
+<tr>
+<th>延迟范围</th>
+<th>控制回路影响</th>
+<th>典型可接受上限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(&lt;10\)</span> ms</td>
+<td>几乎无感</td>
+<td>高频编队控制</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(10\sim50\)</span> ms</td>
+<td>轻微滞后</td>
+<td>中速导航</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(50\sim200\)</span> ms</td>
+<td>明显滞后，需减速</td>
+<td>慢速任务分配</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(&gt;200\)</span> ms</td>
+<td>闭环失稳风险</td>
+<td>仅用于非实时意图同步</td>
+</tr>
+</tbody>
+</table>
+<p>丢包率同样有量化的性能影响。设丢包率为 <span class="arithmatex">\(q\)</span>，状态更新有效值退化为"最近可用状态"，其平均陈旧度约为</p>
+<div class="arithmatex">\[
+\bar{\tau}_{\text{stale}} \approx \frac{q}{1-q}\cdot\frac{1}{f}.
+\]</div>
+<p>即 <span class="arithmatex">\(q=0.1\)</span>、<span class="arithmatex">\(f=20\)</span> Hz 时，平均陈旧度约 5.6 ms；<span class="arithmatex">\(q=0.5\)</span> 时骤增至 50 ms，此时再高的名义频率也形同虚设。</p>
+<table>
+<thead>
+<tr>
+<th>丢包率 <span class="arithmatex">\(q\)</span></th>
+<th>平均陈旧度（<span class="arithmatex">\(f=20\)</span> Hz）</th>
+<th>系统性能</th>
+<th>应采取的退化行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0 ms</td>
+<td>100%</td>
+<td>无</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>≈ 5.6 ms</td>
+<td>≈ 95%</td>
+<td>无</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>≈ 21 ms</td>
+<td>≈ 85%</td>
+<td>降速</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>50 ms</td>
+<td>≈ 65%</td>
+<td>释放任务、保守避让</td>
+</tr>
+<tr>
+<td>0.9</td>
+<td>450 ms</td>
+<td>≈ 20%</td>
+<td>进入单机自治</td>
+</tr>
+</tbody>
+</table>
+<p>这里同样存在一致性—可用性权衡：要求所有接收方对状态强一致，就必须等待确认，从而抬高有效延迟；允许最终一致，则可能出现短暂的认知分歧。多主体一致性代价的完整讨论见 <a href="../../distributed-systems/03-consistency-state/">分布式一致性与状态</a>。工程设计的原则是：<strong>当延迟比冲突代价更关键时，接受弱一致；当冲突代价极高时，接受高延迟强一致。</strong></p>
+<h2 id="基于信息的决策什么值得发">基于信息的决策：什么值得发</h2>
+<p>最后把前面的讨论收拢成一个可操作的分类：按"发送的信息粒度"决定发什么、发多少。粒度越粗，信息量越小，但能支撑的协作越弱。</p>
+<table>
+<thead>
+<tr>
+<th>粒度</th>
+<th>典型内容</th>
+<th>信息量</th>
+<th>可实现收益</th>
+<th>通信成本</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完备信息</td>
+<td>全部状态 + 原始观测</td>
+<td>极高</td>
+<td>接近集中式最优</td>
+<td>极高</td>
+<td>小规模、有线、离线</td>
+</tr>
+<tr>
+<td>事件触发</td>
+<td>状态变化量超过阈值</td>
+<td>低</td>
+<td>避免重复劳动</td>
+<td>低</td>
+<td>中大规模在线系统</td>
+</tr>
+<tr>
+<td>意图共享</td>
+<td>我要去哪里 / 我要做什么</td>
+<td>极低</td>
+<td>消除冲突与死锁</td>
+<td>极低</td>
+<td>任务分配、路口</td>
+</tr>
+<tr>
+<td>协商</td>
+<td>提议 + 反提议</td>
+<td>中</td>
+<td>处理利益冲突</td>
+<td>中（需往返）</td>
+<td>自利主体、拍卖</td>
+</tr>
+</tbody>
+</table>
+<p>这四种粒度不是互斥的，而是可以分层组合：底层用事件触发同步位置，中层用意图共享防冲突，高层在少数关键决策上用协商解决冲突。选择的原则是：<strong>当低粒度已能消除冲突时，绝不动用高粒度</strong>。因为每一次向上升级都会成倍增加带宽、延迟和协议复杂度，而这些代价在真实系统里往往是性能瓶颈的真正来源。</p>
+<p>可以把这种升级的代价写成一条粗略的缩放关系。设完备信息方案的单条消息为 <span class="arithmatex">\(b_0\)</span>，各粒度相对它的大小依次约为</p>
+<div class="arithmatex">\[
+b_{\text{event}}\sim 10^{-2}b_0,\quad b_{\text{intent}}\sim 10^{-4}b_0,\quad b_{\text{nego}}\sim 10^{-1}b_0 ,
+\]</div>
+<p>可见意图共享是四个量级里最省的一档，而协商虽比完备信息省，却因为需要多轮往返而抬高有效延迟。工程排序通常是：先试意图共享，不够再上事件触发，只有真正存在利益冲突时才引入协商。</p>
+<blockquote>
+<p><strong>下一步</strong>：通信是协调与分配的信息基础。若你想知道协调问题本身的结构与博弈本质，请阅读 <a href="../02-coordination/">合作、竞争与协调</a>；若要把共享信息用于"谁做什么"的决策，见 <a href="../04-allocation-distributed-decision/">任务分配与分布式决策</a>；通信链路的底层机制见 <a href="../../distributed-systems/01-network-messaging/">网络与消息</a>，中间件实现见 <a href="../../distributed-systems/05-middleware-ros2-dds/">ROS 2 与 DDS</a>。</p>
+</blockquote>
 
 
 

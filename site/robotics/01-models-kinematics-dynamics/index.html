@@ -2005,6 +2005,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#旋转表示的三种形式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        旋转表示的三种形式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#雅可比与奇异性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        雅可比与奇异性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#差速运动模型" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2020,6 +2042,17 @@
     <span class="md-ellipsis">
       
         坐标、单位与时间约定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#模型精度与参数标定" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型精度与参数标定
       
     </span>
   </a>
@@ -3685,6 +3718,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#旋转表示的三种形式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        旋转表示的三种形式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#雅可比与奇异性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        雅可比与奇异性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#差速运动模型" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3700,6 +3755,17 @@
     <span class="md-ellipsis">
       
         坐标、单位与时间约定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#模型精度与参数标定" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型精度与参数标定
       
     </span>
   </a>
@@ -3809,16 +3875,71 @@
 
 
 <h1 id="models-kinematics--dynamics">Models, Kinematics &amp; Dynamics</h1>
-<p>机器人要在真实世界运动，至少要解决三件事：<strong>它在哪里、它会怎样运动、要产生这种运动需要什么力或力矩。</strong> 坐标系、运动学和动力学分别对应这三个层次。</p>
+<p>机器人要在真实世界运动，至少要解决三件事：<strong>它在哪里、它会怎样运动、要产生这种运动需要什么力或力矩。</strong> 坐标系、运动学和动力学分别对应这三个层次，而模型精度决定了这三个层次的答案能信到什么程度。</p>
+<p>初学者最容易犯的错误是“混层求解”：用运动学去回答力的问题（比如想问电机扭矩却只算了轨迹），或者用动力学去回答几何问题（明明只关心末端位置却先建了完整惯性矩阵）。正确的做法是先判断任务处在哪一层，再决定模型的复杂度。</p>
+<figure>
+  <img alt="机器人建模栈：坐标系 → 运动学 → 动力学。" src="../../assets/diagrams/robot-stack.svg" />
+<br />
+<figcaption>模型栈自下而上分层：坐标系给出语言，运动学给出几何，动力学给出因果。</figcaption>
+</figure>
 <h2 id="坐标系与参考框架">坐标系与参考框架</h2>
 <p>同一个点可以在相机坐标系、机器人底盘坐标系和地图坐标系下得到完全不同的数值。机器人系统因此不会只说“目标在 <span class="arithmatex">\((2,1)\)</span>”，而要说明“目标在 camera frame 还是 map frame”。</p>
 <p>刚体位姿通常由旋转 <span class="arithmatex">\(R\)</span> 和平移 <span class="arithmatex">\(t\)</span> 表示，齐次变换写成</p>
 <div class="arithmatex">\[
-T=\begin{bmatrix}R&amp;t\\0&amp;1\end{bmatrix}.
+T=\begin{bmatrix}R&amp;t\\ \mathbf 0^\top &amp;1\end{bmatrix},
 \]</div>
-<p>若已知 <span class="arithmatex">\(T^A_B\)</span> 和 <span class="arithmatex">\(T^B_C\)</span>，则</p>
-<div class="arithmatex">\[T^A_C=T^A_BT^B_C.\]</div>
-<p>这条链式关系就是机器人 TF 系统的数学基础。</p>
+<p>其中 <span class="arithmatex">\(R\in SO(3)\)</span> 满足 <span class="arithmatex">\(R^\top R=I\)</span> 且 <span class="arithmatex">\(\det R=1\)</span>。若已知 <span class="arithmatex">\(T^A_B\)</span> 和 <span class="arithmatex">\(T^B_C\)</span>，则</p>
+<div class="arithmatex">\[
+T^A_C=T^A_B\,T^B_C.
+\]</div>
+<p>这条链式关系就是机器人 TF 系统的数学基础。它的逆变换有闭式解：</p>
+<div class="arithmatex">\[
+\left(T^A_B\right)^{-1}=\begin{bmatrix}R^\top&amp;-R^\top t\\ \mathbf 0^\top&amp;1\end{bmatrix},
+\]</div>
+<p>注意<strong>不是</strong>简单地把 <span class="arithmatex">\(t\)</span> 取负——外参写反是机器人调试中最常见的“方向颠倒”错误来源。</p>
+<p>工程上常见的坐标系及其职责：</p>
+<table>
+<thead>
+<tr>
+<th>坐标系</th>
+<th>记号约定</th>
+<th>典型来源</th>
+<th>常见错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>世界/地图 <code>map</code></td>
+<td><span class="arithmatex">\(T^{map}_{odom}\)</span></td>
+<td>定位模块输出</td>
+<td>与 <code>odom</code> 混用导致跳变</td>
+</tr>
+<tr>
+<td>里程计 <code>odom</code></td>
+<td><span class="arithmatex">\(T^{odom}_{base}\)</span></td>
+<td>轮式里程计积分</td>
+<td>长期漂移被当作真值</td>
+</tr>
+<tr>
+<td>机器人本体 <code>base_link</code></td>
+<td><span class="arithmatex">\(T^{base}_{sensor}\)</span></td>
+<td>URDF 静态外参</td>
+<td>外参旋转方向取反</td>
+</tr>
+<tr>
+<td>传感器 <code>camera_link</code></td>
+<td><span class="arithmatex">\(T^{base}_{cam}\)</span></td>
+<td>标定结果 <span class="arithmatex">\(\pm0.5°\)</span></td>
+<td>光学轴 vs 机械轴混淆</td>
+</tr>
+<tr>
+<td>工具 <code>tool0</code></td>
+<td><span class="arithmatex">\(T^{base}_{tool}\)</span></td>
+<td>正运动学计算</td>
+<td>单位混用（m vs mm）</td>
+</tr>
+</tbody>
+</table>
 <p>在工程层，一个二维坐标变换的小例子可以把“先旋转、再平移”的顺序固定下来：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
@@ -3833,15 +3954,218 @@ T=\begin{bmatrix}R&amp;t\\0&amp;1\end{bmatrix}.
 v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
 \]</div>
 <p>因此两轮同速时直行，速度不同则转弯。对机械臂，关节变量 <span class="arithmatex">\(q\)</span> 通过正运动学映射到末端位姿；Jacobian 则描述关节速度和末端速度的局部关系</p>
-<div class="arithmatex">\[\dot x=J(q)\dot q.\]</div>
-<p>运动学回答的是“怎么动”，不是“为什么能这样动”。</p>
+<div class="arithmatex">\[
+\dot x=J(q)\dot q.
+\]</div>
+<p>这两层的分工可以明确列表：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>运动学</th>
+<th>动力学</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入</td>
+<td>位置/速度 <span class="arithmatex">\(q,\dot q\)</span></td>
+<td>力矩 <span class="arithmatex">\(\tau\)</span> 或力 <span class="arithmatex">\(F\)</span></td>
+</tr>
+<tr>
+<td>输出</td>
+<td>位姿、速度 <span class="arithmatex">\(\dot x\)</span></td>
+<td>加速度 <span class="arithmatex">\(\ddot q\)</span></td>
+</tr>
+<tr>
+<td>是否含质量</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>轨迹规划、IK、TF</td>
+<td>力矩控制、轨迹跟踪</td>
+</tr>
+<tr>
+<td>失效场景</td>
+<td>高速、重载时不准</td>
+<td>低速时算力浪费</td>
+</tr>
+<tr>
+<td>主要参数</td>
+<td>连杆长度、轮距 <span class="arithmatex">\(L\)</span>、轮径 <span class="arithmatex">\(r\)</span></td>
+<td>质量、惯量 <span class="arithmatex">\(I\)</span>、摩擦</td>
+</tr>
+</tbody>
+</table>
+<p>运动学回答的是“怎么动”，不是“为什么能这样动”。当任务对速度或负载敏感时，运动学给出的答案会系统性偏差，且偏差随速度平方增长。</p>
 <h2 id="动力学把质量惯性和力加入模型">动力学把质量、惯性和力加入模型</h2>
 <p>当控制任务需要考虑加速度、负载或高速运动时，只靠运动学就不够。机械系统常写成</p>
 <div class="arithmatex">\[
 M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
 \]</div>
-<p>其中 <span class="arithmatex">\(M\)</span> 表示惯性，<span class="arithmatex">\(C\)</span> 表示速度相关项，<span class="arithmatex">\(g\)</span> 表示重力，<span class="arithmatex">\(\tau\)</span> 是执行器力矩。</p>
+<p>其中 <span class="arithmatex">\(M(q)\in\mathbb R^{n\times n}\)</span> 表示惯性矩阵（对称正定，<span class="arithmatex">\(n\)</span> 为自由度数），<span class="arithmatex">\(C(q,\dot q)\dot q\)</span> 表示科氏力与离心力项，<span class="arithmatex">\(g(q)\)</span> 表示重力项，<span class="arithmatex">\(\tau\)</span> 是执行器力矩。</p>
+<p>每一项的量级决定了控制难度：低速时 <span class="arithmatex">\(M\ddot q\)</span> 与 <span class="arithmatex">\(C\dot q\)</span> 都可忽略，只剩 <span class="arithmatex">\(g(q)\)</span>，所以简单的 PD + 重力补偿就能稳定；高速时 <span class="arithmatex">\(C(q,\dot q)\dot q\)</span> 随 <span class="arithmatex">\(\dot q^2\)</span> 增长，若忽略它，跟踪误差会随速度平方上升。举个数值感受：二连杆臂在关节速度 5 rad/s 时离心项可能占总力矩的 20%–40%，而 1 rad/s 时不到 3%。</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>物理含义</th>
+<th>量级随速度</th>
+<th>忽略后果</th>
+<th>补偿方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(M(q)\ddot q\)</span></td>
+<td>惯性</td>
+<td>与 <span class="arithmatex">\(\ddot q\)</span> 线性</td>
+<td>加速段跟踪滞后</td>
+<td>反馈线性化</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(C(q,\dot q)\dot q\)</span></td>
+<td>科氏/离心</td>
+<td><span class="arithmatex">\(\propto \dot q^2\)</span></td>
+<td>高速段误差突增</td>
+<td>前馈模型</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(g(q)\)</span></td>
+<td>重力</td>
+<td>与速度无关</td>
+<td>静态位置偏移</td>
+<td>重力补偿</td>
+</tr>
+<tr>
+<td>摩擦项 <span class="arithmatex">\(F_v\dot q+F_c\text{sgn}(\dot q)\)</span></td>
+<td>黏滞 + 库仑</td>
+<td>线性 + 常量</td>
+<td>低速爬行、死区</td>
+<td>摩擦辨识</td>
+</tr>
+</tbody>
+</table>
 <p>移动机器人低速导航时，简单运动学模型往往已经够用；机械臂高速轨迹控制、无人机姿态控制则更依赖动力学。<strong>模型复杂度要由任务决定。</strong></p>
+<h2 id="旋转表示的三种形式">旋转表示的三种形式</h2>
+<p>姿态是机器人学里最容易出错的部分，因为同一个旋转可以写成完全不同的数值。三种主流表示各有明确的适用边界。</p>
+<p><strong>欧拉角</strong>：用三个角 <span class="arithmatex">\((\phi,\theta,\psi)\)</span> 表示，通常是绕固定轴或体轴的顺序旋转。它的优点是直观、维数最少（3）；缺点是存在<strong>万向锁（gimbal lock）</strong>：当中间角 <span class="arithmatex">\(\theta=\pm90°\)</span> 时，第一和第三旋转轴重合，雅可比秩下降，逆解不唯一。</p>
+<p><strong>旋转矩阵</strong>：<span class="arithmatex">\(R\in SO(3)\)</span>，9 个分量、6 个独立约束。优点是线性、可复合、无奇异；缺点是冗余（9 个数描述 3 个自由度），需要正交化才能保持 <span class="arithmatex">\(R^\top R=I\)</span>。</p>
+<p><strong>四元数</strong>：<span class="arithmatex">\(q=(w,x,y,z)\)</span>，单位四元数满足 <span class="arithmatex">\(\|q\|=1\)</span>，4 个数、1 个约束。优点是无奇异、插值平滑（SLERP）；缺点是符号二义性（<span class="arithmatex">\(q\)</span> 与 <span class="arithmatex">\(-q\)</span> 表示同一旋转），直接线性插值会失真。</p>
+<p>三种表示的关键对比：</p>
+<table>
+<thead>
+<tr>
+<th>表示</th>
+<th>参数个数/自由度</th>
+<th>奇异性</th>
+<th>复合运算代价</th>
+<th>捷联积分误差</th>
+<th>典型使用位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>欧拉角</td>
+<td>3 / 3</td>
+<td>有（万向锁，<span class="arithmatex">\(\theta=\pm90°\)</span>）</td>
+<td>3 次三角运算</td>
+<td>在奇异点发散</td>
+<td>人类可读接口、UI</td>
+</tr>
+<tr>
+<td>旋转矩阵</td>
+<td>9 / 3</td>
+<td>无</td>
+<td>一次 <span class="arithmatex">\(3\times3\)</span> 乘法</td>
+<td>需正交化，误差 <span class="arithmatex">\(\sim10^{-7}\)</span>/步</td>
+<td>变换链、TF、视觉</td>
+</tr>
+<tr>
+<td>四元数</td>
+<td>4 / 3</td>
+<td>无</td>
+<td>一次四元数乘法（16 乘 + 12 加）</td>
+<td>需归一化，漂移小</td>
+<td>IMU 姿态积分</td>
+</tr>
+</tbody>
+</table>
+<p>从旋转矩阵到四元数的转换（数值上最稳健的写法之一）：</p>
+<div class="arithmatex">\[
+w=\tfrac12\sqrt{1+R_{11}+R_{22}+R_{33}},\quad
+x=\frac{R_{32}-R_{23}}{4w},\quad
+y=\frac{R_{13}-R_{31}}{4w},\quad
+z=\frac{R_{21}-R_{12}}{4w}.
+\]</div>
+<p>当 <span class="arithmatex">\(w\to0\)</span>（旋转接近 <span class="arithmatex">\(180°\)</span>）时该公式数值不稳，必须改用最大对角元分支。这个细节说明：<strong>没有一种表示在所有场景下都安全，切换表示本身就要处理边界情形。</strong></p>
+<p>捷联积分的误差量级可以作为选型判据：IMU 在 200 Hz 下用一阶欧拉积分，姿态漂移典型 <span class="arithmatex">\(0.5°\text{–}2°/s\)</span>；用四元数积分 + 归一化可降到 <span class="arithmatex">\(0.05°\text{–}0.2°/s\)</span>；用旋转矩阵则需要每步正交化，否则误差累积更快。因此<strong>姿态积分优先用四元数，变换链优先用齐次矩阵</strong>。</p>
+<h2 id="雅可比与奇异性">雅可比与奇异性</h2>
+<p>Jacobian 把关节速度线性映射到末端速度：</p>
+<div class="arithmatex">\[
+\dot x=J(q)\dot q,\qquad J(q)\in\mathbb R^{m\times n},
+\]</div>
+<p>其中 <span class="arithmatex">\(m\)</span> 是任务空间维数（平面任务 3，空间任务 6），<span class="arithmatex">\(n\)</span> 是关节数。对平面二连杆臂，<span class="arithmatex">\(J\)</span> 可显式写出：</p>
+<div class="arithmatex">\[
+J(q)=\begin{bmatrix}-l_1\sin q_1-l_2\sin(q_1+q_2) &amp; -l_2\sin(q_1+q_2)\\ l_1\cos q_1+l_2\cos(q_1+q_2) &amp; l_2\cos(q_1+q_2)\end{bmatrix}.
+\]</div>
+<p>由此得到两条实用推论：</p>
+<ul>
+<li><strong>力映射是对偶的</strong>：<span class="arithmatex">\(\tau=J^\top(q)F\)</span>。把末端外力 <span class="arithmatex">\(F\)</span> 换算成关节力矩时用的是 <span class="arithmatex">\(J^\top\)</span>，这不是巧合，而是虚功原理的直接结果；</li>
+<li><strong>逆解在奇异位形失效</strong>：由 <span class="arithmatex">\(\dot q=J^{-1}(q)\dot x\)</span>（方阵情形）可见，当 <span class="arithmatex">\(\det J(q)\to0\)</span>，同样的末端速度需要趋于无穷的关节速度。</li>
+</ul>
+<p>奇异性的定量度量是<strong>可操作度</strong>：</p>
+<div class="arithmatex">\[
+w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
+\]</div>
+<p><span class="arithmatex">\(w\to0\)</span> 即为奇异位形。几何上它对应“所有关节运动都无法让末端沿某个方向移动”的构形。可操作度还能用奇异值解释：<span class="arithmatex">\(J\)</span> 的最小奇异值 <span class="arithmatex">\(\sigma_{\min}\)</span> 越小，末端在对应方向上的可控速度越弱。</p>
+<table>
+<thead>
+<tr>
+<th>奇异类型</th>
+<th>几何条件</th>
+<th>现象</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>边界奇异</td>
+<td>臂完全伸展</td>
+<td>末端无法继续外伸</td>
+<td>规划阶段避开工作空间边界</td>
+</tr>
+<tr>
+<td>内部奇异</td>
+<td>关节轴共线（如腕部 <span class="arithmatex">\(q_5=0\)</span>）</td>
+<td>逆解退化为无穷多解</td>
+<td>阻尼最小二乘（DLS）</td>
+</tr>
+<tr>
+<td>数值奇异</td>
+<td><span class="arithmatex">\(\sigma_{\min}/\sigma_{\max}&lt;10^{-3}\)</span></td>
+<td>关节速度尖峰、抖动</td>
+<td>截断奇异值（TSVD）</td>
+</tr>
+</tbody>
+</table>
+<p>工程上的标准解法是阻尼最小二乘：</p>
+<div class="arithmatex">\[
+\dot q=J^\top\big(JJ^\top+\lambda^2 I\big)^{-1}\dot x,
+\]</div>
+<p><span class="arithmatex">\(\lambda\)</span> 一般取 <span class="arithmatex">\(10^{-3}\text{–}10^{-1}\)</span> 之间的值：太小无法抑制尖峰，太大会引入末端跟踪误差。这条公式是“奇异附近用牺牲精度换稳定”的典型范式。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dls_step</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">manipulability</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)))</span>
+</code></pre></div>
+<p>慢速通过奇异区还有一个廉价技巧：在 <span class="arithmatex">\(w(q)&lt;w_{th}\)</span> 时按比例缩放末端速度，即 <span class="arithmatex">\(\dot x\leftarrow\dot x\cdot w(q)/w_{th}\)</span>，让轨迹在奇异附近自然减速而不是跳变。</p>
 <h2 id="差速运动模型">差速运动模型</h2>
 <p>二维差速车位姿为 <span class="arithmatex">\((x,y,\theta)\)</span>，在短时间 <span class="arithmatex">\(\Delta t\)</span> 内可近似更新为</p>
 <div class="arithmatex">\[
@@ -3851,6 +4175,15 @@ y_{k+1}&amp;=y_k+v\sin\theta_k\Delta t,\\
 \theta_{k+1}&amp;=\theta_k+\omega\Delta t.
 \end{aligned}
 \]</div>
+<p>这个写法把 <span class="arithmatex">\(\theta\)</span> 固定在区间起点，因此当 <span class="arithmatex">\(\omega\)</span> 较大时误差不可忽略。严格解是圆弧积分：</p>
+<div class="arithmatex">\[
+\begin{aligned}
+x_{k+1}&amp;=x_k+\frac{v}{\omega}\big(\sin(\theta_k+\omega\Delta t)-\sin\theta_k\big),\\
+y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k\big),\\
+\theta_{k+1}&amp;=\theta_k+\omega\Delta t.
+\end{aligned}
+\]</div>
+<p>两者在 <span class="arithmatex">\(\omega\to0\)</span> 时一致（需要洛必达处理）。误差量级判据：当 <span class="arithmatex">\(\omega\Delta t&lt;0.05\)</span> rad 时一阶近似相对误差 <span class="arithmatex">\(&lt;0.1\%\)</span>；当 <span class="arithmatex">\(\omega\Delta t=0.3\)</span> rad（约 <span class="arithmatex">\(17°\)</span>）时位置误差可达厘米级。因此低速导航用一阶近似，快速转向必须用圆弧模型或更小步长。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">diff_drive_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">vl</span><span class="p">,</span> <span class="n">vr</span><span class="p">,</span> <span class="n">wheel_base</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
@@ -3861,11 +4194,224 @@ y_{k+1}&amp;=y_k+v\sin\theta_k\Delta t,\\
             <span class="n">yaw</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
 </code></pre></div>
 <p>这段代码没有考虑轮胎打滑、执行器动态和地形，因此适合低速平面运动，不应被当成真实车辆的完整物理模型。</p>
+<table>
+<thead>
+<tr>
+<th>误差来源</th>
+<th>数学表现</th>
+<th>典型量级</th>
+<th>是否可标定</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轮径误差 <span class="arithmatex">\(\Delta r/r\)</span></td>
+<td>尺度误差，随里程线性增长</td>
+<td>1%–3%</td>
+<td>是</td>
+<td>直线标定</td>
+</tr>
+<tr>
+<td>轮距误差 <span class="arithmatex">\(\Delta L/L\)</span></td>
+<td>转向尺度误差，随累计转角增长</td>
+<td>2%–5%</td>
+<td>是</td>
+<td>原地旋转标定</td>
+</tr>
+<tr>
+<td>积分离散化</td>
+<td>一阶 vs 圆弧</td>
+<td><span class="arithmatex">\(\propto \omega\Delta t\)</span></td>
+<td>是（改模型）</td>
+<td>减小 <span class="arithmatex">\(\Delta t\)</span> / 圆弧积分</td>
+</tr>
+<tr>
+<td>轮胎打滑</td>
+<td>非系统性随机项</td>
+<td>转弯时 5%–20%</td>
+<td>否</td>
+<td>融合 IMU/视觉</td>
+</tr>
+<tr>
+<td>地面坡度</td>
+<td>平面假设失效</td>
+<td>依地形</td>
+<td>否</td>
+<td>3D 状态估计</td>
+</tr>
+</tbody>
+</table>
 <h2 id="坐标单位与时间约定">坐标、单位与时间约定</h2>
 <p>很多“算法错误”其实来自模型接口不一致：角度一处用 degree、一处用 radian；位置来自旧时间戳；相机外参方向写反；把 <code>map → base</code> 当成 <code>base → map</code> 使用。</p>
 <p>因此机器人模型落地时应明确三个约定：<strong>坐标系方向、单位、时间戳</strong>。公式本身往往比这些工程约定更简单。</p>
+<table>
+<thead>
+<tr>
+<th>约定项</th>
+<th>建议写法</th>
+<th>违约的典型后果</th>
+<th>检查方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单位</td>
+<td>全部 SI（m, rad, s）</td>
+<td>1000× 尺度错误</td>
+<td>断言数值范围</td>
+</tr>
+<tr>
+<td>旋转方向</td>
+<td>右手系，逆时针为正</td>
+<td>转向反了、镜像轨迹</td>
+<td>用已知点验证</td>
+</tr>
+<tr>
+<td>时间戳</td>
+<td>统一单调时钟，标注 frame</td>
+<td>TF 插值错位</td>
+<td>检查单调性</td>
+</tr>
+<tr>
+<td>变换记号</td>
+<td><span class="arithmatex">\(T^{A}_{B}\)</span> 表示“B 在 A 中的位姿”</td>
+<td>链路方向颠倒</td>
+<td>正逆变换回原点测试</td>
+</tr>
+<tr>
+<td>角度范围</td>
+<td>统一 <span class="arithmatex">\((-\pi,\pi]\)</span></td>
+<td>跨越 <span class="arithmatex">\(\pm\pi\)</span> 时跳变</td>
+<td>检查 <span class="arithmatex">\(\theta\)</span> 连续性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="模型精度与参数标定">模型精度与参数标定</h2>
+<p>模型误差最终都会以位姿误差的形式暴露出来，而且不同参数误差的<strong>增长规律完全不同</strong>。定量地看，对差速底盘，里程计输出的位置误差可以写成</p>
+<div class="arithmatex">\[
+\Delta p\approx \Big(\frac{\Delta r}{r}\Big)s+\Big(\frac{\Delta L}{L}\Big)\frac{s\theta}{2},
+\]</div>
+<p>其中 <span class="arithmatex">\(s\)</span> 是行进距离，<span class="arithmatex">\(\theta\)</span> 是累计转角。第一项与距离成正比（尺度误差），第二项与 <span class="arithmatex">\(s\cdot\theta\)</span> 成正比（转向尺度误差）。举个数：<span class="arithmatex">\(s=100\)</span> m、<span class="arithmatex">\(\theta=10\)</span> rad、轮径误差 1%、轮距误差 3%，则两项分别贡献约 1.0 m 和 1.5 m，合计约 2.5 m——在 100 m 的行进上已经不可接受。这解释了为什么“只标定轮径”往往不够，<strong>旋转标定必须单独做</strong>。</p>
+<p>各类参数对位姿误差的影响方式：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>误差典型值</th>
+<th>进入位姿误差的方式</th>
+<th>敏感实验</th>
+<th>标后残差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轮径 <span class="arithmatex">\(r\)</span></td>
+<td>1%–3%</td>
+<td>平移尺度 <span class="arithmatex">\(\propto s\)</span></td>
+<td>直行 10 m 对比真值</td>
+<td><span class="arithmatex">\(&lt;0.5\)</span>%</td>
+</tr>
+<tr>
+<td>轮距 <span class="arithmatex">\(L\)</span></td>
+<td>2%–5%</td>
+<td>旋转尺度 <span class="arithmatex">\(\propto s\theta\)</span></td>
+<td>原地转 10 圈对比真值</td>
+<td><span class="arithmatex">\(&lt;1\)</span>%</td>
+</tr>
+<tr>
+<td>外参 <span class="arithmatex">\(T^{base}_{cam}\)</span></td>
+<td><span class="arithmatex">\(0.5°\)</span>、5 mm</td>
+<td>局部误差，随距离放大</td>
+<td>靶标运动对比</td>
+<td><span class="arithmatex">\(&lt;0.3°\)</span></td>
+</tr>
+<tr>
+<td>惯性矩阵 <span class="arithmatex">\(I\)</span></td>
+<td>5%–10%</td>
+<td>力矩估计偏差，动态跟踪</td>
+<td>阶跃力矩响应</td>
+<td><span class="arithmatex">\(&lt;3\)</span>%</td>
+</tr>
+<tr>
+<td>关节零位</td>
+<td><span class="arithmatex">\(0.1°\text{–}1°\)</span></td>
+<td>系统性末端偏移</td>
+<td>多点对靶</td>
+<td><span class="arithmatex">\(&lt;0.2°\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>标定实验的最小配置，按“用最少实验覆盖最多参数”原则排列：</p>
+<ol>
+<li><strong>静止段</strong>（30–60 s）：估计传感器偏置（IMU 陀螺零偏、加速度计零偏），给出测量噪声方差 <span class="arithmatex">\(\sigma^2\)</span>；</li>
+<li><strong>直线段</strong>（10 m 往返）：用外部真值（卷尺、全站仪或运动捕捉）标定轮径 <span class="arithmatex">\(r\)</span> 与每轮尺度；</li>
+<li><strong>原地旋转</strong>（正反各 5–10 圈）：标定轮距 <span class="arithmatex">\(L\)</span> 与左右轮差异；</li>
+<li><strong>方形/8 字轨迹</strong>：联合验证 <span class="arithmatex">\(r\)</span> 与 <span class="arithmatex">\(L\)</span> 的耦合，检查回环闭合误差；</li>
+<li><strong>靶标多点对位</strong>（机械臂场景）：标定外参与关节零位，至少 15–20 个位形以覆盖各关节。</li>
+</ol>
+<p>验收标准建议用两个指标：<strong>回环闭合误差</strong>（回到起点时位置误差占路径长度比例，合格线 <span class="arithmatex">\(&lt;0.5\%\)</span>）和<strong>残差白噪声性</strong>（标定后残差不应有系统性趋势，若仍有随 <span class="arithmatex">\(\theta\)</span> 增长的趋势，说明还有未辨识的尺度参数）。</p>
 <h2 id="变换链的验证方法">变换链的验证方法</h2>
 <p>坐标变换最可靠的检查不是盯着矩阵元素，而是选择几个已知几何关系的点进行验证：原点应落在哪里，坐标轴方向是否正确，正变换后再逆变换能否回到原点。把这些检查写成测试，能在外参更新时及时发现方向颠倒。</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>期望结果</th>
+<th>失败说明</th>
+<th>严格度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正逆变换回原点</td>
+<td>残差 <span class="arithmatex">\(&lt;10^{-9}\)</span></td>
+<td>外参方向写反</td>
+<td>极强</td>
+</tr>
+<tr>
+<td>原点映射</td>
+<td><span class="arithmatex">\(T^{A}_{B}\cdot 0=t^{A}_{B}\)</span></td>
+<td>平移与旋转顺序错</td>
+<td>强</td>
+</tr>
+<tr>
+<td>轴向量映射</td>
+<td>单位轴映射后仍为单位向量</td>
+<td>旋转矩阵未正交化</td>
+<td>强</td>
+</tr>
+<tr>
+<td>链式复合</td>
+<td><span class="arithmatex">\(T^{A}_{C}=T^{A}_{B}T^{B}_{C}\)</span></td>
+<td>frame 命名或方向错</td>
+<td>强</td>
+</tr>
+<tr>
+<td>时间戳单调</td>
+<td>严格递增</td>
+<td>时钟源混用</td>
+<td>中</td>
+</tr>
+<tr>
+<td>已知点对齐</td>
+<td>与实测点误差 <span class="arithmatex">\(&lt;2\sigma\)</span></td>
+<td>标定参数过期</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_inverse</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">R</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">T_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="o">-</span><span class="n">R</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">t</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))]])</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">T</span> <span class="o">@</span> <span class="n">T_inv</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+</code></pre></div>
+<p>最后一条经验：<strong>模型的价值不在公式有多复杂，而在于它的误差是否被量化过。</strong> 一个标定过的一阶运动学模型，通常比一个未标定的完整动力学模型更有用。</p>
+<blockquote>
+<p><strong>下一步</strong>：接着看 <a href="../02-sensing-estimation/">传感与状态估计</a> 了解如何抑制里程计漂移，用 <a href="../03-mapping-slam/">建图与 SLAM</a> 把长期位姿误差闭合掉，再用 <a href="../04-path-motion-planning/">路径与运动规划</a> 把运动学约束变成可行轨迹，最后在 <a href="../05-navigation-control/">导航与控制</a> 里把模型接到闭环控制器上，动力学细节可参考 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a>。</p>
+</blockquote>
 
 
 
