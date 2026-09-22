@@ -3542,7 +3542,84 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        内容
+        本节要解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五章的推进逻辑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        术语与符号约定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见失败模式速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与其它章节的接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        单智能体到多智能体的新增困难
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导航
       
     </span>
   </a>
@@ -3641,20 +3718,408 @@
 
 
 <h1 id="multi-agent-systems">Multi-Agent Systems</h1>
-<p>多智能体系统关注多个 Agent 如何组织、协调、通信、分配任务并共同学习。重点是理解系统机制，而不是罗列 MARL 算法。</p>
+<p>多智能体系统（MAS）研究的不是"把单智能体程序复制若干份"，而是<strong>当多个决策者共享同一个环境、各自只有局部信息、且彼此的动作互相进入对方的回报时，系统应当怎样组织才不至于崩溃</strong>。本章的重点是机制与判据——Agent 怎么建模、协调靠什么、信息如何流动、任务归谁、学习如何避免互相拆台——而不是罗列 MARL 算法名字。</p>
 <figure>
   <img alt="multi-agent-systems overview" src="../assets/diagrams/mas-map.svg" />
 <br />
 <figcaption>Multi Agent Systems 的核心概念关系。</figcaption>
 </figure>
-<h2 id="_1">内容</h2>
+<h2 id="_1">本节要解决的问题</h2>
+<p>单智能体 RL 的世界里，环境动力学 <span class="arithmatex">\(P(s'\mid s,a)\)</span> 是稳定的：策略变了，世界不会跟着变。多智能体系统的第一层困难就是<strong>这个前提被破坏</strong>。设 <span class="arithmatex">\(n\)</span> 个 Agent，联合动作 <span class="arithmatex">\(\mathbf a=(a_1,\dots,a_n)\)</span>，则 Agent <span class="arithmatex">\(i\)</span> 感受到的有效动力学是</p>
+<div class="arithmatex">\[P\big(s'\mid s, a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s, \mathbf a\big)\prod_{j\neq i}\pi_j\big(a_j\mid o_j\big).\]</div>
+<p>等号右侧含其他 Agent 的策略 <span class="arithmatex">\(\pi_j\)</span>，它们全都在学习、都在变。于是从 Agent <span class="arithmatex">\(i\)</span> 的视角看，<strong>"环境"是一个持续移动的目标</strong>。这不是工程实现问题，而是问题结构本身的改变。</p>
+<p>由此产生四个必须回答的问题：</p>
 <ol>
-<li><a href="01-agents-architectures/">智能体与多智能体系统架构</a></li>
-<li><a href="02-coordination/">合作、竞争与协调</a></li>
-<li><a href="03-communication/">多智能体通信与信息共享</a></li>
-<li><a href="04-allocation-distributed-decision/">任务分配与分布式决策</a></li>
-<li><a href="05-multi-agent-learning/">多智能体学习与 CTDE</a></li>
+<li><strong>组织结构</strong>：谁决策、谁只执行、决策在什么时间尺度上发生？</li>
+<li><strong>协调机制</strong>：多个动作同时发生冲突时，靠规则、靠协商、还是靠学出来的均衡来化解？</li>
+<li><strong>信息流</strong>：每个 Agent 只知道局部观测 <span class="arithmatex">\(o_i\)</span>，谁该把什么信息发给谁，代价是多少？</li>
+<li><strong>归属与学习</strong>：任务与收益如何分配到具体主体，学习信号才不至于互相抵消？</li>
 </ol>
+<p>这四个问题不能跳答，因为它们之间存在依赖：观测结构决定协调需要多少信息，信息可得性又决定分配能不能去中心化，而分配结果才是学习信号的定义基础。下表给出每一层被跳过时最先出现的症状，可作为诊断起点。</p>
+<table>
+<thead>
+<tr>
+<th>被跳过的问题</th>
+<th>直接后果</th>
+<th>最先出现的症状</th>
+<th>该去哪里补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谁算 Agent（边界）</td>
+<td>决策权划分错误</td>
+<td>算法调优无效、行为不可解释</td>
+<td><a href="01-agents-architectures/">01 架构</a></td>
+</tr>
+<tr>
+<td>观测结构 <span class="arithmatex">\(\mathcal O_i\)</span></td>
+<td>Agent 依据不足</td>
+<td>换场景立刻失效、行为抖动</td>
+<td><a href="01-agents-architectures/">01 架构</a></td>
+</tr>
+<tr>
+<td>协调机制</td>
+<td>联合动作互相破坏</td>
+<td>死锁、来回让行、冲突频发</td>
+<td><a href="02-coordination/">02 协调</a></td>
+</tr>
+<tr>
+<td>信息流设计</td>
+<td>关键信息缺失</td>
+<td>带宽升高但性能不升</td>
+<td><a href="03-communication/">03 通信</a></td>
+</tr>
+<tr>
+<td>任务归属</td>
+<td>资源错配</td>
+<td>重复执行、任务无人认领</td>
+<td><a href="04-allocation-distributed-decision/">04 分配</a></td>
+</tr>
+<tr>
+<td>信用分配</td>
+<td>学习信号模糊</td>
+<td>团队回报上升、个体行为退化</td>
+<td><a href="05-multi-agent-learning/">05 学习</a></td>
+</tr>
+</tbody>
+</table>
+<p>本章不追求一次性给出标准答案，而是给出<strong>判据与失败模式</strong>：在具体系统里，你的失败出在哪一层，以及那一层应该用什么手段。</p>
+<h2 id="_2">五章的推进逻辑</h2>
+<p>五章不是并列的知识清单，而是一条递进的依赖链：先确定"谁在决策"，才谈得上"怎么协调"；协调需要信息，所以下一步是通信；通信受限后分配问题变成分布式决策；最后才是让这些主体自己学。</p>
+<table>
+<thead>
+<tr>
+<th>章</th>
+<th>核心问题</th>
+<th>关键概念</th>
+<th>上一章遗留的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="01-agents-architectures/">01 智能体与架构</a></td>
+<td>谁算 Agent、系统分几层</td>
+<td>MDP、Markov Game、Reactive/Deliberative/Hybrid</td>
+<td>——</td>
+</tr>
+<tr>
+<td><a href="02-coordination/">02 合作、竞争与协调</a></td>
+<td>多主体动作如何不互相破坏</td>
+<td>联合动作、均衡、协调失败</td>
+<td>耦合由何而来</td>
+</tr>
+<tr>
+<td><a href="03-communication/">03 通信与信息共享</a></td>
+<td>局部观测如何补全</td>
+<td>消息、带宽、延迟、共享状态</td>
+<td>协调需要哪些信息</td>
+</tr>
+<tr>
+<td><a href="04-allocation-distributed-decision/">04 任务分配与分布式决策</a></td>
+<td>谁去做哪件事、在哪决定</td>
+<td>分配目标函数、一致性、去中心化</td>
+<td>信息在哪里可用</td>
+</tr>
+<tr>
+<td><a href="05-multi-agent-learning/">05 多智能体学习与 CTDE</a></td>
+<td>如何学而不互相拆台</td>
+<td>非平稳性、信用分配、CTDE</td>
+<td>分配结果如何反馈成学习信号</td>
+</tr>
+</tbody>
+</table>
+<p>推进逻辑中有一个不变的主线：<strong>耦合度</strong>。从"独立 Agent 各自决策"到"共享同一环境的完全耦合"，每往右一步，可分解性下降一级，单智能体方法能直接搬运的部分就少一块。因此读到任何一章，都值得先问：这一章处理的是耦合度多大的场景？</p>
+<h2 id="_3">概念地图</h2>
+<p>上图从左到右六个节点，是一条从「个体」到「群体学习」的链路，每个节点都在回答上一个节点留下的缺口。</p>
+<p><strong>Agents / architectures</strong>——系统的最底层是"哪些组件被建模成决策者"。判据是它是否拥有自己的观测 <span class="arithmatex">\(o_i\)</span>、动作 <span class="arithmatex">\(a_i\)</span> 与目标 <span class="arithmatex">\(r_i\)</span>。架构分三档：Reactive（观测到动作的直接映射，快但无规划）、Deliberative（维护内部世界模型并搜索动作序列，慢但可规划）、Hybrid（高层规划 + 低层反应 + 安全层）。</p>
+<p><strong>Coordination / joint behavior</strong>——一旦有多个决策者，个体最优不再等于整体最优。典型例子是两个 Agent 都选择"让对方先过"而同时僵住，或都选择"我先过"而相撞。协调要处理的是联合动作 <span class="arithmatex">\(\mathbf a\)</span> 层面上的问题，而不是单个 <span class="arithmatex">\(a_i\)</span>。</p>
+<p><strong>Communication / information</strong>——协调需要信息，而信息有代价。带宽、延迟、丢包决定了"能传什么"。消息可以是从局部观测里压缩出来的结论，也可以是共享的意图或计划；传得多则带宽吃紧、传得少则协调失败。</p>
+<p><strong>Allocation / who does what</strong>——信息到位后，才有条件回答"任务分给谁"。分配是组合优化问题：<span class="arithmatex">\(n\)</span> 个 Agent、<span class="arithmatex">\(m\)</span> 个任务，一对一指派就有 <span class="arithmatex">\(n!\)</span> 种方案，必须依赖结构或近似算法。</p>
+<p><strong>Distributed / local decisions</strong>——分配结果最终要在本地执行。现实中往往没有中心节点，Agent 只能基于邻居信息决策，于是需要一致性机制与有限的迭代通信，还要面对通信中断时的降级行为。</p>
+<p><strong>Learning / MARL &amp; CTDE</strong>——最右端是让整个系统自动获得策略。CTDE（集中训练、分散执行）是最常用的桥：训练时可以访问全局信息、允许信息互通，执行时每个 Agent 只用本地观测，从而在"学得动"和"跑得起"之间取一个折中。</p>
+<p>链条的读法是：<strong>左侧节点定义问题的形状，右侧节点决定能不能自动求解。</strong>任何一层跳过，右侧都会建立在错误的结构上——例如没定义清楚观测，却直接上 CTDE，只会得到一个过拟合到训练时信息结构的策略。</p>
+<p>把六个节点按"输入 / 输出"再排一次，能更清楚看到依赖方向：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>输入</th>
+<th>输出（交给下一节点）</th>
+<th>对应章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agents / architectures</td>
+<td>系统组件清单</td>
+<td>决策者集合与分层结构</td>
+<td><a href="01-agents-architectures/">01</a></td>
+</tr>
+<tr>
+<td>Coordination</td>
+<td>各自的动作集合</td>
+<td>联合动作的可行组合与冲突规则</td>
+<td><a href="02-coordination/">02</a></td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>各自需要但拿不到的信息</td>
+<td>消息内容、频率与优先级</td>
+<td><a href="03-communication/">03</a></td>
+</tr>
+<tr>
+<td>Allocation</td>
+<td>任务集合与 Agent 状态</td>
+<td>任务到 Agent 的指派</td>
+<td><a href="04-allocation-distributed-decision/">04</a></td>
+</tr>
+<tr>
+<td>Distributed</td>
+<td>指派结果与局部信息</td>
+<td>各 Agent 的本地决策规则</td>
+<td><a href="04-allocation-distributed-decision/">04</a></td>
+</tr>
+<tr>
+<td>Learning</td>
+<td>上述全部结构</td>
+<td>可自动优化的策略</td>
+<td><a href="05-multi-agent-learning/">05</a></td>
+</tr>
+</tbody>
+</table>
+<p>注意最后一行：学习节点吃进去的是<strong>前面五个节点的结构假设</strong>。这也是为什么"换一个更强的 MARL 算法"经常解决不了问题——若观测结构本身不足，再强的算法也只能在错误信息上做最优拟合。</p>
+<h2 id="_4">术语与符号约定</h2>
+<p>全章统一使用下面的符号，避免在不同章节之间产生歧义。多智能体的符号与单智能体最大的差别在于：<strong>几乎所有量都带上了主体下标，或者依赖他人的策略。</strong></p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>在 MAS 中的特殊性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(n\)</span></td>
+<td>Agent 数量</td>
+<td>直接决定联合空间规模 <span class="arithmatex">\(m^{n}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(s\)</span></td>
+<td>全局状态</td>
+<td>执行期通常没有任何单个 Agent 能完整观测</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(o_i\)</span></td>
+<td>Agent <span class="arithmatex">\(i\)</span> 的局部观测</td>
+<td>由观测函数 <span class="arithmatex">\(\mathcal O_i\)</span> 生成，各 Agent 内容不同</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(a_i\)</span></td>
+<td>Agent <span class="arithmatex">\(i\)</span> 的动作</td>
+<td><span class="arithmatex">\(\mathcal A_i\)</span> 可以对每个 Agent 不同</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathbf a\)</span></td>
+<td>联合动作 <span class="arithmatex">\((a_1,\dots,a_n)\)</span></td>
+<td>规模为 $\prod_i</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathbf a_{-i}\)</span></td>
+<td>除 <span class="arithmatex">\(i\)</span> 外的联合动作</td>
+<td><span class="arithmatex">\(i\)</span> 的回报依赖它，是耦合的直接体现</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(r_i\)</span></td>
+<td>Agent <span class="arithmatex">\(i\)</span> 的奖励</td>
+<td>完全合作时 <span class="arithmatex">\(r_i=r\)</span>，竞争时可符号相反</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\pi_i\)</span></td>
+<td>Agent <span class="arithmatex">\(i\)</span> 的策略</td>
+<td>他人策略 <span class="arithmatex">\(\pi_{-i}\)</span> 进入 <span class="arithmatex">\(i\)</span> 的有效动力学</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(h_i\)</span></td>
+<td>历史 <span class="arithmatex">\(o_{i,0:t},a_{i,0:t-1}\)</span></td>
+<td>观测不足时用来推断隐藏状态</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(b_i\)</span></td>
+<td>信念 <span class="arithmatex">\(P(s\mid h_i)\)</span></td>
+<td>Dec-POMDP 中的充分统计量</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\gamma\)</span></td>
+<td>折扣因子</td>
+<td>决定协调需要向前看多远</td>
+</tr>
+</tbody>
+</table>
+<p>两个容易混淆的写法值得单独强调。第一，<span class="arithmatex">\(\pi_{-i}\)</span> 不是"其他所有 Agent 合起来的一个策略"，而是一组各自独立的策略，因此它是一个联合策略而不是单一函数。第二，观测函数写作 <span class="arithmatex">\(\mathcal O_i\)</span> 时下标在函数上，但真正的观测随机性来自环境状态与联合动作，所以 <span class="arithmatex">\(o_i\)</span> 的信噪比会随队友行为变化——队友动作越剧烈，<span class="arithmatex">\(o_i\)</span> 中包含的动态信息越多，静态信息相对越难提取。</p>
+<h2 id="_5">常见失败模式速查</h2>
+<p>下面这张表用于现场定位：先看症状，再看最可能的层次，最后检查对应的设计项。经验上，绝大多数"算法不 work"的多智能体问题都能被前四行覆盖。</p>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>最可能的层次</th>
+<th>优先检查项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>两个 Agent 僵持不动</td>
+<td>协调</td>
+<td>是否存在确定性的打破平局规则（如 ID 优先级）</td>
+</tr>
+<tr>
+<td>任务长期无人认领</td>
+<td>分配</td>
+<td>出价机制是否让这些任务产生负收益预期</td>
+</tr>
+<tr>
+<td>回报曲线周期震荡、复现性差</td>
+<td>学习</td>
+<td>是否把仍在更新的他人策略当作目标（非平稳性）</td>
+</tr>
+<tr>
+<td>团队成功但个体行为退化</td>
+<td>学习</td>
+<td>是否有搭便车的 Agent，信用分配是否模糊</td>
+</tr>
+<tr>
+<td>训练好、部署差</td>
+<td>信息结构</td>
+<td>执行期观测是否满足训练期假设（CTDE 常见坑）</td>
+</tr>
+<tr>
+<td>通信量升高但性能不升</td>
+<td>通信</td>
+<td>消息延迟 <span class="arithmatex">\(\tau\)</span> 是否已超过决策周期 <span class="arithmatex">\(\Delta t\)</span></td>
+</tr>
+<tr>
+<td>路口反复急停</td>
+<td>控制 / 安全层</td>
+<td>反应式阈值 <span class="arithmatex">\(d_{safe}\)</span> 与局部规划目标是否冲突</td>
+</tr>
+<tr>
+<td>Agent 数一增加就学不动</td>
+<td>联合空间</td>
+<td>是否仍在枚举 <span class="arithmatex">\(m^{n}\)</span> 而没有做分解或参数共享</td>
+</tr>
+</tbody>
+</table>
+<p>使用方式是"排除法"而不是"对症下药"：症状只提示层次，具体原因仍需回到对应章节的机制上验证。例如"回报震荡"可能是非平稳性，也可能只是超参数问题，区分判据是看震荡周期是否与对手策略的更新周期相关。</p>
+<h2 id="_6">与其它章节的接口</h2>
+<p>MAS 不是一个孤立模块，它同时借用博弈论（多主体目标的数学语言）、分布式系统（在不可靠通信上做一致的工程手段）、单智能体 RL（学习机制）与机器人学（物理执行约束）。下表是主要的接口点：</p>
+<table>
+<thead>
+<tr>
+<th>MAS 中的概念</th>
+<th>用在哪一章</th>
+<th>在那里解决什么问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联合动作与收益矩阵</td>
+<td><a href="../game-theory/01-game-models/">博弈建模</a></td>
+<td>把"别人的动作影响我"写成可分析的形式</td>
+</tr>
+<tr>
+<td>Nash 均衡与最佳响应</td>
+<td><a href="../game-theory/02-best-response-nash/">最佳响应与 Nash 均衡</a></td>
+<td>多主体策略不再变化时的稳定点是什么</td>
+</tr>
+<tr>
+<td>重复博弈与学习动力学</td>
+<td><a href="../game-theory/05-repeated-learning/">重复博弈与学习</a></td>
+<td>多轮交互中信任、报复与收敛如何出现</td>
+</tr>
+<tr>
+<td>MDP 与 Bellman 方程</td>
+<td><a href="../reinforcement-learning/01-mdp-bellman/">MDP 与 Bellman</a></td>
+<td>单主体价值迭代的基线，多主体的起点</td>
+</tr>
+<tr>
+<td>CTDE 与 Actor-Critic</td>
+<td><a href="../reinforcement-learning/03-policy-actor-critic/">策略梯度与 Actor-Critic</a></td>
+<td>集中 critic 提供全局信号、分散 actor 执行</td>
+</tr>
+<tr>
+<td>约束、鲁棒与离线</td>
+<td><a href="../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a></td>
+<td>多 Agent 同时学习时的非平稳性进一步加剧</td>
+</tr>
+<tr>
+<td>共识与一致性状态</td>
+<td><a href="../distributed-systems/03-consistency-state/">一致性状态</a></td>
+<td>无中心节点时状态如何收敛到一致</td>
+</tr>
+<tr>
+<td>QoS 与中间件</td>
+<td><a href="../distributed-systems/05-middleware-ros2-dds/">中间件 ROS2/DDS</a></td>
+<td>真实带宽、延迟、可靠性如何约束通信设计</td>
+</tr>
+<tr>
+<td>路径与运动规划</td>
+<td><a href="../robotics/04-path-motion-planning/">路径与运动规划</a></td>
+<td>协调与分配结果落地成可执行轨迹</td>
+</tr>
+</tbody>
+</table>
+<p>接口方向是双向的：MAS 从博弈论拿模型语言，反过来把多主体约束（局部观测、通信受限、实时性）作为新条件反馈给博弈论与 RL；MAS 从分布式系统拿可靠性工程，反过来提出"参与者会理性选择策略"这一分布式系统通常不假设的条件。</p>
+<h2 id="_7">单智能体到多智能体的新增困难</h2>
+<p>把单智能体算法复制 <span class="arithmatex">\(n\)</span> 份是最容易犯的错误。下表列出新增的困难，以及为什么单智能体方法不能直接搬。</p>
+<table>
+<thead>
+<tr>
+<th>新增的困难</th>
+<th>为什么单智能体方法搬不过来</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>非平稳环境</td>
+<td>其他 Agent 的策略在变，同一个 <span class="arithmatex">\((s,a_i)\)</span> 的回报分布不稳定，经验回放的数据会过期</td>
+</tr>
+<tr>
+<td>联合空间指数增长</td>
+<td>$</td>
+</tr>
+<tr>
+<td>信用分配</td>
+<td>共享团队奖励时无法区分"关键贡献"与"恰好在场"，梯度信号被稀释</td>
+</tr>
+<tr>
+<td>局部观测</td>
+<td>每个 Agent 看到的是 <span class="arithmatex">\(o_i\)</span> 而非真实的 <span class="arithmatex">\(s\)</span>，需要记忆或通信补全</td>
+</tr>
+<tr>
+<td>均衡而非最优</td>
+<td>多主体系统中"最优动作"没有唯一含义，稳定点可能是均衡而非全局最优</td>
+</tr>
+<tr>
+<td>通信耦合</td>
+<td>策略与通信协议互相依赖，学习空间本身就是联合的</td>
+</tr>
+</tbody>
+</table>
+<p>量化一下增长：<span class="arithmatex">\(m=3\)</span> 时，<span class="arithmatex">\(n=5\)</span> 得 <span class="arithmatex">\(243\)</span> 种组合、<span class="arithmatex">\(n=10\)</span> 得 <span class="arithmatex">\(59049\)</span> 种、<span class="arithmatex">\(n=20\)</span> 得 <span class="arithmatex">\(3.5\times10^{9}\)</span> 种。若每个联合动作需要 1000 次采样才能可靠估计价值，<span class="arithmatex">\(n=20\)</span> 就需要 <span class="arithmatex">\(3.5\times10^{12}\)</span> 次交互——<strong>这条路径在物理系统上等于不可行</strong>，必须靠分解（独立 Q 学习）、结构（参数共享）或集中训练（CTDE）来绕开。</p>
+<h2 id="_8">本章导航</h2>
+<ol>
+<li><a href="01-agents-architectures/">智能体与多智能体系统架构</a>：MDP 到 Markov Game，Reactive/Deliberative/Hybrid 架构选择，建模要素与系统边界判据。</li>
+<li><a href="02-coordination/">合作、竞争与协调</a>：联合动作与协调失败，合作/竞争/混合动机下的目标设置与均衡概念。</li>
+<li><a href="03-communication/">多智能体通信与信息共享</a>：消息内容与压缩、带宽与延迟权衡、什么信息真正值得传。</li>
+<li><a href="04-allocation-distributed-decision/">任务分配与分布式决策</a>：指派问题、一致性机制、去中心化的代价与降级策略。</li>
+<li><a href="05-multi-agent-learning/">多智能体学习与 CTDE</a>：非平稳性应对、信用分配、集中训练分散执行的机制与失效边界。</li>
+</ol>
+<p>阅读建议：若在做机器人系统，按 01 → 04 → 03 顺序读更顺；若在做学习算法，按 01 → 02 → 05 读，把通信与分配当作"学习之外的外生约束"看待。</p>
+<blockquote>
+<p><strong>下一步</strong>：从 <a href="01-agents-architectures/">智能体与多智能体系统架构</a> 开始，先解决"谁算 Agent"与"系统分几层"的问题；需要数学基础时配合阅读 <a href="../game-theory/02-best-response-nash/">最佳响应与 Nash 均衡</a> 与 <a href="../reinforcement-learning/01-mdp-bellman/">MDP 与 Bellman</a>。</p>
+</blockquote>
 
 
 

@@ -1693,10 +1693,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#markov-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Markov Game 的联合动作空间
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#agent" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部观测让每个 Agent 看到的世界不同
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dec-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        部分可观测与 Dec-POMDP 的信息结构
       
     </span>
   </a>
@@ -1804,6 +1826,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构选择的判据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1815,7 +1848,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个仓库机器人例子
@@ -3752,10 +3785,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#markov-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Markov Game 的联合动作空间
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#agent" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部观测让每个 Agent 看到的世界不同
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dec-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        部分可观测与 Dec-POMDP 的信息结构
       
     </span>
   </a>
@@ -3863,6 +3918,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构选择的判据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3874,7 +3940,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个仓库机器人例子
@@ -3987,53 +4053,344 @@
 
 
 <h1 id="agents-system-architectures">Agents &amp; System Architectures</h1>
-<p>单个 Agent 只需要考虑“环境怎样响应我的动作”；多个 Agent 同时决策后，<strong>别人的动作也会改变我的结果</strong>。多智能体系统真正增加的不是“多几个程序”，而是耦合、局部信息和协调问题。</p>
+<p>单个 Agent 只需要考虑"环境怎样响应我的动作"；多个 Agent 同时决策后，<strong>别人的动作也会改变我的结果</strong>。多智能体系统真正增加的不是"多几个程序"，而是耦合、局部信息与协调问题——这三件事决定了后面所有章节的难度来源。</p>
 <h2 id="mdp-markov-game">MDP 与 Markov Game</h2>
-<p>单智能体 MDP 的转移写成</p>
-<div class="arithmatex">\[
-P(s'\mid s,a).
-\]</div>
-<p>有 <span class="arithmatex">\(n\)</span> 个主体时，联合动作记为</p>
-<div class="arithmatex">\[
-\mathbf a=(a_1,\ldots,a_n),\qquad a_i\in\mathcal A_i,
-\]</div>
-<p>转移变成</p>
-<div class="arithmatex">\[
-P(s'\mid s,\mathbf a).
-\]</div>
-<p>每个主体还可能有自己的奖励</p>
-<div class="arithmatex">\[
-r_i=\mathcal R_i(s,\mathbf a,s').
-\]</div>
-<p>于是同一个状态下，主体 <span class="arithmatex">\(i\)</span> 的动作好不好，不只取决于 <span class="arithmatex">\(a_i\)</span>，还取决于其他主体的 <span class="arithmatex">\(\mathbf a_{-i}\)</span>。</p>
-<p>这就是多智能体问题的第一层本质：<strong>决策相互耦合。</strong></p>
-<h2 id="agent">局部观测让每个 Agent 看到的世界不同</h2>
-<p>现实系统里，一个 Agent 往往只能获得局部观测 <span class="arithmatex">\(o_i\)</span>，而不是完整状态 <span class="arithmatex">\(s\)</span>。例如仓库机器人知道自己位置和附近障碍物，却不一定知道所有机器人当前任务。</p>
-<p>因此要区分：</p>
+<p>先固定单智能体的符号，否则后面无法说清"哪里变了"。单智能体 MDP 是五元组 <span class="arithmatex">\((\mathcal S,\mathcal A,P,r,\gamma)\)</span>，转移写成</p>
+<div class="arithmatex">\[P(s'\mid s,a).\]</div>
+<p><span class="arithmatex">\(s\)</span> 是环境状态，<span class="arithmatex">\(a\)</span> 是唯一决策者的动作，<span class="arithmatex">\(P\)</span> 只依赖这两个变量。有 <span class="arithmatex">\(n\)</span> 个主体时，动作从标量变成联合动作向量：</p>
+<div class="arithmatex">\[\mathbf a=(a_1,\dots,a_n),\qquad a_i\in\mathcal A_i,\]</div>
+<p>转移随之变成</p>
+<div class="arithmatex">\[P(s'\mid s,\mathbf a).\]</div>
+<p>奖励也不再唯一。每个主体可以有自己的奖励函数</p>
+<div class="arithmatex">\[r_i=\mathcal R_i(s,\mathbf a,s'),\]</div>
+<p>于是同一个状态下，主体 <span class="arithmatex">\(i\)</span> 的动作好不好，不只取决于 <span class="arithmatex">\(a_i\)</span>，还取决于其他主体的 <span class="arithmatex">\(\mathbf a_{-i}\)</span>（除 <span class="arithmatex">\(i\)</span> 之外的联合动作，属于 <span class="arithmatex">\(\mathcal A_{-i}=\prod_{j\neq i}\mathcal A_j\)</span>）。<strong>这就是多智能体问题的第一层本质：决策相互耦合。</strong></p>
+<p>耦合带来的直接后果是"最优"这个词失效。单智能体里可以定义 <span class="arithmatex">\(V^{\star}(s)=\max_a Q^{\star}(s,a)\)</span>，多主体里必须改写为依赖他人策略的量：</p>
+<div class="arithmatex">\[V_i^{\pi_i,\pi_{-i}}(s) = \mathbb E\!\left[\sum_{t=0}^{\infty}\gamma^{t} r_i(s_t,\mathbf a_t)\;\Big|\; s_0=s,\; a_{i,t}\sim\pi_i,\; a_{j,t}\sim\pi_j\right].\]</div>
+<p>上标 <span class="arithmatex">\(\pi_{-i}\)</span> 是关键：<strong>Agent <span class="arithmatex">\(i\)</span> 的价值函数本身是其他人策略的函数</strong>，不是环境的属性。这解释了为什么多智能体系统里"一个策略到底好不好"必须连同"在什么对手/队友配置下"一起说。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>单智能体</th>
+<th>多智能体</th>
+<th>带来的新问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动作</td>
+<td><span class="arithmatex">\(a\in\mathcal A\)</span></td>
+<td><span class="arithmatex">\(\mathbf a\in\prod_i\mathcal A_i\)</span></td>
+<td>空间指数增长</td>
+</tr>
+<tr>
+<td>转移</td>
+<td><span class="arithmatex">\(P(s'\mid s,a)\)</span></td>
+<td><span class="arithmatex">\(P(s'\mid s,\mathbf a)\)</span></td>
+<td>他人动作进入动力学</td>
+</tr>
+<tr>
+<td>奖励</td>
+<td><span class="arithmatex">\(r(s,a,s')\)</span></td>
+<td><span class="arithmatex">\(r_i(s,\mathbf a,s')\)</span></td>
+<td>目标可能冲突或共享</td>
+</tr>
+<tr>
+<td>最优性</td>
+<td><span class="arithmatex">\(\max_a\)</span> 有定义</td>
+<td>依赖他人策略</td>
+<td>需要均衡概念</td>
+</tr>
+<tr>
+<td>观测</td>
+<td><span class="arithmatex">\(s\)</span> 通常可知</td>
+<td>通常只有 <span class="arithmatex">\(o_i\)</span></td>
+<td>需要通信或记忆</td>
+</tr>
+<tr>
+<td>稳定性</td>
+<td>环境固定</td>
+<td>他人策略持续变化</td>
+<td>非平稳性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="markov-game">Markov Game 的联合动作空间</h2>
+<p>Markov Game（又称随机博弈）是 MDP 的多主体推广，写成 <span class="arithmatex">\((\mathcal S,\{\mathcal A_i\}_{i=1}^{n},P,\{\mathcal R_i\}_{i=1}^{n},\gamma)\)</span>。它的状态转移与奖励都作用在<strong>联合动作</strong>上：</p>
+<div class="arithmatex">\[P:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\to\Delta(\mathcal S),\qquad \mathcal R_i:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\times\mathcal S\to\mathbb R.\]</div>
+<p>联合动作集合的大小是各 Agent 动作数的乘积：</p>
+<div class="arithmatex">\[\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|.\]</div>
+<p>在同构情形（每个 Agent 都有 <span class="arithmatex">\(m=|\mathcal A_i|\)</span> 个动作）下就是 <span class="arithmatex">\(m^{n}\)</span>。这个数字的可怕之处在于它是<strong>指数</strong>，而不是线性。下表给出 <span class="arithmatex">\(m=3\)</span> 时的增长：</p>
+<table>
+<thead>
+<tr>
+<th>Agent 数 <span class="arithmatex">\(n\)</span></th>
+<th>联合动作数 <span class="arithmatex">\(3^{n}\)</span></th>
+<th>若每组合需 1000 次采样</th>
+<th>直观类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td><span class="arithmatex">\(3\times10^{3}\)</span></td>
+<td>单个路口信号灯</td>
+</tr>
+<tr>
+<td>5</td>
+<td>243</td>
+<td><span class="arithmatex">\(2.4\times10^{5}\)</span></td>
+<td>5 台仓库 AGV</td>
+</tr>
+<tr>
+<td>10</td>
+<td>59 049</td>
+<td><span class="arithmatex">\(5.9\times10^{7}\)</span></td>
+<td>10 台无人机编队</td>
+</tr>
+<tr>
+<td>15</td>
+<td>14 348 907</td>
+<td><span class="arithmatex">\(1.4\times10^{10}\)</span></td>
+<td>中型车队长</td>
+</tr>
+<tr>
+<td>20</td>
+<td><span class="arithmatex">\(3.49\times10^{9}\)</span></td>
+<td><span class="arithmatex">\(3.5\times10^{12}\)</span></td>
+<td>城市级路口网络</td>
+</tr>
+</tbody>
+</table>
+<p>即使把每个联合动作的价值估计压缩到 1000 次采样，<span class="arithmatex">\(n=20\)</span> 也需要 <span class="arithmatex">\(3.5\times10^{12}\)</span> 次环境交互；若每次交互 10 ms，串行总时长约 <span class="arithmatex">\(1.1\times10^{4}\)</span> 年。<strong>结论不是"努力优化"，而是必须放弃枚举。</strong></p>
+<p>可行的绕过方式有三类，它们的代价各不相同：</p>
 <ul>
-<li><strong>state</strong>：描述整个环境的真实变量；</li>
-<li><strong>observation</strong>：某个主体实际拿到的信息；</li>
-<li><strong>message</strong>：其他主体主动传来的信息；</li>
-<li><strong>history</strong>：主体过去的观测与动作。</li>
+<li><strong>独立分解</strong>：假设 <span class="arithmatex">\(Q_i(s,\mathbf a)\approx Q_i(s,a_i)\)</span>，把联合空间压回 <span class="arithmatex">\(n\cdot m\)</span>。代价是忽略耦合，在真耦合场景（抢路口、抢任务）上系统性失效。</li>
+<li><strong>参数共享 + 结构假设</strong>：所有 Agent 用同一套参数，靠输入的身份或角色区分。代价是需要同构性，异构系统（车 + 无人机 + 人）难以直接套用。</li>
+<li><strong>集中训练 / 分散执行（CTDE）</strong>：训练时用一个能看到全局信息的 critic 估计联合价值，执行时各 Agent 用自己的 actor。代价是训练与执行的信息结构不一致，若执行期观测不足则性能回退。</li>
 </ul>
-<p>如果当前观测不足以决定下一步，就需要历史、记忆或通信，而不是简单把一个单智能体算法复制 <span class="arithmatex">\(n\)</span> 份。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>复杂度量级</th>
+<th>何时有效</th>
+<th>何时失效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联合 Q 表</td>
+<td>$\mathcal O(</td>
+<td>\mathcal S</td>
+<td>\cdot m^{n})$</td>
+</tr>
+<tr>
+<td>独立 Q 学习</td>
+<td>$\mathcal O(n</td>
+<td>\mathcal S</td>
+<td>m)$</td>
+</tr>
+<tr>
+<td>参数共享</td>
+<td>参数量与 <span class="arithmatex">\(n\)</span> 无关</td>
+<td>同构 Agent</td>
+<td>异构任务</td>
+</tr>
+<tr>
+<td>CTDE</td>
+<td>训练期 <span class="arithmatex">\(\mathcal O(1)\)</span> critic、执行期 <span class="arithmatex">\(\mathcal O(m)\)</span></td>
+<td>训练可集中</td>
+<td>部署时观测受限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent">局部观测让每个 Agent 看到的世界不同</h2>
+<p>现实系统里一个 Agent 往往只能拿到局部观测 <span class="arithmatex">\(o_i\)</span>，而不是完整状态 <span class="arithmatex">\(s\)</span>。例如仓库机器人知道自己位置与附近障碍物，却不一定知道其他机器人的当前任务；无人机看到自己视角的画面，却看不到墙后的队友。观测由观测函数生成：</p>
+<div class="arithmatex">\[o_i = \mathcal O_i(s, \mathbf a, \epsilon_i),\]</div>
+<p><span class="arithmatex">\(\epsilon_i\)</span> 是传感噪声。<span class="arithmatex">\(\mathcal O_i\)</span> 的<strong>输出维度与内容各不相同</strong>：激光雷达给 360° 距离序列，摄像头给图像，调度接口给一条任务 ID。这意味着几个概念必须分开：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>定义</th>
+<th>例子</th>
+<th>缺失时的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>state <span class="arithmatex">\(s\)</span></td>
+<td>描述整个环境的真实变量</td>
+<td>全部车辆位置与任务</td>
+<td>无法定义全局最优</td>
+</tr>
+<tr>
+<td>observation <span class="arithmatex">\(o_i\)</span></td>
+<td>主体实际拿到的信息</td>
+<td>本车位姿 + 局部地图</td>
+<td>决策依据不足</td>
+</tr>
+<tr>
+<td>message <span class="arithmatex">\(m_{j\to i}\)</span></td>
+<td>其他主体主动传的信息</td>
+<td>队友的意图、占用的路口</td>
+<td>协调失败、死锁</td>
+</tr>
+<tr>
+<td>history <span class="arithmatex">\(h_i\)</span></td>
+<td>到 <span class="arithmatex">\(t\)</span> 为止的观测动作序列</td>
+<td><span class="arithmatex">\(o_{i,0:t},a_{i,0:t-1}\)</span></td>
+<td>无法推断隐藏状态</td>
+</tr>
+<tr>
+<td>belief <span class="arithmatex">\(b_i\)</span></td>
+<td>对 <span class="arithmatex">\(s\)</span> 的概率分布</td>
+<td><span class="arithmatex">\(P(s\mid h_i)\)</span></td>
+<td>无法做最优决策</td>
+</tr>
+</tbody>
+</table>
+<p>判断"观测够不够"有个实用判据：若当前 <span class="arithmatex">\(o_i\)</span> 不足以决定下一步最优动作，且这不是传感精度问题而是<strong>信息结构问题</strong>，就必须引入记忆或通信。形式化地，若</p>
+<div class="arithmatex">\[I\big(a_i^{\star};\; s \mid o_i\big) &gt; 0,\]</div>
+<p>即最优动作与状态之间在给定观测后仍有剩余互信息，说明 <span class="arithmatex">\(o_i\)</span> 不是充分统计量。此时把一个单智能体算法复制 <span class="arithmatex">\(n\)</span> 份，只会得到 <span class="arithmatex">\(n\)</span> 个各自犯错的主体。</p>
+<h2 id="dec-pomdp">部分可观测与 Dec-POMDP 的信息结构</h2>
+<p>把"局部观测 + 完全合作"的组合形式化，就是 Dec-POMDP（去中心化部分可观测 Markov 决策过程）：</p>
+<div class="arithmatex">\[\big\langle \mathcal S,\; \{\mathcal A_i\},\; P,\; r,\; \{\mathcal O_i\},\; \mathcal Z,\; \gamma \big\rangle,\]</div>
+<p>其中 <span class="arithmatex">\(\mathcal Z(s,\mathbf a,o)\)</span> 给出观测联合分布，<span class="arithmatex">\(r\)</span> 是共享的团队奖励。这里的困难不在于某个 Agent 学不会，而在于<strong>信息分布本身</strong>：每个 Agent 只见到自己的 <span class="arithmatex">\(h_i\)</span>，却要联合起来最大化同一个 <span class="arithmatex">\(r\)</span>。</p>
+<p>信息共享程度是设计时最需要显式选择的维度，从"完全不共享"到"共享原始状态"，可用性和代价差异极大：</p>
+<table>
+<thead>
+<tr>
+<th>共享程度</th>
+<th>每个 Agent 掌握什么</th>
+<th>通信代价</th>
+<th>适用场景</th>
+<th>主要失效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无共享</td>
+<td>仅 <span class="arithmatex">\(h_i\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td>大规模、弱耦合</td>
+<td>协调死锁</td>
+</tr>
+<tr>
+<td>共享意图 / 计划</td>
+<td><span class="arithmatex">\(h_i\)</span> + 队友下一步目标</td>
+<td>低（几字节）</td>
+<td>车队、编队</td>
+<td>意图过期</td>
+</tr>
+<tr>
+<td>共享局部总结</td>
+<td><span class="arithmatex">\(h_i\)</span> + 邻居状态摘要</td>
+<td>中</td>
+<td>多机协同、部分耦合</td>
+<td>摘要丢信息</td>
+</tr>
+<tr>
+<td>共享全局状态 <span class="arithmatex">\(s\)</span></td>
+<td>完整状态</td>
+<td>高（全带宽）</td>
+<td>小规模、有中心节点</td>
+<td>带宽/延迟不可行</td>
+</tr>
+<tr>
+<td>共享全局状态 + 联合动作</td>
+<td><span class="arithmatex">\(s\)</span> 与 <span class="arithmatex">\(\mathbf a\)</span></td>
+<td>极高</td>
+<td>仅训练阶段（CTDE）</td>
+<td>部署时无法满足</td>
+</tr>
+</tbody>
+</table>
+<p>信息共享的收益可以用一个可计算的条件粗略描述：共享带来的回报增益，必须超过"消息占用资源 + 延迟导致决策过期"的损失。设消息延迟 <span class="arithmatex">\(\tau\)</span>、决策周期 <span class="arithmatex">\(\Delta t\)</span>，若 <span class="arithmatex">\(\tau &gt; \Delta t\)</span>，消息到达时决策窗口已关闭，此时共享不仅无用，还会因为等待而加剧不同步——<strong>这正是"传得越多不一定越好"的机制解释。</strong></p>
+<p>Dec-POMDP 的复杂度是 NEXP-complete，即使 <span class="arithmatex">\(n=2\)</span> 也是如此；因此实践中不会去精确求解，而是退化为三类近似：集中训练分散执行（CTDE）、显式通信协议学习、以及把协调规则写死成启发式或市场机制。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>对信息结构的要求</th>
+<th>复杂度</th>
+<th>用在哪一章</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CTDE</td>
+<td>训练期可访问 <span class="arithmatex">\(s\)</span> 与 <span class="arithmatex">\(\mathbf a\)</span></td>
+<td>训练重、执行轻</td>
+<td><a href="../05-multi-agent-learning/">多智能体学习</a></td>
+</tr>
+<tr>
+<td>显式通信学习</td>
+<td>可交换消息 <span class="arithmatex">\(m\)</span></td>
+<td>消息空间爆炸</td>
+<td><a href="../03-communication/">通信与信息共享</a></td>
+</tr>
+<tr>
+<td>规则/市场机制</td>
+<td>只需广播出价</td>
+<td>低且可预测</td>
+<td><a href="../04-allocation-distributed-decision/">任务分配</a></td>
+</tr>
+</tbody>
+</table>
 <h2 id="_1">多智能体学习的三类困难</h2>
 <h3 id="31">3.1 非平稳性</h3>
-<p>主体 <span class="arithmatex">\(i\)</span> 学习时，其他主体的策略也在变化。即使物理环境没有变，从 <span class="arithmatex">\(i\)</span> 的角度看，同一个 <span class="arithmatex">\((s,a_i)\)</span> 对应的结果分布仍可能持续改变。</p>
-<p>这会破坏很多单智能体算法默认的“环境动力学稳定”直觉。</p>
+<p>主体 <span class="arithmatex">\(i\)</span> 学习时，其他主体的策略 <span class="arithmatex">\(\pi_j\)</span> 也在变化。即使物理环境完全不变，从 <span class="arithmatex">\(i\)</span> 的角度看，同一个 <span class="arithmatex">\((s,a_i)\)</span> 对应的结果分布仍在改变：</p>
+<div class="arithmatex">\[P_t\big(s'\mid s,a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s,\mathbf a\big)\prod_{j\neq i}\pi_{j,t}\big(a_j\mid o_j\big).\]</div>
+<p>下标 <span class="arithmatex">\(t\)</span> 表示时刻——<strong>环境对 <span class="arithmatex">\(i\)</span> 而言每步都在漂移</strong>。这直接破坏经验回放的有效性：三个月前存入缓冲区的 <span class="arithmatex">\((s,a_i)\)</span> 与它当时观察到的回报，是在一个已经消失的"他人策略配置"下采集的。固定目标网络、降低学习率等技巧只能缓解速度，不能取消漂移。</p>
 <h3 id="32">3.2 信用分配</h3>
-<p>完全合作时，所有主体可能共享同一个团队奖励。但“奖励相同”不代表每个动作贡献相同。</p>
-<p>例如三台机器人共同搬运，如果任务成功只给一个总奖励，就需要区分：是谁完成关键动作，谁只是恰好在场。否则学习信号会很模糊。</p>
+<p>完全合作时所有主体可能共享同一个团队奖励 <span class="arithmatex">\(r\)</span>。但"奖励相同"不代表每个动作贡献相同。以一个 team reward 的形式写：</p>
+<div class="arithmatex">\[Q_{\text{team}}^{\boldsymbol\pi}(s,\mathbf a) = \mathbb E\Big[\sum_t \gamma^{t} r(s_t,\mathbf a_t)\Big],\]</div>
+<p>它把 <span class="arithmatex">\(n\)</span> 个主体的动作揉成一个整体价值，梯度信号无法区分谁的关键动作带来了收益。三台机器人共同搬运，任务成功只给一个总奖励，就要面对这样的问题：是谁完成了关键动作，谁只是恰好在场？</p>
+<p>可用的做法包括差分奖励（difference reward）：</p>
+<div class="arithmatex">\[D_i = G(\mathbf a) - G(\mathbf a_{-i}),\]</div>
+<p>即"有我在"与"没我在"的收益差，它天然把"恰好在场"的贡献压到 0；还有反事实基线、按角色加权、以及分成任务级与个体级的奖励塑形。<strong>判断指标很直接：如果替换某个 Agent 的策略为随机策略，团队回报几乎不变，说明它对回报没有实质贡献，也说明信用分配信号当前是模糊的。</strong></p>
 <h3 id="33">3.3 联合空间增长</h3>
 <p>如果每个主体有 <span class="arithmatex">\(m\)</span> 个动作，联合动作组合数量就是</p>
-<div class="arithmatex">\[
-|\mathcal A_{joint}|=\prod_{i=1}^{n}|\mathcal A_i|,
-\]</div>
-<p>在同构情形下约为 <span class="arithmatex">\(m^n\)</span>。因此枚举全部联合动作会很快变得不可行。</p>
-<p>这三个困难——<strong>目标在移动、奖励难归因、组合数量增长</strong>——基本解释了为什么 MARL 需要额外结构。</p>
+<div class="arithmatex">\[\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|,\]</div>
+<p>同构情形下约为 <span class="arithmatex">\(m^{n}\)</span>（<span class="arithmatex">\(m=3\)</span> 时的具体数值见前文表格）。因此枚举全部联合动作会很快变得不可行，必须依靠分解、参数共享或集中—分散结构。</p>
+<p>这三个困难——<strong>目标在移动、奖励难归因、组合数量增长</strong>——基本解释了为什么 MARL 需要额外结构，而不是把单智能体算法复制 <span class="arithmatex">\(n\)</span> 份。</p>
+<table>
+<thead>
+<tr>
+<th>困难</th>
+<th>可观测征兆</th>
+<th>缓解手段</th>
+<th>未能缓解时的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>非平稳性</td>
+<td>回报曲线周期性震荡、复现性差</td>
+<td>CTDE、慢更新对手、冻结对手</td>
+<td>训练不收敛、互相对抗升级</td>
+</tr>
+<tr>
+<td>信用分配</td>
+<td>团队奖励稳步上升但个体行为退化</td>
+<td>差分奖励、反事实基线</td>
+<td>出现"搭便车"的 Agent</td>
+</tr>
+<tr>
+<td>联合空间</td>
+<td>采样效率随 <span class="arithmatex">\(n\)</span> 断崖下跌</td>
+<td>分解、参数共享、结构假设</td>
+<td>训练规模无法扩展</td>
+</tr>
+</tbody>
+</table>
 <h2 id="reactivedeliberative-hybrid">Reactive、Deliberative 与 Hybrid</h2>
+<p>架构选择决定"决策在什么时间尺度上、基于什么信息发生"。三者不是代际更替关系，而是分别占据不同的时间尺度。</p>
 <h3 id="41-reactive">4.1 Reactive：看到什么就立即反应</h3>
-<p>反应式 Agent 可以写成观测到动作的直接映射：</p>
+<p>反应式 Agent 是观测到动作的直接映射：</p>
 <div class="arithmatex">\[
 \pi(o)=
 \begin{cases}
@@ -4041,45 +4398,262 @@ r_i=\mathcal R_i(s,\mathbf a,s').
 \text{前进}, &amp; d(o)\ge d_{safe}.
 \end{cases}
 \]</div>
-<p>优点是快、可预测，适合避障和安全保护；缺点是缺少长期规划。</p>
+<p><span class="arithmatex">\(d(o)\)</span> 是观测中估计出的最近障碍距离，<span class="arithmatex">\(d_{safe}\)</span> 是安全阈值。优点是没有内部状态、结果可预测、延迟极低（通常一个控制周期内完成），适合避障与安全保护；缺点是缺少长期规划，容易陷入局部极小——例如在凹形障碍前反复"前进—停止"而不绕行。</p>
 <h3 id="42-deliberative">4.2 Deliberative：先维护状态，再规划</h3>
-<p>慎思式 Agent 会维护内部世界模型，根据目标搜索动作序列。它适合任务规划，但计算更慢，而且依赖模型质量。</p>
+<p>慎思式 Agent 会维护内部世界模型，根据目标搜索动作序列，例如求解最短路径：</p>
+<div class="arithmatex">\[\pi_{\text{plan}} = \arg\min_{\text{path}} \sum_{k} \|\text{pose}_{k+1}-\text{pose}_{k}\|.\]</div>
+<p>它适合任务级规划（去哪、按什么顺序做），但计算更慢，而且<strong>依赖模型质量</strong>：地图有一处未更新的障碍，规划出的路径就可能完全不可行。重规划周期通常是秒级，无法应对突发动态障碍。</p>
 <h3 id="43-hybrid">4.3 Hybrid：高层规划，低层反应</h3>
-<p>现实机器人最常见的是混合结构：</p>
-<div class="highlight"><pre><span></span><code>Mission / Planner
-       ↓
-Local Controller
-       ↓
-Safety / Reactive Layer
-</code></pre></div>
-<p>高层负责“去哪、做什么”，低层负责“怎么稳定执行”，安全层负责在紧急情况下覆盖上层命令。</p>
+<p>现实机器人最常见的是混合结构，三层各自负责不同时间尺度：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>时间尺度</th>
+<th>输入</th>
+<th>输出</th>
+<th>失效后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mission / Planner</td>
+<td>秒—分钟</td>
+<td>任务列表、全局地图</td>
+<td>目标点序列</td>
+<td>任务分配错误</td>
+</tr>
+<tr>
+<td>Local Controller</td>
+<td>毫秒—秒</td>
+<td>目标点、当前位姿</td>
+<td>速度/转向指令</td>
+<td>轨迹偏差、超时</td>
+</tr>
+<tr>
+<td>Safety / Reactive</td>
+<td>毫秒</td>
+<td>传感器原始数据</td>
+<td>覆盖或急停</td>
+<td>碰撞、人员受伤</td>
+</tr>
+</tbody>
+</table>
+<p>高层的职责是"去哪、做什么"，低层负责"怎么稳定执行"，安全层负责在紧急情况下<strong>覆盖上层命令</strong>。这个覆盖关系是分层设计的核心：安全层必须拥有最高优先级，否则一旦上层规划出错，就没有任何机制能阻止它被执行。对应到 RL 语境，这一层就是训练后可选的运行时过滤器，与 <a href="../../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a> 中的约束与兜底机制直接对应。</p>
+<p>三种架构的取舍可以概括为：Reactive 用"信息少、延迟低"换可预测性；Deliberative 用"计算与建模成本"换长期最优；Hybrid 用"分层接口设计复杂度"换两者兼顾。</p>
+<h2 id="_2">架构选择的判据</h2>
+<p>选择架构不是风格问题，而是三个可测量的量共同决定：任务的时间尺度、信息的可获取性、失效的代价。</p>
+<p>把决策周期记为 <span class="arithmatex">\(\Delta t\)</span>，感知与通信延迟记为 <span class="arithmatex">\(\tau\)</span>，规划所需的前瞻步数记为 <span class="arithmatex">\(H\)</span>。最基本的可行性条件是不等式</p>
+<div class="arithmatex">\[\tau + T_{\text{compute}}(H) \le \Delta t,\]</div>
+<p>即"感知 + 计算"必须在下一个决策时刻之前完成。若 <span class="arithmatex">\(H\)</span> 大（需要长前瞻）而 <span class="arithmatex">\(\Delta t\)</span> 小，Deliberative 结构在物理上就不可能实现，必须降级为 Reactive 或者把长前瞻放到低频层。</p>
+<table>
+<thead>
+<tr>
+<th>任务时间尺度</th>
+<th>信息可获取性</th>
+<th>失效代价</th>
+<th>推荐架构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>快（<span class="arithmatex">\(&lt;100\)</span> ms）</td>
+<td>仅局部传感</td>
+<td>高（人身安全）</td>
+<td>Reactive 安全层，规则优先</td>
+</tr>
+<tr>
+<td>快（<span class="arithmatex">\(&lt;100\)</span> ms）</td>
+<td>局部 + 低延迟邻居信息</td>
+<td>中</td>
+<td>Reactive + 局部协商</td>
+</tr>
+<tr>
+<td>中（0.1–1 s）</td>
+<td>局部 + 部分全局</td>
+<td>中高</td>
+<td>Hybrid：反应层 + 局部规划</td>
+</tr>
+<tr>
+<td>中（0.1–1 s）</td>
+<td>全局状态可得</td>
+<td>中</td>
+<td>Deliberative 局部规划</td>
+</tr>
+<tr>
+<td>慢（秒—分钟）</td>
+<td>全局状态可得</td>
+<td>低—中</td>
+<td>Deliberative 全局规划</td>
+</tr>
+<tr>
+<td>慢（秒—分钟）</td>
+<td>信息不全、Agent 众多</td>
+<td>中</td>
+<td>规则/市场机制 + 低频优化</td>
+</tr>
+<tr>
+<td>任意</td>
+<td>训练期全局、执行期局部</td>
+<td>中高</td>
+<td>CTDE（训练集中、执行分散）</td>
+</tr>
+</tbody>
+</table>
+<p>三条经验判据：<strong>时间尺度决定能否规划</strong>（<span class="arithmatex">\(\Delta t\)</span> 太小则只能反应）；<strong>信息可获取性决定协调方式</strong>（拿不到全局信息就只能靠通信或规则）；<strong>失效代价决定是否需要独立于主策略的兜底层</strong>（代价越高，越不能把安全托付给学出来的策略）。三者中只要有一项是"高"或"不可得"，就应当保留非学习的安全层，而不是让单一学出的策略承担全部职责。</p>
 <h2 id="mas">MAS 建模要素</h2>
-<p>以多车任务分配为例：</p>
+<p>以多车任务分配为例，建模要按顺序回答五个问题，顺序不能颠倒——先定主体，才能定观测；定了观测，动作空间才有意义。</p>
 <ol>
-<li><strong>主体是谁？</strong> 每台车是否独立决策？</li>
-<li><strong>每个主体能看到什么？</strong> 位置、任务、局部地图还是全局状态？</li>
-<li><strong>动作是什么？</strong> 移动、接受任务、等待、通信？</li>
-<li><strong>目标是什么？</strong> 总时间、能耗、安全，还是各自不同目标？</li>
-<li><strong>哪些变量需要共享？</strong> 当前任务、剩余资源、局部发现？</li>
+<li><strong>主体是谁？</strong> 每台车是否独立决策？还是由中央调度器统一指挥、车只是执行器？这决定了 <span class="arithmatex">\(n\)</span> 的取值与耦合程度。</li>
+<li><strong>每个主体能看到什么？</strong> 位置、任务、局部地图还是全局状态？对应观测函数 <span class="arithmatex">\(\mathcal O_i\)</span> 的内容与维度。</li>
+<li><strong>动作是什么？</strong> 移动、接受任务、等待、通信？动作集合的基数直接决定 <span class="arithmatex">\(|\mathcal A_{\text{joint}}|=\prod_i|\mathcal A_i|\)</span>。</li>
+<li><strong>目标是什么？</strong> 总时间、能耗、安全，还是各自不同目标？共享目标对应完全合作，冲突目标对应竞争，混合则介于两者之间。</li>
+<li><strong>哪些变量需要共享？</strong> 当前任务、剩余资源、局部发现？这决定通信带宽需求与延迟容忍度。</li>
 </ol>
-<p>只有这些问题明确后，才有意义讨论通信协议、任务分配或 MARL。</p>
-<h2 id="_2">一个仓库机器人例子</h2>
-<p>假设有 4 台 AGV 和多个搬运任务。</p>
+<p>每一条都可以量化到设计参数上：</p>
+<table>
+<thead>
+<tr>
+<th>建模要素</th>
+<th>形式化问题</th>
+<th>具体参数</th>
+<th>设计影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主体边界</td>
+<td><span class="arithmatex">\(n\)</span> 取多少？</td>
+<td>Agent 数量与同构性</td>
+<td>联合空间大小、是否可参数共享</td>
+</tr>
+<tr>
+<td>观测</td>
+<td><span class="arithmatex">\(\mathcal O_i\)</span> 的内容</td>
+<td>传感器列表、通信范围</td>
+<td>是否需要记忆/通信</td>
+</tr>
+<tr>
+<td>动作</td>
+<td><span class="arithmatex">\(\mathcal A_i\)</span> 的基数</td>
+<td>离散动作数或连续维度</td>
+<td>学习难度、协调粒度</td>
+</tr>
+<tr>
+<td>目标</td>
+<td><span class="arithmatex">\(r_i\)</span> 是否相同</td>
+<td>共享/个体/竞争</td>
+<td>均衡概念选择</td>
+</tr>
+<tr>
+<td>共享变量</td>
+<td>消息集合与频率</td>
+<td>字节数、周期</td>
+<td>带宽占用、延迟容忍</td>
+</tr>
+<tr>
+<td>时间尺度</td>
+<td>决策周期 <span class="arithmatex">\(\Delta t\)</span></td>
+<td>控制环/规划环频率</td>
+<td>架构分层方式</td>
+</tr>
+</tbody>
+</table>
+<p>只要这五个问题没有明确，讨论通信协议、任务分配或 MARL 都是空谈——因为这些技术各自都以"观测结构""动作空间""目标结构"为输入假设。<strong>建模要素不清楚时，最有效的动作是回到这五个问题，而不是换算法。</strong></p>
+<h2 id="_3">一个仓库机器人例子</h2>
+<p>假设有 4 台 AGV 和多个搬运任务，构成一个典型的中等耦合系统。</p>
 <ul>
-<li>每台车知道自己的位置、电量、当前任务；</li>
-<li>调度信息通过低带宽网络共享；</li>
-<li>同一任务不能被两台车重复执行；</li>
-<li>路口可能发生局部冲突；</li>
-<li>总目标是缩短完成时间，同时避免碰撞和电量耗尽。</li>
+<li>每台车知道自己的位置、电量、当前任务，即 <span class="arithmatex">\(o_i\)</span> 是本车位姿 + 电量 + 任务 ID；</li>
+<li>调度信息通过低带宽网络共享，带宽与延迟构成硬约束；</li>
+<li>同一任务不能被两台车重复执行，即存在全局唯一性约束；</li>
+<li>路口可能发生局部冲突，即存在物理耦合；</li>
+<li>总目标是缩短完成时间，同时避免碰撞和电量耗尽，即回报 + 两类约束。</li>
 </ul>
-<p>这里其实包含三个层次：</p>
-<div class="highlight"><pre><span></span><code>Task allocation      谁去做哪个任务
-Coordination         多车动作怎样避免冲突
-Navigation/control   每台车怎样真正到达目标
-</code></pre></div>
-<p>把这三个层次分开，比直接说“做一个多智能体算法”更容易设计系统，也更容易定位失败发生在哪一层。</p>
+<p>这个看似简单的场景里实际包含三个层次，混在一起谈必然失败：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>问题</th>
+<th>时间尺度</th>
+<th>典型手段</th>
+<th>失败的典型症状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task allocation</td>
+<td>谁去做哪个任务</td>
+<td>秒—分钟</td>
+<td>拍卖/匈牙利算法/规则</td>
+<td>任务重复执行或长期无人认领</td>
+</tr>
+<tr>
+<td>Coordination</td>
+<td>多车动作怎样避免冲突</td>
+<td>0.1–1 s</td>
+<td>优先级、预约、局部协商</td>
+<td>路口死锁、互相让行</td>
+</tr>
+<tr>
+<td>Navigation / control</td>
+<td>每台车怎样真正到达目标</td>
+<td>10–100 ms</td>
+<td>局部规划 + 反应式避障</td>
+<td>轨迹振荡、贴近障碍</td>
+</tr>
+</tbody>
+</table>
+<p>分层的价值在于<strong>可定位性</strong>：出现"两台车堵在路口互相等待"时，能立刻判断这是 Coordination 层的问题，而不是去调低层控制器参数；出现"任务完成时间异常长"时，先查 Task allocation 是否把任务分给了电量不足的车。把三个层次分开，比直接说"做一个多智能体算法"更容易设计系统，也更容易定位失败发生在哪一层。各层的具体方法分别在 <a href="../04-allocation-distributed-decision/">任务分配与分布式决策</a> 与 <a href="../../robotics/04-path-motion-planning/">路径与运动规划</a> 中展开。</p>
 <h2 id="agent_1">系统边界决定谁算 Agent</h2>
-<p>并非每个软件模块都应被视为独立 Agent。只有当组件拥有自己的观测、动作和决策目标时，把它建模为 Agent 才有分析价值。若多个模块始终由同一控制器统一决策，强行拆成多智能体问题反而会引入不必要的通信和协调复杂度。</p>
+<p>并非每个软件模块都应被视为独立 Agent。判据是三条同时成立：拥有<strong>自己的观测</strong>（信息输入不同于别人）、<strong>自己的动作</strong>（能独立影响环境）、<strong>自己的决策目标</strong>（有独立优化的对象）。三条全满足，把它建模为 Agent 才有分析价值。</p>
+<p>形式化一点：若模块 <span class="arithmatex">\(i\)</span> 的动作总能写成 <span class="arithmatex">\(a_i = f_i(a_j)\)</span>（完全是另一个模块决策的确定性函数），那么 <span class="arithmatex">\(\mathcal A_i\)</span> 与 <span class="arithmatex">\(\mathcal A_j\)</span> 的维度信息是冗余的，把它们视为两个 Agent 只是把 <span class="arithmatex">\(|\mathcal A_{\text{joint}}|\)</span> 白白乘了一次。</p>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>是否建模为独立 Agent</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每台 AGV 自主决策路径</td>
+<td>是</td>
+<td>观测、动作、目标三者独立</td>
+</tr>
+<tr>
+<td>低层 PID 跟随上层速度指令</td>
+<td>否</td>
+<td>动作为上层输出的确定函数</td>
+</tr>
+<tr>
+<td>传感模块只提供数据</td>
+<td>否</td>
+<td>无动作、无目标</td>
+</tr>
+<tr>
+<td>两个子系统各自有 KPI 且互不隶属</td>
+<td>是</td>
+<td>目标冲突需要均衡分析</td>
+</tr>
+<tr>
+<td>同一控制器分时控制两个执行器</td>
+<td>否</td>
+<td>决策权未分离</td>
+</tr>
+<tr>
+<td>人类操作员与自动车共用通道</td>
+<td>是</td>
+<td>观测、动作、目标都不同，且不可完全预测</td>
+</tr>
+</tbody>
+</table>
+<p>误判会带来两个方向的代价。把不该拆的拆开：引入额外的通信与协调开销，<span class="arithmatex">\(|\mathcal A_{\text{joint}}|\)</span> 无意义膨胀，还可能因为"两个 Agent 只是同一个决策者的两只手"而出现人为的非平稳性。把该拆的不拆：把具有独立目标的子系统压成单一决策者，会掩盖真正的博弈结构，得到的策略在多主体共存时失效。</p>
+<p>一条实用经验：<strong>先按"谁能独立说不"划边界。</strong>若某个组件可以在不违反上级指令的前提下拒绝一个动作，它实际上就拥有独立的决策权，应当被建模为 Agent；若它必须无条件执行，就属于同一个决策体的执行层。</p>
+<blockquote>
+<p><strong>下一步</strong>：继续阅读 <a href="../02-coordination/">合作、竞争与协调</a> 理解联合动作层面的协调失败，<a href="../05-multi-agent-learning/">多智能体学习与 CTDE</a> 掌握集中训练分散执行如何处理非平稳性，以及 <a href="../../game-theory/01-game-models/">博弈建模</a> 获取分析多主体收益结构的数学工具。</p>
+</blockquote>
 
 
 

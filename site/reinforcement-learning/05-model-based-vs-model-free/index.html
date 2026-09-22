@@ -1403,6 +1403,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        样本效率与计算成本的换算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dyna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        规划与学习的混合（Dyna）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型误差如何进入闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3761,6 +3794,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        样本效率与计算成本的换算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dyna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        规划与学习的混合（Dyna）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型误差如何进入闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3853,41 +3919,574 @@
 
 
 <h1 id="model-based-vs-model-free-rl">Model-Based vs Model-Free RL</h1>
-<p>是否显式学习或使用环境模型，是 RL 最重要的结构分界之一：模型换来规划能力，也引入模型偏差。</p>
+<p>是否显式学习或使用环境模型，是 RL 最重要的结构分界之一：模型换来规划能力，也引入模型偏差。<strong>本章的核心判断是：真正的分界不在于“用不用模型”，而在于是否愿意把真实经验压缩成可预测的模型，并接受由此带来的误差闭环风险。</strong></p>
 <figure>
   <img alt="是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。" src="../../assets/diagrams/model-based-vs-free.svg" />
 <br />
 <figcaption>是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。</figcaption>
 </figure>
 <h2 id="_1">两条路线的根本区别</h2>
+<p>区别可以用“数据流向”精确表述。</p>
 <ul>
-<li><strong>Model-free</strong>：直接学价值或策略，不显式预测下一状态。</li>
-<li><strong>Model-based</strong>：使用 <span class="arithmatex">\(P(s'\mid s,a)\)</span>、奖励模型或 learned dynamics。</li>
-<li><strong>Planning</strong>：利用模型在真实交互之外进行搜索/优化。</li>
-<li><strong>Model bias</strong>：模型误差会在多步 rollout 中累积。</li>
+<li><strong>Model-free</strong>：直接学价值或策略，不显式预测下一状态，更新只依赖 <span class="arithmatex">\((s,a,r,s')\)</span> 与损失函数。</li>
+<li><strong>Model-based</strong>：显式估计动力学 <span class="arithmatex">\(\hat T(s'\mid s,a)\)</span>、奖励模型 <span class="arithmatex">\(\hat R(s,a)\)</span> 或 learned dynamics <span class="arithmatex">\(f_\phi(s,a)\)</span>。</li>
+<li><strong>Planning</strong>：利用模型在真实交互之外进行搜索或优化，例如 MPC、树搜索、梯度规划。</li>
+<li><strong>Model bias</strong>：模型误差会在多步 rollout 中累积，并可能被策略主动放大。</li>
 </ul>
-<h2 id="model-free">Model-Free：直接从经验学习</h2>
-<p>Model-free 把真实交互直接变成参数更新；Model-based 则多了一层</p>
+<p>形式上，model-free 的策略改进依赖</p>
 <div class="arithmatex">\[
-(s_t,a_t)\rightarrow \hat s_{t+1},\hat r_{t+1}\rightarrow \text{planning / synthetic data}.
+Q(s,a)\leftarrow Q(s,a)+\alpha\big[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\big],
 \]</div>
-<p>前者结构简单，后者通常更节省真实交互，但必须管理模型误差。</p>
+<p>而 model-based 额外多了一条“先拟合、再使用”的路径：</p>
+<div class="arithmatex">\[
+(s,a)\ \longrightarrow\ \hat s',\hat r\ \longrightarrow\ \text{planning / synthetic rollout}.
+\]</div>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Model-Free</th>
+<th>Model-Based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显式预测下一状态</td>
+<td>不需要</td>
+<td>需要，且质量决定上限</td>
+</tr>
+<tr>
+<td>每条真实样本的利用方式</td>
+<td>直接影响一次参数更新</td>
+<td>可反复进入想象 rollout</td>
+</tr>
+<tr>
+<td>样本效率</td>
+<td>低，常需 <span class="arithmatex">\(10^5\)</span>–<span class="arithmatex">\(10^7\)</span> 步</td>
+<td>高，常可降 1–2 个数量级</td>
+</tr>
+<tr>
+<td>每步计算量</td>
+<td>低，一次前向反传</td>
+<td>高，规划开销与 rollout 长度成正比</td>
+</tr>
+<tr>
+<td>主要失效模式</td>
+<td>样本昂贵、探索困难</td>
+<td>模型偏差、model exploitation</td>
+</tr>
+<tr>
+<td>对新任务的迁移</td>
+<td>弱，通常需要重训</td>
+<td>较强，模型可跨任务复用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-free">Model-Free：直接从经验学习</h2>
+<p>Model-free 把真实交互直接变成参数更新：价值方法用 TD 误差，策略方法用策略梯度。它的优点是目标与数据来源一致，不存在“在错误模型上优化出错误策略”的风险；代价是每条经验只被间接使用一次或几次。</p>
+<p>从样本复杂度看，经典结果给出 model-free 的样本量随状态空间规模线性甚至更高增长，而 model-based 可以做到与状态数近似无关的量级（对连续状态在覆盖假设下）。这解释了为什么在真实机器人上试错昂贵时，model-based 几乎是默认方向。</p>
+<table>
+<thead>
+<tr>
+<th>Model-Free 家族</th>
+<th>更新信号</th>
+<th>样本需求（典型量级）</th>
+<th>主要限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表格 Q-learning</td>
+<td>TD 误差</td>
+<td>$O(</td>
+<td>\mathcal S</td>
+</tr>
+<tr>
+<td>DQN 类</td>
+<td>TD 误差 + 目标网络 + 经验回放</td>
+<td><span class="arithmatex">\(10^6\)</span>–<span class="arithmatex">\(10^7\)</span> 帧</td>
+<td>只支持离散动作，样本昂贵</td>
+</tr>
+<tr>
+<td>策略梯度 / PPO</td>
+<td>优势估计</td>
+<td><span class="arithmatex">\(10^6\)</span> 步量级</td>
+<td>高方差，对超参数敏感</td>
+</tr>
+<tr>
+<td>SAC / TD3</td>
+<td>熵正则 + 双 Critic</td>
+<td><span class="arithmatex">\(10^5\)</span>–<span class="arithmatex">\(10^6\)</span> 步</td>
+<td>对奖励尺度敏感</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：样本效率低带来一个连锁后果——探索预算被摊薄。真实机器人上，只有当单次试错成本足够低（如仿真环境）时，纯 model-free 才是合理选择。</p>
 <h2 id="model-based">Model-Based：先学模型再规划</h2>
+<p>Model-based 的核心动作是：用已收集的数据拟合 <span class="arithmatex">\(\hat T\)</span> 与 <span class="arithmatex">\(\hat R\)</span>，再用模型生成本来需要真实交互才能获得的信息。常见形态包括：</p>
 <ul>
-<li>Learned dynamics + MPC：用预测模型滚动规划。</li>
-<li>Model-generated rollouts：用模型补充真实交互数据。</li>
+<li><strong>Learned dynamics + MPC</strong>：用预测模型滚动优化，每一步求解有限时域最优控制问题；</li>
+<li><strong>Model-generated rollouts</strong>：用模型补充真实数据，训练 model-free 的策略或价值网络；</li>
+<li><strong>Latent world model</strong>：把观测压到低维隐空间，在隐空间内预测与规划；</li>
+<li><strong>Search-based planning</strong>：在模型上做树搜索，例如 MCTS 或值展开。</li>
 </ul>
+<p>规划的基本形式是有限时域优化：</p>
+<div class="arithmatex">\[
+a^*_{t:t+H-1}=\arg\max_{a_{t:t+H-1}}\ \mathbb E\left[\sum_{l=0}^{H-1}\gamma^{l}\hat r_{t+l}+\gamma^{H}\hat V(\hat s_{t+H})\right],
+\]</div>
+<p>其中 <span class="arithmatex">\(\hat V\)</span> 是终端价值近似，<span class="arithmatex">\(H\)</span> 是规划时域。注意 <span class="arithmatex">\(\hat V\)</span> 的存在很重要：它把超出 <span class="arithmatex">\(H\)</span> 步的长期后果折回，而不是简单截断。</p>
+<table>
+<thead>
+<tr>
+<th>规划方式</th>
+<th>是否在线搜索</th>
+<th>典型时域 <span class="arithmatex">\(H\)</span></th>
+<th>计算特征</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>随机射击 / 采样规划</td>
+<td>是</td>
+<td>10–50</td>
+<td>与候选数 <span class="arithmatex">\(\times H\)</span> 成正比</td>
+<td>低维连续控制</td>
+</tr>
+<tr>
+<td>MPC（梯度或 CEM）</td>
+<td>是</td>
+<td>10–30</td>
+<td>每步求解优化问题</td>
+<td>已知或已学动力学</td>
+</tr>
+<tr>
+<td>MCTS</td>
+<td>是</td>
+<td>深，节点数大</td>
+<td>与模拟次数成正比</td>
+<td>离散、长程、组合性任务</td>
+</tr>
+<tr>
+<td>想象 rollout 训练</td>
+<td>否，离线生成数据</td>
+<td>15–50</td>
+<td>与 batch <span class="arithmatex">\(\times H\)</span> 成正比</td>
+<td>提升样本效率</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_2">模型偏差与计算代价</h2>
-<p>真实机器人试错昂贵时，可先用少量轨迹拟合动力学，再在模型中筛掉明显差的动作，只把候选动作放到实车。</p>
+<p>真实机器人试错昂贵时，可先用少量轨迹拟合动力学，再在模型中筛掉明显差的动作，只把候选动作放到实车。这是典型的“模型做筛选、实车做验证”结构，也是 model-based 方法最实用的形态。</p>
+<p>模型误差进入规划目标后，后果并不只是噪声，而是系统性的偏差。若模型单步预测误差范数有界 <span class="arithmatex">\(\|f_\phi(s,a)-f(s,a)\|\le\epsilon\)</span>，且动力学是 <span class="arithmatex">\(L\)</span>-Lipschitz 的，则 <span class="arithmatex">\(H\)</span> 步 rollout 的误差上界约按 <span class="arithmatex">\((1+L+\dots+L^{H-1})\epsilon\)</span> 增长；当 <span class="arithmatex">\(L&gt;1\)</span> 时呈指数，即</p>
+<div class="arithmatex">\[
+\| \hat s_H-s_H\|\ \lesssim\ \frac{L^{H}-1}{L-1}\,\epsilon\ \xrightarrow[L&gt;1]{}\ O(L^{H}\epsilon).
+\]</div>
+<p>这条不等式是整章最重要的定量结论：<strong>误差放大是乘法效应，缩短时域比提高模型精度更便宜</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>单步误差 <span class="arithmatex">\(\epsilon\)</span></th>
+<th>规划时域 <span class="arithmatex">\(H\)</span></th>
+<th><span class="arithmatex">\(L=1.1\)</span> 时的放大因子</th>
+<th>实际含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.01</td>
+<td>5</td>
+<td>约 1.6</td>
+<td>可用</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>20</td>
+<td>约 6.7</td>
+<td>需要终端价值兜底</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>50</td>
+<td>约 117</td>
+<td>基本不可用</td>
+</tr>
+<tr>
+<td>0.05</td>
+<td>20</td>
+<td>约 33.6</td>
+<td>误差不可接受</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：把模型误差当成噪声来平均处理是常见错误。噪声在多步预测中会部分抵消，模型偏差不会——它总朝同一方向叠加，因此规划时域越长，偏差主导越明显。</p>
 <h2 id="_3">真正的选择是要不要把经验变成可预测模型</h2>
 <p>Model-Free 方法直接从经验更新价值或策略，结构简单，但每条数据通常只能通过更新规则间接影响未来决策。Model-Based 方法则尝试学习或使用 <span class="arithmatex">\(p(s'\mid s,a)\)</span> 和奖励模型，再利用模型进行规划或生成额外经验，因此数据利用率往往更高。</p>
-<p>代价是模型会错。规划次数越多，模型误差越可能被反复放大。因此工程上常见折中不是二选一，而是让模型只负责短期预测、候选筛选或安全检查，把最终策略仍交给 Model-Free 部分。</p>
+<p>代价是模型会错。规划次数越多，模型误差越可能被反复放大。因此工程上常见的折中不是二选一，而是让模型只负责短期预测、候选筛选或安全检查，把最终策略仍交给 Model-Free 部分。可以用一个比值来刻画折中位置：</p>
+<div class="arithmatex">\[
+\eta=\frac{\text{模型生成样本数}}{\text{真实样本数}},
+\]</div>
+<p><span class="arithmatex">\(\eta=0\)</span> 是纯 model-free，<span class="arithmatex">\(\eta\to\infty\)</span> 是纯在模型里训练（极不可靠）。实践中 <span class="arithmatex">\(\eta\)</span> 常取 1–100，且随模型质量提升而增大。</p>
+<table>
+<thead>
+<tr>
+<th>任务特征</th>
+<th>更偏向哪一侧</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>交互成本极低（仿真、游戏）</td>
+<td>Model-free</td>
+<td>试错便宜，模型误差不值得引入</td>
+</tr>
+<tr>
+<td>交互成本极高（真实机器人）</td>
+<td>Model-based</td>
+<td>每条真实样本必须反复使用</td>
+</tr>
+<tr>
+<td>动力学复杂但平滑可学</td>
+<td>Model-based</td>
+<td>模型误差随 <span class="arithmatex">\(H\)</span> 可控</td>
+</tr>
+<tr>
+<td>动力学含接触、突变</td>
+<td>Model-free 或混合</td>
+<td>模型在突变点误差大，易被利用</td>
+</tr>
+<tr>
+<td>需要在线适应新环境</td>
+<td>混合</td>
+<td>模型提供快速适应，策略保证稳健</td>
+</tr>
+<tr>
+<td>奖励稀疏、长程</td>
+<td>Model-based 规划</td>
+<td>模型可做信用分配与想象展开</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_4">模型真正提供的是可以在脑内试错的能力</h2>
 <p>有模型以后，智能体可以在不执行真实动作的情况下预测后果、比较候选方案或生成额外训练数据。这能显著节省真实交互，但收益取决于模型是否准确。模型错误会在多步预测中积累，产生所谓 model bias。</p>
+<p>从信息利用角度看，模型的真正价值在于摊销：一条真实样本可以被反复用于无损的“查询”。若单条样本可用于 <span class="arithmatex">\(N\)</span> 次想象 rollout，平均每条真实样本的有效利用率提升约 <span class="arithmatex">\(N\)</span> 倍（受误差折扣影响，实际收益小于 <span class="arithmatex">\(N\)</span>）：</p>
+<div class="arithmatex">\[
+\text{有效利用率}\ \approx\ N\cdot\mathbb E\big[\text{rollout 有效性}\big],
+\qquad
+\text{rollout 有效性}\ \sim\ \text{随}\ H\ \text{指数衰减}.
+\]</div>
+<table>
+<thead>
+<tr>
+<th>模型能力</th>
+<th>想象 rollout 的可用长度</th>
+<th>主要收益</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只学局部线性化</td>
+<td>1–5 步</td>
+<td>稳定、可分析</td>
+<td>长期收益有限</td>
+</tr>
+<tr>
+<td>学短期动力学（平滑任务）</td>
+<td>15–50 步</td>
+<td>样本效率大幅提升</td>
+<td>长时域偏差</td>
+</tr>
+<tr>
+<td>学潜空间世界模型</td>
+<td>30–100 步</td>
+<td>高维观测也能规划</td>
+<td>潜表示可能与决策无关</td>
+</tr>
+<tr>
+<td>含接触的刚体动力学</td>
+<td>视接触密度</td>
+<td>抓取、操作类任务</td>
+<td>误差大，需真实数据校正</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：把模型质量用预测误差（如 MSE）衡量并不充分。一个在视觉细节上预测得很准的模型，可能在关键决策量（碰撞距离、接触状态）上完全错误；反过来，一个预测误差略大的模型可能保留了全部决策相关信息。</p>
 <h2 id="_5">工程上常用的是混合方案</h2>
 <p>很多系统并不纯粹属于二者之一：低层控制使用已知动力学模型，高层策略用 Model-Free RL；或者用真实数据学习短期模型，只在很短预测时域内规划。理解这条连续谱，比背“某算法属于哪一派”更重要。</p>
+<p>混合最常出现在“已知部分 + 未知部分”的分解上。若物理主体部分已知（如刚体动力学），可以只学残差：</p>
+<div class="arithmatex">\[
+s_{t+1}=f_{\text{known}}(s_t,a_t)+g_\phi(s_t,a_t),
+\qquad
+a_t=a_t^{\text{MPC}}+\pi_\theta(s_t),
+\]</div>
+<p>其中 <span class="arithmatex">\(g_\phi\)</span> 只负责补偿摩擦、形变、延迟等未建模效应。残差通常比全动力学小 1–2 个数量级，因此同样数据量下可学得更准，规划时域也能更长。</p>
+<table>
+<thead>
+<tr>
+<th>混合模式</th>
+<th>模型负责什么</th>
+<th>策略负责什么</th>
+<th>适用条件</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已知动力学 + model-free 高层</td>
+<td>低层执行与稳态控制</td>
+<td>高层决策与长期目标</td>
+<td>动力学大部分已知</td>
+<td>接口处误差累积</td>
+</tr>
+<tr>
+<td>残差模型学习</td>
+<td>补偿未建模效应</td>
+<td>仍按 model-free 训练</td>
+<td>有可靠的基座模型</td>
+<td>残差与状态耦合时外推差</td>
+</tr>
+<tr>
+<td>模型做安全过滤</td>
+<td>预测危险状态</td>
+<td>提出候选动作</td>
+<td>安全要求高</td>
+<td>漏检导致防护失效</td>
+</tr>
+<tr>
+<td>想象 rollout + 真实微调</td>
+<td>生成合成经验</td>
+<td>在真实数据上收敛</td>
+<td>真实样本昂贵</td>
+<td>model exploitation</td>
+</tr>
+<tr>
+<td>teacher–student 蒸馏</td>
+<td>规划器充当 teacher</td>
+<td>student 在线快速推理</td>
+<td>规划太慢无法实时</td>
+<td>蒸馏丢失关键策略细节</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：把模型与策略分别训练、互不校准，是最常见的混合失败。模型在策略实际访问不到的区域上误差很大，而策略又依赖模型输出的梯度或价值，两者形成正反馈：策略越偏离训练分布，模型误差越大，策略偏离得越远。缓解办法是让模型训练数据持续由当前策略生成（on-policy 刷新），并对模型预测加不确定性惩罚。</p>
 <h2 id="_6">模型应预测任务相关量</h2>
 <p>世界模型不必重建所有像素或物理细节，只需准确预测会改变决策的量。若速度、碰撞概率和奖励已足够支持规划，继续追求视觉细节可能只增加误差与算力成本。模型质量应通过下游决策改进衡量，而不仅是预测损失。</p>
+<p>形式上，设任务相关量集合为 <span class="arithmatex">\(\mathcal C=\{c_1,\dots,c_m\}\)</span>（例如碰撞距离、末端速度、接触状态、奖励与终止标志），理想模型只需满足</p>
+<div class="arithmatex">\[
+\hat P(c'\mid s,a)\approx P(c'\mid s,a),
+\qquad\text{而无需保证}\quad \hat P(o'\mid s,a)\approx P(o'\mid s,a).
+\]</div>
+<p>这是一个信息瓶颈式的取舍：把有限的模型容量分配给与回报相关的维度，可以降低单步误差 <span class="arithmatex">\(\epsilon\)</span>，而 <span class="arithmatex">\(\epsilon\)</span> 又直接决定 rollout 的放大上界 <span class="arithmatex">\(O(L^H\epsilon)\)</span>，因此“少预测无关细节”往往直接换来更长的可用规划时域。</p>
+<table>
+<thead>
+<tr>
+<th>预测目标</th>
+<th>输出维度</th>
+<th>训练信号</th>
+<th>对决策的影响</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全像素重建</td>
+<td>极高（<span class="arithmatex">\(10^5\)</span> 以上）</td>
+<td>重建损失</td>
+<td>纹理误差通常不改变动作</td>
+<td>算力大，易过拟合外观</td>
+</tr>
+<tr>
+<td>隐空间一致性</td>
+<td>中</td>
+<td>一致性或对比损失</td>
+<td>潜表示可能与决策无关</td>
+<td>需要防止表示坍塌</td>
+</tr>
+<tr>
+<td>任务相关量回归</td>
+<td>低（通常 <span class="arithmatex">\(&lt;10\)</span>）</td>
+<td>监督回归</td>
+<td>直接服务规划与安全判定</td>
+<td>需要人工选取关键量</td>
+</tr>
+<tr>
+<td>奖励 + 终止 + 下一隐状态</td>
+<td>低</td>
+<td>TD 类损失</td>
+<td>与价值学习目标对齐</td>
+<td>可能缺少约束信息</td>
+</tr>
+<tr>
+<td>混合：关键量 + 轻量观测</td>
+<td>中低</td>
+<td>多任务损失</td>
+<td>兼顾可行性与丰富度</td>
+<td>权重需要调参</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：用预测损失（如像素 MSE）作为唯一模型质量指标会被误导。一个在纹理上高度准确的模型，可能在碰撞距离上系统性偏差，而后者才会决定动作；反过来，一个重建模糊但关键量准确的模型可能表现更好。因此模型评估必须在闭环里做：用同一规划器接不同模型，比较真实环境回报，而不是比较预测误差。</p>
+<h2 id="_7">样本效率与计算成本的换算</h2>
+<p>model-free 与 model-based 的本质差异可以用一组“换算”指标看清：前者把成本放在数据上，后者把成本放在计算上。设每步真实交互成本为 <span class="arithmatex">\(c_{\text{env}}\)</span>，每步模型 rollout 成本为 <span class="arithmatex">\(c_{\text{model}}\)</span>，达到目标性能所需真实步数为 <span class="arithmatex">\(N_{\text{real}}\)</span>，想象步数为 <span class="arithmatex">\(N_{\text{imag}}\)</span>，则总成本为</p>
+<div class="arithmatex">\[
+C_{\text{total}}=c_{\text{env}}N_{\text{real}}+c_{\text{model}}N_{\text{imag}}.
+\]</div>
+<p>在机器人上 <span class="arithmatex">\(c_{\text{env}}\)</span> 通常比 <span class="arithmatex">\(c_{\text{model}}\)</span> 大 3 个数量级以上，因此即使用大量想象样本替换少量真实样本也能净赚。</p>
+<table>
+<thead>
+<tr>
+<th>方法类别</th>
+<th>达到典型运动控制性能的交互步数量级</th>
+<th>每步规划计算量</th>
+<th>相对成本结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表格 Q-learning</td>
+<td><span class="arithmatex">\(10^5\)</span>–<span class="arithmatex">\(10^6\)</span></td>
+<td>1 次查表</td>
+<td>只有数据成本</td>
+</tr>
+<tr>
+<td>DQN / 离散策略梯度</td>
+<td><span class="arithmatex">\(10^6\)</span>–<span class="arithmatex">\(10^7\)</span> 帧</td>
+<td>1 次前向 + 反传</td>
+<td>只有数据成本</td>
+</tr>
+<tr>
+<td>SAC / PPO</td>
+<td><span class="arithmatex">\(10^5\)</span>–<span class="arithmatex">\(10^6\)</span> 步</td>
+<td>数倍前向 + 反传</td>
+<td>数据为主</td>
+</tr>
+<tr>
+<td>MPC + 学习模型</td>
+<td><span class="arithmatex">\(10^3\)</span>–<span class="arithmatex">\(10^4\)</span> 步</td>
+<td><span class="arithmatex">\(O(H\times\text{候选数})\)</span> 次模型前向</td>
+<td>计算显著</td>
+</tr>
+<tr>
+<td>想象 rollout 训练（混合）</td>
+<td><span class="arithmatex">\(10^3\)</span>–<span class="arithmatex">\(10^5\)</span> 真实步 + <span class="arithmatex">\(10^5\)</span>–<span class="arithmatex">\(10^6\)</span> 想象步</td>
+<td>batch <span class="arithmatex">\(\times H\)</span> 次模型前向</td>
+<td>计算与数据并重</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：在计算受限的边缘设备上照搬“加大规划预算”的做法会把控制频率从 100 Hz 压到 5 Hz，此时规划质量的提升被实时性损失抵消，甚至因延迟导致不稳定；这类情形应缩短 <span class="arithmatex">\(H\)</span> 并提高模型更新频率，而不是加长规划。</p>
+<h2 id="dyna">规划与学习的混合（Dyna）</h2>
+<p>Dyna 框架把两条路线合成一个循环：用真实经验更新模型，用模型生成想象经验，再用真实与想象经验共同更新价值或策略。其价值更新可以写成对两类样本求和：</p>
+<div class="arithmatex">\[
+Q(s,a)\leftarrow Q(s,a)+\alpha\Big[\underbrace{r+\gamma\max_{a'}Q(s',a')}_{\text{真实样本 TD 目标}}\Big]
++\beta\sum_{i=1}^{n}\Big[\underbrace{\hat r_i+\gamma\max_{a'}Q(\hat s_i',a')}_{\text{想象样本 TD 目标}}-Q(\hat s_i,a_i)\Big].
+\]</div>
+<p>其中 <span class="arithmatex">\(n\)</span> 是每条真实转移触发的想象更新次数，<span class="arithmatex">\(\beta\)</span> 是想象更新的权重。<span class="arithmatex">\(n\)</span> 增大意味着更多计算换更少真实交互，但想象带来的偏差也随之上升。</p>
+<p>真实与想象的比例直接决定结果走向：</p>
+<table>
+<thead>
+<tr>
+<th>真实 : 想象 比例</th>
+<th>样本效率</th>
+<th>偏差风险</th>
+<th>适用条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 : 0</td>
+<td>最低</td>
+<td>无</td>
+<td>环境便宜、模型不可信</td>
+</tr>
+<tr>
+<td>1 : 1</td>
+<td>略升</td>
+<td>低</td>
+<td>模型刚训练、不确定其质量</td>
+</tr>
+<tr>
+<td>1 : 5</td>
+<td>明显提升</td>
+<td>中</td>
+<td>模型在短时域上较准</td>
+</tr>
+<tr>
+<td>1 : 20</td>
+<td>大幅提升</td>
+<td>高</td>
+<td>模型质量高且时域短</td>
+</tr>
+<tr>
+<td>1 : 100 以上</td>
+<td>理论最高</td>
+<td>极高</td>
+<td>常导致 model exploitation</td>
+</tr>
+</tbody>
+</table>
+<p>失效模式：当想象样本权重 <span class="arithmatex">\(\beta\)</span> 或比例过高时，价值函数会被模型偏差完全主导，表现为策略在真实环境中持续撞上“模型没预测到的”障碍；这类失败往往在训练曲线上不明显（因为训练用的正是错误模型），只能在真实环境中暴露。</p>
+<h2 id="_8">模型误差如何进入闭环</h2>
+<p>模型误差进入闭环有两条独立路径，必须分开处理。</p>
+<p>第一条是<strong>多步预测误差放大</strong>，即前面给出的 <span class="arithmatex">\(O(L^H\epsilon)\)</span> 上界。它随规划时域指数增长，缓解手段是缩短 <span class="arithmatex">\(H\)</span>、提高模型精度或引入不确定性惩罚。</p>
+<p>第二条是 <strong>model exploitation</strong>：策略会主动搜索模型中“被系统性高估”的区域。由于策略优化目标是最大化 <span class="arithmatex">\(\hat Q\)</span>，而</p>
+<div class="arithmatex">\[
+\hat Q^\pi - Q^\pi\ \propto\ \max_{a}\big[\hat R(s,a)-R(s,a)\big]+\gamma\,\mathbb E\big[\hat T\ \text{的偏差}\big],
+\]</div>
+<p>优化过程会放大模型误差中被策略可利用的部分，把它变成看似高回报的动作。这与“模型只是有点噪声”完全不同：<strong>策略是主动攻击模型不准的区域</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>表现</th>
+<th>根因</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>真实环境回报远低于模型内估计</td>
+<td>训练指标好、上线差</td>
+<td>模型偏差被规划放大</td>
+<td>缩短 <span class="arithmatex">\(H\)</span>、用真实数据校准</td>
+</tr>
+<tr>
+<td>策略偏好某些诡异动作</td>
+<td>反复选择同一异常动作</td>
+<td>该区域 <span class="arithmatex">\(\hat R\)</span> 被高估</td>
+<td>集成模型 + 认识不确定性惩罚</td>
+</tr>
+<tr>
+<td>长时域 rollout 发散</td>
+<td>预测状态越滚越远</td>
+<td><span class="arithmatex">\(L&gt;1\)</span> 的指数放大</td>
+<td>限制 rollout 长度、加终端价值</td>
+</tr>
+<tr>
+<td>模型更新后策略立刻崩坏</td>
+<td>非平稳</td>
+<td>策略在旧模型上过拟合</td>
+<td>减缓模型更新、做正则</td>
+</tr>
+<tr>
+<td>无法在线适应</td>
+<td>新环境表现差</td>
+<td>模型未覆盖新区域</td>
+<td>收集真实数据重训模型</td>
+</tr>
+</tbody>
+</table>
+<p>控制这类风险的标准做法是模型集成加悲观目标：用 <span class="arithmatex">\(M\)</span> 个模型预测取最小值或惩罚方差，</p>
+<div class="arithmatex">\[
+\hat Q^{\text{pess}}(s,a)=\min_{i\in\{1..M\}}\hat Q_i(s,a)\quad\text{或}\quad
+\hat Q(s,a)-\kappa\,\mathrm{std}_i\big[\hat Q_i(s,a)\big].
+\]</div>
+<p><span class="arithmatex">\(\kappa\)</span> 越大越保守，代价是在模型准确区域也过度保守，需要按任务调节。</p>
+<blockquote>
+<p><strong>下一步</strong>：模型式规划需要精确的动力学与概率工具，见 <a href="../../mathematics/03-probability-random-variables/">概率与随机变量</a> 与 <a href="../../mathematics/05-markov-processes/">马尔可夫过程</a>；仿真到现实的模型差距见 <a href="../../simulation-sim2real/04-sim2real-real2sim/">Sim2Real 与 Real2Sim</a>；与值方法的对照见 <a href="../02-value-based/">值方法</a>，安全性与分布偏移下的模型风险见 <a href="../../robustness-safety/01-uncertainty-shift/">鲁棒与安全中的不确定性</a>。</p>
+</blockquote>
 
 
 
