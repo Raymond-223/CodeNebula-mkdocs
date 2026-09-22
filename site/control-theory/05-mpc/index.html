@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#model-predictive-control" class="md-skip">
           Skip to content
         </a>
       
@@ -1033,7 +1033,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         预测过程来自系统模型
@@ -1055,7 +1055,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         滚动时域让预测不断被真实测量纠正
@@ -1066,7 +1066,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         预测时域的选择
@@ -1088,7 +1088,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         不可行问题的处理
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         预测过程来自系统模型
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         滚动时域让预测不断被真实测量纠正
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         预测时域的选择
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         不可行问题的处理
@@ -3830,12 +3830,12 @@
 
 
 
-<h1 id="_1">模型预测控制</h1>
+<h1 id="model-predictive-control">Model Predictive Control</h1>
 <p>MPC（Model Predictive Control）的核心是：<strong>先用模型预测未来若干步，找一段满足约束且代价最小的控制序列，只执行第一步，然后重新测量并再次优化。</strong></p>
 <h2 id="mpc">MPC 的有限时域预测</h2>
 <p>比例控制或 LQR 都可以根据当前状态立即计算控制量。MPC 则把未来 <span class="arithmatex">\(H\)</span> 步一起考虑：如果现在急转会导致两秒后越界，当前就会提前选择更缓和的动作。</p>
 <p>这使它特别适合车辆、无人机和过程控制等“动作后果会延迟显现”的系统。</p>
-<h2 id="_2">预测过程来自系统模型</h2>
+<h2 id="_1">预测过程来自系统模型</h2>
 <p>对离散线性模型</p>
 <div class="arithmatex">\[x_{k+1}=Ax_k+Bu_k,\]</div>
 <p>给定当前状态 <span class="arithmatex">\(x_0\)</span> 和候选控制序列 <span class="arithmatex">\(u_0,\ldots,u_{H-1}\)</span>，可以逐步得到</p>
@@ -3851,7 +3851,7 @@
 x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal X,\quad u_k\in\mathcal U.
 \]</div>
 <p>速度上限、转角限制、加速度约束、道路边界都可以直接放进 <span class="arithmatex">\(\mathcal X\)</span> 和 <span class="arithmatex">\(\mathcal U\)</span>。相比“违反后再在奖励里罚”，这种表达更明确。</p>
-<h2 id="_3">滚动时域让预测不断被真实测量纠正</h2>
+<h2 id="_2">滚动时域让预测不断被真实测量纠正</h2>
 <p>MPC 并不会一次执行整段最优控制。它只执行第一个输入 <span class="arithmatex">\(u_0\)</span>，下一周期重新测量真实状态，再求一次新的优化问题。</p>
 <p>因此即使模型不完美，每个控制周期都能用新测量修正预测。这就是 receding horizon 的核心。</p>
 <figure>
@@ -3859,13 +3859,13 @@ x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal X,\quad u_k\in\mathcal U.
 <br />
 <figcaption>MPC 可以理解为“带约束、有限时域、每步重新求解”的最优控制。</figcaption>
 </figure>
-<h2 id="_4">预测时域的选择</h2>
+<h2 id="_3">预测时域的选择</h2>
 <p>时域太短，看不到远期后果；时域过长，优化变量增多、计算量变大，而且模型误差会持续累积。工程上要在<strong>控制频率、求解时间、模型可信度和任务预见性</strong>之间平衡。</p>
 <p>车辆控制常用几秒内的有限时域，并以几十毫秒到几百毫秒周期重复求解，而不是预测几十秒以后所有细节。</p>
 <h2 id="mpc_2">MPC 的实时计算约束</h2>
 <p>控制周期为 50 ms，就意味着优化最好稳定地在这个时间预算内完成。偶尔求出更优但经常超时的控制器，实际效果可能不如一个稍保守但确定能按时运行的方案。</p>
 <p>入门阶段掌握线性 MPC 就足够。非线性 MPC、鲁棒 MPC 等只是同一框架在更复杂模型和不确定性下的扩展，不需要为了理解主线先全部学习。</p>
-<h2 id="_5">不可行问题的处理</h2>
+<h2 id="_4">不可行问题的处理</h2>
 <p>当初始状态、预测模型和硬约束彼此冲突时，优化器可能找不到可行解。工程 MPC 通常为部分约束引入带高惩罚的松弛变量，并准备上一时刻控制或安全控制作为回退。这样才能区分“优化失败”和“系统完全无法安全运行”。</p>
 
 

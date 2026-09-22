@@ -1,4 +1,4 @@
-# 价值学习：Q-Learning 与 DQN
+# Value-Based Methods
 
 价值学习不直接输出“应该做什么”，而是先学习**每个动作的长期价值**，再从价值中选动作。Q-Learning 是最典型的表格方法，DQN 则把同一思想扩展到高维状态。
 

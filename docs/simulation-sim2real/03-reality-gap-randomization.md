@@ -1,4 +1,4 @@
-# Reality Gap 与域随机化
+# Reality Gap & Domain Randomization
 
 仿真中的策略到了实机性能下降，通常不是因为“仿真没有价值”，而是因为训练过程中依赖了某些在真实世界并不稳定的细节。Reality Gap 就是**仿真分布与真实分布之间会影响任务行为的差异**。
 

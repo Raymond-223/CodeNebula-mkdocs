@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#markov-processes" class="md-skip">
           Skip to content
         </a>
       
@@ -791,7 +791,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         多步预测来自矩阵的重复作用
@@ -802,7 +802,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         长期行为不等于每条样本轨迹都一样
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         多步预测来自矩阵的重复作用
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         长期行为不等于每条样本轨迹都一样
@@ -3808,7 +3808,7 @@
 
 
 
-<h1 id="_1">马尔可夫过程</h1>
+<h1 id="markov-processes">Markov Processes</h1>
 <p>Markov 性是一种状态建模假设：<strong>给定当前状态以后，预测下一步不再需要更久以前的历史。</strong> 强化学习的 MDP、很多状态估计模型都建立在这个思想上。</p>
 <h2 id="markov">Markov 性与状态完整性</h2>
 <p>Markov 性写成</p>
@@ -3823,10 +3823,10 @@ P(S_{t+1}\mid S_t,S_{t-1},\ldots)=P(S_{t+1}\mid S_t).
 <p>每一行和为 1。</p>
 <p>当前分布为行向量 <span class="arithmatex">\(\mu_t\)</span> 时，下一步分布为</p>
 <div class="arithmatex">\[\mu_{t+1}=\mu_tP.\]</div>
-<h2 id="_2">多步预测来自矩阵的重复作用</h2>
+<h2 id="_1">多步预测来自矩阵的重复作用</h2>
 <div class="arithmatex">\[\mu_{t+k}=\mu_tP^k.\]</div>
 <p>这说明很多轨迹概率可以通过线性代数统一计算，而不需要逐条枚举所有路径。</p>
-<h2 id="_3">长期行为不等于每条样本轨迹都一样</h2>
+<h2 id="_2">长期行为不等于每条样本轨迹都一样</h2>
 <p>某些 Markov 链经过足够长时间会趋近 stationary distribution，但单条轨迹仍然随机。长期分布描述的是访问频率和概率，不是“系统最终停在某个固定状态”。</p>
 <p>入门阶段知道这个区别即可，不需要展开完整遍历性理论。</p>
 <h2 id="markov-mdp">从 Markov 过程到 MDP</h2>

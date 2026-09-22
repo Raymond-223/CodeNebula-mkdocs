@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#feedback-stability" class="md-skip">
           Skip to content
         </a>
       
@@ -938,7 +938,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         开环控制的误差来源
@@ -949,7 +949,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         负反馈的纠偏机制
@@ -960,10 +960,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定性定义
+        稳定性：定义与判据
       
     </span>
   </a>
@@ -971,7 +971,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         时域响应指标
@@ -982,10 +982,21 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        增益裕度与相位裕度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        延迟与相位滞后
+        延迟、采样与相位滞后
       
     </span>
   </a>
@@ -996,7 +1007,18 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定不等于响应足够好
+        稳定性不等于响应足够好
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见失败模式与排查顺序
       
     </span>
   </a>
@@ -3652,7 +3674,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         开环控制的误差来源
@@ -3663,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         负反馈的纠偏机制
@@ -3674,10 +3696,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定性定义
+        稳定性：定义与判据
       
     </span>
   </a>
@@ -3685,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         时域响应指标
@@ -3696,10 +3718,21 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        增益裕度与相位裕度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        延迟与相位滞后
+        延迟、采样与相位滞后
       
     </span>
   </a>
@@ -3710,7 +3743,18 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        稳定不等于响应足够好
+        稳定性不等于响应足够好
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见失败模式与排查顺序
       
     </span>
   </a>
@@ -3808,29 +3852,149 @@
 
 
 
-<h1 id="_1">反馈控制与稳定性</h1>
-<p>反馈控制的核心思想很简单：<strong>不要只相信模型预先算好的动作，而要不断测量实际结果，用误差修正下一步输入。</strong> 这也是机器人能够抵抗扰动、模型误差和负载变化的根本原因。</p>
+<h1 id="feedback-stability">Feedback &amp; Stability</h1>
+<p>反馈控制的核心思想很简单：<strong>不要只相信模型预先算好的动作，而要不断测量实际结果，用误差修正下一步输入。</strong> 这也是机器人能够抵抗扰动、模型误差和负载变化的根本原因。稳定性则是这套机制能够长期成立的前提条件——一个不断发散的闭环，无论瞬态响应多漂亮都没有工程价值。</p>
 <figure>
   <img alt="反馈控制把目标、系统输出和控制器连接成闭环。" src="../../assets/diagrams/feedback-loop.svg" />
 <br />
 <figcaption>闭环控制持续比较目标与实际输出，再根据误差调整输入。</figcaption>
 </figure>
-<h2 id="_2">开环控制的误差来源</h2>
+<p>这一章按“为什么需要反馈 → 反馈如何纠偏 → 什么情况下反馈会失效”的顺序展开：先建立稳定性的严格定义，再看时域与频域两类判据，最后落到实机上最常见的失稳原因和排查顺序。</p>
+<h2 id="_1">开环控制的误差来源</h2>
 <p>开环系统直接执行预先计算的输入，例如“给电机 30% 电压持续 2 秒”。如果地面摩擦、负载或电池电压发生变化，最终位置就会偏离预期，因为控制器没有看到实际结果。</p>
+<p>误差按来源可以分成几类，它们对任务的影响方式并不相同：</p>
+<table>
+<thead>
+<tr>
+<th>误差来源</th>
+<th>具体表现</th>
+<th>是否随时间累积</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型与参数不确定性</td>
+<td>质量、转动惯量、摩擦系数标称值偏离真值</td>
+<td>是，随运动距离累积</td>
+</tr>
+<tr>
+<td>环境扰动</td>
+<td>坡度、风阻、地面打滑、碰撞</td>
+<td>是，且不可预测</td>
+</tr>
+<tr>
+<td>执行器非理想</td>
+<td>死区、饱和、反冲、响应延迟</td>
+<td>是，误差随指令切换累积</td>
+</tr>
+<tr>
+<td>能源与热状态</td>
+<td>电池电压下降、电机升温后力矩衰减</td>
+<td>是，缓慢漂移</td>
+</tr>
+<tr>
+<td>初始条件偏差</td>
+<td>起始位姿与假设不一致</td>
+<td>否，但会整体平移轨迹</td>
+</tr>
+</tbody>
+</table>
+<p>其中最危险的是<strong>角度误差</strong>：角度偏差会改变后续所有平移的方向，因此轨迹误差不是线性增长，而是随距离平方级放大。这也是为什么纯开环的移动机器人走几米还准，走几十米就完全不可用。</p>
+<p>开环并非总是错误选择。当任务足够短、扰动可忽略、且反馈传感器不可得或成本过高时，开环仍然是合理方案：固定工位上的分拣动作、标定良好的步进电机走固定步数、一次性开火的执行机构都属于这一类。判断标准是<strong>误差在任务周期内是否仍低于容许上限</strong>。</p>
+<h2 id="_2">负反馈的纠偏机制</h2>
 <p>闭环则测量输出 <span class="arithmatex">\(y(t)\)</span>，与目标 <span class="arithmatex">\(r(t)\)</span> 比较得到误差</p>
 <div class="arithmatex">\[e(t)=r(t)-y(t),\]</div>
 <p>再令控制器根据 <span class="arithmatex">\(e(t)\)</span> 产生新的输入 <span class="arithmatex">\(u(t)\)</span>。只要测量和执行链仍然有效，扰动造成的偏差就能被后续控制动作纠正。</p>
-<h2 id="_3">负反馈的纠偏机制</h2>
 <p>最简单的比例反馈为</p>
-<div class="arithmatex">\[u=K(r-y).\]</div>
+<div class="arithmatex">\[u=K_p e = K_p (r-y).\]</div>
 <p>若输出低于目标，误差为正，控制器增加输入；输出高于目标时则反向修正。这就是负反馈。它的价值不在某个具体公式，而在于让控制动作依赖<strong>实际状态</strong>，而不是只依赖事先模型。</p>
-<p>但反馈增益并非越大越好。增益过高会放大测量噪声、让执行器频繁饱和，并且在存在延迟时更容易产生振荡。</p>
-<h2 id="_4">稳定性定义</h2>
+<p>用一个一阶系统可以看清反馈到底改变了什么。设对象为</p>
+<div class="arithmatex">\[\dot x = -a x + b u, \qquad a&gt;0,\]</div>
+<p>施加比例反馈 <span class="arithmatex">\(u=K_p(r-x)\)</span> 后，闭环变成</p>
+<div class="arithmatex">\[\dot x = -(a+bK_p)x + bK_p r .\]</div>
+<p>同一个系统的时间常数从 <span class="arithmatex">\(1/a\)</span> 变成 <span class="arithmatex">\(1/(a+bK_p)\)</span>：增益把“系统自己的响应速度”替换成了“由我们设计的响应速度”。更重要的是，闭环对参数变化的敏感度被压低为原来的 <span class="arithmatex">\(1/(1+bK_p/a)\)</span> 量级——对象参数漂移 <span class="arithmatex">\(10\%\)</span>，闭环输出的漂移可能只有百分之几。这就是反馈最本质的收益：<strong>用测量换取对模型的低依赖</strong>。</p>
+<p>但反馈不是免费的：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>开环</th>
+<th>闭环</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扰动抑制</td>
+<td>无（靠任务短）</td>
+<td>有，且随增益增强</td>
+</tr>
+<tr>
+<td>对模型的依赖</td>
+<td>高，参数必须准</td>
+<td>低，只要求模型误差有界</td>
+</tr>
+<tr>
+<td>传感器需求</td>
+<td>无</td>
+<td>必须有，且引入噪声与延迟</td>
+</tr>
+<tr>
+<td>主要失效模式</td>
+<td>缓慢偏移</td>
+<td>振荡、噪声放大、饱和、延迟失稳</td>
+</tr>
+<tr>
+<td>执行代价</td>
+<td>恒定</td>
+<td>通常更高，且可能激励未建模动态</td>
+</tr>
+</tbody>
+</table>
+<p>反馈增益并非越大越好：增益过高会放大测量噪声、让执行器频繁饱和，并且在存在延迟时更容易产生振荡。这条权衡线正是本章后半部分要量化的对象。</p>
+<h2 id="_3">稳定性：定义与判据</h2>
 <p>稳定和“误差当前是否很小”不是一回事。一个系统现在恰好在目标附近，但稍微受到扰动就不断发散，它仍然是不稳定的。</p>
+<p>工程上通常关心三个强度递增的概念：</p>
+<ul>
+<li><strong>Lyapunov 稳定</strong>：初始扰动后状态保持有界，不要求回到原点；</li>
+<li><strong>渐近稳定</strong>：扰动后状态最终回到平衡点；</li>
+<li><strong>指数稳定</strong>：收敛速度有下界，工程上最常用，因为它能把“多久回到范围内”写成明确的时间常数。</li>
+</ul>
 <p>对线性连续系统</p>
 <div class="arithmatex">\[\dot x=Ax,\]</div>
-<p>若 <span class="arithmatex">\(A\)</span> 的所有特征值实部都小于零，状态会随时间衰减；离散系统 <span class="arithmatex">\(x_{k+1}=Ax_k\)</span> 则要求特征值位于单位圆内。入门阶段不必展开完整稳定性证明，但必须建立一个概念：<strong>控制器首先要保证系统不发散，然后才谈快慢和精度。</strong></p>
-<h2 id="_5">时域响应指标</h2>
+<p>若 <span class="arithmatex">\(A\)</span> 的所有特征值实部都小于零，状态会随时间衰减；离散系统 <span class="arithmatex">\(x_{k+1}=Ax_k\)</span> 则要求特征值位于单位圆内。</p>
+<table>
+<thead>
+<tr>
+<th>系统类型</th>
+<th>稳定判据</th>
+<th>直观含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续线性</td>
+<td><span class="arithmatex">\(\operatorname{Re}\lambda_i(A)&lt;0\)</span></td>
+<td>所有模态都在衰减</td>
+</tr>
+<tr>
+<td>离散线性</td>
+<td><span class="arithmatex">\(\lvert\lambda_i(A)\rvert&lt;1\)</span></td>
+<td>每步都把偏差缩小</td>
+</tr>
+<tr>
+<td>非线性</td>
+<td>平衡点附近线性化后判据成立，或存在递减的 Lyapunov 函数</td>
+<td>局部结论；全局需要额外条件</td>
+</tr>
+<tr>
+<td>含纯延迟</td>
+<td>特征方程含 <span class="arithmatex">\(e^{-sT}\)</span>，无法直接用有限维判据</td>
+<td>延迟消耗相位，可能先于增益失效</td>
+</tr>
+</tbody>
+</table>
+<p>非线性系统的常用做法是：在工作点线性化得到 Jacobian，按线性判据得到<strong>局部</strong>结论；全局性质则依赖 Lyapunov 函数是否存在。入门阶段不必展开完整稳定性证明，但必须建立一个概念：<strong>控制器首先要保证系统不发散，然后才谈快慢和精度。</strong></p>
+<h2 id="_4">时域响应指标</h2>
 <p>给系统一个阶跃目标，可以观察几个直观指标：</p>
 <ul>
 <li><strong>上升时间</strong>：多快接近目标；</li>
@@ -3838,12 +4002,167 @@
 <li><strong>稳定时间</strong>：多久进入并保持在允许误差范围；</li>
 <li><strong>稳态误差</strong>：最后是否仍有长期偏差。</li>
 </ul>
-<p>它们之间往往存在权衡。更激进的控制可以缩短上升时间，却可能带来更大超调和更强振荡。</p>
-<h2 id="_6">延迟与相位滞后</h2>
-<p>传感、通信、计算和执行都会引入延迟。若控制器看到的是 100 ms 以前的状态，它给出的修正可能已经不适合当前系统。高增益控制在这种情况下尤其容易振荡。</p>
+<p>这些指标可以借助二阶标准型定量把握。对</p>
+<div class="arithmatex">\[G(s)=\frac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2},\]</div>
+<p>阻尼比 <span class="arithmatex">\(\zeta\)</span> 单独决定了超调量</p>
+<div class="arithmatex">\[M_p=\exp\!\left(\frac{-\pi\zeta}{\sqrt{1-\zeta^2}}\right),\]</div>
+<p>而稳定时间近似为 <span class="arithmatex">\(t_s\approx 4/(\zeta\omega_n)\)</span>。于是设计过程变成一个双变量问题：<span class="arithmatex">\(\omega_n\)</span> 决定<strong>多快</strong>，<span class="arithmatex">\(\zeta\)</span> 决定<strong>多稳</strong>。</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\zeta\)</span></th>
+<th>超调 <span class="arithmatex">\(M_p\)</span></th>
+<th>工程含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.3</td>
+<td>约 37%</td>
+<td>明显过冲，通常不可接受</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>约 16%</td>
+<td>快但有可见超调</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>约 5%</td>
+<td>常用折中，接近“最优阻尼”</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>0%</td>
+<td>无超调，响应变慢</td>
+</tr>
+</tbody>
+</table>
+<p>因此把“响应更快”简单等同于“增益更大”是危险的：提高增益同时改变 <span class="arithmatex">\(\omega_n\)</span> 与 <span class="arithmatex">\(\zeta\)</span>，可能缩短上升时间却把系统推向高振荡区。<strong>性能指标之间是权衡关系，不是可以同时最优的目标列表。</strong></p>
+<h2 id="_5">增益裕度与相位裕度</h2>
+<p>时域指标适合验收，但设计阶段更需要知道“离不稳定还有多远”。对开环传递函数 <span class="arithmatex">\(L(s)\)</span>，闭环为 <span class="arithmatex">\(1/(1+L)\)</span>，不稳定的边界是 <span class="arithmatex">\(L=-1\)</span>。围绕这一点可以定义两个余量：</p>
+<ul>
+<li><strong>增益穿越频率</strong> <span class="arithmatex">\(\omega_c\)</span>：<span class="arithmatex">\(\lvert L(j\omega)\rvert=1\)</span> 处的频率；</li>
+<li><strong>相位裕度 PM</strong>：在 <span class="arithmatex">\(\omega_c\)</span> 处，相位距离 <span class="arithmatex">\(-180^\circ\)</span> 还差多少；</li>
+<li><strong>增益裕度 GM</strong>：相位达到 <span class="arithmatex">\(-180^\circ\)</span> 时，增益还能再放大多少倍才到 1。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>裕度水平</th>
+<th>典型表现</th>
+<th>处理方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PM &lt; 30°</td>
+<td>阶跃响应强振荡、对延迟极敏感</td>
+<td>降增益、加相位超前、减小延迟</td>
+</tr>
+<tr>
+<td>PM ≈ 45°–60°</td>
+<td>常见设计目标，超调与速度平衡</td>
+<td>保持</td>
+</tr>
+<tr>
+<td>GM &lt; 6 dB</td>
+<td>增益稍有变化就接近不稳定</td>
+<td>降增益或提高相位裕度</td>
+</tr>
+<tr>
+<td>裕度充足但响应慢</td>
+<td>安全但保守</td>
+<td>在保证 PM 的前提下提高带宽</td>
+</tr>
+</tbody>
+</table>
+<p>频域之所以重要，是因为延迟和未建模高频动态在频域的表现非常直观：它们不改变低频增益，却持续消耗相位。这也是“仿真稳定、实机振荡”最常见的根源。</p>
+<h2 id="_6">延迟、采样与相位滞后</h2>
+<p>传感、通信、计算和执行都会引入延迟。纯延迟 <span class="arithmatex">\(e^{-sT}\)</span> 在频率 <span class="arithmatex">\(\omega\)</span> 处贡献相位 <span class="arithmatex">\(- \omega T\)</span>，延迟本身不改变增益，却直接把相位裕度削掉一块。当 <span class="arithmatex">\(\omega_c T\)</span> 接近 <span class="arithmatex">\(\pi\)</span> 时，仅延迟一项就足以让系统失稳。</p>
+<table>
+<thead>
+<tr>
+<th>延迟来源</th>
+<th>典型量级</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传感器曝光与滤波</td>
+<td>1–30 ms</td>
+<td>滤波越强，延迟越大</td>
+</tr>
+<tr>
+<td>总线、网络与中间件</td>
+<td>1–100 ms</td>
+<td>无线链路抖动最严重</td>
+</tr>
+<tr>
+<td>控制计算与调度</td>
+<td>0.1–10 ms</td>
+<td>与控制器周期同量级时不可忽略</td>
+</tr>
+<tr>
+<td>执行器响应（含液压/气动）</td>
+<td>10–200 ms</td>
+<td>常被低估，是实机振荡主因之一</td>
+</tr>
+</tbody>
+</table>
+<p>采样周期 <span class="arithmatex">\(T_s\)</span> 也必须与闭环带宽匹配。若 <span class="arithmatex">\(T_s\)</span> 与系统时间常数相当，离散化造成的等效延迟会显著降低裕度；经验做法是让 <span class="arithmatex">\(T_s\)</span> 比最快的闭环动态小一个数量级以上。若控制器看到的是 100 ms 以前的状态，它给出的修正可能已经不适合当前系统，高增益控制在这样的闭环里尤其容易振荡。</p>
 <p>因此真实系统的稳定性不仅由控制公式决定，还由<strong>采样周期、网络延迟、传感噪声和执行器响应</strong>共同决定。很多“算法在仿真稳定、实机振荡”的问题，本质上是闭环时序发生了变化。</p>
-<h2 id="_7">稳定不等于响应足够好</h2>
+<h2 id="_7">稳定性不等于响应足够好</h2>
 <p>一个系统可以最终回到目标，却经历过大的超调、过慢的收敛或不可接受的控制能量。稳定性只回答长期是否失控；性能还需要上升时间、调节时间、超调量和稳态误差等指标。设计控制器时应先保证稳定，再比较这些任务相关指标。</p>
+<p>同样地，稳定也不等于任务可用：机械臂可能稳定跟踪但末端精度不够，移动机器人可能稳定行驶但横向误差超限。稳定性是必要条件，<strong>任务指标才是验收标准</strong>。</p>
+<h2 id="_8">常见失败模式与排查顺序</h2>
+<p>实机调试中，绝大多数“控制器不稳”并不是稳定性理论本身出错，而是闭环链条上某一环发生了变化。按下面的顺序排查，通常比反复调参更快：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>最可能原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高频抖动、嗡嗡声</td>
+<td>增益过高，或噪声未被滤波</td>
+<td>降低增益是否立刻改善；检查信号频谱</td>
+</tr>
+<tr>
+<td>低频缓慢摆动</td>
+<td>积分饱和、执行器延迟</td>
+<td>记录指令与实际输出是否存在相位差</td>
+</tr>
+<tr>
+<td>仿真稳定、实机振荡</td>
+<td>采样周期、延迟或未建模柔性</td>
+<td>对比实机与仿真的延迟和采样率</td>
+</tr>
+<tr>
+<td>大扰动后回不到目标</td>
+<td>执行器饱和或限幅逻辑</td>
+<td>记录输入是否长期顶在上下限</td>
+</tr>
+<tr>
+<td>始终存在固定偏差</td>
+<td>摩擦死区，或缺少积分项</td>
+<td>逐步增大指令，观察最小可动输入</td>
+</tr>
+<tr>
+<td>增益调大后突然发散</td>
+<td>相位裕度已被延迟耗尽</td>
+<td>检查 <span class="arithmatex">\(\omega_c T\)</span> 是否接近 <span class="arithmatex">\(\pi\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>排查顺序建议固定为：<strong>先看数据链（时间戳、坐标系、单位）→ 再看执行链（饱和、死区、延迟）→ 最后才调控制器参数</strong>。把参数当作第一嫌疑对象，往往会在错误的层面上反复修改。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章确立了稳定性的判据与余量。下一章 <a href="../03-pid/">PID Principles</a> 把这些抽象要求落到三个可调参数上；在此之后，<a href="../04-lqr/">Optimal Control &amp; LQR</a> 与 <a href="../05-mpc/">Model Predictive Control</a> 会换一种方式，用代价函数和约束直接表达“多快”和“多稳”的取舍。工程侧的闭环实现与调参顺序见 <a href="../../robotics/05-navigation-control/">Navigation &amp; Control</a>。</p>
+</blockquote>
 
 
 

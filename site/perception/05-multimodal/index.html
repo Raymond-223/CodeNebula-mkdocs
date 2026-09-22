@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#multi-modal-perception" class="md-skip">
           Skip to content
         </a>
       
@@ -2309,7 +2309,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         不同传感器的优势通常正好互补
@@ -2320,7 +2320,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         时间不同步会把正确数据拼成错误场景
@@ -2331,7 +2331,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         空间对齐依赖准确外参
@@ -2342,7 +2342,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合可以发生在不同层级
@@ -2353,7 +2353,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合系统还必须考虑传感器失效
@@ -2364,7 +2364,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         标定也会随时间漂移
@@ -2375,7 +2375,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合前先验证单模态
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         不同传感器的优势通常正好互补
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         时间不同步会把正确数据拼成错误场景
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         空间对齐依赖准确外参
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合可以发生在不同层级
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合系统还必须考虑传感器失效
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         标定也会随时间漂移
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         融合前先验证单模态
@@ -3830,31 +3830,31 @@
 
 
 
-<h1 id="_1">多模态感知</h1>
+<h1 id="multi-modal-perception">Multi-Modal Perception</h1>
 <p>多模态感知不是把更多传感器数据堆进一个网络，而是利用不同传感器的<strong>互补信息</strong>降低单一感知源的盲区。真正的难点往往发生在融合之前：时间、坐标和语义必须先对齐。</p>
 <figure>
   <img alt="不同传感器只有在时间和坐标对齐后才适合融合。" src="../../assets/diagrams/time-alignment.svg" />
 <br />
 <figcaption>相机、LiDAR、IMU 的数据频率和坐标系不同，融合前必须先完成同步与标定。</figcaption>
 </figure>
-<h2 id="_2">不同传感器的优势通常正好互补</h2>
+<h2 id="_1">不同传感器的优势通常正好互补</h2>
 <p>相机能提供丰富纹理和语义，但受光照影响明显；LiDAR 提供直接三维几何，却缺少颜色和纹理；IMU 更新快，可以感知短时运动，但积分会漂移。</p>
 <p>融合有价值的前提是这些信息真的互补。如果单一传感器已经稳定满足任务，复杂融合反而会增加标定、计算和故障诊断成本。</p>
-<h2 id="_3">时间不同步会把正确数据拼成错误场景</h2>
+<h2 id="_2">时间不同步会把正确数据拼成错误场景</h2>
 <p>车辆在运动时，相机 <span class="arithmatex">\(t=10.00\)</span> s 的图像和 LiDAR <span class="arithmatex">\(t=10.15\)</span> s 的点云对应不同物理位置。直接叠加会产生明显错位。</p>
 <p>工程上要依赖时间戳、硬件同步或运动补偿，把数据变换到相同参考时刻。</p>
-<h2 id="_4">空间对齐依赖准确外参</h2>
+<h2 id="_3">空间对齐依赖准确外参</h2>
 <p>融合前需要知道 <span class="arithmatex">\(T^{camera}_{lidar}\)</span> 或相应坐标变换。外参偏一点，近处可能看不明显，远处就会产生很大投影偏差。</p>
 <p>因此多模态问题出现“框和点云对不上”时，第一步通常不是换融合网络，而是重新检查标定和 TF。</p>
-<h2 id="_5">融合可以发生在不同层级</h2>
+<h2 id="_4">融合可以发生在不同层级</h2>
 <p><strong>早期融合</strong>在较原始特征层组合数据，能充分利用跨模态相关性，但对对齐要求高；<strong>后期融合</strong>先让各传感器独立产生检测/估计结果，再在决策层合并，更容易模块化和诊断。</p>
 <p>没有一种方式始终最好，选择取决于数据同步质量、算力和任务需求。</p>
-<h2 id="_6">融合系统还必须考虑传感器失效</h2>
+<h2 id="_5">融合系统还必须考虑传感器失效</h2>
 <p>如果相机暂时过曝，系统是否能只靠 LiDAR 继续低速运行？如果 LiDAR 丢帧，视觉结果是否会被错误的旧点云拖累？真正可靠的融合不只是“多传感器同时在线时更准”，还要能识别哪个输入当前不可信。</p>
-<h2 id="_7">标定也会随时间漂移</h2>
+<h2 id="_6">标定也会随时间漂移</h2>
 <p>相机和 LiDAR 外参并非一次标定后永久不变。震动、碰撞、温度和重新安装都可能让外参慢慢偏移。工程系统应通过重投影误差、特征对齐或周期标定检查这种漂移。</p>
 <p>因此多模态融合的维护成本不只在训练模型，还包括长期保证<strong>时间同步和空间标定仍然可信</strong>。</p>
-<h2 id="_8">融合前先验证单模态</h2>
+<h2 id="_7">融合前先验证单模态</h2>
 <p>多模态融合会把各传感器的优点和故障一起带入系统。若单模态输出尚未独立验证，融合后的改善或退化很难归因。测试时应保留关闭某一模态的消融实验，并记录传感器缺失、延迟和错位时的表现。</p>
 
 

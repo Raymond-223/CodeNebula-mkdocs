@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#trust-explainability" class="md-skip">
           Skip to content
         </a>
       
@@ -3508,7 +3508,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         信任校准
@@ -3519,7 +3519,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释应该优先回答行动相关的问题
@@ -3530,7 +3530,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型分数不等于真实正确概率
@@ -3541,7 +3541,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         限制说明和成功案例同样重要
@@ -3552,7 +3552,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         可操作的告警设计
@@ -3563,7 +3563,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         行为可预测性
@@ -3574,7 +3574,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释质量应通过行为验证
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         信任校准
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释应该优先回答行动相关的问题
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型分数不等于真实正确概率
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         限制说明和成功案例同样重要
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         可操作的告警设计
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         行为可预测性
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释质量应通过行为验证
@@ -3830,12 +3830,12 @@
 
 
 
-<h1 id="_1">信任与可解释性</h1>
+<h1 id="trust-explainability">Trust &amp; Explainability</h1>
 <p>可解释性的目标不是让用户理解神经网络每一层，而是让人能够<strong>正确判断系统是否值得信任、为什么做出当前决定，以及什么时候应该干预。</strong></p>
-<h2 id="_2">信任校准</h2>
+<h2 id="_1">信任校准</h2>
 <p>过度信任会让人忽略系统错误，完全不信任又会使自动化失去价值。理想状态是人的信任水平与系统真实能力匹配，即 trust calibration。</p>
 <p>因此设计目标不是“让用户更相信 AI”，而是“让用户在正确的时候相信、错误的时候怀疑”。</p>
-<h2 id="_3">解释应该优先回答行动相关的问题</h2>
+<h2 id="_2">解释应该优先回答行动相关的问题</h2>
 <p>对监督机器人来说，最有价值的解释通常是：</p>
 <ul>
 <li>系统现在判断发生了什么；</li>
@@ -3845,17 +3845,17 @@
 <li>人现在能采取什么操作。</li>
 </ul>
 <p>一张 attention heatmap 若不能帮助操作者做决定，就不一定是有效解释。</p>
-<h2 id="_4">模型分数不等于真实正确概率</h2>
+<h2 id="_3">模型分数不等于真实正确概率</h2>
 <p>网络输出 0.9，不代表它天然就是“90% 正确”。只有经过 calibration 后，分数才可能近似具有概率意义。</p>
 <p>因此界面可以把“高/中/低置信度”与失败原因结合，而不是给用户一个看似精确却未经校准的小数。</p>
-<h2 id="_5">限制说明和成功案例同样重要</h2>
+<h2 id="_4">限制说明和成功案例同样重要</h2>
 <p>“系统在夜间逆光下可能漏检行人”比只展示“平均准确率 95%”更能帮助人正确使用。解释系统能力边界，能够减少用户把模型应用到训练分布之外的风险。</p>
-<h2 id="_6">可操作的告警设计</h2>
+<h2 id="_5">可操作的告警设计</h2>
 <p>“规划失败”信息量很低；“目标位于动态禁区，机器人已停止，可重新选择目标或人工接管”才是可操作解释。</p>
 <p>可解释性最终服务的是<strong>决策和干预</strong>，不是展示技术细节。</p>
-<h2 id="_7">行为可预测性</h2>
+<h2 id="_6">行为可预测性</h2>
 <p>如果同类情景下机器始终采用相似策略，人会逐渐形成正确心理模型。频繁改变规则、没有明显原因地切换模式，即使每次都能生成长文本解释，也会降低可用性。</p>
-<h2 id="_8">解释质量应通过行为验证</h2>
+<h2 id="_7">解释质量应通过行为验证</h2>
 <p>解释是否有效，不取决于文字看起来多详细，而取决于用户能否据此预测系统下一步、识别限制并选择正确行动。可以通过情景任务比较有无解释时的判断准确率，避免把更长的说明误当成更好的解释。</p>
 
 

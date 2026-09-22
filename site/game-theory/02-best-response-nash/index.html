@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#best-response-nash-equilibrium" class="md-skip">
           Skip to content
         </a>
       
@@ -1485,7 +1485,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         最佳响应
@@ -1507,7 +1507,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         纯策略均衡的矩阵检查
@@ -1518,7 +1518,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         混合策略的必要性
@@ -1529,7 +1529,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡与社会效率
@@ -1540,7 +1540,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡检查的三个层次
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         最佳响应
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         纯策略均衡的矩阵检查
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         混合策略的必要性
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡与社会效率
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         均衡检查的三个层次
@@ -3808,9 +3808,9 @@
 
 
 
-<h1 id="_1">最佳响应与纳什均衡</h1>
+<h1 id="best-response-nash-equilibrium">Best Response &amp; Nash Equilibrium</h1>
 <p>纳什均衡描述一种稳定状态：<strong>在其他人的策略保持不变时，没有任何玩家愿意单独改变自己的策略。</strong> 它不保证结果公平、高效或唯一，只保证“单边偏离没有好处”。</p>
-<h2 id="_2">最佳响应</h2>
+<h2 id="_1">最佳响应</h2>
 <p>对玩家 <span class="arithmatex">\(i\)</span>，给定其他玩家策略 <span class="arithmatex">\(a_{-i}\)</span>，最佳响应集合为</p>
 <div class="arithmatex">\[
 BR_i(a_{-i})=\arg\max_{a_i}u_i(a_i,a_{-i}).
@@ -3822,7 +3822,7 @@ BR_i(a_{-i})=\arg\max_{a_i}u_i(a_i,a_{-i}).
 u_i(a_i^*,a_{-i}^*)\ge u_i(a_i,a_{-i}^*),\qquad \forall i,a_i.
 \]</div>
 <p>这意味着任何单个玩家改策略都不能提高自己的收益。</p>
-<h2 id="_3">纯策略均衡的矩阵检查</h2>
+<h2 id="_2">纯策略均衡的矩阵检查</h2>
 <p>假设两台机器人选择任务 A/B，若两者选不同任务团队效率最高，但每台车都更喜欢离自己近的目标。可以在每个格子上分别标出行玩家和列玩家的最佳响应；两个标记同时出现的位置就是纯策略 Nash 候选。</p>
 <p>设行玩家与列玩家的收益矩阵分别为</p>
 <div class="arithmatex">\[
@@ -3830,13 +3830,13 @@ U_r=\begin{bmatrix}3&amp;5\\1&amp;2\end{bmatrix},\qquad
 U_c=\begin{bmatrix}3&amp;1\\5&amp;2\end{bmatrix}.
 \]</div>
 <p>检查时固定列动作，在该列标出行玩家收益最大的格子；再固定行动作，在该行标出列玩家收益最大的格子。两个标记重合处就是纯策略 Nash 候选。这个过程直接对应最佳响应的定义，而不是一个求解器技巧。</p>
-<h2 id="_4">混合策略的必要性</h2>
+<h2 id="_3">混合策略的必要性</h2>
 <p>石头剪刀布中，任何固定动作都有克制它的动作，因此不存在纯策略 Nash。此时策略需要随机化，即使用 mixed strategy。</p>
 <p>混合策略均衡不是“人为加点随机性”，而是为了让对手无法通过单边调整获得更高期望收益。</p>
-<h2 id="_5">均衡与社会效率</h2>
+<h2 id="_4">均衡与社会效率</h2>
 <p>囚徒困境的 Nash 均衡可能让双方收益都低于合作结果。多重均衡中，不同均衡的整体效率也可能差异很大。</p>
 <p>因此在多智能体系统中，“收敛到稳定行为”和“得到我们想要的团队行为”是两个问题。机制、通信和奖励设计就是为了改变激励结构或帮助选择更好的均衡。</p>
-<h2 id="_6">均衡检查的三个层次</h2>
+<h2 id="_5">均衡检查的三个层次</h2>
 <p>检查候选均衡时先确认每个玩家的可选策略，再固定其他玩家策略计算单边偏离收益，最后判断所有玩家是否同时没有获利偏离。若只看到策略长期稳定便称其为 Nash 均衡，可能把惯性、协调失败或学习尚未收敛误认为均衡。</p>
 
 

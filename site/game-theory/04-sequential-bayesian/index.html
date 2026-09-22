@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#sequential-bayesian-games" class="md-skip">
           Skip to content
         </a>
       
@@ -1541,7 +1541,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         顺序行动要用博弈树描述历史
@@ -1552,7 +1552,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         逆向归纳从最后一步往前推
@@ -1574,7 +1574,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         不完全信息需要引入类型和信念
@@ -1585,7 +1585,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         顺序和隐藏信息常在真实系统中同时出现
@@ -1596,7 +1596,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         可观测行动与信息集
@@ -1607,7 +1607,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         承诺为何能够改变结果
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         顺序行动要用博弈树描述历史
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         逆向归纳从最后一步往前推
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         不完全信息需要引入类型和信念
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         顺序和隐藏信息常在真实系统中同时出现
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         可观测行动与信息集
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         承诺为何能够改变结果
@@ -3830,30 +3830,30 @@
 
 
 
-<h1 id="_1">序贯博弈与贝叶斯博弈</h1>
+<h1 id="sequential-bayesian-games">Sequential &amp; Bayesian Games</h1>
 <p>现实决策经常同时包含两种复杂性：有人先行动、有人后行动；同时玩家又可能不知道对方的真实类型或成本。序贯博弈解决<strong>行动顺序</strong>，贝叶斯博弈解决<strong>隐藏信息</strong>，两者需要分开理解。</p>
 <figure>
   <img alt="博弈树把行动顺序和后续响应显式展开。" src="../../assets/diagrams/game-tree.svg" />
 <br />
 <figcaption>顺序行动使后行动者能够根据已经发生的动作做响应。</figcaption>
 </figure>
-<h2 id="_2">顺序行动要用博弈树描述历史</h2>
+<h2 id="_1">顺序行动要用博弈树描述历史</h2>
 <p>博弈树节点表示当前历史，边表示可选动作，叶节点给出最终收益。策略不再只是一个动作，而要说明玩家在自己可能遇到的每个决策节点怎样行动。</p>
-<h2 id="_3">逆向归纳从最后一步往前推</h2>
+<h2 id="_2">逆向归纳从最后一步往前推</h2>
 <p>有限完全信息博弈中，可以先看最后行动者会选择什么，再把这个结果代回前一个节点，逐步向根节点回推。</p>
 <p>这种 backward induction 的逻辑是：早期玩家做决定时，会预见后续玩家的理性响应。</p>
 <h2 id="stackelberg">Stackelberg 领导者—跟随者结构</h2>
 <p>领导者先承诺策略，跟随者观察后做最佳响应。领导者选择时必须把这个响应考虑进去。</p>
 <p>这与同时行动 Nash 的差别在于：<strong>先行动本身可以形成战略优势或劣势。</strong></p>
-<h2 id="_4">不完全信息需要引入类型和信念</h2>
+<h2 id="_3">不完全信息需要引入类型和信念</h2>
 <p>如果卖家不知道买家的真实估值，可以把估值视为类型 <span class="arithmatex">\(\theta\)</span>，并维护概率 <span class="arithmatex">\(P(\theta)\)</span>。观察到动作后，再用 Bayes 规则更新对类型的信念。</p>
 <p>因此最优策略不仅依赖当前局面，也依赖“我认为对方是什么类型”。</p>
-<h2 id="_5">顺序和隐藏信息常在真实系统中同时出现</h2>
+<h2 id="_4">顺序和隐藏信息常在真实系统中同时出现</h2>
 <p>攻防、谈判、拍卖和非合作机器人都可能存在“我先行动，同时我不知道对方能力”。入门阶段不需要学习所有精炼均衡，只需要掌握两条主线：<strong>顺序 → 预测后续响应；隐藏信息 → 维护并更新信念。</strong></p>
-<h2 id="_6">可观测行动与信息集</h2>
+<h2 id="_5">可观测行动与信息集</h2>
 <p>顺序行动并不自动意味着后手看得见前手动作。若行动历史被隐藏，就形成 imperfect information，不能直接使用普通逆向归纳。</p>
 <p>因此建模时除了写清“谁先动”，还要写清“后行动者在决策时到底知道什么”。这也是博弈树中 information set 存在的原因。</p>
-<h2 id="_7">承诺为何能够改变结果</h2>
+<h2 id="_6">承诺为何能够改变结果</h2>
 <p>领导者先行动时，公开且可信的承诺会改变跟随者的最佳响应，从而改变领导者当前动作的价值。如果承诺可以随时撤销，跟随者就不会按承诺推理。现实系统中的规则、协议和资源预留，常常承担使承诺可信的作用。</p>
 
 

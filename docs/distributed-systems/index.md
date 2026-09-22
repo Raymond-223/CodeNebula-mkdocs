@@ -1,4 +1,4 @@
-# Distributed Systems & Networking
+# Distributed Systems
 
 分布式系统部分解释多个计算节点如何通过网络交换消息、处理异步、维护状态并容忍故障，并以 ROS2/DDS 作为工程落点。
 

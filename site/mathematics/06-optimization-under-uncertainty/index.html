@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#optimization-constraints-uncertainty" class="md-skip">
           Skip to content
         </a>
       
@@ -797,7 +797,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         优化问题由变量、目标和约束组成
@@ -808,7 +808,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         负梯度与下降方向
@@ -819,7 +819,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部最优与全局最优
@@ -830,7 +830,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束与可行域
@@ -841,7 +841,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         不确定参数的表示
@@ -852,7 +852,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个有边界的最优化例子
@@ -863,7 +863,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         最优解的敏感性
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         优化问题由变量、目标和约束组成
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         负梯度与下降方向
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部最优与全局最优
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束与可行域
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         不确定参数的表示
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个有边界的最优化例子
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         最优解的敏感性
@@ -3830,20 +3830,20 @@
 
 
 
-<h1 id="_1">优化、约束与不确定性</h1>
+<h1 id="optimization-constraints-uncertainty">Optimization, Constraints &amp; Uncertainty</h1>
 <p>优化的本质是：<strong>在允许的选择中，找到让目标函数尽可能好的那一个。</strong> 控制、规划、模型训练和资源分配都可以用这个统一语言描述。</p>
 <figure>
   <img alt="优化是在目标函数和可行域之间寻找最优点。" src="../../assets/diagrams/optimization-constraints.svg" />
 <br />
 <figcaption>目标函数决定“好坏”，约束决定“哪些解允许被选择”。</figcaption>
 </figure>
-<h2 id="_2">优化问题由变量、目标和约束组成</h2>
+<h2 id="_1">优化问题由变量、目标和约束组成</h2>
 <p>一般形式为</p>
 <div class="arithmatex">\[
 \min_x f(x)\quad\text{s.t.}\quad g_i(x)\le0,\;h_j(x)=0.
 \]</div>
 <p><span class="arithmatex">\(x\)</span> 是决策变量，<span class="arithmatex">\(f\)</span> 是目标函数，<span class="arithmatex">\(g/h\)</span> 定义可行域。建模时最常见的错误不是不会求解，而是把“希望更好”和“绝不能违反”混在一个目标函数里。</p>
-<h2 id="_3">负梯度与下降方向</h2>
+<h2 id="_2">负梯度与下降方向</h2>
 <p>若 <span class="arithmatex">\(f\)</span> 可微，梯度下降更新</p>
 <div class="arithmatex">\[x_{k+1}=x_k-\alpha\nabla f(x_k).\]</div>
 <p>对一个很小的位移 <span class="arithmatex">\(\Delta x\)</span>，一阶近似给出</p>
@@ -3851,25 +3851,25 @@
 f(x+\Delta x)\approx f(x)+\nabla f(x)^\top\Delta x.
 \]</div>
 <p>在长度固定的所有微小位移中，<span class="arithmatex">\(\Delta x\)</span> 与 <span class="arithmatex">\(-\nabla f(x)\)</span> 同向时，内积下降得最多。因此负梯度是局部最陡下降方向。步长 <span class="arithmatex">\(\alpha\)</span> 太小会前进缓慢，太大则可能越过有效的局部近似区域。</p>
-<h2 id="_4">局部最优与全局最优</h2>
+<h2 id="_3">局部最优与全局最优</h2>
 <p>局部最优只要求在某个邻域内没有更好的可行点；全局最优则必须优于整个可行域中的所有点。凸问题的关键价值在于：任一局部最优同时也是全局最优。非凸问题存在多个谷底、鞍点与平坦区域，只依赖局部信息的方法通常无法证明自己找到了全局最低点。</p>
-<h2 id="_5">约束与可行域</h2>
+<h2 id="_4">约束与可行域</h2>
 <p>车辆最快路径可能需要超速，机械臂最短动作可能超过关节限位。约束优化的价值是把物理、安全和资源限制直接写进问题。</p>
 <p>对等式约束 <span class="arithmatex">\(h(x)=0\)</span>，可行移动必须沿约束面的切向方向。最优点处，目标函数沿这些切向方向都不能再下降，因此 <span class="arithmatex">\(\nabla f\)</span> 必须与约束面的法向量 <span class="arithmatex">\(\nabla h\)</span> 平行：</p>
 <div class="arithmatex">\[
 \nabla f(x^*)+\lambda\nabla h(x^*)=0.
 \]</div>
 <p>拉格朗日乘子 <span class="arithmatex">\(\lambda\)</span> 正是把“沿可行方向无法继续改善”写成方程的系数，也可解释为约束放宽一单位时最优目标值的边际变化。</p>
-<h2 id="_6">不确定参数的表示</h2>
+<h2 id="_5">不确定参数的表示</h2>
 <p>摩擦、需求、传感器误差可能只知道一个范围或分布。处理方式可以是使用期望目标、加入安全 margin，或要求在一组可能参数下都保持可接受。</p>
 <p>不必先学习完整 robust optimization 理论，关键是不要把未知参数伪装成完全精确。</p>
-<h2 id="_7">一个有边界的最优化例子</h2>
+<h2 id="_6">一个有边界的最优化例子</h2>
 <p>设控制量 <span class="arithmatex">\(u\)</span> 的执行器范围为 <span class="arithmatex">\(-1\le u\le1\)</span>，代价为</p>
 <div class="arithmatex">\[
 J(u)=(u-0.35)^2+0.1u^2.
 \]</div>
 <p>无约束驻点由 <span class="arithmatex">\(J'(u)=0\)</span> 得到；若驻点落在可行区间内，它就是这个凸问题的全局最优。若驻点越过边界，最优解只能落在最近的可行边界上。这个例子同时展示了决策变量、目标函数、可行域，以及约束如何改变最优解。</p>
-<h2 id="_8">最优解的敏感性</h2>
+<h2 id="_7">最优解的敏感性</h2>
 <p>求出最优点后还要问：参数轻微变化时，解会不会大幅移动。若答案是会，单个最优值并不足以支持可靠决策。此时可比较邻域内的目标曲面、约束余量和不同场景下的解，把“最优”扩展为“对合理扰动仍可接受”。</p>
 
 

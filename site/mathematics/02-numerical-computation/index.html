@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#numerical-computation" class="md-skip">
           Skip to content
         </a>
       
@@ -685,7 +685,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         有限精度与舍入误差
@@ -696,7 +696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续导数和积分需要离散近似
@@ -707,7 +707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         线性求解与最小二乘
@@ -718,7 +718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         迭代算法必须有停止条件
@@ -729,7 +729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         条件数与误差放大
@@ -740,7 +740,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数值稳定性
@@ -751,7 +751,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         量纲和尺度影响问题的可计算性
@@ -762,7 +762,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         误差预算比小数位数更重要
@@ -3674,7 +3674,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         有限精度与舍入误差
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续导数和积分需要离散近似
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         线性求解与最小二乘
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         迭代算法必须有停止条件
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         条件数与误差放大
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数值稳定性
@@ -3740,7 +3740,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         量纲和尺度影响问题的可计算性
@@ -3751,7 +3751,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         误差预算比小数位数更重要
@@ -3852,17 +3852,17 @@
 
 
 
-<h1 id="_1">数值计算基础</h1>
+<h1 id="numerical-computation">Numerical Computation</h1>
 <p>数学公式最终要在有限精度计算机上运行。控制、仿真、SLAM 和优化中，很多“算法问题”其实来自步长、条件数、迭代停止或浮点误差。因此数值计算是必要基础，但只需要掌握工程上最常出现的几件事。</p>
 <figure>
   <img alt="数值计算把连续问题离散化，再通过有限精度算法得到近似结果。" src="../../assets/diagrams/numerical-computation.svg" />
 <br />
 <figcaption>核心不是追求绝对精确，而是知道误差来自哪里、是否在可接受范围。</figcaption>
 </figure>
-<h2 id="_2">有限精度与舍入误差</h2>
+<h2 id="_1">有限精度与舍入误差</h2>
 <p>计算机只能用有限位数表示连续的实数，因此绝大多数实数都必须被舍入为邻近的可表示值。连续运算中的每一步都可能引入舍入误差；当大量运算串联，或问题本身对扰动敏感时，这些微小误差就可能被放大。</p>
 <p>这不是某种编程语言的缺陷，而是有限信息表示连续量的必然后果。因此数值判断通常讨论“在给定容差内是否一致”，而不是要求两个近似量绝对相等。</p>
-<h2 id="_3">连续导数和积分需要离散近似</h2>
+<h2 id="_2">连续导数和积分需要离散近似</h2>
 <p>有限差分可近似导数：</p>
 <div class="arithmatex">\[
 f'(x)\approx\frac{f(x+h)-f(x)}{h}.
@@ -3870,7 +3870,7 @@ f'(x)\approx\frac{f(x+h)-f(x)}{h}.
 <p>动态系统最简单的 Euler 积分为</p>
 <div class="arithmatex">\[x_{k+1}=x_k+\Delta t\,f(x_k,u_k).\]</div>
 <p><span class="arithmatex">\(\Delta t\)</span> 太大，离散误差明显；太小则计算量增加，而且浮点舍入也可能积累。步长选择是一种精度—计算成本权衡。</p>
-<h2 id="_4">线性求解与最小二乘</h2>
+<h2 id="_3">线性求解与最小二乘</h2>
 <p>状态估计、标定和优化里常见</p>
 <div class="arithmatex">\[Ax=b\]</div>
 <p>或观测带噪声时的</p>
@@ -3881,18 +3881,18 @@ x^*=\arg\min_x\|Ax-b\|_2^2,
 \qquad A^\top(Ax^*-b)=0.
 \]</div>
 <p>第二个关系说明最优残差与可解释方向正交，也解释了为什么最小二乘是一个投影问题。</p>
-<h2 id="_5">迭代算法必须有停止条件</h2>
+<h2 id="_4">迭代算法必须有停止条件</h2>
 <p>梯度下降、非线性优化、图优化都会重复更新参数。停止条件通常看：目标函数变化足够小、参数变化足够小、残差达到阈值，或者迭代次数达到上限。</p>
 <p>“迭代 100 次”本身不是收敛证明，只是一个计算预算。</p>
-<h2 id="_6">条件数与误差放大</h2>
+<h2 id="_5">条件数与误差放大</h2>
 <p>某些线性系统中，输入只变化一点点，解却变化很多，这类问题称为 ill-conditioned。此时即使算法实现正确，有限精度和测量噪声也会被放大。</p>
 <p>因此数值稳定性不仅是代码问题，也反映了问题本身是否容易求解。</p>
-<h2 id="_7">数值稳定性</h2>
+<h2 id="_6">数值稳定性</h2>
 <p>离散化不仅产生单步近似误差，还改变系统随时间传播误差的方式。若微小误差在每一步被放大，即使单步公式看起来准确，长时间结果仍会失真；若误差逐步衰减，计算才具有数值稳定性。</p>
 <p>因此离散方法不能只比较“单步谁更准”，还要结合步长、系统时间尺度和误差传播来判断。</p>
-<h2 id="_8">量纲和尺度影响问题的可计算性</h2>
+<h2 id="_7">量纲和尺度影响问题的可计算性</h2>
 <p>位置、角度、时间代表不同物理量；若变量尺度相差几个数量级，同样大小的数值误差可能具有完全不同的意义。无量纲化和合理尺度能让误差比较、条件数与稳定性分析更可信。</p>
-<h2 id="_9">误差预算比小数位数更重要</h2>
+<h2 id="_8">误差预算比小数位数更重要</h2>
 <p>一次计算的误差通常由建模误差、离散误差、测量误差和舍入误差共同组成。继续提高浮点精度只会改善最后一项；如果步长或模型本身占主导，增加小数位并不会让结果更可信。工程上应先估计各项误差的量级，再决定把计算资源投入哪里。</p>
 
 

@@ -1,4 +1,4 @@
-# 任务分配与分布式决策
+# Task Allocation & Distributed Decision Making
 
 当多个 Agent 都能执行多个任务时，系统必须回答：**谁去做什么，以及谁来决定这件事。** 这既是组合优化问题，也可能受到通信、私有信息和故障的限制。
 

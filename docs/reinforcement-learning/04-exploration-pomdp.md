@@ -1,4 +1,4 @@
-# 探索与部分可观测问题
+# Exploration & Partial Observability
 
 
 

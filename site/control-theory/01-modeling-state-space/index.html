@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#dynamic-models-state-space" class="md-skip">
           Skip to content
         </a>
       
@@ -910,7 +910,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         静态模型与动态状态
@@ -921,7 +921,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续时间状态方程
@@ -932,7 +932,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         高阶系统的状态空间表示
@@ -943,7 +943,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续模型的离散化
@@ -954,7 +954,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         状态选择与可观测量
@@ -965,7 +965,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型阶数与可辨识性
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         静态模型与动态状态
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续时间状态方程
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         高阶系统的状态空间表示
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续模型的离散化
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         状态选择与可观测量
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型阶数与可辨识性
@@ -3808,21 +3808,21 @@
 
 
 
-<h1 id="_1">动态系统建模与状态空间</h1>
+<h1 id="dynamic-models-state-space">Dynamic Models &amp; State Space</h1>
 <p>控制问题的第一步不是选 PID、LQR 或 MPC，而是回答：<strong>系统现在处于什么状态，输入会怎样改变它，下一时刻会发生什么。</strong> 动态模型就是把这三个问题写成数学关系。</p>
 <figure>
   <img alt="状态、输入和输出构成动态系统的基本关系。" src="../../assets/diagrams/control-map.svg" />
 <br />
 <figcaption>控制理论从“状态如何随输入演化”开始，再讨论反馈和控制器。</figcaption>
 </figure>
-<h2 id="_2">静态模型与动态状态</h2>
+<h2 id="_1">静态模型与动态状态</h2>
 <p>代数关系 <span class="arithmatex">\(y=f(u)\)</span> 只说明当前输入和当前输出的对应关系，但真实机器人、电机和车辆都有惯性：同样的油门，在不同速度下产生的后果不同；同样的位置误差，在不同速度方向下也需要不同控制。</p>
 <p>因此控制系统必须引入<strong>状态（state）</strong>。状态是一组足以预测未来演化的变量，例如小车的位置和速度</p>
 <div class="arithmatex">\[
 x=\begin{bmatrix}p\\v\end{bmatrix}.
 \]</div>
 <p>给定当前 <span class="arithmatex">\(x(t)\)</span> 和控制输入 <span class="arithmatex">\(u(t)\)</span>，模型就能描述下一瞬间状态如何改变。</p>
-<h2 id="_3">连续时间状态方程</h2>
+<h2 id="_2">连续时间状态方程</h2>
 <p>一般形式为</p>
 <div class="arithmatex">\[
 \dot x=f(x,u),\qquad y=h(x,u),
@@ -3832,7 +3832,7 @@ x=\begin{bmatrix}p\\v\end{bmatrix}.
 \dot x=Ax+Bu,\qquad y=Cx+Du.
 \]</div>
 <p>矩阵 <span class="arithmatex">\(A\)</span> 描述“系统自身怎样演化”，<span class="arithmatex">\(B\)</span> 描述“输入怎样作用于状态”。这两个矩阵比某个具体控制器更基础，因为后面的稳定性、LQR 和 MPC 都直接依赖它们。</p>
-<h2 id="_4">高阶系统的状态空间表示</h2>
+<h2 id="_3">高阶系统的状态空间表示</h2>
 <p>考虑质量—弹簧—阻尼系统</p>
 <div class="arithmatex">\[
 m\ddot p+c\dot p+kp=u.
@@ -3856,7 +3856,7 @@ m\ddot p+c\dot p+kp=u.
 \end{bmatrix}u.
 \]</div>
 <p>这一步很重要：无论原方程是二阶还是更高阶，都可以通过增加状态变量统一成一阶向量形式。</p>
-<h2 id="_5">连续模型的离散化</h2>
+<h2 id="_4">连续模型的离散化</h2>
 <p>控制器运行在计算机上，只能每隔 <span class="arithmatex">\(\Delta t\)</span> 更新一次。连续模型因此要变成</p>
 <div class="arithmatex">\[
 x_{k+1}=A_dx_k+B_du_k.
@@ -3871,7 +3871,7 @@ A_d=e^{A\Delta t},\qquad
 B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
 \]</div>
 <p>欧拉法则用 <span class="arithmatex">\(A_d\approx I+A\Delta t\)</span>、<span class="arithmatex">\(B_d\approx B\Delta t\)</span> 近似它。这个关系解释了离散模型为何依赖采样周期，以及过大的 <span class="arithmatex">\(\Delta t\)</span> 为什么会改变模型的稳定性。</p>
-<h2 id="_6">状态选择与可观测量</h2>
+<h2 id="_5">状态选择与可观测量</h2>
 <p>状态需要足够预测未来，但不要求全部直接测到。车辆的速度可以由编码器估计，姿态可以由 IMU 与视觉融合得到。反过来，把大量与未来无关的量都塞进状态，只会增加估计和控制复杂度。</p>
 <p>实际建模时可以按三步检查：</p>
 <ol>
@@ -3880,7 +3880,7 @@ B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
 <li><strong>模型是否够用</strong>：当前控制频率和任务精度是否真的需要更复杂的动力学？</li>
 </ol>
 <p>模型的目标不是最大程度还原物理世界，而是以足够低的复杂度支持预测和控制。</p>
-<h2 id="_7">模型阶数与可辨识性</h2>
+<h2 id="_6">模型阶数与可辨识性</h2>
 <p>增加状态可以提高表达能力，但也会增加需要估计的未知量。若传感器无法区分两个内部变量，再复杂的模型也难以从数据中可靠辨识。建模时应同时考虑动力学需要和观测能力，使状态既足够预测未来，又能够被测量或估计。</p>
 
 

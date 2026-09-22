@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#consistency-distributed-state" class="md-skip">
           Skip to content
         </a>
       
@@ -2545,7 +2545,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         旧读与写冲突
@@ -2556,7 +2556,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         强一致和最终一致描述的是可见语义
@@ -2567,7 +2567,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         版本号可以把静默覆盖变成显式冲突
@@ -2578,7 +2578,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         最简单的冲突处理方式往往是避免多人同时写
@@ -2600,7 +2600,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         一致性需求应按数据分类
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         旧读与写冲突
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         强一致和最终一致描述的是可见语义
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         版本号可以把静默覆盖变成显式冲突
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         最简单的冲突处理方式往往是避免多人同时写
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         一致性需求应按数据分类
@@ -3808,20 +3808,20 @@
 
 
 
-<h1 id="_1">一致性与分布式状态</h1>
+<h1 id="consistency-distributed-state">Consistency &amp; Distributed State</h1>
 <p>只要同一份逻辑状态存在多个副本，就会出现一个问题：<strong>什么时候这些副本可以被认为“足够一致”？</strong> 不同数据对一致性的要求不同，不能用一个协议解决所有状态。</p>
 <figure>
   <img alt="副本越多，状态同步就越需要明确顺序、延迟与冲突解决规则。" src="../../assets/diagrams/consistency-flow.svg" />
 <br />
 <figcaption>一致性问题来自传播延迟和并发写入，而不仅仅是“数据有没有同步”。</figcaption>
 </figure>
-<h2 id="_2">旧读与写冲突</h2>
+<h2 id="_1">旧读与写冲突</h2>
 <p>副本传播需要时间，因此节点 B 暂时没看到 A 的最新写入，这是<strong>stale read</strong>。如果 A 和 B 同时修改同一对象，之后必须决定哪次写入有效或怎样合并，这才是<strong>write conflict</strong>。</p>
 <p>两者都表现为“状态不同”，但处理机制并不相同。</p>
-<h2 id="_3">强一致和最终一致描述的是可见语义</h2>
+<h2 id="_2">强一致和最终一致描述的是可见语义</h2>
 <p>强一致类模型希望读操作看到满足明确全局顺序的状态；最终一致允许副本短暂不同，只要停止新写入后最终能够收敛。</p>
 <p>机器人急停状态、任务唯一归属通常不能容忍随意冲突；遥测历史、统计指标往往可以晚一点同步。<strong>一致性应该按数据语义选择。</strong></p>
-<h2 id="_4">版本号可以把静默覆盖变成显式冲突</h2>
+<h2 id="_3">版本号可以把静默覆盖变成显式冲突</h2>
 <p>若两个节点都读取 version=7，之后分别写回，接口可以要求“只有当前版本仍为 7 才允许更新”。第一个成功后版本变为 8，第二个就能发现自己基于旧数据操作。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_if_version</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">new_owner</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span>
@@ -3831,13 +3831,13 @@
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div>
 <p>这类 compare-and-swap 思想并没有消灭并发，而是让并发冲突变得可检测。</p>
-<h2 id="_5">最简单的冲突处理方式往往是避免多人同时写</h2>
+<h2 id="_4">最简单的冲突处理方式往往是避免多人同时写</h2>
 <p>若业务允许，可以规定某类状态只有一个权威 writer，其他节点只订阅。这比设计复杂合并规则更容易验证。</p>
 <p>只有在确实需要多点写入时，才需要版本、锁、事务、共识或可合并数据结构等更复杂机制。</p>
 <h2 id="cap">CAP 讨论的是网络分区期间的取舍</h2>
 <p>当网络已经分区，系统无法同时保证所有请求都立即得到成功响应，并且所有节点仍保持强一致语义。它不是“任何分布式系统永远只能在 C/A/P 里选两个”的简单口号。</p>
 <p>工程上更有用的问题是：<strong>分区发生时，这类数据宁愿拒绝部分请求，还是允许短暂不一致？</strong></p>
-<h2 id="_6">一致性需求应按数据分类</h2>
+<h2 id="_5">一致性需求应按数据分类</h2>
 <p>任务归属通常要求较强的一致性，遥测展示却可以容忍短暂旧值。把所有数据都放进同一种一致性模型会付出不必要的延迟或复杂度。设计时应逐类说明允许多旧、是否允许冲突，以及冲突造成的后果。</p>
 
 

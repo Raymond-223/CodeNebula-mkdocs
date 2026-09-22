@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#q-learning-dqn" class="md-skip">
+        <a href="#value-based-methods" class="md-skip">
           Skip to content
         </a>
       
@@ -3886,7 +3886,7 @@
 
 
 
-<h1 id="q-learning-dqn">价值学习：Q-Learning 与 DQN</h1>
+<h1 id="value-based-methods">Value-Based Methods</h1>
 <p>价值学习不直接输出“应该做什么”，而是先学习<strong>每个动作的长期价值</strong>，再从价值中选动作。Q-Learning 是最典型的表格方法，DQN 则把同一思想扩展到高维状态。</p>
 <h2 id="td">TD 学习与自举目标</h2>
 <p>如果直接用完整回报 <span class="arithmatex">\(G_t\)</span> 更新 <span class="arithmatex">\(V(s_t)\)</span>，必须等未来真正发生。TD 的做法是只走一步，就用当前估计构造目标：</p>

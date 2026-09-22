@@ -1,4 +1,4 @@
-# 策略梯度、Actor–Critic 与 PPO
+# Policy Gradient & Actor–Critic
 
 价值方法先估计“动作有多好”，再选最大值；策略方法则直接学习一个参数化策略 $\pi_\theta(a\mid s)$。这使它天然适合随机策略和连续动作，但也带来更高的梯度方差。
 

@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#safe-robust-offline-rl" class="md-skip">
           Skip to content
         </a>
       
@@ -1344,7 +1344,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         在线试错的风险边界
@@ -1366,7 +1366,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         鲁棒性与扰动
@@ -1377,7 +1377,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全约束与风险
@@ -1388,7 +1388,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         三类问题不要混在一起
@@ -1410,7 +1410,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         鲁棒、安全和离线分别解决不同问题
@@ -1421,7 +1421,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数据覆盖决定离线结论
@@ -3674,7 +3674,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         在线试错的风险边界
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         鲁棒性与扰动
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全约束与风险
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         三类问题不要混在一起
@@ -3740,7 +3740,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         鲁棒、安全和离线分别解决不同问题
@@ -3751,7 +3751,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数据覆盖决定离线结论
@@ -3852,9 +3852,9 @@
 
 
 
-<h1 id="_1">安全、鲁棒与离线强化学习</h1>
+<h1 id="safe-robust-offline-rl">Safe, Robust &amp; Offline RL</h1>
 <p>当在线自由试错不可接受时，需要从数据来源、约束和分布偏移三个方向重新定义学习问题。</p>
-<h2 id="_2">在线试错的风险边界</h2>
+<h2 id="_1">在线试错的风险边界</h2>
 <ul>
 <li><strong>Safe RL</strong>：决策过程必须满足成本或安全约束。</li>
 <li><strong>Robust RL</strong>：面对模型、观测或动力学扰动仍保持性能。</li>
@@ -3867,26 +3867,26 @@
 <div class="arithmatex">\[
 \max_\pi J_R(\pi)\quad \text{s.t.}\quad J_C(\pi)\le d.
 \]</div>
-<h2 id="_3">鲁棒性与扰动</h2>
+<h2 id="_2">鲁棒性与扰动</h2>
 <ul>
 <li>Constrained objective：把性能目标与成本/安全约束分开建模。</li>
 <li>Conservative offline learning：避免对数据外动作过度乐观。</li>
 </ul>
-<h2 id="_4">安全约束与风险</h2>
+<h2 id="_3">安全约束与风险</h2>
 <p>自动驾驶日志很多，但不能为了探索让车辆在线随机尝试危险动作，因此“离线数据 + 安全约束 + 上线前鲁棒验证”往往同时出现。</p>
-<h2 id="_5">三类问题不要混在一起</h2>
+<h2 id="_4">三类问题不要混在一起</h2>
 <p>Offline RL 主要解决“不能继续在线采样，只能利用已有数据”；Robust RL 主要解决“环境参数或观测会变化”；Safe RL 主要解决“即使探索，也不能违反安全约束”。三者经常同时出现，但技术目标并不相同。</p>
 <p>例如真实机器人只有历史日志可用，这是 offline；电机摩擦系数会变化，这是 robustness；机械臂不能进入人的安全区域，这是 safety。先分清问题来源，才能决定是改数据、改目标函数、加约束，还是增加运行时保护层。</p>
 <h2 id="offline-rl_1">Offline RL 的分布外风险</h2>
 <p>离线数据只覆盖行为策略访问过的区域。若新策略选择数据集中几乎没有出现的动作，价值网络就可能在没有证据的地方给出过高估计，这类 distribution shift 是 Offline RL 的核心困难。因此离线算法往往会限制策略不要偏离数据分布太远，或对分布外动作保持保守估计。</p>
-<h2 id="_6">鲁棒、安全和离线分别解决不同问题</h2>
+<h2 id="_5">鲁棒、安全和离线分别解决不同问题</h2>
 <ul>
 <li><strong>Offline</strong>：不能继续在线采样，只能利用固定数据。</li>
 <li><strong>Robust</strong>：环境参数、观测或扰动会变化，希望性能不要快速崩溃。</li>
 <li><strong>Safe</strong>：存在不可接受的状态或风险，要求策略满足约束。</li>
 </ul>
 <p>三者可以同时出现，但不应混成一个概念。例如“用旧日志训练机器人”首先是离线问题，“地面摩擦变化”首先是鲁棒问题，“绝不能进入禁区”首先是安全约束问题。</p>
-<h2 id="_7">数据覆盖决定离线结论</h2>
+<h2 id="_6">数据覆盖决定离线结论</h2>
 <p>离线数据只记录行为策略访问过的区域。新策略若频繁选择数据中罕见的动作，价值估计会依赖外推而变得不可靠。评估离线策略时，应报告其动作与状态分布相对数据集的偏离程度，而不能只报告估计回报。</p>
 
 

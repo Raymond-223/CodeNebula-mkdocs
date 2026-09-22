@@ -1,4 +1,4 @@
-# 多智能体学习与 CTDE
+# Multi-Agent Learning & CTDE
 
 多智能体强化学习（MARL）不是简单让每个 Agent 各跑一个 PPO。关键矛盾是：**训练时希望利用更多全局信息，部署时每个 Agent 又必须独立行动。** CTDE（Centralized Training, Decentralized Execution）就是最常见的解决框架。
 

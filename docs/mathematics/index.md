@@ -1,4 +1,4 @@
-# Mathematics for Intelligent Systems
+# Mathematics
 
 这里只保留后续强化学习、控制、机器人和优化反复使用的数学工具。目标不是完成一门数学专业课程，而是能够读懂公式、理解推导并进行基本计算。
 

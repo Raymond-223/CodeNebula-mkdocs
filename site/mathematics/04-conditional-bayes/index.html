@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#conditional-probability-bayes" class="md-skip">
           Skip to content
         </a>
       
@@ -741,7 +741,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         条件概率把背景信息写进概率
@@ -763,7 +763,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         先验信息的数学表达
@@ -774,7 +774,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         最大似然和最大后验回答不同问题
@@ -785,7 +785,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个离散更新例子
@@ -796,7 +796,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         证据强度与基准概率
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         条件概率把背景信息写进概率
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         先验信息的数学表达
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         最大似然和最大后验回答不同问题
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个离散更新例子
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         证据强度与基准概率
@@ -3808,14 +3808,14 @@
 
 
 
-<h1 id="_1">条件概率与贝叶斯推断</h1>
+<h1 id="conditional-probability-bayes">Conditional Probability &amp; Bayes</h1>
 <p>条件概率回答的是：<strong>已经知道一些信息后，原来的判断应该怎样改变。</strong> 这正是传感器融合、目标跟踪和机器人定位不断在做的事情。</p>
 <figure>
   <img alt="Bayes 更新把先验与新观测结合成后验。" src="../../assets/diagrams/bayes-update.svg" />
 <br />
 <figcaption>先验表示观测前的信念，似然描述观测与假设的匹配程度，后验是更新后的信念。</figcaption>
 </figure>
-<h2 id="_2">条件概率把背景信息写进概率</h2>
+<h2 id="_1">条件概率把背景信息写进概率</h2>
 <div class="arithmatex">\[
 P(A\mid B)=\frac{P(A\cap B)}{P(B)}.
 \]</div>
@@ -3827,16 +3827,16 @@ P(x\mid z)=\frac{P(z\mid x)P(x)}{P(z)}.
 <p>其中 <span class="arithmatex">\(P(x)\)</span> 是 prior，<span class="arithmatex">\(P(z\mid x)\)</span> 是 likelihood，<span class="arithmatex">\(P(x\mid z)\)</span> 是 posterior。</p>
 <p>对推断而言，常写成比例形式</p>
 <div class="arithmatex">\[p(x\mid z)\propto p(z\mid x)p(x).\]</div>
-<h2 id="_3">先验信息的数学表达</h2>
+<h2 id="_2">先验信息的数学表达</h2>
 <p>机器人上一时刻的位置估计、地图约束、目标运动模型都可以形成 prior。新传感器观测只是新增证据，不应每次把过去信息全部丢掉。</p>
 <p>Bayes 递推正是“旧后验成为新先验”的循环。</p>
-<h2 id="_4">最大似然和最大后验回答不同问题</h2>
+<h2 id="_3">最大似然和最大后验回答不同问题</h2>
 <p>Maximum Likelihood 只寻找让观测最可能的参数；Maximum A Posteriori 还考虑 prior。数据很充分时二者可能接近，数据少或噪声大时先验影响更明显。</p>
 <p>这解释了为什么“最像当前观测的状态”不一定是“综合所有信息后最可信的状态”。</p>
-<h2 id="_5">一个离散更新例子</h2>
+<h2 id="_4">一个离散更新例子</h2>
 <p>假设机器人在 A/B 两个位置的先验概率分别为 0.7/0.3，传感器看到门。若在 A 看到门的概率为 0.2，在 B 为 0.9，则 Bayes 更新后 B 的概率会显著增加。</p>
 <p>不需要复杂算法，核心只是<strong>先验 × 观测可信度，再归一化</strong>。</p>
-<h2 id="_6">证据强度与基准概率</h2>
+<h2 id="_5">证据强度与基准概率</h2>
 <p>低基准概率事件即使检测器很灵敏，阳性结果也未必意味着事件真的发生。Bayes 更新要求同时考虑似然与先验，这解释了医学筛查、故障检测和异常识别中常见的基准率问题。判断证据强弱时，应比较它让先验赔率改变了多少。</p>
 
 

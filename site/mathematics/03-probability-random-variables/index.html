@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#probability-random-variables" class="md-skip">
           Skip to content
         </a>
       
@@ -713,7 +713,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         概率描述事件发生有多可能
@@ -724,7 +724,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         随机变量把随机结果映射成数值
@@ -735,7 +735,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         期望描述平均水平，方差描述离散程度
@@ -757,7 +757,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         独立性与不相关性
@@ -768,7 +768,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         样本统计量与总体估计
@@ -779,7 +779,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         从分布到决策
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         概率描述事件发生有多可能
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         随机变量把随机结果映射成数值
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         期望描述平均水平，方差描述离散程度
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         独立性与不相关性
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         样本统计量与总体估计
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         从分布到决策
@@ -3830,15 +3830,15 @@
 
 
 
-<h1 id="_1">概率与随机变量</h1>
+<h1 id="probability-random-variables">Probability &amp; Random Variables</h1>
 <p>智能系统中的很多不确定性不能用一个确定值描述：传感器有噪声、策略会随机采样、环境转移也可能不确定。概率论提供的是一套<strong>描述不确定结果及其平均行为</strong>的语言。</p>
-<h2 id="_2">概率描述事件发生有多可能</h2>
+<h2 id="_1">概率描述事件发生有多可能</h2>
 <p>事件 <span class="arithmatex">\(A\)</span> 的概率满足 <span class="arithmatex">\(0\le P(A)\le1\)</span>。多个互斥结果的概率之和等于整体概率。</p>
 <p>机器人中常见的例子是“当前位置落在某区域的概率”“检测框属于行人的概率”“动作后进入某状态的概率”。</p>
-<h2 id="_3">随机变量把随机结果映射成数值</h2>
+<h2 id="_2">随机变量把随机结果映射成数值</h2>
 <p>随机变量 <span class="arithmatex">\(X\)</span> 可以是离散的，例如目标类别；也可以是连续的，例如测距误差。</p>
 <p>分布告诉我们不同取值出现的概率。入门阶段最常见的是 Bernoulli/Categorical 和 Gaussian，不需要把大量分布名称都背下来。</p>
-<h2 id="_4">期望描述平均水平，方差描述离散程度</h2>
+<h2 id="_3">期望描述平均水平，方差描述离散程度</h2>
 <p>离散随机变量的期望为</p>
 <div class="arithmatex">\[
 \mathbb E[X]=\sum_x xP(X=x).
@@ -3852,17 +3852,17 @@
 <h2 id="gaussian">Gaussian 模型与状态估计</h2>
 <p>许多小而独立的扰动叠加后近似 Gaussian，而且 Gaussian 只需要均值和协方差就能描述。Kalman Filter 正是利用这一结构获得简洁递推。</p>
 <p>协方差矩阵不仅表示每个变量的不确定性，还表示变量之间如何共同变化。</p>
-<h2 id="_5">独立性与不相关性</h2>
+<h2 id="_4">独立性与不相关性</h2>
 <p>独立意味着联合分布可以分解；协方差为零只说明线性相关性消失。一般情况下“不相关”并不自动推出“独立”。</p>
 <p>这类区别在推导概率模型时很重要，不能仅凭协方差矩阵对角就假设所有随机变量完全独立。</p>
-<h2 id="_6">样本统计量与总体估计</h2>
+<h2 id="_5">样本统计量与总体估计</h2>
 <p>对独立同分布样本 <span class="arithmatex">\(X_1,\ldots,X_n\)</span>，样本均值为</p>
 <div class="arithmatex">\[
 \bar X_n=\frac{1}{n}\sum_{i=1}^{n}X_i.
 \]</div>
 <p>大数定律说明，在适当条件下，样本数量增加时 <span class="arithmatex">\(\bar X_n\)</span> 会趋近期望 <span class="arithmatex">\(\mathbb E[X]\)</span>。但有限样本仍有随机波动，其标准误差通常按 <span class="arithmatex">\(1/\sqrt n\)</span> 的量级缩小。</p>
 <p>因此“样本越多越可靠”并不是经验口号，而来自估计量方差随样本量下降；同时它也提醒我们，少量数据得出的均值本身仍需要置信区间来表达不确定性。</p>
-<h2 id="_7">从分布到决策</h2>
+<h2 id="_6">从分布到决策</h2>
 <p>概率模型的终点不是得到一个均值，而是支持决策。两个方案即使期望收益相同，也可能因为方差、尾部风险或相关结构不同而适合不同任务。机器人安全问题尤其要关注低概率但高损失的事件，不能只比较平均表现。</p>
 
 

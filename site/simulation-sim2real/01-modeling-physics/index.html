@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#modeling-physics-simulation" class="md-skip">
           Skip to content
         </a>
       
@@ -2937,7 +2937,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型边界与任务需求
@@ -2948,7 +2948,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         仿真时间步进
@@ -2959,7 +2959,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         接触和摩擦往往比自由运动更难模拟
@@ -2970,7 +2970,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型参数必须有物理尺度
@@ -2981,7 +2981,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         仿真精度要和任务指标对应
@@ -3003,7 +3003,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数值稳定与物理可信是两件事
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型边界与任务需求
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         仿真时间步进
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         接触和摩擦往往比自由运动更难模拟
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型参数必须有物理尺度
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         仿真精度要和任务指标对应
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         数值稳定与物理可信是两件事
@@ -3830,12 +3830,12 @@
 
 
 
-<h1 id="_1">建模与物理仿真</h1>
+<h1 id="modeling-physics-simulation">Modeling &amp; Physics Simulation</h1>
 <p>物理仿真不是把现实世界“完整复制”进计算机，而是构造一个足够准确、可以快速计算的近似模型。真正需要问的是：<strong>哪些物理因素会影响当前任务，哪些可以忽略。</strong></p>
-<h2 id="_2">模型边界与任务需求</h2>
+<h2 id="_1">模型边界与任务需求</h2>
 <p>低速移动机器人导航时，可能只需要刚体运动、轮地摩擦和碰撞；研究机械臂抓取时，接触、摩擦和关节动力学就更重要；研究视觉感知时，纹理和光照又会成为主要因素。</p>
 <p>因此模型复杂度应由研究问题决定，而不是“参数越多越真实”。</p>
-<h2 id="_3">仿真时间步进</h2>
+<h2 id="_2">仿真时间步进</h2>
 <p>连续系统满足</p>
 <div class="arithmatex">\[\dot x=f(x,u).\]</div>
 <p>计算机只能用有限步长 <span class="arithmatex">\(\Delta t\)</span> 推进。最简单的显式欧拉法为</p>
@@ -3846,13 +3846,13 @@
     <span class="k">return</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span>
 </code></pre></div>
 <p>步长越小通常越接近连续系统，但计算量也越大。步长过大可能引入明显数值误差甚至不稳定。</p>
-<h2 id="_4">接触和摩擦往往比自由运动更难模拟</h2>
+<h2 id="_3">接触和摩擦往往比自由运动更难模拟</h2>
 <p>物体悬空运动只需要积分动力学；一旦轮子接触地面、机械手抓住物体，就需要处理法向力、摩擦、碰撞恢复和约束。</p>
 <p>不同引擎采用的接触模型和求解器不同，因此“同一组参数”在不同模拟器中不一定产生完全相同结果。不要把仿真器输出当作绝对物理真值。</p>
-<h2 id="_5">模型参数必须有物理尺度</h2>
+<h2 id="_4">模型参数必须有物理尺度</h2>
 <p>质量、惯量、摩擦、执行器最大力矩和控制周期不应随意填写。即使无法精确测量，也应该根据真实硬件尺寸、数据手册或简单实验给出合理范围。</p>
 <p>一个模型如果几何外观很漂亮，但质量和摩擦完全不合理，对控制和 Sim2Real 的价值仍然很低。</p>
-<h2 id="_6">仿真精度要和任务指标对应</h2>
+<h2 id="_5">仿真精度要和任务指标对应</h2>
 <p>如果任务只比较规划算法的路径长度，不一定需要精细轮胎模型；如果要评估高速控制器，动力学和延迟就必须更准确。</p>
 <p>评估仿真是否“够用”时，最好比较任务相关量：转弯半径、制动距离、里程计漂移、传感器量程，而不是只看动画是否逼真。</p>
 <h2 id="mujocogazebo">MuJoCo/Gazebo 控制循环</h2>
@@ -3864,7 +3864,7 @@
     <span class="n">simulation</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </code></pre></div>
 <p>MuJoCo 通常直接操作模型与数据对象，Gazebo 常通过插件或 ROS2 接口交换状态和命令。将模拟器差异封装在 <code>simulation</code> 适配层，可让控制与评测逻辑保持一致。</p>
-<h2 id="_7">数值稳定与物理可信是两件事</h2>
+<h2 id="_6">数值稳定与物理可信是两件事</h2>
 <p>仿真不爆炸只说明积分过程数值上可运行，并不代表接触、摩擦或惯量符合现实。验证时应把能量变化、静态平衡和任务指标分别检查。数值稳定性负责让结果可计算，物理校准负责让结果可解释。</p>
 
 

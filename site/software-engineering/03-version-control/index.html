@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#git" class="md-skip">
+        <a href="#git-workflow" class="md-skip">
           Skip to content
         </a>
       
@@ -2792,7 +2792,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_1" class="md-nav__link">
+  <a href="#git" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 冲突处理
@@ -2814,7 +2814,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_2" class="md-nav__link">
+  <a href="#git_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 最重要的安全能力是可追溯、可回退
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_1" class="md-nav__link">
+  <a href="#git" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 冲突处理
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_2" class="md-nav__link">
+  <a href="#git_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 最重要的安全能力是可追溯、可回退
@@ -3808,7 +3808,7 @@
 
 
 
-<h1 id="git">Git 与版本协作</h1>
+<h1 id="git-workflow">Git Workflow</h1>
 <p>Git 最重要的不是命令数量，而是理解三个动作：<strong>保存一个可回退的版本、在独立分支上修改、把变化安全合并回来</strong>。</p>
 <h2 id="commit">Commit 是一次有意义的状态快照</h2>
 <p>工作区文件不断变化，<code>git add</code> 选择本次要记录的变化，<code>git commit</code> 把它们保存为一个可追踪版本。</p>
@@ -3826,7 +3826,7 @@ git<span class="w"> </span>switch<span class="w"> </span>main
 git<span class="w"> </span>merge<span class="w"> </span>feature/task-api
 </code></pre></div>
 <p>分支并不是完整复制一份项目，而是让不同提交历史可以暂时分开发展。它最有价值的场景是：主分支继续保持可用，同时新功能、实验或修复可以独立进行。</p>
-<h2 id="git_1">Git 冲突处理</h2>
+<h2 id="git">Git 冲突处理</h2>
 <p>两个人修改同一段代码时，Git 可能无法自动判断应该保留哪一边。此时需要人工理解上下文，然后重新测试。</p>
 <p>处理冲突的顺序应该是：</p>
 <ol>
@@ -3843,7 +3843,7 @@ git<span class="w"> </span>merge<span class="w"> </span>feature/task-api
 </code></pre></div>
 <p>代码审查主要看四件事：逻辑是否正确、接口是否清楚、测试是否覆盖关键行为、是否引入不必要复杂度。</p>
 <p>一个 PR 如果大到审查者无法建立完整心智模型，通常说明它应该继续拆小。</p>
-<h2 id="git_2">Git 最重要的安全能力是可追溯、可回退</h2>
+<h2 id="git_1">Git 最重要的安全能力是可追溯、可回退</h2>
 <p>遇到问题时，先用 <code>git diff</code>、<code>git log</code> 看变化，再决定恢复方式。不要养成“出错就手动复制旧文件覆盖”的习惯，否则历史会失去可信度。</p>
 <p>对于学习和科研项目，掌握 <code>status / add / commit / switch / merge / pull / push / diff / log</code> 已经足够覆盖大多数场景。更复杂的 rebase、cherry-pick 等操作可以在真正需要时再学。</p>
 <h2 id="_1">提交历史应支持定位问题</h2>

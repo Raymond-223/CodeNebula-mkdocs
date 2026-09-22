@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#detection-segmentation" class="md-skip">
           Skip to content
         </a>
       
@@ -2253,7 +2253,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         视觉任务与输出类型
@@ -2264,7 +2264,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测器的共同任务是分类 + 定位
@@ -2275,7 +2275,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         分割把空间边界表达得更细
@@ -2297,7 +2297,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         置信度阈值直接改变漏检和误检的权衡
@@ -2308,7 +2308,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测、分割和跟踪是连续系统中的不同角色
@@ -2319,7 +2319,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         推理接口应隔离模型细节
@@ -2330,7 +2330,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         指标必须对应部署决策
@@ -3674,7 +3674,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         视觉任务与输出类型
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测器的共同任务是分类 + 定位
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         分割把空间边界表达得更细
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         置信度阈值直接改变漏检和误检的权衡
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测、分割和跟踪是连续系统中的不同角色
@@ -3740,7 +3740,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         推理接口应隔离模型细节
@@ -3751,7 +3751,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         指标必须对应部署决策
@@ -3852,9 +3852,9 @@
 
 
 
-<h1 id="_1">目标检测与图像分割</h1>
+<h1 id="detection-segmentation">Detection &amp; Segmentation</h1>
 <p>检测和分割都属于语义感知，但输出粒度不同。选择方法前应先问：<strong>后续模块到底需要知道“有没有”“在哪里”，还是需要精确到每个像素的区域？</strong></p>
-<h2 id="_2">视觉任务与输出类型</h2>
+<h2 id="_1">视觉任务与输出类型</h2>
 <ul>
 <li><strong>Classification</strong>：整张图属于什么类别；</li>
 <li><strong>Detection</strong>：图中有哪些目标，以及每个目标的边界框；</li>
@@ -3862,10 +3862,10 @@
 <li><strong>Instance segmentation</strong>：除了像素类别，还区分同类的不同个体。</li>
 </ul>
 <p>它们不是简单的“高级程度”排序，而是回答不同问题。</p>
-<h2 id="_3">检测器的共同任务是分类 + 定位</h2>
+<h2 id="_2">检测器的共同任务是分类 + 定位</h2>
 <p>现代检测器结构差异很大，但输出都要解决两个部分：候选区域属于什么类别，以及位置参数是什么。训练损失通常也同时包含分类误差和框回归误差。</p>
 <p>机器人如果只需要粗略障碍位置，边界框可能已经足够；若机械臂要沿物体轮廓抓取，实例掩码才更合适。</p>
-<h2 id="_4">分割把空间边界表达得更细</h2>
+<h2 id="_3">分割把空间边界表达得更细</h2>
 <p>语义分割会给每个像素一个类别，例如可行驶区域、墙面、天空；实例分割进一步把“两个相邻的人”分成不同实例。</p>
 <p>这种精细输出需要更昂贵的像素级标注和计算，因此不要为了“模型更先进”而使用超过下游需求的表示。</p>
 <h2 id="iou">IoU 与空间重合</h2>
@@ -3874,12 +3874,12 @@
 \operatorname{IoU}(B_p,B_g)=\frac{|B_p\cap B_g|}{|B_p\cup B_g|}.
 \]</div>
 <p>IoU 越大，预测和真实区域越接近。检测评测还会结合 precision、recall 和不同 IoU 阈值，但入门阶段先理解：<strong>检测正确不仅是“类别认对”，还要“位置足够准”。</strong></p>
-<h2 id="_5">置信度阈值直接改变漏检和误检的权衡</h2>
+<h2 id="_4">置信度阈值直接改变漏检和误检的权衡</h2>
 <p>阈值太高，会丢掉低置信度但真实的目标；阈值太低，又会产生大量误报。因此“模型分数”必须结合任务风险选择阈值。自动驾驶对行人漏检的代价，和普通图片搜索的漏检代价完全不同。</p>
-<h2 id="_6">检测、分割和跟踪是连续系统中的不同角色</h2>
+<h2 id="_5">检测、分割和跟踪是连续系统中的不同角色</h2>
 <p>检测只处理当前帧“有什么”；跟踪还要判断下一帧哪个目标是同一个实体，并维持速度和身份。检测器本身并不天然解决身份连续性。</p>
 <p>工程设计应先明确后续规划器需要框、掩码还是持续 ID，再决定感知输出，不要把所有能力堆在一个模型里。</p>
-<h2 id="_7">推理接口应隔离模型细节</h2>
+<h2 id="_6">推理接口应隔离模型细节</h2>
 <p>下游模块最好只依赖稳定的输入输出契约，而不是依赖某个训练框架：</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Detector</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
@@ -3888,7 +3888,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </code></pre></div>
 <p>这样可以单独替换推理后端，同时让阈值、坐标恢复和输出字段保持可测试。</p>
-<h2 id="_8">指标必须对应部署决策</h2>
+<h2 id="_7">指标必须对应部署决策</h2>
 <p>mAP 适合综合比较检测器，却不直接等于系统安全性。若下游只关心近距离行人，应单独报告该距离范围的召回率与延迟。把评测切分到任务关键区域，通常比追求单个总分更能指导模型选择。</p>
 
 

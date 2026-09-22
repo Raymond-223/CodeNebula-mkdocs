@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#requirements-architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -2714,7 +2714,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把功能与质量分开
@@ -2725,7 +2725,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         架构是对系统边界和依赖关系的安排
@@ -2736,7 +2736,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         什么时候需要拆模块，什么时候不要
@@ -2747,7 +2747,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         用一个机器人任务系统走一遍
@@ -2758,7 +2758,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         架构图最终要回答什么
@@ -2769,7 +2769,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         用可验证条件约束架构
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把功能与质量分开
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         架构是对系统边界和依赖关系的安排
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         什么时候需要拆模块，什么时候不要
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         用一个机器人任务系统走一遍
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         架构图最终要回答什么
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         用可验证条件约束架构
@@ -3808,10 +3808,10 @@
 
 
 
-<h1 id="_1">需求与软件架构</h1>
+<h1 id="requirements-architecture">Requirements &amp; Architecture</h1>
 <p>软件工程的第一步不是选框架，而是先回答两个问题：<strong>系统必须完成什么，以及哪些质量不能牺牲</strong>。架构的作用，就是把这些要求变成可以实现、测试和长期维护的结构。</p>
 <p><img alt="从需求到架构" src="../../assets/diagrams/software-architecture.svg" /></p>
-<h2 id="_2">先把功能与质量分开</h2>
+<h2 id="_1">先把功能与质量分开</h2>
 <p>功能需求描述系统<strong>做什么</strong>，例如“用户可以提交任务”“机器人可以上报状态”。非功能需求描述系统<strong>做到什么程度</strong>，例如延迟、吞吐、可靠性、安全性和可维护性。</p>
 <p>同一个功能可以对应完全不同的架构。例如一个只给实验室内部使用的任务面板，和一个要支持上万设备同时连接的平台，都能完成“提交任务”，但它们对并发、容错和部署的要求完全不同。</p>
 <p>写需求时至少要明确三类信息：</p>
@@ -3821,7 +3821,7 @@
 <li><strong>可验收条件</strong>：什么现象出现时，才能说需求已经完成。</li>
 </ul>
 <p>模糊的“系统要稳定、要快”无法指导设计。更好的写法是“核心接口 95% 请求在 200 ms 内返回”“单个工作节点故障后任务不会丢失”。</p>
-<h2 id="_3">架构是对系统边界和依赖关系的安排</h2>
+<h2 id="_2">架构是对系统边界和依赖关系的安排</h2>
 <p>一个够用的心智模型是把系统拆成三层：</p>
 <div class="highlight"><pre><span></span><code>Interface / API
       ↓
@@ -3845,7 +3845,7 @@ Domain + Infrastructure
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
 </code></pre></div>
 <p>这里 <code>TaskService</code> 只知道“需要一个 repo”，并不关心数据最终写入 SQLite、PostgreSQL 还是内存。这个边界就是模块化的价值。</p>
-<h2 id="_4">什么时候需要拆模块，什么时候不要</h2>
+<h2 id="_3">什么时候需要拆模块，什么时候不要</h2>
 <p>模块应该围绕<strong>稳定的职责</strong>划分，而不是按文件类型机械拆分。</p>
 <p>一个模块值得独立出来，通常满足至少一个条件：</p>
 <ol>
@@ -3856,7 +3856,7 @@ Domain + Infrastructure
 </ol>
 <p>反过来，如果两个模块永远一起修改、彼此大量读取内部状态，那么“拆开”只是在增加接口数量。</p>
 <p>初学者最容易犯的错误是过早微服务化。<strong>单体并不等于混乱</strong>。对于课程项目和大多数科研原型，一个边界清楚的模块化单体通常比一开始拆成十几个服务更容易开发和调试。只有当独立部署、独立扩缩容或团队边界真的成为需求时，服务拆分才有明确收益。</p>
-<h2 id="_5">用一个机器人任务系统走一遍</h2>
+<h2 id="_4">用一个机器人任务系统走一遍</h2>
 <p>假设系统要支持：用户提交目标点，规划模块生成路径，机器人执行并持续上报状态。</p>
 <p>可以先划分四个职责：</p>
 <div class="highlight"><pre><span></span><code>Task API ──→ Task Service ──→ Planner
@@ -3865,7 +3865,7 @@ Domain + Infrastructure
 </code></pre></div>
 <p><code>Task API</code> 不直接控制机器人；<code>Planner</code> 不负责保存用户信息；<code>Robot Adapter</code> 只处理 ROS2/设备通信。这样当规划算法从 A* 换成 MPC，或者机器人通信方式发生变化时，其他部分不需要跟着重写。</p>
 <p>这就是架构设计最实用的判断标准：<strong>变化能不能被限制在合理范围内</strong>。</p>
-<h2 id="_6">架构图最终要回答什么</h2>
+<h2 id="_5">架构图最终要回答什么</h2>
 <p>一张有用的架构图至少应该让读者看懂：</p>
 <ul>
 <li>系统有哪些主要组件；</li>
@@ -3875,7 +3875,7 @@ Domain + Infrastructure
 <li>故障发生时影响会传播到哪里。</li>
 </ul>
 <p>如果架构图只有很多方框，却看不出数据流和依赖方向，它的价值就很有限。对于学习和小型工程，<strong>先把边界、接口和故障传播讲清楚，比掌握几十种架构模式更重要</strong>。</p>
-<h2 id="_7">用可验证条件约束架构</h2>
+<h2 id="_6">用可验证条件约束架构</h2>
 <p>“系统要稳定”不能直接指导设计；“定位失效后 200 ms 内停止速度输出”才是可验证条件。把需求写成触发条件、可观察行为和时间边界，架构才能据此划分监控、控制与故障处理责任。</p>
 
 

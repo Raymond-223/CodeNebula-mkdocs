@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#safe-learning-runtime-safety" class="md-skip">
           Skip to content
         </a>
       
@@ -3311,7 +3311,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时监控关注的是当前还能不能信任主策略
@@ -3322,7 +3322,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全过滤器可以修改不安全动作
@@ -3344,7 +3344,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         回退策略必须比主策略更简单、更可信
@@ -3355,7 +3355,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时安全最终需要明确状态机
@@ -3366,7 +3366,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全状态机要避免频繁来回切换
@@ -3377,7 +3377,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         回退控制器也需要覆盖证明
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时监控关注的是当前还能不能信任主策略
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全过滤器可以修改不安全动作
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         回退策略必须比主策略更简单、更可信
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时安全最终需要明确状态机
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全状态机要避免频繁来回切换
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         回退控制器也需要覆盖证明
@@ -3830,17 +3830,17 @@
 
 
 
-<h1 id="_1">安全学习与运行时安全</h1>
+<h1 id="safe-learning-runtime-safety">Safe Learning &amp; Runtime Safety</h1>
 <p>训练阶段加入安全目标，并不能保证部署后模型永远不会遇到新场景。运行时安全的核心思想是：<strong>学习策略之外再保留一层独立监控和回退机制。</strong></p>
 <figure>
   <img alt="运行时安全层持续检查学习策略输出，并在越界时触发过滤或回退。" src="../../assets/diagrams/runtime-safety.svg" />
 <br />
 <figcaption>主策略追求任务性能，独立安全层负责监控、限制和紧急回退。</figcaption>
 </figure>
-<h2 id="_2">运行时监控关注的是当前还能不能信任主策略</h2>
+<h2 id="_1">运行时监控关注的是当前还能不能信任主策略</h2>
 <p>监控信号可以包括定位协方差、传感器更新时间、控制循环频率、动作是否越界以及模型置信度。</p>
 <p>系统不需要先知道主策略为什么出错，只要检测到关键安全前提已经失效，就应该降低自动化程度。</p>
-<h2 id="_3">安全过滤器可以修改不安全动作</h2>
+<h2 id="_2">安全过滤器可以修改不安全动作</h2>
 <p>策略输出 <span class="arithmatex">\(u_{nom}\)</span> 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。</p>
 <p>这种结构让学习算法不必独自承担“永远不犯错”的责任。</p>
 <h2 id="watchdog">watchdog 处理的是系统是否还活着</h2>
@@ -3848,15 +3848,15 @@
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">watchdog</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">last_update</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;STOP&quot;</span> <span class="k">if</span> <span class="n">now</span> <span class="o">-</span> <span class="n">last_update</span> <span class="o">&gt;</span> <span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;OK&quot;</span>
 </code></pre></div>
-<h2 id="_4">回退策略必须比主策略更简单、更可信</h2>
+<h2 id="_3">回退策略必须比主策略更简单、更可信</h2>
 <p>安全回退不追求完成最优任务，而是把系统带回可控状态。停车、悬停、保持姿态、低速返航或请求人工接管都是常见选择。</p>
 <p>如果备用策略和主策略依赖相同模型、相同传感器和相同复杂软件链，就可能在同一故障下同时失效。</p>
-<h2 id="_5">运行时安全最终需要明确状态机</h2>
+<h2 id="_4">运行时安全最终需要明确状态机</h2>
 <p>正常运行、警告、降级、紧急停止、人工接管和恢复自动控制之间应有清晰切换条件。这样才能避免故障时多个模块同时“抢着处理”或者没有任何模块负责。</p>
-<h2 id="_6">安全状态机要避免频繁来回切换</h2>
+<h2 id="_5">安全状态机要避免频繁来回切换</h2>
 <p>若定位质量在阈值附近波动，系统可能在 NORMAL 和 DEGRADED 之间不断切换。常见做法是加入 hysteresis：进入降级状态使用更严格阈值，恢复正常则要求更长时间稳定满足条件。</p>
 <p>安全机制不仅要能触发，还要保证触发后的行为稳定、可预测。</p>
-<h2 id="_7">回退控制器也需要覆盖证明</h2>
+<h2 id="_6">回退控制器也需要覆盖证明</h2>
 <p>回退策略更简单并不自动意味着它在所有状态都安全。系统必须明确主策略被接管时的状态范围，以及回退控制器能否从这些状态恢复到安全区域。若两者覆盖范围不连续，切换瞬间本身就可能成为风险。</p>
 
 

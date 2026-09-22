@@ -1,4 +1,4 @@
-# 模型预测控制
+# Model Predictive Control
 
 MPC（Model Predictive Control）的核心是：**先用模型预测未来若干步，找一段满足约束且代价最小的控制序列，只执行第一步，然后重新测量并再次优化。**
 

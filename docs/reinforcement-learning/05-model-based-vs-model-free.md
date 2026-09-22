@@ -1,4 +1,4 @@
-# Model-Based 与 Model-Free 强化学习
+# Model-Based vs Model-Free RL
 
 
 

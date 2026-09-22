@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#fault-tolerance" class="md-skip">
           Skip to content
         </a>
       
@@ -2573,7 +2573,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         超时只能说明我没有按时收到结果
@@ -2584,7 +2584,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         重试必须和幂等一起设计
@@ -2595,7 +2595,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余的价值在于减少单点失效
@@ -2606,7 +2606,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复策略应明确系统进入什么状态
@@ -2617,7 +2617,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障隔离比全局重启更重要
@@ -2628,7 +2628,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续失败时不要无限高频重试
@@ -2639,7 +2639,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复目标需要量化
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         超时只能说明我没有按时收到结果
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         重试必须和幂等一起设计
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余的价值在于减少单点失效
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复策略应明确系统进入什么状态
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障隔离比全局重启更重要
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         连续失败时不要无限高频重试
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复目标需要量化
@@ -3830,24 +3830,24 @@
 
 
 
-<h1 id="_1">故障与容错</h1>
+<h1 id="fault-tolerance">Fault Tolerance</h1>
 <p>分布式系统中的节点会重启、进程会崩、网络会断、消息会超时。容错的目标不是让故障永远不发生，而是让<strong>局部故障不会立刻变成整个系统失效</strong>。</p>
-<h2 id="_2">超时只能说明我没有按时收到结果</h2>
+<h2 id="_1">超时只能说明我没有按时收到结果</h2>
 <p>请求超时可能因为服务真的宕机，也可能只是网络拥塞、GC 暂停或响应包丢失。观察者通常无法立即区分。</p>
 <p>因此超时是一种 failure suspicion，而不是绝对证明。设得太短会误判，设得太长又拖慢恢复。</p>
-<h2 id="_3">重试必须和幂等一起设计</h2>
+<h2 id="_2">重试必须和幂等一起设计</h2>
 <p>最危险的情况是：服务端已经执行成功，但响应丢了。客户端超时后重试，如果操作会重复产生副作用，就可能出现重复扣款、重复建任务或机器人动作被执行两次。</p>
 <p>请求 ID、幂等键和去重表都是为了让“同一个逻辑请求被传输多次”仍只产生一次效果。</p>
-<h2 id="_4">冗余的价值在于减少单点失效</h2>
+<h2 id="_3">冗余的价值在于减少单点失效</h2>
 <p>备用节点、双传感器、多个网络链路都属于冗余。但如果它们共享同一电源、同一交换机或同一软件 bug，故障仍可能同时发生。</p>
 <p>有效冗余要考虑<strong>共同失效模式</strong>，而不仅是组件数量。</p>
-<h2 id="_5">恢复策略应明确系统进入什么状态</h2>
+<h2 id="_4">恢复策略应明确系统进入什么状态</h2>
 <p>故障后可以重启服务、切换备用节点、重新选举、降级运行或进入安全模式。关键是恢复过程中不要产生新的不一致。</p>
 <p>例如机器人失去云端连接后，可以继续本地避障并停止接受新任务；这比不断阻塞重连更安全。</p>
-<h2 id="_6">故障隔离比全局重启更重要</h2>
+<h2 id="_5">故障隔离比全局重启更重要</h2>
 <p>模块化系统应该尽量让一个组件失败只影响它负责的能力。感知服务失败时，日志和急停仍应可用；一个机器人掉线不应阻塞整个车队的状态更新。</p>
 <p>容错架构的目标就是把故障边界控制在可接受范围。</p>
-<h2 id="_7">连续失败时不要无限高频重试</h2>
+<h2 id="_6">连续失败时不要无限高频重试</h2>
 <p>远端服务已经故障时，几十个客户端立即高频重试会制造更大负载，形成 retry storm。常见做法是指数退避、随机抖动和最大重试次数，让系统给故障组件恢复时间。</p>
 <p>这类机制不是为了“保证最终一定成功”，而是为了让恢复过程不会因为重试本身再次压垮系统。</p>
 <div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
@@ -3858,7 +3858,7 @@
 <span class="n">enter_degraded_mode</span><span class="p">()</span>
 </code></pre></div>
 <p>有限重试之后进入明确的降级状态，通常比无限等待更容易让系统保持可预测。</p>
-<h2 id="_8">恢复目标需要量化</h2>
+<h2 id="_7">恢复目标需要量化</h2>
 <p>容错设计应明确允许丢失多少数据、服务最多中断多久，以及恢复后是否需要补偿动作。RPO 和 RTO 分别描述可接受的数据损失窗口与恢复时间目标。没有量化目标，就无法判断冗余、备份和重试是否足够。</p>
 
 

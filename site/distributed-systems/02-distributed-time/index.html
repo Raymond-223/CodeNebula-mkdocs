@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#time-asynchrony" class="md-skip">
           Skip to content
         </a>
       
@@ -2517,7 +2517,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         消息延迟使现在在不同节点上不一样
@@ -2528,7 +2528,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         墙上时钟不能直接证明因果顺序
@@ -2539,7 +2539,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         并发事件与偏序关系
@@ -2550,7 +2550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         超时应该使用单调时钟
@@ -2561,7 +2561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         时间戳的价值来自语义清楚
@@ -2572,7 +2572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         异步系统设计要避免依赖固定延迟假设
@@ -2583,7 +2583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         序列号可以解决新旧消息谁应该覆盖谁
@@ -2594,7 +2594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         事件时间与处理时间
@@ -3674,7 +3674,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         消息延迟使现在在不同节点上不一样
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         墙上时钟不能直接证明因果顺序
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         并发事件与偏序关系
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         超时应该使用单调时钟
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         时间戳的价值来自语义清楚
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         异步系统设计要避免依赖固定延迟假设
@@ -3740,7 +3740,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         序列号可以解决新旧消息谁应该覆盖谁
@@ -3751,7 +3751,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         事件时间与处理时间
@@ -3852,30 +3852,30 @@
 
 
 
-<h1 id="_1">分布式系统中的时间与异步</h1>
+<h1 id="time-asynchrony">Time &amp; Asynchrony</h1>
 <p>单机程序很容易说“先发生 A，再发生 B”。多个节点以后，这句话变得复杂：网络延迟不固定、各机器时钟不完全一致，甚至两个事件之间根本不存在一个所有节点都同意的绝对顺序。</p>
-<h2 id="_2">消息延迟使现在在不同节点上不一样</h2>
+<h2 id="_1">消息延迟使现在在不同节点上不一样</h2>
 <p>节点 A 已经更新任务状态，不代表节点 B 立刻知道。B 在消息到达前继续使用旧状态并不是程序逻辑错误，而是分布式系统的正常现象。</p>
 <p>因此系统不能假设“我写完以后，所有人同时看到新值”。</p>
-<h2 id="_3">墙上时钟不能直接证明因果顺序</h2>
+<h2 id="_2">墙上时钟不能直接证明因果顺序</h2>
 <p>机器时钟可能有偏差，也可能被 NTP 调整。A 的日志写着 10:00:00.100，B 的日志写着 10:00:00.080，不足以证明 B 的事件更早发生。</p>
 <p>Lamport clock 解决的是另一个问题：如果事件 <span class="arithmatex">\(A\)</span> 确实因果先于 <span class="arithmatex">\(B\)</span>，则逻辑时间满足</p>
 <div class="arithmatex">\[L(A)&lt;L(B).\]</div>
 <p>它不告诉我们真实相差多少毫秒，只提供一致的因果排序线索。</p>
-<h2 id="_4">并发事件与偏序关系</h2>
+<h2 id="_3">并发事件与偏序关系</h2>
 <p>两个节点在互不知情时同时修改不同对象，这两个事件可以视为 concurrent。分布式系统不应强行给所有事件构造“真实唯一顺序”，而应只在业务需要时建立排序规则。</p>
 <p>这也是一致性协议、版本向量和共识算法存在的原因之一。</p>
-<h2 id="_5">超时应该使用单调时钟</h2>
+<h2 id="_4">超时应该使用单调时钟</h2>
 <p>计算“请求已经等待多久”时，应使用 monotonic clock，而不是可能跳变的 wall clock。墙上时间适合记录日志和展示；单调时钟适合测量持续时间和 deadline。</p>
 <p>工程中把这两个概念混用，会出现“系统时间被校准后超时突然失效”的隐蔽问题。</p>
-<h2 id="_6">时间戳的价值来自语义清楚</h2>
+<h2 id="_5">时间戳的价值来自语义清楚</h2>
 <p>传感器时间戳通常表示采样时刻，消息接收时间则表示数据什么时候到达，它们不是同一个值。机器人多传感器融合时应尽量依据采样时间，而不是简单使用“收到消息的当前时间”。</p>
-<h2 id="_7">异步系统设计要避免依赖固定延迟假设</h2>
+<h2 id="_6">异步系统设计要避免依赖固定延迟假设</h2>
 <p>“消息一定 50 ms 内到”如果不是系统真实保证，就不能成为正确性的前提。可以用超时做故障怀疑，但应准备消息更晚到达、重复到达甚至永远不到的处理逻辑。</p>
-<h2 id="_8">序列号可以解决新旧消息谁应该覆盖谁</h2>
+<h2 id="_7">序列号可以解决新旧消息谁应该覆盖谁</h2>
 <p>对同一来源的连续状态，可以给消息附递增 sequence number。即使网络乱序，接收端也能丢弃比当前版本更旧的包。序列号不能解决跨节点的全局因果问题，但对机器人状态流、控制指令和日志重放非常实用。</p>
 <p>时间戳回答“什么时候采样”，序列号回答“这是第几次更新”，二者经常需要同时存在。</p>
-<h2 id="_9">事件时间与处理时间</h2>
+<h2 id="_8">事件时间与处理时间</h2>
 <p>传感器记录的事件发生时间和系统收到消息的处理时间是两个不同概念。网络抖动会改变处理顺序，却不一定改变事件顺序。融合和回放系统应保留两类时间，并明确窗口与过期策略依据哪一种。</p>
 
 

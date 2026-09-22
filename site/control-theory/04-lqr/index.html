@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lqr" class="md-skip">
+        <a href="#optimal-control-lqr" class="md-skip">
           Skip to content
         </a>
       
@@ -994,7 +994,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#lqr_1" class="md-nav__link">
+  <a href="#lqr" class="md-nav__link">
     <span class="md-ellipsis">
       
         LQR 代价函数
@@ -1027,7 +1027,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lqr_2" class="md-nav__link">
+  <a href="#lqr_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         LQR 依赖一个可以信任的线性模型
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#lqr_1" class="md-nav__link">
+  <a href="#lqr" class="md-nav__link">
     <span class="md-ellipsis">
       
         LQR 代价函数
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lqr_2" class="md-nav__link">
+  <a href="#lqr_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         LQR 依赖一个可以信任的线性模型
@@ -3808,9 +3808,9 @@
 
 
 
-<h1 id="lqr">最优控制与 LQR</h1>
+<h1 id="optimal-control-lqr">Optimal Control &amp; LQR</h1>
 <p>PID 主要从误差形状出发调节输入，LQR 则先问一个更系统的问题：<strong>怎样在“状态偏差小”和“控制动作不要太激烈”之间找到最优折中？</strong></p>
-<h2 id="lqr_1">LQR 代价函数</h2>
+<h2 id="lqr">LQR 代价函数</h2>
 <p>考虑离散线性系统</p>
 <div class="arithmatex">\[x_{k+1}=Ax_k+Bu_k.\]</div>
 <p>LQR 使用二次代价</p>
@@ -3826,7 +3826,7 @@ J=\sum_{k=0}^{\infty}\left(x_k^\top Qx_k+u_k^\top Ru_k\right).
 <h2 id="q-r"><span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 决定控制器怕什么</h2>
 <p>若 <span class="arithmatex">\(Q\)</span> 中位置误差权重大，控制器会更积极把位置拉回目标；若 <span class="arithmatex">\(R\)</span> 很大，控制器会更节制使用执行器，动作更平滑但响应也可能更慢。</p>
 <p>因此调 LQR 时不应直接手工调 <span class="arithmatex">\(K\)</span>，而应先问：哪些状态最重要？执行器动作成本有多大？不同变量量纲是否需要归一化？</p>
-<h2 id="lqr_2">LQR 依赖一个可以信任的线性模型</h2>
+<h2 id="lqr_1">LQR 依赖一个可以信任的线性模型</h2>
 <p>LQR 最自然的使用场景是系统本身近似线性，或围绕某个工作点做了局部线性化。例如无人机悬停附近、小车小角度姿态控制、机械系统平衡点附近。</p>
 <p>若状态远离线性化工作点，模型可能不再准确；若存在严格速度、转角或碰撞约束，LQR 本身也无法直接表达这些不等式条件。</p>
 <figure>

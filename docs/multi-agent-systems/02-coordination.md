@@ -1,4 +1,4 @@
-# 合作、竞争与协调
+# Cooperation, Competition & Coordination
 
 
 

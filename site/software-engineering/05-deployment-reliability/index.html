@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#docker-ci-reliability" class="md-skip">
           Skip to content
         </a>
       
@@ -2837,7 +2837,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         容器边界不能替代系统边界
@@ -2859,7 +2859,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         存活、就绪与健康状态
@@ -2870,7 +2870,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障处理首先要设计安全退化
@@ -2881,7 +2881,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         可回滚是部署能力的一部分
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         容器边界不能替代系统边界
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         存活、就绪与健康状态
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障处理首先要设计安全退化
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         可回滚是部署能力的一部分
@@ -3808,7 +3808,7 @@
 
 
 
-<h1 id="_1">容器、部署与运行可靠性</h1>
+<h1 id="docker-ci-reliability">Docker, CI &amp; Reliability</h1>
 <p>代码在开发机上跑通，只说明“程序可以运行”；部署要解决的是：<strong>换一台机器后还能不能按同样方式启动，出错后能不能快速发现和恢复</strong>。</p>
 <p><img alt="容器边界" src="../../assets/diagrams/container-boundary.svg" /></p>
 <h2 id="docker">Docker 解决的是运行环境一致性</h2>
@@ -3822,7 +3822,7 @@
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;main.py&quot;</span><span class="p">]</span>
 </code></pre></div>
 <p>镜像是静态模板，容器是镜像启动后的运行实例。真正需要长期保存的数据不要只写在容器内部，而应使用挂载目录、数据库或对象存储。</p>
-<h2 id="_2">容器边界不能替代系统边界</h2>
+<h2 id="_1">容器边界不能替代系统边界</h2>
 <p>“把两个程序放进不同容器”并不会自动让架构变好。容器之间仍然需要清楚的端口、协议、数据格式和故障处理。</p>
 <p>对于 ROS/机器人项目，容器化特别适合隔离复杂依赖，但还要额外考虑：设备映射、GPU、网络模式、DDS/ROS_DOMAIN_ID、时钟和宿主机权限。</p>
 <h2 id="ci">CI 把重复检查自动化</h2>
@@ -3837,7 +3837,7 @@
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -r requirements.txt</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest -q</span>
 </code></pre></div>
-<h2 id="_3">存活、就绪与健康状态</h2>
+<h2 id="_2">存活、就绪与健康状态</h2>
 <p>部署后至少需要知道三类信息：</p>
 <ul>
 <li><strong>日志</strong>：具体发生了什么；</li>
@@ -3845,7 +3845,7 @@
 <li><strong>健康状态</strong>：服务是否还能完成关键功能。</li>
 </ul>
 <p>一个进程即使没有崩溃，也可能已经无法连接数据库或无法收到传感器数据。因此健康检查最好验证关键依赖，而不是只检查 PID 是否存在。</p>
-<h2 id="_4">故障处理首先要设计安全退化</h2>
+<h2 id="_3">故障处理首先要设计安全退化</h2>
 <p>可靠性不意味着永不失败，而是失败时行为可控。例如：</p>
 <ul>
 <li>网络断开时停止接受新任务；</li>
@@ -3854,7 +3854,7 @@
 <li>重启前保存必要状态，避免任务重复执行。</li>
 </ul>
 <p>工程上最重要的不是背监控平台名字，而是形成运行意识：<strong>部署后系统仍然需要被观察、被诊断、被恢复</strong>。</p>
-<h2 id="_5">可回滚是部署能力的一部分</h2>
+<h2 id="_4">可回滚是部署能力的一部分</h2>
 <p>新版本通过测试仍可能在真实负载下失败。部署流程应保存上一可用版本、配置与数据迁移边界，并定义触发回滚的指标。没有回滚路径的自动部署，只是把发布速度提高，并没有提高可靠性。</p>
 
 

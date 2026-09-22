@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#agent" class="md-skip">
+        <a href="#agents-system-architectures" class="md-skip">
           Skip to content
         </a>
       
@@ -1693,7 +1693,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent_1" class="md-nav__link">
+  <a href="#agent" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部观测让每个 Agent 看到的世界不同
@@ -1826,7 +1826,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent_2" class="md-nav__link">
+  <a href="#agent_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         系统边界决定谁算 Agent
@@ -3752,7 +3752,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent_1" class="md-nav__link">
+  <a href="#agent" class="md-nav__link">
     <span class="md-ellipsis">
       
         局部观测让每个 Agent 看到的世界不同
@@ -3885,7 +3885,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent_2" class="md-nav__link">
+  <a href="#agent_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         系统边界决定谁算 Agent
@@ -3986,7 +3986,7 @@
 
 
 
-<h1 id="agent">Agent 与多智能体系统</h1>
+<h1 id="agents-system-architectures">Agents &amp; System Architectures</h1>
 <p>单个 Agent 只需要考虑“环境怎样响应我的动作”；多个 Agent 同时决策后，<strong>别人的动作也会改变我的结果</strong>。多智能体系统真正增加的不是“多几个程序”，而是耦合、局部信息和协调问题。</p>
 <h2 id="mdp-markov-game">MDP 与 Markov Game</h2>
 <p>单智能体 MDP 的转移写成</p>
@@ -4007,7 +4007,7 @@ r_i=\mathcal R_i(s,\mathbf a,s').
 \]</div>
 <p>于是同一个状态下，主体 <span class="arithmatex">\(i\)</span> 的动作好不好，不只取决于 <span class="arithmatex">\(a_i\)</span>，还取决于其他主体的 <span class="arithmatex">\(\mathbf a_{-i}\)</span>。</p>
 <p>这就是多智能体问题的第一层本质：<strong>决策相互耦合。</strong></p>
-<h2 id="agent_1">局部观测让每个 Agent 看到的世界不同</h2>
+<h2 id="agent">局部观测让每个 Agent 看到的世界不同</h2>
 <p>现实系统里，一个 Agent 往往只能获得局部观测 <span class="arithmatex">\(o_i\)</span>，而不是完整状态 <span class="arithmatex">\(s\)</span>。例如仓库机器人知道自己位置和附近障碍物，却不一定知道所有机器人当前任务。</p>
 <p>因此要区分：</p>
 <ul>
@@ -4078,7 +4078,7 @@ Coordination         多车动作怎样避免冲突
 Navigation/control   每台车怎样真正到达目标
 </code></pre></div>
 <p>把这三个层次分开，比直接说“做一个多智能体算法”更容易设计系统，也更容易定位失败发生在哪一层。</p>
-<h2 id="agent_2">系统边界决定谁算 Agent</h2>
+<h2 id="agent_1">系统边界决定谁算 Agent</h2>
 <p>并非每个软件模块都应被视为独立 Agent。只有当组件拥有自己的观测、动作和决策目标时，把它建模为 Agent 才有分析价值。若多个模块始终由同一控制器统一决策，强行拆成多智能体问题反而会引入不必要的通信和协调复杂度。</p>
 
 

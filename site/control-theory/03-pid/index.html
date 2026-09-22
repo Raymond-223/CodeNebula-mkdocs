@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pid" class="md-skip">
+        <a href="#pid-principles" class="md-skip">
           Skip to content
         </a>
       
@@ -999,7 +999,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_1" class="md-nav__link">
+  <a href="#pid" class="md-nav__link">
     <span class="md-ellipsis">
       
         离散 PID 的内部状态
@@ -1021,7 +1021,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_2" class="md-nav__link">
+  <a href="#pid_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         PID 调参与现象诊断
@@ -1032,7 +1032,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_3" class="md-nav__link">
+  <a href="#pid_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         采样与滤波会改变 PID 行为
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_1" class="md-nav__link">
+  <a href="#pid" class="md-nav__link">
     <span class="md-ellipsis">
       
         离散 PID 的内部状态
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_2" class="md-nav__link">
+  <a href="#pid_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         PID 调参与现象诊断
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid_3" class="md-nav__link">
+  <a href="#pid_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         采样与滤波会改变 PID 行为
@@ -3830,7 +3830,7 @@
 
 
 
-<h1 id="pid">PID 控制</h1>
+<h1 id="pid-principles">PID Principles</h1>
 <p>PID 是最常见的反馈控制器之一，因为它不要求精确动力学模型，却能分别利用<strong>当前误差、累计误差和误差变化趋势</strong>来形成控制量。</p>
 <h2 id="_1">比例、积分与微分作用</h2>
 <p>连续时间 PID 写成</p>
@@ -3849,7 +3849,7 @@ u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
 <p>积分项会累积这个长期小误差，持续增加控制直到偏差被消除。这就是 I 项最核心的意义。</p>
 <h2 id="_3">微分作用与阻尼</h2>
 <p>如果误差正在快速减小，系统很可能已经以较大速度冲向目标。D 项根据变化率产生反向作用，相当于增加阻尼。因此它能减少超调，但同时会放大高频测量噪声，实际实现常对微分项加低通滤波。</p>
-<h2 id="pid_1">离散 PID 的内部状态</h2>
+<h2 id="pid">离散 PID 的内部状态</h2>
 <p>采样周期为 <span class="arithmatex">\(\Delta t\)</span> 时，可写成</p>
 <div class="arithmatex">\[
 I_k=I_{k-1}+e_k\Delta t,\qquad
@@ -3862,10 +3862,10 @@ u_k=K_pe_k+K_iI_k+K_dD_k.
 <h2 id="anti-windup">积分饱和与 Anti-windup</h2>
 <p>执行器存在上限。若误差很大而输出已经饱和，积分项仍持续累积，等系统终于接近目标时，巨大的积分量会让控制继续“用力”，产生明显超调。这就是 integral windup。</p>
 <p>常见处理方式是在输出饱和时暂停积分，或使用 anti-windup 反馈修正积分器。这个细节往往比继续增加 <span class="arithmatex">\(K_d\)</span> 更有效。</p>
-<h2 id="pid_2">PID 调参与现象诊断</h2>
+<h2 id="pid_1">PID 调参与现象诊断</h2>
 <p>一个实用顺序是先用 P 获得基本响应，再少量加入 I 消除长期偏差，最后根据过冲和噪声决定是否需要 D。若系统严重延迟、模型本身不适合 PID，继续调三个增益通常不会解决根本问题。</p>
 <p>PID 适合单回路、目标明确、约束较少的控制任务；当需要显式预测未来或同时处理很多约束时，LQR 和 MPC 更自然。</p>
-<h2 id="pid_3">采样与滤波会改变 PID 行为</h2>
+<h2 id="pid_2">采样与滤波会改变 PID 行为</h2>
 <p>离散控制器中的微分项对高频噪声敏感，积分项又会累积偏置。采样周期改变时，同一组离散增益未必保持相同行为。实际部署需要把采样周期、微分滤波和 anti-windup 与增益一起记录，才能复现实验结果。</p>
 
 
