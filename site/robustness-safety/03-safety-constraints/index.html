@@ -3277,6 +3277,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#约束的形式化与可行域" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束的形式化与可行域
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#运行时安全层可以独立检查策略输出" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3299,6 +3310,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#安全余量与延迟的定量关系" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全余量与延迟的定量关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#安全约束必须贯穿规划控制和执行" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3314,6 +3336,39 @@
     <span class="md-ellipsis">
       
         约束可执行性依赖状态估计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#运行时安全层的实现路线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行时安全层的实现路线
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#约束设计中的典型失败模式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束设计中的典型失败模式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#约束的验证清单" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束的验证清单
       
     </span>
   </a>
@@ -3674,6 +3729,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#约束的形式化与可行域" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束的形式化与可行域
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#运行时安全层可以独立检查策略输出" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3696,6 +3762,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#安全余量与延迟的定量关系" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全余量与延迟的定量关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#安全约束必须贯穿规划控制和执行" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3711,6 +3788,39 @@
     <span class="md-ellipsis">
       
         约束可执行性依赖状态估计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#运行时安全层的实现路线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行时安全层的实现路线
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#约束设计中的典型失败模式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束设计中的典型失败模式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#约束的验证清单" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        约束的验证清单
       
     </span>
   </a>
@@ -3810,29 +3920,860 @@
 
 <h1 id="safety-constraints">Safety Constraints</h1>
 <p>性能目标可以权衡，但安全底线通常不能只靠“给一个很大的负奖励”表达。安全约束的作用是明确：<strong>哪些状态、动作或风险水平原则上不允许越过。</strong></p>
+<p>约束和奖励的区别在于语义。奖励是<strong>偏好排序</strong>，可以用权重交换；约束是<strong>可行域边界</strong>，原则上不参与交换。把安全写进奖励意味着“只要收益足够大，轻微越界也许可以接受”，而这通常正是事故发生的方式。</p>
+<p>本章按四步展开：先区分硬约束与软约束的分工，再把约束写进优化问题，然后处理“模型与状态估计都有误差”时约束必须收缩成什么形式，最后给出运行时安全层在实时预算内的实现路线、失败模式与验证清单。</p>
 <h2 id="硬约束和软约束表达不同优先级">硬约束和软约束表达不同优先级</h2>
-<p>硬约束例如最大速度、禁入区域、最低障碍距离；软约束例如偏离中心线、能耗偏高，可以和其他性能指标权衡。</p>
+<p>把安全性实现成<strong>一个巨大的负奖励</strong>是常见但脆弱的做法。设单步越界惩罚为 <span class="arithmatex">\(\rho\)</span>、越界换来的收益增量为 <span class="arithmatex">\(\Delta R\)</span>，则策略是否越界取决于 <span class="arithmatex">\(\Delta R\)</span> 与 <span class="arithmatex">\(\rho\)</span> 的比较。只要 <span class="arithmatex">\(\rho\)</span> 有限，就存在收益足够大的场景让越界变成“划算”；若把 <span class="arithmatex">\(\rho\)</span> 提到压过一切，策略又会为了绝对不越界而放弃任务，学习信号几乎全是惩罚项。</p>
+<p>硬约束例如最大速度、禁入区域、最低障碍距离；软约束例如偏离中心线、能耗偏高，可以和其他性能指标权衡。数学上的区别在可行域：硬约束要求解落在集合 <span class="arithmatex">\(\mathcal{C}=\{x \mid g_i(x,u)\le 0,\ i=1,\dots,m\}\)</span> 内，软约束允许违反，但违反量 <span class="arithmatex">\(s_i\ge 0\)</span> 必须进目标函数被计价。</p>
 <p>把二者都塞进同一个奖励函数，会让“到底多大惩罚才算绝对不能违反”变得模糊。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>数学表达</th>
+<th>违反后果</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬约束</td>
+<td><span class="arithmatex">\(g_i(x,u)\le 0\)</span>，必须满足</td>
+<td>不可接受事件（碰撞、越界）</td>
+<td>可行域收缩、安全层拒绝</td>
+</tr>
+<tr>
+<td>软约束</td>
+<td><span class="arithmatex">\(g_i(x,u)\le s_i\)</span>，<span class="arithmatex">\(s_i\ge 0\)</span></td>
+<td>性能下降、舒适性变差</td>
+<td>加松弛变量并惩罚 <span class="arithmatex">\(s_i\)</span></td>
+</tr>
+<tr>
+<td>目标项</td>
+<td>进入代价函数</td>
+<td>仅影响优劣排序</td>
+<td>加权求和</td>
+</tr>
+</tbody>
+</table>
+<p>一个实用判据：<strong>如果某个量在极端情况下也不允许被交换，它就是硬约束</strong>。反过来，如果工程上确实存在“用一点安全换很多效率”的合法空间，那就应该显式写成带松弛变量的软约束，而不是藏在奖励权重里。</p>
+<p>二者的工程差别可以逐维度对照：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>硬约束</th>
+<th>软约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语义</td>
+<td>可行域边界，不参与交换</td>
+<td>带价格的偏好项</td>
+</tr>
+<tr>
+<td>求解方式</td>
+<td>投影、安全过滤器、QP、障碍函数</td>
+<td>惩罚项或拉格朗日项</td>
+</tr>
+<tr>
+<td>调参对象</td>
+<td>边界位置与安全余量</td>
+<td>权重 <span class="arithmatex">\(\rho\)</span> 与松弛上限 <span class="arithmatex">\(s_i^\text{max}\)</span></td>
+</tr>
+<tr>
+<td>可行性风险</td>
+<td>可能整体不可行</td>
+<td>总有解，但可能严重越界</td>
+</tr>
+<tr>
+<td>典型失效</td>
+<td>求解器不可行导致指令冻结</td>
+<td>权重偏小后越界常态化</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行是实践重点。硬约束会让优化问题<strong>可能不可行</strong>，因此必须预先规定“不可行时按什么优先级放宽哪条约束”；软约束永远不会不可行，但会通过越界常态化把硬约束慢慢变成摆设。两种失效都必须在设计阶段显式处理，而不是等实机调试时才发现。</p>
 <h2 id="约束可以直接进入优化问题">约束可以直接进入优化问题</h2>
-<p>例如控制问题可以写成</p>
+<p>控制问题可以写成带约束的形式</p>
 <div class="arithmatex">\[
-\min_u J(u)\quad\text{s.t.}\quad g(x,u)\le 0.
+\min_u J(u)\quad\text{s.t.}\quad g_i(x,u)\le 0,\ i=1,\dots,m .
 \]</div>
-<p>其中 <span class="arithmatex">\(g\)</span> 可以表示速度上限、碰撞距离或温度限制。相比事后惩罚，这种形式更明确地告诉求解器哪些区域不可行。</p>
+<p>其中 <span class="arithmatex">\(g_i\)</span> 可以表示速度上限、碰撞距离或温度限制。相比把越界做成惩罚项再求和，这种形式把“不可行”与“代价高”明确分开：求解器不会用一点性能换取轻微越界。</p>
+<p>Lagrange 乘子 <span class="arithmatex">\(\lambda_i\)</span> 在这里有一个可解释的作用。把约束右端写成 <span class="arithmatex">\(b_i\)</span>，最优值的灵敏度为</p>
+<div class="arithmatex">\[\frac{\partial J^*}{\partial b_i} = -\lambda_i ,\]</div>
+<p>即<strong>约束放宽一单位，最优目标能改善多少</strong>。乘子很大说明这条约束正在限制性能，值得投入资源去扩大余量；乘子接近零说明约束当前不起作用，可以暂不优化它。</p>
+<table>
+<thead>
+<tr>
+<th>乘子 <span class="arithmatex">\(\lambda_i\)</span></th>
+<th>解释</th>
+<th>建议动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接近 0</td>
+<td>约束不活跃</td>
+<td>保持，无须增加余量</td>
+</tr>
+<tr>
+<td>中等且稳定</td>
+<td>约束偶尔限制性能</td>
+<td>观察并纳入调参</td>
+</tr>
+<tr>
+<td>很大且持续</td>
+<td>约束是主要瓶颈</td>
+<td>扩大余量或放松边界</td>
+</tr>
+<tr>
+<td>跳变或求解失败</td>
+<td>可行域空或模型错</td>
+<td>检查约束设定与传感器</td>
+</tr>
+</tbody>
+</table>
+<p>把约束与性能分开还有测试上的好处：可以单独验证“约束检查器”在给定状态下是否拒绝越界动作，而不必跑完整任务。这类单元级测试通常比端到端测试便宜几个数量级，也更容易覆盖边界情况。</p>
+<h2 id="约束的形式化与可行域">约束的形式化与可行域</h2>
+<p>把约束写成集合，可以让“安全”这个词有明确外延。定义安全集合</p>
+<div class="arithmatex">\[\mathcal{S} = \{x \mid h(x)\ge 0\},\]</div>
+<p>其中 <span class="arithmatex">\(h\)</span> 是连续可微的标量函数，<span class="arithmatex">\(h(x)&gt;0\)</span> 表示严格安全，<span class="arithmatex">\(h(x)=0\)</span> 是边界。控制屏障函数（Control Barrier Function, CBF）路线要求控制输入满足</p>
+<div class="arithmatex">\[\dot h(x,u) + \gamma h(x) \ge 0,\]</div>
+<p>它的含义是：只要当前 <span class="arithmatex">\(h(x)&gt;0\)</span>，该条件保证 <span class="arithmatex">\(h\)</span> 在未来不会变成负值，也就不会越过边界。<span class="arithmatex">\(\gamma&gt;0\)</span> 越大，返回安全内部的趋势越强；若忽略 <span class="arithmatex">\(\gamma\)</span> 项，约束退化为“<span class="arithmatex">\(\dot h\ge 0\)</span>”，即禁止任何指向边界的运动，在远离边界时过于保守。</p>
+<p>把 <span class="arithmatex">\(\dot h\)</span> 展开：<span class="arithmatex">\(\dot h = \nabla h(x)^\top f(x) + \nabla h(x)^\top g(x)u\)</span>，于是 CBF 条件对 <span class="arithmatex">\(u\)</span> 是仿射的，可以在每个控制周期用一个小型二次规划求解：</p>
+<div class="arithmatex">\[\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .\]</div>
+<table>
+<thead>
+<tr>
+<th>约束层级</th>
+<th>形式</th>
+<th>保证的强度</th>
+<th>主要依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规划层禁入区</td>
+<td>几何可行域</td>
+<td>软，取决于跟踪精度</td>
+<td>地图与定位精度</td>
+</tr>
+<tr>
+<td>控制层限幅</td>
+<td><span class="arithmatex">\(u\in\mathcal{U}\)</span></td>
+<td>强，可硬保证</td>
+<td>执行器模型</td>
+</tr>
+<tr>
+<td>屏障函数约束</td>
+<td><span class="arithmatex">\(\dot h+\gamma h\ge 0\)</span></td>
+<td>强（连续时间）</td>
+<td>模型准确度与采样周期</td>
+</tr>
+<tr>
+<td>运行时监控</td>
+<td>事后判定与回退</td>
+<td>取决于回退速度</td>
+<td>状态估计与响应延迟</td>
+</tr>
+</tbody>
+</table>
+<p>越靠下的层级保证越强，但覆盖的语义越窄。可靠系统通常在多层同时设置互补约束，而不是只依赖单一模块。</p>
+<p>需要强调：上表第三行的“强保证”是<strong>连续时间</strong>结论。实际系统以周期 <span class="arithmatex">\(\Delta t\)</span> 离散执行，若 <span class="arithmatex">\(\gamma\Delta t \gg 1\)</span>，离散化误差足以让理论上的前向不变性失效。工程上常用的经验约束是 <span class="arithmatex">\(\gamma\Delta t \lesssim 0.1\)</span>，即 100 Hz 控制环下 <span class="arithmatex">\(\gamma\lesssim 10\)</span>，量纲为 1/s。采样率再低，就必须把 <span class="arithmatex">\(\gamma\)</span> 一并调小，代价是靠近边界时恢复速度变慢。</p>
 <h2 id="运行时安全层可以独立检查策略输出">运行时安全层可以独立检查策略输出</h2>
 <p>学习策略先给出建议 <span class="arithmatex">\(u_{nom}\)</span>，安全层再检查是否满足边界；若不满足，就限制、投影或替换为安全控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">limit_speed</span><span class="p">(</span><span class="n">v_cmd</span><span class="p">,</span> <span class="n">v_max</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">v_max</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">v_cmd</span><span class="p">,</span> <span class="n">v_max</span><span class="p">))</span>
 </code></pre></div>
-<p>真实安全过滤器会复杂得多，但结构相同：<strong>性能控制负责“想怎么做”，安全层负责“哪些不能做”。</strong></p>
+<p>真实安全过滤器会复杂得多，但结构相同：<strong>性能控制负责“想怎么做”，安全层负责“哪些不能做”。</strong> 这段代码只有两个变量：<span class="arithmatex">\(v_{cmd}\)</span> 是策略请求的速度，<span class="arithmatex">\(v_{max}\)</span> 是当前状态下允许的上限（可由到障碍的余量反推）。它做的是逐维裁剪，计算量恒定、延迟可预测，这正是它被放在最内层的原因。</p>
+<p>裁剪的代价是它<strong>不知道约束之间的耦合</strong>：同时裁剪速度和转向角，可能得到一个既不沿原路径、又贴近障碍的折中动作。因此实践中常见的做法是分层：最内层做逐维限幅（保底，几乎不可能出错），中间层做联合 QP（处理耦合约束），最外层做状态机回退（处理前提失效）。</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>输入</th>
+<th>输出</th>
+<th>计算量</th>
+<th>保证类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>限幅层</td>
+<td><span class="arithmatex">\(u_{nom}\)</span> 与各维上限</td>
+<td>裁剪后的 <span class="arithmatex">\(u\)</span></td>
+<td>常数，微秒级</td>
+<td>逐维硬保证</td>
+</tr>
+<tr>
+<td>QP 过滤层</td>
+<td><span class="arithmatex">\(u_{nom}\)</span>、函数 <span class="arithmatex">\(h\)</span>、模型</td>
+<td>最接近的可行 <span class="arithmatex">\(u\)</span></td>
+<td>0.1–2 ms</td>
+<td>联合约束下最优</td>
+</tr>
+<tr>
+<td>状态机回退</td>
+<td>监控信号集合</td>
+<td>模式切换</td>
+<td>常数，微秒级</td>
+<td>前提失效时可控</td>
+</tr>
+</tbody>
+</table>
+<p>同一组输入在不同层级处理，结果差别很大。以“策略请求 1.5 m/s、当前上限 1.0 m/s、左前方 1.2 m 处有障碍”为例：</p>
+<table>
+<thead>
+<tr>
+<th>处理层级</th>
+<th>输出</th>
+<th>满足耦合约束</th>
+<th>额外代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逐维限幅</td>
+<td>降到 1.0 m/s，方向不变</td>
+<td>否，仍朝障碍</td>
+<td>极低</td>
+</tr>
+<tr>
+<td>最近可行投影</td>
+<td>减速并向右让</td>
+<td>是</td>
+<td>0.1–2 ms</td>
+</tr>
+<tr>
+<td>状态机回退</td>
+<td>原地停止</td>
+<td>是（保守）</td>
+<td>极低</td>
+</tr>
+<tr>
+<td>无安全层</td>
+<td>保持 1.5 m/s 直行</td>
+<td>否</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
 <h2 id="安全余量用来应对估计误差和响应延迟">安全余量用来应对估计误差和响应延迟</h2>
-<p>机器人距离障碍 0.5 m 并不意味着可以把安全阈值也设为 0.5 m。定位误差、制动距离和控制延迟都需要 margin。</p>
-<p>安全边界因此应基于最坏合理误差，而不是理想模型中的精确几何距离。</p>
+<p>机器人距离障碍 0.5 m 并不意味着可以把安全阈值也设为 0.5 m。定位误差、制动距离和控制延迟都需要计入 margin，安全边界因此应基于最坏合理误差，而不是理想模型中的精确几何距离。</p>
+<p>把余量拆开写，才能知道每一项由谁负责。设感知与传输延迟为 <span class="arithmatex">\(\tau_p\)</span>、通信与调度抖动为 <span class="arithmatex">\(\tau_c\)</span>、执行器响应为 <span class="arithmatex">\(\tau_a\)</span>，则总响应延迟</p>
+<div class="arithmatex">\[\tau = \tau_p + \tau_c + \tau_a .\]</div>
+<table>
+<thead>
+<tr>
+<th>延迟来源</th>
+<th>典型量级</th>
+<th>可控手段</th>
+<th>抖动特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传感器曝光与传输</td>
+<td>30–100 ms</td>
+<td>提高帧率、硬件触发</td>
+<td>与负载相关</td>
+</tr>
+<tr>
+<td>感知推理</td>
+<td>20–80 ms</td>
+<td>模型裁剪、量化</td>
+<td>与输入内容相关</td>
+</tr>
+<tr>
+<td>通信（总线或网络）</td>
+<td>1–20 ms</td>
+<td>优先级调度、本地计算</td>
+<td>突发、易丢帧</td>
+</tr>
+<tr>
+<td>调度抖动</td>
+<td>1–15 ms</td>
+<td>实时内核、周期守护</td>
+<td>与系统负载相关</td>
+</tr>
+<tr>
+<td>执行器响应</td>
+<td>20–100 ms</td>
+<td>更高带宽驱动器</td>
+<td>非线性、含饱和</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的意义是：<strong>总延迟由若干项相加，而只有其中一部分能靠算法优化</strong>。把 <span class="arithmatex">\(\tau\)</span> 从 0.2 s 降到 0.15 s，往往比把减速度从 1.0 m/s² 提到 1.3 m/s² 更容易，因为在余量公式里两者对制动距离的贡献是同一数量级。</p>
+<p>余量还必须覆盖<strong>参数漂移</strong>：路面摩擦系数在湿滑条件下可能从 0.8 降到 0.3，等效可实现的减速度 <span class="arithmatex">\(a\)</span> 也随之降到约三分之一。按干地标定得到的 <span class="arithmatex">\(a\)</span> 计算出来的余量，在雨天不再成立。因此余量应基于<strong>最差工况下仍可保证的</strong> <span class="arithmatex">\(a\)</span>，而不是标称值。</p>
+<p>把这些延迟项按典型值代入，可以看出余量的构成比例：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th><span class="arithmatex">\(\tau_p\)</span></th>
+<th><span class="arithmatex">\(\tau_c\)</span></th>
+<th><span class="arithmatex">\(\tau_a\)</span></th>
+<th>总 <span class="arithmatex">\(\tau\)</span></th>
+<th>贡献的余量（<span class="arithmatex">\(v=1\)</span> m/s）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车载低速</td>
+<td>40 ms</td>
+<td>5 ms</td>
+<td>30 ms</td>
+<td>75 ms</td>
+<td>7.5 cm</td>
+</tr>
+<tr>
+<td>云侧推理</td>
+<td>120 ms</td>
+<td>40 ms</td>
+<td>30 ms</td>
+<td>190 ms</td>
+<td>19 cm</td>
+</tr>
+<tr>
+<td>弱网远程</td>
+<td>80 ms</td>
+<td>150 ms</td>
+<td>30 ms</td>
+<td>260 ms</td>
+<td>26 cm</td>
+</tr>
+</tbody>
+</table>
+<p>表中最后一列与感知误差同量级（几厘米到几十厘米），这说明<strong>延迟不是可以忽略的次要项</strong>，而是与传感器精度同等的误差来源。</p>
+<h2 id="安全余量与延迟的定量关系">安全余量与延迟的定量关系</h2>
+<p>余量不能凭感觉给，它可以被算出来。设速度为 <span class="arithmatex">\(v\)</span>、总响应延迟为 <span class="arithmatex">\(\tau\)</span>、最大减速度为 <span class="arithmatex">\(a\)</span>，则从“决定刹车”到停住的距离为</p>
+<div class="arithmatex">\[d_\text{stop} = v\tau + \frac{v^2}{2a},\]</div>
+<p>再加上定位误差上界 <span class="arithmatex">\(\epsilon\)</span>，最小安全余量为</p>
+<div class="arithmatex">\[d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.\]</div>
+<table>
+<thead>
+<tr>
+<th>速度 <span class="arithmatex">\(v\)</span></th>
+<th>延迟 <span class="arithmatex">\(\tau\)</span></th>
+<th>减速度 <span class="arithmatex">\(a\)</span></th>
+<th>反应距离 <span class="arithmatex">\(v\tau\)</span></th>
+<th>制动距离 <span class="arithmatex">\(v^2/(2a)\)</span></th>
+<th>合计（<span class="arithmatex">\(\epsilon=0.1\)</span> m）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5 m/s</td>
+<td>0.2 s</td>
+<td>1.0 m/s²</td>
+<td>0.10 m</td>
+<td>0.13 m</td>
+<td>0.33 m</td>
+</tr>
+<tr>
+<td>1.0 m/s</td>
+<td>0.2 s</td>
+<td>1.0 m/s²</td>
+<td>0.20 m</td>
+<td>0.50 m</td>
+<td>0.80 m</td>
+</tr>
+<tr>
+<td>1.5 m/s</td>
+<td>0.2 s</td>
+<td>1.0 m/s²</td>
+<td>0.30 m</td>
+<td>1.13 m</td>
+<td>1.53 m</td>
+</tr>
+<tr>
+<td>1.5 m/s</td>
+<td>0.5 s</td>
+<td>0.5 m/s²</td>
+<td>0.75 m</td>
+<td>2.25 m</td>
+<td>3.10 m</td>
+</tr>
+</tbody>
+</table>
+<p>这张表说明两个常被低估的事实：<strong>余量对速度是超线性的</strong>（第二项按 <span class="arithmatex">\(v^2\)</span> 增长），以及<strong>延迟与减速度的地位相当</strong>（延迟 0.5 s 配弱制动所需的余量，是 1.5 m/s 标准情形下的两倍）。降低速度要求远比升级感知硬件便宜。</p>
+<p>反推允许速度同样有用。给定可用净空 <span class="arithmatex">\(d\)</span>，把 <span class="arithmatex">\(d_\text{safe}=d\)</span> 解成速度上限：</p>
+<div class="arithmatex">\[v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .\]</div>
+<p>以 <span class="arithmatex">\(d=2\)</span> m、<span class="arithmatex">\(\epsilon=0.1\)</span> m、<span class="arithmatex">\(a=1.0\)</span>、<span class="arithmatex">\(\tau=0.2\)</span> 为例：<span class="arithmatex">\(v_\text{max} = -0.2+\sqrt{0.04+3.8} \approx 1.76\)</span>。也就是说，2 m 的净空在 0.2 s 延迟下只允许约 1.8 m/s，超过这个速度减速已经来不及，只能靠更早规划或者更高减速度来补救。</p>
+<table>
+<thead>
+<tr>
+<th>可用净空 <span class="arithmatex">\(d\)</span></th>
+<th><span class="arithmatex">\(\tau=0.1\)</span> s</th>
+<th><span class="arithmatex">\(\tau=0.2\)</span> s</th>
+<th><span class="arithmatex">\(\tau=0.4\)</span> s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 m</td>
+<td>1.24 m/s</td>
+<td>1.16 m/s</td>
+<td>1.00 m/s</td>
+</tr>
+<tr>
+<td>2.0 m</td>
+<td>1.85 m/s</td>
+<td>1.76 m/s</td>
+<td>1.59 m/s</td>
+</tr>
+<tr>
+<td>5.0 m</td>
+<td>3.03 m/s</td>
+<td>2.94 m/s</td>
+<td>2.75 m/s</td>
+</tr>
+</tbody>
+</table>
+<p>注意表的纵向对比：净空从 5 m 缩到 1 m，允许速度下降约 60%，而延迟从 0.1 s 增到 0.4 s 在同一行内只下降约 10%–20%。这意味着<strong>在中低速场景中，空间余量比延迟更值得投入</strong>；只有在高速或净空本来就紧张时，压缩延迟才成为主要手段。</p>
 <h2 id="安全约束必须贯穿规划控制和执行">安全约束必须贯穿规划、控制和执行</h2>
-<p>规划器避开禁区，但底盘驱动若没有速度限制，仍可能因控制异常发生危险；反过来，只在最底层限速也无法阻止高层持续规划进入危险区域。</p>
-<p>可靠系统通常在不同层级设置互补约束，而不是只依赖单一模块。</p>
+<p>规划器避开禁区，但底盘驱动若没有速度限制，仍可能因控制异常发生危险；反过来，只在最底层限速也无法阻止高层持续规划进入危险区域。可靠系统通常在不同层级设置互补约束，而不是只依赖单一模块。</p>
+<p>判断某一层是否真的“有约束”，可以问三个问题：这一层能观测到什么量、它以多快速度能拒绝一个危险指令、这一层失效时的后果是什么。</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>可观测的量</th>
+<th>拒绝危险指令的延迟</th>
+<th>单层失效后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务与规划</td>
+<td>地图、目标、全局路径</td>
+<td>秒级（重规划）</td>
+<td>进入危险区域但仍能脱出</td>
+</tr>
+<tr>
+<td>局部规划</td>
+<td>局部代价地图、动态障碍</td>
+<td>100 ms 级</td>
+<td>贴障但可停</td>
+</tr>
+<tr>
+<td>控制器</td>
+<td>状态、期望轨迹</td>
+<td>10 ms 级</td>
+<td>跟踪变差</td>
+</tr>
+<tr>
+<td>安全过滤器</td>
+<td><span class="arithmatex">\(u_{nom}\)</span>、函数 <span class="arithmatex">\(h\)</span>、即时状态</td>
+<td>1 ms 级</td>
+<td>直接越界</td>
+</tr>
+<tr>
+<td>执行器限幅</td>
+<td>电气与机械上限</td>
+<td>微秒级</td>
+<td>硬件损伤</td>
+</tr>
+</tbody>
+</table>
+<p><strong>越靠下的层级响应越快、语义越窄。</strong> 因此正确的问题不是“哪一层负责安全”，而是“每一层各自封住了哪一类失效”。当某一层的失效后果是“直接越界”时，它下面就不应再存在可被绕过的层。</p>
+<p>分层也带来一致性问题：上下层对同一约束的阈值必须单调，即下层阈值不得宽于上层。否则会出现“规划器认为已避开、过滤器却认为仍在危险区”的死锁，或者更糟的反向情形——上层以为底层会拦截，底层却因为参数过宽而放行。</p>
+<p>各层允许的越界概率也应自上而下收紧，可以把它当作分层设计的验收指标：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>允许越界概率</th>
+<th>依据</th>
+<th>验证方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规划层</td>
+<td>1e-2</td>
+<td>重规划可纠正</td>
+<td>场景回归</td>
+</tr>
+<tr>
+<td>局部规划</td>
+<td>1e-3</td>
+<td>可急停纠正</td>
+<td>仿真扫描</td>
+</tr>
+<tr>
+<td>控制器</td>
+<td>1e-4</td>
+<td>安全层兜底</td>
+<td>单元测试</td>
+</tr>
+<tr>
+<td>安全过滤器</td>
+<td>&lt;1e-6</td>
+<td>直接决定碰撞</td>
+<td>边界扫描</td>
+</tr>
+<tr>
+<td>执行器限幅</td>
+<td>0（硬界限）</td>
+<td>物理极限</td>
+<td>电气测试</td>
+</tr>
+</tbody>
+</table>
 <h2 id="约束可执行性依赖状态估计">约束可执行性依赖状态估计</h2>
-<p>安全约束通常作用于真实状态，但系统只能访问带误差的估计。若不把估计误差和制动延迟纳入安全余量，数学上满足约束的命令仍可能在现实中越界。安全集合应根据可观测性和响应时间适当收缩。</p>
+<p>安全约束通常作用于真实状态 <span class="arithmatex">\(x\)</span>，但系统只能访问带误差的估计 <span class="arithmatex">\(\hat x\)</span>。若不把估计误差和制动延迟纳入安全余量，数学上满足约束的命令仍可能在现实中越界。安全集合应根据可观测性和响应时间适当收缩。</p>
+<p>形式上，如果真实状态与估计满足 <span class="arithmatex">\(\lVert x-\hat x\rVert\le \epsilon\)</span>，那么要求估计状态满足收紧后的约束</p>
+<div class="arithmatex">\[h(\hat x)\;\ge\;\epsilon,\]</div>
+<p>才能推出真实状态仍在安全域内。这就是“<strong>估计不确定性直接变成安全余量</strong>”的具体含义，也是 <a href="../01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a> 与本章相接的地方。这类“把不确定性转成集合收缩”的做法，与 <a href="../../mathematics/06-optimization-under-uncertainty/">Optimization, Constraints &amp; Uncertainty</a> 中的鲁棒优化是同一思路。</p>
+<p>收缩量 <span class="arithmatex">\(\epsilon\)</span> 本身也需要估计：它来自传感器协方差、标定残差和地图误差的合成。实践中常用的保守做法是按 <span class="arithmatex">\(3\sigma\)</span> 取上界，因为协方差估计本身也有误差，直接用 <span class="arithmatex">\(1\sigma\)</span> 会让越界概率高到不可接受。</p>
+<table>
+<thead>
+<tr>
+<th>误差来源</th>
+<th>估计方式</th>
+<th>典型量级</th>
+<th>是否随速度增长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传感器噪声</td>
+<td>协方差矩阵</td>
+<td>1–5 cm</td>
+<td>否</td>
+</tr>
+<tr>
+<td>标定残差</td>
+<td>离线标定报告</td>
+<td>0.5–3 cm</td>
+<td>否</td>
+</tr>
+<tr>
+<td>地图误差</td>
+<td>建图精度统计</td>
+<td>2–10 cm</td>
+<td>否</td>
+</tr>
+<tr>
+<td>滤波滞后</td>
+<td>与真值比对</td>
+<td>5–30 cm</td>
+<td>是</td>
+</tr>
+<tr>
+<td>时间同步误差</td>
+<td>时钟偏差乘速度</td>
+<td>与 <span class="arithmatex">\(v\)</span> 成正比</td>
+<td>是</td>
+</tr>
+<tr>
+<td>外参漂移</td>
+<td>在线标定残差</td>
+<td>1–5 cm</td>
+<td>否</td>
+</tr>
+<tr>
+<td>动态障碍预测误差</td>
+<td>预测残差统计</td>
+<td>10–50 cm</td>
+<td>是</td>
+</tr>
+<tr>
+<td>坐标链累计误差</td>
+<td>变换链追踪</td>
+<td>1–10 cm</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>其中“滤波滞后”“时间同步误差”与“动态障碍预测误差”三项随速度增长，这正是高速场景下“约束总是显得很紧”的原因：不是约束本身变严，而是同样阈值下估计不确定性贡献的余量变大了。</p>
+<h2 id="运行时安全层的实现路线">运行时安全层的实现路线</h2>
+<p>安全过滤器的实现方式决定了它的保证强度与计算代价。三条主流路线的对比如下：</p>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>基本思想</th>
+<th>保证强度</th>
+<th>计算代价</th>
+<th>主要前提</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>限幅与投影</td>
+<td>把动作裁剪到允许集</td>
+<td>弱（逐帧局部）</td>
+<td>极低</td>
+<td>允许集能刻画全部危险</td>
+</tr>
+<tr>
+<td>安全过滤器与 CBF</td>
+<td>求最接近 <span class="arithmatex">\(u_{nom}\)</span> 的、满足 <span class="arithmatex">\(\dot h+\gamma h\ge0\)</span> 的控制</td>
+<td>强（连续时间下前向不变）</td>
+<td>中等（在线 QP）</td>
+<td>模型与 <span class="arithmatex">\(\dot h\)</span> 可用、采样足够快</td>
+</tr>
+<tr>
+<td>可达性分析</td>
+<td>预先计算安全状态集与其补集</td>
+<td>强（离线穷举）</td>
+<td>离线高、在线低</td>
+<td>状态维数低、模型可信</td>
+</tr>
+</tbody>
+</table>
+<p>选择依据是<strong>模型可信度</strong>：模型越可信，CBF 与可达性给出的保证越接近现实；模型偏差大时，强保证可能只是纸面上的。反过来说，如果只能依赖简单限幅，就必须让上游规划足够保守，把安全性建立在更粗但更稳的层次上。</p>
+<p>在线 QP 的计算量随约束数与状态维数增长，需要留出实时预算：</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>典型耗时</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算梯度 <span class="arithmatex">\(\nabla h\)</span></td>
+<td>0.05–0.3 ms</td>
+<td>有解析式最快</td>
+</tr>
+<tr>
+<td>QP 求解（10–30 变量）</td>
+<td>0.2–2 ms</td>
+<td>热启动约可减半</td>
+</tr>
+<tr>
+<td>可行性回退分支</td>
+<td>0.1–0.5 ms</td>
+<td>不可行时的降级判断</td>
+</tr>
+<tr>
+<td>状态读取与拷贝</td>
+<td>0.02–0.1 ms</td>
+<td>注意避免深拷贝</td>
+</tr>
+<tr>
+<td>日志与统计打点</td>
+<td>0.02–0.1 ms</td>
+<td>同步写盘会放大</td>
+</tr>
+<tr>
+<td>合计（100 Hz 控制环）</td>
+<td>0.5–3 ms</td>
+<td>占 10 ms 周期的 5%–30%</td>
+</tr>
+</tbody>
+</table>
+<p>如果合计耗时逼近周期的一半，正确的做法是降低 QP 频率（例如每 3 个控制周期解一次，中间用上一解外推）或者退回到限幅层，而不是放宽约束边界。放宽约束换来的是时序余量，付出的是安全保证，这种交换必须显式记录。</p>
+<h2 id="约束设计中的典型失败模式">约束设计中的典型失败模式</h2>
+<p>前面几节给出的是正确做法；反向列出错误做法，更容易在实际系统中定位问题。</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>表现</th>
+<th>根因</th>
+<th>排查手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>惩罚替代约束</td>
+<td>极端场景下策略主动越界</td>
+<td>越界收益超过惩罚</td>
+<td>构造高压场景做压力测试</td>
+</tr>
+<tr>
+<td>余量按理想模型给</td>
+<td>仿真通过、实机越界</td>
+<td>未计延迟与估计误差</td>
+<td>按 <span class="arithmatex">\(d_\text{safe}\)</span> 重算余量</td>
+</tr>
+<tr>
+<td>层间阈值不单调</td>
+<td>规划与过滤器互相死锁</td>
+<td>各层独立调参</td>
+<td>列出各层阈值做单调性核对</td>
+</tr>
+<tr>
+<td>只在仿真中验证</td>
+<td>故障注入即失效</td>
+<td>未跑真实时序</td>
+<td>故障注入与延迟注入测试</td>
+</tr>
+<tr>
+<td>模型偏差未建模</td>
+<td>CBF 放行危险动作</td>
+<td>模型与真机不符</td>
+<td>比对预测残差的分布</td>
+</tr>
+<tr>
+<td>缺少不可行退路</td>
+<td>求解失败后指令冻结</td>
+<td>未定义降级优先级</td>
+<td>定义放宽顺序与最小安全集</td>
+</tr>
+<tr>
+<td>阈值不分工况</td>
+<td>低速、雨天过度降级</td>
+<td>阈值写死未分档</td>
+<td>按工况分档并回归测试</td>
+</tr>
+<tr>
+<td>余量被后续优化吃掉</td>
+<td>某次提速后开始越界</td>
+<td>缺余量回归测试</td>
+<td>把余量写进单元测试</td>
+</tr>
+<tr>
+<td>把相关信号当独立</td>
+<td>联合误报率仍然偏高</td>
+<td>未估计残差相关性</td>
+<td>分析残差相关矩阵</td>
+</tr>
+<tr>
+<td>只在静止状态验证</td>
+<td>运动中边界失效</td>
+<td>忽略速度相关误差</td>
+<td>增加运动工况用例</td>
+</tr>
+<tr>
+<td>约束与状态时间戳不同步</td>
+<td>用旧状态判边界</td>
+<td>未检查时间戳</td>
+<td>时间戳一致性检查</td>
+</tr>
+<tr>
+<td>降级路径未演练</td>
+<td>触发即卡死</td>
+<td>只测正常路径</td>
+<td>故障注入测试</td>
+</tr>
+<tr>
+<td>越界事件未打点</td>
+<td>事后无法定位原因</td>
+<td>缺日志设计</td>
+<td>越界事件全量记录</td>
+</tr>
+<tr>
+<td>单位与量纲混淆</td>
+<td>阈值换算出错后全盘失效</td>
+<td>未做单位校验</td>
+<td>阈值参数的单元测试</td>
+</tr>
+<tr>
+<td>余量只在单一速度验证</td>
+<td>高速时余量不足</td>
+<td>未做速度扫描</td>
+<td>按速度扫描用例</td>
+</tr>
+<tr>
+<td>安全层被旁路</td>
+<td>某些模式绕过过滤器</td>
+<td>存在直通调用路径</td>
+<td>检查全部调用路径</td>
+</tr>
+</tbody>
+</table>
+<p>排查顺序建议从<strong>时序</strong>开始：先确认延迟是否被正确测量并计入余量，再看余量数值，最后才怀疑模型。多数“约束不生效”的案例根因在延迟被低估，而不是公式写错。这也解释了为什么把延迟和余量放在同一张表里核对，比只做代码审查更有效。上表中“余量被后续优化吃掉”一类尤其隐蔽：单次改动都在余量内，多次累积之后才越界，只有回归测试能拦住它。</p>
+<h2 id="约束的验证清单">约束的验证清单</h2>
+<p>约束是否真的生效，不能靠读代码判断，要靠可执行的检查。一个够用的清单至少覆盖下面几项：</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>方法</th>
+<th>通过判据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元级拒绝</td>
+<td>直接调用过滤器并传入越界动作</td>
+<td>输出被裁剪到边界内</td>
+</tr>
+<tr>
+<td>边界连续性</td>
+<td>扫描边界附近的一批状态</td>
+<td>输出连续、无跳变</td>
+</tr>
+<tr>
+<td>时序预算</td>
+<td>最坏情况下测量执行时间</td>
+<td>不超过周期的一定比例</td>
+</tr>
+<tr>
+<td>不可行处理</td>
+<td>构造空可行域</td>
+<td>按预设优先级降级而非冻结</td>
+</tr>
+<tr>
+<td>层间一致性</td>
+<td>核对各层阈值的单调性</td>
+<td>下层不宽于上层</td>
+</tr>
+<tr>
+<td>实机抽查</td>
+<td>记录越界事件与对应状态</td>
+<td>越界次数为零或可解释</td>
+</tr>
+<tr>
+<td>回归测试</td>
+<td>每次修改后重跑上述用例</td>
+<td>无新增失败用例</td>
+</tr>
+<tr>
+<td>分级降级</td>
+<td>注入不同严重度的故障</td>
+<td>每一级行为符合定义</td>
+</tr>
+<tr>
+<td>延迟注入</td>
+<td>人为增加感知与通信延迟</td>
+<td>余量规则仍然成立</td>
+</tr>
+<tr>
+<td>恢复条件</td>
+<td>反复触发与恢复</td>
+<td>无振荡、无滞留</td>
+</tr>
+<tr>
+<td>日志完备性</td>
+<td>检查越界事件记录</td>
+<td>每次触发可复现</td>
+</tr>
+<tr>
+<td>长时间运行</td>
+<td>数小时压力测试</td>
+<td>无漂移性误报</td>
+</tr>
+<tr>
+<td>阈值反推一致性</td>
+<td>由任务指标重算阈值</td>
+<td>推导过程可复现</td>
+</tr>
+<tr>
+<td>量纲检查</td>
+<td>核对所有阈值的单位</td>
+<td>量纲一致</td>
+</tr>
+<tr>
+<td>旁路检查</td>
+<td>找出绕过过滤器的调用路径</td>
+<td>不存在直通路径</td>
+</tr>
+</tbody>
+</table>
+<p>其中<strong>边界连续性</strong>最容易被漏掉：约束在数学上正确、在单点测试上也正确，但实现中的取整、符号判断或分支切换会在边界上产生不连续输出，进而在实机上表现为抖动或冲击。这类问题只能通过扫描边界附近的输入区间来发现，单点测试一定会放过它。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章处理“不允许做什么”。当组件已经真的坏了，就需要 <a href="../04-fault-tolerance/">Fault Detection &amp; Tolerance</a> 的检测、隔离与降级；当主策略本身不可信时，见 <a href="../05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a>。约束进入优化求解器的做法见 <a href="../../control-theory/05-mpc/">Model Predictive Control</a>，不确定性的建模见 <a href="../../mathematics/06-optimization-under-uncertainty/">Optimization, Constraints &amp; Uncertainty</a>，训练阶段如何把约束写进学习目标见 <a href="../../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a>。</p>
+</blockquote>
 
 
 

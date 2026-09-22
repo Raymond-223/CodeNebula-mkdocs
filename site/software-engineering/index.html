@@ -3583,6 +3583,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#工程实践的代价与收益" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工程实践的代价与收益
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#技术债与返工成本" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        技术债与返工成本
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#工程实践的最低基线" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3712,7 +3734,50 @@
 <li><strong>改动不可追溯</strong>：改了哪些文件、为什么改、能不能退回上一个可用状态，全靠回忆；</li>
 <li><strong>部署靠现场操作</strong>：换一台机器就起不来，出问题只能翻终端里已经滚过去的输出。</li>
 </ul>
-<p>这五类问题有一个共同特征：它们在项目早期几乎不产生成本，在项目中后期集中爆发。所以本节的目标不是让你在第一天就搭建完整工程体系，而是让你知道<strong>在什么阶段该引入哪种工程手段</strong>，以及每种手段到底在解决什么。</p>
+<p>这五类问题有一个共同特征：它们在项目早期几乎不产生成本，在项目中后期集中爆发。下表把这一点写成可以对照的形式：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>早期表现（几乎无成本）</th>
+<th>中后期爆发的形式</th>
+<th>量化的后果示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求说不清</td>
+<td>讨论可以任意改口</td>
+<td>模块反复搬迁、返工</td>
+<td>架构级返工常占已投入时间的 20–40%</td>
+</tr>
+<tr>
+<td>模块拆不开</td>
+<td>单文件脚本跑得很快</td>
+<td>改一处需重读全部代码</td>
+<td>变更影响面随单文件长度近似线性上升</td>
+</tr>
+<tr>
+<td>接口靠记忆</td>
+<td>字段名口头约定即可</td>
+<td>跨模块静默错误</td>
+<td>一处单位错误可让整批实验数据不可用</td>
+</tr>
+<tr>
+<td>改动不可追溯</td>
+<td>无提交历史也能运行</td>
+<td>无法定位是哪个改动引入问题</td>
+<td>回归定位从分钟级升到小时级</td>
+</tr>
+<tr>
+<td>部署靠现场操作</td>
+<td>手工敲命令能跑</td>
+<td>换机器即失败</td>
+<td>环境类问题常占实机调试时间的 30% 以上</td>
+</tr>
+</tbody>
+</table>
+<p>所以本节的目标不是让你在第一天就搭建完整工程体系，而是让你知道<strong>在什么阶段该引入哪种工程手段</strong>，以及每种手段到底在解决什么。</p>
 <p>本节允许出现代码，因为工程概念只有落到具体命令和目录结构上才有意义；但代码是手段不是目的——本节的重点始终是判断，而不是语法。</p>
 <h2 id="五章的推进逻辑">五章的推进逻辑</h2>
 <p>五章之间的关系是一条从“想清楚”到“跑得住”的直线，每一章都以前一章的产物为输入。</p>
@@ -3721,6 +3786,49 @@
 <p><strong>第三阶段：版本控制（<a href="03-version-control/">第 3 章</a>）。</strong> 有了模块划分，就需要记录系统如何一步步演化：提交粒度、分支策略、评审流程。版本控制不只是备份，它是让多人协作和事后追溯成为可能的基础设施。</p>
 <p><strong>第四阶段：测试与调试（<a href="04-testing-debugging/">第 4 章</a>）。</strong> 前两章定义了“正确的行为”，这一章把它变成可自动执行的检查，并给出定位故障的方法。测试把推测变成证据，调试把现象缩小到根因。</p>
 <p><strong>第五阶段：部署与可靠性（<a href="05-deployment-reliability/">第 5 章</a>）。</strong> 最后要面对真实运行环境：环境一致性、自动检查流水线、健康检查、故障退化与回滚。到这里，“能跑”才变成“能一直跑”。</p>
+<p>每一阶段都有明确的输入与产出，因此“跳过某一步”的代价可以被预测，而不是只能事后抱怨：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>输入</th>
+<th>产出物</th>
+<th>跳过它的典型后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 需求与架构</td>
+<td>“想做什么”</td>
+<td>功能范围、质量指标、依赖方向</td>
+<td>模块边界随讨论反复摇摆</td>
+</tr>
+<tr>
+<td>2 模块与接口</td>
+<td>边界</td>
+<td>函数签名、数据结构、错误约定</td>
+<td>集成成本随模块数快速上升</td>
+</tr>
+<tr>
+<td>3 版本控制</td>
+<td>可工作的代码</td>
+<td>提交历史、分支与评审记录</td>
+<td>无法回退，也无法追溯</td>
+</tr>
+<tr>
+<td>4 测试与调试</td>
+<td>契约与需求</td>
+<td>可执行检查、系统化定位流程</td>
+<td>缺陷留到实机阶段才暴露</td>
+</tr>
+<tr>
+<td>5 部署与可靠性</td>
+<td>已验证的构建</td>
+<td>可复现环境、流水线、回滚流程</td>
+<td>交付依赖某个人的操作记忆</td>
+</tr>
+</tbody>
+</table>
 <p>这条链条也可以反向使用：当你在后期遇到某个反复出现的麻烦，通常能沿链条往上找到缺失的环节。反复出现的接口错误，往往是第 1 章的边界没定清；反复出现的协作冲突，往往是第 3 章的提交与评审约定缺失。</p>
 <h2 id="概念地图">概念地图</h2>
 <p>软件地图这张图把整节的骨架压缩成五个节点，它们不是并列的清单，而是一条有依赖顺序的链条。</p>
@@ -3730,6 +3838,49 @@
 <p><strong>Interfaces — contracts。</strong> 第三个节点把边界变成契约。契约的特点是可验证：字段名、单位、错误码、超时语义都必须写下来，而不是靠口头约定。接口一旦稳定，模块内部就可以自由重构，这是整个工程体系里最重要的杠杆点之一。</p>
 <p><strong>Tests — evidence。</strong> 第四个节点提供证据。它把契约和需求变成可执行的检查，让“我觉得没问题”变成“检查证明没问题”。注意图中的用词是 <em>evidence</em> 而不是 <em>verification</em>，强调测试的价值在于为判断提供依据，而不是追求形式上的覆盖。</p>
 <p><strong>Delivery — deploy &amp; operate。</strong> 最后一个节点指向运行：部署与运维。它提醒读者整个链条并没有在代码合入时就结束，系统的可靠性是在运行中持续被验证的，因此交付必须包含观察、诊断和恢复能力。</p>
+<p>五个节点的关键词与产出可以并列成一张表，用来快速判断“当前缺的是哪一环”：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>关键词</th>
+<th>主要产出</th>
+<th>被省略时的典型症状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requirements</td>
+<td>what</td>
+<td>范围、质量指标、验收条件</td>
+<td>需求蔓延，做多了也做错了</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>boundaries</td>
+<td>模块划分与依赖方向</td>
+<td>循环依赖，改一处牵连全部</td>
+</tr>
+<tr>
+<td>Interfaces</td>
+<td>contracts</td>
+<td>类型、单位、错误码、超时语义</td>
+<td>跨模块错误静默发生</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>evidence</td>
+<td>可自动执行的检查</td>
+<td>回归不可知，只能靠人肉验证</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>deploy &amp; operate</td>
+<td>镜像、流水线、监控与回滚</td>
+<td>只有开发机上能跑起来</td>
+</tr>
+</tbody>
+</table>
 <p>顺着这五个节点读，可以得到一条完整的判断链：<strong>想清楚要什么 → 划出边界 → 写下契约 → 用证据检查 → 交付并持续观察</strong>。任何一环缺失，后面所有环节的成本都会上升。</p>
 <h2 id="与其他章节的接口">与其他章节的接口</h2>
 <p>本章的概念不是自成一体的，它们会作为工具出现在其它章节的语境里。下表给出几个最主要的衔接点：</p>
@@ -3777,9 +3928,204 @@
 <td><a href="../robustness-safety/05-safe-learning-runtime/">安全学习与运行时</a></td>
 <td>学习策略上线后需要持续监控与干预能力</td>
 </tr>
+<tr>
+<td>接口版本演进</td>
+<td><a href="02-modular-apis/">模块化设计与 API</a></td>
+<td>消息结构即 API，字段增删需要兼容策略</td>
+</tr>
 </tbody>
 </table>
 <p>这些接口说明了本节的定位：它提供的是<strong>跨章节通用的工程基础设施</strong>。当你在其它章节遇到“为什么仿真好好的、实机就失败”这类问题时，多半要回到本章的接口契约、测试与可观测性上找答案。</p>
+<p>接口是否真的存在，可以用一条标准检验：<strong>如果一个模块的输入输出无法在不读它内部实现的前提下被写下来，那么这个接口就还没有真正存在。</strong> 这条标准会在本节各章反复出现——第 2 章把它变成函数签名，第 4 章把它变成测试用例，第 5 章把它变成运行期检查。</p>
+<table>
+<thead>
+<tr>
+<th>接口对象</th>
+<th>由哪一章定义</th>
+<th>出问题时的症状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模块边界与依赖方向</td>
+<td>第 1 章</td>
+<td>循环依赖，改动牵连全局</td>
+</tr>
+<tr>
+<td>函数签名与错误约定</td>
+<td>第 2 章</td>
+<td>调用方必须读实现才能用对</td>
+</tr>
+<tr>
+<td>提交与分支约定</td>
+<td>第 3 章</td>
+<td>无法回退，责任不清</td>
+</tr>
+<tr>
+<td>测试里的示例用法</td>
+<td>第 4 章</td>
+<td>契约失效却无人发现</td>
+</tr>
+<tr>
+<td>运行期检查与健康端点</td>
+<td>第 5 章</td>
+<td>故障只能靠人工发现</td>
+</tr>
+</tbody>
+</table>
+<h2 id="工程实践的代价与收益">工程实践的代价与收益</h2>
+<p>工程实践最容易被质疑的一点是“现在就做，是不是在浪费时间”。这个问题其实可以算，只是很少人把变量写出来。设某项实践的一次性投入为 <span class="arithmatex">\(C_0\)</span>（小时），它使每次后续变更节省的时间为 <span class="arithmatex">\(s\)</span>（小时/次），项目在可预见范围内还会发生 <span class="arithmatex">\(N\)</span> 次变更，则净收益为</p>
+<div class="arithmatex">\[B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s &gt; C_0.\]</div>
+<p>这里 <span class="arithmatex">\(N\)</span> 是最容易被低估的变量：研究项目常常以为“写完就结束了”，但真实情况是标定要重跑、参数要微调、论文返修要补实验，<span class="arithmatex">\(N\)</span> 往往在几十到几百的量级。<strong>只要 <span class="arithmatex">\(N\)</span> 够大，几乎任何把重复劳动自动化的实践都会回本。</strong></p>
+<table>
+<thead>
+<tr>
+<th>实践</th>
+<th>一次性投入</th>
+<th>每次变更节省</th>
+<th>回本条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写下接口契约</td>
+<td>0.5–2 h / 模块</td>
+<td>0.2–1 h / 次联调</td>
+<td>联调次数 ≥3 次</td>
+</tr>
+<tr>
+<td>单元测试</td>
+<td>约 0.5–1 倍实现时间</td>
+<td>回归定位从小时级降到分钟级</td>
+<td>该模块还会被改第二次</td>
+</tr>
+<tr>
+<td>CI 流水线</td>
+<td>0.5–2 天搭建</td>
+<td>10–30 min / 次合并验证</td>
+<td>每周合并 &gt;3 次</td>
+</tr>
+<tr>
+<td>容器化</td>
+<td>1–3 天</td>
+<td>1–4 h / 次环境排错</td>
+<td>需要交付到 ≥2 台机器</td>
+</tr>
+<tr>
+<td>代码评审</td>
+<td>20–60 min / 次</td>
+<td>拦截缺陷，修复成本显著下降</td>
+<td>依赖他人长期维护</td>
+</tr>
+<tr>
+<td>日志与指标</td>
+<td>2–8 h</td>
+<td>1–8 h / 次故障定位</td>
+<td>系统需要连续运行</td>
+</tr>
+</tbody>
+</table>
+<p>另一条更硬的量化关系是<strong>缺陷修复成本的放大</strong>：同一个缺陷，在设计阶段发现、在编码/单元测试阶段发现、在集成阶段发现、在部署上线后发现，修复成本通常按 1 : 10 : 100 的量级递增，因为越晚发现，需要改动的东西越多、需要重跑的验证越多。这条规律直接解释了为什么测试应当尽可能靠近契约被写下的地方。</p>
+<p>不过“什么都做”同样是错误答案。工程投入本身有维护成本：流水线会坏、测试会 flaky、文档会过期。所以判断标准不是“是否规范”，而是<strong>这项投入是否在可预见的 <span class="arithmatex">\(N\)</span> 次变更内回本</strong>；一个只跑一次的数据处理脚本，不值得为它建 CI。</p>
+<p>还有一类收益不体现在任何一次具体变更里：<strong>认知负载的下降</strong>。边界清楚、契约明确的项目，新成员的上手时间可以从数天缩短到数小时，这笔收益会在人员更替时一次性兑现。</p>
+<p>反过来，有几类情况确实不值得投入，应当明确说“不做”：</p>
+<ul>
+<li>代码生命周期短于投入回收期（例如一次性的数据转换脚本）；</li>
+<li>变更次数 <span class="arithmatex">\(N\)</span> 很小且确定不会再发生；</li>
+<li>该环节已被更外层的检查覆盖（例如已有一条端到端测试兜住）。</li>
+</ul>
+<h2 id="技术债与返工成本">技术债与返工成本</h2>
+<p>技术债这个比喻之所以有用，是因为它自带两个变量：<strong>本金</strong>和<strong>利息</strong>。设本金为 <span class="arithmatex">\(V\)</span>（当前实现与“本该有的实现”之间的差距），每次变更因绕过这份差距而多付的成本比例为 <span class="arithmatex">\(r\)</span>，经过 <span class="arithmatex">\(t\)</span> 次变更后的总代价约为</p>
+<div class="arithmatex">\[C_{\text{future}} = V \cdot (1 + r)^{t}.\]</div>
+<p>这个式子最重要的含义是<strong>债务按复利增长</strong>：<span class="arithmatex">\(r = 0.2\)</span>、<span class="arithmatex">\(t = 10\)</span> 时，<span class="arithmatex">\(1.2^{10} \approx 6.2\)</span>，也就是同样一块差距，十次变更之后要多付六倍的代价。因此技术债的处置原则不是“迟早还”，而是<strong>在利息超过本金之前还</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>债务类型</th>
+<th>典型来源</th>
+<th>利息的表现形式</th>
+<th>偿还方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求债</td>
+<td>需求未定就开始写</td>
+<td>返工波及已完成的模块</td>
+<td>先冻结范围再实现</td>
+</tr>
+<tr>
+<td>设计债</td>
+<td>临时补丁层层堆叠</td>
+<td>每加一个功能都要绕过旧分支</td>
+<td>抽出明确边界后重构</td>
+</tr>
+<tr>
+<td>接口债</td>
+<td>字段与单位靠约定</td>
+<td>跨模块静默错误、联调变慢</td>
+<td>写下契约并加入校验</td>
+</tr>
+<tr>
+<td>测试债</td>
+<td>没有自动化检查</td>
+<td>每次改动都要人工回归</td>
+<td>从真实失败案例倒推测试</td>
+</tr>
+<tr>
+<td>环境债</td>
+<td>手工配置运行环境</td>
+<td>换机器即失败</td>
+<td>容器化与依赖版本锁定</td>
+</tr>
+</tbody>
+</table>
+<p>技术债里最贵的一类发生在<strong>接口上</strong>，因为它会向外传播。设一次接口变更涉及 <span class="arithmatex">\(k\)</span> 个调用方，单点修改成本为 <span class="arithmatex">\(c_e\)</span>，而由于契约不清晰导致的返工概率为 <span class="arithmatex">\(p_{\text{rework}}\)</span>，返工单次成本为 <span class="arithmatex">\(c_v\)</span>：</p>
+<div class="arithmatex">\[C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \qquad c_v \gg c_e.\]</div>
+<p>因为 <span class="arithmatex">\(c_v \gg c_e\)</span>，降低总成本最有效的做法不是“写得更快”，而是<strong>降低 <span class="arithmatex">\(p_{\text{rework}}\)</span></strong>，也就是让契约稳定、让不兼容变更在早期就能被检测出来：</p>
+<table>
+<thead>
+<tr>
+<th>变更对象</th>
+<th>受影响者</th>
+<th>传播成本</th>
+<th>什么时候才会被发现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模块内部函数</td>
+<td>该模块自身</td>
+<td>最低</td>
+<td>编译或单元测试立即发现</td>
+</tr>
+<tr>
+<td>模块间接口</td>
+<td><span class="arithmatex">\(k\)</span> 个调用方</td>
+<td>近似 <span class="arithmatex">\(O(k)\)</span></td>
+<td>集成测试</td>
+</tr>
+<tr>
+<td>消息 / 话题契约</td>
+<td>所有发布者与订阅者</td>
+<td>近似 <span class="arithmatex">\(O(k)\)</span> 且跨进程</td>
+<td>运行期才暴露，没有编译检查</td>
+</tr>
+<tr>
+<td>数据文件格式</td>
+<td>历史数据与全部工具链</td>
+<td>需要迁移脚本</td>
+<td>旧数据读不出来时</td>
+</tr>
+<tr>
+<td>坐标系与单位约定</td>
+<td>全系统</td>
+<td>最高且完全静默</td>
+<td>表现为“结果总是差一点点”</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行是最危险的：坐标系与单位错误不会报错，只会让结果缓慢地偏离，因此必须在接口层加入显式约束（类型、单位后缀、校验断言），把它从“静默错误”变成“立即失败”。</p>
 <h2 id="工程实践的最低基线">工程实践的最低基线</h2>
 <p>工程实践很容易变成两种极端：要么完全不讲，要么一开始就上全套重流程。更现实的方式是按项目规模设定最低基线——先保证不会因为缺哪一环而崩，再逐步加码。</p>
 <table>
@@ -3809,16 +4155,79 @@
 </tbody>
 </table>
 <p>这张表的关键判断是：<strong>成本不是消失了，而是被推迟了</strong>。一个人做原型时不写测试是合理的权衡；但同一个项目如果要交给别人继续做，那么“暂时不做”的那一格就会立刻变成必须做的事。基线的选择应当由“这段代码还要活多久、还有谁来碰”决定，而不是由个人偏好决定。</p>
+<p>“人多了就要加流程”也不是感觉，而是可以被计数的：若团队有 <span class="arithmatex">\(n\)</span> 个人，两两之间的沟通路径数为</p>
+<div class="arithmatex">\[C(n) = \frac{n(n-1)}{2},\]</div>
+<p><span class="arithmatex">\(n=3\)</span> 时是 3 条，<span class="arithmatex">\(n=8\)</span> 时是 28 条，<span class="arithmatex">\(n=20\)</span> 时是 190 条。<strong>沟通路径的增长速度远快于人数</strong>，这就是为什么小团队的默契做法到十人以上会失效，必须换成书面契约与自动化检查。</p>
+<table>
+<thead>
+<tr>
+<th>团队规模</th>
+<th>沟通路径数</th>
+<th>必要流程强度</th>
+<th>主要瓶颈</th>
+<th>流程过度的症状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 人</td>
+<td>0</td>
+<td>提交纪律 + 少量断言</td>
+<td>个人注意力</td>
+<td>——</td>
+</tr>
+<tr>
+<td>2–3 人</td>
+<td>1–3</td>
+<td>分支、评审、接口文档</td>
+<td>接口约定是否清楚</td>
+<td>评审排队</td>
+</tr>
+<tr>
+<td>4–8 人</td>
+<td>6–28</td>
+<td>CI、自动化测试、模块负责人</td>
+<td>集成冲突</td>
+<td>会议时间超过编码时间</td>
+</tr>
+<tr>
+<td>9–20 人</td>
+<td>36–190</td>
+<td>契约版本化、门禁、灰度发布</td>
+<td>依赖管理</td>
+<td>流程本身变成主要工作</td>
+</tr>
+<tr>
+<td>20 人以上</td>
+<td>190+</td>
+<td>平台化、内部工具、SLO 与错误预算</td>
+<td>协调与认知负荷</td>
+<td>发布周期被流程拖长</td>
+</tr>
+</tbody>
+</table>
+<p>合理的做法是让流程强度随 <span class="arithmatex">\(n(n-1)/2\)</span> 增长而增长，但不要提前加载：<strong>当某类问题第一次重复出现时引入对应的最小手段，比一开始就上全套重流程更省钱，也比等着它第三次出现更省事。</strong></p>
 <h2 id="本章导航">本章导航</h2>
+<p>建议按顺序读：每一章都在使用上一章的产出，顺序颠倒会让概念缺少落点。</p>
 <ul>
 <li><a href="01-requirements-architecture/">第 1 章 · 需求、边界与软件架构</a>：从功能与质量要求出发，定义系统边界与依赖方向。</li>
+<li>读法：先把“必须做到”和“最好做到”分开，再谈技术选型。</li>
+<li>出口：能写出功能范围、质量指标与依赖方向三样东西。</li>
 <li><a href="02-modular-apis/">第 2 章 · 模块化设计与 API</a>：把边界固化为接口契约，让模块可以独立开发与验证。</li>
+<li>读法：重点看签名、单位、错误约定这三类契约要素。</li>
+<li>出口：模块的输入输出可以不读实现就写下来。</li>
 <li><a href="03-version-control/">第 3 章 · 版本控制与 Git</a>：用提交、分支与评审记录系统如何演化。</li>
+<li>读法：关注提交粒度与分支策略如何服务于回退与追溯。</li>
+<li>出口：任何一次行为变化都能定位到对应的提交与理由。</li>
 <li><a href="04-testing-debugging/">第 4 章 · 测试与调试</a>：用测试提供证据，用系统化流程定位故障。</li>
+<li>读法：从真实失败案例倒推测试，而不是追求覆盖率数字。</li>
+<li>出口：常见回归能被自动发现，调试有固定顺序。</li>
 <li><a href="05-deployment-reliability/">第 5 章 · 容器、部署与可靠运行</a>：让系统在不同机器上可复现地启动，并且可以被观察和回退。</li>
+<li>读法：把环境一致性、健康检查与回滚当成同一件事的三面。</li>
+<li>出口：换一台机器能一条命令起来，出问题能回退。</li>
 </ul>
 <blockquote>
-<p><strong>下一步</strong>：从 <a href="01-requirements-architecture/">需求、边界与软件架构</a> 开始，按顺序读完五章；如果正在调试跨模块问题，可以直接跳到 <a href="04-testing-debugging/">测试与调试</a>，再结合 <a href="../distributed-systems/05-middleware-ros2-dds/">ROS 2 与 DDS 中间件</a> 检查接口契约。</p>
+<p><strong>下一步</strong>：从 <a href="01-requirements-architecture/">需求、边界与软件架构</a> 开始，按顺序读完五章；如果正在调试跨模块问题，可以直接跳到 <a href="04-testing-debugging/">测试与调试</a>，再结合 <a href="../distributed-systems/05-middleware-ros2-dds/">ROS 2 与 DDS 中间件</a> 检查接口契约。涉及多机部署与参数分发时，另见 <a href="../distributed-systems/02-distributed-time/">第 2 章 · 时间与异步</a> 与 <a href="../multi-agent-systems/04-allocation-distributed-decision/">任务分配与分布式决策</a>。</p>
 </blockquote>
 
 

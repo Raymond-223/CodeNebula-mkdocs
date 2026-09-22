@@ -3502,6 +3502,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#融合权重的调度规则" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        融合权重的调度规则
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#共享自主必须推断人真正想做什么" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3535,6 +3546,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#仲裁与权限分层" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        仲裁与权限分层
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#必要时清晰切换模式比长期模糊融合更好" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3550,6 +3572,28 @@
     <span class="md-ellipsis">
       
         融合权重需要可解释变化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#共享自主的性能度量" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        共享自主的性能度量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#人机闭环的稳定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人机闭环的稳定性
       
     </span>
   </a>
@@ -3685,6 +3729,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#融合权重的调度规则" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        融合权重的调度规则
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#共享自主必须推断人真正想做什么" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3718,6 +3773,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#仲裁与权限分层" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        仲裁与权限分层
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#必要时清晰切换模式比长期模糊融合更好" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3733,6 +3799,28 @@
     <span class="md-ellipsis">
       
         融合权重需要可解释变化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#共享自主的性能度量" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        共享自主的性能度量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#人机闭环的稳定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人机闭环的稳定性
       
     </span>
   </a>
@@ -3837,30 +3925,904 @@
 <br />
 <figcaption>控制权应该随风险、置信度和任务阶段变化，而不是固定平均。</figcaption>
 </figure>
+<p>它的价值来自一个事实：在遥操作中，人的决策速度受限于注意力与手眼协调，而机器在高频精度上远强于人。把两者按层级而不是按比例组合，才能同时获得人的判断力和机器的稳定性。</p>
+<p>本章回答四个问题：控制权在哪一层融合、融合权重如何调度、融合后如何保证安全、以及如何度量与验收。离散介入点见 <a href="../02-human-in-loop/">Human-in-the-Loop</a>，控制权的完全转移见 <a href="../05-intervention-takeover/">Intervention &amp; Takeover</a>。</p>
 <h2 id="人和自动系统通常控制不同层级">人和自动系统通常控制不同层级</h2>
-<p>遥操作机械臂时，人可以决定“抓哪个物体”，系统负责避障和末端稳定；轮椅用户给出大致方向，系统负责局部避障。</p>
-<p>这比直接混合两个速度向量更自然，因为人和机器各自承担最擅长的部分。</p>
+<p>先定义层级：设控制信号按时间尺度分层，任务目标层、路径轨迹层、姿态力矩层、安全边界层，各层的更新率与主导者不同。 层级分工成立的前提是带宽分离：人的输入更新率通常在 5–10 Hz（人手生理性抖动集中在 0.5–2 Hz），而机器姿态环可运行在 1 kHz，两者相差两个数量级以上。只要满足 <span class="arithmatex">\(f_a\gg f_h\)</span>，机器就有能力在人给出的低频意图之间补出连续、平滑的执行，而人不需要感知毫秒级细节。</p>
+<table>
+<thead>
+<tr>
+<th>控制层级</th>
+<th>谁主导</th>
+<th>时间尺度</th>
+<th>机器负责什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务目标</td>
+<td>人</td>
+<td>秒–分钟</td>
+<td>提供候选与风险提示</td>
+</tr>
+<tr>
+<td>路径/轨迹</td>
+<td>机器为主</td>
+<td>0.1–1 s</td>
+<td>避障、平滑、可行性</td>
+</tr>
+<tr>
+<td>姿态/力矩</td>
+<td>机器</td>
+<td>1–10 ms</td>
+<td>稳定、限幅、抗扰动</td>
+</tr>
+<tr>
+<td>安全边界</td>
+<td>机器（独立于融合）</td>
+<td>1–10 ms</td>
+<td>强制约束</td>
+</tr>
+</tbody>
+</table>
+<p>按层级分工的直接好处是<strong>冲突最少</strong>：只要人和机器操作的层级不同，双方输出就不是同一维度的竞争关系。比如人可以决定“抓哪个物体”，系统负责避障和末端稳定；轮椅用户给出大致方向，系统负责局部避障。</p>
+<table>
+<thead>
+<tr>
+<th>组合方式</th>
+<th>可预测性</th>
+<th>对参数误差的敏感度</th>
+<th>典型失效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>层级分工</td>
+<td>高</td>
+<td>低</td>
+<td>层级归属定义不清</td>
+</tr>
+<tr>
+<td>同层向量叠加</td>
+<td>中</td>
+<td>中</td>
+<td>双方持续对抗</td>
+</tr>
+<tr>
+<td>纯人操作 + 保护层</td>
+<td>高</td>
+<td>低</td>
+<td>人的疲劳与精度不足</td>
+</tr>
+<tr>
+<td>纯自动 + 人监督</td>
+<td>中</td>
+<td>高</td>
+<td>监督负荷与状态丢失</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>分工失败模式</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>层级重叠</td>
+<td>两方在同维度互相修正</td>
+<td>明确每层的唯一主导者</td>
+</tr>
+<tr>
+<td>带宽错配</td>
+<td>人在高频环成为瓶颈</td>
+<td>把高频细节下放到机器层</td>
+</tr>
+<tr>
+<td>层级真空</td>
+<td>某些状态无人负责</td>
+<td>为每层指定默认行为</td>
+</tr>
+</tbody>
+</table>
+<p>层级分工把融合问题从“两个向量怎么混合”变成“每层由谁负责、何时交还”，这正是它与简单加权融合的根本区别。</p>
 <h2 id="最简单的融合可以写成加权控制">最简单的融合可以写成加权控制</h2>
+<p>定义 <span class="arithmatex">\(u_h\)</span> 为人的输入、<span class="arithmatex">\(u_a\)</span> 为自主建议、<span class="arithmatex">\(\alpha\in[0,1]\)</span> 为人的权重，最直接的融合是</p>
 <div class="arithmatex">\[
 u=\alpha u_h+(1-\alpha)u_a,
 \]</div>
-<p>其中 <span class="arithmatex">\(u_h\)</span> 是人的输入，<span class="arithmatex">\(u_a\)</span> 是自主建议。但真正困难的是 <span class="arithmatex">\(\alpha\)</span> 怎么变化，而不是公式本身。</p>
-<p>风险升高、机器置信度下降时，可以增大人的控制权；人的输入明显危险时，安全层仍可以限制最终动作。</p>
+<p>其中 <span class="arithmatex">\(u\)</span> 是送给执行器的最终指令。<span class="arithmatex">\(\alpha=1\)</span> 表示完全由人控制，<span class="arithmatex">\(\alpha=0\)</span> 表示完全由自动系统控制，中间值表示两者线性混合。 有效增益可以直接读出：若自动建议为零（<span class="arithmatex">\(u_a=0\)</span>），操作者要让输出达到满幅 <span class="arithmatex">\(u=1\)</span>，需要给出 <span class="arithmatex">\(u_h=1/\alpha\)</span>。取 <span class="arithmatex">\(\alpha=0.3\)</span>，操作者需要 3.3 倍的输入幅度才能达到全速，主观感受就是“控制变沉”。这个现象不是 bug，而是线性融合的必然结果，必须在设计中显式承认。</p>
+<table>
+<thead>
+<tr>
+<th>融合方法</th>
+<th>参数含义</th>
+<th>可预测性</th>
+<th>参数敏感度</th>
+<th>计算代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线性加权</td>
+<td><span class="arithmatex">\(\alpha\)</span></td>
+<td>高</td>
+<td>中</td>
+<td>极低</td>
+</tr>
+<tr>
+<td>位置混合</td>
+<td>目标位置权重</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+</tr>
+<tr>
+<td>力矩混合</td>
+<td>期望力矩权重</td>
+<td>中</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>势场叠加</td>
+<td>势场强度</td>
+<td>中</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>MPC 含人类代价</td>
+<td>代价权重</td>
+<td>中</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>层级分配</td>
+<td>层级边界</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<p>混合的维度选择同样重要：位置混合在低速接近时手感最好，速度混合适合中高速巡航，力矩混合适合需要柔顺接触的场景。同一条控制律照搬到不同维度，会得到完全不同的操作感受。</p>
+<p>具体地说，在低速段（例如 0.05 m/s 以下）若仍使用速度融合，人的输入 <span class="arithmatex">\(u_h\)</span> 会被机器分量主导，表现为“推不动”；此时应切换到位置接口，让人给出的相对位移直接生效。这个切换点应写进设计文档，并与 <span class="arithmatex">\(\alpha\)</span> 调度规则一起评审。 真正困难的是 <span class="arithmatex">\(\alpha\)</span> 怎么变化，而不是公式本身。风险升高、机器置信度下降时，可以增大人的控制权；人的输入明显危险时，安全层仍可以限制最终动作。一个常见错误是把 <span class="arithmatex">\(\alpha\)</span> 写成常数并宣称“人机协作”：常数权重既没有利用机器在不确定场景中的能力，也没有利用人在清晰场景中的效率。</p>
+<p>还有一个容易被忽略的约束是 <span class="arithmatex">\(\alpha\)</span> 的作用维度必须与被融合的物理量一致：对速度指令使用权重，等价于对速度做缩放；对位置指令使用同一权重，等价于对位移做缩放，两者的手感与稳定性完全不同。设计文档应写明 <span class="arithmatex">\(\alpha\)</span> 作用在哪一维，以及该维度上的量纲与限幅。</p>
+<h2 id="融合权重的调度规则">融合权重的调度规则</h2>
+<p>把 <span class="arithmatex">\(\alpha\)</span> 的调度写成显式规则，是共享自主能否被验收的关键。一个可用的结构是：风险越高、机器越不确定，就越把人推向主导；但变化速率必须受限，以免操作者失去运动预期。</p>
+<div class="arithmatex">\[
+\alpha_{k+1}=\mathrm{clip}\big(\alpha_k+\eta\,(\alpha_\text{target}-\alpha_k),\ \alpha_\text{min},\ \alpha_\text{max}\big),
+\]</div>
+<p>其中 <span class="arithmatex">\(\eta\)</span> 是限速系数，<span class="arithmatex">\(\alpha_\text{target}\)</span> 由风险与置信度决定。<span class="arithmatex">\(\eta\)</span> 的物理含义是时间常数：控制周期为 <span class="arithmatex">\(\Delta t\)</span> 时，权重接近目标值的特征时间约为 <span class="arithmatex">\(\tau_\alpha\approx \Delta t/\eta\)</span>。取 <span class="arithmatex">\(\Delta t=20\)</span> ms，<span class="arithmatex">\(\eta=0.1\)</span> 对应约 0.2 s，<span class="arithmatex">\(\eta=0.02\)</span> 对应约 1 s。</p>
+<table>
+<thead>
+<tr>
+<th>系统状态</th>
+<th>目标 <span class="arithmatex">\(\alpha\)</span></th>
+<th>备注意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低风险、高置信</td>
+<td>0.2–0.3</td>
+<td>机器主导，人做微调</td>
+</tr>
+<tr>
+<td>高不确定性</td>
+<td>0.6–0.8</td>
+<td>明显交还控制权</td>
+</tr>
+<tr>
+<td>接近安全边界</td>
+<td>由安全层覆盖</td>
+<td>不论 <span class="arithmatex">\(\alpha\)</span> 多大都限幅</td>
+</tr>
+<tr>
+<td>检测到人离开输入设备</td>
+<td>逐步降到 0.1 并降速</td>
+<td>避免无输入时的“漂移控制”</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>限速系数 <span class="arithmatex">\(\eta\)</span></th>
+<th>特征时间 <span class="arithmatex">\(\tau_\alpha\)</span></th>
+<th>主观感受</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>40 ms</td>
+<td>近似硬切换</td>
+<td>检测到危险时</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>0.2 s</td>
+<td>快速但可感知</td>
+<td>一般风险变化</td>
+</tr>
+<tr>
+<td>0.02</td>
+<td>1 s</td>
+<td>平滑、几乎无感</td>
+<td>置信度缓慢变化</td>
+</tr>
+<tr>
+<td>0.005</td>
+<td>4 s</td>
+<td>保护动作可能来不及</td>
+<td>仅用于非安全相关调整</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行常被忽略：人松手时，<span class="arithmatex">\(u_h\)</span> 若被当作零输入参与融合，等同于机器获得了完全控制权；若被当作“保持当前值”，则机器人会沿最后方向持续运动。<strong>必须显式定义无输入时的行为</strong>，并在代码中写出对应的分支与超时（典型 200–500 ms）。</p>
+<p>“人离开输入设备”的检测也需要显式实现：常见判据是连续 300 ms 内输入变化小于噪声带，或手柄压力传感器归零。检测到之后应降速并逐步降低 <span class="arithmatex">\(\alpha\)</span>，而不是把零输入当作“保持当前方向”——后者在遥操作中会造成典型的失控漂移。</p>
 <h2 id="共享自主必须推断人真正想做什么">共享自主必须推断人真正想做什么</h2>
-<p>摇杆向右不一定意味着用户最终目标就是右侧，可能只是绕开当前障碍。高级共享自主会从一段历史输入估计目标，但目标推断错误也会导致机器“过度帮忙”。</p>
-<p>因此系统应该保留明显的人工覆盖方式。</p>
+<p>摇杆向右不一定意味着用户最终目标就是右侧，可能只是绕开当前障碍。高级共享自主会从一段历史输入估计目标，其形式化描述是目标集合 <span class="arithmatex">\(G\)</span> 上的后验</p>
+<div class="arithmatex">\[
+P(g\mid u_{1:k})\ \propto\ P(u_{1:k}\mid g)\,P(g),
+\]</div>
+<p>其中 <span class="arithmatex">\(u_{1:k}\)</span> 是最近一段输入，<span class="arithmatex">\(P(g)\)</span> 是先验（比如当前场景下的可行动目标）。当后验最大概率高于阈值（实践中常取 0.7）时，可以按该目标辅助；低于阈值时应减少而非增加干预。</p>
+<table>
+<thead>
+<tr>
+<th>意图推断方式</th>
+<th>响应速度</th>
+<th>误判表现</th>
+<th>适用场合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>瞬时输入方向</td>
+<td>最快</td>
+<td>把避障动作当目标</td>
+<td>简单方向控制</td>
+</tr>
+<tr>
+<td>输入历史平滑</td>
+<td>中等</td>
+<td>对意图切换反应迟钝</td>
+<td>平稳遥操作</td>
+</tr>
+<tr>
+<td>显式目标选择</td>
+<td>最慢但最准</td>
+<td>需要额外交互</td>
+<td>高风险或精确任务</td>
+</tr>
+</tbody>
+</table>
+<p>错误帮助的代价通常是不帮助的若干倍：若操作者需要先撤销一次错误辅助再重新输入，纠正时间往往达到被救回时间的 3 倍量级。这解释了为什么低置信度时应退回“不帮忙”。</p>
+<table>
+<thead>
+<tr>
+<th>推断失败模式</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>把避障当目标</td>
+<td>机器人持续偏向障碍一侧</td>
+<td>区分瞬时输入与目标输入</td>
+</tr>
+<tr>
+<td>目标切换迟钝</td>
+<td>用户改向后仍沿旧目标</td>
+<td>缩短历史窗口</td>
+</tr>
+<tr>
+<td>过度帮忙</td>
+<td>用户频繁反向修正</td>
+<td>提高辅助触发阈值</td>
+</tr>
+<tr>
+<td>目标僵死</td>
+<td>场景变化后辅助不变</td>
+<td>加入场景重构检测</td>
+</tr>
+</tbody>
+</table>
+<p>一条稳健的实践原则是：<strong>当推断置信度低时，退回“不帮忙”而不是按低置信推断去帮忙</strong>。错误帮助比不帮助更难纠正，因为操作者必须先把机器拉回来才能继续。</p>
+<p>历史窗口长度是这套机制里最关键的可调参数：窗口过短会把避障动作误当目标，过长则对目标切换反应迟钝。实践中常用 0.5–2 s，并按任务节奏在验收阶段重标定；窗口与阈值应作为一组参数一起记录，单独调整其中一个往往只是把失效从一种形式换成另一种。</p>
 <h2 id="控制冲突是共享自主最常见的问题">控制冲突是共享自主最常见的问题</h2>
 <p>如果人持续左转，而自动系统不断向右修正，人会进一步加大左转输入，双方就形成对抗。解决办法不是隐藏自动修正，而是让规则可预测：哪些区域机器会限制？什么时候会完全交还控制？</p>
+<p>冲突可被量化：设人类指令与最终指令的一致率为 <span class="arithmatex">\(c\)</span>，定义为</p>
+<div class="arithmatex">\[
+c=\frac{1}{N}\sum_{k=1}^{N}\mathbf{1}\big[u_h(k)\,u(k)&gt;0\big],
+\]</div>
+<p>即两路指令同号的采样比例。若 <span class="arithmatex">\(c\)</span> 长期低于某一水平（实践中常取 0.7），说明系统正在频繁覆盖人的意图。持续低一致率通常意味着<strong>要么辅助规则不合理，要么人的心理模型与系统行为不符</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>冲突类型</th>
+<th>观测信号</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方向对抗</td>
+<td>输入方向与输出方向长期相反</td>
+<td>降低辅助强度或交还控制</td>
+</tr>
+<tr>
+<td>幅度对抗</td>
+<td>输入幅度持续增大</td>
+<td>提高有效增益或限速</td>
+</tr>
+<tr>
+<td>静默覆盖</td>
+<td>输出被修正但无提示</td>
+<td>至少提示被覆盖的维度</td>
+</tr>
+<tr>
+<td>迟滞振荡</td>
+<td>输出在两侧来回跳变</td>
+<td>加入死区或平滑</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>量化指标</th>
+<th>定义</th>
+<th>健康区间</th>
+<th>恶化含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一致率 <span class="arithmatex">\(c\)</span></td>
+<td>同号指令比例</td>
+<td>0.8–0.95</td>
+<td>低于 0.7 说明对抗</td>
+</tr>
+<tr>
+<td>力度比</td>
+<td>平均输入幅度 / 基线</td>
+<td>1.0–1.3</td>
+<td>明显大于 1 说明控制变沉</td>
+</tr>
+<tr>
+<td>修正次数</td>
+<td>每秒反向修正次数</td>
+<td>低</td>
+<td>高值说明规则不可预测</td>
+</tr>
+</tbody>
+</table>
+<p>一致率的健康区间不是越高越好：<span class="arithmatex">\(c\to 1\)</span> 意味着辅助几乎从不改变人的指令，此时系统实际上没有提供任何帮助，只是增加了延迟与复杂度。</p>
+<p>冲突的成因往往不是算法，而是信息不对称：人看不到机器正在规避的障碍，机器也看不到人正在追踪的目标。因此降低冲突的第一手段是把双方关心的量放进同一个界面——当前最小障碍距离、目标偏差、剩余速度余量三项即可覆盖多数对抗场景。</p>
+<table>
+<thead>
+<tr>
+<th>信息共享项</th>
+<th>减少的冲突类型</th>
+<th>缺失后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最小障碍距离</td>
+<td>方向对抗</td>
+<td>人误判机器“无故转向”</td>
+</tr>
+<tr>
+<td>目标偏差</td>
+<td>幅度对抗</td>
+<td>人持续加大输入</td>
+</tr>
+<tr>
+<td>剩余速度余量</td>
+<td>迟滞振荡</td>
+<td>人无法预判减速点</td>
+</tr>
+<tr>
+<td>当前辅助强度</td>
+<td>静默覆盖</td>
+<td>变化显得随机</td>
+</tr>
+</tbody>
+</table>
 <h2 id="安全约束应独立于融合权重">安全约束应独立于融合权重</h2>
 <p>无论 <span class="arithmatex">\(\alpha\)</span> 取多少，最终命令都应经过速度、碰撞和执行器边界检查。否则“人拥有最高权重”可能直接绕过系统安全底线。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shared_command</span><span class="p">(</span><span class="n">human</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">human</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">auto</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">limit</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
 </code></pre></div>
+<p>这段代码的结构比内容更重要：<strong>融合在前，约束在后，约束不接受权重参数</strong>。任何让安全层依赖 <span class="arithmatex">\(\alpha\)</span> 的写法都会引入“人是操舵者所以可以压过安全”这样的隐含假设。 形式上，安全层实现的是一个投影算子：<span class="arithmatex">\(u_\text{safe}=\mathrm{Proj}_{\mathcal{U}}(u)\)</span>，其中 <span class="arithmatex">\(\mathcal{U}\)</span> 是允许指令集合，由速度上限、关节限位、最小障碍距离等约束定义。投影只依赖当前状态，不依赖 <span class="arithmatex">\(\alpha\)</span>、也不依赖人机谁在主导。</p>
+<table>
+<thead>
+<tr>
+<th>约束类型</th>
+<th>检查频率</th>
+<th>触发后行为</th>
+<th>是否可被人覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>执行器限幅</td>
+<td>每个控制周期</td>
+<td>截断指令</td>
+<td>否</td>
+</tr>
+<tr>
+<td>速度上限</td>
+<td>每个控制周期</td>
+<td>按比例缩放</td>
+<td>否</td>
+</tr>
+<tr>
+<td>最小障碍距离</td>
+<td>10–100 Hz</td>
+<td>减速或停止</td>
+<td>否</td>
+</tr>
+<tr>
+<td>任务级约束（禁入区）</td>
+<td>1–10 Hz</td>
+<td>拒绝或改道</td>
+<td>可由有权限者解除</td>
+</tr>
+</tbody>
+</table>
+<p>第三行的频率差异很重要：安全约束的检查频率必须与被约束动态一样快，否则约束总会晚一步。若融合环运行在 50 Hz 而安全环只在 10 Hz，那么一次 60 ms 的指令变化就可能完全绕过检查。 投影算子还有一个实用性质：多条约束可以依次投影，结果必落在各约束的交集内。但当约束之间互相冲突时（例如“必须保持最小距离”与“必须在限速内到达目标”无法同时满足），系统必须有预设的优先级与放弃条件，否则保护层会在冲突时陷入反复切换。</p>
+<table>
+<thead>
+<tr>
+<th>约束冲突情形</th>
+<th>优先级规则</th>
+<th>期望行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>距离与进度冲突</td>
+<td>安全优先</td>
+<td>减速或停住，放弃进度</td>
+</tr>
+<tr>
+<td>限速与任务时限冲突</td>
+<td>安全优先</td>
+<td>超时告警，不由控制器提速</td>
+</tr>
+<tr>
+<td>多条路径约束冲突</td>
+<td>取交集</td>
+<td>无可行解时停机</td>
+</tr>
+</tbody>
+</table>
+<p>验收方式是故障注入：人为把 <span class="arithmatex">\(\alpha\)</span> 设为 1、把人的输入设为最大幅值，检查最终指令是否仍满足全部约束。这个测试不依赖对人的行为假设，因此可以在回归测试中自动执行。</p>
+<h2 id="仲裁与权限分层">仲裁与权限分层</h2>
+<p>人是最终权威并不等于人的每个输入都直接执行。合理的权限分层如下：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>权限</th>
+<th>典型机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>意图层</td>
+<td>人拥有最终决定权</td>
+<td>目标选择、任务中止</td>
+</tr>
+<tr>
+<td>辅助层</td>
+<td>机器可修改细节</td>
+<td>避障、平滑、限速</td>
+</tr>
+<tr>
+<td>保护层</td>
+<td>机器可否决任何人</td>
+<td>碰撞、越界、失稳保护</td>
+</tr>
+</tbody>
+</table>
+<p>保护层之所以能否决人，是因为它的目标是<strong>防止不可逆后果</strong>，而不是完成任务。承认这一点需要在设计文档里明确写出，否则在实现中它很容易被“用户说了算”的需求覆盖掉。</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>意图层</th>
+<th>辅助层</th>
+<th>保护层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择目标</td>
+<td>人决定</td>
+<td>提供候选</td>
+<td>可拒绝不可达目标</td>
+</tr>
+<tr>
+<td>修改轨迹</td>
+<td>人可指定</td>
+<td>机器主导</td>
+<td>可强制绕行</td>
+</tr>
+<tr>
+<td>调整速度</td>
+<td>人可要求</td>
+<td>机器平滑</td>
+<td>可强制限速</td>
+</tr>
+<tr>
+<td>停止任务</td>
+<td>人可发起</td>
+<td>不参与</td>
+<td>可强制触发</td>
+</tr>
+</tbody>
+</table>
+<p>保护层的触发条件必须是可量化的状态判据，例如最小距离低于 0.3 m、速度超过 1.2 m/s、倾角超过安全阈值等。若保护层条件写成“感觉不安全时停止”，它既无法测试也无法在评审中被验证，最终会被实现成一个几乎不触发的死代码。 权限分层还需要处理“谁能解除保护”：保护层一旦触发，解除权限通常只授予承担明确责任的主体，并且必须记录解除原因与时间。缺少这条记录时，保护层会在日常运维中被逐步放宽，直到失去作用。</p>
+<table>
+<thead>
+<tr>
+<th>权限动作</th>
+<th>意图层（人）</th>
+<th>辅助层（机）</th>
+<th>保护层（机）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设定目标</td>
+<td>决定</td>
+<td>提供候选</td>
+<td>可拒绝不可达目标</td>
+</tr>
+<tr>
+<td>修改细节</td>
+<td>可要求</td>
+<td>主导</td>
+<td>可强制修正</td>
+</tr>
+<tr>
+<td>解除保护</td>
+<td>需授权并留痕</td>
+<td>不参与</td>
+<td>记录解除原因</td>
+</tr>
+<tr>
+<td>中止任务</td>
+<td>可发起</td>
+<td>不参与</td>
+<td>可强制触发</td>
+</tr>
+</tbody>
+</table>
 <h2 id="必要时清晰切换模式比长期模糊融合更好">必要时清晰切换模式比长期模糊融合更好</h2>
 <p>如果系统无法可靠推断人的意图，明确进入“人工模式”或“自动模式”可能比不断隐式抢控制更安全。共享自主的目标是降低人的负担，不是让责任边界变得更模糊。</p>
+<p>给出一个可操作的判据：设意图预测的长期命中率为 <span class="arithmatex">\(p_g\)</span>，错误帮助造成的额外修正时间为 <span class="arithmatex">\(t_c\)</span>，纯手工完成时间为 <span class="arithmatex">\(t_m\)</span>。当 <span class="arithmatex">\(p_g\)</span> 低于约 0.7 时，错误帮助带来的期望额外时间会接近甚至超过它节省的时间，此时应改回显式模式与人工确认。</p>
+<p>判断依据可以用意图预测的准确率：若在目标集合上 <span class="arithmatex">\(\max_g P(g\mid u_{1:k})\)</span> 的长期命中率低于约 0.7，隐式融合会频繁产生错误帮助，此时显式模式和明确的交接确认更合适。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适用条件</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续融合</td>
+<td>意图可推断、环境平稳</td>
+<td>无交接动作、控制连续</td>
+<td>参数敏感、易产生对抗</td>
+</tr>
+<tr>
+<td>显式模式切换</td>
+<td>意图模糊、任务分段</td>
+<td>责任边界清晰</td>
+<td>切换瞬间有空档</td>
+</tr>
+<tr>
+<td>混合（模式 + 内部融合）</td>
+<td>高风险且长时段</td>
+<td>兼顾两者</td>
+<td>实现与验证复杂度高</td>
+</tr>
+</tbody>
+</table>
+<p>切换本身也应分层：任务级切换（人重新选择目标）按事件触发，能力级切换（自动↔人工）按预测置信度或风险阈值触发。把两类切换合并到一个按钮上，会造成“按了却没换层”的困惑，而这正是典型的模式混淆来源。</p>
+<table>
+<thead>
+<tr>
+<th>切换类型</th>
+<th>触发条件</th>
+<th>交接要求</th>
+<th>失败后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务级</td>
+<td>人显式选择新目标</td>
+<td>仅需确认目标</td>
+<td>走错路线</td>
+</tr>
+<tr>
+<td>能力级（自动→人）</td>
+<td>置信度或风险越界</td>
+<td>状态摘要 + 接管确认</td>
+<td>接管延迟</td>
+</tr>
+<tr>
+<td>能力级（人→自动）</td>
+<td>人显式交还且条件满足</td>
+<td>目标一致性检查</td>
+<td>机器沿错误目标执行</td>
+</tr>
+<tr>
+<td>保护级</td>
+<td>约束被违反</td>
+<td>无需确认</td>
+<td>任务中止</td>
+</tr>
+</tbody>
+</table>
+<p>交接要求中最重要的一条是状态摘要：接管方需要知道当前目标、当前速度与最近一次自动决策的原因，否则接管后的前几秒只能靠猜。摘要的信息结构与 <a href="../04-trust-explainability/">Trust &amp; Explainability</a> 中“行动相关问题”的清单一致，只是压缩到一到两行。 模式切换的代价是把连续问题变成离散问题：切换瞬间必须保证指令源唯一，否则会出现双源并存。相关的空档概率与切换协议见 <a href="../01-human-ai-automation/">Interaction &amp; Levels of Automation</a> 与 <a href="../05-intervention-takeover/">Intervention &amp; Takeover</a>。</p>
 <h2 id="融合权重需要可解释变化">融合权重需要可解释变化</h2>
-<p>控制权比例若随系统置信度变化，应让操作者能够感知这种变化及其原因。突然增大或减小辅助会破坏人的运动预期。权重调度应限制变化速率，并在接近安全边界时明确提示自动系统正在覆盖哪些输入。</p>
+<p>控制权比例若随系统置信度变化，应让操作者能够感知这种变化及其原因。突然增大或减小辅助会破坏人的运动预期。权重调度应限制变化速率，并在接近安全边界时明确提示自动系统正在覆盖哪些输入。 可感知的最低要求是：<strong>当前辅助强度、最近一次显著变化的原因、以及被覆盖的输入维度</strong>。缺少任何一项，操作者都无法建立稳定的心理模型，也就无法预测自己的输入会产生什么效果。</p>
+<table>
+<thead>
+<tr>
+<th>需展示项</th>
+<th>实现形式</th>
+<th>缺失后果</th>
+<th>量化门槛</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前辅助强度</td>
+<td>常驻条形/百分比</td>
+<td>无法预判输入增益</td>
+<td>分辨率 0.1 级</td>
+</tr>
+<tr>
+<td>变化原因</td>
+<td>一行文字或图标</td>
+<td>变化显得随机</td>
+<td>变化后 500 ms 内显示</td>
+</tr>
+<tr>
+<td>被覆盖维度</td>
+<td>高亮对应输入轴</td>
+<td>用户误判失效</td>
+<td>覆盖时立即提示</td>
+</tr>
+<tr>
+<td>速率限制</td>
+<td>参数本身</td>
+<td>变化过于突兀</td>
+<td>每 100 ms 变化 ≤ 0.05</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行给出一个可直接实现的约束：把 <span class="arithmatex">\(\lvert \Delta\alpha\rvert\)</span> 限制在每 100 ms 不超过 0.05，对应约 1 s 完成一次从 0.5 到 1.0 的过渡量级，这通常落在操作者不感到突兀、机器又来得及保护的区间内。 展示形式要与控制方式匹配：连续融合适合连续变化的指示（条形、指针），离散模式适合离散指示（标签、图标）。用离散标签表示连续权重，会让操作者误以为系统在两种状态之间跳变，从而做出不必要的覆盖动作。</p>
+<table>
+<thead>
+<tr>
+<th>展示设计</th>
+<th>适配的控制方式</th>
+<th>误读风险</th>
+<th>建议做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>百分比数值</td>
+<td>连续融合</td>
+<td>分辨率过高、难以快速读取</td>
+<td>数值 + 条形组合</td>
+</tr>
+<tr>
+<td>条形/指针</td>
+<td>连续融合</td>
+<td>无方向感</td>
+<td>标注变化方向</td>
+</tr>
+<tr>
+<td>离散标签</td>
+<td>显式模式</td>
+<td>掩盖渐变过程</td>
+<td>仅用于模式切换</td>
+</tr>
+<tr>
+<td>颜色编码</td>
+<td>两者</td>
+<td>色觉差异导致漏读</td>
+<td>颜色 + 图标冗余</td>
+</tr>
+</tbody>
+</table>
+<p>另一个常被忽略的维度是历史：操作者需要知道辅助强度正在上升还是正在下降，因为这两种趋势对应的预期输入增益不同。只显示当前值而不显示趋势，会让人在变化期间做出反向修正，进而放大前文提到的闭环过补偿。</p>
+<p>可解释性同样适用于“不帮忙”的时刻：当系统判断应减少辅助时，应给出触发原因（置信度下降、接近障碍、输入冲突等），否则操作者会把辅助减弱理解为设备故障，并尝试用更大输入补偿，这恰好会触发下一次更强的保护动作。</p>
+<h2 id="共享自主的性能度量">共享自主的性能度量</h2>
+<p>共享自主是否真的有用，必须用成对实验来回答：同一任务、同一操作者、同一场景集合，分别在纯人工与共享自主下测量。辅助增益可以定义为</p>
+<div class="arithmatex">\[
+\Delta_T=\frac{T_\text{manual}-T_\text{shared}}{T_\text{manual}},
+\]</div>
+<p>其中 <span class="arithmatex">\(T\)</span> 是任务完成时间。若 <span class="arithmatex">\(\Delta_T\)</span> 只有几个百分点，而失败率与认知负荷显著上升，那么这套共享自主在本场景中就是负收益的。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>典型目标</th>
+<th>恶化含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务完成时间</td>
+<td>端到端耗时</td>
+<td>相对纯人工改善 20% 以上</td>
+<td>辅助在拖慢操作</td>
+</tr>
+<tr>
+<td>碰撞/越界次数</td>
+<td>安全相关事件</td>
+<td>显著低于纯人工</td>
+<td>保护层不生效</td>
+</tr>
+<tr>
+<td>一致率 <span class="arithmatex">\(c\)</span></td>
+<td>同号指令比例</td>
+<td>0.8–0.95</td>
+<td>对抗或辅助无效</td>
+</tr>
+<tr>
+<td>路径效率</td>
+<td>实际路径 / 最优路径</td>
+<td>1.0–1.3</td>
+<td>辅助绕行过多</td>
+</tr>
+<tr>
+<td>认知负荷</td>
+<td>主观评分或次任务指标</td>
+<td>不高于纯人工</td>
+<td>辅助增加负担</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>度量陷阱</th>
+<th>机制</th>
+<th>后果</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只测平均值</td>
+<td>少数困难场景被平均掉</td>
+<td>危险场景被掩盖</td>
+<td>按场景分层报告</td>
+</tr>
+<tr>
+<td>不同受试者对比</td>
+<td>个体差异大于辅助效果</td>
+<td>结论不可靠</td>
+<td>同受试者配对实验</td>
+</tr>
+<tr>
+<td>忽略学习效应</td>
+<td>后续试验天然更快</td>
+<td>高估辅助收益</td>
+<td>随机化顺序、加练习期</td>
+</tr>
+<tr>
+<td>只测成功率</td>
+<td>不安全但成功的操作被计入</td>
+<td>鼓励激进策略</td>
+<td>加入越界与碰撞计数</td>
+</tr>
+</tbody>
+</table>
+<p>度量设计要覆盖最坏场景，而不是平均场景：共享自主的价值恰恰在于困难情境，用简单场景的平均改善来评估它，几乎总会得出“收益不大”的错误结论。</p>
+<h2 id="人机闭环的稳定性">人机闭环的稳定性</h2>
+<p>共享自主构成一个闭环：人的输入影响机器输出，机器的修正又反过来改变人的下一步输入。把人简化为增益 <span class="arithmatex">\(K_h\)</span>、辅助规则简化为增益 <span class="arithmatex">\(K_a\)</span> 的环节，闭环稳定性的粗略判据是开环增益小于 1：</p>
+<div class="arithmatex">\[
+K_h\,K_a&lt;1 .
+\]</div>
+<p>取 <span class="arithmatex">\(K_h=0.8\)</span>、<span class="arithmatex">\(K_a=0.6\)</span>，乘积 0.48 说明闭环有余量；若辅助增益提高到 2.0，乘积变成 1.6，闭环会表现为过补偿振荡：人输入一次修正，系统过冲，人再反向修正，幅度逐周期放大。</p>
+<table>
+<thead>
+<tr>
+<th>参数区间</th>
+<th>闭环行为</th>
+<th>观测信号</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(K_hK_a&lt;0.5\)</span></td>
+<td>平缓、无振荡</td>
+<td>收敛慢</td>
+<td>可适当提高辅助</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\)</span>–<span class="arithmatex">\(0.9\)</span></td>
+<td>响应快、略有过冲</td>
+<td>轻微超调</td>
+<td>正常区间</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.9\)</span>–<span class="arithmatex">\(1.0\)</span></td>
+<td>临界</td>
+<td>持续小幅振荡</td>
+<td>降低增益或加阻尼</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(&gt;1\)</span></td>
+<td>发散</td>
+<td>幅度逐周期增大</td>
+<td>必须降低辅助增益</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>振荡来源</th>
+<th>生成机制</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>增益过高</td>
+<td>辅助修正量大于偏差</td>
+<td>降低 <span class="arithmatex">\(K_a\)</span> 或加平滑</td>
+</tr>
+<tr>
+<td>纯延迟</td>
+<td>人的感知与动作滞后</td>
+<td>预测显示或降低辅助带宽</td>
+</tr>
+<tr>
+<td>硬切换</td>
+<td><span class="arithmatex">\(\alpha\)</span> 突变引起过补偿</td>
+<td>限速调度 <span class="arithmatex">\(\eta\)</span></td>
+</tr>
+<tr>
+<td>死区过小</td>
+<td>微小偏差也被修正</td>
+<td>加入死区与滞回</td>
+</tr>
+</tbody>
+</table>
+<p>这类稳定性问题与 <a href="../../robustness-safety/01-uncertainty-shift/">Uncertainty &amp; Shift</a> 中的分布外退化有共同点：两者都表现为“正常工况下完全正常、边界条件下突然失控”。因此验收不能只在标称场景下做，必须包含增益被人为上调、感知延迟增大、输入设备读数抖动等扰动工况。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章处理连续融合，<a href="../02-human-in-loop/">Human-in-the-Loop</a> 讨论离散的介入点，<a href="../04-trust-explainability/">Trust &amp; Explainability</a> 解释如何让辅助规则被正确理解，<a href="../05-intervention-takeover/">Intervention &amp; Takeover</a> 给出控制权完全转移的协议。融合后的强制约束见 <a href="../../robustness-safety/03-safety-constraints/">Safety Constraints</a>。</p>
+</blockquote>
 
 
 

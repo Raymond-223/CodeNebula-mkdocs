@@ -3322,6 +3322,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#监控信号的量化阈值" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监控信号的量化阈值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#监控信号的窗口长度与滤波延迟" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监控信号的窗口长度与滤波延迟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#安全过滤器可以修改不安全动作" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3355,6 +3377,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#回退策略的覆盖范围与切换安全性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回退策略的覆盖范围与切换安全性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#运行时安全最终需要明确状态机" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3377,10 +3410,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#回退控制器也需要覆盖证明" class="md-nav__link">
+  <a href="#干预延迟与接管时间预算" class="md-nav__link">
     <span class="md-ellipsis">
       
-        回退控制器也需要覆盖证明
+        干预延迟与接管时间预算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#运行时安全的验证故障注入与红队测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行时安全的验证：故障注入与红队测试
       
     </span>
   </a>
@@ -3674,6 +3718,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#监控信号的量化阈值" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监控信号的量化阈值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#监控信号的窗口长度与滤波延迟" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监控信号的窗口长度与滤波延迟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#安全过滤器可以修改不安全动作" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3707,6 +3773,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#回退策略的覆盖范围与切换安全性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回退策略的覆盖范围与切换安全性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#运行时安全最终需要明确状态机" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3729,10 +3806,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#回退控制器也需要覆盖证明" class="md-nav__link">
+  <a href="#干预延迟与接管时间预算" class="md-nav__link">
     <span class="md-ellipsis">
       
-        回退控制器也需要覆盖证明
+        干预延迟与接管时间预算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#运行时安全的验证故障注入与红队测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行时安全的验证：故障注入与红队测试
       
     </span>
   </a>
@@ -3837,27 +3925,827 @@
 <br />
 <figcaption>主策略追求任务性能，独立安全层负责监控、限制和紧急回退。</figcaption>
 </figure>
+<p>这一层必须“独立”，因为它要在主策略出错时仍然正确。如果监控与主策略共享同一份状态估计、同一个模型和同一段代码，导致主策略失效的原因通常也会让监控失效——看起来有两层，实际只有一层。</p>
+<p>设时刻 <span class="arithmatex">\(t\)</span> 的策略动作为 <span class="arithmatex">\(u_{nom}(t)\)</span>，允许动作集为 <span class="arithmatex">\(\mathcal{U}_\text{safe}\)</span>，监控量向量 <span class="arithmatex">\(m(t)\in\mathbb{R}^k\)</span> 含协方差、延迟、置信度等，监控器给出布尔判定 <span class="arithmatex">\(a(t)\)</span>。运行时安全要保证：</p>
+<div class="arithmatex">\[\Pr\big(u(t)\in\mathcal{U}_\text{safe}\ \text{对所有}\ t\le T\big)\ \ge\ 1-\delta,\]</div>
+<p>即在任务时域 <span class="arithmatex">\(T\)</span> 内越界概率不超过 <span class="arithmatex">\(\delta\)</span>。后面各节的参数选择都是为了让 <span class="arithmatex">\(\delta\)</span> 可控。</p>
 <h2 id="运行时监控关注的是当前还能不能信任主策略">运行时监控关注的是当前还能不能信任主策略</h2>
-<p>监控信号可以包括定位协方差、传感器更新时间、控制循环频率、动作是否越界以及模型置信度。</p>
-<p>系统不需要先知道主策略为什么出错，只要检测到关键安全前提已经失效，就应该降低自动化程度。</p>
+<p>监控信号可以包括定位协方差、传感器更新时间、控制循环频率、动作是否越界以及模型置信度。系统不需要先知道主策略为什么出错，只要检测到关键安全前提已经失效，就应该降低自动化程度。</p>
+<p>这里的判断依据是<strong>前提条件</strong>而不是<strong>输出结果</strong>：定位协方差超界意味着下游所有几何推理都不可靠，即使此刻的动作看起来完全正常。等输出异常再反应，往往已经失去了干预时间。</p>
+<p>用依赖图看这件事会更清楚。策略输出依赖一串前提 <span class="arithmatex">\(P_1,\dots,P_k\)</span>（定位有效、点云新鲜、控制周期按时、模型在分布内），动作的安全性成立要求这些前提同时成立：</p>
+<div class="arithmatex">\[\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .\]</div>
+<p>监控的职责就是持续评估每个 <span class="arithmatex">\(P_i\)</span>。只要任一前提失效，结论就不再成立，无论输出当前看起来多么合理。</p>
+<table>
+<thead>
+<tr>
+<th>前提 <span class="arithmatex">\(P_i\)</span></th>
+<th>失效的典型征兆</th>
+<th>失效后仍“看起来正常”的原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位有效</td>
+<td>协方差增大、重定位触发</td>
+<td>短时里程计外推仍然平滑</td>
+</tr>
+<tr>
+<td>点云新鲜</td>
+<td>帧间隔变长、时间戳跳变</td>
+<td>旧帧仍能产生合理但过时的规划</td>
+</tr>
+<tr>
+<td>控制周期按时</td>
+<td>周期抖动增大、丢拍</td>
+<td>低频运行仍能跟随慢速轨迹</td>
+</tr>
+<tr>
+<td>模型在分布内</td>
+<td>OOD 分数升高</td>
+<td>网络对熟悉外形给出高置信输出</td>
+</tr>
+<tr>
+<td>执行器健康</td>
+<td>反馈电流异常</td>
+<td>命令与期望之间的偏差缓慢累积</td>
+</tr>
+</tbody>
+</table>
+<p>最后两列的“看起来正常”正是沉默失效在软件层的对应物：<strong>前提失效不会立刻表现为动作异常</strong>，因此必须靠监控前提来提前发现。</p>
+<table>
+<thead>
+<tr>
+<th>监控层次</th>
+<th>观测对象</th>
+<th>采样频率</th>
+<th>典型响应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态估计层</td>
+<td>协方差、残差、收敛标志</td>
+<td>10–100 Hz</td>
+<td>提高余量、降速</td>
+</tr>
+<tr>
+<td>感知层</td>
+<td>帧龄、点数、OOD 分数</td>
+<td>10–30 Hz</td>
+<td>降级传感器融合策略</td>
+</tr>
+<tr>
+<td>控制层</td>
+<td>周期抖动、饱和标志</td>
+<td>控制频率</td>
+<td>限幅、切换回退控制</td>
+</tr>
+<tr>
+<td>任务层</td>
+<td>进度、重规划频率</td>
+<td>1–10 Hz</td>
+<td>缩小任务范围</td>
+</tr>
+<tr>
+<td>系统层</td>
+<td>心跳、资源占用、温度</td>
+<td>1–10 Hz</td>
+<td>进入安全停止</td>
+</tr>
+</tbody>
+</table>
+<h2 id="监控信号的量化阈值">监控信号的量化阈值</h2>
+<p>阈值定在哪，决定了这套机制是保护还是噪声源。合理的做法是从“容忍误差”反推阈值：</p>
+<table>
+<thead>
+<tr>
+<th>监控量</th>
+<th>阈值来源</th>
+<th>典型量级</th>
+<th>越界含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位协方差</td>
+<td>允许的位置误差 <span class="arithmatex">\(\epsilon\)</span></td>
+<td><span class="arithmatex">\(\sigma_x&gt;0.1\)</span> m 告警</td>
+<td>安全余量被吃掉</td>
+</tr>
+<tr>
+<td>控制循环周期</td>
+<td>闭环带宽的 1/10</td>
+<td>100 Hz 环超 15 ms</td>
+<td>时序契约被破坏</td>
+</tr>
+<tr>
+<td>传感器更新间隔</td>
+<td>外推可容忍时长</td>
+<td>激光 &gt;0.3 s 未更新</td>
+<td>数据可能已过期</td>
+</tr>
+<tr>
+<td>动作越界幅度</td>
+<td>执行器物理上限</td>
+<td>超出 <span class="arithmatex">\(u_\text{max}\)</span> 5%</td>
+<td>控制器与实际不符</td>
+</tr>
+<tr>
+<td>模型置信度</td>
+<td>校准后的分布外分数</td>
+<td>OOD 分数超分位点</td>
+<td>输入已在训练分布外</td>
+</tr>
+</tbody>
+</table>
+<p>阈值设计的常见错误是用<strong>离线平均值的百分比</strong>来定，例如“延迟超过平均延迟的两倍就告警”。这类阈值对分布偏移没有意义。更稳的做法是先从任务指标反推可容忍上限，再把阈值设在略低于该上限的位置，并为状态切换留出迟滞区间。</p>
+<p>反推过程可以写成一条明确的式子。设可容忍的位置误差上界为 <span class="arithmatex">\(\epsilon\)</span>、安全余量需要消耗 <span class="arithmatex">\(d_\text{need}\)</span>，则允许的定位标准差近似为</p>
+<div class="arithmatex">\[\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},\]</div>
+<p>其中 <span class="arithmatex">\(k\)</span> 是置信倍数（取 3 表示按 <span class="arithmatex">\(3\sigma\)</span> 计）。以 <span class="arithmatex">\(\epsilon=0.5\)</span> m、<span class="arithmatex">\(d_\text{need}=0.2\)</span> m、<span class="arithmatex">\(k=3\)</span> 为例，<span class="arithmatex">\(\sigma_x^\text{max}=0.1\)</span> m，正好对应上表那一行的数值。这样得到的阈值有来源、可解释：<strong>它直接表达了“当估计不确定性吃掉多少余量时必须干预”。</strong></p>
+<table>
+<thead>
+<tr>
+<th>可容忍误差 <span class="arithmatex">\(\epsilon\)</span></th>
+<th>需要的余量 <span class="arithmatex">\(d_\text{need}\)</span></th>
+<th>允许的 <span class="arithmatex">\(\sigma_x^\text{max}\)</span>（<span class="arithmatex">\(k=3\)</span>）</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.3 m</td>
+<td>0.2 m</td>
+<td>0.033 m</td>
+<td>很严，通常需高频定位</td>
+</tr>
+<tr>
+<td>0.5 m</td>
+<td>0.2 m</td>
+<td>0.100 m</td>
+<td>常见设定</td>
+</tr>
+<tr>
+<td>1.0 m</td>
+<td>0.2 m</td>
+<td>0.267 m</td>
+<td>宽松，适合低速</td>
+</tr>
+<tr>
+<td>1.0 m</td>
+<td>0.5 m</td>
+<td>0.167 m</td>
+<td>高速时需要额外余量</td>
+</tr>
+</tbody>
+</table>
+<h2 id="监控信号的窗口长度与滤波延迟">监控信号的窗口长度与滤波延迟</h2>
+<p>瞬时阈值对突变反应快，但误报多；窗口统计更稳，但把检测延迟也拉长了。两者之间存在可计算的权衡。</p>
+<p>设监控残差的噪声标准差为 <span class="arithmatex">\(\sigma\)</span>、需要检出的真实偏移为 <span class="arithmatex">\(\Delta\)</span>。用长度 <span class="arithmatex">\(W\)</span> 的滑动均值 <span class="arithmatex">\(\bar r = \frac{1}{W}\sum_{i=1}^{W} r_i\)</span> 做判定时，噪声被压低到</p>
+<div class="arithmatex">\[\sigma_{\bar r} = \frac{\sigma}{\sqrt{W}} .\]</div>
+<p>若把阈值设为该窗口统计量的 3 倍，则能可靠检出偏移 <span class="arithmatex">\(\Delta\)</span> 所需的窗口长度为</p>
+<div class="arithmatex">\[W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .\]</div>
+<table>
+<thead>
+<tr>
+<th>需要检出的偏移 <span class="arithmatex">\(\Delta\)</span></th>
+<th>所需窗口 <span class="arithmatex">\(W\)</span></th>
+<th>100 Hz 下的检测延迟</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(1.0\sigma\)</span></td>
+<td>9</td>
+<td>约 0.09 s</td>
+<td>突变类故障</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\sigma\)</span></td>
+<td>36</td>
+<td>约 0.36 s</td>
+<td>中等漂移</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.2\sigma\)</span></td>
+<td>225</td>
+<td>约 2.3 s</td>
+<td>缓慢漂移</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.1\sigma\)</span></td>
+<td>900</td>
+<td>约 9 s</td>
+<td>需配合模型交叉验证</td>
+</tr>
+</tbody>
+</table>
+<p>这张表给出一个反直觉的结论：<strong>检测能力对偏移大小是平方敏感的</strong>。要检出的偏移减半，窗口长度与延迟都要变成四倍。因此“既快又灵敏”在单通道上做不到，正确做法是引入独立信息源（第二传感器、运动模型预测）而不是继续加长窗口。</p>
+<p>窗口长度还决定了误报的节奏。若用不重叠的窗口、每 <span class="arithmatex">\(W\)</span> 个采样做一次判定，<span class="arithmatex">\(3\sigma\)</span> 判据的单次误报率约 <span class="arithmatex">\(2.7\times10^{-3}\)</span>，在 100 Hz、<span class="arithmatex">\(W=36\)</span> 下平均误报间隔</p>
+<div class="arithmatex">\[\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.\]</div>
+<p>两分多钟一次误报对长时间任务仍然太频繁，因此实际系统通常把窗口阈值提到 <span class="arithmatex">\(4\sigma\)</span> 到 <span class="arithmatex">\(5\sigma\)</span>，或者要求<strong>两种不同类型的证据同时越界</strong>才触发降级——后者能把误报率相乘，效果远好于单纯提高单通道阈值。</p>
 <h2 id="安全过滤器可以修改不安全动作">安全过滤器可以修改不安全动作</h2>
-<p>策略输出 <span class="arithmatex">\(u_{nom}\)</span> 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。</p>
-<p>这种结构让学习算法不必独自承担“永远不犯错”的责任。</p>
+<p>策略输出 <span class="arithmatex">\(u_{nom}\)</span> 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。这种结构让学习算法不必独自承担“永远不犯错”的责任。</p>
+<p>形式上可以在每个控制周期求解</p>
+<div class="arithmatex">\[u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,\]</div>
+<p>即在安全集合内取<strong>离策略建议最近的</strong>动作。这个写法的好处是行为可解释：如果 <span class="arithmatex">\(u^*=u_{nom}\)</span>，说明策略本身安全；如果偏离很大，偏差本身就是“策略正在提危险建议”的证据，可以直接用于监控与再训练。</p>
+<p>差值 <span class="arithmatex">\(\lVert u^*-u_{nom}\rVert\)</span> 是一个非常有用的监控量，甚至可以定义一个干预率</p>
+<div class="arithmatex">\[\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert&gt;\varepsilon_0\}}{\#\{t\}} .\]</div>
+<table>
+<thead>
+<tr>
+<th>干预率 <span class="arithmatex">\(\rho_\text{int}\)</span></th>
+<th>解释</th>
+<th>建议动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小于 1%</td>
+<td>策略与过滤器基本一致</td>
+<td>保持，可用于放行更多动作</td>
+</tr>
+<tr>
+<td>1%–5%</td>
+<td>策略偶尔冒险</td>
+<td>记录并纳入再训练数据</td>
+</tr>
+<tr>
+<td>5%–20%</td>
+<td>策略与约束经常冲突</td>
+<td>检查指标定义，补训练</td>
+</tr>
+<tr>
+<td>大于 20%</td>
+<td>过滤层在代替主策略</td>
+<td>主策略不可用，应退回回退策略</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行的判据很重要：<strong>当干预率持续高于 20%，系统实际由过滤器在控制</strong>，此时任务性能无法归因于学习策略，继续运行等于在用一个未经验证的控制器。</p>
+<table>
+<thead>
+<tr>
+<th>过滤器类型</th>
+<th>处理耦合约束</th>
+<th>计算量</th>
+<th>行为可解释性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逐维裁剪</td>
+<td>否</td>
+<td>微秒级</td>
+<td>高（但可能产生非法组合）</td>
+</tr>
+<tr>
+<td>最近可行投影</td>
+<td>是</td>
+<td>0.1–2 ms</td>
+<td>高（偏差可直接监控）</td>
+</tr>
+<tr>
+<td>约束松弛型 QP</td>
+<td>是（允许少量违反）</td>
+<td>0.5–3 ms</td>
+<td>中（需看松弛量）</td>
+</tr>
+<tr>
+<td>切换式回退</td>
+<td>是（整段替换）</td>
+<td>微秒级</td>
+<td>低（丢弃策略意图）</td>
+</tr>
+</tbody>
+</table>
 <h2 id="watchdog-处理的是系统是否还活着">watchdog 处理的是系统是否还活着</h2>
 <p>如果控制节点超过 500 ms 没有心跳，继续使用最后一条速度命令非常危险。watchdog 可以直接触发停车或备用控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">watchdog</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">last_update</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;STOP&quot;</span> <span class="k">if</span> <span class="n">now</span> <span class="o">-</span> <span class="n">last_update</span> <span class="o">&gt;</span> <span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;OK&quot;</span>
 </code></pre></div>
+<p>timeout 不能凭经验随手给：它应大于正常周期抖动的上界（否则会误停），又小于“控制系统已失去意义”的时间尺度（否则停得太晚）。这两者之间的窗口有时很窄，此时应改进调度确定性而不是继续放宽阈值。</p>
+<p>把它写成区间：设控制周期的均值与标准差分别为 <span class="arithmatex">\(\mu_P\)</span> 与 <span class="arithmatex">\(\sigma_P\)</span>，并设系统在保持最后指令的情况下、从当前状态走出安全域所需的时间为 <span class="arithmatex">\(\tau_\text{crit}\)</span>，则</p>
+<div class="arithmatex">\[\mu_P + 4\sigma_P\ &lt;\ \text{timeout}\ &lt;\ \tau_\text{crit}.\]</div>
+<p><span class="arithmatex">\(\tau_\text{crit}\)</span> 可以用安全余量反推：若当前速度为 <span class="arithmatex">\(v\)</span>、可用净空为 <span class="arithmatex">\(d\)</span>，则</p>
+<div class="arithmatex">\[\tau_\text{crit} \approx \frac{d}{v}.\]</div>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>周期 <span class="arithmatex">\(\mu_P\)</span></th>
+<th>抖动 <span class="arithmatex">\(\sigma_P\)</span></th>
+<th>下限 <span class="arithmatex">\(\mu_P+4\sigma_P\)</span></th>
+<th>净空与速度</th>
+<th><span class="arithmatex">\(\tau_\text{crit}\)</span></th>
+<th>可行窗口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 Hz 定位环</td>
+<td>10 ms</td>
+<td>1 ms</td>
+<td>14 ms</td>
+<td>0.5 m，1.0 m/s</td>
+<td>0.5 s</td>
+<td>很宽</td>
+</tr>
+<tr>
+<td>10 Hz 规划环</td>
+<td>100 ms</td>
+<td>20 ms</td>
+<td>180 ms</td>
+<td>0.5 m，1.0 m/s</td>
+<td>0.5 s</td>
+<td>宽</td>
+</tr>
+<tr>
+<td>10 Hz 规划环</td>
+<td>100 ms</td>
+<td>80 ms</td>
+<td>420 ms</td>
+<td>0.3 m，1.0 m/s</td>
+<td>0.3 s</td>
+<td><strong>无解</strong></td>
+</tr>
+</tbody>
+</table>
+<p>第三行是真实系统的常见困境：抖动大到下限已经超过安全窗口，此时任何取值都会同时造成误停或停得太晚，正确做法是<strong>提高周期确定性</strong>（实时内核、优先级调度、把重计算移出控制线程）。反过来，timeout 小于下限会因正常抖动而误停，大于 <span class="arithmatex">\(\tau_\text{crit}\)</span> 则检测到失联时系统已经越界。</p>
 <h2 id="回退策略必须比主策略更简单更可信">回退策略必须比主策略更简单、更可信</h2>
 <p>安全回退不追求完成最优任务，而是把系统带回可控状态。停车、悬停、保持姿态、低速返航或请求人工接管都是常见选择。</p>
-<p>如果备用策略和主策略依赖相同模型、相同传感器和相同复杂软件链，就可能在同一故障下同时失效。</p>
+<p>如果备用策略和主策略依赖相同模型、相同传感器和相同复杂软件链，就可能在同一故障下同时失效。一个可用的检验标准是：<strong>回退路径能否在硬件、软件、状态估计三个层面各去掉至少一项主策略的依赖</strong>。去掉不了，就要承认这不是真正的冗余。</p>
+<p>把这条标准做成核对表：</p>
+<table>
+<thead>
+<tr>
+<th>依赖维度</th>
+<th>主策略典型依赖</th>
+<th>回退应去掉的项</th>
+<th>若无法去掉的风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型</td>
+<td>学习模型、地图</td>
+<td>只依赖几何或纯反馈</td>
+<td>同一次分布偏移同时失效</td>
+</tr>
+<tr>
+<td>传感器</td>
+<td>相机、激光、IMU 全融合</td>
+<td>只用 IMU 或只用测距</td>
+<td>共同退化条件一起失效</td>
+</tr>
+<tr>
+<td>状态估计</td>
+<td>高精度 SLAM</td>
+<td>直接使用原始测量</td>
+<td>估计发散时两者一起错</td>
+</tr>
+<tr>
+<td>计算路径</td>
+<td>同一进程与调度器</td>
+<td>独立线程或独立控制器</td>
+<td>死锁或 GC 停顿同时影响</td>
+</tr>
+<tr>
+<td>执行路径</td>
+<td>同一驱动与总线</td>
+<td>直接电气限幅或硬停机</td>
+<td>总线故障时无法停车</td>
+</tr>
+</tbody>
+</table>
+<p><strong>“回退更简单”本身是可验证的</strong>：统计两条路径的依赖模块即可。若回退的依赖集合几乎是主策略依赖集合的子集，它只是主策略的一个分支，而非独立通道。下面的对照表把“看起来独立”与“真正独立”分开：</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>看起来独立</th>
+<th>真正独立</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>进程</td>
+<td>不同模块</td>
+<td>不同进程</td>
+</tr>
+<tr>
+<td>传感器</td>
+<td>不同话题</td>
+<td>不同物理原理</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>不同网络</td>
+<td>不含学习模型</td>
+</tr>
+<tr>
+<td>电源</td>
+<td>不同接口</td>
+<td>不同供电轨</td>
+</tr>
+<tr>
+<td>失效域</td>
+<td>代码不同</td>
+<td>失效机理不同</td>
+</tr>
+</tbody>
+</table>
+<h2 id="回退策略的覆盖范围与切换安全性">回退策略的覆盖范围与切换安全性</h2>
+<p>但“更简单”并不自动意味着它在所有状态都安全。系统必须明确主策略被接管时的状态范围，以及回退控制器能否从这些状态恢复到安全区域。若两者覆盖范围不连续，切换瞬间本身就可能成为风险。</p>
+<p>具体检查三点：</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>问题</th>
+<th>失败后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>覆盖范围</td>
+<td>主策略失败时的状态是否都在回退的稳定域内</td>
+<td>一旦切换，回退立即发散</td>
+</tr>
+<tr>
+<td>切换瞬态</td>
+<td>切换瞬间的执行器指令是否连续</td>
+<td>冲击、饱和、机械损伤</td>
+</tr>
+<tr>
+<td>恢复条件</td>
+<td>什么条件下允许从回退返回主策略</td>
+<td>反复切换或过早恢复</td>
+</tr>
+</tbody>
+</table>
+<p>第二点常被忽略：主策略输出 <span class="arithmatex">\(u_1\)</span>、回退输出 <span class="arithmatex">\(u_2\)</span> 时，直接硬切换等于给执行器一个阶跃输入。稳妥做法是<strong>限制指令变化率</strong>，在一小段过渡时间内插值或限幅：</p>
+<div class="arithmatex">\[u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\text{blend}},\]</div>
+<p>其中 <span class="arithmatex">\(T_\text{blend}\)</span> 是过渡时长。若 <span class="arithmatex">\(u_1\)</span> 与 <span class="arithmatex">\(u_2\)</span> 的差可达执行器量程的 50%，而机械允许的最大加速度对应 <span class="arithmatex">\(T_\text{blend}=0.2\)</span> s，那么过渡阶段的加速度约为 <span class="arithmatex">\(0.5\,u_\text{max}/0.2 = 2.5\,u_\text{max}\)</span>——超出量程。因此 <span class="arithmatex">\(T_\text{blend}\)</span> 必须由执行器能力反推，而不是取一个“看起来平滑”的经验值。</p>
+<table>
+<thead>
+<tr>
+<th>切换方式</th>
+<th>指令连续性</th>
+<th>对执行器的冲击</th>
+<th>适用场合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬切换</td>
+<td>不连续</td>
+<td>阶跃，可能饱和</td>
+<td>紧急停机</td>
+</tr>
+<tr>
+<td>速率限幅</td>
+<td>一阶连续</td>
+<td>有界</td>
+<td>一般降级</td>
+</tr>
+<tr>
+<td>一小段内插值</td>
+<td>连续</td>
+<td>小</td>
+<td>模式频繁切换</td>
+</tr>
+<tr>
+<td>先减速再切换</td>
+<td>连续</td>
+<td>最小</td>
+<td>电机类执行器</td>
+</tr>
+</tbody>
+</table>
+<p>覆盖范围检查也有定量形式：回退控制器的吸引域 <span class="arithmatex">\(\mathcal{D}_\text{fb}\)</span> 必须覆盖所有可能触发切换的状态集合 <span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span>，即</p>
+<div class="arithmatex">\[\mathcal{S}_\text{trig} \subseteq \mathcal{D}_\text{fb}.\]</div>
+<p><span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span> 在实践中几乎无法精确枚举，因此常用做法是<strong>先限制触发条件</strong>：让切换只在速度低于某个值、姿态偏差小于某个角度时发生。这样虽然牺牲了一部分恢复能力，但把 <span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span> 收缩成可验证的小集合。</p>
 <h2 id="运行时安全最终需要明确状态机">运行时安全最终需要明确状态机</h2>
 <p>正常运行、警告、降级、紧急停止、人工接管和恢复自动控制之间应有清晰切换条件。这样才能避免故障时多个模块同时“抢着处理”或者没有任何模块负责。</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>触发条件</th>
+<th>系统行为</th>
+<th>退出条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NORMAL</td>
+<td>全部监控量正常</td>
+<td>完整自动任务</td>
+<td>任一监控量超界</td>
+</tr>
+<tr>
+<td>WARN</td>
+<td>单项指标接近阈值</td>
+<td>减速、提高监控频率</td>
+<td>指标恢复稳定</td>
+</tr>
+<tr>
+<td>DEGRADED</td>
+<td>关键传感器或估计失效</td>
+<td>最简任务（低速短程）</td>
+<td>关键指标持续正常</td>
+</tr>
+<tr>
+<td>SAFE_STOP</td>
+<td>安全前提无法满足</td>
+<td>停车并保持可控状态</td>
+<td>人工复位</td>
+</tr>
+<tr>
+<td>HUMAN</td>
+<td>任务超出自动能力</td>
+<td>交接给操作员</td>
+<td>操作员交还</td>
+</tr>
+</tbody>
+</table>
+<p>状态机必须是<strong>唯一</strong>负责切换的组件。让多个模块各自判断“该不该停车”，会在边界情况下产生相互矛盾的指令。</p>
+<p>实现上有一条硬要求：状态转移表必须<strong>完备且确定</strong>。约定事件集合为 <span class="arithmatex">\(\mathcal{E}\)</span>、状态集合为 <span class="arithmatex">\(\mathcal{Q}\)</span>，则转移函数</p>
+<div class="arithmatex">\[\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}\]</div>
+<p>必须是全定义的（不允许出现“未定义行为”）。工程上这意味着对每个 <span class="arithmatex">\(\mathcal{Q}\times\mathcal{E}\)</span> 组合都要写出期望行为，哪怕只是“保持当前状态并记录”。漏掉组合的代价是：在故障叠加时系统行为取决于代码执行顺序，而这恰恰是最不可预测的情形。</p>
+<table>
+<thead>
+<tr>
+<th>缺失的转移定义</th>
+<th>可能的表现</th>
+<th>排查方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEGRADED 遇到传感器恢复</td>
+<td>长期滞留在降级状态</td>
+<td>状态转移矩阵的完备性测试</td>
+</tr>
+<tr>
+<td>SAFE_STOP 遇到新告警</td>
+<td>停机过程被重新触发中断</td>
+<td>注入叠加故障</td>
+</tr>
+<tr>
+<td>HUMAN 遇到超时</td>
+<td>无人接管却停留在 HUMAN</td>
+<td>超时分支的强制转移</td>
+</tr>
+<tr>
+<td>WARN 遇到第二个告警</td>
+<td>升级不确定，可能停在 WARN</td>
+<td>定义告警计数的升级规则</td>
+</tr>
+</tbody>
+</table>
 <h2 id="安全状态机要避免频繁来回切换">安全状态机要避免频繁来回切换</h2>
 <p>若定位质量在阈值附近波动，系统可能在 NORMAL 和 DEGRADED 之间不断切换。常见做法是加入 hysteresis：进入降级状态使用更严格阈值，恢复正常则要求更长时间稳定满足条件。</p>
-<p>安全机制不仅要能触发，还要保证触发后的行为稳定、可预测。</p>
-<h2 id="回退控制器也需要覆盖证明">回退控制器也需要覆盖证明</h2>
-<p>回退策略更简单并不自动意味着它在所有状态都安全。系统必须明确主策略被接管时的状态范围，以及回退控制器能否从这些状态恢复到安全区域。若两者覆盖范围不连续，切换瞬间本身就可能成为风险。</p>
+<p>设进入降级阈值为 <span class="arithmatex">\(\eta_\text{down}\)</span>、恢复阈值为 <span class="arithmatex">\(\eta_\text{up}\)</span>（<span class="arithmatex">\(\eta_\text{up}&lt;\eta_\text{down}\)</span>），并要求指标连续 <span class="arithmatex">\(T_\text{hold}\)</span> 时间满足恢复条件。抖动抑制效果与代价同时增长：</p>
+<table>
+<thead>
+<tr>
+<th>迟滞带宽 <span class="arithmatex">\(\eta_\text{down}-\eta_\text{up}\)</span></th>
+<th>保持时间 <span class="arithmatex">\(T_\text{hold}\)</span></th>
+<th>切换次数</th>
+<th>恢复延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无迟滞</td>
+<td>0</td>
+<td>可能极高</td>
+<td>最短</td>
+</tr>
+<tr>
+<td>5% 量程</td>
+<td>1 s</td>
+<td>中等</td>
+<td>少量增加</td>
+</tr>
+<tr>
+<td>15% 量程</td>
+<td>3 s</td>
+<td>很低</td>
+<td>明显增加</td>
+</tr>
+</tbody>
+</table>
+<p>恢复延迟本身就是风险：如果系统停留在降级状态过久，任务性能持续受损；如果过早恢复，又可能立刻再次降级。<strong>迟滞参数应当由“降级代价”与“误切换代价”的比较来决定</strong>，而不是取经验默认值。</p>
+<p>切换频率可以量化。设监控量在阈值附近做标准差为 <span class="arithmatex">\(\sigma_m\)</span> 的随机游走，迟滞带宽为 <span class="arithmatex">\(h\)</span>、保持时间为 <span class="arithmatex">\(T_\text{hold}\)</span>，则单位时间内跨越带宽并完成往返的平均次数近似</p>
+<div class="arithmatex">\[f_\text{sw} \approx \frac{1}{T_\text{hold}} \exp\!\left(-\frac{h}{\sigma_m}\right).\]</div>
+<table>
+<thead>
+<tr>
+<th>迟滞带宽 <span class="arithmatex">\(h\)</span></th>
+<th><span class="arithmatex">\(h/\sigma_m\)</span></th>
+<th><span class="arithmatex">\(f_\text{sw}\)</span>（<span class="arithmatex">\(T_\text{hold}=1\)</span> s）</th>
+<th>每小时切换次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1 Hz 量级</td>
+<td>数千</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(1\sigma_m\)</span></td>
+<td>1</td>
+<td>约 0.37 Hz</td>
+<td>约 1300</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(2\sigma_m\)</span></td>
+<td>2</td>
+<td>约 0.14 Hz</td>
+<td>约 480</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(4\sigma_m\)</span></td>
+<td>4</td>
+<td>约 0.018 Hz</td>
+<td>约 66</td>
+</tr>
+</tbody>
+</table>
+<p>这个指数关系解释了为什么迟滞带宽的收益来得很快：<strong>带宽从 <span class="arithmatex">\(1\sigma_m\)</span> 增到 <span class="arithmatex">\(4\sigma_m\)</span>，切换频率下降约 20 倍，而恢复延迟只增加零点几秒。</strong> 相比之下单纯延长 <span class="arithmatex">\(T_\text{hold}\)</span> 只是线性收益，且会直接拖长恢复时间。</p>
+<h2 id="干预延迟与接管时间预算">干预延迟与接管时间预算</h2>
+<p>如果回退动作是把控制权交给人，那么运行时安全的实际效果取决于<strong>人是否来得及接管</strong>。设系统发现异常的时刻为 <span class="arithmatex">\(t_0\)</span>，操作员完成接管需要</p>
+<div class="arithmatex">\[T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},\]</div>
+<p>其中 <span class="arithmatex">\(T_\text{percept}\)</span> 是操作员感知到告警并理解情境的时间、<span class="arithmatex">\(T_\text{decide}\)</span> 是判断采取何种操作的时间、<span class="arithmatex">\(T_\text{act}\)</span> 是执行动作的时间。这个总时间必须小于系统在无人干预下的可用时间 <span class="arithmatex">\(T_\text{avail}\)</span>，否则交接只是把失效形式从“自动失效”变成了“无人接管”。</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>有利条件</th>
+<th>典型时长</th>
+<th>不利条件</th>
+<th>典型时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>感知</td>
+<td>明确的视听告警</td>
+<td>0.5–1 s</td>
+<td>告警淹没在噪声中</td>
+<td>2–5 s</td>
+</tr>
+<tr>
+<td>决策</td>
+<td>预案唯一且明确</td>
+<td>0.5–1.5 s</td>
+<td>需要选择方案</td>
+<td>2–5 s</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>手感熟悉、单键接管</td>
+<td>0.3–1 s</td>
+<td>需要复杂输入</td>
+<td>2–6 s</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>设计良好的接管</td>
+<td>1.3–3.5 s</td>
+<td>设计不良</td>
+<td>6–16 s</td>
+</tr>
+</tbody>
+</table>
+<p>后一列说明：<strong>接管时间在坏设计下可以差出一个数量级</strong>，而安全余量通常只有一两秒。因此需要人工介入的场景必须提前缩小 <span class="arithmatex">\(T_\text{percept}\)</span> 与 <span class="arithmatex">\(T_\text{decide}\)</span>：预先定义唯一的接管动作、给出明确的动作提示、把接管按钮放在触手可及之处。这部分设计与 <a href="../../human-ai-interaction/05-intervention-takeover/">Intervention &amp; Takeover</a> 讨论的交接设计直接相关。</p>
+<table>
+<thead>
+<tr>
+<th>系统策略</th>
+<th>提前多长时间请求接管</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只发告警</td>
+<td>越早越好，常为 5–10 s</td>
+<td>覆盖最坏接管时间</td>
+</tr>
+<tr>
+<td>告警加自动减速</td>
+<td>3–5 s</td>
+<td>用降速换取接管窗口</td>
+</tr>
+<tr>
+<td>直接进入安全停止</td>
+<td>不需要</td>
+<td>不依赖人工</td>
+</tr>
+<tr>
+<td>限时接管后自动回退</td>
+<td>2–3 s</td>
+<td>超时按预案接管</td>
+</tr>
+<tr>
+<td>分级请求接管</td>
+<td>5 s 后升级为自动停止</td>
+<td>兼顾时间与可用性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="运行时安全的验证故障注入与红队测试">运行时安全的验证：故障注入与红队测试</h2>
+<p>运行时安全层最容易出的问题不是“逻辑写错”，而是<strong>它从未在真实时序下被触发过</strong>。验证的重点因此不是覆盖率，而是“能否在预期时间内把系统带到预期状态”。</p>
+<p>验证的目标可以写成一组必须同时成立的判据：检测在 <span class="arithmatex">\(T_d\)</span> 内触发、回退在 <span class="arithmatex">\(T_r\)</span> 内接管、接管后的状态落在安全集合内、且整个过程没有产生违反约束的中间动作。</p>
+<table>
+<thead>
+<tr>
+<th>注入项</th>
+<th>观测指标</th>
+<th>通过判据</th>
+<th>常见失败表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位协方差突增</td>
+<td>进入 DEGRADED 的时间</td>
+<td>小于 300 ms</td>
+<td>阈值过宽，未触发</td>
+</tr>
+<tr>
+<td>传感器读数冻结</td>
+<td>检测延迟与隔离结论</td>
+<td>延迟在窗口预算内</td>
+<td>无残差检查，漏报</td>
+</tr>
+<tr>
+<td>控制周期抖动注入</td>
+<td>周期监控与降级</td>
+<td>抖动超限即触发</td>
+<td>监控本身与主循环同线程</td>
+</tr>
+<tr>
+<td>动作越界注入</td>
+<td>过滤器干预与干预率</td>
+<td>输出始终在界内</td>
+<td>裁剪后组合越界</td>
+</tr>
+<tr>
+<td>心跳停止</td>
+<td>watchdog 停车</td>
+<td>在 timeout 内进入 SAFE_STOP</td>
+<td>回退也依赖同一进程</td>
+</tr>
+<tr>
+<td>接管超时</td>
+<td>自动回退触发</td>
+<td>超时后自动进入 SAFE_STOP</td>
+<td>停留在 HUMAN 状态</td>
+</tr>
+<tr>
+<td>叠加故障</td>
+<td>状态机确定性</td>
+<td>行为符合转移表</td>
+<td>进入未定义组合</td>
+</tr>
+<tr>
+<td>回退路径失效注入</td>
+<td>回退可用性</td>
+<td>仍存在最终手段</td>
+<td>无硬件兜底</td>
+</tr>
+<tr>
+<td>告警通道屏蔽</td>
+<td>告警到达与降级</td>
+<td>降级仍能触发</td>
+<td>依赖单一通道</td>
+</tr>
+<tr>
+<td>传感器缓慢漂移</td>
+<td>检测延迟与累积误差</td>
+<td>累积误差未超余量</td>
+<td>只看瞬时阈值</td>
+</tr>
+<tr>
+<td>时钟偏移</td>
+<td>时间同步误差</td>
+<td>误差仍在余量内</td>
+<td>未检查时间戳来源</td>
+</tr>
+</tbody>
+</table>
+<p>验证还要覆盖<strong>回退路径自身的失败</strong>：回退控制器不可用、回退所需传感器也失效、告警通道本身故障。这三类最难发现，因为它们要求系统在“安全机制已经不可靠”时仍能进入可控状态——通常的答案是留一条最终手段，例如硬件看门狗或机械制动。</p>
+<p>安全机制不仅要能触发，还要保证触发后的行为稳定、可预测：阈值由任务指标反推，窗口长度与检测目标匹配，回退依赖真正独立，状态机转移完备，迟滞由代价比决定，而这一切都需要在真实时序下被验证过。</p>
+<blockquote>
+<p><strong>下一步</strong>：运行时安全是最后一道防线，前面几道分别是不确定性监测 <a href="../01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a>、约束 <a href="../03-safety-constraints/">Safety Constraints</a> 与故障容错 <a href="../04-fault-tolerance/">Fault Detection &amp; Tolerance</a>。控制权交接给人的过程见 <a href="../../human-ai-interaction/05-intervention-takeover/">Intervention &amp; Takeover</a>，训练阶段的约束形式见 <a href="../../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a>，实验与部署中的验证流程见 <a href="../../robotics/05-navigation-control/">Navigation &amp; Control</a>。</p>
+</blockquote>
 
 
 

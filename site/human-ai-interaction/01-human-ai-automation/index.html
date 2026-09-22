@@ -3446,6 +3446,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#控制权的四种状态与责任分配" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        控制权的四种状态与责任分配
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#最重要的是明确当前谁拥有决策权" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3461,6 +3472,28 @@
     <span class="md-ellipsis">
       
         自动化越强，监督难度反而可能越高
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#监督负荷的量化" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监督负荷的量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#模式混淆的检测与设计约束" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模式混淆的检测与设计约束
       
     </span>
   </a>
@@ -3696,6 +3729,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#控制权的四种状态与责任分配" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        控制权的四种状态与责任分配
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#最重要的是明确当前谁拥有决策权" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3711,6 +3755,28 @@
     <span class="md-ellipsis">
       
         自动化越强，监督难度反而可能越高
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#监督负荷的量化" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监督负荷的量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#模式混淆的检测与设计约束" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模式混淆的检测与设计约束
       
     </span>
   </a>
@@ -3853,32 +3919,831 @@
 
 
 <h1 id="interaction--levels-of-automation">Interaction &amp; Levels of Automation</h1>
-<p>人机系统的关键不是“自动化越高越先进”，而是<strong>哪些任务交给机器、哪些判断保留给人，以及控制权在什么条件下切换。</strong> 自动化程度本质上是职责划分问题。</p>
+<p>人机系统的关键不是“自动化越高越先进”，而是<strong>哪些任务交给机器、哪些判断保留给人，以及控制权在什么条件下切换。</strong> 自动化程度本质上是职责划分问题，不是技术先进度排名。</p>
+<p>因此人机交互的核心不是界面美观，而是<strong>控制权状态的明确性</strong>。一个功能再强、界面再漂亮的系统，如果操作者不知道自己此刻是否在负责，就仍然是不安全的。</p>
+<p>本章先用可测量的方式定义职责划分，再把“自动化等级”还原为逐功能的责任矩阵。离散介入点见 <a href="../02-human-in-loop/">Human-in-the-Loop</a>，连续控制权融合见 <a href="../03-shared-autonomy/">Shared Autonomy</a>。</p>
 <h2 id="机器和人擅长的事情不同">机器和人擅长的事情不同</h2>
-<p>机器适合高速计算、持续监控、重复执行和严格约束；人更擅长处理新颖情境、模糊目标、价值判断和异常解释。</p>
-<p>成熟系统通常不会简单做“全自动/全人工”二选一，而是把任务拆成感知、建议、执行、监督和恢复等环节分别分工。</p>
+<p>先定义变量：把任务拆成环节集合 <span class="arithmatex">\(S=\{s_1,\dots,s_n\}\)</span>，第 <span class="arithmatex">\(i\)</span> 个环节的自动化水平为 <span class="arithmatex">\(a_i\in[0,1]\)</span>，人对该环节可维持有效监督的时长为 <span class="arithmatex">\(t^{v}_i\)</span>（分钟）。</p>
+<p>机器的优势是可量化的带宽与重复性：位置环可在 1 ms 周期内更新，重复定位误差通常低于 1 mm，且不随班次衰减。人的优势是语义与价值判断：面对未见过的情况可以构造新解释，而这类判断没有现成评分函数。</p>
+<p>关键差异体现在数量级上：人完成一次“感知—判断—动作”的简单反应时约 0.2–0.3 s，复杂监控条件下为 1–8 s，而机器闭环在毫秒级。把人放在需要毫秒响应的环节里，等于把安全建立在整条链最慢的一段上。</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>机器量化优势</th>
+<th>人的量化优势</th>
+<th>默认分工</th>
+<th>责任归属</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>感知</td>
+<td>100 Hz 以上采样、无疲劳</td>
+<td>理解陌生场景语义</td>
+<td>机器主导</td>
+<td>机器，人复核异常</td>
+</tr>
+<tr>
+<td>决策</td>
+<td>已知目标下可求最优</td>
+<td>权衡模糊价值与责任</td>
+<td>机器建议</td>
+<td>高风险项归人</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>重复误差低于 1 mm</td>
+<td>非结构化情况应变</td>
+<td>机器主导</td>
+<td>机器，人可覆盖</td>
+</tr>
+<tr>
+<td>监督</td>
+<td>长期稳定、不衰减</td>
+<td>察觉“看起来不对”</td>
+<td>机器辅助</td>
+<td>人</td>
+</tr>
+<tr>
+<td>恢复</td>
+<td>毫秒级执行降级动作</td>
+<td>判断是否放弃任务</td>
+<td>两者配合</td>
+<td>机器兜底，人决定</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的用途是把“自动化程度”这个模糊概念还原成每行各自的责任归属。任一格归属写不清楚，系统就存在责任空档，而空档在正常运行时不会暴露，只在异常时才显现。</p>
+<p>串联环节的错误率可写成 <span class="arithmatex">\(P_e = 1 - \prod_{i=1}^{n}(1-p_i)\)</span>，其中 <span class="arithmatex">\(p_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个环节独立出错的概率。若 5 个环节各有 2% 的独立错误率，则整体错误率是 <span class="arithmatex">\(1-0.98^{5}\approx 9.6\%\)</span>；若把两个环节合并由单一主体负责，误差不再按乘积独立传播，责任范围也随之变大。</p>
+<table>
+<thead>
+<tr>
+<th>分工失败模式</th>
+<th>观测信号</th>
+<th>生成机制</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>责任空档</td>
+<td>异常发生后无法定位责任人</td>
+<td>双方都认为对方在监控</td>
+<td>逐环节写出责任归属</td>
+</tr>
+<tr>
+<td>能力错配</td>
+<td>人在毫秒级环节成为瓶颈</td>
+<td>按“重要性”而非时间尺度分工</td>
+<td>按响应带宽重新分配</td>
+</tr>
+<tr>
+<td>误差叠加</td>
+<td>总错误率远高于单环节估计</td>
+<td>环节未被视作独立误差源</td>
+<td>给出逐环节错误预算</td>
+</tr>
+</tbody>
+</table>
+<p>因此分工越细，越需要逐环节给出错误预算；只写“系统可靠性 99%”而不写分配方式，无法判断空档在哪里。环节级责任在 <a href="../03-shared-autonomy/">Shared Autonomy</a> 中会进一步变成连续的权重分配。</p>
 <h2 id="自动化程度应该按功能讨论">自动化程度应该按功能讨论</h2>
-<p>同一辆机器人可以在路径跟踪上全自动，在目标选择上由人决定，在危险场景下要求人工确认。因此“Level 3/Level 4”一类全局标签只能提供粗略描述，真正设计仍要落到具体功能。</p>
+<p>定义功能级自动化向量 <span class="arithmatex">\(\mathbf{a}=(a_1,\dots,a_n)\)</span>，其中 <span class="arithmatex">\(a_i\in[0,1]\)</span> 表示第 <span class="arithmatex">\(i\)</span> 个功能在正常工况下由机器完成的比例；再定义权重 <span class="arithmatex">\(w_i\)</span>（按风险或使用频率取），得到加权自动化覆盖率</p>
+<div class="arithmatex">\[
+A_w = \frac{\sum_{i=1}^{n} w_i a_i}{\sum_{i=1}^{n} w_i}.
+\]</div>
+<p>同一辆机器人可以在路径跟踪上接近全自动，在目标选择上完全由人决定，在危险场景下要求人工确认。因此“Level 3 / Level 4”一类全局标签只能提供粗略描述，真正设计仍要落到具体功能。</p>
+<p>取一组具体数：车道保持 <span class="arithmatex">\(a=0.95\)</span>、目标选择 <span class="arithmatex">\(a=0.10\)</span>、紧急制动 <span class="arithmatex">\(a=1.00\)</span>（由独立安全层实现），风险权重取 <span class="arithmatex">\((0.2,0.3,0.5)\)</span>，则 <span class="arithmatex">\(A_w=0.19+0.03+0.50=0.72\)</span>。若只报“0.72 级自动化”，没有人能从中读出否决权在谁手上。</p>
+<table>
+<thead>
+<tr>
+<th>描述方式</th>
+<th>能回答“谁在执行”</th>
+<th>能回答“谁可否决”</th>
+<th>适合的用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局等级标签</td>
+<td>部分</td>
+<td>不能</td>
+<td>市场沟通、法规分类</td>
+</tr>
+<tr>
+<td>功能级自动化向量</td>
+<td>可以</td>
+<td>需要附加说明</td>
+<td>系统设计、验收</td>
+</tr>
+<tr>
+<td>功能级责任矩阵</td>
+<td>可以</td>
+<td>可以</td>
+<td>安全论证、培训</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>观测信号</th>
+<th>生成机制</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>等级替代分解</td>
+<td>设计文档只有一句等级声明</td>
+<td>用标签代替功能清单</td>
+<td>逐功能填写责任矩阵</td>
+</tr>
+<tr>
+<td>权重拍脑袋</td>
+<td>汇总指标好看但关键功能弱</td>
+<td><span class="arithmatex">\(w_i\)</span> 未与风险挂钩</td>
+<td>按失效后果给权重</td>
+</tr>
+<tr>
+<td>平均值掩盖</td>
+<td>总体达标、特定功能频繁失败</td>
+<td>只报 <span class="arithmatex">\(A_w\)</span> 不报分布</td>
+<td>报告最弱功能的 <span class="arithmatex">\(a_i\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>结论是：全局等级的一个典型问题是把“谁负责”和“谁执行”混为一谈。同样的技术能力，在责任划分不同时，需要的界面、培训和验收标准完全不同。</p>
+<p>功能分解还有一个直接收益是可测性：每个 <span class="arithmatex">\(a_i\)</span> 都可以单独设计验收场景，在指定工况下统计机器完成比例。例如标线清晰路段的车道保持可取到 <span class="arithmatex">\(a\approx 0.95\)</span>，而雨天标线模糊时可能只剩 <span class="arithmatex">\(0.6\)</span> 出头，汇总成一个数就把这个差异抹平了。</p>
+<p>因此报告自动化水平时应至少给出最弱功能的值、对应工况与样本量，而不是只给均值。</p>
+<h2 id="控制权的四种状态与责任分配">控制权的四种状态与责任分配</h2>
+<p>把控制权拆成一个四元组 <span class="arithmatex">\((O,D,E,V)\)</span>，四个分量分别表示谁在观察、谁在决定、谁在执行、谁能否决，每个分量取值为“人”或“机”，因此理论上有 <span class="arithmatex">\(2^4=16\)</span> 种组合。</p>
+<p>工程上并不需要覆盖全部 16 种，而是固定几组并显式命名。明确说出当前处于哪一组，比宣称“L3 级自动化”更有用，因为后者不告诉你否决权在谁手上。</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>说明</th>
+<th>若说不清会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谁在观察？</td>
+<td>谁负责持续感知与监控</td>
+<td>异常无人发现</td>
+</tr>
+<tr>
+<td>谁在决定？</td>
+<td>谁设定目标与选择动作</td>
+<td>双方都以为对方在做决定</td>
+</tr>
+<tr>
+<td>谁在执行？</td>
+<td>谁输出实际指令</td>
+<td>指令冲突或无人输出</td>
+</tr>
+<tr>
+<td>谁能否决？</td>
+<td>谁有权覆盖当前决定</td>
+<td>危险动作无法被阻止</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>工程原型</th>
+<th><span class="arithmatex">\((O,D,E,V)\)</span></th>
+<th>典型系统</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全自动</td>
+<td>机、机、机、人</td>
+<td>封闭区巡检机器人</td>
+<td>人的否决来不及生效</td>
+</tr>
+<tr>
+<td>人在环上</td>
+<td>机、人、机、人</td>
+<td>辅助驾驶</td>
+<td>决策延迟超出时间窗</td>
+</tr>
+<tr>
+<td>人在环中</td>
+<td>机、人、机、人（逐动作批准）</td>
+<td>手术辅助机械臂</td>
+<td>确认请求过载</td>
+</tr>
+<tr>
+<td>全人工</td>
+<td>人、人、人、机</td>
+<td>精细遥操作</td>
+<td>保护层被误当作障碍</td>
+</tr>
+</tbody>
+</table>
+<p>空档可以量化：设双方在每个决策点上各自以概率 <span class="arithmatex">\(q\)</span> 错误地假定“对方在控制”，且在窗口内共有 <span class="arithmatex">\(N\)</span> 个决策点，则窗口内至少出现一次无人控制的概率为</p>
+<div class="arithmatex">\[
+p_{\text{hole}} = 1-(1-q)^{N}.
+\]</div>
+<p>取 <span class="arithmatex">\(q=0.01\)</span>、<span class="arithmatex">\(N=30\)</span>（每秒一个决策点、共 30 s），得 <span class="arithmatex">\(p_{\text{hole}}\approx 26\%\)</span>。这说明“双方都以为对方在看”不是理论细节：只要每个决策点的误解概率不为零，长窗口内必然累积成现实风险。</p>
 <h2 id="最重要的是明确当前谁拥有决策权">最重要的是明确当前谁拥有决策权</h2>
 <p>界面必须让操作者知道：系统现在处于哪种模式、机器正在控制什么、人可以修改什么，以及接管是否已经生效。</p>
-<p>若系统默认“人会兜底”，而人又以为“机器已经完全接管”，就会出现责任空档。</p>
+<p>定义模式可见性 <span class="arithmatex">\(V_m\)</span> 为随机抽取的操作者在 3 秒内正确回答“现在谁在控制”的比例，工程上通常要求 <span class="arithmatex">\(V_m\ge 0.95\)</span>；低于 0.9 时，模式相关的失效会明显上升。</p>
+<p>对持续展示的状态指示器，其可用性可按 <span class="arithmatex">\(A=\frac{MTBF}{MTBF+MTTR}\)</span> 估算：若平均无故障间隔为 5000 h、每次显示异常需 0.5 h 修复，则 <span class="arithmatex">\(A\approx 0.9999\)</span>。指示器本身的可用性不应低于被指示功能的可用性，否则它反而成为薄弱环节。</p>
+<table>
+<thead>
+<tr>
+<th>反馈通道</th>
+<th>典型感知延迟</th>
+<th>覆盖注意力在外的情况</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视觉常驻指示</td>
+<td>100 ms 以内</td>
+<td>差</td>
+<td>模式名称与控制层级</td>
+</tr>
+<tr>
+<td>听觉提示</td>
+<td>140–250 ms</td>
+<td>好</td>
+<td>模式切换、接管请求</td>
+</tr>
+<tr>
+<td>触觉提示</td>
+<td>150–250 ms</td>
+<td>好</td>
+<td>高噪声、高视觉负荷</td>
+</tr>
+<tr>
+<td>语音播报</td>
+<td>300 ms 以上</td>
+<td>好</td>
+<td>非实时状态说明</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>决策权不清的失效</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只显示“已就绪”</td>
+<td>操作者无法判断谁在控制</td>
+<td>常驻显示控制层级与授权</td>
+</tr>
+<tr>
+<td>提示为弹窗</td>
+<td>弹窗消失后状态不可查</td>
+<td>改为常驻状态区域</td>
+</tr>
+<tr>
+<td>接管无确认</td>
+<td>人以为已接管、机器仍在输出</td>
+<td>接管需显式反馈与去冲突</td>
+</tr>
+</tbody>
+</table>
+<p>若系统默认“人会兜底”，而人又以为“机器已经完全接管”，就会出现责任空档：双方的动作集合重叠但都不完整。控制权的状态展示必须消除这种默认假设，而不是依赖培训去弥补。</p>
+<p><span class="arithmatex">\(V_m\)</span> 的测量方法是固定的：在班次中随机抽取若干时刻冻结提问，统计正确答案比例。它是可重复的运行时指标，不是满意度问卷，因此可以直接作为上线门槛与月度回归项。</p>
+<p>另一个必须量化的量是接管生效时间，即从操作者动作到系统停止输出自动指令的时间差，目标通常低于 300 ms。超过该值时，人的输入与机器残余指令会在执行层叠加，表现为方向相反的两股控制力。</p>
 <h2 id="自动化越强监督难度反而可能越高">自动化越强，监督难度反而可能越高</h2>
-<p>当机器长期稳定运行，人会降低注意力；真正需要接管时，却可能缺少对当前状态的理解。这就是 automation complacency 和 out-of-the-loop 问题。</p>
-<p>因此高自动化系统更需要良好的状态展示和提前告警，而不是更少的人机交互设计。</p>
+<p>定义警觉衰减模型 <span class="arithmatex">\(P_d(t)=P_0 e^{-t/\tau_v}\)</span>，其中 <span class="arithmatex">\(P_d\)</span> 是异常信号被检测到的概率，<span class="arithmatex">\(P_0\)</span> 是任务开始时的检测率，<span class="arithmatex">\(\tau_v\)</span> 是衰减时间常数，量级约 20–40 min。</p>
+<p>取 <span class="arithmatex">\(t=30\)</span> min、<span class="arithmatex">\(\tau_v=30\)</span> min，得 <span class="arithmatex">\(P_d\approx 0.37P_0\)</span>：检测能力在半小时内下降到初始值的三分之一量级。这不是操作者态度问题，而是持续监控任务的常态。</p>
+<p>complacency（自动化自满）可以写成复核概率的下降：<span class="arithmatex">\(p_c=p_0\,(1-k R_s)\)</span>，其中 <span class="arithmatex">\(R_s\)</span> 是系统可靠性，<span class="arithmatex">\(k\)</span> 是敏感系数（经验量级 0.5）。当 <span class="arithmatex">\(R_s=0.99\)</span> 时 <span class="arithmatex">\(p_c\approx 0.5p_0\)</span>，也就是系统越好用，人越少检查。</p>
+<table>
+<thead>
+<tr>
+<th>自动化水平</th>
+<th>人的角色</th>
+<th>典型失效</th>
+<th>缓解设计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低</td>
+<td>直接操作</td>
+<td>体力与操作误差</td>
+<td>辅助提示、限幅</td>
+</tr>
+<tr>
+<td>中</td>
+<td>共同执行与决策</td>
+<td>责任划分模糊</td>
+<td>显式模式与授权展示</td>
+</tr>
+<tr>
+<td>高</td>
+<td>监督与例外处理</td>
+<td>自满、警觉衰减</td>
+<td>提前告警、主动抽查</td>
+</tr>
+<tr>
+<td>很高（无监督）</td>
+<td>只在降级时介入</td>
+<td>无人在环、状态预测失效</td>
+<td>自动降级与安全停机</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>缓解手段</th>
+<th>作用机制</th>
+<th>代价</th>
+<th>边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提前告警</td>
+<td>增加反应准备时间</td>
+<td>误报率上升</td>
+<td>误报过多会引发告警疲劳</td>
+</tr>
+<tr>
+<td>主动抽查</td>
+<td>维持检查行为</td>
+<td>增加日常工作量</td>
+<td>抽查过频失去针对</td>
+</tr>
+<tr>
+<td>状态展示</td>
+<td>降低情景意识丢失</td>
+<td>界面占位</td>
+<td>信息过多会稀释注意力</td>
+</tr>
+<tr>
+<td>自动降级</td>
+<td>减少对人的依赖</td>
+<td>可用性下降</td>
+<td>降级本身需被感知</td>
+</tr>
+</tbody>
+</table>
+<p>因此高自动化系统更需要良好的状态展示和提前告警，而不是更少的人机交互设计。把“人会在最后一秒接管”当作主要安全机制，等价于把 <span class="arithmatex">\(P_d(30)\)</span> 与反应时间两个都在恶化的量放进同一条安全链。</p>
+<p>可检验的做法是给缓解手段设量化门槛：提前告警的提前量应覆盖 <span class="arithmatex">\(t_r\)</span> 的 90 分位而非均值，主动抽查的抽样率应随 <span class="arithmatex">\(R_s\)</span> 上升而提高，而不是保持不变。若某系统的抽查率随可靠性升高反而下降，它就已经落入自满区。</p>
+<h2 id="监督负荷的量化">监督负荷的量化</h2>
+<p>“人会盯着看”通常是错误假设。监督负荷可以用两个量近似描述：持续自动化时长与接管反应时间。经验规律是自动化运行越久、越平稳，反应时间越长：</p>
+<table>
+<thead>
+<tr>
+<th>持续自动运行时长</th>
+<th>典型反应时间量级</th>
+<th>对应可用速度上限（按 0.5 s 反应 + 1 m/s² 制动估算）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 1 min</td>
+<td>0.5–1 s</td>
+<td>低速短程任务</td>
+</tr>
+<tr>
+<td>5–10 min</td>
+<td>1.5–3 s</td>
+<td>中速、开阔场地</td>
+</tr>
+<tr>
+<td>&gt; 30 min</td>
+<td>3–8 s</td>
+<td>只能依赖自动降级兜底</td>
+</tr>
+</tbody>
+</table>
+<p>反应时间可以按环节分解：<span class="arithmatex">\(t_r=t_{\text{perc}}+t_{\text{orient}}+t_{\text{dec}}+t_{\text{act}}\)</span>。有准备的监控任务中，四项典型值约为 0.2 s、0.8 s、0.7 s、0.3 s，合计约 2.0 s；无准备时可放大到 3–8 s，与上表一致。</p>
+<p>停止距离由反应距离与制动距离两部分构成：</p>
+<div class="arithmatex">\[
+d = v\,t_r + \frac{v^{2}}{2a},
+\]</div>
+<p>其中 <span class="arithmatex">\(v\)</span> 是速度、<span class="arithmatex">\(t_r\)</span> 是反应时间、<span class="arithmatex">\(a\)</span> 是减速度。取 <span class="arithmatex">\(v=5\)</span> m/s、<span class="arithmatex">\(t_r=3\)</span> s、<span class="arithmatex">\(a=3\)</span> m/s²，得 <span class="arithmatex">\(d=15+4.2\approx 19.2\)</span> m；若 <span class="arithmatex">\(t_r\)</span> 缩短到 1 s，则 <span class="arithmatex">\(d=5+4.2\approx 9.2\)</span> m，节省的 10 m 完全来自反应时间。</p>
+<table>
+<thead>
+<tr>
+<th>速度 <span class="arithmatex">\(v\)</span></th>
+<th>反应时间 <span class="arithmatex">\(t_r\)</span></th>
+<th>反应距离</th>
+<th>制动距离（<span class="arithmatex">\(a=3\)</span> m/s²）</th>
+<th>总停止距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2 m/s</td>
+<td>2 s</td>
+<td>4.0 m</td>
+<td>0.7 m</td>
+<td>4.7 m</td>
+</tr>
+<tr>
+<td>5 m/s</td>
+<td>3 s</td>
+<td>15.0 m</td>
+<td>4.2 m</td>
+<td>19.2 m</td>
+</tr>
+<tr>
+<td>10 m/s</td>
+<td>3 s</td>
+<td>30.0 m</td>
+<td>16.7 m</td>
+<td>46.7 m</td>
+</tr>
+<tr>
+<td>10 m/s</td>
+<td>8 s</td>
+<td>80.0 m</td>
+<td>16.7 m</td>
+<td>96.7 m</td>
+</tr>
+</tbody>
+</table>
+<p>表中最重要的一行是最后一行：速度不变而反应时间从 3 s 变到 8 s，停止距离翻倍。结论很直接：在任何需要 1 秒内接管的任务里，长期无人值守的自动化都不能把人工接管当作主要安全机制。反应时间必须进入安全余量计算，这与 <a href="../../robustness-safety/03-safety-constraints/">Safety Constraints</a> 中的延迟项是同一个量。</p>
+<h2 id="模式混淆的检测与设计约束">模式混淆的检测与设计约束</h2>
+<p>模式混淆（mode confusion）不是偶发界面问题，而是可以用设计约束压到很低的工程问题。先定义模式空间大小 <span class="arithmatex">\(N\)</span> 为同一时刻可能存在的控制模式数，人的可靠记忆与区分能力会随 <span class="arithmatex">\(N\)</span> 快速增长而下降，混淆概率量级约为 <span class="arithmatex">\(O\!\left(N(N-1)\right)\)</span>。</p>
+<table>
+<thead>
+<tr>
+<th>设计约束</th>
+<th>目的</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模式数量上限（通常 ≤ 4）</td>
+<td>人能记住全部状态</td>
+<td>需要合并相似模式</td>
+</tr>
+<tr>
+<td>模式变化必须由显式事件触发</td>
+<td>消除隐藏切换</td>
+<td>部分场景需人工确认</td>
+</tr>
+<tr>
+<td>模式状态持续可见（非弹窗）</td>
+<td>任何时刻可自检</td>
+<td>界面占用空间</td>
+</tr>
+<tr>
+<td>切换必须有可感知反馈</td>
+<td>覆盖注意力不在界面的情况</td>
+<td>需要声音/触觉通道</td>
+</tr>
+</tbody>
+</table>
+<p>从 <span class="arithmatex">\(N=2\)</span> 增到 <span class="arithmatex">\(N=4\)</span>，混淆相关的模式对数量从 2 增到 12，是 6 倍增长；这正是把 <span class="arithmatex">\(N\)</span> 压在 4 以内的量化理由，而不是审美选择。</p>
+<table>
+<thead>
+<tr>
+<th>检测手段</th>
+<th>成本</th>
+<th>能发现的缺陷</th>
+<th>覆盖边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>静态界面审查</td>
+<td>低</td>
+<td>缺少常驻状态指示</td>
+<td>无法发现动态切换</td>
+</tr>
+<tr>
+<td>日志审计</td>
+<td>中</td>
+<td>未被察觉的切换</td>
+<td>需完整记录切换事件</td>
+</tr>
+<tr>
+<td>注入测试</td>
+<td>中</td>
+<td>边界条件下的静默降级</td>
+<td>需构造触发条件</td>
+</tr>
+<tr>
+<td>受训操作者测试</td>
+<td>高</td>
+<td>心理模型与实际不符</td>
+<td>样本量有限</td>
+</tr>
+</tbody>
+</table>
+<p>反例是“静默降级”：系统因为传感器偶尔超时而悄悄退回低自动化模式，操作者继续按原有心理模型行动。这类问题在测试中很难被偶然发现，只能通过模式变化日志主动审计——如果日志里出现了操作者未察觉的切换，那就是设计缺陷，判据是这类事件的计数必须为 0。</p>
+<p>审计字段至少包括：切换前后模式、触发事件、是否向操作者发出反馈、操作者在切换后 5 s 内的输入。缺最后一项就无法判断“人是否跟上”，缺第三项则无法区分“没告知”与“告知了但没看见”两种缺陷。</p>
+<p>工程上可把 <span class="arithmatex">\(N\)</span> 与提示通道数量一起写入设计约束：模式数 ≤ 4、每种模式至少一个常驻视觉指示、切换至少有两条通道反馈。这三条是可以在评审清单上打勾的，而“界面清晰易懂”不能。</p>
 <h2 id="辅助驾驶可以看出功能级自动化">辅助驾驶可以看出功能级自动化</h2>
 <p>车辆可以自动保持车道和车距，但驾驶员仍负责目的地、复杂施工区域和系统失效后的接管。这里不是简单的“人一半、机器一半”，而是不同任务由不同主体负责。</p>
+<p>接管所需的可用距离可写成 <span class="arithmatex">\(d_{\text{avail}}=v\,(t_{\text{alert}}+t_{\text{react}})\)</span>，其中 <span class="arithmatex">\(t_{\text{alert}}\)</span> 是系统发出接管请求到人察觉的时间，<span class="arithmatex">\(t_{\text{react}}\)</span> 是人开始动作的总延迟。取 60 km/h（约 16.7 m/s）、<span class="arithmatex">\(t_{\text{alert}}+t_{\text{react}}=10\)</span> s，则 <span class="arithmatex">\(d_{\text{avail}}\approx 167\)</span> m。</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>责任主体</th>
+<th>典型时间尺度</th>
+<th>失效后果</th>
+<th>兜底机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车道保持</td>
+<td>机执行、人监督</td>
+<td>0.1–1 s</td>
+<td>偏离车道</td>
+<td>人接管或退出</td>
+</tr>
+<tr>
+<td>自适应巡航</td>
+<td>机执行、人设目标</td>
+<td>0.5–2 s</td>
+<td>追尾</td>
+<td>紧急制动</td>
+</tr>
+<tr>
+<td>目标选择</td>
+<td>人</td>
+<td>秒–分钟</td>
+<td>走错路线</td>
+<td>人重新设目标</td>
+</tr>
+<tr>
+<td>失效接管</td>
+<td>人</td>
+<td>3–8 s</td>
+<td>直接安全风险</td>
+<td>最小风险操作</td>
+</tr>
+<tr>
+<td>紧急制动</td>
+<td>机（独立安全层）</td>
+<td>10–100 ms</td>
+<td>碰撞</td>
+<td>不由融合权重控制</td>
+</tr>
+</tbody>
+</table>
+<p>把这几行与前文的 <span class="arithmatex">\((O,D,E,V)\)</span> 四元组对照，就能看出“L2/L3”标签为什么不足以描述系统：同一辆车上，目标选择是完全的“人在决定”，紧急制动又是“机在执行且机可否决人”。</p>
+<p>边界场景决定了这套设计的实际安全水平：静止障碍物、施工区、标线消失和系统能力边界处的切出，都是功能级责任必须提前定义的场合。这类失效与 <a href="../../robustness-safety/01-uncertainty-shift/">Uncertainty &amp; Shift</a> 描述的分布外条件高度重合：功能在该场景未定义，等价于责任在该场景为空。</p>
+<p>接管请求通常分两级：先发出提示并给出约 10 s 的处理窗口，若窗口内无人接管则升级为最小风险操作。10 s 这个量级直接来自反应时间分布——它需要覆盖无准备条件下 3–8 s 的反应时间并留出动作余量，而不是来自法规的任意取值。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>感知难度</th>
+<th>接管窗口</th>
+<th>需要谁决定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车道内跟车</td>
+<td>低</td>
+<td>3–5 s</td>
+<td>机器</td>
+</tr>
+<tr>
+<td>前车切出后出现静止目标</td>
+<td>高</td>
+<td>2–4 s</td>
+<td>机器（紧急制动）</td>
+</tr>
+<tr>
+<td>施工区绕行</td>
+<td>高</td>
+<td>5–10 s</td>
+<td>人（目标变更）</td>
+</tr>
+<tr>
+<td>系统能力边界切出</td>
+<td>中</td>
+<td>10 s 级</td>
+<td>人</td>
+</tr>
+</tbody>
+</table>
+<p>这张表说明为什么“接管窗口”必须逐场景给出：把窗口统一写成一个数，就等于在感知难度最高的场景里默认了最宽松的时间预算。</p>
 <h2 id="自动化设计最终要回答三句话">自动化设计最终要回答三句话</h2>
 <ol>
 <li><strong>谁在做决定？</strong></li>
 <li><strong>谁能覆盖这个决定？</strong></li>
 <li><strong>异常时谁负责把系统带回安全状态？</strong></li>
 </ol>
-<p>如果这三句话说不清，人机系统就很难真正可控。</p>
+<p>这三句话必须同时出现在设计文档和界面上，缺一不可：文档里有答案、界面上没有证据，操作者仍然无法在运行时做出判断。</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>界面证据</th>
+<th>文档证据</th>
+<th>验收方法</th>
+<th>通过判据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谁在做决定</td>
+<td>常驻模式与控制层级</td>
+<td>责任矩阵</td>
+<td>受训者问答</td>
+<td>≥ 9/10 人 3 min 内答对</td>
+</tr>
+<tr>
+<td>谁能覆盖</td>
+<td>覆盖入口与生效反馈</td>
+<td>权限分层说明</td>
+<td>演练覆盖操作</td>
+<td>覆盖确认延迟 &lt; 1 s</td>
+</tr>
+<tr>
+<td>谁负责收尾</td>
+<td>降级状态与责任人</td>
+<td>恢复流程</td>
+<td>故障注入演练</td>
+<td>全程无责任空档记录</td>
+</tr>
+</tbody>
+</table>
+<p>一个可操作的验收方式：让一位不熟悉该项目的人只看界面与文档，回答“现在谁在控制”“如果我想让它停下该按什么”“系统自动降级后我如何得知”这三个问题。答不出来，说明功能分解没有真正落到交互设计上。</p>
+<p>注意判据必须可观测：把“操作者理解系统状态”写成通过条件是无法验收的，写成“≥9/10 名受训操作者在 3 分钟内正确回答三个问题”才可验收。前者无法证伪，后者既能证伪也能回归测试。</p>
+<p>这三句话还应当出现在告警文案里：告警必须同时说明当前谁在执行、能否覆盖、若无人响应将发生什么。只写“系统异常”的告警无法支撑任何决策。</p>
+<p>验收可以做成固定流程：冻结一个版本，让未参与开发的受训操作者在无提示条件下完成三个提问、两次覆盖操作和一次降级观察，全程记录时间与错误。三项判据同时满足才算通过，任一项不满足即回到责任矩阵修改界面。</p>
+<p>失败案例也应进入验收清单：一个常见的漏项是“降级后无反馈”，操作者仍在等待自动系统完成任务，而系统已经静默移交控制权。这类问题在正常演示中不会出现，只有通过主动触发降级才能暴露。</p>
+<p>判据要写成数字而不是印象：覆盖入口的确认反馈应在 1 s 内可见，降级通知应在 500 ms 内到达，模式指示的遮挡与失效时间应计入可用性。把这三条写进验收清单，才能防止“设计上没问题、现场没人知道”的情况。</p>
+<p>如果这三句话说不清，人机系统就很难真正可控，任何事后的事故分析也只能停留在“没有明确责任人”这一层结论上。</p>
 <h2 id="模式切换必须避免我以为你在控制">模式切换必须避免我以为你在控制</h2>
 <p>自动驾驶、机器人和无人机里常见 mode confusion：操作者以为系统还在自动控制，系统却已经退回人工；或者人已经接管，自动控制仍继续输出。</p>
-<p>模式变化应该有明确视觉/声音反馈，并尽量减少隐藏的自动切换。对高风险系统，<strong>控制权状态本身就是需要持续展示的系统状态</strong>。</p>
+<p>把切换窗口内的空档写成概率：设切换过程中每秒内“双方都以为对方在负责”的瞬时概率为 <span class="arithmatex">\(q\)</span>，切换持续 <span class="arithmatex">\(T\)</span> 秒，则空档累积概率为</p>
+<div class="arithmatex">\[
+p_{\text{hole}} = 1-(1-q)^{T}.
+\]</div>
+<p>取 <span class="arithmatex">\(q=0.01\)</span>、<span class="arithmatex">\(T=30\)</span> s 得 <span class="arithmatex">\(p_{\text{hole}}\approx 26\%\)</span>；即使把 <span class="arithmatex">\(q\)</span> 压到 0.001，30 s 内仍有约 3% 的概率出现无人负责的时刻。</p>
+<table>
+<thead>
+<tr>
+<th>切换场景</th>
+<th>主要风险</th>
+<th>量化关注点</th>
+<th>缓解措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动 → 人接管</td>
+<td>人未理解当前状态</td>
+<td>接管延迟 3–8 s</td>
+<td>提前告警、状态摘要</td>
+</tr>
+<tr>
+<td>人 → 自动交接</td>
+<td>机器未察觉人已松手</td>
+<td>输入缺口检测 &lt; 100 ms</td>
+<td>显式交接确认</td>
+</tr>
+<tr>
+<td>静默降级</td>
+<td>无人知晓权限已转移</td>
+<td>日志中未告知切换次数</td>
+<td>降级必须可感知</td>
+</tr>
+<tr>
+<td>双源并存</td>
+<td>两路指令同时输出</td>
+<td>冲突命令比例</td>
+<td>切换期指令源唯一</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>失效模式</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我以为你在控制</td>
+<td>切换后无人动作，或动作冲突</td>
+<td>切换需双向确认</td>
+</tr>
+<tr>
+<td>双控冲突</td>
+<td>输入与输出方向长期不一致</td>
+<td>切换瞬间锁定单一指令源</td>
+</tr>
+<tr>
+<td>切换期丢帧</td>
+<td>命令在切换窗口出现空洞</td>
+<td>保持最后有效指令并限速</td>
+</tr>
+</tbody>
+</table>
+<p>模式变化应该有明确视觉/声音反馈，并尽量减少隐藏的自动切换。对高风险系统，<strong>控制权状态本身就是需要持续展示的系统状态</strong>，而不是只在切换瞬间提示一次的事件。切换时序协议的细节见 <a href="../05-intervention-takeover/">Intervention &amp; Takeover</a>。</p>
 <h2 id="自动化等级不能替代功能分解">自动化等级不能替代功能分解</h2>
 <p>同一系统中，感知可能高度自动化，目标选择由人完成，紧急制动又由安全层接管。用单一等级概括整个系统会掩盖实际控制权。设计文档应逐功能说明谁观察、谁决定、谁执行以及谁能否决。</p>
+<p>定义验收覆盖度 <span class="arithmatex">\(R_{\text{cover}}=\frac{n_{\text{defined}}}{n}\)</span>，其中 <span class="arithmatex">\(n\)</span> 是功能环节数、<span class="arithmatex">\(n_{\text{defined}}\)</span> 是四个责任问题都写清楚的功能数。要求 <span class="arithmatex">\(R_{\text{cover}}=1\)</span>：一个 12 环节的系统若有 3 处未定义，就留下 25% 的责任空档区间。</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>谁观察</th>
+<th>谁决定</th>
+<th>谁执行</th>
+<th>谁能否决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位与建图</td>
+<td>机</td>
+<td>机</td>
+<td>机</td>
+<td>人（中止任务）</td>
+</tr>
+<tr>
+<td>路径规划</td>
+<td>机</td>
+<td>机</td>
+<td>机</td>
+<td>人（改目标）</td>
+</tr>
+<tr>
+<td>目标选择</td>
+<td>机推荐</td>
+<td>人</td>
+<td>机</td>
+<td>人</td>
+</tr>
+<tr>
+<td>接近与抓取</td>
+<td>机</td>
+<td>机</td>
+<td>机</td>
+<td>机（碰撞保护）</td>
+</tr>
+<tr>
+<td>异常恢复</td>
+<td>机告警</td>
+<td>人</td>
+<td>人/机</td>
+<td>机（安全停机）</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>空档类型</th>
+<th>生成机制</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未定义环节</td>
+<td>功能清单遗漏</td>
+<td>事故分析无法定位责任人</td>
+<td>补齐 <span class="arithmatex">\(R_{\text{cover}}\)</span></td>
+</tr>
+<tr>
+<td>定义冲突</td>
+<td>两个功能都声称可执行</td>
+<td>指令冲突或重复动作</td>
+<td>明确唯一执行者</td>
+</tr>
+<tr>
+<td>隐含兜底</td>
+<td>假定“反正有人会处理”</td>
+<td>关键告警长期无人响应</td>
+<td>指定责任主体与时限</td>
+</tr>
+</tbody>
+</table>
+<p>逐行填表比讨论等级标签费力，但它是唯一能让后续的信任校准、接管设计与安全约束有明确作用对象的做法。信任如何与真实可靠性对齐见 <a href="../04-trust-explainability/">Trust &amp; Explainability</a>，学习系统的运行时约束见 <a href="../../robustness-safety/05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a>。</p>
+<p>矩阵还应覆盖工况维度：同一个功能在标称、降级和失效三种状态下，责任人可能不同。若矩阵只有功能一个维度，降级状态下的责任归属仍然会被留空，而这恰恰是最需要提前定义的区间。</p>
+<p>配套的评审门槛可以写成：<span class="arithmatex">\(R_{\text{cover}}=1\)</span>、每个环节的响应时间要求已量化、降级状态下的责任人已指定。三条都通过，责任分解才算完成，可以进入控制器与安全层的实现阶段。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章确立职责划分，<a href="../02-human-in-loop/">Human-in-the-Loop</a> 讨论人具体插在哪一环，<a href="../03-shared-autonomy/">Shared Autonomy</a> 处理控制权的连续融合，<a href="../05-intervention-takeover/">Intervention &amp; Takeover</a> 给出接管的时序协议。自动化失败后的降级机制见 <a href="../../robustness-safety/05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a>。</p>
+</blockquote>
 
 
 

@@ -3474,6 +3474,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#人力预算的量化" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人力预算的量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#反馈必须能改变后续系统行为" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3518,10 +3529,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#反馈闭环的延迟与漂移" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反馈闭环的延迟与漂移
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#人的注意力是有限资源" class="md-nav__link">
     <span class="md-ellipsis">
       
         人的注意力是有限资源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hitl-的人力成本与扩展性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HITL 的人力成本与扩展性
       
     </span>
   </a>
@@ -3685,6 +3718,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#人力预算的量化" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人力预算的量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#反馈必须能改变后续系统行为" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3729,10 +3773,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#反馈闭环的延迟与漂移" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反馈闭环的延迟与漂移
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#人的注意力是有限资源" class="md-nav__link">
     <span class="md-ellipsis">
       
         人的注意力是有限资源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hitl-的人力成本与扩展性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HITL 的人力成本与扩展性
       
     </span>
   </a>
@@ -3832,21 +3898,338 @@
 
 <h1 id="human-in-the-loop">Human-in-the-Loop</h1>
 <p>Human-in-the-Loop（HITL）不是简单“最后让人点确认”，而是在系统闭环中选择<strong>人类判断最有价值的位置</strong>，让人的反馈真正改变模型、决策或执行。</p>
+<p>判断一个 HITL 设计是否成立的唯一标准是：<strong>它是否改变了后续系统行为</strong>。只记录不生效的确认，本质上是把责任转移给人，而不是把人接入闭环。</p>
+<p>本章按“人插在哪一环 → 什么条件下请求人 → 人力够不够 → 反馈如何生效 → 如何度量与审计”展开。控制权如何在连续融合中分配见 <a href="../03-shared-autonomy/">Shared Autonomy</a>，信任与解释如何校准人的判断见 <a href="../04-trust-explainability/">Trust &amp; Explainability</a>。</p>
 <h2 id="人在环首先要说明人插在哪一环">人在环首先要说明人插在哪一环</h2>
-<p>人可以出现在多个位置：</p>
+<p>先把“插入位置”定义为一个显式变量：人的作用点 <span class="arithmatex">\(l\in\{\text{数据层},\text{决策层},\text{目标层},\text{恢复层}\}\)</span>，每层有各自的响应时间要求、输入形式和失败后果。</p>
 <ul>
 <li>数据层：修正标注、筛选异常样本；</li>
 <li>决策层：批准或拒绝关键动作；</li>
 <li>目标层：修改任务优先级和约束；</li>
 <li>异常恢复层：系统能力不足时接管。</li>
 </ul>
-<p>不同位置的响应时间和责任完全不同。</p>
+<p>不同位置的响应时间和责任完全不同，因此“这个系统有人参与”不是设计说明，必须写出在哪一层、以什么频率、由谁负责。</p>
+<table>
+<thead>
+<tr>
+<th>插入位置</th>
+<th>响应时间要求</th>
+<th>人的输入形式</th>
+<th>失败后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据层</td>
+<td>小时–天</td>
+<td>标注修正、样本取舍</td>
+<td>模型质量缓慢下降</td>
+</tr>
+<tr>
+<td>决策层</td>
+<td>秒–分钟</td>
+<td>批准 / 拒绝 / 改参</td>
+<td>任务中断或错误执行</td>
+</tr>
+<tr>
+<td>目标层</td>
+<td>分钟–小时</td>
+<td>修改优先级与约束</td>
+<td>系统做对的事但做错目标</td>
+</tr>
+<tr>
+<td>恢复层</td>
+<td>秒以内</td>
+<td>接管控制</td>
+<td>直接安全事故</td>
+</tr>
+</tbody>
+</table>
+<p>是否值得把人插进某一层，可用单位介入的期望净收益判断：</p>
+<div class="arithmatex">\[
+G = p_e\,C_e\,r - c_h\,\tau,
+\]</div>
+<p>其中 <span class="arithmatex">\(p_e\)</span> 是被审核事件中真实出错的概率，<span class="arithmatex">\(C_e\)</span> 是一次错误的代价，<span class="arithmatex">\(r\)</span> 是人工修正成功的概率，<span class="arithmatex">\(c_h\)</span> 是人力单位时间成本，<span class="arithmatex">\(\tau\)</span> 是单条平均处理时间。取 <span class="arithmatex">\(p_e=0.02\)</span>、<span class="arithmatex">\(C_e=1000\)</span>、<span class="arithmatex">\(r=0.8\)</span>、<span class="arithmatex">\(c_h=0.05\)</span>、<span class="arithmatex">\(\tau=20\)</span> s，得 <span class="arithmatex">\(G=16-1=15\)</span>，介入明显划算。</p>
+<p>但同一公式在数据层会给出完全不同的答案：若 <span class="arithmatex">\(p_e=0.001\)</span>，则 <span class="arithmatex">\(p_e C_e r\)</span> 只剩 0.8，低于单条人力成本，此时逐条人工审核就是纯损耗。<strong>同一个公式在不同层给出不同结论，正是必须逐层计算的理由。</strong></p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>介入频率量级</th>
+<th>单次人工成本量级</th>
+<th>是否需要实时性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据层</td>
+<td>每天数百条</td>
+<td>10 s 级</td>
+<td>否</td>
+</tr>
+<tr>
+<td>决策层</td>
+<td>每天数十次</td>
+<td>10–60 s</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>目标层</td>
+<td>每周数次</td>
+<td>分钟级</td>
+<td>否</td>
+</tr>
+<tr>
+<td>恢复层</td>
+<td>极少但关键</td>
+<td>秒级</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>最容易被忽略的是<strong>目标层</strong>：系统可能完全按设计运行，只是目标本身已经不再合适。把目标修改权留在人手里，往往比让人逐条批准动作更有效，因为前者一次介入可以修正成百次动作。</p>
 <h2 id="人应该介入机器最不确定或风险最高的地方">人应该介入机器最不确定或风险最高的地方</h2>
 <p>如果系统对 99% 普通样本都很稳定，让人逐个审核只会增加成本。更有效的是根据置信度、风险或异常检测结果，把少数关键案例交给人。</p>
-<p>这也是 active learning 和人工审核系统背后的共同思想：<strong>让有限的人力覆盖最有信息价值的样本。</strong></p>
+<p>先定义不确定性度量：设模型输出类别分布为 <span class="arithmatex">\(p=(p_1,\dots,p_K)\)</span>，预测熵为</p>
+<div class="arithmatex">\[
+H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
+\]</div>
+<p>二分类且 <span class="arithmatex">\(p_1=p_2=0.5\)</span> 时 <span class="arithmatex">\(H=\ln 2\approx 0.693\)</span>；四类均匀分布时 <span class="arithmatex">\(H=\ln 4\approx 1.386\)</span>。常用触发阈值取 <span class="arithmatex">\(H&gt;0.7\)</span> 或最大类概率低于 0.6，二者分别是“分布接近均匀”和“没有明显赢家”的判据。</p>
+<p>风险加权则把后果算进来：审核优先级 <span class="arithmatex">\(L(x)=P_{\text{err}}(x)\,C(x)\)</span>，其中 <span class="arithmatex">\(C(x)\)</span> 是该样本出错后的代价。在全自主导航中，靠近人或车辆的位置 <span class="arithmatex">\(C(x)\)</span> 显著更高，即使 <span class="arithmatex">\(P_{\text{err}}\)</span> 相同也应优先复核；相关控制与安全约束见 <a href="../../robotics/05-navigation-control/">Navigation &amp; Control</a>。</p>
+<table>
+<thead>
+<tr>
+<th>采样策略</th>
+<th>每 1000 条覆盖的错误数</th>
+<th>覆盖长尾场景</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>随机抽样</td>
+<td>与错误率同比例（约 50 条 5% 样本）</td>
+<td>差</td>
+<td>浪费人力在简单样本</td>
+</tr>
+<tr>
+<td>不确定性优先</td>
+<td>可覆盖大部分错误（经验量级 60%）</td>
+<td>中</td>
+<td>高置信错误被漏掉</td>
+</tr>
+<tr>
+<td>风险加权</td>
+<td>取决于代价分布</td>
+<td>中</td>
+<td>代价估计不准</td>
+</tr>
+<tr>
+<td>多样性/聚类抽样</td>
+<td>中等</td>
+<td>好</td>
+<td>需要额外聚类计算</td>
+</tr>
+</tbody>
+</table>
+<p>需要强调不确定性采样的失效模式：<strong>当模型校准很差时，高置信错误不会出现在不确定性排序的前列</strong>。此时必须叠加独立的风险规则或异常检测，而不能把“模型很自信”当作免检凭证。</p>
+<table>
+<thead>
+<tr>
+<th>触发条件</th>
+<th>阈值示例</th>
+<th>失效表现</th>
+<th>补充手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低置信</td>
+<td>最大类概率 &lt; 0.6</td>
+<td>模型过度自信时失效</td>
+<td>阈值重标定</td>
+</tr>
+<tr>
+<td>高熵</td>
+<td><span class="arithmatex">\(H&gt;0.7\)</span></td>
+<td>类别数不同时不可比</td>
+<td>归一化熵</td>
+</tr>
+<tr>
+<td>分布外</td>
+<td>异常分数超限</td>
+<td>阈值漂移</td>
+<td>定期重估阈值</td>
+</tr>
+<tr>
+<td>高风险场景</td>
+<td>规则命中</td>
+<td>规则覆盖不全</td>
+<td>与不确定性取并集</td>
+</tr>
+</tbody>
+</table>
+<p>这也是 active learning 和人工审核系统背后的共同思想：<strong>让有限的人力覆盖最有信息价值的样本</strong>，而不是均匀地覆盖所有样本。</p>
+<h2 id="人力预算的量化">人力预算的量化</h2>
+<p>把人放进闭环必须回答“人处理得过来吗”。设告警到达率为 <span class="arithmatex">\(\lambda\)</span>、单条平均理解时间为 <span class="arithmatex">\(\tau\)</span>，则人的利用率与队列长度为</p>
+<div class="arithmatex">\[
+\rho = \lambda \tau, \qquad \mathbb{E}[L] = \frac{\rho}{1-\rho}\quad(\rho&lt;1).
+\]</div>
+<table>
+<thead>
+<tr>
+<th>到达率 <span class="arithmatex">\(\lambda\)</span></th>
+<th>理解时间 <span class="arithmatex">\(\tau\)</span></th>
+<th>利用率 <span class="arithmatex">\(\rho\)</span></th>
+<th>平均排队数</th>
+<th>是否可行</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.2 /min</td>
+<td>20 s</td>
+<td>0.07</td>
+<td>0.07</td>
+<td>充裕</td>
+</tr>
+<tr>
+<td>1 /min</td>
+<td>20 s</td>
+<td>0.33</td>
+<td>0.5</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>2 /min</td>
+<td>20 s</td>
+<td>0.67</td>
+<td>2.0</td>
+<td>偏紧，延迟明显</td>
+</tr>
+<tr>
+<td>3 /min</td>
+<td>20 s</td>
+<td>1.00</td>
+<td>发散</td>
+<td>不可行，必然堆积</td>
+</tr>
+</tbody>
+</table>
+<p>关键结论是<strong>利用率接近 1 时队列会非线性爆炸</strong>（<span class="arithmatex">\(\rho=0.67\)</span> 时平均已排队 2 条，<span class="arithmatex">\(\rho=0.9\)</span> 时排队 9 条）。因此设计阈值时通常把 <span class="arithmatex">\(\rho\)</span> 控制在 0.5–0.6 以内，剩下的余量用于应对突发。</p>
+<p>由 <span class="arithmatex">\(0.5\sim0.6\)</span> 的目标利用率可以直接反推触发阈值的上限：<span class="arithmatex">\(\lambda_{\max}=\frac{1-\rho_{\text{tgt}}}{\tau}\)</span>。取 <span class="arithmatex">\(\tau=20\)</span> s、<span class="arithmatex">\(\rho_{\text{tgt}}=0.6\)</span>，得 <span class="arithmatex">\(\lambda_{\max}\approx 0.02\)</span> /s，即每分钟约 1.2 条告警。<strong>这个数应该写进告警设计文档，作为阈值参数的上界，而不是等系统上线后由现场感受决定。</strong></p>
+<table>
+<thead>
+<tr>
+<th>超载程度</th>
+<th>观测信号</th>
+<th>后果</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轻微（<span class="arithmatex">\(\rho\)</span> 0.6–0.8）</td>
+<td>处理延迟上升</td>
+<td>决策变慢</td>
+<td>限流、合并同类告警</td>
+</tr>
+<tr>
+<td>中等（<span class="arithmatex">\(\rho\)</span> 0.8–1.0）</td>
+<td>队列持续增长</td>
+<td>关键告警被淹没</td>
+<td>分级 + 自动降级处理</td>
+</tr>
+<tr>
+<td>严重（<span class="arithmatex">\(\rho&gt;1\)</span>）</td>
+<td>大量超时未处理</td>
+<td>安全下降</td>
+<td>自动放行低风险项</td>
+</tr>
+</tbody>
+</table>
+<p>机制解释与阈值选择必须同时写清楚：<strong>确认请求超过人力速率时，安全性会下降而不是上升</strong>，因为超载的最终表现是机械批准与漏处理，而不是系统停机。</p>
 <h2 id="反馈必须能改变后续系统行为">反馈必须能改变后续系统行为</h2>
 <p>如果人每次都修正同一种错误，但系统从不更新规则、数据或模型，那么它只是“人工补洞”，而不是闭环。</p>
-<p>反馈可以被记录为新标签、约束、案例库或恢复策略，之后用于训练、评估或直接规则修正。</p>
+<p>反馈可以被记录为新标签、约束、案例库或恢复策略，之后用于训练、评估或直接规则修正。判断是否闭环的方法是给每类错误指定一条生效路径，并测量生效延迟。</p>
+<table>
+<thead>
+<tr>
+<th>反馈用途</th>
+<th>生效路径</th>
+<th>生效延迟</th>
+<th>适合的错误类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接规则修正</td>
+<td>立即写入配置或约束</td>
+<td>秒级</td>
+<td>明确、可枚举的规则错误</td>
+</tr>
+<tr>
+<td>案例库 / 检索</td>
+<td>推理时检索相似历史</td>
+<td>立即</td>
+<td>长尾场景、需要上下文</td>
+</tr>
+<tr>
+<td>增量训练</td>
+<td>加入训练集后重新训练</td>
+<td>小时–天</td>
+<td>分布性、统计性偏差</td>
+</tr>
+<tr>
+<td>阈值重标定</td>
+<td>根据误报率调整</td>
+<td>分钟级</td>
+<td>阈值设置不当</td>
+</tr>
+</tbody>
+</table>
+<p>生效延迟可以用暴露量来衡量：若某类错误的单次调用发生概率为 <span class="arithmatex">\(f\)</span>、日调用量为 <span class="arithmatex">\(N\)</span>、修复延迟为 <span class="arithmatex">\(D\)</span> 天，则修复前累计暴露为</p>
+<div class="arithmatex">\[
+E = f\,N\,D .
+\]</div>
+<p>取 <span class="arithmatex">\(f=5\times10^{-4}\)</span>、<span class="arithmatex">\(N=2000\)</span>/天、<span class="arithmatex">\(D=3\)</span> 天，得 <span class="arithmatex">\(E=3\)</span>：也就是说，一个“三天后修复”的问题会在现场真实发生 3 次。这个数把“以后再修”的代价量化了，也让修复优先级可以按 <span class="arithmatex">\(E\)</span> 排序。</p>
+<table>
+<thead>
+<tr>
+<th>错误类别</th>
+<th>生效路径</th>
+<th>验证指标</th>
+<th>验证周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规则错误</td>
+<td>直接改规则</td>
+<td>该类错误复现计数归零</td>
+<td>立即</td>
+</tr>
+<tr>
+<td>长尾场景</td>
+<td>案例库扩充</td>
+<td>相似输入命中率上升</td>
+<td>周</td>
+</tr>
+<tr>
+<td>系统性偏差</td>
+<td>增量训练</td>
+<td>按场景分层的误差下降</td>
+<td>月</td>
+</tr>
+<tr>
+<td>阈值问题</td>
+<td>重标定</td>
+<td>误报率 / 漏报率回到目标区间</td>
+<td>分钟–天</td>
+</tr>
+</tbody>
+</table>
+<p>如果一类错误反复出现却从未进入上表任何一条路径，说明 HITL 只是人工兜底，系统本身没有在学习。最直接的检查方式是统计“同类错误的人工修正次数”：若同一原因连续出现超过 3 次且无对应修复记录，就应视为流程缺陷。</p>
 <h2 id="确认操作必须提供足够上下文">确认操作必须提供足够上下文</h2>
 <p>“是否批准？Yes/No”往往不够。人至少需要知道系统准备做什么、为什么、可能风险以及如果不批准会发生什么。</p>
 <div class="highlight"><pre><span></span><code><span class="n">review</span> <span class="o">=</span> <span class="p">{</span>
@@ -3856,13 +4239,438 @@
     <span class="s2">&quot;alternatives&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wait&quot;</span><span class="p">,</span> <span class="s2">&quot;reroute&quot;</span><span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>真正需要的不是这段代码，而是这种信息结构。</p>
+<p>真正需要的不是这段代码，而是这种信息结构：动作、原因、风险、替代方案四项。缺少任何一项，操作者都只能凭经验补全，而补全结果因人而异。</p>
+<p>决策时间与信息量之间大致满足 <span class="arithmatex">\(T \approx a + b\log_2(n+1)\)</span>，其中 <span class="arithmatex">\(n\)</span> 是可选项数。取 <span class="arithmatex">\(a\approx 0.3\)</span> s、<span class="arithmatex">\(b\approx 0.15\)</span> s：2 个选项时 <span class="arithmatex">\(T\approx 0.54\)</span> s，5 个选项时 <span class="arithmatex">\(T\approx 0.69\)</span> s。这说明增加选项并不会让人彻底无法决策，但会稳定增加时间，因此在 <span class="arithmatex">\(\rho\)</span> 已接近 0.6 的系统里，选项数量本身就是一个负荷参数。</p>
+<table>
+<thead>
+<tr>
+<th>上下文项</th>
+<th>缺失时的典型后果</th>
+<th>建议呈现形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统准备做什么</td>
+<td>依赖操作者自行猜测</td>
+<td>一行动作摘要</td>
+</tr>
+<tr>
+<td>为什么</td>
+<td>无法判断依据是否可信</td>
+<td>关键依据 1–2 条</td>
+</tr>
+<tr>
+<td>风险等级</td>
+<td>高风动作被低风险对待</td>
+<td>分级标签 + 触发原因</td>
+</tr>
+<tr>
+<td>不批准的后果</td>
+<td>倾向于机械批准</td>
+<td>一行后果说明</td>
+</tr>
+</tbody>
+</table>
+<p>机械批准是可以测量的：若采纳率长期高于 0.95 且平均理解时间低于 2 s，人实际上没有在审核。经验上，补齐风险与替代方案两项信息后，机械批准比例会从十个百分点的量级明显回落，但具体幅度必须用本系统的日志统计，不能照搬数值。</p>
 <h2 id="人在环有自己的延迟和错误率">人在环有自己的延迟和错误率</h2>
 <p>人不是完美 oracle。疲劳、信息不足和界面设计都会影响判断，因此不能假设“交给人就一定安全”。高频实时控制通常不适合等待人工确认，人更适合高层目标和异常决策。</p>
+<table>
+<thead>
+<tr>
+<th>人的局限</th>
+<th>具体表现</th>
+<th>设计应对</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>反应延迟</td>
+<td>长期监督后可达数秒</td>
+<td>提前告警、自动降级兜底</td>
+</tr>
+<tr>
+<td>判断偏差</td>
+<td>倾向于快速确认</td>
+<td>关键动作要求二次确认</td>
+</tr>
+<tr>
+<td>信息负载</td>
+<td>多告警并发时处理能力骤降</td>
+<td>限流、合并、分级</td>
+</tr>
+<tr>
+<td>疲劳漂移</td>
+<td>结论随时间变化</td>
+<td>轮换、抽样复核</td>
+</tr>
+</tbody>
+</table>
+<p>把人与机器视作串联环节，系统可靠度为 <span class="arithmatex">\(R_{\text{sys}}=R_m R_h\)</span>。取 <span class="arithmatex">\(R_m=0.999\)</span>、<span class="arithmatex">\(R_h=0.99\)</span>，则 <span class="arithmatex">\(R_{\text{sys}}\approx 0.989\)</span>，比纯机器系统低了整整一个数量级。若系统要求 <span class="arithmatex">\(R_{\text{sys}}\ge 0.999\)</span>，就必须有 <span class="arithmatex">\(R_h\ge 0.999\)</span>，也就是“每一千次人工判断最多一次错误”——这在人类操作者身上几乎无法长期保持。</p>
+<table>
+<thead>
+<tr>
+<th>人的错误类型</th>
+<th>典型成因</th>
+<th>量级</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>疏忽（slip）</td>
+<td>注意力瞬时转移</td>
+<td>千分之一级</td>
+<td>二次确认、互锁</td>
+</tr>
+<tr>
+<td>失忆（lapse）</td>
+<td>任务被打断</td>
+<td>千分之一到百分之一</td>
+<td>检查清单、状态回显</td>
+</tr>
+<tr>
+<td>规则错误（mistake）</td>
+<td>心理模型错误</td>
+<td>百分之一级</td>
+<td>培训、演练、显式说明</td>
+</tr>
+<tr>
+<td>违规（violation）</td>
+<td>赶时间、图方便</td>
+<td>依组织而异</td>
+<td>设计使违规成本更高</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的用途是明确：<strong>人在环不能作为提升可靠度的通用手段</strong>，它只在“人的判断与该环节的正确性相关且机器难以覆盖”时才带来净收益。否则串联可靠度只会下降。</p>
+<p>另一个必须承认的事实是人的错误率与任务节奏强相关：在每分钟一次的低频判断中，人的错误率可以低到千分之一的量级；而在每分钟数次、窗口只有几秒的场景里，错误率会上升一个到两个数量级。因此 HITL 触发频率本身就是一个可靠性参数。</p>
 <h2 id="审计记录是-hitl-系统的一部分">审计记录是 HITL 系统的一部分</h2>
 <p>应记录当时状态、模型建议、触发原因、人类决定和最终结果。这样才能区分模型错误、界面误导和人工覆盖，并把经验沉淀回系统。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+<th>缺失后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>触发时刻与原因</td>
+<td>复现、统计触发分布</td>
+<td>无法定位系统性误触发</td>
+</tr>
+<tr>
+<td>模型输出与置信度</td>
+<td>判断模型是否该求助</td>
+<td>无法评估触发阈值</td>
+</tr>
+<tr>
+<td>展示给操作者的信息</td>
+<td>区分模型错误与界面误导</td>
+<td>责任与原因无法分离</td>
+</tr>
+<tr>
+<td>操作者的决定与耗时</td>
+<td>衡量负荷与机械批准</td>
+<td>无法发现形式化流程</td>
+</tr>
+<tr>
+<td>最终结果</td>
+<td>校验人工判断质量</td>
+<td>无法反馈训练数据</td>
+</tr>
+</tbody>
+</table>
+<p>一份可用的记录至少包含：触发时刻、触发原因、当时的模型输出与置信度、展示给操作者的信息、操作者的决定、最终结果与是否成功。缺少“展示了什么”这一项，就无法区分是模型错了还是界面误导了。</p>
+<p>存储量可以事先估算：若每天产生 2000 条审核事件、每条含缩略状态与元数据约 1 KB，则每天约 2 MB、每年约 0.7 GB；若把原始观测一并保存，量级会上升两三个数量级。这个估算决定日志保留策略与抽样策略，应在设计阶段给出，而不是上线后被动扩容。</p>
+<p>判断记录是否可用的标准是“能否重新回答当时的问题”：给定一条记录，另一名工程师应能独立判断操作者当时拥有的信息与可选动作。不能满足这一条的日志，只能用于统计，不能用于复盘。</p>
+<p>保留策略需要和大数据区分开：结论类字段（决定、触发原因、模型版本）应至少保留与责任追究周期一致的时间（常见 2 年），原始观测因体积大而只保留较短窗口（常见 30 天），并另行抽取固定比例做长期样本。</p>
+<p>人工判断自身的质量也要被审计。可行做法是每周随机抽取一批已处理事件由第二人重判，统计改判率 <span class="arithmatex">\(r_{\text{rev}}\)</span>；若 <span class="arithmatex">\(r_{\text{rev}}\)</span> 明显高于模型错误率，说明人的判断已经成为主要误差来源，此时正确的反应是改善信息展示或降低审核量，而不是继续增加人工确认。</p>
+<table>
+<thead>
+<tr>
+<th>审计项</th>
+<th>频率</th>
+<th>观测指标</th>
+<th>触发整改的判据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>切换与降级记录</td>
+<td>每周</td>
+<td>未告知事件计数</td>
+<td>计数 &gt; 0</td>
+</tr>
+<tr>
+<td>人工判断一致性</td>
+<td>每周</td>
+<td>重判改判率</td>
+<td>高于模型错误率</td>
+</tr>
+<tr>
+<td>阈值有效性</td>
+<td>每月</td>
+<td>触发分布与错误覆盖</td>
+<td>触发集中在少数场景</td>
+</tr>
+<tr>
+<td>日志完整性</td>
+<td>每月</td>
+<td>必填字段缺失率</td>
+<td>缺失率 &gt; 0.01</td>
+</tr>
+</tbody>
+</table>
+<p>缺少“展示了什么”这一项的记录，无法区分是模型错了还是界面误导了，因此在字段设计阶段就应把它列为必填，而不是等复盘受阻后再补。</p>
+<h2 id="反馈闭环的延迟与漂移">反馈闭环的延迟与漂移</h2>
+<p>人的反馈天然滞后：今天的告警往往对应几分钟甚至几小时前的状态。如果反馈样本被直接用于训练，会引入两类系统性偏差：</p>
+<table>
+<thead>
+<tr>
+<th>偏差来源</th>
+<th>机制</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态漂移</td>
+<td>反馈时状态已改变</td>
+<td>标签与输入不匹配</td>
+</tr>
+<tr>
+<td>选择偏差</td>
+<td>只审核了部分案例</td>
+<td>训练分布被窄化</td>
+</tr>
+<tr>
+<td>标签过时</td>
+<td>环境或任务已变化</td>
+<td>学到过时规则</td>
+</tr>
+</tbody>
+</table>
+<p>状态漂移造成的标签失配比例可近似写成 <span class="arithmatex">\(p_{\text{mis}}\approx 1-e^{-\Delta t/\tau_{\text{drift}}}\)</span>，其中 <span class="arithmatex">\(\Delta t\)</span> 是反馈延迟、<span class="arithmatex">\(\tau_{\text{drift}}\)</span> 是环境状态的相关时间。取 <span class="arithmatex">\(\Delta t=10\)</span> min、<span class="arithmatex">\(\tau_{\text{drift}}=30\)</span> min，得 <span class="arithmatex">\(p_{\text{mis}}\approx 0.28\)</span>：接近三成的样本对已经不再有效。</p>
+<p>应对方式是<strong>记录反馈对应的状态快照而不是当前状态</strong>，并在训练时按时间切分验证集，检查新数据是否真的改善了近期表现。</p>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>做法</th>
+<th>不通过的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间切分</td>
+<td>用近 7 天数据做验证</td>
+<td>离线指标好、上线变差</td>
+</tr>
+<tr>
+<td>快速回滚</td>
+<td>保留前一版本权重</td>
+<td>无回滚路径</td>
+</tr>
+<tr>
+<td>分层评估</td>
+<td>按场景/时段分层看误差</td>
+<td>总体改善、局部恶化</td>
+</tr>
+<tr>
+<td>漂移监控</td>
+<td>监控输入分布距离</td>
+<td>分布变化无告警</td>
+</tr>
+</tbody>
+</table>
+<p>选择偏差的处理相对直接：<strong>不要用“被审核过的样本”代表全体</strong>。人工审核天然偏向模型不确定或规则命中的区域，直接用这批数据训练会让模型在这些区域过拟合，而在未覆盖区域退化。实践中应保留一个随机抽样的对照通道，其规模不需要大，但必须持续存在，用于估计真实错误率。</p>
+<p>把三个偏差合起来看，可以给出一个简单规则：<strong>任何用于训练的反馈样本，都必须带有“产生时的状态快照”和“是否来自随机抽样”两个标记</strong>。缺少前者会把状态漂移写成标签噪声，缺少后者会让监督信号在分布上系统性偏移。</p>
+<p>量化上，随机对照通道的规模只需覆盖错误率的置信区间：若真实错误率约 1%，要在 95% 置信水平下把估计误差压到 0.3% 以内，需要约 <span class="arithmatex">\(n\approx\frac{1.96^{2}\cdot0.01\cdot0.99}{0.003^{2}}\approx 4200\)</span> 条样本。这个数决定了对照通道的抽样比例，而不是凭感觉设定。</p>
+<p>注意时间切分验证必须按事件时间而非处理时间排序：人工审核发生在模型推理之后，若按处理时间排序，训练集会出现“用未来数据预测过去”的泄漏。</p>
 <h2 id="人的注意力是有限资源">人的注意力是有限资源</h2>
 <p>要求人工确认并不等于增加安全。如果告警过多、上下文不足或响应窗口过短，人会形成机械确认或错过关键事件。人在环设计应测量告警频率、理解时间和实际响应质量，而不仅是界面上是否存在确认按钮。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>目标区间</th>
+<th>恶化含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>采纳率</td>
+<td>批准比例</td>
+<td>0.6–0.9</td>
+<td>过高说明机械批准</td>
+</tr>
+<tr>
+<td>平均理解时间</td>
+<td>触发到决定</td>
+<td>2–10 s</td>
+<td>过短说明未真正阅读</td>
+</tr>
+<tr>
+<td>漏处理率</td>
+<td>超时未处理比例</td>
+<td>&lt; 0.01</td>
+<td>超载或通知失效</td>
+</tr>
+<tr>
+<td>覆盖修正率</td>
+<td>人工改判占比</td>
+<td>与模型错误率相当</td>
+<td>偏离说明阈值不当</td>
+</tr>
+</tbody>
+</table>
+<p>三个最关键的指标是：<strong>告警采纳率</strong>（是否有大量机械批准）、<strong>平均理解时间</strong>（界面信息是否足够）、<strong>漏处理率</strong>（是否有请求无人响应）。三者任一恶化，说明 HITL 正在变成形式化流程。</p>
+<p>这些指标需要与人力预算联动。若 <span class="arithmatex">\(\rho\)</span> 已经在 0.6 以上，而管理层继续上调审核比例，最先变化的必然是平均理解时间，随后是漏处理率。因此<strong>审核比例不应被当作可以随意拉高的安全参数</strong>：它的上限由 <span class="arithmatex">\(\lambda_{\max}=\frac{1-\rho_{\text{tgt}}}{\tau}\)</span> 决定，而不是由责任分配意愿决定。</p>
+<p>注意力预算可以直接算：以 8 小时班次计，扣除交接、休息与设备操作，真正可用于审核的时间通常不超过 5–6 小时；按 <span class="arithmatex">\(\tau=20\)</span> s 计算，理论上限约每小时 180 条，但持续状态下可靠的速率通常只有三分之一到一半，因为注意力需要恢复间隔。</p>
+<table>
+<thead>
+<tr>
+<th>每日审核时长 <span class="arithmatex">\(u\)</span></th>
+<th>单条 <span class="arithmatex">\(\tau\)</span></th>
+<th>可持续日处理量</th>
+<th>对应 <span class="arithmatex">\(\lambda\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2 h</td>
+<td>20 s</td>
+<td>360 条</td>
+<td>0.05 /min</td>
+</tr>
+<tr>
+<td>4 h</td>
+<td>20 s</td>
+<td>720 条</td>
+<td>0.1 /min</td>
+</tr>
+<tr>
+<td>6 h</td>
+<td>20 s</td>
+<td>1080 条</td>
+<td>0.15 /min</td>
+</tr>
+<tr>
+<td>6 h</td>
+<td>60 s</td>
+<td>360 条</td>
+<td>0.05 /min</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>形式化 HITL 的迹象</th>
+<th>观测信号</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机械批准</td>
+<td>采纳率 &gt; 0.95、理解时间 &lt; 2 s</td>
+<td>减少请求量、增加信息</td>
+</tr>
+<tr>
+<td>关键告警被淹没</td>
+<td>漏处理集中在某类事件</td>
+<td>分级与限流</td>
+</tr>
+<tr>
+<td>指标被优化而非行为被优化</td>
+<td>采纳率好看但事故率未降</td>
+<td>改为按场景评估</td>
+</tr>
+<tr>
+<td>人力被当作无限资源</td>
+<td>审核比例随责任压力上升</td>
+<td>用 <span class="arithmatex">\(\lambda_{\max}\)</span> 设硬上限</td>
+</tr>
+</tbody>
+</table>
+<p>最后一条是 HITL 项目最常见的失败：把“加人工审核”当作免费的可靠性提升，而实际结果是处理时间被压缩、判断质量下降，系统整体可靠度反而低于不做人工审核的版本。</p>
+<h2 id="hitl-的人力成本与扩展性">HITL 的人力成本与扩展性</h2>
+<p>把 HITL 当作可扩展的系统组件，就必须回答“事件量增长十倍时会发生什么”。设每天需要人工处理的独立事件数为 <span class="arithmatex">\(N\)</span>、单条平均处理时间为 <span class="arithmatex">\(\tau\)</span>、每名操作者的有效工作时间为 <span class="arithmatex">\(u\)</span>，则所需人力为</p>
+<div class="arithmatex">\[
+n_{\text{FTE}} = \frac{N\,\tau}{u}.
+\]</div>
+<p>取 <span class="arithmatex">\(N=2000\)</span>、<span class="arithmatex">\(\tau=20\)</span> s、<span class="arithmatex">\(u=6\)</span> h（考虑告警等待与打断后的有效时间），得 <span class="arithmatex">\(n_{\text{FTE}}=\frac{40000}{21600}\approx 1.9\)</span>。事件量升到 20000 条时，需求变成约 19 名全职人员，这在多数部署中不可接受。</p>
+<table>
+<thead>
+<tr>
+<th>日事件量</th>
+<th>单条 20 s 所需 FTE</th>
+<th>需要的组织变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>0.2</td>
+<td>兼职值守即可</td>
+</tr>
+<tr>
+<td>2 000</td>
+<td>1.9</td>
+<td>专职班组、排班与轮换</td>
+</tr>
+<tr>
+<td>20 000</td>
+<td>19</td>
+<td>必须改用自动降级策略</td>
+</tr>
+<tr>
+<td>200 000</td>
+<td>185</td>
+<td>HITL 在物理上不可行</td>
+</tr>
+</tbody>
+</table>
+<p>扩展路径只有三条，且每条都有代价：</p>
+<table>
+<thead>
+<tr>
+<th>扩展方式</th>
+<th>机制</th>
+<th>代价</th>
+<th>失效边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提高触发阈值</td>
+<td>减少进入人工的事件</td>
+<td>漏掉需要复核的案例</td>
+<td>阈值过高等于取消 HITL</td>
+</tr>
+<tr>
+<td>低风险自动放行</td>
+<td>按 <span class="arithmatex">\(L(x)\)</span> 分流</td>
+<td>分流规则错误放大事故</td>
+<td>代价估计偏差</td>
+</tr>
+<tr>
+<td>主动学习降本</td>
+<td>只在信息增益高处求助</td>
+<td>需要维护采样管线</td>
+<td>采样偏差导致退化</td>
+</tr>
+</tbody>
+</table>
+<p>因此 HITL 的容量上限必须事先声明：在本系统的 <span class="arithmatex">\(\rho\)</span> 与 <span class="arithmatex">\(\tau\)</span> 下，人工审核比例存在一个物理上限，超出后唯一正确的做法是<strong>降低自动化对人工兜底的依赖</strong>，改由自动降级与安全停机承担，而不是继续增加确认请求。约束如何落到运行时安全层见 <a href="../../robustness-safety/03-safety-constraints/">Safety Constraints</a>。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章说明人在哪一环介入，<a href="../03-shared-autonomy/">Shared Autonomy</a> 讨论控制权的连续融合，<a href="../04-trust-explainability/">Trust &amp; Explainability</a> 处理信任校准，<a href="../05-intervention-takeover/">Intervention &amp; Takeover</a> 给出接管的时序与度量。监督负荷的时间代价见 <a href="../01-human-ai-automation/">Interaction &amp; Levels of Automation</a>。</p>
+</blockquote>
 
 
 

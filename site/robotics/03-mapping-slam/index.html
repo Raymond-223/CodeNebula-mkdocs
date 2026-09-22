@@ -2072,6 +2072,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#稳健核与误闭环抑制" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳健核与误闭环抑制
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#地图表示由任务决定" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2087,6 +2098,17 @@
     <span class="md-ellipsis">
       
         可观测性限制地图质量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#计算预算与实时性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        计算预算与实时性
       
     </span>
   </a>
@@ -3707,6 +3729,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#稳健核与误闭环抑制" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳健核与误闭环抑制
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#地图表示由任务决定" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3722,6 +3755,17 @@
     <span class="md-ellipsis">
       
         可观测性限制地图质量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#计算预算与实时性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        计算预算与实时性
       
     </span>
   </a>
@@ -3842,7 +3886,46 @@
 <p>假设每一步位姿增量都只有很小误差，连续累积几百、几千步后，位置和角度误差仍会越来越大。尤其角度误差会改变后续平移方向，使轨迹逐渐偏离真实路径。</p>
 <p>这个累积不是线性增长。设第 <span class="arithmatex">\(k\)</span> 步的角度误差为 <span class="arithmatex">\(\delta\theta_k\)</span>，此后剩余行程长度为 <span class="arithmatex">\(L_k\)</span>，则它造成的末端位置误差近似为</p>
 <div class="arithmatex">\[\delta p \approx \sum_k L_k\,\delta\theta_k,\]</div>
-<p>也就是说，<strong>越早出现的角度误差，被放大的行程越长</strong>。位置误差本身以随机游走方式累积（约与步数的平方根同阶），而角度误差通过上述机制带来与距离同阶甚至更强的漂移。这解释了一个常见现象：短距离内里程计看起来完全够用，走完一个长回路后地图却整体扭曲。</p>
+<p>也就是说，<strong>越早出现的角度误差，被放大的行程越长</strong>。位置误差本身以随机游走方式累积（约与步数的平方根同阶），而角度误差通过上述机制带来与距离同阶甚至更强的漂移。若把每步的平移噪声方差记为 <span class="arithmatex">\(\sigma_x^2\)</span>、角度噪声方差记为 <span class="arithmatex">\(\sigma_\theta^2\)</span>，则末端位置误差的方差近似为</p>
+<div class="arithmatex">\[\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).\]</div>
+<p>第二项里的 <span class="arithmatex">\(L_k^2\)</span> 是关键：<strong>角度噪声的权重随剩余距离平方增长</strong>，所以同样的角度精度，在长距离任务里比在短距离任务里贵得多。这也解释了一个常见现象：短距离内里程计看起来完全够用，走完一个长回路后地图却整体扭曲。</p>
+<p>不同里程计来源的误差量级可以用“相对行程的百分比”粗略对照：</p>
+<table>
+<thead>
+<tr>
+<th>里程计来源</th>
+<th>误差量级（相对行程）</th>
+<th>长距离主导项</th>
+<th>失效条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轮式编码器</td>
+<td>约 1%–5%（打滑时更差）</td>
+<td>标定误差与打滑</td>
+<td>湿滑地面、越障</td>
+</tr>
+<tr>
+<td>视觉里程计</td>
+<td>约 0.5%–2%</td>
+<td>尺度漂移与角度漂移</td>
+<td>纹理缺乏、快速旋转</td>
+</tr>
+<tr>
+<td>LiDAR 扫描匹配</td>
+<td>约 0.1%–1%</td>
+<td>无结构环境下的横向约束不足</td>
+<td>长直走廊、开阔场地</td>
+</tr>
+<tr>
+<td>IMU 单积分</td>
+<td>位置误差随时间平方增长</td>
+<td>零偏漂移</td>
+<td>超过数秒的纯惯性推算</td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
@@ -3882,6 +3965,11 @@
 <li><strong>运动估计</strong>：在已知数据关联的前提下，求解两帧之间的相对位姿；</li>
 <li><strong>数据关联</strong>：决定当前观测“属于”哪个已有结构或地图区域。</li>
 </ul>
+<p>扫描匹配的几何形式可以直接写出来。设当前帧点集为 <span class="arithmatex">\(\{q_j\}\)</span>，目标帧或局部地图点集为 <span class="arithmatex">\(\{p_j\}\)</span>，待求的相对变换为 <span class="arithmatex">\((R, t)\)</span>，则点到点 ICP 求解的是</p>
+<div class="arithmatex">\[\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,\]</div>
+<p>其中 <span class="arithmatex">\(c(j)\)</span> 是 <span class="arithmatex">\(q_j\)</span> 在目标点云中的最近点索引。点到点形式简单，但在平面结构上收敛慢；引入目标点法向 <span class="arithmatex">\(n_j\)</span> 后得到点到面残差</p>
+<div class="arithmatex">\[\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \right)^2,\]</div>
+<p>它只约束法向方向，因此在墙面、地面这类平面上收敛更快，但对法向估计的噪声更敏感。最近点搜索是这里的成本瓶颈：暴力搜索是 <span class="arithmatex">\(O(NM)\)</span>，用 KD-tree 或体素哈希可以降到约 <span class="arithmatex">\(O(N \log M)\)</span> 甚至 <span class="arithmatex">\(O(N)\)</span>，这也是前端能否跑到 10–100 Hz 的决定因素。</p>
 <table>
 <thead>
 <tr>
@@ -3912,16 +4000,55 @@
 </tr>
 </tbody>
 </table>
-<p>真正拖垮 SLAM 的通常不是运动估计，而是<strong>数据关联错误</strong>：一个错误匹配会以约束的形式进入后端，让整条轨迹被“合理但错误”地拉扯。</p>
+<table>
+<thead>
+<tr>
+<th>配准残差形式</th>
+<th>对什么敏感</th>
+<th>收敛范围</th>
+<th>适用几何</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>点到点</td>
+<td>采样密度、初值</td>
+<td>需要较好初值</td>
+<td>无显著结构的点云</td>
+</tr>
+<tr>
+<td>点到面</td>
+<td>法向估计误差</td>
+<td>较大，平面多时快</td>
+<td>室内墙面、地面</td>
+</tr>
+<tr>
+<td>点到分布（NDT）</td>
+<td>体素分辨率</td>
+<td>大，不需要对应点</td>
+<td>室外大场景</td>
+</tr>
+<tr>
+<td>光度残差</td>
+<td>光照与曝光</td>
+<td>小位移</td>
+<td>视觉前端、纹理丰富</td>
+</tr>
+</tbody>
+</table>
+<p>真正拖垮 SLAM 的通常不是运动估计，而是<strong>数据关联错误</strong>：一个错误匹配会以约束的形式进入后端，让整条轨迹被“合理但错误”地拉扯。因此在实现上，先固定关联再求位姿（ICP 风格）比同时求解两者更稳定，代价是当两者都错时需要外层的鲁棒机制来兜底。</p>
 <h2 id="后端把整条轨迹写成优化问题">后端：把整条轨迹写成优化问题</h2>
 <p>后端可以把机器人不同时刻的位姿作为节点，把里程计、扫描匹配和闭环关系作为约束。若两个时刻实际上处于同一地点，闭环约束会告诉优化器：这两个位姿应该重合或接近。</p>
 <p>写成最小二乘形式，位姿图优化求解的是</p>
-<div class="arithmatex">\[X^\* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},\]</div>
+<div class="arithmatex">\[X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},\]</div>
 <p>其中 <span class="arithmatex">\(z_{ij}\)</span> 是观测到的相对约束，<span class="arithmatex">\(e_{ij}\)</span> 是它与当前估计之间的残差，<span class="arithmatex">\(\Sigma_{ij}\)</span> 是该约束的不确定度（信息矩阵）。这个形式包含两个重要含义：</p>
 <ul>
 <li><strong>权重由不确定度决定</strong>：不可靠的约束权重低，闭环这类长期约束权重高，因此能主导全局形状；</li>
 <li><strong>误差在全轨迹重新分配</strong>：优化的结果不是简单修改当前位置，而是把误差在整条轨迹中重新分配，使所有约束尽可能一致。</li>
 </ul>
+<p>实际求解用的是 Gauss-Newton 或 Levenberg-Marquardt 迭代。把全部残差堆成向量 <span class="arithmatex">\(e(X)\)</span>、把雅可比记为 <span class="arithmatex">\(J = \partial e / \partial X\)</span>，则每次迭代要求解的线性系统是</p>
+<div class="arithmatex">\[\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta X,\]</div>
+<p>其中 <span class="arithmatex">\(\boxplus\)</span> 表示在流形（位姿群）上的更新。这个系统的结构决定了复杂度：位姿图的 <span class="arithmatex">\(J\)</span> 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，<span class="arithmatex">\(n\)</span> 个位姿的求解成本大致是 <span class="arithmatex">\(O(n)\)</span> 到 <span class="arithmatex">\(O(n^{1.5})\)</span>；而如果当成稠密矩阵处理，成本是 <span class="arithmatex">\(O(n^3)\)</span>，<span class="arithmatex">\(n=1000\)</span> 时就已不可接受。</p>
 <table>
 <thead>
 <tr>
@@ -3952,10 +4079,48 @@
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th>求解方式</th>
+<th>复杂度量级</th>
+<th>适用规模</th>
+<th>工程取舍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>稠密直接求解</td>
+<td><span class="arithmatex">\(O(n^3)\)</span></td>
+<td><span class="arithmatex">\(n &lt; 100\)</span></td>
+<td>实现最简单，仅用于小规模或调试</td>
+</tr>
+<tr>
+<td>稀疏 Cholesky</td>
+<td>约 <span class="arithmatex">\(O(n)\)</span>–<span class="arithmatex">\(O(n^{1.5})\)</span></td>
+<td><span class="arithmatex">\(n\)</span> 到 <span class="arithmatex">\(10^4\)</span></td>
+<td>主流选择，需要好的变量排序</td>
+</tr>
+<tr>
+<td>增量式（iSAM 类）</td>
+<td>每次更新近似 <span class="arithmatex">\(O(1)\)</span> 摊销</td>
+<td>长时间在线运行</td>
+<td>实现复杂，收敛行为更依赖参数</td>
+</tr>
+<tr>
+<td>滑窗 + 边缘化</td>
+<td>窗口内 <span class="arithmatex">\(O(w^3)\)</span></td>
+<td>需要严格实时</td>
+<td>会引入窗口边界的线性化误差</td>
+</tr>
+</tbody>
+</table>
+<p>实践中降低 <span class="arithmatex">\(n\)</span> 的最有效手段不是换求解器，而是<strong>关键帧策略</strong>：只在运动足够大或观测质量足够好时才插入新节点，可以把节点数从“每帧一个”降到“每米一个”，直接让后端成本下降一个数量级。</p>
 <h2 id="闭环检测与误匹配风险">闭环检测与误匹配风险</h2>
 <p>机器人走一圈回到旧地点时，正确闭环可以显著修正漂移；错误闭环则会把两个不同地点强行拉到一起，导致地图整体变形。</p>
 <p>因此闭环检测通常需要比普通帧间匹配更谨慎的验证，例如几何一致性、点云匹配得分或多帧确认。<strong>错误闭环往往比没有闭环更糟。</strong></p>
-<p>闭环检测本质上是一个二分类问题，两类错误代价完全不对称：</p>
+<p>闭环检测本质上是一个二分类问题，两类错误代价完全不对称。若把候选分为真正例 <span class="arithmatex">\(TP\)</span>、假正例 <span class="arithmatex">\(FP\)</span>、假负例 <span class="arithmatex">\(FN\)</span>，精确率 <span class="arithmatex">\(P = TP/(TP+FP)\)</span>、召回率 <span class="arithmatex">\(R = TP/(TP+FN)\)</span>，综合指标为</p>
+<div class="arithmatex">\[F_1 = \frac{2PR}{P+R}.\]</div>
 <table>
 <thead>
 <tr>
@@ -3977,9 +4142,140 @@
 </tr>
 </tbody>
 </table>
-<p>因此实践中的参数调法是把阈值设得保守、用多帧一致性确认，而不是追求高召回率。若发现地图出现“整体折叠”或某段轨迹被强行拉直，第一嫌疑对象就是误检闭环，而不是后端优化器。</p>
+<table>
+<thead>
+<tr>
+<th>错误类型</th>
+<th>计入指标</th>
+<th>代价特征</th>
+<th>缓解方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>漏检（FN）</td>
+<td>召回率下降</td>
+<td>漂移残留，地图慢慢变形，可事后补救</td>
+<td>放宽检索 top-k</td>
+</tr>
+<tr>
+<td>误检（FP）</td>
+<td>精确率下降</td>
+<td>地图结构被破坏，需人工重建</td>
+<td>加严几何与 χ² 校验</td>
+</tr>
+</tbody>
+</table>
+<p>因此实践中的参数调法是把阈值设得保守、用多帧一致性确认，而不是追求高召回率：<strong>目标是精确率接近 1（例如 &gt;0.98），召回率 0.6–0.8 即可接受</strong>，因为漏掉的闭环会在下一次经过时再次成为候选。若发现地图出现“整体折叠”或某段轨迹被强行拉直，第一嫌疑对象就是误检闭环，而不是后端优化器。</p>
+<p>一个可复用的验证流水线是逐级收紧的，每一级都能廉价地否决候选：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>方法</th>
+<th>典型否决条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 检索</td>
+<td>描述子/直方图相似度取 top-k</td>
+<td>相似度低于阈值</td>
+</tr>
+<tr>
+<td>2. 几何一致性</td>
+<td>RANSAC 拟合相对位姿</td>
+<td>内点数 &lt;10 或内点率 &lt;30%</td>
+</tr>
+<tr>
+<td>3. 不确定度校验</td>
+<td>残差马氏距离平方 <span class="arithmatex">\(d^2 = e^\top \Sigma^{-1} e\)</span></td>
+<td><span class="arithmatex">\(d^2\)</span> 超过 <span class="arithmatex">\(\chi^2_{(3,\,0.99)}\)</span> 门限（约 11.3）</td>
+</tr>
+<tr>
+<td>4. 时间一致性</td>
+<td>连续 2–3 次观测相互印证</td>
+<td>单次触发不采信</td>
+</tr>
+<tr>
+<td>5. 事后审计</td>
+<td>记录每位姿的闭环次数与残差</td>
+<td>单个位姿被大量闭环“拉扯”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="稳健核与误闭环抑制">稳健核与误闭环抑制</h2>
+<p>最小二乘对离群值极不稳健，原因在代价函数本身：二次代价中残差以平方进入目标，因此<strong>一条量级差 10 倍的错误约束，其影响会放大 100 倍</strong>，足以压过几十条正确的里程计约束，让整段轨迹被拉向错误位置。</p>
+<p>解决办法是在残差上改用稳健核。设残差尺度参数为 <span class="arithmatex">\(\delta\)</span>，Huber 权重为</p>
+<div class="arithmatex">\[w(r)=\min\left(1,\ \frac{\delta}{|r|}\right), \qquad \rho(r)=\int_0^{|r|} w(s)\,\mathrm{d}s,\]</div>
+<p>其效果是：残差小于 <span class="arithmatex">\(\delta\)</span> 时保持二次行为（不损失正常数据的效率），超过 <span class="arithmatex">\(\delta\)</span> 后退化为线性增长，从而限制单条约束的最大影响。权重写进目标函数后，优化问题变为</p>
+<div class="arithmatex">\[\min_X \sum_{(i,j)\in\mathcal{E}} \rho\!\left( \left\lVert e_{ij} \right\rVert_{\Sigma_{ij}} \right),\]</div>
+<p>等价于把每条约束的信息矩阵按 <span class="arithmatex">\(w\)</span> 缩放，再迭代求解——这也意味着稳健核不改变问题的结构，只改变权重。</p>
+<table>
+<thead>
+<tr>
+<th>稳健核</th>
+<th>权重特征（超出尺度后）</th>
+<th>对极端离群的处理</th>
+<th>典型使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>二次（无稳健核）</td>
+<td>恒为 1</td>
+<td>无，离群完全主导</td>
+<td>已经严格剔除离群的干净数据</td>
+</tr>
+<tr>
+<td>Huber</td>
+<td>随 δ / abs(r) 线性衰减</td>
+<td>增长被限制为线性</td>
+<td>一般扫描匹配，离群较少</td>
+</tr>
+<tr>
+<td>Cauchy</td>
+<td>按 1/(1+(r/c)²) 快速衰减</td>
+<td>影响有上界，近似被忽略</td>
+<td>误闭环风险较高</td>
+</tr>
+<tr>
+<td>Geman-McClure</td>
+<td>极快趋零</td>
+<td>影响近乎截断</td>
+<td>离群比例较高</td>
+</tr>
+<tr>
+<td>开关变量法</td>
+<td>额外优化开关权重</td>
+<td>可完全关闭某条约束</td>
+<td>已知存在误闭环时需要保留可回滚性</td>
+</tr>
+</tbody>
+</table>
+<p>下面这段示意代码把两个关键动作放在一起：用 Huber 权重降低可疑残差的发言权，用卡方门限决定候选闭环是否入库。真实实现还需要多帧确认与日志审计。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">huber_weight</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Weight for one residual: 1.0 for inliers, delta/abs(r) for outliers.&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">delta</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">delta</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">accept_loop</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">chi2_thresh</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mahalanobis gate for a candidate loop closure (3-DoF pose error).&quot;&quot;&quot;</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">residual</span> <span class="o">@</span> <span class="n">info</span> <span class="o">@</span> <span class="n">residual</span><span class="p">)</span>  <span class="c1"># squared Mahalanobis distance</span>
+    <span class="k">return</span> <span class="n">d2</span> <span class="o">&lt;=</span> <span class="n">chi2_thresh</span>  <span class="c1"># True keeps the constraint in the graph</span>
+
+<span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>  <span class="c1"># [dx, dy, dyaw] in metres / radians</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.05</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.05</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.01</span><span class="o">**</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">w_huber</span> <span class="o">=</span> <span class="n">huber_weight</span><span class="p">(</span><span class="n">residual</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># downweight a shaky yaw match</span>
+<span class="n">accepted</span> <span class="o">=</span> <span class="n">accept_loop</span><span class="p">(</span><span class="n">w_huber</span> <span class="o">*</span> <span class="n">residual</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="mf">11.34</span><span class="p">)</span>  <span class="c1"># chi2(3, 0.99)</span>
+</code></pre></div>
 <h2 id="地图表示由任务决定">地图表示由任务决定</h2>
 <p>二维导航常用 occupancy grid；三维避障可能使用体素、点云或局部高度图；视觉系统还可能维护稀疏 landmark。地图不是越精细越好，分辨率越高意味着存储、匹配和更新成本也越高。</p>
+<p>这一点可以算清楚。设地图覆盖面积为 <span class="arithmatex">\(L \times L\)</span>（m）、分辨率为 <span class="arithmatex">\(r\)</span>（m/格）、每格存储 <span class="arithmatex">\(b\)</span> 字节，则内存为</p>
+<div class="arithmatex">\[M = \frac{L^2}{r^2} \cdot b.\]</div>
+<p>代入 <span class="arithmatex">\(L = 100\)</span> m、<span class="arithmatex">\(b = 1\)</span> B：分辨率 0.05 m 时需要约 <span class="arithmatex">\(4 \times 10^6\)</span> 个格，即 4 MB；分辨率减半到 0.025 m，格数与内存涨到 4 倍（16 MB）。而匹配与更新的成本同样随格数增长，因此<strong>分辨率每提升一倍，整条流水线的成本大约翻两番</strong>。</p>
 <table>
 <thead>
 <tr>
@@ -4022,9 +4318,48 @@
 </tr>
 </tbody>
 </table>
-<p>选择表示时应先问“下游要拿地图做什么”，而不是“哪种地图更完整”。定位需要的是可重复识别的结构，规划需要的是可查询的占据与距离信息，两者对分辨率的要求并不一致。</p>
+<table>
+<thead>
+<tr>
+<th>分辨率</th>
+<th>100 m × 100 m 网格数</th>
+<th>内存（1 B/格）</th>
+<th>适用场合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 m</td>
+<td><span class="arithmatex">\(10^4\)</span></td>
+<td>10 KB</td>
+<td>大范围粗地图、全局拓扑</td>
+</tr>
+<tr>
+<td>0.2 m</td>
+<td><span class="arithmatex">\(2.5 \times 10^5\)</span></td>
+<td>250 KB</td>
+<td>室外导航、粗略避障</td>
+</tr>
+<tr>
+<td>0.05 m</td>
+<td><span class="arithmatex">\(4 \times 10^6\)</span></td>
+<td>4 MB</td>
+<td>室内导航、轮椅与仓储机器人</td>
+</tr>
+<tr>
+<td>0.02 m</td>
+<td><span class="arithmatex">\(2.5 \times 10^7\)</span></td>
+<td>25 MB</td>
+<td>精细操作、窄通道通过</td>
+</tr>
+</tbody>
+</table>
+<p>选择表示时应先问“下游要拿地图做什么”，而不是“哪种地图更完整”。定位需要的是可重复识别的结构，规划需要的是可查询的占据与距离信息，两者对分辨率的要求并不一致。常见的工程折中是维护多层地图：粗分辨率用于全局规划，精细分辨率只在机器人附近的局部窗口内维护。</p>
 <h2 id="可观测性限制地图质量">可观测性限制地图质量</h2>
 <p>某些运动和环境无法提供足够约束，例如长直走廊缺少横向特征、纯旋转难以恢复平移尺度。此时优化器无法凭空创造信息。</p>
+<p>这一点可以用信息矩阵说明。设约束残差对状态的雅可比为 <span class="arithmatex">\(J\)</span>、噪声协方差为 <span class="arithmatex">\(\Sigma\)</span>，则信息矩阵为 <span class="arithmatex">\(\mathcal{I} = J^\top \Sigma^{-1} J\)</span>，状态估计的不确定度由它的逆给出。当某个方向缺少约束时</p>
+<div class="arithmatex">\[\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}} \to \infty,\]</div>
+<p>也就是说：<strong>该方向上的估计误差可以任意大，而优化器仍然报告“收敛”</strong>。工程上更常用的诊断量是条件数 <span class="arithmatex">\(\kappa = \lambda_{\max} / \lambda_{\min}\)</span>：<span class="arithmatex">\(\kappa\)</span> 在健康场景通常是 <span class="arithmatex">\(10^2\)</span> 量级，退化时会升到 <span class="arithmatex">\(10^5\)</span> 以上，此时即使残差很小，解得出的位姿在该方向上也是不可信的。</p>
 <table>
 <thead>
 <tr>
@@ -4056,7 +4391,132 @@
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th>退化方向</th>
+<th>可观测性诊断信号</th>
+<th>后果</th>
+<th>优先应对</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>横向平移</td>
+<td>信息矩阵最小特征值接近 0</td>
+<td>位置沿走廊漂移</td>
+<td>轮速/IMU 约束或先验地图</td>
+</tr>
+<tr>
+<td>偏航角</td>
+<td>条件数突然上升一个量级</td>
+<td>地图整体缓慢旋转</td>
+<td>陀螺仪约束、检测旋转退化</td>
+</tr>
+<tr>
+<td>尺度（单目）</td>
+<td>尺度不可观测，协方差无上界</td>
+<td>地图尺寸随经验漂移</td>
+<td>IMU 预积分或深度</td>
+</tr>
+<tr>
+<td>高度 / 俯仰</td>
+<td>平面环境下法向约束退化</td>
+<td>高度缓慢漂移</td>
+<td>重力方向约束</td>
+</tr>
+</tbody>
+</table>
 <p>识别退化场景并融合其他传感器，通常比继续调迭代次数更有效。传感器融合的价值主要体现在<strong>不同传感器在不同场景下退化方向不同</strong>：视觉在弱纹理下退化，LiDAR 在无结构环境下退化，IMU 在长时间下退化，它们失效的条件并不重合。</p>
+<h2 id="计算预算与实时性">计算预算与实时性</h2>
+<p>SLAM 的每次迭代都要与传感器频率竞争。设传感器周期为 <span class="arithmatex">\(T_{\text{s}}\)</span>，前端每帧耗时 <span class="arithmatex">\(t_{\text{front}}\)</span>（含数据关联），后端每次优化耗时 <span class="arithmatex">\(t_{\text{back}}\)</span>、执行频率为 <span class="arithmatex">\(f_{\text{back}}\)</span>，则常规帧必须满足</p>
+<div class="arithmatex">\[t_{\text{front}} + \frac{t_{\text{back}}}{f_{\text{back}} \cdot T_{\text{s}}} \le T_{\text{s}} \cdot \eta, \qquad \eta \approx 0.5,\]</div>
+<p>其中 <span class="arithmatex">\(\eta\)</span> 是留给这一级流水线的时间占比（其余留给其它模块）。若 <span class="arithmatex">\(T_{\text{s}} = 100\)</span> ms、<span class="arithmatex">\(\eta = 0.5\)</span>、<span class="arithmatex">\(f_{\text{back}} = 1\)</span> Hz，则后端每次最多只能用 50 ms，前端还有约 45 ms 可用。</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>典型耗时</th>
+<th>运行频率</th>
+<th>超预算时的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>点云预处理与降采样</td>
+<td>5–20 ms</td>
+<td>与传感器同频</td>
+<td>帧率下降、时间戳滞后</td>
+</tr>
+<tr>
+<td>数据关联（KD-tree/体素）</td>
+<td>5–30 ms</td>
+<td>与传感器同频</td>
+<td>匹配耗时抖动、延迟累积</td>
+</tr>
+<tr>
+<td>前端位姿求解</td>
+<td>1–10 ms</td>
+<td>与传感器同频</td>
+<td>迭代次数被截断，精度下降</td>
+</tr>
+<tr>
+<td>局部后端优化</td>
+<td>10–100 ms</td>
+<td>1–10 Hz</td>
+<td>地图更新滞后于机器人运动</td>
+</tr>
+<tr>
+<td>全局优化 + 闭环</td>
+<td>100 ms–数秒</td>
+<td>事件触发</td>
+<td>卡顿几帧，需异步执行</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>降本手段</th>
+<th>直接效果</th>
+<th>代价</th>
+<th>何时采用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关键帧采样</td>
+<td>后端 <span class="arithmatex">\(n\)</span> 降一个数量级</td>
+<td>牺牲少量精度</td>
+<td>默认应有</td>
+</tr>
+<tr>
+<td>体素降采样</td>
+<td>关联与求解同时变快</td>
+<td>细结构被抹平</td>
+<td>大场景、高分辨率传感器</td>
+</tr>
+<tr>
+<td>局部窗口优化</td>
+<td>单次求解时间有上界</td>
+<td>产生窗口边界误差</td>
+<td>需要严格实时</td>
+</tr>
+<tr>
+<td>异步/多线程后端</td>
+<td>前端不被阻塞</td>
+<td>需要处理位姿回写与竞争</td>
+<td>有多个 CPU 核可用</td>
+</tr>
+<tr>
+<td>降频建图</td>
+<td>直接省算力</td>
+<td>快速运动时关联易失败</td>
+<td>低速平台</td>
+</tr>
+</tbody>
+</table>
+<p>工程上的一条经验是：<strong>把全局优化和闭环检测放到独立线程，前端永远不等后端返回</strong>。一旦前端为了等后端结果而阻塞，传感数据就会在队列里堆积，而堆积又会进一步提高相邻帧之间的运动量，形成“越慢越难匹配”的正反馈。</p>
 <h2 id="实机调试顺序">实机调试顺序</h2>
 <p>地图撕裂、轨迹跳变时，应先检查时间戳、TF、传感器外参和前端匹配；后端优化通常不是第一个怀疑对象。实机 SLAM 的大量问题来自<strong>坐标和数据关联</strong>，而不是优化公式本身。</p>
 <table>
@@ -4095,9 +4555,47 @@
 </tr>
 </tbody>
 </table>
+<p>每一步都应当有量化判据，否则“看起来正常”会浪费大量时间：</p>
+<table>
+<thead>
+<tr>
+<th>检查步骤</th>
+<th>具体检查内容</th>
+<th>通过标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间戳</td>
+<td>传感器时间戳与 TF 查询时间之差</td>
+<td>同步后偏差 &lt;5 ms，且不随运行时间漂移</td>
+</tr>
+<tr>
+<td>外参 / TF 树</td>
+<td>标定重投影或平面残差</td>
+<td>相机重投影误差 &lt;2 px，LiDAR 平面残差 &lt;2 cm</td>
+</tr>
+<tr>
+<td>前端匹配</td>
+<td>内点率与迭代次数</td>
+<td>内点率 &gt;60%，迭代次数不长期顶到上限</td>
+</tr>
+<tr>
+<td>闭环质量</td>
+<td>人工抽检候选闭环</td>
+<td>20 个候选中 ≥19 个正确</td>
+</tr>
+<tr>
+<td>后端残差</td>
+<td>优化后各约束的残差分布</td>
+<td>无单条残差超过中位数的 10 倍</td>
+</tr>
+</tbody>
+</table>
 <p>推荐的固定排查顺序是：<strong>时间戳与 TF → 标定与外参 → 前端数据关联 → 闭环检测 → 后端优化</strong>。顺序颠倒会让人在公式层面反复修改一个其实由坐标系引起的问题。</p>
+<p>只有当以上判据全部通过、问题却依然存在时，才进入算法层面的怀疑。此时必须先保留原始观测数据（话题录制或等价的离线包）以便复现——<strong>没有原始数据的 SLAM 问题几乎无法定位</strong>，因为大多数现象只在特定运动与环境下出现一次。</p>
 <blockquote>
-<p><strong>下一步</strong>：地图建好之后，下一步是让机器人在其中移动。先看 <a href="../02-sensing-estimation/">Sensing &amp; State Estimation</a> 理解定位的观测来源，再看 <a href="../04-path-motion-planning/">Path &amp; Motion Planning</a> 与 <a href="../05-navigation-control/">Navigation &amp; Control</a> 把地图变成动作。时间戳与分布式时间同步的细节见 <a href="../../distributed-systems/02-distributed-time/">Time &amp; Asynchrony</a>，三维观测的处理见 <a href="../../perception/04-depth-point-cloud/">Depth, 3D Vision &amp; Point Clouds</a>。</p>
+<p><strong>下一步</strong>：地图建好之后，下一步是让机器人在其中移动。先看 <a href="../02-sensing-estimation/">Sensing &amp; State Estimation</a> 理解定位的观测来源，再看 <a href="../04-path-motion-planning/">Path &amp; Motion Planning</a> 与 <a href="../05-navigation-control/">Navigation &amp; Control</a> 把地图变成动作。时间戳与分布式时间同步的细节见 <a href="../../distributed-systems/02-distributed-time/">Time &amp; Asynchrony</a>，三维观测的处理见 <a href="../../perception/04-depth-point-cloud/">Depth, 3D Vision &amp; Point Clouds</a>。地图在下游规划中的分辨率取舍另见 <a href="../../simulation-sim2real/02-robot-sensor-simulation/">机器人仿真与传感器模拟</a>。</p>
 </blockquote>
 
 

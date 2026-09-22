@@ -3530,10 +3530,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#解释的具体性分级" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解释的具体性分级
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#模型分数不等于真实正确概率" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型分数不等于真实正确概率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#置信度校准的度量" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        置信度校准的度量
       
     </span>
   </a>
@@ -3574,10 +3596,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#信任恢复与过度依赖的长期效应" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        信任恢复与过度依赖的长期效应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#解释质量应通过行为验证" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释质量应通过行为验证
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#部署检查表" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        部署检查表
       
     </span>
   </a>
@@ -3685,10 +3729,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#解释的具体性分级" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解释的具体性分级
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#模型分数不等于真实正确概率" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型分数不等于真实正确概率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#置信度校准的度量" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        置信度校准的度量
       
     </span>
   </a>
@@ -3729,10 +3795,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#信任恢复与过度依赖的长期效应" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        信任恢复与过度依赖的长期效应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#解释质量应通过行为验证" class="md-nav__link">
     <span class="md-ellipsis">
       
         解释质量应通过行为验证
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#部署检查表" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        部署检查表
       
     </span>
   </a>
@@ -3832,10 +3920,89 @@
 
 <h1 id="trust--explainability">Trust &amp; Explainability</h1>
 <p>可解释性的目标不是让用户理解神经网络每一层，而是让人能够<strong>正确判断系统是否值得信任、为什么做出当前决定，以及什么时候应该干预。</strong></p>
+<p>因此“解释得好不好”不能用信息量衡量，只能用<strong>行为是否因此改变得更正确</strong>衡量。一段详细但无人使用的说明，和没有解释没有区别。</p>
+<p>本章沿“信任如何被校准 → 解释回答什么问题 → 分数如何变成可信概率 → 解释如何被验收”这条主线展开，把“用户觉得这个系统靠不靠谱”翻译成可测量、可监控、可训练的工程对象。读完后应能回答三个问题：信任偏差出现在哪个方向？当前解释改变的是理解还是行动？哪一类证据能证明解释真的有用？</p>
 <h2 id="信任校准">信任校准</h2>
-<p>过度信任会让人忽略系统错误，完全不信任又会使自动化失去价值。理想状态是人的信任水平与系统真实能力匹配，即 trust calibration。</p>
-<p>因此设计目标不是“让用户更相信 AI”，而是“让用户在正确的时候相信、错误的时候怀疑”。</p>
+<p>先定义三个量。<span class="arithmatex">\(\tau\in[0,1]\)</span> 是操作者的<strong>信任水平</strong>，属于潜变量，只能通过行为间接观测；<span class="arithmatex">\(R=\Pr(\text{系统给出正确判断})\)</span> 是系统的<strong>真实可靠性</strong>；<span class="arithmatex">\(u\in[0,1]\)</span> 是<strong>依赖率</strong>，即人放行 AI 判断而不复核的比例。校准良好意味着 <span class="arithmatex">\(\tau\)</span> 接近 <span class="arithmatex">\(R\)</span>，并且 <span class="arithmatex">\(u\)</span> 在系统正确时接近 1、在系统错误时接近 0。</p>
+<p>过度信任会让人忽略系统错误，完全不信任又会使自动化失去价值。理想状态是人的信任水平与系统真实能力匹配，即 trust calibration。因此设计目标不是“让用户更相信 AI”，而是“让用户在正确的时候相信、错误的时候怀疑”。</p>
+<p>把放行与拦截写成一个决策问题。设放行概率为 <span class="arithmatex">\(p_{\text{rel}}\)</span>，漏掉一次错误决定的代价为 <span class="arithmatex">\(c_{\text{miss}}\)</span>，一次不必要拦截的代价为 <span class="arithmatex">\(c_{\text{over}}\)</span>（表现为自动化价值损失），则期望代价与理性放行阈值 <span class="arithmatex">\(R^{*}\)</span> 分别为</p>
+<div class="arithmatex">\[
+C(p_{\text{rel}})=p_{\text{rel}}\,(1-R)\,c_{\text{miss}}+(1-p_{\text{rel}})\,R\,c_{\text{over}} ,\qquad R^{*}=\frac{c_{\text{miss}}}{c_{\text{miss}}+c_{\text{over}}} .
+\]</div>
+<p>这条式子把“该不该信”变成可算的数。若漏检代价是误拦截代价的 20 倍，则 <span class="arithmatex">\(R^{*}=20/21\approx0.952\)</span>：系统可靠性 0.95 与 0.99 分别落在阈值两侧，理性的操作者应当给出完全不同的默认行为。解释的第一个作用就是把 <span class="arithmatex">\(R\)</span> 的估计误差压小，而不是把 <span class="arithmatex">\(R\)</span> 说得更高。</p>
+<table>
+<thead>
+<tr>
+<th>信任状态</th>
+<th>表现</th>
+<th>后果</th>
+<th>修正方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>过度信任</td>
+<td>不检查、不干预</td>
+<td>系统性错误被放大</td>
+<td>展示限制与失败案例</td>
+</tr>
+<tr>
+<td>信任不足</td>
+<td>频繁覆盖、弃用</td>
+<td>自动化价值丧失</td>
+<td>展示能力范围与验证结果</td>
+</tr>
+<tr>
+<td>校准良好</td>
+<td>在高置信时放行、低置信时检查</td>
+<td>人机互补</td>
+<td>维持并持续测量</td>
+</tr>
+</tbody>
+</table>
+<p>校准的实用检验是：<strong>在系统正确时人是否放行、在系统错误时人是否拦截</strong>。只测“用户满意度”或“解释阅读率”都不足以说明校准是否达成。更细的两个条件概率是 <span class="arithmatex">\(\mathrm{Acc}_{\text{rel}}=\Pr(\text{正确}\mid\text{放行})\)</span> 与 <span class="arithmatex">\(\mathrm{Err}_{\text{int}}=\Pr(\text{错误}\mid\text{拦截})\)</span>：前者应高（放行的都基本正确），后者也应高（拦截的确实多有问题）。若 <span class="arithmatex">\(\mathrm{Acc}_{\text{rel}}\)</span> 只有 0.7，说明大量错误被放行，系统处于过度信任区；若 <span class="arithmatex">\(\mathrm{Err}_{\text{int}}\)</span> 只有 0.2，说明拦截里八成是白拦，属于信任不足。这两个数比满意度问卷可靠得多，因为它们直接来自操作日志且不受“用户想不想抱怨”影响。</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>观测信号</th>
+<th>生成机制</th>
+<th>修正手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>过度信任</td>
+<td>干预率极低，失败后才被察觉</td>
+<td>界面只展示成功案例</td>
+<td>加入限制说明与失败样本演练</td>
+</tr>
+<tr>
+<td>信任不足</td>
+<td>覆盖率长期偏高，自动化闲置</td>
+<td>早期一次高代价失败</td>
+<td>展示验证结果与能力边界</td>
+</tr>
+<tr>
+<td>信任漂移</td>
+<td>干预率随班次缓慢上升</td>
+<td>疲劳与告警疲劳累积</td>
+<td>轮换、降低误报、分级告警</td>
+</tr>
+<tr>
+<td>平均值掩盖</td>
+<td>总体达标但特定场景频繁出错</td>
+<td>只报汇总指标</td>
+<td>按 ODD、天气、时段分层报告</td>
+</tr>
+</tbody>
+</table>
 <h2 id="解释应该优先回答行动相关的问题">解释应该优先回答行动相关的问题</h2>
+<p>先给出可行动性的定义：一条解释 <span class="arithmatex">\(e\)</span> 只有当它可能改变人在动作集合 <span class="arithmatex">\(\mathcal{A}\)</span> 上的最优选择时才算有用。用信息价值（value of information）度量：</p>
+<div class="arithmatex">\[
+\mathrm{VOI}(e)=\min_{a\in\mathcal{A}}\mathbb{E}_{s}\big[C(a,s)\big]-\mathbb{E}_{e}\Big[\min_{a\in\mathcal{A}}\mathbb{E}_{s}\big[C(a,s)\mid e\big]\Big]\ \ge 0 ,
+\]</div>
+<p>其中 <span class="arithmatex">\(s\)</span> 是真实情境，<span class="arithmatex">\(C(a,s)\)</span> 是动作 <span class="arithmatex">\(a\)</span> 在情境 <span class="arithmatex">\(s\)</span> 下的代价，<span class="arithmatex">\(\mathcal{A}\)</span> 是操作者可用的动作集合。该量刻画“有了这条信息，最好的决策能省多少代价”。它对解释的信息量并不敏感：一段包含大量模型细节、却无法更新 <span class="arithmatex">\(\mathbb{E}[C(a,s)\mid e]\)</span> 的说明，其 VOI 接近 0。</p>
 <p>对监督机器人来说，最有价值的解释通常是：</p>
 <ul>
 <li>系统现在判断发生了什么；</li>
@@ -3844,19 +4011,632 @@
 <li>下一步准备做什么；</li>
 <li>人现在能采取什么操作。</li>
 </ul>
-<p>一张 attention heatmap 若不能帮助操作者做决定，就不一定是有效解释。</p>
+<table>
+<thead>
+<tr>
+<th>应回答的问题</th>
+<th>支持的决定</th>
+<th>缺失该信息时的默认行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前判断是什么</td>
+<td>是否接受该状态估计</td>
+<td>自行推断，时间成本高</td>
+</tr>
+<tr>
+<td>主要依据是什么</td>
+<td>依据是否可信</td>
+<td>只看结论，形成无依据信任</td>
+</tr>
+<tr>
+<td>不确定性水平</td>
+<td>是否需要人工复核</td>
+<td>一律复核或一律放行</td>
+</tr>
+<tr>
+<td>下一步意图</td>
+<td>是否需要抢占或预授权</td>
+<td>被动反应，来不及干预</td>
+</tr>
+<tr>
+<td>可用操作集合</td>
+<td>具体怎么处理</td>
+<td>只能急停或放任</td>
+</tr>
+</tbody>
+</table>
+<p>一张 attention heatmap 若不能帮助操作者做决定，就不一定是有效解释。检验方式很直接：让操作者在看完解释后<strong>预测系统下一步动作</strong>，预测准确率的提升幅度就是该解释可行动性的下限估计。若五问里缺了“下一步”和“可用操作”，操作者只能事后反应，VOI 主要由前两问贡献，通常远小于完整解释。</p>
+<h2 id="解释的具体性分级">解释的具体性分级</h2>
+<p>解释的“深度”并不重要，重要的是它是否指向一个可执行的动作。可以把动作的不确定性写成条件熵</p>
+<div class="arithmatex">\[
+H(\mathcal{A}\mid e)=-\sum_{a\in\mathcal{A}}p(a\mid e)\log p(a\mid e),
+\]</div>
+<p><span class="arithmatex">\(p(a\mid e)\)</span> 是人在读到解释 <span class="arithmatex">\(e\)</span> 后选择动作 <span class="arithmatex">\(a\)</span> 的概率。<span class="arithmatex">\(H\)</span> 越低，说明解释把行动方向收得越紧。可以按具体性分级：</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>示例</th>
+<th>能支持的决定</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无解释</td>
+<td>“规划失败”</td>
+<td>无</td>
+<td>信息量接近零</td>
+</tr>
+<tr>
+<td>全局解释</td>
+<td>“模型平均准确率 95%”</td>
+<td>是否采用该系统</td>
+<td>不针对当前场景</td>
+</tr>
+<tr>
+<td>局部解释</td>
+<td>“因为在位置 A 检测置信度低而停止”</td>
+<td>当前该如何处理</td>
+<td>不说明如何避免</td>
+</tr>
+<tr>
+<td>反事实解释</td>
+<td>“若目标改到 B 区则可行”</td>
+<td>下一步该改什么</td>
+<td>需要能搜索可行方案</td>
+</tr>
+</tbody>
+</table>
+<p>按上述熵定义，三档的典型取值差距明显：无解释时操作者只在“放行/拦截/接管”三个动作间近乎均匀选择，<span class="arithmatex">\(H\approx\log 3\approx1.10\)</span> bit；局部解释把候选压缩到一到两个，<span class="arithmatex">\(H\approx0.4\)</span> bit；反事实解释直接给出唯一可行替代，<span class="arithmatex">\(H\to0\)</span>。这就是“反事实解释在实践中往往最有用”的量化理由：它直接给出<strong>可操作的替代选项</strong>。</p>
+<p>代价是系统需要能评估“如果换个决定会怎样”：给出反事实解释要求规划器在 <span class="arithmatex">\(K\)</span> 个候选目标上各跑一次可行性评估，计算量约为 <span class="arithmatex">\(K\)</span> 倍。工程上常用 <span class="arithmatex">\(K\in[3,10]\)</span> 并设置超时，超时后降级为局部解释，而不是让界面长时间空白——空白的解释等价于无解释，<span class="arithmatex">\(H\)</span> 会立刻回到 1.10 bit。</p>
+<table>
+<thead>
+<tr>
+<th>伪解释模式</th>
+<th>表现</th>
+<th>为什么无效</th>
+<th>替代做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注意力可视化</td>
+<td>热力图好看但不指向动作</td>
+<td>无法更新代价估计</td>
+<td>说明哪一区域导致停止</td>
+</tr>
+<tr>
+<td>指标堆砌</td>
+<td>展示 mAP、F1 等多个分数</td>
+<td>与当前情境无关</td>
+<td>给出当前判断的条件概率</td>
+</tr>
+<tr>
+<td>免责式说明</td>
+<td>“结果仅供参考”</td>
+<td>不改变任何动作分布</td>
+<td>说明限制在何时触发</td>
+</tr>
+<tr>
+<td>事后合理化</td>
+<td>解释与真实决策依据不符</td>
+<td>破坏心理模型</td>
+<td>用与决策同源的量做解释</td>
+</tr>
+</tbody>
+</table>
 <h2 id="模型分数不等于真实正确概率">模型分数不等于真实正确概率</h2>
-<p>网络输出 0.9，不代表它天然就是“90% 正确”。只有经过 calibration 后，分数才可能近似具有概率意义。</p>
-<p>因此界面可以把“高/中/低置信度”与失败原因结合，而不是给用户一个看似精确却未经校准的小数。</p>
+<p>把网络输出记为 <span class="arithmatex">\(s\in[0,1]\)</span>（分类 softmax 最大分量或检测置信度），把它希望代表的真实正确概率记为 <span class="arithmatex">\(q=\Pr(\text{正确}\mid s)\)</span>，标签 <span class="arithmatex">\(y\in\{0,1\}\)</span>。只有当校准成立时才有</p>
+<div class="arithmatex">\[
+\mathbb{E}\big[\,y\mid s\,\big]=s,
+\]</div>
+<p>即“所有输出 0.9 的样本里约有 90% 确实正确”。未校准的网络通常系统性过自信：<span class="arithmatex">\(s=0.9\)</span> 的样本真实正确率可能只有 0.7。因此界面可以把“高/中/低置信度”与失败原因结合，而不是给用户一个看似精确却未经校准的小数。</p>
+<p>常用的修正方式是温度缩放：对 logits <span class="arithmatex">\(z\)</span> 重新归一化</p>
+<div class="arithmatex">\[
+p_i=\frac{\exp(z_i/T)}{\sum_j \exp(z_j/T)},\qquad T&gt;0,
+\]</div>
+<p><span class="arithmatex">\(T\)</span> 是标量温度，在验证集上最小化负对数似然即可拟合。该参数不改变 argmax，因此不影响检测结果本身，只改变分数的概率含义；在典型检测任务上 <span class="arithmatex">\(T\approx1.5\sim2.0\)</span> 可将 ECE 从 0.10 量级降到 0.03 量级。</p>
+<table>
+<thead>
+<tr>
+<th>分数来源</th>
+<th>是否近似概率</th>
+<th>主要偏差</th>
+<th>界面处置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分类 softmax 最大值</td>
+<td>否，通常过自信</td>
+<td>类间竞争与过参数化</td>
+<td>先温度缩放，再映射为挡位</td>
+</tr>
+<tr>
+<td>检测框置信度</td>
+<td>否</td>
+<td>与 NMS 阈值耦合</td>
+<td>注明阈值，避免当作概率</td>
+</tr>
+<tr>
+<td>多假设输出熵</td>
+<td>部分</td>
+<td>受假设数量影响</td>
+<td>与校准曲线一起报告</td>
+</tr>
+<tr>
+<td>logit margin</td>
+<td>否</td>
+<td>仅单调于可分性</td>
+<td>只用于排序，不展示数值</td>
+</tr>
+<tr>
+<td>ODD 外推样本</td>
+<td>不适用</td>
+<td>往往过度自信</td>
+<td>单列为“能力边界外”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="置信度校准的度量">置信度校准的度量</h2>
+<p>校准可以被量化，而不是靠感觉。把预测按置信度分成 <span class="arithmatex">\(B\)</span> 个箱，第 <span class="arithmatex">\(b\)</span> 箱有 <span class="arithmatex">\(n_b\)</span> 个样本，<span class="arithmatex">\(N=\sum_{b=1}^{B}n_b\)</span>，比较箱内平均置信度 <span class="arithmatex">\(\mathrm{conf}(b)\)</span> 与真实正确率 <span class="arithmatex">\(\mathrm{acc}(b)\)</span>，得到期望校准误差</p>
+<div class="arithmatex">\[
+\mathrm{ECE}=\sum_{b=1}^{B}\frac{n_b}{N}\big|\,\mathrm{acc}(b)-\mathrm{conf}(b)\,\big| .
+\]</div>
+<p>最坏箱误差 <span class="arithmatex">\(\mathrm{MCE}=\max_b|\mathrm{acc}(b)-\mathrm{conf}(b)|\)</span> 关注尾部而非整体，当风险集中在少数场景时应优先看它。另一常用指标是 Brier 分数，它可以分解为三项</p>
+<div class="arithmatex">\[
+\mathrm{BS}=\underbrace{\sum_b \frac{n_b}{N}\big(\mathrm{conf}(b)-\mathrm{acc}(b)\big)^2}_{\mathrm{REL}}-\underbrace{\sum_b \frac{n_b}{N}\big(\mathrm{acc}(b)-\bar y\big)^2}_{\mathrm{RES}}+\underbrace{\bar y(1-\bar y)}_{\mathrm{UNC}} ,
+\]</div>
+<p><span class="arithmatex">\(\bar y\)</span> 是总体正确率，REL 是可靠性（越小越好），RES 是分辨力（越大越好），UNC 是数据固有难度。<span class="arithmatex">\(B=15\)</span> 是常用分箱数：分箱太少会让过自信与欠自信互相抵消，太多则每箱样本不足、方差变大，工程上通常要求每箱样本数不少于 30。</p>
+<p>具体示例：某检测模型验证集上 ECE=0.04、MCE=0.18，说明整体偏差可接受，但存在一个高风险箱（例如夜间远距离目标），若只报 ECE 会掩盖该问题。这类“整体合格、局部失守”的分布正是 ODD 分层报告要解决的对象。</p>
+<table>
+<thead>
+<tr>
+<th>校准方式</th>
+<th>特点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>温度缩放</td>
+<td>只调整一个参数，简单稳健</td>
+<td>只能修正整体过/欠自信</td>
+</tr>
+<tr>
+<td>直方图分箱</td>
+<td>拟合能力强</td>
+<td>需要大量验证样本，易过拟合</td>
+</tr>
+<tr>
+<td>保序回归</td>
+<td>单调且无需分布假设</td>
+<td>需要样本量更大</td>
+</tr>
+</tbody>
+</table>
+<p>对操作界面而言，通常不需要精确到小数：<strong>把置信度映射为 3 档并给出对应的推荐行为</strong>，比展示 0.87 这样的数字更有指导性，也避免了未经校准的数值被当作概率使用。挡位阈值应直接来自校准曲线，例如把 <span class="arithmatex">\(\hat q&lt;0.6\)</span> 映射为“低”、<span class="arithmatex">\(0.6\sim0.9\)</span> 映射为“中”、<span class="arithmatex">\(&gt;0.9\)</span> 映射为“高”，并规定只有“高”才允许默认放行。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>关注点</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ECE</td>
+<td>分箱加权平均偏差</td>
+<td>整体校准水平</td>
+<td>对分箱数敏感，可被互相抵消</td>
+</tr>
+<tr>
+<td>MCE</td>
+<td>最大单箱偏差</td>
+<td>最差场景</td>
+<td>受小样本箱干扰</td>
+</tr>
+<tr>
+<td>Brier</td>
+<td>概率的平方误差</td>
+<td>校准与分辨力之和</td>
+<td>与基率耦合，跨数据集不可比</td>
+</tr>
+<tr>
+<td>NLL</td>
+<td>负对数似然</td>
+<td>重罚极端自信的错误</td>
+<td>分布外样本取值无意义</td>
+</tr>
+</tbody>
+</table>
 <h2 id="限制说明和成功案例同样重要">限制说明和成功案例同样重要</h2>
-<p>“系统在夜间逆光下可能漏检行人”比只展示“平均准确率 95%”更能帮助人正确使用。解释系统能力边界，能够减少用户把模型应用到训练分布之外的风险。</p>
+<p>能力边界不是一句免责声明，而是一组可以分层的条件准确率。把输入落在运行设计域（ODD）内的比例记为 <span class="arithmatex">\(P_{\text{in}}\)</span>，域内与域外的正确率分别为 <span class="arithmatex">\(\mathrm{acc}_{\text{in}}\)</span> 与 <span class="arithmatex">\(\mathrm{acc}_{\text{out}}\)</span>，则总体正确率</p>
+<div class="arithmatex">\[
+\Pr(\text{正确})=P_{\text{in}}\,\mathrm{acc}_{\text{in}}+(1-P_{\text{in}})\,\mathrm{acc}_{\text{out}} .
+\]</div>
+<p>若 <span class="arithmatex">\(\mathrm{acc}_{\text{in}}=0.98\)</span>、<span class="arithmatex">\(\mathrm{acc}_{\text{out}}=0.55\)</span>、<span class="arithmatex">\(P_{\text{in}}=0.90\)</span>，则总正确率为 0.937，与宣传中的 0.98 相差近 5 个百分点；当 <span class="arithmatex">\(P_{\text{in}}\)</span> 降到 0.70 时总正确率跌到 0.851。同一个“95% 准确率”的说法，在不同 ODD 覆盖率下对应完全不同的真实表现，这也是为什么只给一个总体数字具有误导性。</p>
+<p>分层的条件准确率只有在样本量足够时才可信。对条件正确率 <span class="arithmatex">\(p\)</span> 的估计，<span class="arithmatex">\(n\)</span> 个独立样本下 95% 置信区间半宽近似为</p>
+<div class="arithmatex">\[
+w\approx1.96\sqrt{\frac{p(1-p)}{n}} ,
+\]</div>
+<p>当 <span class="arithmatex">\(p=0.9\)</span> 时 <span class="arithmatex">\(n=100\)</span> 给出 <span class="arithmatex">\(w\approx0.059\)</span>（约 ±6 个百分点），要把半宽压到 ±0.02 需要 <span class="arithmatex">\(n\approx900\)</span>。因此“夜间准确率 0.90”若只基于 40 个样本，区间半宽接近 0.10，不足以支撑边界声明；分层报告需同时给出样本数与准确率。</p>
+<p>“系统在夜间逆光下可能漏检行人”比只展示“平均准确率 95%”更能帮助人正确使用。解释系统能力边界，能够减少用户把模型应用到训练分布之外的风险：域外错误往往不是随机抖动，而是成片出现、伴随高置信度，靠人逐次复核难以察觉。</p>
+<table>
+<thead>
+<tr>
+<th>应说明的边界</th>
+<th>依据</th>
+<th>缺失后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ODD 定义</td>
+<td>训练与验证数据分布统计</td>
+<td>用户外推到未覆盖场景</td>
+</tr>
+<tr>
+<td>已知失败条件</td>
+<td>失效案例分析报告</td>
+<td>重复踩坑，信任骤降</td>
+</tr>
+<tr>
+<td>分场景准确率</td>
+<td>按天气、时段、距离分层评测</td>
+<td>平均值掩盖尾部风险</td>
+</tr>
+<tr>
+<td>退化行为</td>
+<td>降级与停机策略</td>
+<td>用户不知道失败后系统做什么</td>
+</tr>
+<tr>
+<td>验证范围</td>
+<td>测试里程、场景数与样本量</td>
+<td>无法判断证据强度</td>
+</tr>
+</tbody>
+</table>
 <h2 id="可操作的告警设计">可操作的告警设计</h2>
-<p>“规划失败”信息量很低；“目标位于动态禁区，机器人已停止，可重新选择目标或人工接管”才是可操作解释。</p>
-<p>可解释性最终服务的是<strong>决策和干预</strong>，不是展示技术细节。</p>
+<p>告警的价值可以写成一次期望收益。设事件 <span class="arithmatex">\(e\)</span> 被观察到，<span class="arithmatex">\(\Pr(g\mid e)\)</span> 为异常确实存在的后验概率，<span class="arithmatex">\(\mathrm{FPR}\)</span> 为误报率，<span class="arithmatex">\(c_{\text{save}}\)</span> 为成功处置挽回的代价，<span class="arithmatex">\(c_{\text{bother}}\)</span> 为一次打扰（含信任损失）的代价，则</p>
+<div class="arithmatex">\[
+\mathrm{Val}(e)=\Pr(g\mid e)\,(1-\mathrm{FPR})\,c_{\text{save}}-\mathrm{FPR}\,c_{\text{bother}} .
+\]</div>
+<p>只有当 <span class="arithmatex">\(\mathrm{Val}(e)&gt;0\)</span> 时才值得主动弹出；否则应降级为日志。这个判据解释了告警疲劳的机制：当 FPR 从 5% 升到 30%，右侧惩罚项迅速超过收益，操作者学会忽略全部告警——包括真正重要的那些，等于把所有事件的 <span class="arithmatex">\(\mathrm{Val}\)</span> 都压到零。</p>
+<p>“规划失败”信息量很低；“目标位于动态禁区，机器人已停止，可重新选择目标或人工接管”才是可操作解释：它同时给出了当前状态（已停止）、原因（动态禁区）和动作集合（重选目标或接管），使 <span class="arithmatex">\(H(\mathcal{A}\mid e)\)</span> 显著下降。</p>
+<table>
+<thead>
+<tr>
+<th>告警文本</th>
+<th>是否可操作</th>
+<th>缺失的要素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“规划失败”</td>
+<td>否</td>
+<td>原因、当前状态、可选动作</td>
+</tr>
+<tr>
+<td>“置信度低”</td>
+<td>否</td>
+<td>阈值、影响、建议动作</td>
+</tr>
+<tr>
+<td>“定位丢失”</td>
+<td>部分</td>
+<td>是否继续运动、如何恢复</td>
+</tr>
+<tr>
+<td>“目标在动态禁区，已停止，可重选或接管”</td>
+<td>是</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p>告警还应按所需响应强度分级，并给出响应时限，避免所有事件都占用同一注意力通道。</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>触发条件</th>
+<th>期望响应</th>
+<th>建议时限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 记录</td>
+<td>可自恢复的轻微偏离</td>
+<td>无需即时动作</td>
+<td>班后复盘</td>
+</tr>
+<tr>
+<td>L1 提示</td>
+<td>指标接近阈值</td>
+<td>留意，可能需调整参数</td>
+<td>数十秒</td>
+</tr>
+<tr>
+<td>L2 请求确认</td>
+<td>决策不确定且代价中等</td>
+<td>明确放行或否决</td>
+<td>数秒</td>
+</tr>
+<tr>
+<td>L3 强制接管</td>
+<td>进入安全关键状态</td>
+<td>立即接管或停机</td>
+<td>亚秒级</td>
+</tr>
+</tbody>
+</table>
 <h2 id="行为可预测性">行为可预测性</h2>
-<p>如果同类情景下机器始终采用相似策略，人会逐渐形成正确心理模型。频繁改变规则、没有明显原因地切换模式，即使每次都能生成长文本解释，也会降低可用性。</p>
+<p>心理模型（mental model）指操作者对“系统在什么情况下会做什么”的内部预期，其可维护性取决于策略的一致性。把状态 <span class="arithmatex">\(x\)</span> 的相近邻域记为 <span class="arithmatex">\(\mathcal{N}(x)\)</span>，系统策略记为 <span class="arithmatex">\(\pi\)</span>，用动作不一致率度量</p>
+<div class="arithmatex">\[
+D_{\text{cons}}=\Pr_{x'\in\mathcal{N}(x)}\big[\pi(x')\ne\pi(x)\big].
+\]</div>
+<p>若在 <span class="arithmatex">\(\varepsilon\)</span> 邻域内 <span class="arithmatex">\(D_{\text{cons}}\)</span> 长期低于 2%，操作者可用少量规则覆盖多数情景，心理模型稳定；若同类场景随机切换策略，即使每次都能生成长文本解释，也会降低可用性，因为解释无法补偿不可预测性。</p>
+<p>信任本身也是随观测更新的量。最简单的线性更新是</p>
+<div class="arithmatex">\[
+\tau_{t+1}=\tau_t+\alpha\,(o_t-\tau_t),\qquad o_t\in\{0,1\},
+\]</div>
+<p><span class="arithmatex">\(o_t\)</span> 是第 <span class="arithmatex">\(t\)</span> 次交互的结果（成功为 1，失败为 0），<span class="arithmatex">\(\alpha\)</span> 是学习率。失败与成功通常具有不同增益 <span class="arithmatex">\(\alpha_{\text{fail}}&gt;\alpha_{\text{succ}}\)</span>，这正是信任不对称的来源。<span class="arithmatex">\(\alpha\)</span> 过大时一次波动就让信任剧烈震荡，<span class="arithmatex">\(\alpha\)</span> 过小时信任长期滞后于真实能力的变化，两类极端都会破坏校准。</p>
+<table>
+<thead>
+<tr>
+<th>一致性维度</th>
+<th>高一致性表现</th>
+<th>低一致性表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>策略稳定性</td>
+<td>同类场景行为相似</td>
+<td>相似输入结果差异大</td>
+</tr>
+<tr>
+<td>模式切换</td>
+<td>有明确触发条件</td>
+<td>静默、无规律切换</td>
+</tr>
+<tr>
+<td>辅助强度</td>
+<td>平滑变化且有界</td>
+<td>突然增大或归零</td>
+</tr>
+</tbody>
+</table>
+<p><strong>行为一致性带来的信任，通常比解释文本带来的信任更牢固</strong>，因为它允许操作者形成可验证的预期。可检查的量化项是：同一场景重复运行多次的动作一致率，以及固定 <span class="arithmatex">\(\varepsilon\)</span> 邻域内的动作不一致率；两者应作为发布前的回归测试项，而不是只测平均成功率。</p>
+<h2 id="信任恢复与过度依赖的长期效应">信任恢复与过度依赖的长期效应</h2>
+<p>信任是会被事件改变的动态量，需要按时间维度管理，不同事件的更新方向和恢复成本并不相同。</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>对信任的影响</th>
+<th>恢复手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一次被察觉的失败</td>
+<td>明显下降，可能过期</td>
+<td>说明原因、展示已修复证据</td>
+</tr>
+<tr>
+<td>一次成功拦截</td>
+<td>上升（且校准改善）</td>
+<td>记录并复用该判断依据</td>
+</tr>
+<tr>
+<td>长期无差错</td>
+<td>缓慢上升，可能过度</td>
+<td>定期插入限制说明与演练</td>
+</tr>
+<tr>
+<td>长期高告警率</td>
+<td>下降并转向忽略</td>
+<td>降低误报、分级告警</td>
+</tr>
+</tbody>
+</table>
+<p>不对称性可以直接写成增益比。若 <span class="arithmatex">\(\alpha_{\text{fail}}=0.30\)</span>、<span class="arithmatex">\(\alpha_{\text{succ}}=0.05\)</span>，一次失败让信任下降约 <span class="arithmatex">\(0.30\,(1-\tau)\)</span>，而恢复到原水平需要约 6 次连续成功验证（<span class="arithmatex">\(1-0.95^{6}\approx0.26\)</span>，量级相当）。因此训练与运营中更有价值的是让操作者经历“被正确拦截”的案例，而不是单纯强调平均准确率。</p>
+<p>运营上可以把恢复过程制度化：每次班前用 5 分钟回放一次“被正确拦截”的真实案例，每季度插入一次已知失效场景演练，并在界面长期保留限制说明入口。这些做法的共同点是把信任的更新来源从“偶然事件”换成“计划内的证据”，避免 <span class="arithmatex">\(\tau\)</span> 长期被少数高影响事件主导。</p>
+<p>过度依赖也可以早期检测：持续统计干预率与告警响应率，若连续两个班次干预率低于基线的一半、而系统错误率并未下降，说明人已不再实质复核，此时应提高 L2 告警频率或插入校验任务，而不是继续优化模型指标。</p>
+<p>过度依赖还有第二层机制：<strong>自动化偏见</strong>（automation bias），即人先接受系统结论、再寻找支持它的证据。把人的独立判断正确率记为 <span class="arithmatex">\(a\)</span>，在系统错误时仍接受系统答案的概率记为 <span class="arithmatex">\(b\)</span>，系统可靠性仍记为 <span class="arithmatex">\(R\)</span>，则人机串联后的综合正确率</p>
+<div class="arithmatex">\[
+\Pr(\text{正确})=R+(1-R)(1-b).
+\]</div>
+<p>当 <span class="arithmatex">\(R=0.95\)</span>、<span class="arithmatex">\(b=0.6\)</span> 时综合正确率为 0.97；把 <span class="arithmatex">\(b\)</span> 降到 0.2，则升到 0.99。也就是说，在系统可靠性已经固定时，收益主要来自降低 <span class="arithmatex">\(b\)</span>，这正是解释设计与训练要解决的部分，而不是继续堆模型指标。</p>
 <h2 id="解释质量应通过行为验证">解释质量应通过行为验证</h2>
-<p>解释是否有效，不取决于文字看起来多详细，而取决于用户能否据此预测系统下一步、识别限制并选择正确行动。可以通过情景任务比较有无解释时的判断准确率，避免把更长的说明误当成更好的解释。</p>
+<p>解释是否有效，不取决于文字看起来多详细，而取决于用户能否据此预测系统下一步、识别限制并选择正确行动。可以把有无解释两种条件下的准确率记为 <span class="arithmatex">\(\mathrm{acc}_{\text{with}}\)</span> 与 <span class="arithmatex">\(\mathrm{acc}_{\text{without}}\)</span>，解释增益</p>
+<div class="arithmatex">\[
+\Delta=\mathrm{acc}_{\text{with}}-\mathrm{acc}_{\text{without}},
+\]</div>
+<p>只有当 <span class="arithmatex">\(\Delta\)</span> 在统计上显著（例如每组 30 个以上试验、<span class="arithmatex">\(p&lt;0.05\)</span>）且达到预设门槛时才认为解释有效。典型分布是：无解释时处置正确率约 0.60，加入局部解释后升到 0.80，加入反事实解释后升到 0.90；若换来的只是“觉得更清楚”的问卷分数而无 <span class="arithmatex">\(\Delta\)</span>，应视为无效改版。</p>
+<p>可用的验收方式有三种：<strong>预测任务</strong>（能否预判系统下一步）、<strong>识别任务</strong>（能否指出当前场景属于系统的哪类局限）、<strong>处置任务</strong>（能否给出正确操作）。只有当这三类任务的准确率在引入解释后显著提升，解释才算有效。</p>
+<table>
+<thead>
+<tr>
+<th>验收指标</th>
+<th>定义</th>
+<th>建议门槛</th>
+<th>采集方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预测准确率</td>
+<td>正确预判下一步的比例</td>
+<td>相对提升 ≥10%</td>
+<td>情景回放</td>
+</tr>
+<tr>
+<td>识别准确率</td>
+<td>正确指出局限类型的比例</td>
+<td>≥0.80</td>
+<td>故障场景题库</td>
+</tr>
+<tr>
+<td>处置正确率</td>
+<td>选择正确操作的比例</td>
+<td>≥0.85</td>
+<td>模拟器任务</td>
+</tr>
+<tr>
+<td>校准误差</td>
+<td>放行时正确率与依赖率之差</td>
+<td>≤0.05</td>
+<td>操作日志</td>
+</tr>
+<tr>
+<td>告警响应</td>
+<td>L2 告警平均响应时间</td>
+<td>≤5 s</td>
+<td>日志时间戳</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>伪验证模式</th>
+<th>表现</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只测主观感受</td>
+<td>问卷“解释有帮助”得分高</td>
+<td>与实际决策无关</td>
+</tr>
+<tr>
+<td>只测阅读时长</td>
+<td>用户看了更久</td>
+<td>可能只是更难懂</td>
+</tr>
+<tr>
+<td>只测理解题</td>
+<td>能复述模型原理</td>
+<td>不保证改变动作</td>
+</tr>
+<tr>
+<td>无对照条件</td>
+<td>所有人都有解释</td>
+<td>无法归因于解释本身</td>
+</tr>
+</tbody>
+</table>
+<h2 id="部署检查表">部署检查表</h2>
+<p>解释与信任相关的设计很难靠直觉验收，因此上线前先确定受众分层，再用一张自检表把每条要求对应到可复核的证据。</p>
+<table>
+<thead>
+<tr>
+<th>受众</th>
+<th>关心的问题</th>
+<th>时间尺度</th>
+<th>合适的交付形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>现场操作者</td>
+<td>现在能不能放行、下一步做什么</td>
+<td>秒级</td>
+<td>挡位化置信度与建议动作</td>
+</tr>
+<tr>
+<td>任务指挥</td>
+<td>任务是否继续、是否换策略</td>
+<td>分钟级</td>
+<td>分场景成功率与风险趋势</td>
+</tr>
+<tr>
+<td>维护工程师</td>
+<td>为什么反复失败、怎么修</td>
+<td>小时到天</td>
+<td>失效样本、指标分布、日志</td>
+</tr>
+<tr>
+<td>监管与审查</td>
+<td>系统边界与责任如何界定</td>
+<td>事后</td>
+<td>能力声明、验证报告、审计记录</td>
+</tr>
+<tr>
+<td>算法与数据团队</td>
+<td>哪类数据缺失导致错误</td>
+<td>天到周</td>
+<td>分层误差、校准曲线、切片统计</td>
+</tr>
+</tbody>
+</table>
+<p>同一条信息对不同角色价值不同，分层的关键是把“结论—依据—证据”排成三级：默认只展示结论与依据，证据按需展开；把同一份解释直接发给所有人，只会让操作者被细节淹没，同时让工程师拿不到足够信息。</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>通过标准</th>
+<th>证据来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分数已校准</td>
+<td>ECE ≤0.05 且 MCE ≤0.15</td>
+<td>验证集可靠性曲线</td>
+</tr>
+<tr>
+<td>边界已声明</td>
+<td>ODD 与已知失败条件成文</td>
+<td>分层评测报告</td>
+</tr>
+<tr>
+<td>解释可行动</td>
+<td>每条解释都给出可选动作</td>
+<td>解释模板审查</td>
+</tr>
+<tr>
+<td>告警已分级</td>
+<td>各级误报率与响应时限明确</td>
+<td>事件日志统计</td>
+</tr>
+<tr>
+<td>一致性测试</td>
+<td>邻域动作不一致率 ≤2%</td>
+<td>回归测试记录</td>
+</tr>
+<tr>
+<td>信任不对称已考虑</td>
+<td>已安排限制说明与演练</td>
+<td>培训计划</td>
+</tr>
+<tr>
+<td>解释效果已验证</td>
+<td>三类任务增益显著</td>
+<td>情景实验数据</td>
+</tr>
+<tr>
+<td>日志可追溯</td>
+<td>每次拦截可回查当时的解释内容</td>
+<td>操作日志存档</td>
+</tr>
+</tbody>
+</table>
+<p>每条自检项的通过标准都应当可直接取数，例如“校准误差 ≤0.05”能从原始日志算出，而“用户信任度良好”无法复核。模型、阈值或界面任一改动后重跑这张表，比重新做一轮问卷更快，也更能定位改动影响了哪一环。</p>
+<blockquote>
+<p><strong>下一步</strong>：本章关注人是否理解系统，<a href="../01-human-ai-automation/">Interaction &amp; Levels of Automation</a> 界定谁在控制，<a href="../02-human-in-loop/">Human-in-the-Loop</a> 界定人介入的位置，<a href="../03-shared-autonomy/">Shared Autonomy</a> 讨论连续共享控制，<a href="../05-intervention-takeover/">Intervention &amp; Takeover</a> 给出控制权转移的时序。不确定性的量化表达见 <a href="../../robustness-safety/01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a>，运行时安全与回退见 <a href="../../robustness-safety/05-safe-learning-runtime/">Safe Learning &amp; Runtime</a>。</p>
+</blockquote>
 
 
 

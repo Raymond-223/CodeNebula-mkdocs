@@ -3283,10 +3283,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#故障模型与检测手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        故障模型与检测手段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#故障检测首先需要正常行为的参考" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测首先需要正常行为的参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#检测性能的定量指标延迟误报率与可用性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        检测性能的定量指标：延迟、误报率与可用性
       
     </span>
   </a>
@@ -3316,10 +3338,43 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#指数退避与重试上限的定量设计" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        指数退避与重试上限的定量设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#恢复时间目标与降级深度的选择" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        恢复时间目标与降级深度的选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#冗余要避免共同失效模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余要避免共同失效模式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#冗余与多数派表决的代价" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        冗余与多数派表决的代价
       
     </span>
   </a>
@@ -3652,10 +3707,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#故障模型与检测手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        故障模型与检测手段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#故障检测首先需要正常行为的参考" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测首先需要正常行为的参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#检测性能的定量指标延迟误报率与可用性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        检测性能的定量指标：延迟、误报率与可用性
       
     </span>
   </a>
@@ -3685,10 +3762,43 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#指数退避与重试上限的定量设计" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        指数退避与重试上限的定量设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#恢复时间目标与降级深度的选择" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        恢复时间目标与降级深度的选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#冗余要避免共同失效模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余要避免共同失效模式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#冗余与多数派表决的代价" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        冗余与多数派表决的代价
       
     </span>
   </a>
@@ -3815,12 +3925,331 @@
 <br />
 <figcaption>容错不是“没有故障”，而是阻止局部故障演变成系统级失效。</figcaption>
 </figure>
+<p>先约定三个容易混淆的词。<strong>故障（fault）</strong>是组件内部的异常状态，例如编码器读数冻结；<strong>错误（error）</strong>是故障导致的状态偏差，例如里程计位置漂移；<strong>失效（failure）</strong>是系统对外提供的功能不再满足要求，例如无法到达目标。三者的关系是链式的：故障产生错误，错误若未被处理就演变成失效。</p>
+<p>这条链条上的每一环都是可以打断的：检测决定“多久发现”，隔离决定“影响范围”，恢复决定“还能做什么”。<strong>没有检测就没有容错</strong>，因为系统会把错误数据当作正确数据继续使用，问题只会以更难定位的形式在后面爆发。</p>
+<p>工程上常用的两个上层指标是平均无故障时间与可用度。设故障率 <span class="arithmatex">\(\lambda\)</span>、平均修复时间 <span class="arithmatex">\(\text{MTTR}\)</span>，则</p>
+<div class="arithmatex">\[\text{MTBF} = 1/\lambda, \qquad A = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}} .\]</div>
+<p>这两个式子说明：<strong>在长任务中，降低 MTTR 往往比提高单个部件的可靠性更划算</strong>。若 MTBF 为 10000 h、MTTR 为 0.5 h，可用度约 0.99995；若把 MTTR 压到 0.05 h（靠快速检测与快速降级），同样可用度只需 MTBF 约 1000 h，相当于对部件可靠性的要求放松了一个数量级。</p>
+<h2 id="故障模型与检测手段">故障模型与检测手段</h2>
+<p>讨论容错前必须明确“故障长什么样”。不同故障模型对应的检测手段和代价差别很大：</p>
+<table>
+<thead>
+<tr>
+<th>故障模型</th>
+<th>行为</th>
+<th>检测手段</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fail-stop</td>
+<td>立即停止响应</td>
+<td>心跳超时</td>
+<td>最易处理，代价最低</td>
+</tr>
+<tr>
+<td>crash-recovery</td>
+<td>崩溃后重启，可能丢失状态</td>
+<td>心跳加状态版本号</td>
+<td>需处理状态不一致</td>
+</tr>
+<tr>
+<td>沉默失效</td>
+<td>继续输出，但数据错误</td>
+<td>物理范围检查、交叉验证、残差监测</td>
+<td>最危险，阈值检测易漏</td>
+</tr>
+<tr>
+<td>拜占庭</td>
+<td>任意错误输出，可能伪装正确</td>
+<td>多数派表决、一致性校验</td>
+<td>代价高，通常需 3 倍冗余</td>
+</tr>
+</tbody>
+</table>
+<p><strong>沉默失效在机器人系统中比崩溃更常见</strong>：编码器卡在某个读数、IMU 零偏缓慢漂移、相机画面冻结，都属于这一类比。它们不会触发超时，只能靠内部一致性和模型残差来发现。</p>
+<p>不同故障模型对检测时间的敏感度也不同。设故障在 <span class="arithmatex">\(t_0\)</span> 发生，检测在 <span class="arithmatex">\(t_0+T_d\)</span> 给出告警，从检测到系统进入安全状态还需 <span class="arithmatex">\(T_r\)</span>，则暴露时间</p>
+<div class="arithmatex">\[T_\text{exp} = T_d + T_r,\]</div>
+<p>在这段时间里系统使用的是错误数据。若错误的增长速度是 <span class="arithmatex">\(\dot e\)</span>，则累积误差上界为 <span class="arithmatex">\(\dot e \cdot T_\text{exp}\)</span>。这个量必须与安全余量比较，而不是与“任务是否完成”比较。</p>
+<table>
+<thead>
+<tr>
+<th>故障类型</th>
+<th>典型 <span class="arithmatex">\(T_d\)</span> 目标</th>
+<th>典型 <span class="arithmatex">\(T_r\)</span></th>
+<th>主要限制因素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fail-stop</td>
+<td>1–3 个心跳周期</td>
+<td>0.1–1 s</td>
+<td>心跳周期与超时设定</td>
+</tr>
+<tr>
+<td>沉默失效（突变）</td>
+<td>0.1–1 s</td>
+<td>0.1–1 s</td>
+<td>阈值灵敏度与噪声水平</td>
+</tr>
+<tr>
+<td>沉默失效（漂移）</td>
+<td>10–100 s</td>
+<td>1–5 s</td>
+<td>漂移率与可容忍累积误差</td>
+</tr>
+<tr>
+<td>拜占庭</td>
+<td>1 轮表决</td>
+<td>1–10 s</td>
+<td>冗余度与通信轮次</td>
+</tr>
+</tbody>
+</table>
+<p>表的最后两行是难点：<strong>漂移类故障的检测延迟被物理规律限制</strong>。若零偏漂移率是 0.01 °/s，而姿态误差容忍上限是 1°，那么无论阈值多灵敏，纯靠观察该传感器也至少需要 100 s 才能判定它失准——除非引入独立参考做交叉验证。</p>
 <h2 id="故障检测首先需要正常行为的参考">故障检测首先需要正常行为的参考</h2>
-<p>可以检查传感器是否超出物理范围、多个传感器是否互相矛盾、控制循环是否按时运行、模型残差是否突然增大。</p>
-<p>单个阈值适合简单故障；复杂系统常结合多个信号降低误报。</p>
+<p>可以检查传感器是否超出物理范围、多个传感器是否互相矛盾、控制循环是否按时运行、模型残差是否突然增大。单个阈值适合简单故障；复杂系统常结合多个信号降低误报。</p>
+<p>检测的基本结构是比较残差与阈值：</p>
+<div class="arithmatex">\[r_k = z_k - \hat z_k, \qquad \text{触发条件：}\ \lVert r_k \rVert &gt; \eta,\]</div>
+<p>其中 <span class="arithmatex">\(z_k\)</span> 是第 <span class="arithmatex">\(k\)</span> 步的观测量，<span class="arithmatex">\(\hat z_k\)</span> 由运动学模型、卡尔曼滤波预测或历史统计给出。阈值 <span class="arithmatex">\(\eta\)</span> 的选择直接决定检测延迟与误报率的关系：</p>
+<table>
+<thead>
+<tr>
+<th>阈值 <span class="arithmatex">\(\eta\)</span></th>
+<th>检测延迟</th>
+<th>误报率</th>
+<th>适用场合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>偏小</td>
+<td>短</td>
+<td>高，正常波动即触发</td>
+<td>失效后果极严重、备用充足</td>
+</tr>
+<tr>
+<td>适中（约 3<span class="arithmatex">\(\sigma\)</span>）</td>
+<td>中等</td>
+<td>低</td>
+<td>一般传感器监测</td>
+</tr>
+<tr>
+<td>偏大</td>
+<td>长</td>
+<td>极低</td>
+<td>备用能力弱、频繁降级代价高</td>
+</tr>
+</tbody>
+</table>
+<p>用残差的滑动统计量（均值、方差、卡方统计量）比瞬时阈值更稳，因为它能抑制单帧噪声引起的误报。若残差近似高斯，则平方和服从卡方分布：</p>
+<div class="arithmatex">\[\chi^2_k = r_k^\top \Sigma^{-1} r_k \sim \chi^2_m,\]</div>
+<p>其中 <span class="arithmatex">\(m\)</span> 是残差维数、<span class="arithmatex">\(\Sigma\)</span> 是残差协方差。按 <span class="arithmatex">\(1-\alpha\)</span> 分位数设阈值，可以直接控制误报率 <span class="arithmatex">\(\alpha\)</span>，而不是靠调参碰运气。</p>
+<p>各种检测手段的适用面差别很大：</p>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>检测对象</th>
+<th>对小漂移的灵敏度</th>
+<th>计算代价</th>
+<th>主要弱点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>瞬时阈值</td>
+<td>突变</td>
+<td>低</td>
+<td>极低</td>
+<td>高噪声下误报多</td>
+</tr>
+<tr>
+<td>滑动均值与方差</td>
+<td>慢变偏移</td>
+<td>中</td>
+<td>低</td>
+<td>响应滞后</td>
+</tr>
+<tr>
+<td>卡方检验</td>
+<td>多变量一致性</td>
+<td>中高</td>
+<td>低到中</td>
+<td>需要可靠的 <span class="arithmatex">\(\Sigma\)</span></td>
+</tr>
+<tr>
+<td>卡尔曼残差（NIS）</td>
+<td>模型与观测不一致</td>
+<td>高</td>
+<td>中</td>
+<td>依赖模型准确度</td>
+</tr>
+<tr>
+<td>交叉验证（异构传感器）</td>
+<td>共性错误以外的一切</td>
+<td>高</td>
+<td>中</td>
+<td>无法发现共因失效</td>
+</tr>
+</tbody>
+</table>
+<h2 id="检测性能的定量指标延迟误报率与可用性">检测性能的定量指标：延迟、误报率与可用性</h2>
+<p>只看“报警了没有”会漏掉真正决定系统行为的东西。检测器的行为可以用三个数刻画：<strong>检测延迟 <span class="arithmatex">\(T_d\)</span>、误报率 <span class="arithmatex">\(P_{FA}\)</span>、以及平均误报间隔 MTFA</strong>。</p>
+<p>对双侧高斯残差，阈值 <span class="arithmatex">\(\eta\)</span> 与单侧尾部概率的关系是</p>
+<div class="arithmatex">\[P_{FA}(\eta) = 2\,Q(\eta/\sigma), \qquad Q(x)=\frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-t^2/2}\,dt .\]</div>
+<p>把它换成工程语言就是下面的表。注意最后一列：<strong>在 100 Hz 的监控频率下，3<span class="arithmatex">\(\sigma\)</span> 阈值平均每几秒就会误报一次</strong>，这足以让操作员很快开始忽略告警。</p>
+<table>
+<thead>
+<tr>
+<th>阈值 <span class="arithmatex">\(\eta\)</span></th>
+<th>单侧 <span class="arithmatex">\(Q\)</span></th>
+<th>双侧误报率</th>
+<th>100 Hz 下 MTFA</th>
+<th>检出 <span class="arithmatex">\(0.2\sigma\)</span> 偏移的延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2<span class="arithmatex">\(\sigma\)</span></td>
+<td>2.3e-2</td>
+<td>4.6e-2</td>
+<td>0.22 s</td>
+<td>约 10 个采样</td>
+</tr>
+<tr>
+<td>3<span class="arithmatex">\(\sigma\)</span></td>
+<td>1.3e-3</td>
+<td>2.7e-3</td>
+<td>3.7 s</td>
+<td>约 15 个采样</td>
+</tr>
+<tr>
+<td>4<span class="arithmatex">\(\sigma\)</span></td>
+<td>3.2e-5</td>
+<td>6.3e-5</td>
+<td>158 s</td>
+<td>约 20 个采样</td>
+</tr>
+<tr>
+<td>5<span class="arithmatex">\(\sigma\)</span></td>
+<td>2.9e-7</td>
+<td>5.7e-7</td>
+<td>约 5 h</td>
+<td>约 25 个采样</td>
+</tr>
+</tbody>
+</table>
+<p>检测延迟的估算很简单：若偏移按每采样 <span class="arithmatex">\(\delta\)</span> 增长，从偏移开始到越过阈值需要约 <span class="arithmatex">\(\eta/\delta\)</span> 个采样。把 <span class="arithmatex">\(\eta\)</span> 从 3<span class="arithmatex">\(\sigma\)</span> 提到 5<span class="arithmatex">\(\sigma\)</span>，延迟只增加约三分之二，误报间隔却提高四个数量级——这就是<strong>为什么提高阈值几乎总是正确的第一步</strong>，而真正的困难在于如何在不降低灵敏度的前提下提高阈值，答案是用更长的观测窗。</p>
+<p>累积和（CUSUM）检验正是为此设计的。定义统计量</p>
+<div class="arithmatex">\[S_k = \max\big(0,\ S_{k-1} + r_k - \nu\big),\]</div>
+<p>当 <span class="arithmatex">\(S_k &gt; \eta_c\)</span> 时报警。常用的取值是 <span class="arithmatex">\(\nu = \delta/2\)</span>、<span class="arithmatex">\(\eta_c\)</span> 由期望的 MTFA 反推。对持续的小偏移，CUSUM 的检测延迟可以比固定阈值低数倍到十倍，代价是它对<strong>单次脉冲型故障</strong>不敏感，因此实践中通常与瞬时阈值并行使用。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>典型目标</th>
+<th>与调参的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检测延迟 <span class="arithmatex">\(T_d\)</span></td>
+<td>从发生到报警的时间</td>
+<td>小于安全余量允许的暴露时间</td>
+<td>阈值越低越短</td>
+</tr>
+<tr>
+<td>误报率 <span class="arithmatex">\(P_{FA}\)</span></td>
+<td>正常状态下报警的概率</td>
+<td>单通道低于 1e-5</td>
+<td>阈值越高越低</td>
+</tr>
+<tr>
+<td>MTFA</td>
+<td>误报间隔的期望</td>
+<td>大于任务时长的 10 倍</td>
+<td>由 <span class="arithmatex">\(P_{FA}\)</span> 与频率决定</td>
+</tr>
+<tr>
+<td>定位正确率</td>
+<td>报警指向真实故障源</td>
+<td>高于 90%</td>
+<td>依赖独立信息源数量</td>
+</tr>
+</tbody>
+</table>
 <h2 id="检测之后还要判断谁出了问题">检测之后还要判断谁出了问题</h2>
-<p>两个编码器读数不一致，只能说明至少一个有问题。结合 IMU、车辆运动模型或第三个传感器，才能进一步做 fault isolation。</p>
-<p>没有隔离就直接丢弃某个传感器，可能反而删除了正确数据。</p>
+<p>两个编码器读数不一致，只能说明至少一个有问题。结合 IMU、车辆运动模型或第三个传感器，才能进一步做 fault isolation。没有隔离就直接丢弃某个传感器，可能反而删除了正确数据。</p>
+<table>
+<thead>
+<tr>
+<th>检测结果</th>
+<th>可推出的结论</th>
+<th>不能推出的结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>两个编码器不一致</td>
+<td>至少一个错了</td>
+<td>哪个错了</td>
+</tr>
+<tr>
+<td>与 IMU 积分一致</td>
+<td>该编码器大概率正确</td>
+<td>另一路一定错</td>
+</tr>
+<tr>
+<td>三路中两路一致</td>
+<td>多数派大概率正确</td>
+<td>多数派同时错的概率为零</td>
+</tr>
+</tbody>
+</table>
+<p>隔离的本质是<strong>用独立信息源打破平局</strong>。如果所有信息源共享同一个前提（同一电源、同一时间源、同一坐标系转换），它们会一起出错，多数派表决也会同时失效——这就是共同失效模式。</p>
+<p>隔离能力可以量化。设单路传感器正确率 <span class="arithmatex">\(p\)</span>、共因失效概率 <span class="arithmatex">\(q\)</span>，则 <span class="arithmatex">\(N\)</span> 路多数派的错误率近似为</p>
+<div class="arithmatex">\[P_\text{maj} \approx q + \binom{N}{\lceil N/2\rceil} p^{\lceil N/2\rceil}(1-p)^{\lceil N/2\rceil}\ \text{（$q$ 独立于各路时）}.\]</div>
+<p>关键在 <span class="arithmatex">\(q\)</span> 这一项：<strong>当 <span class="arithmatex">\(q&gt;0\)</span> 时，无论 <span class="arithmatex">\(N\)</span> 加到多大，多数派都无法优于 <span class="arithmatex">\(q\)</span></strong>。这解释了为什么异构冗余比简单加一路同型传感器更重要——它降低的是 <span class="arithmatex">\(q\)</span>，而不是括号内的独立项。</p>
+<table>
+<thead>
+<tr>
+<th>冗余配置</th>
+<th>单路正确率 <span class="arithmatex">\(p\)</span></th>
+<th>共因概率 <span class="arithmatex">\(q\)</span></th>
+<th>三取二错误率上界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>三路同型号同电源</td>
+<td>0.99</td>
+<td>0.01</td>
+<td>约 0.01</td>
+</tr>
+<tr>
+<td>三路同型号独立供电</td>
+<td>0.99</td>
+<td>0.001</td>
+<td>约 0.001</td>
+</tr>
+<tr>
+<td>异构两路加一路独立</td>
+<td>0.99</td>
+<td>1e-4</td>
+<td>约 1e-4</td>
+</tr>
+<tr>
+<td>异构三路（视觉、激光、雷达）</td>
+<td>0.99</td>
+<td>1e-5</td>
+<td>约 1e-5</td>
+</tr>
+</tbody>
+</table>
 <h2 id="恢复策略通常以降级为目标">恢复策略通常以降级为目标</h2>
 <p>故障后不一定还能继续完成原任务。更安全的目标可能是减速、停车、返航或切换人工控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fallback</span><span class="p">(</span><span class="n">localization_ok</span><span class="p">,</span> <span class="n">lidar_ok</span><span class="p">):</span>
@@ -3830,13 +4259,508 @@
         <span class="k">return</span> <span class="s2">&quot;LOW_SPEED_CAMERA_ONLY&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;NORMAL&quot;</span>
 </code></pre></div>
+<p>这段代码的结构包含两个布尔变量 <span class="arithmatex">\(localization\_ok\)</span> 与 <span class="arithmatex">\(lidar\_ok\)</span>，按优先级短路判断。它体现了一个重要原则：<strong>降级优先级应写成显式顺序，而不是让多个条件自由组合</strong>。顺序意味着当定位和激光同时失效时，系统的行为是确定的（进入重定位流程），而不是依赖条件求值的实现细节。</p>
+<p>降级选择应考虑两个量：<strong>当前能力下能完成的最保守任务</strong>，以及<strong>恢复到正常模式所需的可观测条件</strong>。只写降级而不写恢复条件，系统往往会在降级状态下滞留，或在不该恢复时盲目恢复。</p>
+<p>每种降级都能按“能力保留”和“恢复成本”两个量排序，这比只按“安全程度”排序更有用：</p>
+<table>
+<thead>
+<tr>
+<th>降级动作</th>
+<th>能力保留</th>
+<th>恢复成本</th>
+<th>恢复前提</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>限速</td>
+<td>高</td>
+<td>极低</td>
+<td>指标稳定一段时间</td>
+</tr>
+<tr>
+<td>关闭部分功能</td>
+<td>中</td>
+<td>低</td>
+<td>模块自检通过</td>
+</tr>
+<tr>
+<td>切换保守控制器</td>
+<td>中低</td>
+<td>中</td>
+<td>主控制器重载成功</td>
+</tr>
+<tr>
+<td>返航</td>
+<td>低</td>
+<td>高</td>
+<td>定位恢复</td>
+</tr>
+<tr>
+<td>停车</td>
+<td>最低</td>
+<td>极高</td>
+<td>人工介入</td>
+</tr>
+</tbody>
+</table>
+<h2 id="指数退避与重试上限的定量设计">指数退避与重试上限的定量设计</h2>
+<p>连续失败时不要无限高频重试：这既浪费资源，也可能让本已拥塞的链路更不可用。常用做法是指数退避加上限，第 <span class="arithmatex">\(n\)</span> 次重试前等待</p>
+<div class="arithmatex">\[t_n = \min\big(t_0 \cdot 2^{\,n-1},\ t_\text{max}\big) + \mathcal{U}(0, j),\]</div>
+<p>其中 <span class="arithmatex">\(t_0\)</span> 是初始等待、<span class="arithmatex">\(t_\text{max}\)</span> 是等待上限、<span class="arithmatex">\(j\)</span> 是抖动幅度，用于避免多个节点同时重试造成同步冲击。总等待时间上界为</p>
+<div class="arithmatex">\[T_N = \sum_{n=1}^{N} t_n .\]</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>典型取值</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初始等待 <span class="arithmatex">\(t_0\)</span></td>
+<td>50–200 ms</td>
+<td>决定短期恢复速度</td>
+</tr>
+<tr>
+<td>上限 <span class="arithmatex">\(t_\text{max}\)</span></td>
+<td>1–5 s</td>
+<td>决定长期资源占用</td>
+</tr>
+<tr>
+<td>重试次数 <span class="arithmatex">\(N\)</span></td>
+<td>3–7</td>
+<td>决定何时转入降级</td>
+</tr>
+<tr>
+<td>抖动 <span class="arithmatex">\(j\)</span></td>
+<td><span class="arithmatex">\(t_n\)</span> 的 10%–50%</td>
+<td>决定重试风暴的抑制效果</td>
+</tr>
+</tbody>
+</table>
+<p>以 <span class="arithmatex">\(t_0=0.1\)</span> s、<span class="arithmatex">\(t_\text{max}=2\)</span> s、<span class="arithmatex">\(N=6\)</span> 为例，忽略抖动时总等待约为 <span class="arithmatex">\(0.1+0.2+0.4+0.8+1.6+2.0=5.1\)</span> s。这个数字应和任务的时间预算对齐：<strong>若 5 s 已经超出安全窗口，重试就必须在更早的次一级失败时切换到降级路径</strong>，而不是继续等。</p>
+<p>抖动幅度的选择也有定量依据。设 <span class="arithmatex">\(M\)</span> 个节点同时开始重试、抖动在 <span class="arithmatex">\([0,j]\)</span> 上均匀分布，则首次重试的碰撞概率近似</p>
+<div class="arithmatex">\[P_\text{collide} \approx 1-\left(1-\frac{\epsilon}{j}\right)^{M-1},\]</div>
+<p>其中 <span class="arithmatex">\(\epsilon\)</span> 是可分辨的时间粒度（例如调度粒度 1 ms）。<span class="arithmatex">\(M=100\)</span>、<span class="arithmatex">\(\epsilon=1\)</span> ms 时，若 <span class="arithmatex">\(j=1\)</span> ms 则几乎必然碰撞；把 <span class="arithmatex">\(j\)</span> 提到 100 ms 才能把碰撞概率压到可接受水平。这解释了为什么抖动幅度是退避算法里最容易被低估的参数。</p>
+<h2 id="恢复时间目标与降级深度的选择">恢复时间目标与降级深度的选择</h2>
+<p>容错设计最终要落到“多快恢复、恢复到什么程度”。这两个量为降级深度和恢复时间目标（RTO）提供了设计坐标。</p>
+<p>设正常模式的峰值风险暴露为 <span class="arithmatex">\(R_0\)</span>、系统在时刻 <span class="arithmatex">\(t\)</span> 的瞬时暴露为 <span class="arithmatex">\(R(t)\)</span>，那么从故障发生到恢复的累计暴露是</p>
+<div class="arithmatex">\[E = \int_{t_0}^{t_0+T} R(t)\,dt,\]</div>
+<p>其中 <span class="arithmatex">\(T\)</span> 是总的中断时间。<strong>降级深度的作用是压低 <span class="arithmatex">\(R(t)\)</span>，检测与恢复速度的作用是缩短 <span class="arithmatex">\(T\)</span></strong>，两者相乘构成总风险。这解释了为什么“降级到很保守”和“很快恢复”对最终安全的贡献是可互换的，尽管它们在工程上的代价完全不同。</p>
+<table>
+<thead>
+<tr>
+<th>降级层级</th>
+<th>保留能力</th>
+<th>典型进入条件</th>
+<th>恢复条件</th>
+<th>RTO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 正常</td>
+<td>全部任务</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>L1 降速</td>
+<td>约 80% 功能</td>
+<td>单项指标接近阈值</td>
+<td>指标持续稳定</td>
+<td>小于 1 s</td>
+</tr>
+<tr>
+<td>L2 降功能</td>
+<td>约 50%，限速限域</td>
+<td>关键传感器短时失效</td>
+<td>传感器恢复且自检通过</td>
+<td>1–5 s</td>
+</tr>
+<tr>
+<td>L3 最小任务</td>
+<td>仅安全移动与返回</td>
+<td>定位精度退化</td>
+<td>重定位成功</td>
+<td>5–30 s</td>
+</tr>
+<tr>
+<td>L4 安全停止</td>
+<td>停车并保持可控</td>
+<td>安全前提不满足</td>
+<td>人工复位</td>
+<td>0.5–3 s</td>
+</tr>
+<tr>
+<td>L5 人工接管</td>
+<td>由操作员操作</td>
+<td>超出自动能力</td>
+<td>操作员交还</td>
+<td>秒级</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的一个要点是<strong>降级层级不是单调的“越来越差”</strong>：L4 的安全停止在风险意义上优于 L3 的带病移动，但在任务意义上更差。因此选择层级时要同时看两个排序，并且把“无法继续任务但绝对安全”和“能继续但风险高”明确区分开，而不是用一条“健康度”标量把两者混在一起。</p>
+<p>把相对暴露 <span class="arithmatex">\(R/R_0\)</span> 与恢复时间相乘，可以直接比较不同策略的总暴露：</p>
+<table>
+<thead>
+<tr>
+<th>降级层级</th>
+<th>相对暴露 <span class="arithmatex">\(R/R_0\)</span></th>
+<th>恢复时间</th>
+<th>累计暴露</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>0.6</td>
+<td>1 s</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>0.05</td>
+<td>3 s</td>
+<td>0.15</td>
+</tr>
+</tbody>
+</table>
+<p>深降级往往用稍长一点的时间就换来小得多的总暴露，这就是“宁可停得早、不要停得晚”的定量依据。</p>
 <h2 id="冗余要避免共同失效模式">冗余要避免共同失效模式</h2>
-<p>两只同型号传感器共用同一电源，并不能抵御电源故障；两套软件副本共享同一个 bug，也不会因为“有两个实例”就更可靠。</p>
-<p>有效冗余应尽量在物理原理、供电、通信和软件路径上减少共同故障。</p>
+<p>两只同型号传感器共用同一电源，并不能抵御电源故障；两套软件副本共享同一个 bug，也不会因为“有两个实例”就更可靠。有效冗余应尽量在物理原理、供电、通信和软件路径上减少共同故障。</p>
+<table>
+<thead>
+<tr>
+<th>冗余方式</th>
+<th>抵御的故障</th>
+<th>共因风险</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同型号双传感器</td>
+<td>单点硬件损坏</td>
+<td>高（同批缺陷、同电源）</td>
+<td>低</td>
+</tr>
+<tr>
+<td>异构传感器（视觉加激光）</td>
+<td>单模态退化</td>
+<td>低（退化条件不同）</td>
+<td>中（需标定与融合）</td>
+</tr>
+<tr>
+<td>双电源与双总线</td>
+<td>供电、链路失效</td>
+<td>中（共用接地或线束）</td>
+<td>中</td>
+</tr>
+<tr>
+<td>N 版本编程</td>
+<td>软件缺陷</td>
+<td>中（需求误解仍共有）</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p>冗余的边际收益是递减的，可以用上面的共因公式解释：第一次加入异构通道把 <span class="arithmatex">\(q\)</span> 从 0.01 降到 0.001，收益是 10 倍；再加一路若仍解决不了 <span class="arithmatex">\(q\)</span> 里剩下的那部分（例如共同需求误解），后续投入可能只能把错误率从 0.001 降到 0.0009，几乎无意义。<strong>因此冗余设计的第一步是画出共同依赖图，而不是增加通道数。</strong></p>
+<p>共同失效模式可以按“共享了什么”分类，每一类都有对应的破除手段：</p>
+<table>
+<thead>
+<tr>
+<th>共享项</th>
+<th>典型共因</th>
+<th>表现</th>
+<th>破除手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>电源</td>
+<td>电压跌落</td>
+<td>多路同时失效</td>
+<td>独立供电与稳压</td>
+</tr>
+<tr>
+<td>时钟</td>
+<td>时钟跳变</td>
+<td>时间戳同时出错</td>
+<td>独立时间源</td>
+</tr>
+<tr>
+<td>外参与坐标系</td>
+<td>标定错误</td>
+<td>多路一致地偏移</td>
+<td>在线标定与残差监控</td>
+</tr>
+<tr>
+<td>软件库</td>
+<td>同一解析器缺陷</td>
+<td>多路同时解析错</td>
+<td>异构实现</td>
+</tr>
+<tr>
+<td>环境</td>
+<td>强光、扬尘</td>
+<td>视觉与激光同时退化</td>
+<td>引入互补模态</td>
+</tr>
+<tr>
+<td>需求理解</td>
+<td>场景定义错误</td>
+<td>所有实现同样漏检</td>
+<td>独立需求评审</td>
+</tr>
+<tr>
+<td>机械结构</td>
+<td>共振</td>
+<td>多传感器同频受扰</td>
+<td>隔振与分散安装位</td>
+</tr>
+<tr>
+<td>固件版本</td>
+<td>版本升级引入缺陷</td>
+<td>多设备同时异常</td>
+<td>灰度升级与回滚</td>
+</tr>
+</tbody>
+</table>
+<h2 id="冗余与多数派表决的代价">冗余与多数派表决的代价</h2>
+<p>冗余的容错能力可以用多数派表决量化：<span class="arithmatex">\(N\)</span> 个副本中允许 <span class="arithmatex">\(f\)</span> 个同时出错而仍能得出正确结果，要求</p>
+<div class="arithmatex">\[N \ge 2f+1 .\]</div>
+<p>若故障可能伪装成正确输出（拜占庭模型），多数派不足以保证一致性，需要更强的界</p>
+<div class="arithmatex">\[N \ge 3f+1 .\]</div>
+<table>
+<thead>
+<tr>
+<th>副本数 <span class="arithmatex">\(N\)</span></th>
+<th>可容忍故障数 <span class="arithmatex">\(f\)</span></th>
+<th>表决延迟</th>
+<th>相对成本</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>无</td>
+<td>1×</td>
+<td>无容错</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>—</td>
+<td>2×</td>
+<td><strong>无法区分谁对</strong>，只能检测不一致</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>1 轮</td>
+<td>3×</td>
+<td>最常用，可定位单点故障</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>1 轮</td>
+<td>4×</td>
+<td>与 3 副本容错能力相同，不划算</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>1 轮</td>
+<td>5×</td>
+<td>用于高价值或长任务</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>1 轮</td>
+<td>6×</td>
+<td>偶数，容错能力与 5 相同</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>1 轮</td>
+<td>7×</td>
+<td>成本高，仅用于极长任务</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4</td>
+<td>1 轮</td>
+<td>9×</td>
+<td>收益递减明显</td>
+</tr>
+</tbody>
+</table>
+<p>两个结论值得记住：<strong>偶数副本没有额外收益</strong>（4 副本与 3 副本可容忍的故障数相同）；表决延迟通常由最慢副本决定，因此加大冗余会同时抬高响应时间。</p>
+<p>表决延迟可以估算。若各副本延迟独立同分布，均值 <span class="arithmatex">\(\mu\)</span>、标准差 <span class="arithmatex">\(\sigma\)</span>，则 <span class="arithmatex">\(N\)</span> 取中位数需要等待其中一个中位序的副本完成。<span class="arithmatex">\(N=3\)</span>、<span class="arithmatex">\(\mu=10\)</span> ms、<span class="arithmatex">\(\sigma=2\)</span> ms 时，取第二小的期望延迟约为 <span class="arithmatex">\(\mu + 0.85\sigma \approx 11.7\)</span> ms，再加上汇总开销 0.5 ms，总表决延迟约 12 ms。相对单副本，这是<strong>用 20% 的延迟换取单点故障容忍</strong>——这个交换是否值得，取决于系统在 2.4 ms 额外延迟里会走多远，也就是上面安全余量公式里的 <span class="arithmatex">\(v\Delta\tau\)</span> 项。</p>
 <h2 id="故障演练应该成为测试的一部分">故障演练应该成为测试的一部分</h2>
 <p>可以主动断开传感器、延迟网络、杀死节点或篡改输入，观察系统是否进入预期安全状态。只有故障路径真正被运行过，容错设计才不只是架构图上的假设。</p>
+<p>演练应覆盖三类目标：<strong>检测是否在预期时间内触发、隔离是否正确、降级后系统是否仍可安全运行或安全停止</strong>。三者缺一，故障路径都不算验证过。</p>
+<table>
+<thead>
+<tr>
+<th>注入方式</th>
+<th>模拟的故障</th>
+<th>期望观测</th>
+<th>通过判据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>切断传感器供电</td>
+<td>fail-stop</td>
+<td>心跳超时并进入降级</td>
+<td>报警在 3 个周期内</td>
+</tr>
+<tr>
+<td>冻结传感器读数</td>
+<td>沉默失效</td>
+<td>残差或交叉验证报警</td>
+<td>报警在 <span class="arithmatex">\(T_d\)</span> 目标内</td>
+</tr>
+<tr>
+<td>注入缓慢零偏</td>
+<td>漂移</td>
+<td>滑动统计或均值报警</td>
+<td>累积误差未超余量</td>
+</tr>
+<tr>
+<td>注入网络延迟与丢包</td>
+<td>通信退化</td>
+<td>退避重试后降级</td>
+<td>总等待未超时</td>
+</tr>
+<tr>
+<td>杀死控制节点</td>
+<td>进程崩溃</td>
+<td>watchdog 触发停车</td>
+<td>停车在超时时间内</td>
+</tr>
+<tr>
+<td>注入错误数据</td>
+<td>拜占庭</td>
+<td>表决剔除异常副本</td>
+<td>输出未受影响</td>
+</tr>
+<tr>
+<td>时钟跳变</td>
+<td>分布式时间异常</td>
+<td>时间戳监控报警</td>
+<td>超限即降级</td>
+</tr>
+<tr>
+<td>磁盘写满</td>
+<td>日志或地图写失败</td>
+<td>写失败可观测</td>
+<td>不影响安全路径</td>
+</tr>
+<tr>
+<td>CPU 过载</td>
+<td>控制周期抖动</td>
+<td>周期监控触发</td>
+<td>抖动超限进入降级</td>
+</tr>
+<tr>
+<td>消息乱序</td>
+<td>时序假设被破坏</td>
+<td>序号或时间戳检查</td>
+<td>拒绝乱序帧</td>
+</tr>
+<tr>
+<td>参数被篡改</td>
+<td>配置错误</td>
+<td>参数范围校验</td>
+<td>越界拒绝启动</td>
+</tr>
+<tr>
+<td>双故障叠加</td>
+<td>组合故障</td>
+<td>状态机确定性</td>
+<td>行为符合转移表</td>
+</tr>
+</tbody>
+</table>
+<p>这几类注入的优先级不同：<strong>能被超时发现的故障优先演练</strong>，因为它们最容易验证；沉默失效与组合故障需要更多准备，但漏掉它们的代价最大。</p>
+<p>演练数据还有第二个用途：<strong>它能给出 <span class="arithmatex">\(T_d\)</span> 与 <span class="arithmatex">\(P_{FA}\)</span> 的实测分布</strong>，而不是纸面上假设的值。用这些实测值反推阈值和余量，比在仿真里调参可靠得多。</p>
 <h2 id="故障检测要平衡漏报与误报">故障检测要平衡漏报与误报</h2>
 <p>阈值过宽会延迟发现真实故障，过窄则让系统在正常波动中频繁降级。选择阈值时应结合故障后果、备用能力和检测延迟，通过故障注入数据绘制漏报与误报之间的权衡。</p>
+<table>
+<thead>
+<tr>
+<th>误判方向</th>
+<th>直接后果</th>
+<th>长期后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>漏报（false negative）</td>
+<td>错误数据继续被使用</td>
+<td>误差累积、不可预测的失效</td>
+</tr>
+<tr>
+<td>误报（false positive）</td>
+<td>无谓降级、任务中断</td>
+<td>用户失去信任、忽略告警</td>
+</tr>
+<tr>
+<td>检测延迟过长</td>
+<td>干预窗口被吃掉</td>
+<td>只能被动停车</td>
+</tr>
+<tr>
+<td>隔离错误</td>
+<td>删除了正确通道</td>
+<td>性能与安全同时下降</td>
+</tr>
+<tr>
+<td>恢复条件缺失</td>
+<td>滞留在降级状态</td>
+<td>任务能力长期受损</td>
+</tr>
+<tr>
+<td>阈值与工况不匹配</td>
+<td>某工况下反复误报</td>
+<td>该工况下无人相信告警</td>
+</tr>
+<tr>
+<td>表决被共同故障击穿</td>
+<td>多数派同时给出错误结论</td>
+<td>直接输出错误状态</td>
+</tr>
+<tr>
+<td>只看单次检测结果</td>
+<td>报警未复现即被忽略</td>
+<td>隐患长期潜伏</td>
+</tr>
+<tr>
+<td>阈值长期不校准</td>
+<td>传感器老化后灵敏度下降</td>
+<td>漏报率缓慢上升</td>
+</tr>
+</tbody>
+</table>
+<p>实践中的经验是<strong>让两类错误的代价可比</strong>：如果误报只是多一次减速，而漏报会导致碰撞，阈值就应当偏严；反之，如果误报会让昂贵任务全部中止，阈值就应偏松并辅以多信号确认。</p>
+<p>把这条经验写成式子：设漏报一次损失 <span class="arithmatex">\(C_{MD}\)</span>、误报一次损失 <span class="arithmatex">\(C_{FA}\)</span>，在阈值处的最小期望代价解满足两类错误的似然比条件，直观上等价于</p>
+<div class="arithmatex">\[P_{FA}\cdot C_{FA} \approx P_{MD}\cdot C_{MD} .\]</div>
+<p>也就是说，代价比 <span class="arithmatex">\(C_{MD}/C_{FA}\)</span> 直接决定阈值应当朝哪个方向偏。当后果差距在一百倍以上时，宁可让 MTFA 降到几分钟，也不能让漏报概率停在 1e-3 量级——把 <span class="arithmatex">\(C_{MD}/C_{FA}\)</span> 写出来，比争论“阈值取 3<span class="arithmatex">\(\sigma\)</span> 还是 4<span class="arithmatex">\(\sigma\)</span>”更有用。</p>
+<blockquote>
+<p><strong>下一步</strong>：检测与降级解决“组件出错之后怎么办”。当问题出在主策略本身而不是硬件时，见 <a href="../05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a>；分布式链路上的超时、重试与副本一致性见 <a href="../../distributed-systems/04-fault-tolerance/">Fault Tolerance in Distributed Systems</a>，整体风险度量框架见 <a href="../02-robustness-risk/">Robustness, Risk &amp; Reliability</a>，部署阶段的健康检查与回滚见 <a href="../../software-engineering/05-deployment-reliability/">Deployment &amp; Reliability</a>。</p>
+</blockquote>
 
 
 

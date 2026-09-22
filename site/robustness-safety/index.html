@@ -3539,10 +3539,87 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#内容" class="md-nav__link">
+  <a href="#本节要解决的问题" class="md-nav__link">
     <span class="md-ellipsis">
       
-        内容
+        本节要解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#五章的推进逻辑与时间尺度" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五章的推进逻辑与时间尺度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#概念地图" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#指标分层安全与性能不能混用" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        指标分层：安全与性能不能混用
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#场景化评测矩阵" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景化评测矩阵
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#与其他章节的接口" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与其他章节的接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#安全论证需要什么证据" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全论证需要什么证据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#常见失败模式与最小实践基线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常见失败模式与最小实践基线
       
     </span>
   </a>
@@ -3641,20 +3718,729 @@
 
 
 <h1 id="robustness--safety">Robustness &amp; Safety</h1>
-<p>鲁棒与安全部分研究系统面对噪声、分布变化、约束和故障时如何保持可接受行为，并最终落实到运行时保护机制。</p>
+<p>这一节处理自主系统里最不能靠“调大奖励”解决的问题：<strong>当条件变化、组件失效、模型不再可信时，系统靠什么保持可接受的行为。</strong></p>
 <figure>
-  <img alt="robustness-safety overview" src="../assets/diagrams/safety-map.svg" />
+  <img alt="鲁棒性与安全从不确性、风险、约束、故障到运行时保护形成一条防线。" src="../assets/diagrams/safety-map.svg" />
 <br />
-<figcaption>Robustness Safety 的核心概念关系。</figcaption>
+<figcaption>五层防线从理解不确定性开始，最终落到运行时保护与覆盖。</figcaption>
 </figure>
-<h2 id="内容">内容</h2>
-<ol>
-<li><a href="01-uncertainty-shift/">不确定性与分布偏移</a></li>
-<li><a href="02-robustness-risk/">鲁棒性、风险与可靠性</a></li>
-<li><a href="03-safety-constraints/">安全约束</a></li>
-<li><a href="04-fault-tolerance/">故障检测与容错</a></li>
-<li><a href="05-safe-learning-runtime/">安全学习与运行时安全</a></li>
-</ol>
+<p>概念地图给出的主线是：<strong>Uncertainty（noise / shift）→ Risk（robustness）→ Constraints（safe set）→ Faults（detect &amp; recover）→ Runtime（assure / override）</strong>。这是一条从“认识问题”到“强制保护”的递进链：前半部分回答“什么会让系统变差”，后半部分回答“当它真的变差时，谁能够阻止后果”。</p>
+<h2 id="本节要解决的问题">本节要解决的问题</h2>
+<p>安全不是一个功能，而是一组可验证条件。下面这些问题如果没有明确答案，系统就还没有被工程化：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>若不回答会怎样</th>
+<th>对应章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扰动范围有多大</td>
+<td>无法判断“鲁棒”是否成立</td>
+<td><a href="01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a></td>
+</tr>
+<tr>
+<td>尾部损失有多严重</td>
+<td>平均值掩盖罕见崩溃</td>
+<td><a href="02-robustness-risk/">Robustness, Risk &amp; Reliability</a></td>
+</tr>
+<tr>
+<td>哪些状态原则上不允许</td>
+<td>事后惩罚挡不住越界</td>
+<td><a href="03-safety-constraints/">Safety Constraints</a></td>
+</tr>
+<tr>
+<td>组件坏了怎么发现</td>
+<td>错误数据被继续使用</td>
+<td><a href="04-fault-tolerance/">Fault Detection &amp; Tolerance</a></td>
+</tr>
+<tr>
+<td>主策略不可信时谁兜底</td>
+<td>失效直接变成事故</td>
+<td><a href="05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a></td>
+</tr>
+</tbody>
+</table>
+<p>把“问题”翻译成“检查项”是本节的核心动作：每一条防线都必须能用<strong>数值 + 阈值 + 适用范围</strong>三要素描述，否则它只是口号。下表给出五层防线各自的典型失败形态与最小检查项：</p>
+<table>
+<thead>
+<tr>
+<th>防线层</th>
+<th>典型失败</th>
+<th>最小检查项</th>
+<th>通过判据（示例）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uncertainty</td>
+<td>只统计名义噪声，忽略分布偏移</td>
+<td>扰动集合与偏移程度的定义</td>
+<td>偏移强度 <span class="arithmatex">\(\epsilon\)</span> 有明确上下界</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>只报平均损失，忽略尾部</td>
+<td>分位数与 <span class="arithmatex">\(\mathrm{CVaR}\)</span> 报告</td>
+<td><span class="arithmatex">\(\mathrm{CVaR}_{0.95}\)</span> 不超过阈值</td>
+</tr>
+<tr>
+<td>Constraints</td>
+<td>约束写成软惩罚</td>
+<td>硬约束集合与余量计算</td>
+<td>余量 <span class="arithmatex">\(\ge\)</span> 制动距离 + 估计误差</td>
+</tr>
+<tr>
+<td>Faults</td>
+<td>只有检测没有降级路径</td>
+<td>检测延迟与隔离策略</td>
+<td>检测延迟 <span class="arithmatex">\(\le 200\)</span> ms</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>兜底逻辑从未被演练</td>
+<td>watchdog 与接管演练记录</td>
+<td>接管成功率 100%，可重复</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td>仿真与实机的语义悄悄分叉</td>
+<td>接口契约与字段对照表</td>
+<td>迁移改动行数 <span class="arithmatex">\(\le 5\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>注意最后两行的顺序：<strong>检测先于隔离，隔离先于降级</strong>。任何跳步都会让故障在系统内部继续传播，等到降级被触发时，错误状态可能已经被写入地图或控制回路。</p>
+<h2 id="五章的推进逻辑与时间尺度">五章的推进逻辑与时间尺度</h2>
+<table>
+<thead>
+<tr>
+<th>章</th>
+<th>关注点</th>
+<th>核心输出</th>
+<th>时间尺度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>不确定性的类型与来源</td>
+<td>区分随机性、模型不确定性与分布偏移</td>
+<td>离线分析</td>
+</tr>
+<tr>
+<td>02</td>
+<td>风险与可靠性度量</td>
+<td><span class="arithmatex">\(\mathrm{CVaR}\)</span>、<span class="arithmatex">\(\mathrm{MTBF}\)</span>、安全/性能指标分离</td>
+<td>离线评估</td>
+</tr>
+<tr>
+<td>03</td>
+<td>安全约束与可行域</td>
+<td>硬/软约束、安全余量、运行时过滤</td>
+<td>设计 + 在线</td>
+</tr>
+<tr>
+<td>04</td>
+<td>故障检测与容错</td>
+<td>检测、隔离、降级、冗余</td>
+<td>在线</td>
+</tr>
+<tr>
+<td>05</td>
+<td>运行时安全</td>
+<td>监控、过滤、watchdog、状态机</td>
+<td>在线（毫秒级）</td>
+</tr>
+</tbody>
+</table>
+<p>时间尺度是理解这五层的钥匙：<strong>越靠后的章节响应越快、覆盖越窄；越靠前的章节周期越长、影响越广</strong>。用离线评估的手段去解决毫秒级问题，或反过来用限幅去掩盖建模错误，都不会有效。</p>
+<p>把时间尺度写成具体数量级，各层的能力边界就变得可讨论了：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>典型响应时间</th>
+<th>可覆盖的状态</th>
+<th>典型实现</th>
+<th>不能解决的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>离线分析</td>
+<td>天–周</td>
+<td>全部标称场景</td>
+<td>统计报告、可达集计算</td>
+<td>运行时突发扰动</td>
+</tr>
+<tr>
+<td>设计期约束</td>
+<td>版本周期</td>
+<td>设计裕度内的状态</td>
+<td>约束形式化、余量预算</td>
+<td>未建模的执行器故障</td>
+</tr>
+<tr>
+<td>监督/过滤层</td>
+<td>10–100 ms</td>
+<td>单步动作</td>
+<td>QP 安全过滤、控制屏障函数</td>
+<td>传感器层面的错误输入</td>
+</tr>
+<tr>
+<td>故障管理层</td>
+<td>0.1–5 s</td>
+<td>组件级降级</td>
+<td>超时、交叉校验、冗余切换</td>
+<td>未检测到的共模失效</td>
+</tr>
+<tr>
+<td>运行时保护</td>
+<td>1–50 ms</td>
+<td>紧急状态</td>
+<td>限幅、watchdog、急停</td>
+<td>语义层面的错误决策</td>
+</tr>
+<tr>
+<td>事后复盘</td>
+<td>天–周</td>
+<td>已发生的全部事件</td>
+<td>事件分类与假设更新</td>
+<td>未发生过的新场景</td>
+</tr>
+</tbody>
+</table>
+<p>前两行的成本是时间，后三行的成本是算力与复杂度。工程上最常见的不平衡是<strong>把预算全花在离线分析，却让运行时保护缺少独立通道</strong>——一旦模型本身出错，整条链会同时失效，而失效模式无法被同源的方法发现。</p>
+<h2 id="概念地图">概念地图</h2>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>含义</th>
+<th>工程落点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uncertainty（noise / shift）</td>
+<td>随机噪声、参数未知、分布变化</td>
+<td>区分偶然与认识不确定性</td>
+</tr>
+<tr>
+<td>Risk（robustness）</td>
+<td>变化之后性能掉多少、尾部多严重</td>
+<td>分位数、<span class="arithmatex">\(\mathrm{CVaR}\)</span>、条件风险</td>
+</tr>
+<tr>
+<td>Constraints（safe set）</td>
+<td>不允许越过的状态与动作边界</td>
+<td>硬约束、余量、可行域收缩</td>
+</tr>
+<tr>
+<td>Faults（detect &amp; recover）</td>
+<td>组件偏离正常并扩散为失效</td>
+<td>检测、隔离、降级、冗余</td>
+</tr>
+<tr>
+<td>Runtime（assure / override）</td>
+<td>部署时的最后一道防线</td>
+<td>监控、过滤、watchdog、回退</td>
+</tr>
+</tbody>
+</table>
+<p>注意最后一层的动词是 <strong>override（覆盖）</strong>：运行时安全层有权否决主策略甚至否决人。接受这一点是设计能兜底的前提。</p>
+<p>动词强度决定权限边界。用“能否否决”而不是“能否建议”来描述每一层，可以避免把安全寄托在协作意愿上：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>动词</th>
+<th>权限</th>
+<th>失效时谁负责</th>
+<th>常见越权</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uncertainty</td>
+<td>quantify</td>
+<td>只提出假设</td>
+<td>建模者</td>
+<td>用猜测替代测量</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>evaluate</td>
+<td>给出风险数字</td>
+<td>评估者</td>
+<td>只报均值不报尾部</td>
+</tr>
+<tr>
+<td>Constraints</td>
+<td>forbid</td>
+<td>缩小可行域</td>
+<td>设计者</td>
+<td>把硬约束降级为软惩罚</td>
+</tr>
+<tr>
+<td>Faults</td>
+<td>isolate</td>
+<td>切断错误数据</td>
+<td>系统本身</td>
+<td>只报警不隔离</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>override</td>
+<td>否决主策略</td>
+<td>系统本身</td>
+<td>必须人工确认才生效</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td>guarantee</td>
+<td>冻结接口语义</td>
+<td>接口所有者</td>
+<td>只做单向迁移测试</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行是关键设计选择：<strong>紧急动作若需要人工确认，人就成了延迟的一部分</strong>，而人的反应时间通常在 0.5–2 s，远大于制动所需的时间尺度（多为 100–300 ms）。把否决权留给人类，等于把最坏情况下的响应时间交给最不确定的环节。</p>
+<h2 id="指标分层安全与性能不能混用">指标分层：安全与性能不能混用</h2>
+<p>一个系统可以同时“性能很好”和“不安全”，也可以“很安全”但“什么都不做”。因此指标必须分层，每层有各自的报告纪律。</p>
+<p>先定义三个量：任务损失 <span class="arithmatex">\(L\)</span>（越小越好）、扰动强度 <span class="arithmatex">\(\epsilon\)</span>（偏离名义条件的程度）、约束函数 <span class="arithmatex">\(g(x,u)\)</span>（<span class="arithmatex">\(g &gt; 0\)</span> 表示越界）。风险度量的标准形式是条件风险价值：</p>
+<div class="arithmatex">\[\mathrm{CVaR}_{\alpha}(L) = \min_{t} \left[ t + \frac{1}{1-\alpha}\,\mathbb{E}\left[(L-t)^{+}\right] \right]\]</div>
+<p>它回答的是“最差的 <span class="arithmatex">\(1-\alpha\)</span> 那一部分平均有多差”，而 <span class="arithmatex">\(\mathbb{E}[L]\)</span> 只回答“总体上怎么样”。两者可以给出完全相反的结论，这不是统计噪声，而是尾部形状本身的信息。</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>指标</th>
+<th>定义</th>
+<th>报告方式</th>
+<th>常见误用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>性能</td>
+<td>成功率、完成时间</td>
+<td>名义场景下的平均表现</td>
+<td>均值 ± 标准差</td>
+<td>用它证明安全</td>
+</tr>
+<tr>
+<td>鲁棒性</td>
+<td>性能下降率 <span class="arithmatex">\(\Delta J / J_0\)</span></td>
+<td>扰动前后任务代价之比</td>
+<td>扰动-性能曲线</td>
+<td>只测单一扰动强度</td>
+</tr>
+<tr>
+<td>尾部风险</td>
+<td><span class="arithmatex">\(\mathrm{CVaR}_{0.95}(L)\)</span></td>
+<td>最差 5% 情形的平均损失</td>
+<td>分位数 + Bootstrap 区间</td>
+<td>用样本不足的估计下结论</td>
+</tr>
+<tr>
+<td>安全</td>
+<td>违反次数、最小间距 <span class="arithmatex">\(d_{\min}\)</span></td>
+<td>硬约束的实际越界情况</td>
+<td>计数 + 极值</td>
+<td>用平均值掩盖单次越界</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td><span class="arithmatex">\(\mathrm{MTBF}\)</span>、<span class="arithmatex">\(\mathrm{MTTR}\)</span></td>
+<td>失效间隔与修复时间</td>
+<td>小时/次、分钟/次</td>
+<td>忽略共因故障</td>
+</tr>
+<tr>
+<td>可恢复性</td>
+<td>恢复时间 <span class="arithmatex">\(t_{\mathrm{rec}}\)</span></td>
+<td>从降级回到标称的时间</td>
+<td>分布而非均值</td>
+<td>只测演练过的场景</td>
+</tr>
+<tr>
+<td>稳健裕度</td>
+<td><span class="arithmatex">\(J_{0} - J_{\epsilon}\)</span></td>
+<td>扰动下的性能保留量</td>
+<td>相对基准的比例</td>
+<td>基准选择不写明</td>
+</tr>
+</tbody>
+</table>
+<p>量化的对比：假设某次改动把平均损失从 <span class="arithmatex">\(0.12\)</span> 降到 <span class="arithmatex">\(0.10\)</span>（改善 <span class="arithmatex">\(17\%\)</span>），同时把 <span class="arithmatex">\(\mathrm{CVaR}_{0.95}\)</span> 从 <span class="arithmatex">\(1.2\)</span> 推到 <span class="arithmatex">\(3.0\)</span>（恶化 <span class="arithmatex">\(150\%\)</span>）。只报第一行时，这次改动会被描述为“性能提升”；而它实际上把最坏 5% 的后果放大了 2.5 倍。</p>
+<table>
+<thead>
+<tr>
+<th>变更类型</th>
+<th>平均损失</th>
+<th><span class="arithmatex">\(\mathrm{CVaR}_{0.95}\)</span></th>
+<th>应如何描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提高速度上限</td>
+<td><span class="arithmatex">\(0.10\)</span></td>
+<td><span class="arithmatex">\(3.0\)</span></td>
+<td>尾部恶化，不能称改善</td>
+</tr>
+</tbody>
+</table>
+<p><strong>报告纪律</strong>：任何“改善”结论都必须同时给出对应的尾部指标，否则不允许进入结论。</p>
+<h2 id="场景化评测矩阵">场景化评测矩阵</h2>
+<p>评测覆盖度不能靠“跑了多少次”衡量，而要看<strong>场景维度 × 扰动强度的矩阵是否被填满</strong>。定义场景集合 <span class="arithmatex">\(\mathcal{S}\)</span> 与扰动档位集合 <span class="arithmatex">\(\mathcal{E}\)</span>，覆盖率写作</p>
+<div class="arithmatex">\[\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) &gt; 0\}\right|}{\left|\mathcal{S}\right| \cdot \left|\mathcal{E}\right|}\]</div>
+<p>其中 <span class="arithmatex">\(n(s,e)\)</span> 是在场景 <span class="arithmatex">\(s\)</span>、扰动档位 <span class="arithmatex">\(e\)</span> 下的有效试验次数。覆盖率小于 1 时，未填格子对应的是<strong>未知风险</strong>，而不是“安全”。</p>
+<table>
+<thead>
+<tr>
+<th>场景维度</th>
+<th>典型取值</th>
+<th>扰动档位</th>
+<th>观察指标</th>
+<th>通过判据（示例）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>光照 / 外观</td>
+<td>白天、夜间、逆光</td>
+<td>3 档</td>
+<td>检测召回率</td>
+<td>夜间 <span class="arithmatex">\(\ge 90\%\)</span></td>
+</tr>
+<tr>
+<td>动态障碍</td>
+<td>无 / 稀疏 / 拥挤</td>
+<td>3 档</td>
+<td>最小间距 <span class="arithmatex">\(d_{\min}\)</span></td>
+<td>全程 <span class="arithmatex">\(d_{\min} \ge 0.3\)</span> m</td>
+</tr>
+<tr>
+<td>通信质量</td>
+<td>正常 / 抖动 / 断连</td>
+<td>3 档</td>
+<td>降级触发时间</td>
+<td><span class="arithmatex">\(\le 300\)</span> ms</td>
+</tr>
+<tr>
+<td>传感器失效</td>
+<td>单目丢失、IMU 冻结</td>
+<td>2 档</td>
+<td>能否安全停车</td>
+<td><span class="arithmatex">\(100\%\)</span> 成功</td>
+</tr>
+<tr>
+<td>地形 / 摩擦</td>
+<td>干燥、湿滑、坡道</td>
+<td>3 档</td>
+<td>跟踪误差</td>
+<td><span class="arithmatex">\(\le 0.1\)</span> m</td>
+</tr>
+<tr>
+<td>速度档位</td>
+<td><span class="arithmatex">\(30\%\)</span> / <span class="arithmatex">\(60\%\)</span> / <span class="arithmatex">\(100\%\)</span></td>
+<td>3 档</td>
+<td>成功率与制动距离</td>
+<td>制动距离 &lt; 余量</td>
+</tr>
+<tr>
+<td>时间 / 负载</td>
+<td>空载、满载</td>
+<td>2 档</td>
+<td>跟踪误差与电流</td>
+<td>不超额定力矩</td>
+</tr>
+<tr>
+<td>系统状态</td>
+<td>冷启动、长时运行</td>
+<td>2 档</td>
+<td>漂移与温升</td>
+<td>漂移在标定区间</td>
+</tr>
+</tbody>
+</table>
+<p>矩阵的填法本身也有纪律：同一格子至少要 <span class="arithmatex">\(20\)</span>–<span class="arithmatex">\(30\)</span> 次独立试验，才能对 <span class="arithmatex">\(5\%\)</span> 量级的事件率给出有意义的估计，否则“零失败”只意味着“没看到失败”。若要把零失败结论外推到 <span class="arithmatex">\(10^{-4}\)</span> 的失效概率，靠堆试验数量并不现实，必须引入分析证据或形式化论证。</p>
+<p>两种典型偏差是<strong>只扩场景维度不扩扰动强度</strong>（矩阵很宽但很薄）和<strong>只在最容易的档位堆样本</strong>（矩阵很密但偏斜）。它们共同的后果是：上线后遇到的第一次真实扰动，会成为该系统历史上第一个测试用例。</p>
+<p>矩阵还应标注<strong>哪一格是“上线前必须为绿”的门槛格</strong>。把所有格子同等对待，等于把有限预算平均分给低风险与高风险的组合。</p>
+<h2 id="与其他章节的接口">与其他章节的接口</h2>
+<p>安全不是孤立的一层，它需要从其他章节借用形式化工具，并把结论还回去：</p>
+<table>
+<thead>
+<tr>
+<th>本节概念</th>
+<th>对接章节</th>
+<th>借什么</th>
+<th>还什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>约束优化形式</td>
+<td><a href="../control-theory/05-mpc/">Model Predictive Control</a></td>
+<td>预测模型与在线求解</td>
+<td>硬约束与余量预算</td>
+</tr>
+<tr>
+<td>随机/鲁棒/机会约束</td>
+<td><a href="../mathematics/06-optimization-under-uncertainty/">Optimization, Constraints &amp; Uncertainty</a></td>
+<td>不确定性集合的数学形式</td>
+<td>可验证的可行性条件</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathrm{CVaR}\)</span> 与安全约束</td>
+<td><a href="../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a></td>
+<td>风险约束下的策略优化</td>
+<td>训练期的风险上限</td>
+</tr>
+<tr>
+<td>不确定性表达</td>
+<td><a href="../human-ai-interaction/04-trust-explainability/">Trust &amp; Explainability</a></td>
+<td>置信度校准方法</td>
+<td>可解释的失效原因</td>
+</tr>
+<tr>
+<td>故障与超时重试</td>
+<td><a href="../distributed-systems/04-fault-tolerance/">Fault Tolerance（分布式）</a></td>
+<td>超时、重试、法定人数</td>
+<td>安全相关的降级语义</td>
+</tr>
+<tr>
+<td>安全退化与可回滚</td>
+<td><a href="../software-engineering/05-deployment-reliability/">Docker, CI &amp; Reliability</a></td>
+<td>回滚与灰度能力</td>
+<td>降级路径的验证需求</td>
+</tr>
+</tbody>
+</table>
+<p>接口处最常见的错误是<strong>只传递结论不传递假设</strong>。例如把“<span class="arithmatex">\(d_{\min} \ge 0.3\)</span> m”写进需求，却没有同时写下“在制动延迟 <span class="arithmatex">\(\le 80\)</span> ms、位置估计误差 <span class="arithmatex">\(\le 0.05\)</span> m 的前提下”。假设一旦丢失，余量的来源就不可追溯，任何一处参数变更都可能悄悄吃掉它。</p>
+<p>因此建议维护一张<strong>假设-余量账本</strong>，把安全相关的假设显式登记：</p>
+<table>
+<thead>
+<tr>
+<th>假设</th>
+<th>典型量级</th>
+<th>由谁提供</th>
+<th>假设失效的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>制动延迟</td>
+<td><span class="arithmatex">\(\le 80\)</span> ms</td>
+<td>执行器/驱动</td>
+<td>制动距离被低估</td>
+</tr>
+<tr>
+<td>位置估计误差</td>
+<td><span class="arithmatex">\(\le 0.05\)</span> m</td>
+<td>感知/定位</td>
+<td>余量不足以覆盖偏置</td>
+</tr>
+<tr>
+<td>控制周期抖动</td>
+<td><span class="arithmatex">\(\le 10\%\)</span></td>
+<td>调度/中间件</td>
+<td>相位滞后，振荡</td>
+</tr>
+<tr>
+<td>通信往返延迟</td>
+<td><span class="arithmatex">\(\le 100\)</span> ms</td>
+<td>网络</td>
+<td>远程接管不可用</td>
+</tr>
+<tr>
+<td>摩擦下界</td>
+<td><span class="arithmatex">\(\mu \ge 0.4\)</span></td>
+<td>场地/建模</td>
+<td>减速能力不足</td>
+</tr>
+<tr>
+<td>单步计算时间</td>
+<td><span class="arithmatex">\(\le\)</span> 周期 <span class="arithmatex">\(50\%\)</span></td>
+<td>求解器/硬件</td>
+<td>求解超时后回退到旧解</td>
+</tr>
+</tbody>
+</table>
+<p>账本的价值在于它把“余量被吃掉”变成可检测事件：只要某一行的实测值越界，就应触发余量重算，而不是等到事故后再追溯。</p>
+<h2 id="安全论证需要什么证据">安全论证需要什么证据</h2>
+<p>“测试了很多次没出事”不是证据。可信的安全论证通常需要四类互补证据，且每类都应能给出量化边界。</p>
+<p>先定义两个统计量：失效概率 <span class="arithmatex">\(p\)</span> 与样本数 <span class="arithmatex">\(n\)</span>。若在 <span class="arithmatex">\(n\)</span> 次试验中观察到零次失效，<span class="arithmatex">\(95\%\)</span> 置信水平下失效概率的上界近似为 <span class="arithmatex">\(\hat{p}_{\mathrm{ub}} \approx 3/n\)</span>。这直接决定了“跑了几百次”只能支持 <span class="arithmatex">\(10^{-2}\)</span> 量级的结论，而任何声称 <span class="arithmatex">\(10^{-6}\)</span> 的说法都必须由设计或分析证据承担。</p>
+<table>
+<thead>
+<tr>
+<th>证据类型</th>
+<th>内容</th>
+<th>量化形式</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设计证据</td>
+<td>约束形式化、安全集合、余量计算</td>
+<td>余量 <span class="arithmatex">\(\ge\)</span> 误差上界</td>
+<td>依赖模型准确性</td>
+</tr>
+<tr>
+<td>分析证据</td>
+<td>最坏情况边界、可达集、<span class="arithmatex">\(\mathrm{CVaR}\)</span> 估计</td>
+<td>上界 + 假设清单</td>
+<td>需要假设本身可验证</td>
+</tr>
+<tr>
+<td>测试证据</td>
+<td>场景化评测、故障注入、边界扫描</td>
+<td><span class="arithmatex">\(3/n\)</span> 式置信上界</td>
+<td>覆盖有限，尾部样本稀少</td>
+</tr>
+<tr>
+<td>运行证据</td>
+<td>线上监控、告警、接管记录</td>
+<td>实际事件率与分布</td>
+<td>只覆盖已发生的场景</td>
+</tr>
+</tbody>
+</table>
+<p>四类证据方向一致但强度不同：<strong>设计给出“为什么不可能”，分析给出“最坏能有多坏”，测试给出“实际发生了多少”，运行给出“部署后是否偏离假设”</strong>。只有测试证据的系统在长尾上不可知；只有分析证据的系统会在实现偏差前先失效。</p>
+<p>一个可操作的组合纪律是：对每一条安全需求，至少给出两类证据，且其中一类必须是设计或分析证据——因为测试无法覆盖尚未被设想到的场景：</p>
+<table>
+<thead>
+<tr>
+<th>安全需求</th>
+<th>设计证据</th>
+<th>分析证据</th>
+<th>测试证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不碰撞</td>
+<td>余量预算表</td>
+<td>可达集不交</td>
+<td>场景矩阵</td>
+</tr>
+<tr>
+<td>不失稳</td>
+<td>增益/相位裕度</td>
+<td>Lyapunov 或谱分析</td>
+<td>阶跃与扰动响应</td>
+</tr>
+<tr>
+<td>可安全停车</td>
+<td>制动距离模型</td>
+<td>最坏摩擦下的停车距离</td>
+<td>湿滑地面试验</td>
+</tr>
+<tr>
+<td>故障可检测</td>
+<td>冗余与交叉校验设计</td>
+<td>检测延迟上界</td>
+<td>故障注入</td>
+</tr>
+<tr>
+<td>可人工接管</td>
+<td>接管接口与权限设计</td>
+<td>最坏响应时间上界</td>
+<td>接管演练</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常见失败模式与最小实践基线">常见失败模式与最小实践基线</h2>
+<p>失败模式值得单独列一张表，因为它们大多不是算法错误，而是<strong>流程缺口</strong>：某种条件从未被定义、被度量或被演练过。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>常见误判</th>
+<th>实际原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>仿真稳定、实机振荡</td>
+<td>认为控制器参数不对</td>
+<td>延迟与采样改变了稳定裕度</td>
+</tr>
+<tr>
+<td>平均指标很好但偶发事故</td>
+<td>认为只是运气</td>
+<td>尾部风险未被度量</td>
+</tr>
+<tr>
+<td>约束在数学上满足却越界</td>
+<td>认为求解器有 bug</td>
+<td>未计入估计误差与制动距离</td>
+</tr>
+<tr>
+<td>传感器故障未被发现</td>
+<td>认为冗余已足够</td>
+<td>沉默失效不触发超时</td>
+</tr>
+<tr>
+<td>降级后系统仍危险</td>
+<td>认为降级即安全</td>
+<td>回退策略覆盖范围不连续</td>
+</tr>
+<tr>
+<td>上线很久后突然失效</td>
+<td>认为环境变了</td>
+<td>假设未登记，参数漂移无人察觉</td>
+</tr>
+</tbody>
+</table>
+<p>这些失败模式有一个共同结构：<strong>系统在名义条件下正确，在边界条件下不正确，而边界条件没有进入验证流程</strong>。因此扩展验证的优先方向不是增加名义场景的数量，而是补齐边界与故障场景的组合。</p>
+<p><strong>把最小实践基线按阶段拆开</strong>，可以让“现在该做多少”变成可回答的问题。按项目阶段，安全工作的最小集是不同的：过早引入重型形式化会拖慢迭代，过晚引入则意味着要重构接口：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>最小必须做到</th>
+<th>可暂缓</th>
+<th>需要的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原型</td>
+<td>参数与状态量的单位、范围写清</td>
+<td>形式化验证</td>
+<td>单元测试与范围检查</td>
+</tr>
+<tr>
+<td>试点</td>
+<td>分位数报告、余量计算、兜底路径</td>
+<td>完整可达集分析</td>
+<td>分位数 + 故障注入</td>
+</tr>
+<tr>
+<td>上线</td>
+<td>运行时监控、watchdog、降级演练</td>
+<td>全场景形式化</td>
+<td>演练记录 + 运行统计</td>
+</tr>
+<tr>
+<td>规模化</td>
+<td>假设-余量账本、回归门禁、事件复盘</td>
+<td>—</td>
+<td>持续监控 + 回归测试</td>
+</tr>
+</tbody>
+</table>
+<p>无论处于哪个阶段，有四件事都不应省略：给每个安全相关的量写出<strong>可验证条件</strong>（值、阈值、适用范围）；用<strong>分位数和最大值</strong>报告结果而不只报平均；给关键约束留出<strong>由延迟和估计误差算出的余量</strong>；确保存在一个<strong>独立于主策略的兜底路径</strong>并演练过它。</p>
+<blockquote>
+<p><strong>下一步</strong>：从 <a href="01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a> 开始，它建立了后续四章共用的不确定性语言。约束的数学形式见 <a href="../mathematics/06-optimization-under-uncertainty/">Optimization, Constraints &amp; Uncertainty</a>，训练期的风险约束见 <a href="../reinforcement-learning/06-safe-robust-offline/">Safe, Robust &amp; Offline RL</a>。</p>
+</blockquote>
 
 
 
