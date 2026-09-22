@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fault-detection-tolerance" class="md-skip">
+        <a href="#fault-detection--tolerance" class="md-skip">
           Skip to content
         </a>
       
@@ -3283,7 +3283,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#故障检测首先需要正常行为的参考" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测首先需要正常行为的参考
@@ -3294,7 +3294,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#检测之后还要判断谁出了问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测之后还要判断谁出了问题
@@ -3305,7 +3305,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#恢复策略通常以降级为目标" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复策略通常以降级为目标
@@ -3316,7 +3316,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#冗余要避免共同失效模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余要避免共同失效模式
@@ -3327,7 +3327,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#故障演练应该成为测试的一部分" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障演练应该成为测试的一部分
@@ -3338,7 +3338,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#故障检测要平衡漏报与误报" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测要平衡漏报与误报
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#故障检测首先需要正常行为的参考" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测首先需要正常行为的参考
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#检测之后还要判断谁出了问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测之后还要判断谁出了问题
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#恢复策略通常以降级为目标" class="md-nav__link">
     <span class="md-ellipsis">
       
         恢复策略通常以降级为目标
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#冗余要避免共同失效模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         冗余要避免共同失效模式
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#故障演练应该成为测试的一部分" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障演练应该成为测试的一部分
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#故障检测要平衡漏报与误报" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障检测要平衡漏报与误报
@@ -3808,20 +3808,20 @@
 
 
 
-<h1 id="fault-detection-tolerance">Fault Detection &amp; Tolerance</h1>
+<h1 id="fault-detection--tolerance">Fault Detection &amp; Tolerance</h1>
 <p>故障是组件偏离正常工作状态，失效则是系统无法完成要求的功能。容错的目标是：<strong>单个组件出问题时，系统还能检测、隔离，并进入可接受的降级状态。</strong></p>
 <figure>
   <img alt="故障从发生到系统失效之间可以通过检测、隔离和恢复打断。" src="../../assets/diagrams/fault-chain.svg" />
 <br />
 <figcaption>容错不是“没有故障”，而是阻止局部故障演变成系统级失效。</figcaption>
 </figure>
-<h2 id="_1">故障检测首先需要正常行为的参考</h2>
+<h2 id="故障检测首先需要正常行为的参考">故障检测首先需要正常行为的参考</h2>
 <p>可以检查传感器是否超出物理范围、多个传感器是否互相矛盾、控制循环是否按时运行、模型残差是否突然增大。</p>
 <p>单个阈值适合简单故障；复杂系统常结合多个信号降低误报。</p>
-<h2 id="_2">检测之后还要判断谁出了问题</h2>
+<h2 id="检测之后还要判断谁出了问题">检测之后还要判断谁出了问题</h2>
 <p>两个编码器读数不一致，只能说明至少一个有问题。结合 IMU、车辆运动模型或第三个传感器，才能进一步做 fault isolation。</p>
 <p>没有隔离就直接丢弃某个传感器，可能反而删除了正确数据。</p>
-<h2 id="_3">恢复策略通常以降级为目标</h2>
+<h2 id="恢复策略通常以降级为目标">恢复策略通常以降级为目标</h2>
 <p>故障后不一定还能继续完成原任务。更安全的目标可能是减速、停车、返航或切换人工控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fallback</span><span class="p">(</span><span class="n">localization_ok</span><span class="p">,</span> <span class="n">lidar_ok</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">localization_ok</span><span class="p">:</span>
@@ -3830,12 +3830,12 @@
         <span class="k">return</span> <span class="s2">&quot;LOW_SPEED_CAMERA_ONLY&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;NORMAL&quot;</span>
 </code></pre></div>
-<h2 id="_4">冗余要避免共同失效模式</h2>
+<h2 id="冗余要避免共同失效模式">冗余要避免共同失效模式</h2>
 <p>两只同型号传感器共用同一电源，并不能抵御电源故障；两套软件副本共享同一个 bug，也不会因为“有两个实例”就更可靠。</p>
 <p>有效冗余应尽量在物理原理、供电、通信和软件路径上减少共同故障。</p>
-<h2 id="_5">故障演练应该成为测试的一部分</h2>
+<h2 id="故障演练应该成为测试的一部分">故障演练应该成为测试的一部分</h2>
 <p>可以主动断开传感器、延迟网络、杀死节点或篡改输入，观察系统是否进入预期安全状态。只有故障路径真正被运行过，容错设计才不只是架构图上的假设。</p>
-<h2 id="_6">故障检测要平衡漏报与误报</h2>
+<h2 id="故障检测要平衡漏报与误报">故障检测要平衡漏报与误报</h2>
 <p>阈值过宽会延迟发现真实故障，过窄则让系统在正常波动中频繁降级。选择阈值时应结合故障后果、备用能力和检测延迟，通过故障注入数据绘制漏报与误报之间的权衡。</p>
 
 

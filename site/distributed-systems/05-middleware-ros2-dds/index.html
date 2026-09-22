@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dds-ros2" class="md-skip">
+        <a href="#dds--ros2" class="md-skip">
           Skip to content
         </a>
       
@@ -2601,7 +2601,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ros2" class="md-nav__link">
+  <a href="#ros2-把模块间通信抽象成几个基本原语" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2 把模块间通信抽象成几个基本原语
@@ -2612,7 +2612,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dds" class="md-nav__link">
+  <a href="#dds-让通信语义可以被显式配置" class="md-nav__link">
     <span class="md-ellipsis">
       
         DDS 让通信语义可以被显式配置
@@ -2623,7 +2623,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#qos" class="md-nav__link">
+  <a href="#qos-兼容性检查" class="md-nav__link">
     <span class="md-ellipsis">
       
         QoS 兼容性检查
@@ -2634,7 +2634,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ros2_1" class="md-nav__link">
+  <a href="#ros2-消息仍然需要好的数据契约" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2 消息仍然需要好的数据契约
@@ -2645,7 +2645,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ros2dds" class="md-nav__link">
+  <a href="#ros2dds-的解耦边界" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2/DDS 的解耦边界
@@ -2656,7 +2656,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#qos_1" class="md-nav__link">
+  <a href="#qos-要沿通信两端检查" class="md-nav__link">
     <span class="md-ellipsis">
       
         QoS 要沿通信两端检查
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ros2" class="md-nav__link">
+  <a href="#ros2-把模块间通信抽象成几个基本原语" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2 把模块间通信抽象成几个基本原语
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dds" class="md-nav__link">
+  <a href="#dds-让通信语义可以被显式配置" class="md-nav__link">
     <span class="md-ellipsis">
       
         DDS 让通信语义可以被显式配置
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#qos" class="md-nav__link">
+  <a href="#qos-兼容性检查" class="md-nav__link">
     <span class="md-ellipsis">
       
         QoS 兼容性检查
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ros2_1" class="md-nav__link">
+  <a href="#ros2-消息仍然需要好的数据契约" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2 消息仍然需要好的数据契约
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ros2dds" class="md-nav__link">
+  <a href="#ros2dds-的解耦边界" class="md-nav__link">
     <span class="md-ellipsis">
       
         ROS2/DDS 的解耦边界
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#qos_1" class="md-nav__link">
+  <a href="#qos-要沿通信两端检查" class="md-nav__link">
     <span class="md-ellipsis">
       
         QoS 要沿通信两端检查
@@ -3808,23 +3808,23 @@
 
 
 
-<h1 id="dds-ros2">DDS &amp; ROS2</h1>
+<h1 id="dds--ros2">DDS &amp; ROS2</h1>
 <p>机器人软件通常包含定位、感知、规划、控制和硬件驱动等多个进程。中间件的作用是让这些模块能够交换数据，而不要求每个模块自己重新实现发现、序列化、网络传输和通信质量控制。</p>
 <figure>
   <img alt="DDS/ROS2 的 QoS 需要根据数据语义选择。" src="../../assets/diagrams/qos-choice.svg" />
 <br />
 <figcaption>高速传感器流和关键状态事件对可靠性、历史深度和时延的要求不同。</figcaption>
 </figure>
-<h2 id="ros2">ROS2 把模块间通信抽象成几个基本原语</h2>
+<h2 id="ros2-把模块间通信抽象成几个基本原语">ROS2 把模块间通信抽象成几个基本原语</h2>
 <p><strong>Topic</strong> 适合持续数据流，例如 <code>/odom</code>、<code>/scan</code>；<strong>Service</strong> 适合一次请求、一次响应；<strong>Action</strong> 适合耗时任务，需要反馈、取消和最终结果。</p>
 <p>这三种接口反映的是交互时序差异，而不是“哪个更高级”。</p>
-<h2 id="dds">DDS 让通信语义可以被显式配置</h2>
+<h2 id="dds-让通信语义可以被显式配置">DDS 让通信语义可以被显式配置</h2>
 <p>ROS2 默认依赖 DDS/RTPS 体系。DDS 不只是传输数据，还提供 reliability、history、durability、deadline 等 QoS 语义。</p>
 <p>高频 LiDAR 数据偶尔丢一帧通常可以接受，重点是最新数据尽快到达；任务模式切换则可能要求可靠送达。不同 Topic 使用同一 QoS 并不一定合理。</p>
-<h2 id="qos">QoS 兼容性检查</h2>
+<h2 id="qos-兼容性检查">QoS 兼容性检查</h2>
 <p>发布者和订阅者即使名字完全一致，如果 reliability 或 durability 等策略不兼容，也可能无法通信。这是 ROS2 实机调试中非常常见的问题。</p>
 <p>因此排查顺序应包含：节点是否存在、Topic 名称/类型是否一致、QoS 是否兼容、网络发现是否正常。</p>
-<h2 id="ros2_1">ROS2 消息仍然需要好的数据契约</h2>
+<h2 id="ros2-消息仍然需要好的数据契约">ROS2 消息仍然需要好的数据契约</h2>
 <p>中间件解决“怎么传”，不解决“字段语义是否合理”。一个状态消息应明确单位、坐标系、时间戳和有效范围。</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Topic：持续发布带明确单位的速度命令</span>
 <span class="n">cmd</span> <span class="o">=</span> <span class="n">Twist</span><span class="p">()</span>
@@ -3838,10 +3838,10 @@
 </code></pre></div>
 <p>若单位和 frame 没有统一，即使通信 100% 可靠，系统仍然会产生错误动作。</p>
 <p>Topic 回调应快速处理持续数据；Service 适合有明确完成结果的短操作。耗时导航任务应使用 Action，以便反馈进度和取消，而不是让 Service 长时间阻塞。</p>
-<h2 id="ros2dds">ROS2/DDS 的解耦边界</h2>
+<h2 id="ros2dds-的解耦边界">ROS2/DDS 的解耦边界</h2>
 <p>定位节点不需要知道规划器运行在哪台机器，规划器只需要订阅符合契约的位姿数据。但网络延迟、带宽和节点故障仍然存在，不能因为用了 ROS2 就假设通信等同于本地函数调用。</p>
 <p>真正稳定的机器人系统会同时设计接口语义、QoS、超时和失联后的退化行为。</p>
-<h2 id="qos_1">QoS 要沿通信两端检查</h2>
+<h2 id="qos-要沿通信两端检查">QoS 要沿通信两端检查</h2>
 <p>ROS2 通信是否建立取决于发布端与订阅端策略是否兼容，而不是单边配置是否看起来合理。排查时应把消息类型、Topic 名称、reliability、durability、history 和 deadline 放在同一张表中比较，避免只在某个节点上反复改参数。</p>
 
 

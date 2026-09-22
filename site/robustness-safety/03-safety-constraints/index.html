@@ -3255,7 +3255,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#硬约束和软约束表达不同优先级" class="md-nav__link">
     <span class="md-ellipsis">
       
         硬约束和软约束表达不同优先级
@@ -3266,7 +3266,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#约束可以直接进入优化问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束可以直接进入优化问题
@@ -3277,7 +3277,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#运行时安全层可以独立检查策略输出" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时安全层可以独立检查策略输出
@@ -3288,7 +3288,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#安全余量用来应对估计误差和响应延迟" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全余量用来应对估计误差和响应延迟
@@ -3299,7 +3299,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#安全约束必须贯穿规划控制和执行" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全约束必须贯穿规划、控制和执行
@@ -3310,7 +3310,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#约束可执行性依赖状态估计" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束可执行性依赖状态估计
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#硬约束和软约束表达不同优先级" class="md-nav__link">
     <span class="md-ellipsis">
       
         硬约束和软约束表达不同优先级
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#约束可以直接进入优化问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束可以直接进入优化问题
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#运行时安全层可以独立检查策略输出" class="md-nav__link">
     <span class="md-ellipsis">
       
         运行时安全层可以独立检查策略输出
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#安全余量用来应对估计误差和响应延迟" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全余量用来应对估计误差和响应延迟
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#安全约束必须贯穿规划控制和执行" class="md-nav__link">
     <span class="md-ellipsis">
       
         安全约束必须贯穿规划、控制和执行
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#约束可执行性依赖状态估计" class="md-nav__link">
     <span class="md-ellipsis">
       
         约束可执行性依赖状态估计
@@ -3810,28 +3810,28 @@
 
 <h1 id="safety-constraints">Safety Constraints</h1>
 <p>性能目标可以权衡，但安全底线通常不能只靠“给一个很大的负奖励”表达。安全约束的作用是明确：<strong>哪些状态、动作或风险水平原则上不允许越过。</strong></p>
-<h2 id="_1">硬约束和软约束表达不同优先级</h2>
+<h2 id="硬约束和软约束表达不同优先级">硬约束和软约束表达不同优先级</h2>
 <p>硬约束例如最大速度、禁入区域、最低障碍距离；软约束例如偏离中心线、能耗偏高，可以和其他性能指标权衡。</p>
 <p>把二者都塞进同一个奖励函数，会让“到底多大惩罚才算绝对不能违反”变得模糊。</p>
-<h2 id="_2">约束可以直接进入优化问题</h2>
+<h2 id="约束可以直接进入优化问题">约束可以直接进入优化问题</h2>
 <p>例如控制问题可以写成</p>
 <div class="arithmatex">\[
 \min_u J(u)\quad\text{s.t.}\quad g(x,u)\le 0.
 \]</div>
 <p>其中 <span class="arithmatex">\(g\)</span> 可以表示速度上限、碰撞距离或温度限制。相比事后惩罚，这种形式更明确地告诉求解器哪些区域不可行。</p>
-<h2 id="_3">运行时安全层可以独立检查策略输出</h2>
+<h2 id="运行时安全层可以独立检查策略输出">运行时安全层可以独立检查策略输出</h2>
 <p>学习策略先给出建议 <span class="arithmatex">\(u_{nom}\)</span>，安全层再检查是否满足边界；若不满足，就限制、投影或替换为安全控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">limit_speed</span><span class="p">(</span><span class="n">v_cmd</span><span class="p">,</span> <span class="n">v_max</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">v_max</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">v_cmd</span><span class="p">,</span> <span class="n">v_max</span><span class="p">))</span>
 </code></pre></div>
 <p>真实安全过滤器会复杂得多，但结构相同：<strong>性能控制负责“想怎么做”，安全层负责“哪些不能做”。</strong></p>
-<h2 id="_4">安全余量用来应对估计误差和响应延迟</h2>
+<h2 id="安全余量用来应对估计误差和响应延迟">安全余量用来应对估计误差和响应延迟</h2>
 <p>机器人距离障碍 0.5 m 并不意味着可以把安全阈值也设为 0.5 m。定位误差、制动距离和控制延迟都需要 margin。</p>
 <p>安全边界因此应基于最坏合理误差，而不是理想模型中的精确几何距离。</p>
-<h2 id="_5">安全约束必须贯穿规划、控制和执行</h2>
+<h2 id="安全约束必须贯穿规划控制和执行">安全约束必须贯穿规划、控制和执行</h2>
 <p>规划器避开禁区，但底盘驱动若没有速度限制，仍可能因控制异常发生危险；反过来，只在最底层限速也无法阻止高层持续规划进入危险区域。</p>
 <p>可靠系统通常在不同层级设置互补约束，而不是只依赖单一模块。</p>
-<h2 id="_6">约束可执行性依赖状态估计</h2>
+<h2 id="约束可执行性依赖状态估计">约束可执行性依赖状态估计</h2>
 <p>安全约束通常作用于真实状态，但系统只能访问带误差的估计。若不把估计误差和制动延迟纳入安全余量，数学上满足约束的命令仍可能在现实中越界。安全集合应根据可观测性和响应时间适当收缩。</p>
 
 

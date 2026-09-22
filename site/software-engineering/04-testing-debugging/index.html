@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pytest-debugging" class="md-skip">
+        <a href="#pytest--debugging" class="md-skip">
           Skip to content
         </a>
       
@@ -2798,7 +2798,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#测试层级与边界覆盖" class="md-nav__link">
     <span class="md-ellipsis">
       
         测试层级与边界覆盖
@@ -2809,7 +2809,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#单元测试先覆盖正常边界错误三类情况" class="md-nav__link">
     <span class="md-ellipsis">
       
         单元测试先覆盖正常、边界、错误三类情况
@@ -2820,7 +2820,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#集成测试专门抓单独都对接起来就错" class="md-nav__link">
     <span class="md-ellipsis">
       
         集成测试专门抓单独都对，接起来就错
@@ -2831,7 +2831,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#调试要从现象走向最小复现" class="md-nav__link">
     <span class="md-ellipsis">
       
         调试要从现象走向最小复现
@@ -2842,7 +2842,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#日志要帮助回答发生了什么" class="md-nav__link">
     <span class="md-ellipsis">
       
         日志要帮助回答发生了什么
@@ -2853,7 +2853,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#修复之后一定补回归测试" class="md-nav__link">
     <span class="md-ellipsis">
       
         修复之后一定补回归测试
@@ -2864,7 +2864,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#测试金字塔在机器人系统中的变化" class="md-nav__link">
     <span class="md-ellipsis">
       
         测试金字塔在机器人系统中的变化
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#测试层级与边界覆盖" class="md-nav__link">
     <span class="md-ellipsis">
       
         测试层级与边界覆盖
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#单元测试先覆盖正常边界错误三类情况" class="md-nav__link">
     <span class="md-ellipsis">
       
         单元测试先覆盖正常、边界、错误三类情况
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#集成测试专门抓单独都对接起来就错" class="md-nav__link">
     <span class="md-ellipsis">
       
         集成测试专门抓单独都对，接起来就错
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#调试要从现象走向最小复现" class="md-nav__link">
     <span class="md-ellipsis">
       
         调试要从现象走向最小复现
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#日志要帮助回答发生了什么" class="md-nav__link">
     <span class="md-ellipsis">
       
         日志要帮助回答发生了什么
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#修复之后一定补回归测试" class="md-nav__link">
     <span class="md-ellipsis">
       
         修复之后一定补回归测试
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#测试金字塔在机器人系统中的变化" class="md-nav__link">
     <span class="md-ellipsis">
       
         测试金字塔在机器人系统中的变化
@@ -3830,10 +3830,10 @@
 
 
 
-<h1 id="pytest-debugging">pytest &amp; Debugging</h1>
+<h1 id="pytest--debugging">pytest &amp; Debugging</h1>
 <p>测试回答“这个行为以后还能不能保持正确”，调试回答“它现在为什么不正确”。两者结合，才能把一次修复变成长期可靠的系统。</p>
 <p><img alt="调试闭环" src="../../assets/diagrams/debugging-loop.svg" /></p>
-<h2 id="_1">测试层级与边界覆盖</h2>
+<h2 id="测试层级与边界覆盖">测试层级与边界覆盖</h2>
 <p>最常用的三层测试：</p>
 <ul>
 <li><strong>单元测试</strong>：验证一个函数或模块；</li>
@@ -3841,7 +3841,7 @@
 <li><strong>端到端测试</strong>：从真实入口走完整流程。</li>
 </ul>
 <p>越靠下的测试运行越快、定位越容易；越靠上的测试越接近真实系统，但成本更高。因此大多数项目应让单元/集成测试承担主要数量，只保留少量关键端到端流程。</p>
-<h2 id="_2">单元测试先覆盖正常、边界、错误三类情况</h2>
+<h2 id="单元测试先覆盖正常边界错误三类情况">单元测试先覆盖正常、边界、错误三类情况</h2>
 <p>例如一个限速函数：</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clamp_speed</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">limit</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
@@ -3853,10 +3853,10 @@
     <span class="k">assert</span> <span class="n">clamp_speed</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1.0</span>
 </code></pre></div>
 <p>测试的价值不是证明“代码永远正确”，而是在需求已经明确的地方建立自动检查。</p>
-<h2 id="_3">集成测试专门抓单独都对，接起来就错</h2>
+<h2 id="集成测试专门抓单独都对接起来就错">集成测试专门抓单独都对，接起来就错</h2>
 <p>很多工程故障发生在边界：字段名不一致、单位不同、超时策略冲突、数据库事务没有提交、ROS 消息坐标系不同。</p>
 <p>因此集成测试最应该覆盖<strong>模块之间真正传递的数据</strong>。例如规划模块输出的是米，控制模块却按厘米解释，这类错误单元测试很难发现。</p>
-<h2 id="_4">调试要从现象走向最小复现</h2>
+<h2 id="调试要从现象走向最小复现">调试要从现象走向最小复现</h2>
 <p>一个有效的调试闭环是：</p>
 <div class="highlight"><pre><span></span><code>复现问题 → 缩小范围 → 提出假设 → 收集证据 → 修复 → 回归测试
 </code></pre></div>
@@ -3865,15 +3865,15 @@
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">state</span>
 </code></pre></div>
 <p>这种小断言往往比几十行日志更快定位数值和接口问题。</p>
-<h2 id="_5">日志要帮助回答发生了什么</h2>
+<h2 id="日志要帮助回答发生了什么">日志要帮助回答发生了什么</h2>
 <p>日志至少应包含时间、关键实体 ID、事件和必要上下文。例如：</p>
 <div class="highlight"><pre><span></span><code>10:31:22 task=42 robot=r3 event=planning_failed reason=no_path
 </code></pre></div>
 <p>不要记录无法行动的信息，如“Error happened”。也不要把高频传感器数据全部塞进普通日志；大量原始数据更适合独立记录或指标系统。</p>
-<h2 id="_6">修复之后一定补回归测试</h2>
+<h2 id="修复之后一定补回归测试">修复之后一定补回归测试</h2>
 <p>如果一个 bug 能稳定复现，最理想的结束方式不是“现在运行正常”，而是先把它写成失败测试，再修到测试通过。这样同一类错误以后重新出现时，CI 可以在合并前直接拦住。</p>
 <p>测试与调试最终形成的是一个闭环：<strong>错误先变成可复现行为，再变成自动化约束</strong>。</p>
-<h2 id="_7">测试金字塔在机器人系统中的变化</h2>
+<h2 id="测试金字塔在机器人系统中的变化">测试金字塔在机器人系统中的变化</h2>
 <p>纯函数与协议逻辑适合快速单元测试，节点组合适合集成测试，完整仿真用于验证时序和系统行为，实机测试则覆盖传感器与执行器差异。越靠近实机成本越高，因此应把能在低层发现的问题尽量提前。</p>
 
 

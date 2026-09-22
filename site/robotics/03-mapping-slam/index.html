@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mapping-slam" class="md-skip">
+        <a href="#mapping--slam" class="md-skip">
           Skip to content
         </a>
       
@@ -2028,7 +2028,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#里程计误差累积" class="md-nav__link">
     <span class="md-ellipsis">
       
         里程计误差累积
@@ -2039,7 +2039,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#前端局部运动估计与数据关联" class="md-nav__link">
     <span class="md-ellipsis">
       
         前端：局部运动估计与数据关联
@@ -2050,7 +2050,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#后端把整条轨迹写成优化问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         后端：把整条轨迹写成优化问题
@@ -2061,7 +2061,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#闭环检测与误匹配风险" class="md-nav__link">
     <span class="md-ellipsis">
       
         闭环检测与误匹配风险
@@ -2072,7 +2072,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#地图表示由任务决定" class="md-nav__link">
     <span class="md-ellipsis">
       
         地图表示由任务决定
@@ -2083,7 +2083,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#可观测性限制地图质量" class="md-nav__link">
     <span class="md-ellipsis">
       
         可观测性限制地图质量
@@ -2094,7 +2094,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#实机调试顺序" class="md-nav__link">
     <span class="md-ellipsis">
       
         实机调试顺序
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#里程计误差累积" class="md-nav__link">
     <span class="md-ellipsis">
       
         里程计误差累积
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#前端局部运动估计与数据关联" class="md-nav__link">
     <span class="md-ellipsis">
       
         前端：局部运动估计与数据关联
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#后端把整条轨迹写成优化问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         后端：把整条轨迹写成优化问题
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#闭环检测与误匹配风险" class="md-nav__link">
     <span class="md-ellipsis">
       
         闭环检测与误匹配风险
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#地图表示由任务决定" class="md-nav__link">
     <span class="md-ellipsis">
       
         地图表示由任务决定
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#可观测性限制地图质量" class="md-nav__link">
     <span class="md-ellipsis">
       
         可观测性限制地图质量
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#实机调试顺序" class="md-nav__link">
     <span class="md-ellipsis">
       
         实机调试顺序
@@ -3830,7 +3830,7 @@
 
 
 
-<h1 id="mapping-slam">Mapping &amp; SLAM</h1>
+<h1 id="mapping--slam">Mapping &amp; SLAM</h1>
 <p>SLAM（Simultaneous Localization and Mapping）解决一个循环依赖：<strong>机器人需要地图才能知道自己在哪，但又需要知道自己在哪才能把观测放进正确的地图位置。</strong> 这个循环不能靠单次求解打破，只能靠“短时间尺度上足够准的局部估计 + 长时间尺度上的全局约束修正”两级结构来实现。</p>
 <figure>
   <img alt="SLAM 由前端估计、地图约束和后端优化形成闭环。" src="../../assets/diagrams/slam-loop.svg" />
@@ -3838,7 +3838,7 @@
 <figcaption>前端不断产生相对运动，后端利用长期约束修正累积漂移。</figcaption>
 </figure>
 <p>理解 SLAM 的关键不是某个算法，而是三件事的分工：<strong>前端负责快但会漂，后端负责准但很慢，闭环负责把两者接起来。</strong> 本章按这个结构展开，最后给出实机调试顺序。</p>
-<h2 id="_1">里程计误差累积</h2>
+<h2 id="里程计误差累积">里程计误差累积</h2>
 <p>假设每一步位姿增量都只有很小误差，连续累积几百、几千步后，位置和角度误差仍会越来越大。尤其角度误差会改变后续平移方向，使轨迹逐渐偏离真实路径。</p>
 <p>这个累积不是线性增长。设第 <span class="arithmatex">\(k\)</span> 步的角度误差为 <span class="arithmatex">\(\delta\theta_k\)</span>，此后剩余行程长度为 <span class="arithmatex">\(L_k\)</span>，则它造成的末端位置误差近似为</p>
 <div class="arithmatex">\[\delta p \approx \sum_k L_k\,\delta\theta_k,\]</div>
@@ -3875,7 +3875,7 @@
 </tbody>
 </table>
 <p>因此 SLAM 不能只靠“上一帧到下一帧”的局部估计，还需要长期约束。</p>
-<h2 id="_2">前端：局部运动估计与数据关联</h2>
+<h2 id="前端局部运动估计与数据关联">前端：局部运动估计与数据关联</h2>
 <p>视觉 SLAM 会从图像中找特征或直接利用像素信息，LiDAR SLAM 会做点云/扫描匹配。前端的任务是估计“我从上一时刻移动到了哪里”，并判断当前观测对应地图中的哪些结构。</p>
 <p>前端输出快、频率高，但它本身无法避免长期漂移。它同时承担两件容易被混淆的工作：</p>
 <ul>
@@ -3913,7 +3913,7 @@
 </tbody>
 </table>
 <p>真正拖垮 SLAM 的通常不是运动估计，而是<strong>数据关联错误</strong>：一个错误匹配会以约束的形式进入后端，让整条轨迹被“合理但错误”地拉扯。</p>
-<h2 id="_3">后端：把整条轨迹写成优化问题</h2>
+<h2 id="后端把整条轨迹写成优化问题">后端：把整条轨迹写成优化问题</h2>
 <p>后端可以把机器人不同时刻的位姿作为节点，把里程计、扫描匹配和闭环关系作为约束。若两个时刻实际上处于同一地点，闭环约束会告诉优化器：这两个位姿应该重合或接近。</p>
 <p>写成最小二乘形式，位姿图优化求解的是</p>
 <div class="arithmatex">\[X^\* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},\]</div>
@@ -3952,7 +3952,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_4">闭环检测与误匹配风险</h2>
+<h2 id="闭环检测与误匹配风险">闭环检测与误匹配风险</h2>
 <p>机器人走一圈回到旧地点时，正确闭环可以显著修正漂移；错误闭环则会把两个不同地点强行拉到一起，导致地图整体变形。</p>
 <p>因此闭环检测通常需要比普通帧间匹配更谨慎的验证，例如几何一致性、点云匹配得分或多帧确认。<strong>错误闭环往往比没有闭环更糟。</strong></p>
 <p>闭环检测本质上是一个二分类问题，两类错误代价完全不对称：</p>
@@ -3978,7 +3978,7 @@
 </tbody>
 </table>
 <p>因此实践中的参数调法是把阈值设得保守、用多帧一致性确认，而不是追求高召回率。若发现地图出现“整体折叠”或某段轨迹被强行拉直，第一嫌疑对象就是误检闭环，而不是后端优化器。</p>
-<h2 id="_5">地图表示由任务决定</h2>
+<h2 id="地图表示由任务决定">地图表示由任务决定</h2>
 <p>二维导航常用 occupancy grid；三维避障可能使用体素、点云或局部高度图；视觉系统还可能维护稀疏 landmark。地图不是越精细越好，分辨率越高意味着存储、匹配和更新成本也越高。</p>
 <table>
 <thead>
@@ -4023,7 +4023,7 @@
 </tbody>
 </table>
 <p>选择表示时应先问“下游要拿地图做什么”，而不是“哪种地图更完整”。定位需要的是可重复识别的结构，规划需要的是可查询的占据与距离信息，两者对分辨率的要求并不一致。</p>
-<h2 id="_6">可观测性限制地图质量</h2>
+<h2 id="可观测性限制地图质量">可观测性限制地图质量</h2>
 <p>某些运动和环境无法提供足够约束，例如长直走廊缺少横向特征、纯旋转难以恢复平移尺度。此时优化器无法凭空创造信息。</p>
 <table>
 <thead>
@@ -4057,7 +4057,7 @@
 </tbody>
 </table>
 <p>识别退化场景并融合其他传感器，通常比继续调迭代次数更有效。传感器融合的价值主要体现在<strong>不同传感器在不同场景下退化方向不同</strong>：视觉在弱纹理下退化，LiDAR 在无结构环境下退化，IMU 在长时间下退化，它们失效的条件并不重合。</p>
-<h2 id="_7">实机调试顺序</h2>
+<h2 id="实机调试顺序">实机调试顺序</h2>
 <p>地图撕裂、轨迹跳变时，应先检查时间戳、TF、传感器外参和前端匹配；后端优化通常不是第一个怀疑对象。实机 SLAM 的大量问题来自<strong>坐标和数据关联</strong>，而不是优化公式本身。</p>
 <table>
 <thead>

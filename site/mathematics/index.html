@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#本节要解决的问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#六章的依赖顺序" class="md-nav__link">
     <span class="md-ellipsis">
       
         六章的依赖顺序
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#概念地图" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#后续章节的接口" class="md-nav__link">
     <span class="md-ellipsis">
       
         后续章节的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#阅读顺序建议" class="md-nav__link">
     <span class="md-ellipsis">
       
         阅读顺序建议
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#常见误解" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见误解
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#本章导航" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3714,7 +3714,7 @@
 <br />
 <figcaption>Mathematics 的核心概念关系。</figcaption>
 </figure>
-<h2 id="_1">本节要解决的问题</h2>
+<h2 id="本节要解决的问题">本节要解决的问题</h2>
 <p>后面每一章都会遇到「看起来懂、实际不会用」的知识断层。断层通常不出在公式本身，而出在下面四类问题上。</p>
 <table>
 <thead>
@@ -3760,7 +3760,7 @@
 <li><strong>不确定性与约束同时存在时，优化问题不再有单一答案。</strong> 期望最优、最坏情况最优、鲁棒最优是三个不同目标，对应不同的解。</li>
 </ol>
 <p>本节六章分别对应上述断层的具体位置。<strong>建议的用法是：带着一个你手上真实存在的公式来读，逐条对照，而不是按目录顺序读完。</strong></p>
-<h2 id="_2">六章的依赖顺序</h2>
+<h2 id="六章的依赖顺序">六章的依赖顺序</h2>
 <p>六章不是并列的，而是有明确的前置关系。跳过前置章节会在后面卡住。</p>
 <table>
 <thead>
@@ -3814,7 +3814,7 @@
 <li><strong>贝叶斯 → 马尔可夫。</strong> 马尔可夫性的严格表述依赖条件独立，而条件独立是用条件概率定义的。</li>
 <li><strong>概率 → 优化。</strong> 只在期望意义上的最优需要把随机目标写成 <span class="arithmatex">\(\mathbb E[f(x,\xi)]\)</span>，这就把概率对象塞进了优化问题。</li>
 </ul>
-<h2 id="_3">概念地图</h2>
+<h2 id="概念地图">概念地图</h2>
 <p>图上的节点可以按「输入 — 变换 — 输出」三类理解。每个节点在主标签下还带一个子标签，说明它负责的具体对象。</p>
 <table>
 <thead>
@@ -3881,7 +3881,7 @@
 \min_x\ \mathbb E_{\xi\sim p}[f(x,\xi)]\quad\text{与}\quad \min_x\ \max_{\xi\in\mathcal U} f(x,\xi).
 \]</div>
 <p>前者用于已知分布、可以平均的场景；后者用于分布未知或不可信、必须防最坏的场景。<strong>选错这一条，后面所有结论都针对另一个问题。</strong> 读图的方法是：先确定你手上的问题属于哪一类输入（确定 / 随机 / 带约束），再顺着箭头找它需要哪几个节点。</p>
-<h2 id="_4">后续章节的接口</h2>
+<h2 id="后续章节的接口">后续章节的接口</h2>
 <p>本节不追求自成一体的完整性，它存在的意义是给后面五节提供接口。下表列出最常用的几条。</p>
 <table>
 <thead>
@@ -3940,7 +3940,7 @@
 </tbody>
 </table>
 <p>一条经验规则：<strong>如果某章的公式你认不出符号来源，先回本节查接口表，再回对应章节。</strong> 反向也成立 —— 本节任何一章如果你说不出它被谁用，说明你还没找到它的用途，可以先跳。</p>
-<h2 id="_5">阅读顺序建议</h2>
+<h2 id="阅读顺序建议">阅读顺序建议</h2>
 <p>不同目标的读者不需要读完全部六章。三种路径如下。</p>
 <p><strong>路径 A：只要够用（约 2 小时）。</strong> 只读 <a href="01-linear-algebra-calculus/">线性代数与微积分基础</a> 的梯度与矩阵部分，以及 <a href="03-probability-random-variables/">概率与随机变量</a> 的期望、方差、常见分布。目标是看懂符号，不追求推导。适合只理解概念、不做实现的读者。判断可以停下的信号：你能正确读出 <span class="arithmatex">\(\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2\)</span> 中每一项的含义。</p>
 <p><strong>路径 B：做控制（建议全读，顺序固定）。</strong> 线性代数 → 数值计算 → 概率 → 优化。控制侧最重要的是特征值、条件数、二次型与约束优化。贝叶斯和马尔可夫可以先跳，回头补。读到 <a href="../control-theory/04-lqr/">../control-theory/04-lqr.md</a> 和 <a href="../control-theory/05-mpc/">../control-theory/05-mpc.md</a> 时再回来查公式。最关键的两条量化结论是：稳定性由 <span class="arithmatex">\(\max_i\operatorname{Re}\lambda_i(A)\)</span> 的符号决定；数值可信度由 <span class="arithmatex">\(\kappa(A)\)</span> 的量级决定。</p>
@@ -3979,7 +3979,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_6">常见误解</h2>
+<h2 id="常见误解">常见误解</h2>
 <p>下面六条是本节最常出现的错误认识。每条都给出可验证的修正方式。</p>
 <table>
 <thead>
@@ -4028,7 +4028,7 @@
 <li>第 3 条的实践后果：矩阵求逆若 <span class="arithmatex">\(\kappa(A)\)</span> 达到 <span class="arithmatex">\(10^{10}\)</span>，双精度下有效位只剩约 6 位，此时应改用分解法而非显式求逆。</li>
 <li>第 4 条的实践后果：安全关键场景应显式写出风险度量，而不是在期望目标上加惩罚项凑效果。</li>
 </ul>
-<h2 id="_7">本章导航</h2>
+<h2 id="本章导航">本章导航</h2>
 <table>
 <thead>
 <tr>

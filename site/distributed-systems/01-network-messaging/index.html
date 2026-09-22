@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#networks-message-passing" class="md-skip">
+        <a href="#networks--message-passing" class="md-skip">
           Skip to content
         </a>
       
@@ -2489,7 +2489,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tcp-udp" class="md-nav__link">
+  <a href="#tcp-和-udp-提供的是不同传输语义" class="md-nav__link">
     <span class="md-ellipsis">
       
         TCP 和 UDP 提供的是不同传输语义
@@ -2501,7 +2501,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tcpudp" class="md-nav__link">
+  <a href="#tcpudp-的最小接口差异" class="md-nav__link">
     <span class="md-ellipsis">
       
         TCP/UDP 的最小接口差异
@@ -2517,7 +2517,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#应用层仍然必须定义什么是一条消息" class="md-nav__link">
     <span class="md-ellipsis">
       
         应用层仍然必须定义什么是一条消息
@@ -2528,7 +2528,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#requestresponse-publishsubscribe" class="md-nav__link">
+  <a href="#requestresponse-与-publishsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       
         Request/Response 与 Publish/Subscribe
@@ -2539,7 +2539,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#消息新鲜度" class="md-nav__link">
     <span class="md-ellipsis">
       
         消息新鲜度
@@ -2550,7 +2550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#网络故障后系统要有明确退化模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         网络故障后系统要有明确退化模式
@@ -2561,7 +2561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#交付保证属于端到端协议" class="md-nav__link">
     <span class="md-ellipsis">
       
         交付保证属于端到端协议
@@ -3669,7 +3669,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tcp-udp" class="md-nav__link">
+  <a href="#tcp-和-udp-提供的是不同传输语义" class="md-nav__link">
     <span class="md-ellipsis">
       
         TCP 和 UDP 提供的是不同传输语义
@@ -3681,7 +3681,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tcpudp" class="md-nav__link">
+  <a href="#tcpudp-的最小接口差异" class="md-nav__link">
     <span class="md-ellipsis">
       
         TCP/UDP 的最小接口差异
@@ -3697,7 +3697,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#应用层仍然必须定义什么是一条消息" class="md-nav__link">
     <span class="md-ellipsis">
       
         应用层仍然必须定义什么是一条消息
@@ -3708,7 +3708,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#requestresponse-publishsubscribe" class="md-nav__link">
+  <a href="#requestresponse-与-publishsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       
         Request/Response 与 Publish/Subscribe
@@ -3719,7 +3719,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#消息新鲜度" class="md-nav__link">
     <span class="md-ellipsis">
       
         消息新鲜度
@@ -3730,7 +3730,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#网络故障后系统要有明确退化模式" class="md-nav__link">
     <span class="md-ellipsis">
       
         网络故障后系统要有明确退化模式
@@ -3741,7 +3741,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#交付保证属于端到端协议" class="md-nav__link">
     <span class="md-ellipsis">
       
         交付保证属于端到端协议
@@ -3842,18 +3842,18 @@
 
 
 
-<h1 id="networks-message-passing">Networks &amp; Message Passing</h1>
+<h1 id="networks--message-passing">Networks &amp; Message Passing</h1>
 <p>分布式系统的第一事实是：<strong>另一个节点不在本进程里，所有协作都必须经过网络。</strong> 网络会延迟、丢包、重复、断开，因此“调用远端函数”和“调用本地函数”从根本上不是同一件事。</p>
 <figure>
   <img alt="发布订阅把发送者和接收者通过主题解耦。" src="../../assets/diagrams/pubsub.svg" />
 <br />
 <figcaption>请求响应适合一次性交互，发布订阅适合持续状态流和事件广播。</figcaption>
 </figure>
-<h2 id="tcp-udp">TCP 和 UDP 提供的是不同传输语义</h2>
+<h2 id="tcp-和-udp-提供的是不同传输语义">TCP 和 UDP 提供的是不同传输语义</h2>
 <p>TCP 提供可靠、有序的<strong>字节流</strong>。它会重传丢失数据，但不替应用定义消息边界：连续两次 <code>send()</code> 在接收端可能被一次 <code>recv()</code> 读到，也可能被拆开。</p>
 <p>UDP 保留数据报边界、延迟更直接，但可能丢包、乱序或重复。它适合对最新数据更敏感、允许偶尔丢失旧包的场景，例如部分高频状态流。</p>
 <p>因此协议选择本质是<strong>可靠性、时延和数据语义</strong>之间的权衡。</p>
-<h3 id="tcpudp">TCP/UDP 的最小接口差异</h3>
+<h3 id="tcpudp-的最小接口差异">TCP/UDP 的最小接口差异</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 
 <span class="n">tcp</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -3863,10 +3863,10 @@
 <span class="n">udp</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>         <span class="c1"># 一次发送对应一个数据报</span>
 </code></pre></div>
 <p>这只是发送侧骨架。生产系统还要定义长度前缀或帧格式、超时、重连、包大小和身份验证。</p>
-<h2 id="_1">应用层仍然必须定义什么是一条消息</h2>
+<h2 id="应用层仍然必须定义什么是一条消息">应用层仍然必须定义什么是一条消息</h2>
 <p>无论 TCP 还是 UDP，系统都需要定义序列化格式、字段、版本和错误行为。一个任务消息至少要说明任务 ID、发送者、时间戳和状态，而不能只发送一个模糊字符串。</p>
 <p>JSON 便于调试，Protobuf/IDL 更适合严格接口和高效传输。格式本身不是重点，<strong>双方对字段语义有共同契约</strong>才是重点。</p>
-<h2 id="requestresponse-publishsubscribe">Request/Response 与 Publish/Subscribe</h2>
+<h2 id="requestresponse-与-publishsubscribe">Request/Response 与 Publish/Subscribe</h2>
 <p>查询参数、请求一次规划结果通常适合 request/response：调用方明确等待一个结果。</p>
 <p>里程计、传感器和状态事件则更适合 publish/subscribe：发布者只负责把数据发到 Topic，不需要知道有多少订阅者。这样可以降低模块耦合。</p>
 <div class="highlight"><pre><span></span><code><span class="n">subscribers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;robot.pose&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">localizer</span><span class="p">,</span> <span class="n">recorder</span><span class="p">]}</span>
@@ -3876,13 +3876,13 @@
         <span class="n">consume</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 </code></pre></div>
 <p>这个内存示例只说明解耦关系；跨进程系统还需要 broker 或 DDS、序列化、背压和交付语义。</p>
-<h2 id="_2">消息新鲜度</h2>
+<h2 id="消息新鲜度">消息新鲜度</h2>
 <p>机器人位置即使可靠送达，如果延迟两秒才到，可能已经没有使用价值。因此很多实时系统更关心<strong>新鲜度</strong>而不是“每一条都不能丢”。</p>
 <p>消息里常需要时间戳、序列号或 TTL。接收方应能丢弃过期数据，而不是把“收到”误认为“可用”。</p>
-<h2 id="_3">网络故障后系统要有明确退化模式</h2>
+<h2 id="网络故障后系统要有明确退化模式">网络故障后系统要有明确退化模式</h2>
 <p>链路断开时，系统可以缓存、重试、切换本地控制或进入安全状态，但不能无限阻塞等待远端恢复。尤其机器人控制链中，失联应该触发安全减速或本地自治，而不是继续执行旧指令。</p>
 <p>分布式设计最重要的习惯之一是：<strong>任何远程调用都可能失败。</strong></p>
-<h2 id="_4">交付保证属于端到端协议</h2>
+<h2 id="交付保证属于端到端协议">交付保证属于端到端协议</h2>
 <p>TCP 的可靠字节流并不等于业务操作只执行一次。连接断开时，客户端可能不知道请求是否已在服务端完成。端到端语义仍需依靠请求 ID、幂等处理和业务确认建立，不能只依赖传输层。</p>
 
 

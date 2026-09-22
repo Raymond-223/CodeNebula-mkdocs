@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#task-allocation-distributed-decision-making" class="md-skip">
+        <a href="#task-allocation--distributed-decision-making" class="md-skip">
           Skip to content
         </a>
       
@@ -1766,7 +1766,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#先把任务分配写成代价矩阵" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把任务分配写成代价矩阵
@@ -1777,7 +1777,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#集中式分配的限制" class="md-nav__link">
     <span class="md-ellipsis">
       
         集中式分配的限制
@@ -1788,7 +1788,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#市场式分配与报价" class="md-nav__link">
     <span class="md-ellipsis">
       
         市场式分配与报价
@@ -1799,7 +1799,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#动态任务需要不断重新分配" class="md-nav__link">
     <span class="md-ellipsis">
       
         动态任务需要不断重新分配
@@ -1810,7 +1810,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#任务分配与运动规划的边界" class="md-nav__link">
     <span class="md-ellipsis">
       
         任务分配与运动规划的边界
@@ -1821,7 +1821,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#分配结果还需要确认协议" class="md-nav__link">
     <span class="md-ellipsis">
       
         分配结果还需要确认协议
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#先把任务分配写成代价矩阵" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把任务分配写成代价矩阵
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#集中式分配的限制" class="md-nav__link">
     <span class="md-ellipsis">
       
         集中式分配的限制
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#市场式分配与报价" class="md-nav__link">
     <span class="md-ellipsis">
       
         市场式分配与报价
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#动态任务需要不断重新分配" class="md-nav__link">
     <span class="md-ellipsis">
       
         动态任务需要不断重新分配
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#任务分配与运动规划的边界" class="md-nav__link">
     <span class="md-ellipsis">
       
         任务分配与运动规划的边界
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#分配结果还需要确认协议" class="md-nav__link">
     <span class="md-ellipsis">
       
         分配结果还需要确认协议
@@ -3808,9 +3808,9 @@
 
 
 
-<h1 id="task-allocation-distributed-decision-making">Task Allocation &amp; Distributed Decision Making</h1>
+<h1 id="task-allocation--distributed-decision-making">Task Allocation &amp; Distributed Decision Making</h1>
 <p>当多个 Agent 都能执行多个任务时，系统必须回答：<strong>谁去做什么，以及谁来决定这件事。</strong> 这既是组合优化问题，也可能受到通信、私有信息和故障的限制。</p>
-<h2 id="_1">先把任务分配写成代价矩阵</h2>
+<h2 id="先把任务分配写成代价矩阵">先把任务分配写成代价矩阵</h2>
 <p>假设 <span class="arithmatex">\(c_{ij}\)</span> 表示 Agent <span class="arithmatex">\(i\)</span> 执行任务 <span class="arithmatex">\(j\)</span> 的代价，例如距离、时间或能耗。</p>
 <p>一对一分配可以写成：</p>
 <div class="arithmatex">\[
@@ -3819,7 +3819,7 @@
 <p>满足每个任务最多分给一个主体、每个主体的容量限制等约束。</p>
 <p>如果所有代价都可以集中获得，标准线性分配问题可以通过组合优化方法求解。其关键不是某个库函数，而是二元变量 <span class="arithmatex">\(x_{ij}\in\{0,1\}\)</span> 是否准确表达“主体 <span class="arithmatex">\(i\)</span> 接受任务 <span class="arithmatex">\(j\)</span>”，以及容量、唯一性等约束是否完整。</p>
 <p>这里最重要的不是算法名字，而是先把“谁做哪个任务”变成明确的<strong>决策变量、代价和约束</strong>。</p>
-<h2 id="_2">集中式分配的限制</h2>
+<h2 id="集中式分配的限制">集中式分配的限制</h2>
 <p>集中式方法默认一个中心节点能拿到所有信息，并且计算结果能可靠下发。现实中常遇到：</p>
 <ul>
 <li>每个 Agent 只知道自己的成本；</li>
@@ -3829,7 +3829,7 @@
 <li>某些主体有自己的目标，而不是完全合作。</li>
 </ul>
 <p>因此工程上常接受“局部计算 + 少量通信 + 足够好的结果”，而不是不惜代价追求一次性的全局最优。</p>
-<h2 id="_3">市场式分配与报价</h2>
+<h2 id="市场式分配与报价">市场式分配与报价</h2>
 <p>如果主体能估计自己执行任务的代价，就可以发送 bid：</p>
 <div class="highlight"><pre><span></span><code>task announced
     ↓
@@ -3842,7 +3842,7 @@ confirm assignment
 <p>合同网（Contract Net）就是一个典型流程：管理者发布任务，候选 Agent 根据局部状态报价，管理者选择合适方案并确认。</p>
 <p>它的价值在于：<strong>全局节点不需要知道每个 Agent 内部怎样计算成本。</strong></p>
 <p>拍卖机制还能进一步处理自利主体，但这时需要考虑“主体是否会虚报成本”。机制设计是一个更大的主题；在 MAS 主线里只要知道：当主体目标不一致时，单纯求组合最优已经不够，还必须考虑规则是否能诱导真实行为。</p>
-<h2 id="_4">动态任务需要不断重新分配</h2>
+<h2 id="动态任务需要不断重新分配">动态任务需要不断重新分配</h2>
 <p>机器人系统里的任务通常不是一次性静态列表。新任务到来、机器人故障、电量下降都会改变原来的分配。</p>
 <p>因此分配算法还要考虑<strong>重规划成本</strong>：理论上更优的新方案，如果需要所有机器人立刻换目标，实际执行可能更差。</p>
 <p>一个实用策略是定义事件集合</p>
@@ -3851,7 +3851,7 @@ E=E_{failure}\cup E_{priority}\cup E_{cost},
 \]</div>
 <p>仅当故障、新高优先级任务，或代价变化超过阈值时触发重新分配。这样把“何时重算”也纳入决策模型，避免系统因小扰动频繁切换任务。</p>
 <p>这比每个控制周期都重新求一次全局分配更稳定。</p>
-<h2 id="_5">任务分配与运动规划的边界</h2>
+<h2 id="任务分配与运动规划的边界">任务分配与运动规划的边界</h2>
 <p>“任务 A 分给机器人 2”只回答了<strong>谁做</strong>；机器人 2 怎样绕开其他机器人到达目标，是另一个协调和导航问题。</p>
 <p>典型层次可以写成：</p>
 <div class="highlight"><pre><span></span><code>Task allocation  →  Who does what?
@@ -3859,7 +3859,7 @@ Coordination     →  How to avoid mutual conflict?
 Planning/control →  How does each robot execute it?
 </code></pre></div>
 <p>如果把三层全部塞进一个巨大优化器，模型会迅速变复杂，也更难调试。最小充分的工程设计是先把层次分开，再在必要处交换代价、路径占用或任务状态。</p>
-<h2 id="_6">分配结果还需要确认协议</h2>
+<h2 id="分配结果还需要确认协议">分配结果还需要确认协议</h2>
 <p>计算出赢家并不代表任务已经可靠分配。消息丢失可能让两个 Agent 都认为自己获得任务，也可能让任务无人执行。实际协议需要区分提议、确认和执行状态，并使用任务版本或租约处理超时与重新分配。</p>
 
 

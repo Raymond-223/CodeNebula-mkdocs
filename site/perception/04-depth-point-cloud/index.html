@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#depth-3d-vision-point-clouds" class="md-skip">
+        <a href="#depth-3d-vision--point-clouds" class="md-skip">
           Skip to content
         </a>
       
@@ -2281,7 +2281,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#深度可以来自不同物理机制" class="md-nav__link">
     <span class="md-ellipsis">
       
         深度可以来自不同物理机制
@@ -2292,7 +2292,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#已知深度后像素可以反投影成三维点" class="md-nav__link">
     <span class="md-ellipsis">
       
         已知深度后，像素可以反投影成三维点
@@ -2303,7 +2303,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#点云必须放到统一坐标系才能融合" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云必须放到统一坐标系才能融合
@@ -2314,7 +2314,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#点云裁剪与下采样" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云裁剪与下采样
@@ -2325,7 +2325,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#深度误差会随距离和传感方式变化" class="md-nav__link">
     <span class="md-ellipsis">
       
         深度误差会随距离和传感方式变化
@@ -2336,7 +2336,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#点云密度并不等于信息量" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云密度并不等于信息量
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#深度可以来自不同物理机制" class="md-nav__link">
     <span class="md-ellipsis">
       
         深度可以来自不同物理机制
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#已知深度后像素可以反投影成三维点" class="md-nav__link">
     <span class="md-ellipsis">
       
         已知深度后，像素可以反投影成三维点
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#点云必须放到统一坐标系才能融合" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云必须放到统一坐标系才能融合
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#点云裁剪与下采样" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云裁剪与下采样
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#深度误差会随距离和传感方式变化" class="md-nav__link">
     <span class="md-ellipsis">
       
         深度误差会随距离和传感方式变化
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#点云密度并不等于信息量" class="md-nav__link">
     <span class="md-ellipsis">
       
         点云密度并不等于信息量
@@ -3808,14 +3808,14 @@
 
 
 
-<h1 id="depth-3d-vision-point-clouds">Depth, 3D Vision &amp; Point Clouds</h1>
+<h1 id="depth-3d-vision--point-clouds">Depth, 3D Vision &amp; Point Clouds</h1>
 <p>二维图像告诉我们像素位置和外观，却没有直接告诉“离相机多远”。深度和点云把视觉从二维投影重新扩展到三维几何，是机器人避障、建图和抓取的基础。</p>
 <figure>
   <img alt="深度可以来自双目、主动传感器或学习模型，并最终形成三维点。" src="../../assets/diagrams/depth-modalities.svg" />
 <br />
 <figcaption>不同深度来源误差特性不同，但都要经过坐标变换进入机器人几何空间。</figcaption>
 </figure>
-<h2 id="_1">深度可以来自不同物理机制</h2>
+<h2 id="深度可以来自不同物理机制">深度可以来自不同物理机制</h2>
 <p>常见来源包括：</p>
 <ul>
 <li>双目视差：利用两个相机的几何三角关系；</li>
@@ -3824,7 +3824,7 @@
 <li>单目深度网络：从图像外观学习相对或绝对深度。</li>
 </ul>
 <p>它们的量程、噪声、密度和失败场景都不同。</p>
-<h2 id="_2">已知深度后，像素可以反投影成三维点</h2>
+<h2 id="已知深度后像素可以反投影成三维点">已知深度后，像素可以反投影成三维点</h2>
 <p>相机内参为 <span class="arithmatex">\((f_x,f_y,c_x,c_y)\)</span>，像素 <span class="arithmatex">\((u,v)\)</span> 的深度为 <span class="arithmatex">\(Z\)</span>，则</p>
 <div class="arithmatex">\[
 X=(u-c_x)\frac{Z}{f_x},\qquad
@@ -3836,10 +3836,10 @@ Y=(v-c_y)\frac{Z}{f_y}.
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 </code></pre></div>
 <p>这一步把图像坐标重新映射到相机三维坐标系。</p>
-<h2 id="_3">点云必须放到统一坐标系才能融合</h2>
+<h2 id="点云必须放到统一坐标系才能融合">点云必须放到统一坐标系才能融合</h2>
 <p>LiDAR 点在 <code>lidar</code> frame，相机反投影点在 <code>camera</code> frame，机器人规划通常使用 <code>base</code> 或 <code>map</code> frame。不同来源的点云若没有正确外参，就无法直接叠加。</p>
 <p>因此点云处理几乎总伴随刚体变换 <span class="arithmatex">\(p_B=T^B_Ap_A\)</span>。</p>
-<h2 id="_4">点云裁剪与下采样</h2>
+<h2 id="点云裁剪与下采样">点云裁剪与下采样</h2>
 <p>原始点云可能包含数十万点。体素下采样、距离裁剪、地面去除等预处理可以显著减少后续计算量。关键是保留任务需要的几何结构，而不是追求所有点都留下。</p>
 <p>一个典型处理接口按固定顺序组织步骤：</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">prepare_cloud</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
@@ -3849,9 +3849,9 @@ Y=(v-c_y)\frac{Z}{f_y}.
     <span class="k">return</span> <span class="n">transform</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
 </code></pre></div>
 <p>先清理非法值和任务外范围，再下采样，最后转换到统一坐标系，可以避免后续模块重复处理原始大点云。</p>
-<h2 id="_5">深度误差会随距离和传感方式变化</h2>
+<h2 id="深度误差会随距离和传感方式变化">深度误差会随距离和传感方式变化</h2>
 <p>双目在远距离时视差变小，深度误差迅速增大；LiDAR 可能在玻璃、强反射或雨雾条件下产生异常；单目网络则可能受训练分布影响。规划器不应把所有深度值都当成同等可靠的精确真值。</p>
-<h2 id="_6">点云密度并不等于信息量</h2>
+<h2 id="点云密度并不等于信息量">点云密度并不等于信息量</h2>
 <p>重复采集同一平面的大量点会增加计算量，却未必增加新的几何约束。下采样应优先保留边缘、曲率变化和稀疏区域的结构信息。处理参数需要根据定位、避障或重建任务分别选择，而不是所有任务共享同一体素大小。</p>
 
 

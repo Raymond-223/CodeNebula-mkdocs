@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#robot-sensor-simulation" class="md-skip">
+        <a href="#robot--sensor-simulation" class="md-skip">
           Skip to content
         </a>
       
@@ -2965,7 +2965,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#机器人本体模型至少要包含可运动结构" class="md-nav__link">
     <span class="md-ellipsis">
       
         机器人本体模型至少要包含可运动结构
@@ -2976,7 +2976,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#理想传感器只能用于最早期验证" class="md-nav__link">
     <span class="md-ellipsis">
       
         理想传感器只能用于最早期验证
@@ -2987,7 +2987,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#噪声偏置和延迟是三种不同误差" class="md-nav__link">
     <span class="md-ellipsis">
       
         噪声、偏置和延迟是三种不同误差
@@ -2998,7 +2998,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#坐标系和时间戳应尽量复现实机语义" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标系和时间戳应尽量复现实机语义
@@ -3009,7 +3009,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#故障仿真比单纯加噪声更有价值" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障仿真比单纯加噪声更有价值
@@ -3020,7 +3020,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#传感器模型应包含失效状态" class="md-nav__link">
     <span class="md-ellipsis">
       
         传感器模型应包含失效状态
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#机器人本体模型至少要包含可运动结构" class="md-nav__link">
     <span class="md-ellipsis">
       
         机器人本体模型至少要包含可运动结构
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#理想传感器只能用于最早期验证" class="md-nav__link">
     <span class="md-ellipsis">
       
         理想传感器只能用于最早期验证
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#噪声偏置和延迟是三种不同误差" class="md-nav__link">
     <span class="md-ellipsis">
       
         噪声、偏置和延迟是三种不同误差
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#坐标系和时间戳应尽量复现实机语义" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标系和时间戳应尽量复现实机语义
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#故障仿真比单纯加噪声更有价值" class="md-nav__link">
     <span class="md-ellipsis">
       
         故障仿真比单纯加噪声更有价值
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#传感器模型应包含失效状态" class="md-nav__link">
     <span class="md-ellipsis">
       
         传感器模型应包含失效状态
@@ -3808,20 +3808,20 @@
 
 
 
-<h1 id="robot-sensor-simulation">Robot &amp; Sensor Simulation</h1>
+<h1 id="robot--sensor-simulation">Robot &amp; Sensor Simulation</h1>
 <p>机器人仿真不仅要让刚体会运动，还要让软件看到与实机相似的传感器接口。只有这样，定位、规划和控制代码才能在仿真与实机之间尽量少改动。</p>
 <figure>
   <img alt="传感器仿真不仅生成理想真值，还要加入采样、噪声、延迟和坐标语义。" src="../../assets/diagrams/sensor-simulation.svg" />
 <br />
 <figcaption>传感器接口越接近实机，后续 Sim2Real 的软件改动越少。</figcaption>
 </figure>
-<h2 id="_1">机器人本体模型至少要包含可运动结构</h2>
+<h2 id="机器人本体模型至少要包含可运动结构">机器人本体模型至少要包含可运动结构</h2>
 <p>移动机器人需要底盘尺寸、轮子位置、关节约束和执行器接口；机械臂需要连杆、关节和限位。碰撞几何可以比视觉模型更简单，只要能正确近似实际碰撞范围。</p>
 <p>仿真模型的目标是支撑算法，不是做 CAD 展示。</p>
-<h2 id="_2">理想传感器只能用于最早期验证</h2>
+<h2 id="理想传感器只能用于最早期验证">理想传感器只能用于最早期验证</h2>
 <p>理想 LiDAR 每个测距都精确、IMU 没有偏置、相机没有曝光问题，这种环境适合先验证算法逻辑，但不能代表实机难度。</p>
 <p>真实传感器至少存在随机噪声、固定偏置、量化、采样频率和延迟。</p>
-<h2 id="_3">噪声、偏置和延迟是三种不同误差</h2>
+<h2 id="噪声偏置和延迟是三种不同误差">噪声、偏置和延迟是三种不同误差</h2>
 <p>白噪声每次随机变化；bias 会长期把测量推向一个方向；latency 则让数据到达时已经过时。三者对算法的影响不同。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -3832,13 +3832,13 @@
             <span class="s2">&quot;linear_acceleration&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">true_acc</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">+</span> <span class="n">noise</span><span class="p">}</span>
 </code></pre></div>
 <p>滤波可以减弱随机噪声，却不会自动修正未知固定 bias；延迟则会直接影响融合和控制相位。让仿真接口同时输出测量值、时间戳和坐标系，才能检验下游模块真正依赖的语义。</p>
-<h2 id="_4">坐标系和时间戳应尽量复现实机语义</h2>
+<h2 id="坐标系和时间戳应尽量复现实机语义">坐标系和时间戳应尽量复现实机语义</h2>
 <p>如果实机 <code>/scan</code> 使用 <code>laser_frame</code>，仿真也应保持同样 frame 逻辑；如果实机 IMU 以 100 Hz 发布，仿真不应无意中以每个物理 step 无限频率输出。</p>
 <p>接口一致性比“仿真画面是否逼真”更直接影响代码迁移成本。</p>
-<h2 id="_5">故障仿真比单纯加噪声更有价值</h2>
+<h2 id="故障仿真比单纯加噪声更有价值">故障仿真比单纯加噪声更有价值</h2>
 <p>真实系统会出现短时丢帧、遮挡、饱和和传感器离线。若安全和容错模块只在完美数据下测试，就无法验证异常路径。</p>
 <p>可以逐步增加难度：先理想传感器验证功能，再加入统计噪声，最后加入延迟、丢包和特定故障。</p>
-<h2 id="_6">传感器模型应包含失效状态</h2>
+<h2 id="传感器模型应包含失效状态">传感器模型应包含失效状态</h2>
 <p>只给测量值叠加高斯噪声无法覆盖遮挡、饱和、丢帧和时间跳变。接口中应允许显式表达数据无效、质量下降或长时间无更新，使下游模块能够练习真实的异常处理路径。</p>
 
 

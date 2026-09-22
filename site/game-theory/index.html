@@ -3539,7 +3539,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#本节要解决的问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         本节要解决的问题
@@ -3550,7 +3550,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#五章的推进逻辑" class="md-nav__link">
     <span class="md-ellipsis">
       
         五章的推进逻辑
@@ -3561,7 +3561,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#概念地图" class="md-nav__link">
     <span class="md-ellipsis">
       
         概念地图
@@ -3572,7 +3572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#与现实系统的接口" class="md-nav__link">
     <span class="md-ellipsis">
       
         与现实系统的接口
@@ -3583,7 +3583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#建模顺序建议" class="md-nav__link">
     <span class="md-ellipsis">
       
         建模顺序建议
@@ -3594,7 +3594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#常见误解" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见误解
@@ -3605,7 +3605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#本章导航" class="md-nav__link">
     <span class="md-ellipsis">
       
         本章导航
@@ -3713,7 +3713,7 @@
 <br />
 <figcaption>Game Theory 的核心概念关系。</figcaption>
 </figure>
-<h2 id="_1">本节要解决的问题</h2>
+<h2 id="本节要解决的问题">本节要解决的问题</h2>
 <p>博弈论不是“把优化问题换个说法”。它处理的是<strong>目标不可合并</strong>的场景：两个主体各自最小化自己的代价，而各自的代价函数里都含对方的决策。用单主体优化的语言去描述这种问题，会隐含地假设“别人不动”，从而系统性地给出错误结论。</p>
 <p>判断一个工程问题是否需要博弈建模，看三条判据：</p>
 <ol>
@@ -3760,7 +3760,7 @@
 </table>
 <p>因此本 Section 的目标不是罗列名词，而是让读者能从“谁在和谁博弈、收益怎么定义”一路推到三层结论：<strong>均衡是否存在、是否唯一、是否高效</strong>。</p>
 <p>这三层结论的判据不同，必须分开检查：<strong>存在性</strong>由不动点定理保证（第 2 章），<strong>唯一性</strong>取决于最佳响应映射的单调性或收益结构的凸凹性，<strong>高效性</strong>则是均衡与帕累托最优的比较。均衡稳定不等于结果好——囚徒困境里（背叛, 背叛）是唯一均衡，却帕累托劣于（合作, 合作）。把这三层混为一谈，就会产生“算出了均衡所以问题解决了”这类误判。</p>
-<h2 id="_2">五章的推进逻辑</h2>
+<h2 id="五章的推进逻辑">五章的推进逻辑</h2>
 <p>五个章节不是并列的知识点，而是一条依赖链，顺序不能随意颠倒：</p>
 <ul>
 <li><strong><a href="01-game-models/">博弈、策略与收益</a></strong> 定义参与者、动作、收益三要素，并区分占优策略与混合策略。没有这一步，后面的“均衡”连定义域都没有。</li>
@@ -3812,7 +3812,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_3">概念地图</h2>
+<h2 id="概念地图">概念地图</h2>
 <p>配图标题是 <em>Game theory: the shortest complete route</em>——它主张这五步是从零到能分析一个真实博弈的最短路线。图中的箭头单向排列，表示每一步都建立在前一步之上。逐节点看：</p>
 <ul>
 <li><strong>Model（players &amp; payoffs）</strong>：起点不是“策略”，而是“谁参与、各自能做什么、每个动作组合下各得多少”。收益必须写成一个可比较的数 <span class="arithmatex">\(u_i(a)\)</span>，否则后面的最优性无法定义。</li>
@@ -3864,7 +3864,7 @@
 </tbody>
 </table>
 <p>把这五个节点连起来读，就是一句话：<strong>先写清收益，再找不动点，必要时收窄到零和结构，然后叠加顺序与信息，最后把一次性互动放到时间轴上。</strong> 图中标为 “shortest complete route” 正是这个意思——它不是完整的博弈论文献目录，而是从工程问题出发所需的最短闭环。</p>
-<h2 id="_4">与现实系统的接口</h2>
+<h2 id="与现实系统的接口">与现实系统的接口</h2>
 <p>博弈论的价值在于它能把“多主体互相影响”这类模糊描述，翻译成可以计算和检验的量。下表给出常用概念与外部章节的对接点：</p>
 <table>
 <thead>
@@ -3912,7 +3912,7 @@
 \delta \ge \frac{T-R}{T-P} = \frac{5-3}{5-1} = 0.5 .
 \]</div>
 <p>也就是说当参与者对未来足够有耐心（<span class="arithmatex">\(\delta \ge 0.5\)</span>）时，合作可以从均衡中自发产生。这个数字不是抽象结论——它直接告诉工程上“想让多主体长期协作，就要让单次背叛的即时收益足够小，或让关系足够长”。</p>
-<h2 id="_5">建模顺序建议</h2>
+<h2 id="建模顺序建议">建模顺序建议</h2>
 <p>五个要素的正确书写顺序是：<strong>参与者 → 动作 → 收益 → 信息 → 时序</strong>。这个顺序不是习惯，而是依赖关系决定的：后一项的定义必须引用前一项。</p>
 <ul>
 <li><strong>先定参与者</strong>，因为动作集是参与者的属性，没确定“谁”就无法列出“能做什么”。</li>
@@ -3964,7 +3964,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_6">常见误解</h2>
+<h2 id="常见误解">常见误解</h2>
 <table>
 <thead>
 <tr>
@@ -4006,7 +4006,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_7">本章导航</h2>
+<h2 id="本章导航">本章导航</h2>
 <table>
 <thead>
 <tr>

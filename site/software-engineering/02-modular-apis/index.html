@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#modular-design-apis" class="md-skip">
+        <a href="#modular-design--apis" class="md-skip">
           Skip to content
         </a>
       
@@ -2742,7 +2742,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#先把模块边界写成契约" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把模块边界写成契约
@@ -2753,7 +2753,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#http" class="md-nav__link">
+  <a href="#一个-http-请求怎样进入业务逻辑" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个 HTTP 请求怎样进入业务逻辑
@@ -2764,7 +2764,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rest" class="md-nav__link">
+  <a href="#rest-只需要先掌握资源和状态码" class="md-nav__link">
     <span class="md-ellipsis">
       
         REST 只需要先掌握资源和状态码
@@ -2775,7 +2775,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#错误也是接口的一部分" class="md-nav__link">
     <span class="md-ellipsis">
       
         错误也是接口的一部分
@@ -2786,7 +2786,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#接口变化时怎样避免改一个地方全崩" class="md-nav__link">
     <span class="md-ellipsis">
       
         接口变化时怎样避免改一个地方全崩
@@ -2797,7 +2797,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#兼容性来自语义稳定" class="md-nav__link">
     <span class="md-ellipsis">
       
         兼容性来自语义稳定
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#先把模块边界写成契约" class="md-nav__link">
     <span class="md-ellipsis">
       
         先把模块边界写成契约
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#http" class="md-nav__link">
+  <a href="#一个-http-请求怎样进入业务逻辑" class="md-nav__link">
     <span class="md-ellipsis">
       
         一个 HTTP 请求怎样进入业务逻辑
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rest" class="md-nav__link">
+  <a href="#rest-只需要先掌握资源和状态码" class="md-nav__link">
     <span class="md-ellipsis">
       
         REST 只需要先掌握资源和状态码
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#错误也是接口的一部分" class="md-nav__link">
     <span class="md-ellipsis">
       
         错误也是接口的一部分
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#接口变化时怎样避免改一个地方全崩" class="md-nav__link">
     <span class="md-ellipsis">
       
         接口变化时怎样避免改一个地方全崩
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#兼容性来自语义稳定" class="md-nav__link">
     <span class="md-ellipsis">
       
         兼容性来自语义稳定
@@ -3808,10 +3808,10 @@
 
 
 
-<h1 id="modular-design-apis">Modular Design &amp; APIs</h1>
+<h1 id="modular-design--apis">Modular Design &amp; APIs</h1>
 <p>架构确定了“大块怎么分”，API 决定这些模块<strong>怎样合作而不互相侵入内部实现</strong>。好的接口不是函数越多越好，而是让调用者只依赖必要信息。</p>
 <p><img alt="API 契约" src="../../assets/diagrams/api-contract.svg" /></p>
-<h2 id="_1">先把模块边界写成契约</h2>
+<h2 id="先把模块边界写成契约">先把模块边界写成契约</h2>
 <p>接口可以理解成一份契约：调用者提供什么，服务承诺返回什么，失败时怎样表达。</p>
 <p>例如创建任务：</p>
 <div class="highlight"><pre><span></span><code>POST /tasks
@@ -3825,7 +3825,7 @@ errors: 400 / 409 / 503
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a path from start to goal, or raise NoPathError.&quot;&quot;&quot;</span>
 </code></pre></div>
 <p>调用者不应该依赖规划器内部用了 A*、Dijkstra 还是其他算法。</p>
-<h2 id="http">一个 HTTP 请求怎样进入业务逻辑</h2>
+<h2 id="一个-http-请求怎样进入业务逻辑">一个 HTTP 请求怎样进入业务逻辑</h2>
 <p>常见的后端流程可以压缩成：</p>
 <div class="highlight"><pre><span></span><code>Request → Validation → Service → Repository/External System → Response
 </code></pre></div>
@@ -3837,7 +3837,7 @@ errors: 400 / 409 / 503
     <span class="k">return</span> <span class="n">task</span><span class="p">,</span> <span class="mi">201</span>
 </code></pre></div>
 <p>重点不是某个 Web 框架，而是<strong>协议层不要吞掉业务层</strong>。</p>
-<h2 id="rest">REST 只需要先掌握资源和状态码</h2>
+<h2 id="rest-只需要先掌握资源和状态码">REST 只需要先掌握资源和状态码</h2>
 <p>REST 的入门重点只有三个：</p>
 <ol>
 <li>URL 表示资源，例如 <code>/tasks/42</code>；</li>
@@ -3849,7 +3849,7 @@ errors: 400 / 409 / 503
 更清楚: POST /tasks
 </code></pre></div>
 <p>也不要为了“RESTful”强行把所有系统设计成 HTTP。进程内函数调用、ROS2 topic/service/action、消息队列和 RPC 都是接口形式，选择取决于通信语义。</p>
-<h2 id="_2">错误也是接口的一部分</h2>
+<h2 id="错误也是接口的一部分">错误也是接口的一部分</h2>
 <p>最难维护的接口往往不是成功返回，而是每次失败都长得不一样。</p>
 <p>建议统一错误结构：</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -3864,11 +3864,11 @@ errors: 400 / 409 / 503
 <li><strong>系统故障</strong>：数据库、网络或外部服务异常。</li>
 </ul>
 <p>这种区分直接影响重试策略和故障定位。</p>
-<h2 id="_3">接口变化时怎样避免改一个地方全崩</h2>
+<h2 id="接口变化时怎样避免改一个地方全崩">接口变化时怎样避免改一个地方全崩</h2>
 <p>接口一旦被多个模块使用，就要尽量保持向后兼容。常用方法是新增字段而不是随意改字段含义、给必要变化增加版本、在边界处做适配。</p>
 <p>工程上还要注意<strong>幂等性</strong>：同一个请求因为网络超时被重复发送时，是否会创建两个任务？对于“创建订单、提交任务、扣款”这类操作，通常需要请求 ID 或去重机制。</p>
 <p>API 的核心并不是记住 REST、GraphQL 或 gRPC 的全部特性，而是形成一个习惯：<strong>任何跨模块的数据，都应该有明确结构、明确语义和明确失败方式</strong>。</p>
-<h2 id="_4">兼容性来自语义稳定</h2>
+<h2 id="兼容性来自语义稳定">兼容性来自语义稳定</h2>
 <p>API 字段名称不变，并不代表接口兼容。单位、默认值、错误语义或排序规则改变，同样可能破坏调用方。版本管理应记录行为契约的变化，并用契约测试验证旧调用仍得到预期结果。</p>
 
 

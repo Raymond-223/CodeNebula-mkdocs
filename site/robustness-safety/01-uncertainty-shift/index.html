@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#uncertainty-distribution-shift" class="md-skip">
+        <a href="#uncertainty--distribution-shift" class="md-skip">
           Skip to content
         </a>
       
@@ -3199,7 +3199,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#随机噪声与系统性偏差" class="md-nav__link">
     <span class="md-ellipsis">
       
         随机噪声与系统性偏差
@@ -3210,7 +3210,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#模型不确定性来自我们不知道真实参数" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型不确定性来自我们不知道真实参数
@@ -3221,7 +3221,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#分布偏移与训练分布" class="md-nav__link">
     <span class="md-ellipsis">
       
         分布偏移与训练分布
@@ -3232,7 +3232,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#监测偏移要看任务相关指标" class="md-nav__link">
     <span class="md-ellipsis">
       
         监测偏移要看任务相关指标
@@ -3243,7 +3243,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#不确定性最终应该影响行为" class="md-nav__link">
     <span class="md-ellipsis">
       
         不确定性最终应该影响行为
@@ -3254,7 +3254,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
     <span class="md-ellipsis">
       
         可以区分数据本身随机与模型不知道
@@ -3265,7 +3265,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#漂移检测需要参考分布" class="md-nav__link">
     <span class="md-ellipsis">
       
         漂移检测需要参考分布
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#随机噪声与系统性偏差" class="md-nav__link">
     <span class="md-ellipsis">
       
         随机噪声与系统性偏差
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#模型不确定性来自我们不知道真实参数" class="md-nav__link">
     <span class="md-ellipsis">
       
         模型不确定性来自我们不知道真实参数
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#分布偏移与训练分布" class="md-nav__link">
     <span class="md-ellipsis">
       
         分布偏移与训练分布
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#监测偏移要看任务相关指标" class="md-nav__link">
     <span class="md-ellipsis">
       
         监测偏移要看任务相关指标
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#不确定性最终应该影响行为" class="md-nav__link">
     <span class="md-ellipsis">
       
         不确定性最终应该影响行为
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
     <span class="md-ellipsis">
       
         可以区分数据本身随机与模型不知道
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#漂移检测需要参考分布" class="md-nav__link">
     <span class="md-ellipsis">
       
         漂移检测需要参考分布
@@ -3830,27 +3830,27 @@
 
 
 
-<h1 id="uncertainty-distribution-shift">Uncertainty &amp; Distribution Shift</h1>
+<h1 id="uncertainty--distribution-shift">Uncertainty &amp; Distribution Shift</h1>
 <p>自主系统永远面对不确定性：传感器有噪声，模型参数不精确，环境会变化，训练数据也不可能覆盖全部真实场景。关键不是“消灭所有不确定性”，而是知道<strong>它来自哪里、是否会积累、什么时候已经超出系统能力范围。</strong></p>
-<h2 id="_1">随机噪声与系统性偏差</h2>
+<h2 id="随机噪声与系统性偏差">随机噪声与系统性偏差</h2>
 <p>零均值测量波动可以通过多次观测或滤波减弱；固定 bias、外参误差、轮径偏差则会长期把估计推向同一方向，平均再多次也不会消失。</p>
 <p>因此看到数据抖动时，不能简单把所有异常都叫 noise。</p>
-<h2 id="_2">模型不确定性来自我们不知道真实参数</h2>
+<h2 id="模型不确定性来自我们不知道真实参数">模型不确定性来自我们不知道真实参数</h2>
 <p>动力学中的质量、摩擦，感知模型对某些场景的预测，都可能与真实世界存在差异。若算法只在一个精确参数点上工作，很容易在部署后性能下降。</p>
 <p>这也是鲁棒控制、域随机化和不确定性估计存在的原因。</p>
-<h2 id="_3">分布偏移与训练分布</h2>
+<h2 id="分布偏移与训练分布">分布偏移与训练分布</h2>
 <p>训练时主要是晴天，部署后遇到夜晚和雨雪；实验室地面平整，真实场景有沙石；机器人载重发生变化。这些都属于 distribution shift。</p>
 <p>分布偏移不是单个样本噪声，而是<strong>数据产生机制发生了变化</strong>。</p>
-<h2 id="_4">监测偏移要看任务相关指标</h2>
+<h2 id="监测偏移要看任务相关指标">监测偏移要看任务相关指标</h2>
 <p>仅比较输入像素分布可能没有意义。更有用的信号包括模型置信度、定位 innovation、控制跟踪误差、传感器一致性和失败率。</p>
 <p>如果多个任务级指标持续恶化，就应降低自动化程度或触发重新标定，而不是继续相信模型输出。</p>
-<h2 id="_5">不确定性最终应该影响行为</h2>
+<h2 id="不确定性最终应该影响行为">不确定性最终应该影响行为</h2>
 <p>系统知道“自己不确定”却仍以同样高速行动，没有太大价值。定位协方差增大时可以降速，感知不确定时增加安全距离，模型严重超出分布时请求人工确认。</p>
 <p>不确定性估计的最终意义是让决策变得更保守、更可控。</p>
-<h2 id="_6">可以区分数据本身随机与模型不知道</h2>
+<h2 id="可以区分数据本身随机与模型不知道">可以区分数据本身随机与模型不知道</h2>
 <p>传感器热噪声属于数据层面的随机性；模型从未见过雪天、因此不知道怎样判断，则更接近模型认知不足。两者都表现为不确定，但应对方式不同：前者可通过滤波和多次观测减弱，后者更需要新数据、重新训练或人工介入。</p>
 <p>这个区分有助于避免把所有低置信度都当作同一种故障。</p>
-<h2 id="_7">漂移检测需要参考分布</h2>
+<h2 id="漂移检测需要参考分布">漂移检测需要参考分布</h2>
 <p>仅观察当前输入无法判断是否发生分布偏移，还需要训练期或已验证运行期的参考。检测指标应和任务失败相关，并区分短时异常与持续变化。否则系统可能在无害外观变化下频繁报警，却错过真正影响控制的漂移。</p>
 
 

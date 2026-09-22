@@ -2770,7 +2770,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commit" class="md-nav__link">
+  <a href="#commit-是一次有意义的状态快照" class="md-nav__link">
     <span class="md-ellipsis">
       
         Commit 是一次有意义的状态快照
@@ -2781,7 +2781,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#branch" class="md-nav__link">
+  <a href="#branch-的意义是隔离正在进行的修改" class="md-nav__link">
     <span class="md-ellipsis">
       
         Branch 的意义是隔离正在进行的修改
@@ -2792,7 +2792,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git" class="md-nav__link">
+  <a href="#git-冲突处理" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 冲突处理
@@ -2803,7 +2803,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pull-request" class="md-nav__link">
+  <a href="#pull-request-与代码审查" class="md-nav__link">
     <span class="md-ellipsis">
       
         Pull Request 与代码审查
@@ -2814,7 +2814,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_1" class="md-nav__link">
+  <a href="#git-最重要的安全能力是可追溯可回退" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 最重要的安全能力是可追溯、可回退
@@ -2825,7 +2825,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#提交历史应支持定位问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         提交历史应支持定位问题
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commit" class="md-nav__link">
+  <a href="#commit-是一次有意义的状态快照" class="md-nav__link">
     <span class="md-ellipsis">
       
         Commit 是一次有意义的状态快照
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#branch" class="md-nav__link">
+  <a href="#branch-的意义是隔离正在进行的修改" class="md-nav__link">
     <span class="md-ellipsis">
       
         Branch 的意义是隔离正在进行的修改
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git" class="md-nav__link">
+  <a href="#git-冲突处理" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 冲突处理
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pull-request" class="md-nav__link">
+  <a href="#pull-request-与代码审查" class="md-nav__link">
     <span class="md-ellipsis">
       
         Pull Request 与代码审查
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git_1" class="md-nav__link">
+  <a href="#git-最重要的安全能力是可追溯可回退" class="md-nav__link">
     <span class="md-ellipsis">
       
         Git 最重要的安全能力是可追溯、可回退
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#提交历史应支持定位问题" class="md-nav__link">
     <span class="md-ellipsis">
       
         提交历史应支持定位问题
@@ -3810,7 +3810,7 @@
 
 <h1 id="git-workflow">Git Workflow</h1>
 <p>Git 最重要的不是命令数量，而是理解三个动作：<strong>保存一个可回退的版本、在独立分支上修改、把变化安全合并回来</strong>。</p>
-<h2 id="commit">Commit 是一次有意义的状态快照</h2>
+<h2 id="commit-是一次有意义的状态快照">Commit 是一次有意义的状态快照</h2>
 <p>工作区文件不断变化，<code>git add</code> 选择本次要记录的变化，<code>git commit</code> 把它们保存为一个可追踪版本。</p>
 <p>最小工作流：</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>status
@@ -3818,7 +3818,7 @@ git<span class="w"> </span>add<span class="w"> </span>src/<span class="w"> </spa
 git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix planner boundary handling&quot;</span>
 </code></pre></div>
 <p>好的 commit 应该只做一件相对完整的事。把“改 UI、重构算法、更新依赖、修测试”全部塞进一次提交，会让代码审查和回退都变困难。</p>
-<h2 id="branch">Branch 的意义是隔离正在进行的修改</h2>
+<h2 id="branch-的意义是隔离正在进行的修改">Branch 的意义是隔离正在进行的修改</h2>
 <p>创建功能分支：</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature/task-api
 <span class="c1"># 修改并提交</span>
@@ -3826,7 +3826,7 @@ git<span class="w"> </span>switch<span class="w"> </span>main
 git<span class="w"> </span>merge<span class="w"> </span>feature/task-api
 </code></pre></div>
 <p>分支并不是完整复制一份项目，而是让不同提交历史可以暂时分开发展。它最有价值的场景是：主分支继续保持可用，同时新功能、实验或修复可以独立进行。</p>
-<h2 id="git">Git 冲突处理</h2>
+<h2 id="git-冲突处理">Git 冲突处理</h2>
 <p>两个人修改同一段代码时，Git 可能无法自动判断应该保留哪一边。此时需要人工理解上下文，然后重新测试。</p>
 <p>处理冲突的顺序应该是：</p>
 <ol>
@@ -3837,16 +3837,16 @@ git<span class="w"> </span>merge<span class="w"> </span>feature/task-api
 <li>再提交合并结果。</li>
 </ol>
 <p>不要只为了让冲突消失而随便选择 “ours” 或 “theirs”。</p>
-<h2 id="pull-request">Pull Request 与代码审查</h2>
+<h2 id="pull-request-与代码审查">Pull Request 与代码审查</h2>
 <p>多人协作时，常见流程是：</p>
 <div class="highlight"><pre><span></span><code>Issue/Task → Branch → Commits → Pull Request → Review → Merge
 </code></pre></div>
 <p>代码审查主要看四件事：逻辑是否正确、接口是否清楚、测试是否覆盖关键行为、是否引入不必要复杂度。</p>
 <p>一个 PR 如果大到审查者无法建立完整心智模型，通常说明它应该继续拆小。</p>
-<h2 id="git_1">Git 最重要的安全能力是可追溯、可回退</h2>
+<h2 id="git-最重要的安全能力是可追溯可回退">Git 最重要的安全能力是可追溯、可回退</h2>
 <p>遇到问题时，先用 <code>git diff</code>、<code>git log</code> 看变化，再决定恢复方式。不要养成“出错就手动复制旧文件覆盖”的习惯，否则历史会失去可信度。</p>
 <p>对于学习和科研项目，掌握 <code>status / add / commit / switch / merge / pull / push / diff / log</code> 已经足够覆盖大多数场景。更复杂的 rebase、cherry-pick 等操作可以在真正需要时再学。</p>
-<h2 id="_1">提交历史应支持定位问题</h2>
+<h2 id="提交历史应支持定位问题">提交历史应支持定位问题</h2>
 <p>一次提交最好只表达一个可解释的变化，并同时包含对应测试。这样二分定位、代码审查和回退都能围绕明确假设进行。把格式化、重构和行为修改混在一个巨大提交中，会显著降低 Git 历史的诊断价值。</p>
 
 

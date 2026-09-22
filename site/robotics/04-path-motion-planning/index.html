@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#path-motion-planning" class="md-skip">
+        <a href="#path--motion-planning" class="md-skip">
           Skip to content
         </a>
       
@@ -2056,7 +2056,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#图搜索适合已经离散化的空间" class="md-nav__link">
     <span class="md-ellipsis">
       
         图搜索适合已经离散化的空间
@@ -2067,7 +2067,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#采样规划适合高维连续空间" class="md-nav__link">
     <span class="md-ellipsis">
       
         采样规划适合高维连续空间
@@ -2078,7 +2078,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#路径与轨迹不完全相同" class="md-nav__link">
     <span class="md-ellipsis">
       
         路径与轨迹不完全相同
@@ -2089,7 +2089,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a" class="md-nav__link">
+  <a href="#a-搜索流程" class="md-nav__link">
     <span class="md-ellipsis">
       
         A* 搜索流程
@@ -2100,7 +2100,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#动态环境需要规划与控制共同处理" class="md-nav__link">
     <span class="md-ellipsis">
       
         动态环境需要规划与控制共同处理
@@ -2111,7 +2111,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#规划失败诊断" class="md-nav__link">
     <span class="md-ellipsis">
       
         规划失败诊断
@@ -2122,7 +2122,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#启发函数决定搜索效率" class="md-nav__link">
     <span class="md-ellipsis">
       
         启发函数决定搜索效率
@@ -3663,7 +3663,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#图搜索适合已经离散化的空间" class="md-nav__link">
     <span class="md-ellipsis">
       
         图搜索适合已经离散化的空间
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#采样规划适合高维连续空间" class="md-nav__link">
     <span class="md-ellipsis">
       
         采样规划适合高维连续空间
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#路径与轨迹不完全相同" class="md-nav__link">
     <span class="md-ellipsis">
       
         路径与轨迹不完全相同
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a" class="md-nav__link">
+  <a href="#a-搜索流程" class="md-nav__link">
     <span class="md-ellipsis">
       
         A* 搜索流程
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#动态环境需要规划与控制共同处理" class="md-nav__link">
     <span class="md-ellipsis">
       
         动态环境需要规划与控制共同处理
@@ -3718,7 +3718,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#规划失败诊断" class="md-nav__link">
     <span class="md-ellipsis">
       
         规划失败诊断
@@ -3729,7 +3729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#启发函数决定搜索效率" class="md-nav__link">
     <span class="md-ellipsis">
       
         启发函数决定搜索效率
@@ -3830,24 +3830,24 @@
 
 
 
-<h1 id="path-motion-planning">Path &amp; Motion Planning</h1>
+<h1 id="path--motion-planning">Path &amp; Motion Planning</h1>
 <p>规划解决的是：<strong>从当前状态到目标状态，如何找到一条可行、尽量安全且代价合适的运动方案。</strong> “路径能连通”和“机器人真的能沿它运动”是两个不同层次。</p>
 <figure>
   <img alt="规划从环境表示、可行性检查到轨迹输出形成完整数据流。" src="../../assets/diagrams/planning-pipeline.svg" />
 <br />
 <figcaption>地图只给出环境，规划还必须考虑碰撞、运动约束和代价。</figcaption>
 </figure>
-<h2 id="_1">图搜索适合已经离散化的空间</h2>
+<h2 id="图搜索适合已经离散化的空间">图搜索适合已经离散化的空间</h2>
 <p>栅格地图中，每个格子可以看作节点，相邻可通行格子之间形成边。Dijkstra 根据累计代价扩展节点；A* 在此基础上加入启发函数 <span class="arithmatex">\(h(n)\)</span>，优先搜索更可能靠近目标的方向：</p>
 <div class="arithmatex">\[f(n)=g(n)+h(n).\]</div>
 <p>只要启发函数不高估真实剩余代价，A* 仍能保持最优性，同时通常比 Dijkstra 少扩展大量无关区域。</p>
-<h2 id="_2">采样规划适合高维连续空间</h2>
+<h2 id="采样规划适合高维连续空间">采样规划适合高维连续空间</h2>
 <p>机械臂有很多关节，自由空间难以完整离散化。RRT 一类方法通过随机采样逐步构造可达树，不需要先显式建立整个配置空间网格。</p>
 <p>入门阶段不必记住所有 RRT 变体，只要理解：<strong>图搜索先有离散图再搜索；采样规划边探索边构图。</strong></p>
-<h2 id="_3">路径与轨迹不完全相同</h2>
+<h2 id="路径与轨迹不完全相同">路径与轨迹不完全相同</h2>
 <p>路径主要描述几何位置序列；轨迹还包含时间、速度和加速度。一个几何上不碰障碍的急转弯，车辆可能因为最小转弯半径而无法执行。</p>
 <p>因此真实规划通常要把机器人尺寸、最大速度、转向约束和安全距离加入可行性检查。</p>
-<h2 id="a">A* 搜索流程</h2>
+<h2 id="a-搜索流程">A* 搜索流程</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">heapq</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">astar</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
@@ -3864,12 +3864,12 @@
     <span class="k">return</span> <span class="n">parent</span>
 </code></pre></div>
 <p>实际工程还需要重建路径、处理障碍膨胀和动态更新，但核心仍是“累计代价 + 对目标的估计”。</p>
-<h2 id="_4">动态环境需要规划与控制共同处理</h2>
+<h2 id="动态环境需要规划与控制共同处理">动态环境需要规划与控制共同处理</h2>
 <p>行人、其他车辆和临时障碍会让静态最短路快速失效。局部控制器可以处理短期小变化；当局部绕行无法继续或全局通道被堵塞时，再触发重新规划。</p>
 <p>如果每个新障碍都重新跑完整全局规划，系统会反应过慢；如果永不重规划，局部控制又可能陷入死胡同。</p>
-<h2 id="_5">规划失败诊断</h2>
+<h2 id="规划失败诊断">规划失败诊断</h2>
 <p>地图膨胀过大、坐标变换错误、机器人半径设置不合理，都可能让规划器认为不存在路径。调试时应先可视化起点、终点、障碍和可行空间，再调整算法参数。</p>
-<h2 id="_6">启发函数决定搜索效率</h2>
+<h2 id="启发函数决定搜索效率">启发函数决定搜索效率</h2>
 <p>A* 的启发函数越接近真实剩余代价，通常扩展的节点越少；但若高估真实代价，就可能失去最优性保证。设计启发函数时应在信息量与可证明边界之间权衡，并用扩展节点数而不只是最终路径长度评估搜索效率。</p>
 
 

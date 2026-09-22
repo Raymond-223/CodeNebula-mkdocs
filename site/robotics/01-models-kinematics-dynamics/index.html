@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#models-kinematics-dynamics" class="md-skip">
+        <a href="#models-kinematics--dynamics" class="md-skip">
           Skip to content
         </a>
       
@@ -1972,7 +1972,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#坐标系与参考框架" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标系与参考框架
@@ -1983,7 +1983,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#运动学映射" class="md-nav__link">
     <span class="md-ellipsis">
       
         运动学映射
@@ -1994,7 +1994,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#动力学把质量惯性和力加入模型" class="md-nav__link">
     <span class="md-ellipsis">
       
         动力学把质量、惯性和力加入模型
@@ -2005,7 +2005,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#差速运动模型" class="md-nav__link">
     <span class="md-ellipsis">
       
         差速运动模型
@@ -2016,7 +2016,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#坐标单位与时间约定" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标、单位与时间约定
@@ -2027,7 +2027,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#变换链的验证方法" class="md-nav__link">
     <span class="md-ellipsis">
       
         变换链的验证方法
@@ -3652,7 +3652,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#坐标系与参考框架" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标系与参考框架
@@ -3663,7 +3663,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#运动学映射" class="md-nav__link">
     <span class="md-ellipsis">
       
         运动学映射
@@ -3674,7 +3674,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#动力学把质量惯性和力加入模型" class="md-nav__link">
     <span class="md-ellipsis">
       
         动力学把质量、惯性和力加入模型
@@ -3685,7 +3685,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#差速运动模型" class="md-nav__link">
     <span class="md-ellipsis">
       
         差速运动模型
@@ -3696,7 +3696,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#坐标单位与时间约定" class="md-nav__link">
     <span class="md-ellipsis">
       
         坐标、单位与时间约定
@@ -3707,7 +3707,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#变换链的验证方法" class="md-nav__link">
     <span class="md-ellipsis">
       
         变换链的验证方法
@@ -3808,9 +3808,9 @@
 
 
 
-<h1 id="models-kinematics-dynamics">Models, Kinematics &amp; Dynamics</h1>
+<h1 id="models-kinematics--dynamics">Models, Kinematics &amp; Dynamics</h1>
 <p>机器人要在真实世界运动，至少要解决三件事：<strong>它在哪里、它会怎样运动、要产生这种运动需要什么力或力矩。</strong> 坐标系、运动学和动力学分别对应这三个层次。</p>
-<h2 id="_1">坐标系与参考框架</h2>
+<h2 id="坐标系与参考框架">坐标系与参考框架</h2>
 <p>同一个点可以在相机坐标系、机器人底盘坐标系和地图坐标系下得到完全不同的数值。机器人系统因此不会只说“目标在 <span class="arithmatex">\((2,1)\)</span>”，而要说明“目标在 camera frame 还是 map frame”。</p>
 <p>刚体位姿通常由旋转 <span class="arithmatex">\(R\)</span> 和平移 <span class="arithmatex">\(t\)</span> 表示，齐次变换写成</p>
 <div class="arithmatex">\[
@@ -3827,7 +3827,7 @@ T=\begin{bmatrix}R&amp;t\\0&amp;1\end{bmatrix}.
     <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">px</span> <span class="o">-</span> <span class="n">s</span> <span class="o">*</span> <span class="n">py</span> <span class="o">+</span> <span class="n">tx</span><span class="p">,</span> <span class="n">s</span> <span class="o">*</span> <span class="n">px</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">py</span> <span class="o">+</span> <span class="n">ty</span>
 </code></pre></div>
 <p>这里输入点位于局部坐标系，<code>tx, ty, yaw</code> 描述该坐标系相对目标坐标系的位姿。实际系统还要同时传递 frame 名称和时间戳。</p>
-<h2 id="_2">运动学映射</h2>
+<h2 id="运动学映射">运动学映射</h2>
 <p>运动学不考虑质量和受力，只研究几何关系。对差速小车，左右轮线速度为 <span class="arithmatex">\(v_l,v_r\)</span>，轮距为 <span class="arithmatex">\(L\)</span>，车体线速度和角速度近似为</p>
 <div class="arithmatex">\[
 v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
@@ -3835,14 +3835,14 @@ v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
 <p>因此两轮同速时直行，速度不同则转弯。对机械臂，关节变量 <span class="arithmatex">\(q\)</span> 通过正运动学映射到末端位姿；Jacobian 则描述关节速度和末端速度的局部关系</p>
 <div class="arithmatex">\[\dot x=J(q)\dot q.\]</div>
 <p>运动学回答的是“怎么动”，不是“为什么能这样动”。</p>
-<h2 id="_3">动力学把质量、惯性和力加入模型</h2>
+<h2 id="动力学把质量惯性和力加入模型">动力学把质量、惯性和力加入模型</h2>
 <p>当控制任务需要考虑加速度、负载或高速运动时，只靠运动学就不够。机械系统常写成</p>
 <div class="arithmatex">\[
 M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
 \]</div>
 <p>其中 <span class="arithmatex">\(M\)</span> 表示惯性，<span class="arithmatex">\(C\)</span> 表示速度相关项，<span class="arithmatex">\(g\)</span> 表示重力，<span class="arithmatex">\(\tau\)</span> 是执行器力矩。</p>
 <p>移动机器人低速导航时，简单运动学模型往往已经够用；机械臂高速轨迹控制、无人机姿态控制则更依赖动力学。<strong>模型复杂度要由任务决定。</strong></p>
-<h2 id="_4">差速运动模型</h2>
+<h2 id="差速运动模型">差速运动模型</h2>
 <p>二维差速车位姿为 <span class="arithmatex">\((x,y,\theta)\)</span>，在短时间 <span class="arithmatex">\(\Delta t\)</span> 内可近似更新为</p>
 <div class="arithmatex">\[
 \begin{aligned}
@@ -3861,10 +3861,10 @@ y_{k+1}&amp;=y_k+v\sin\theta_k\Delta t,\\
             <span class="n">yaw</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
 </code></pre></div>
 <p>这段代码没有考虑轮胎打滑、执行器动态和地形，因此适合低速平面运动，不应被当成真实车辆的完整物理模型。</p>
-<h2 id="_5">坐标、单位与时间约定</h2>
+<h2 id="坐标单位与时间约定">坐标、单位与时间约定</h2>
 <p>很多“算法错误”其实来自模型接口不一致：角度一处用 degree、一处用 radian；位置来自旧时间戳；相机外参方向写反；把 <code>map → base</code> 当成 <code>base → map</code> 使用。</p>
 <p>因此机器人模型落地时应明确三个约定：<strong>坐标系方向、单位、时间戳</strong>。公式本身往往比这些工程约定更简单。</p>
-<h2 id="_6">变换链的验证方法</h2>
+<h2 id="变换链的验证方法">变换链的验证方法</h2>
 <p>坐标变换最可靠的检查不是盯着矩阵元素，而是选择几个已知几何关系的点进行验证：原点应落在哪里，坐标轴方向是否正确，正变换后再逆变换能否回到原点。把这些检查写成测试，能在外参更新时及时发现方向颠倒。</p>
 
 
