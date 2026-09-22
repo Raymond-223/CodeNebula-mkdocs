@@ -3210,6 +3210,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#认识不确定性与偶然不确定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        认识不确定性与偶然不确定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#模型不确定性来自我们不知道真实参数" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3232,10 +3243,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#分布偏移的检测手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分布偏移的检测手段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#监测偏移要看任务相关指标" class="md-nav__link">
     <span class="md-ellipsis">
       
         监测偏移要看任务相关指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#漂移检测需要参考分布" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        漂移检测需要参考分布
       
     </span>
   </a>
@@ -3254,10 +3287,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
+  <a href="#不确定性如何改变行为" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可以区分数据本身随机与模型不知道
+        不确定性如何改变行为
       
     </span>
   </a>
@@ -3265,10 +3298,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#漂移检测需要参考分布" class="md-nav__link">
+  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
     <span class="md-ellipsis">
       
-        漂移检测需要参考分布
+        可以区分数据本身随机与模型不知道
       
     </span>
   </a>
@@ -3674,6 +3707,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#认识不确定性与偶然不确定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        认识不确定性与偶然不确定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#模型不确定性来自我们不知道真实参数" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3696,10 +3740,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#分布偏移的检测手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分布偏移的检测手段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#监测偏移要看任务相关指标" class="md-nav__link">
     <span class="md-ellipsis">
       
         监测偏移要看任务相关指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#漂移检测需要参考分布" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        漂移检测需要参考分布
       
     </span>
   </a>
@@ -3718,10 +3784,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
+  <a href="#不确定性如何改变行为" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可以区分数据本身随机与模型不知道
+        不确定性如何改变行为
       
     </span>
   </a>
@@ -3729,10 +3795,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#漂移检测需要参考分布" class="md-nav__link">
+  <a href="#可以区分数据本身随机与模型不知道" class="md-nav__link">
     <span class="md-ellipsis">
       
-        漂移检测需要参考分布
+        可以区分数据本身随机与模型不知道
       
     </span>
   </a>
@@ -3831,27 +3897,515 @@
 
 
 <h1 id="uncertainty--distribution-shift">Uncertainty &amp; Distribution Shift</h1>
-<p>自主系统永远面对不确定性：传感器有噪声，模型参数不精确，环境会变化，训练数据也不可能覆盖全部真实场景。关键不是“消灭所有不确定性”，而是知道<strong>它来自哪里、是否会积累、什么时候已经超出系统能力范围。</strong></p>
+<p>自主系统永远面对不确定性：传感器有噪声，模型参数不精确，环境会变化，训练数据也不可能覆盖全部真实场景。关键不是“消灭所有不确定性”，而是<strong>知道它来自哪里、是否会积累、什么时候已经超出系统能力范围。</strong> 本章沿“误差的性质 → 两类不确定性的区分 → 分布偏移与检测 → 不确定性如何改变行为”这条主线展开，目标是把一句含糊的“系统不太可靠”翻译成可测量、可监控、可响应的工程对象。读完后你应该能回答三个问题：当前误差是噪声还是偏差？模型的“不确定”是数据本身的随机，还是它没见过？以及当这个数值变大时，系统到底该做什么。</p>
 <h2 id="随机噪声与系统性偏差">随机噪声与系统性偏差</h2>
-<p>零均值测量波动可以通过多次观测或滤波减弱；固定 bias、外参误差、轮径偏差则会长期把估计推向同一方向，平均再多次也不会消失。</p>
-<p>因此看到数据抖动时，不能简单把所有异常都叫 noise。</p>
+<p>传感器的每一次读数几乎都不准确，但误差的性质差别极大。把一次测量写成</p>
+<div class="arithmatex">\[
+z_k = h(x_k) + b + n_k,\qquad \mathbb{E}[n_k]=0,\quad \operatorname{Var}[n_k]=\sigma^2,
+\]</div>
+<p>其中 <span class="arithmatex">\(h(x_k)\)</span> 是理想测量，<span class="arithmatex">\(n_k\)</span> 是零均值随机噪声，<span class="arithmatex">\(b\)</span> 是系统性偏差。两者的统计行为完全不同：对 <span class="arithmatex">\(N\)</span> 次独立观测取平均，噪声项的标准差按 <span class="arithmatex">\(1/\sqrt{N}\)</span> 收缩，<span class="arithmatex">\(N=100\)</span> 时只剩原来的十分之一，而偏差项 <span class="arithmatex">\(b\)</span> 完全不随 <span class="arithmatex">\(N\)</span> 变化：</p>
+<div class="arithmatex">\[
+\bar z_N=\frac{1}{N}\sum_{k=1}^{N}z_k \;\xrightarrow[\ N\to\infty\ ]{}\; h(x)+b .
+\]</div>
+<p>这行式子给出了本章最重要的一条工程直觉：<strong>滤波能压噪声，却压不掉偏差。</strong> 零均值测量波动可以通过多次观测、低通滤波或状态估计减弱；固定的 bias、外参误差、轮径偏差、IMU 零偏则会长期把估计推向同一方向，平均再多次也不会消失，只会得到一个更平滑但依然错误的结果。</p>
+<p>因此看到数据抖动时，不能简单把所有异常都叫 noise。均值滤波会显著改善“随机噪声型”误差的观感，却对“偏差型”误差毫无帮助——甚至更危险，因为它把带偏置的结果包装得更加可信。</p>
+<table>
+<thead>
+<tr>
+<th>误差类型</th>
+<th>统计特征</th>
+<th><span class="arithmatex">\(N\)</span> 次平均后</th>
+<th>典型来源</th>
+<th>应对手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>随机噪声</td>
+<td><span class="arithmatex">\(\mathbb{E}[n]=0\)</span>，方差有限</td>
+<td>标准差按 <span class="arithmatex">\(1/\sqrt{N}\)</span> 缩小</td>
+<td>热噪声、量化、散粒噪声</td>
+<td>滤波、多帧融合、状态估计</td>
+</tr>
+<tr>
+<td>固定偏置</td>
+<td><span class="arithmatex">\(\mathbb{E}[b]\ne 0\)</span> 且为常数</td>
+<td>保持不变</td>
+<td>标定误差、安装偏差</td>
+<td>离线标定、在线偏置估计</td>
+</tr>
+<tr>
+<td>尺度误差</td>
+<td>与真值成比例</td>
+<td>保持不变</td>
+<td>轮径、臂长、镜头焦距</td>
+<td>参数辨识、系统辨识</td>
+</tr>
+<tr>
+<td>缓慢漂移</td>
+<td>随时间单调变化</td>
+<td>被平滑但趋势仍在</td>
+<td>温漂、老化、蠕变</td>
+<td>在线自适应、周期性重标定</td>
+</tr>
+<tr>
+<td>结构性误差</td>
+<td>与状态强相关</td>
+<td>保持不变</td>
+<td>未建模物理效应</td>
+<td>改进模型、学习残差补偿</td>
+</tr>
+</tbody>
+</table>
+<p>判断流程通常很短：先看残差时间序列，再按下面的顺序排除。</p>
+<ul>
+<li>残差自相关接近白噪声、均值近零 → 随机噪声，优先滤波与多帧融合；</li>
+<li>残差均值明显偏离零、长期稳定 → 固定偏置，优先离线标定；</li>
+<li>残差与温度、速度、载荷强相关 → 未建模的尺度或结构误差，优先辨识模型；</li>
+<li>残差随量程成比例增长 → 尺度误差，滤波无效，必须重标定或参数辨识。</li>
+</ul>
+<p>这三类问题的修复成本差异巨大，误判会让团队把预算花在错误的环节上。</p>
+<h2 id="认识不确定性与偶然不确定性">认识不确定性与偶然不确定性</h2>
+<p>在概率建模中，不确定性被明确拆成两类：<strong>偶然不确定性</strong>（aleatoric uncertainty）来自数据生成过程本身的随机性，<strong>认知不确定性</strong>（epistemic uncertainty）来自我们对模型参数的无知。二者的分解来自条件方差的全方差公式：</p>
+<div class="arithmatex">\[
+\operatorname{Var}\!\left[y\mid x\right]=\underbrace{\mathbb{E}_{\theta\sim p(\theta\mid \mathcal{D})}\!\left[\operatorname{Var}\!\left(y\mid x,\theta\right)\right]}_{\text{偶然 uncertainty}}+\underbrace{\operatorname{Var}_{\theta\sim p(\theta\mid \mathcal{D})}\!\left[\mathbb{E}\!\left(y\mid x,\theta\right)\right]}_{\text{认知 uncertainty}} .
+\]</div>
+<p>第一项对参数 <span class="arithmatex">\(\theta\)</span> 取期望，刻画“即便参数完全已知，输出仍然会波动”的部分：传感器噪声、环境的不可预测抖动、人类行为。第二项刻画“不同参数假设给出不同预测”的部分，也就是模型因为数据不足而不知道该选哪个 <span class="arithmatex">\(\theta\)</span>。在常见的异方差高斯模型中，这个分解可以写得更直观：</p>
+<div class="arithmatex">\[
+\operatorname{Var}[y\mid x]=\sigma_{\text{ale}}^{2}(x)+\sigma_{\text{epi}}^{2}(x),
+\]</div>
+<p><span class="arithmatex">\(\sigma_{\text{ale}}^{2}\)</span> 由网络直接预测、不随数据量收缩，<span class="arithmatex">\(\sigma_{\text{epi}}^{2}\)</span> 由集成分歧或后验方差给出、随数据量收缩。</p>
+<p>这个分解最有用的推论是：<strong>只有认知不确定性会随数据量增加而下降。</strong> 当我们不断采样更多同类型数据，后验 <span class="arithmatex">\(p(\theta\mid \mathcal{D})\)</span> 逐渐收窄，第二项趋于零；第一项的期望值不变，因为它根本不依赖 <span class="arithmatex">\(\mathcal{D}\)</span>。这解释了为什么在某些任务上“收集更多同款数据”很快见顶，而在另一些任务上数据量仍是瓶颈——前者被偶然不确定性支配，后者被认知不确定性支配。</p>
+<p>在工程中估计这两项，常用的手段是：</p>
+<ul>
+<li>偶然项：异方差回归、概率输出头、分位数回归；</li>
+<li>认知项：深度集成、MC Dropout、贝叶斯神经网络、高斯过程；</li>
+<li>二者都需要：可靠性曲线与校准检验，确认估计数值与真实错误率对应。</li>
+</ul>
+<p>需要注意的是，这个分解并不是无条件可辨识的：模型类别、似然形式、甚至误差是否被建模为异方差，都会影响划分。所以在工程中更常见的做法是承认它只是一个<strong>有用的分工约定</strong>，用它来指导动作选择，而不是当作严格物理分解去引用绝对数值。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>偶然不确定性（aleatoric）</th>
+<th>认知不确定性（epistemic）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>数据生成过程的固有随机性</td>
+<td>参数/模型结构的知识不足</td>
+</tr>
+<tr>
+<td>数学位置</td>
+<td><span class="arithmatex">\(\mathbb{E}_\theta[\operatorname{Var}(y\mid x,\theta)]\)</span></td>
+<td><span class="arithmatex">\(\operatorname{Var}_\theta[\mathbb{E}(y\mid x,\theta)]\)</span></td>
+</tr>
+<tr>
+<td>增加同类数据后</td>
+<td>基本不变</td>
+<td>逐步减小至零</td>
+</tr>
+<tr>
+<td>是否可被观测消除</td>
+<td>不能，只能被刻画</td>
+<td>能，靠新数据或更强的先验</td>
+</tr>
+<tr>
+<td>典型估计手段</td>
+<td>异方差回归、概率头</td>
+<td>深度集成、MC Dropout、贝叶斯网络</td>
+</tr>
+<tr>
+<td>偏好应对手段</td>
+<td>提高安全裕度、多帧融合</td>
+<td>请求新数据、重新训练、人工介入</td>
+</tr>
+</tbody>
+</table>
 <h2 id="模型不确定性来自我们不知道真实参数">模型不确定性来自我们不知道真实参数</h2>
-<p>动力学中的质量、摩擦，感知模型对某些场景的预测，都可能与真实世界存在差异。若算法只在一个精确参数点上工作，很容易在部署后性能下降。</p>
-<p>这也是鲁棒控制、域随机化和不确定性估计存在的原因。</p>
+<p>动力学中的质量、摩擦系数、执行器增益，感知模型对某些场景的预测，都可能与真实世界存在差异。若算法只在一个精确参数点上工作，很容易在部署后性能下降。形式上可以把真实参数视为集合 <span class="arithmatex">\(\Theta\)</span> 中的一个未知元素，然后要求策略在整个集合上都可接受——这正是鲁棒控制、域随机化和不确定性估计存在的共同原因：</p>
+<div class="arithmatex">\[
+\max_{\theta\in\Theta}\; J(\pi,\theta)\ \text{可接受},\qquad \Theta=\{\theta:\ \lVert\theta-\hat\theta\rVert\le \Delta\}.
+\]</div>
+<p>这里 <span class="arithmatex">\(\Delta\)</span> 的取法是全部关键：取太小，集合外的真实参数会让保证失效；取太大，控制器会退化成极其保守的“只求不摔”，性能几乎不可用。因此 <span class="arithmatex">\(\Delta\)</span> 通常不是凭直觉给的，而是来自下面几类证据：</p>
+<ul>
+<li>系统辨识给出的置信区间（参数估计的标准差）；</li>
+<li>历史故障与现场回放数据中观测到的参数漂移范围；</li>
+<li>物理建模中的已知容差（制造公差、装配误差、载荷变化范围）；</li>
+<li>仿真与实测的系统性差异统计。</li>
+</ul>
+<p>值得区分的是参数不确定性与<strong>结构不确定性</strong>（model misspecification）。前者是“模型形式对了但常数不准”，可以通过估计或自适应削弱；后者是“模型形式本身就漏掉了一项物理效应”（例如忽略轮胎侧滑、忽略气流耦合），再多的参数辨识也无法修复，表现出来就是残差有系统性的、与状态强相关的模式。二者的诊断信号不同：参数误差产生的残差近似随机但幅度偏大，结构误差产生的残差是可重复、可复现的——同一工况下多跑几次，误差几乎一样。</p>
+<table>
+<thead>
+<tr>
+<th>不确定性类型</th>
+<th>数学描述</th>
+<th>估计方式</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参数不确定</td>
+<td><span class="arithmatex">\(\theta\)</span> 的后验分布或置信区间</td>
+<td>最小二乘、贝叶斯辨识</td>
+<td>自适应控制、鲁棒控制器</td>
+</tr>
+<tr>
+<td>结构误差</td>
+<td>残差含未建模项 <span class="arithmatex">\(\Delta f(x,u)\)</span></td>
+<td>残差分析、频域辨识</td>
+<td>加积分项、改模型结构、学习残差</td>
+</tr>
+<tr>
+<td>环境不确定</td>
+<td>扰动 <span class="arithmatex">\(d\in\mathcal{D}\)</span> 未知但有界</td>
+<td>场景采样、专家枚举</td>
+<td>域随机化、最坏情况优化</td>
+</tr>
+<tr>
+<td>学习模型不确定</td>
+<td>网络在分布外输出任意</td>
+<td>集成、MC Dropout</td>
+<td>OOD 检测、置信度阈值、回退规则</td>
+</tr>
+<tr>
+<td>执行器不确定</td>
+<td>增益与带宽随工况变化</td>
+<td>阶跃响应辨识</td>
+<td>带宽留裕量、抗饱和设计</td>
+</tr>
+</tbody>
+</table>
 <h2 id="分布偏移与训练分布">分布偏移与训练分布</h2>
-<p>训练时主要是晴天，部署后遇到夜晚和雨雪；实验室地面平整，真实场景有沙石；机器人载重发生变化。这些都属于 distribution shift。</p>
-<p>分布偏移不是单个样本噪声，而是<strong>数据产生机制发生了变化</strong>。</p>
+<p>训练时主要是晴天，部署后遇到夜晚和雨雪；实验室地面平整，真实场景有沙石；机器人载重从空载变成满载。这些都属于 distribution shift。它和单个样本的噪声有本质区别：<strong>分布偏移不是数据变脏了，而是数据产生机制发生了变化。</strong> 用概率语言说，训练时学的是 <span class="arithmatex">\(p_{\text{train}}(x,y)\)</span>，部署时面对的是 <span class="arithmatex">\(p_{\text{deploy}}(x,y)\)</span>；性能保证只在两者一致或足够接近时成立。</p>
+<p>偏移可以进一步细分。若只有输入分布变了、条件关系不变，即 <span class="arithmatex">\(p(x)\)</span> 变但 <span class="arithmatex">\(p(y\mid x)\)</span> 不变，称为<strong>协变量偏移</strong>（covariate shift）；这是最常见、也最容易处理的一种，因为任务的“物理规律”没变，模型只需被带到新输入区域，甚至可以用重要性权重做修正：</p>
+<div class="arithmatex">\[
+w(x)=\frac{p_{\text{deploy}}(x)}{p_{\text{train}}(x)},\qquad J_{\text{corrected}}=\mathbb{E}_{p_{\text{deploy}}}\!\left[w(x)\, \ell(y,\hat y)\right].
+\]</div>
+<p>若标签比例改变而 <span class="arithmatex">\(p(x\mid y)\)</span> 不变，称为标签偏移。若 <span class="arithmatex">\(p(y\mid x)\)</span> 本身改变——同一图像在夜间对应的真实距离关系不同、同一路面在雨中摩擦系数不同——称为<strong>概念偏移</strong>（concept shift），这类偏移最危险，因为历史数据里学到的“输入到输出”映射已经不成立，任何基于 <span class="arithmatex">\(p_{\text{train}}\)</span> 的权重修正都救不了它。</p>
+<table>
+<thead>
+<tr>
+<th>偏移类型</th>
+<th>变化的部分</th>
+<th>保持的部分</th>
+<th>检测难度</th>
+<th>典型案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协变量偏移</td>
+<td><span class="arithmatex">\(p(x)\)</span></td>
+<td><span class="arithmatex">\(p(y\mid x)\)</span></td>
+<td>较低，无需标签</td>
+<td>新时段光照变化、新地点地图差异</td>
+</tr>
+<tr>
+<td>标签偏移</td>
+<td><span class="arithmatex">\(p(y)\)</span></td>
+<td><span class="arithmatex">\(p(x\mid y)\)</span></td>
+<td>中等</td>
+<td>行人密度从稀疏变拥挤</td>
+</tr>
+<tr>
+<td>概念偏移</td>
+<td><span class="arithmatex">\(p(y\mid x)\)</span></td>
+<td><span class="arithmatex">\(p(x)\)</span> 可能不变</td>
+<td>高，需任务反馈</td>
+<td>雨天路面摩擦、视觉尺度错觉</td>
+</tr>
+<tr>
+<td>数据集漂移</td>
+<td>采集协议改变</td>
+<td>—</td>
+<td>高</td>
+<td>换传感器型号、改标定文件</td>
+</tr>
+</tbody>
+</table>
+<p>一个实践中反复出现的陷阱是：<strong>用输入空间的距离判断偏移，往往会漏掉概念偏移。</strong> 夜间图像在像素统计上确实离训练集很远，容易被发现；而“路面变滑”这类概念偏移可能发生在与训练集几乎一样的视野里，输入看起来毫无异常，模型却已经错了。因此检测体系必须包含任务级反馈，而不只是输入分布比较。</p>
+<h2 id="分布偏移的检测手段">分布偏移的检测手段</h2>
+<p>检测手段按“能看到什么信号”分为几类。输入层面的检测只看 <span class="arithmatex">\(x\)</span>，不需要标签，能在推理时实时给出，是识别协变量偏移与 OOD 样本的主力；输出与残差层面的检测看“预测和观测的差异”，能捕捉一部分概念偏移；置信度校准则把模型的自我评价与真实正确率对齐，让阈值有意义。它们不是替代关系，而是互补：输入检测快但对概念偏移不敏感，残差检测敏感但依赖可观测量。</p>
+<p>输入侧最常用的三类判据是：统计距离（对连续特征用两样本检验，对高维特征用最大均值差异等核方法）、重构误差（自编码器或重建式模型在未见输入上误差偏大）、判别式检验（训练一个“训练集 vs 在线数据”的分类器，若它轻易就能区分，说明分布确实不同）。核方法上的最大均值差异写出来是</p>
+<div class="arithmatex">\[
+\text{MMD}^2=\left\lVert \mathbb{E}_{x\sim p_{\text{train}}}[\phi(x)]-\mathbb{E}_{x\sim p_{\text{deploy}}}[\phi(x)]\right\rVert_{\mathcal{H}}^{2},
+\]</div>
+<p>判别式检验的 AUC 有一个直观解释：AUC 越高，两组数据越容易分开，偏移越大。</p>
+<p>要把输入检测做成可信的一环，至少需要三个前置条件：</p>
+<ul>
+<li>参考集必须与“已验证良好运行”的状态一致，而不是随手截一段历史数据；</li>
+<li>比较用的特征要与业务含义对应，避免在无意义的中间层特征上比距离；</li>
+<li>检测结论要能被后续模块消费，例如触发降速，而不是只写一条日志。</li>
+</ul>
+<p>残差监测依赖一个可比较的量：定位 innovation、控制跟踪误差、多传感器之间的不一致、预测与观测的差值。它最大的优势是与任务直接相关，最大的限制是<strong>只能在有反馈的通道上工作</strong>——如果没有任何方法检验预测对错，残差监测就失效。这也是自动驾驶要把高精地图匹配、GNSS 一致性、里程计与视觉互检都纳入监控的原因。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>能检测什么</th>
+<th>计算代价</th>
+<th>主要局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入统计距离（KS / MMD / PSI）</td>
+<td>协变量偏移</td>
+<td>低（滑窗统计）</td>
+<td>对概念偏移不敏感</td>
+</tr>
+<tr>
+<td>判别式检验（训练集 vs 在线）</td>
+<td>一般性输入偏移</td>
+<td>中（离线训练加在线推理）</td>
+<td>需要保存代表性参考集</td>
+</tr>
+<tr>
+<td>重构与 OOD 打分</td>
+<td>罕见输入、OOD 样本</td>
+<td>中到高</td>
+<td>阈值难定，常与“难度”混淆</td>
+</tr>
+<tr>
+<td>残差与创新监测</td>
+<td>概念偏移、模型失配</td>
+<td>低</td>
+<td>需要可比较的反馈通道</td>
+</tr>
+<tr>
+<td>置信度校准与阈限</td>
+<td>预测可靠度、错判风险</td>
+<td>低</td>
+<td>分布外置信度可能虚高</td>
+</tr>
+</tbody>
+</table>
 <h2 id="监测偏移要看任务相关指标">监测偏移要看任务相关指标</h2>
-<p>仅比较输入像素分布可能没有意义。更有用的信号包括模型置信度、定位 innovation、控制跟踪误差、传感器一致性和失败率。</p>
-<p>如果多个任务级指标持续恶化，就应降低自动化程度或触发重新标定，而不是继续相信模型输出。</p>
-<h2 id="不确定性最终应该影响行为">不确定性最终应该影响行为</h2>
-<p>系统知道“自己不确定”却仍以同样高速行动，没有太大价值。定位协方差增大时可以降速，感知不确定时增加安全距离，模型严重超出分布时请求人工确认。</p>
-<p>不确定性估计的最终意义是让决策变得更保守、更可控。</p>
-<h2 id="可以区分数据本身随机与模型不知道">可以区分数据本身随机与模型不知道</h2>
-<p>传感器热噪声属于数据层面的随机性；模型从未见过雪天、因此不知道怎样判断，则更接近模型认知不足。两者都表现为不确定，但应对方式不同：前者可通过滤波和多次观测减弱，后者更需要新数据、重新训练或人工介入。</p>
-<p>这个区分有助于避免把所有低置信度都当作同一种故障。</p>
+<p>仅比较输入像素分布可能没有意义：光照变暗会让像素统计大幅改变，但定位与控制可能几乎不受影响；反过来，有些微小变化（标定文件被改了一位小数）在图像统计上完全看不出来，却会让整条感知链崩溃。更有用的信号包括模型置信度、定位 innovation、控制跟踪误差、传感器一致性和失败率——这些量都与任务成败直接挂钩。</p>
+<p>设计监控指标时要遵循两条原则。第一，<strong>指标要能被解释为任务后果</strong>，例如“横向跟踪误差超过 0.3 m 的帧占比”比“特征分布距离 0.42”更容易被决策者接受。第二，<strong>指标要能区分症状和原因</strong>：置信度下降是症状，可能是光照、可能是传感器故障、也可能是模型退化，需要配合其他信号才能定位。</p>
+<p>如果多个任务级指标持续恶化，就应降低自动化程度或触发重新标定，而不是继续相信模型输出。一个常见的分层策略是：</p>
+<ul>
+<li>单指标轻微越界 → 记录与告警，不改变行为；</li>
+<li>两个以上任务指标同时越界 → 降速、提高安全距离、增加冗余校验；</li>
+<li>出现安全底线类指标（碰撞、越界、失联）→ 立即进入最小风险状态并请求介入。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>监控指标</th>
+<th>反映什么</th>
+<th>异常时的常见原因</th>
+<th>建议响应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型置信度分布</td>
+<td>预测是否仍在熟悉区域</td>
+<td>OOD 输入、模型退化</td>
+<td>标记、抽样复核、降级</td>
+</tr>
+<tr>
+<td>定位 innovation</td>
+<td>观测与预测是否一致</td>
+<td>地图过时、特征缺失、外参漂移</td>
+<td>重新定位、切换定位源</td>
+</tr>
+<tr>
+<td>控制跟踪误差</td>
+<td>执行是否按预期发生</td>
+<td>载荷变化、打滑、执行器故障</td>
+<td>降速、重辨识参数</td>
+</tr>
+<tr>
+<td>传感器一致性</td>
+<td>多源是否互相矛盾</td>
+<td>单传感器故障、标定失效</td>
+<td>隔离可疑传感器</td>
+</tr>
+<tr>
+<td>任务失败率</td>
+<td>端到端是否还能完成工作</td>
+<td>系统性退化</td>
+<td>降低自动化等级、人工介入</td>
+</tr>
+</tbody>
+</table>
 <h2 id="漂移检测需要参考分布">漂移检测需要参考分布</h2>
-<p>仅观察当前输入无法判断是否发生分布偏移，还需要训练期或已验证运行期的参考。检测指标应和任务失败相关，并区分短时异常与持续变化。否则系统可能在无害外观变化下频繁报警，却错过真正影响控制的漂移。</p>
+<p>仅观察当前输入无法判断是否发生分布偏移，还需要训练期或已验证运行期的参考——一个“基线”分布。没有基线，任何在线数值都只是一个孤立的数，无法回答“这算不算变化”。因此部署时通常要固化一份参考摘要（滑窗直方图、特征均值与协方差、可复现的场景切片），并随验证过的运行阶段定期滚动更新。</p>
+<p>检测器需要处理两个统计问题。第一是<strong>多重比较</strong>：同时监控几十个通道，即使系统正常也会有通道偶然越界，因此阈值要按通道数调整，或采用全局统计量而非逐通道判决。第二是<strong>信噪比</strong>：单帧异常是常态，持续偏移才是问题。累积型统计量对“小幅但持续”的偏移比瞬时阈值敏感得多，代价是对短时扰动也会报警，需要在时间常数上调参。以 CUSUM 为例，累加标准化偏差</p>
+<div class="arithmatex">\[
+S_k=\max\!\left(0,\ S_{k-1}+\frac{x_k-\mu_0}{\sigma_0}-k\right),\qquad \text{当 } S_k&gt;h \text{ 时报警},
+\]</div>
+<p>其中 <span class="arithmatex">\(\mu_0,\sigma_0\)</span> 来自参考分布，<span class="arithmatex">\(k\)</span> 是容许的漂移量，<span class="arithmatex">\(h\)</span> 是判决门限；<span class="arithmatex">\(k\)</span> 选得越大越能忽略小偏差，<span class="arithmatex">\(h\)</span> 越大越保守。</p>
+<p>检测指标应和任务失败相关，并区分短时异常与持续变化。否则系统可能在无害外观变化下频繁报警，却错过真正影响控制的漂移。工程上通常用两级判据：短窗判据触发“关注”，长窗判据触发“动作”；只有长窗判据才允许改变速度、自动化等级或触发重标定，避免一次偶然的强光就让整队机器人停车。</p>
+<table>
+<thead>
+<tr>
+<th>检测器</th>
+<th>输入</th>
+<th>对何种变化敏感</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>瞬时阈值</td>
+<td>单指标当前值</td>
+<td>突发大偏移</td>
+<td>误报多、对缓慢漂移漏报</td>
+</tr>
+<tr>
+<td>滑窗均值与方差</td>
+<td>指标统计量</td>
+<td>中等幅度持续偏移</td>
+<td>响应有延迟</td>
+</tr>
+<tr>
+<td>EWMA</td>
+<td>指数加权统计量</td>
+<td>缓慢漂移</td>
+<td>时间常数难定</td>
+</tr>
+<tr>
+<td>CUSUM</td>
+<td>累积标准化偏差</td>
+<td>小幅持续偏移</td>
+<td>需要可靠的基线方差</td>
+</tr>
+<tr>
+<td>两样本检验</td>
+<td>参考集与在线集</td>
+<td>分布形状变化</td>
+<td>需保存参考集、随窗口波动</td>
+</tr>
+</tbody>
+</table>
+<h2 id="不确定性最终应该影响行为">不确定性最终应该影响行为</h2>
+<p>系统知道“自己不确定”却仍以同样高速行动，没有太大价值。不确定性估计若只停留在仪表盘上，就只是一个装饰性输出；它的意义必须落到动作上。定位协方差增大时可以降速，感知不确定时增加安全距离，模型严重超出分布时请求人工确认，控制通道延迟变大时降低跟踪带宽。</p>
+<p>把不确定性接进行为的正确姿势是把它当作<strong>代价与约束的一部分，而不是事后解释</strong>。一种简洁的做法是在代价里显式加入方差惩罚：</p>
+<div class="arithmatex">\[
+\min_{u}\ \mathbb{E}\!\left[J(u)\right]+\beta\operatorname{Var}\!\left[J(u)\right],
+\]</div>
+<p>权重 <span class="arithmatex">\(\beta\)</span> 越大，策略越偏好“结果稳定但平均稍差”的动作；另一种是约束收缩：安全集合按估计误差和响应延迟向内收缩，越不确定，允许靠近边界的余量越大。</p>
+<p>工程上把不确定性接进决策通常有三条路：</p>
+<ul>
+<li>代价加权：把方差或分位数项加进目标函数，用权重 <span class="arithmatex">\(\beta\)</span> 控制保守程度；</li>
+<li>约束收缩：保持原目标不变，把可行域按不确定性向内收，优先保证安全；</li>
+<li>动作空间限制：高不确定时直接屏蔽激进动作，只允许一个保守子集。</li>
+</ul>
+<p>不确定性估计的最终意义是让决策变得更保守、更可控。这里的“保守”必须是可量化的：降速多少、安全距离加多少、什么时候彻底停下，都要有明确规则，而不是依赖运行时的人工直觉。否则同一份不确定性数值在不同操作员手里会得到完全不同的反应，系统行为无法验证。</p>
+<h2 id="不确定性如何改变行为">不确定性如何改变行为</h2>
+<p>把不确定性转成行为，需要先分类再分级。分类回答“这是偶然还是认知、是输入层面还是任务层面”，分级回答“当前数值落在哪个区间”。二者组合成一张动作表，才能让系统行为确定、可复现、可测试：同一个不确定性档位，无论何时何地都应触发同一类响应。</p>
+<p>阈值不能凭感觉拍。常用的三种做法是：</p>
+<ul>
+<li><strong>分位数法</strong>：用已验证运行期的经验分位数定线，例如 <span class="arithmatex">\(\theta_{\text{warn}}=q_{0.99}(u_{\text{hist}})\)</span>、<span class="arithmatex">\(\theta_{\text{act}}=q_{0.999}(u_{\text{hist}})\)</span>，简单且贴合实际分布；</li>
+<li><strong>代价法</strong>：比较误报损失与漏报损失，选择使期望损失最小的门限
+  <span class="arithmatex">\(\theta^{\star}=\arg\min_{\theta}\left[c_{\text{FP}}P(u&gt;\theta\mid \text{正常})+c_{\text{FN}}P(u\le\theta\mid \text{异常})\right]\)</span>；</li>
+<li><strong>安全余量反推法</strong>：从“必须多久前发现风险才能安全停下”倒推检测延迟与阈值灵敏度要求。</li>
+</ul>
+<p>三种方法常结合使用：分位数给初始值，代价法做校准，余量反推做安全底线。定好门限后还必须留出<strong>滞环</strong>（hysteresis）：升级容易、降级要难，否则系统会在阈值附近来回切换，产生震荡式降级。</p>
+<table>
+<thead>
+<tr>
+<th>不确定性水平与类型</th>
+<th>典型信号</th>
+<th>推荐行为</th>
+<th>恢复条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低、偶然为主</td>
+<td>残差接近白噪声</td>
+<td>继续正常执行</td>
+<td>—</td>
+</tr>
+<tr>
+<td>中、偶然为主</td>
+<td>方差短期升高</td>
+<td>降速、增大安全距离、多帧融合</td>
+<td>方差回落并稳定一段时间</td>
+</tr>
+<tr>
+<td>中、认知为主</td>
+<td>置信度下降、集成分歧上升</td>
+<td>请求更多观测、切换保守策略、限制动作空间</td>
+<td>新证据使分歧收敛</td>
+</tr>
+<tr>
+<td>高、任务级偏移</td>
+<td>多个任务指标同时恶化</td>
+<td>降级到最小风险策略、靠边停车</td>
+<td>重新标定或人工确认</td>
+</tr>
+<tr>
+<td>高、安全底线相关</td>
+<td>碰撞风险、越界、失联</td>
+<td>立即进入最小风险状态并请求介入</td>
+<td>人工接管或复位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="可以区分数据本身随机与模型不知道">可以区分数据本身随机与模型不知道</h2>
+<p>传感器热噪声属于数据层面的随机性；模型从未见过雪天、因此不知道怎样判断，则更接近模型认知不足。前者统计上表现为“同一条件下的重复观测仍然分散”，后者表现为“不同模型假设给出不同的确定预测”。两者都表现为不确定，但应对方式不同：前者可通过滤波和多次观测减弱，后者更需要新数据、重新训练或人工介入。</p>
+<p>一个可操作的判别方法是看<strong>增加了什么之后不确定性是否下降</strong>。如果增加同类样本的重复观测就能降低方差，说明主要成分是偶然性；如果增加同类样本毫无帮助、只有引入新场景（雪天、雨天、新地图）才有效，说明主要成分是认知性。另一个信号是模型间的分歧：深度集成的成员预测若“各说各话”，通常意味着训练数据没有覆盖这一区域，属于认知不确定性。</p>
+<p>这个区分有助于避免把所有低置信度都当作同一种故障。把认知不确定性误判为噪声，会让团队不断加滤波、加平均，却迟迟不补数据；把特征噪声误判为“模型不会”，会让团队反复重新训练，却发现问题依旧。正确的分工是：偶然不确定性用裕度与鲁棒设计吸收，认知不确定性用数据收集与保守行为处理。</p>
+<p>判断顺序也可以反向做一次“可解性检查”，避免把预算投在无效的方向上：</p>
+<ul>
+<li>如果增大数据量无法降低该误差，它不属于认知不确定性，补数据无用；</li>
+<li>如果提高传感器精度无法降低该误差，它不属于偶然不确定性，换硬件无用；</li>
+<li>如果只有改变模型结构才有效，那么问题出在结构误差上。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>更可能的来源</th>
+<th>判别方法</th>
+<th>应对手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重复观测下输出仍分散</td>
+<td>偶然不确定性</td>
+<td>检查同条件重复测量方差</td>
+<td>滤波、平均、提高裕度</td>
+</tr>
+<tr>
+<td>换新场景后准确率骤降</td>
+<td>认知不确定性</td>
+<td>分场景统计误差</td>
+<td>采集新数据、微调、限制适用域</td>
+</tr>
+<tr>
+<td>集成成员分歧大</td>
+<td>认知不确定性</td>
+<td>成员预测方差</td>
+<td>主动学习、请求介入</td>
+</tr>
+<tr>
+<td>输出偏差稳定但幅度大</td>
+<td>偏差而非不确定性</td>
+<td>残差均值检验</td>
+<td>标定、参数辨识</td>
+</tr>
+<tr>
+<td>置信度高但预测错</td>
+<td>校准失败</td>
+<td>可靠性曲线、期望校准误差</td>
+<td>重新校准、温度缩放</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>下一步</strong>：想了解“不确定性变大”在长期运行中如何演化为故障与失效，请继续阅读 <a href="../04-fault-tolerance/">故障检测与容错</a>；想知道怎么把带约束的安全策略真正放进学习回路，看 <a href="../05-safe-learning-runtime/">安全学习与运行时保障</a>；偏移环境下优化目标的数学形式在 <a href="../../mathematics/06-optimization-under-uncertainty/">约束优化与不确定性</a> 里有完整推导；把不确定性接进真实机器人的导航回路，可参考 <a href="../../robotics/05-navigation-control/">导航与控制</a>。</p>
+</blockquote>
 
 
 

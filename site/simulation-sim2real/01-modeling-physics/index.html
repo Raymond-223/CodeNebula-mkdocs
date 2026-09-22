@@ -2959,10 +2959,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#积分器选择与数值稳定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        积分器选择与数值稳定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#接触和摩擦往往比自由运动更难模拟" class="md-nav__link">
     <span class="md-ellipsis">
       
         接触和摩擦往往比自由运动更难模拟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#接触与摩擦模型" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        接触与摩擦模型
       
     </span>
   </a>
@@ -2996,6 +3018,17 @@
     <span class="md-ellipsis">
       
         MuJoCo/Gazebo 控制循环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#实时因子与加速手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实时因子与加速手段
       
     </span>
   </a>
@@ -3685,10 +3718,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#积分器选择与数值稳定性" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        积分器选择与数值稳定性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#接触和摩擦往往比自由运动更难模拟" class="md-nav__link">
     <span class="md-ellipsis">
       
         接触和摩擦往往比自由运动更难模拟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#接触与摩擦模型" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        接触与摩擦模型
       
     </span>
   </a>
@@ -3722,6 +3777,17 @@
     <span class="md-ellipsis">
       
         MuJoCo/Gazebo 控制循环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#实时因子与加速手段" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实时因子与加速手段
       
     </span>
   </a>
@@ -3832,9 +3898,52 @@
 
 <h1 id="modeling--physics-simulation">Modeling &amp; Physics Simulation</h1>
 <p>物理仿真不是把现实世界“完整复制”进计算机，而是构造一个足够准确、可以快速计算的近似模型。真正需要问的是：<strong>哪些物理因素会影响当前任务，哪些可以忽略。</strong></p>
+<p>这个问句之所以重要，是因为“更真实”从来不是免费的：多一个自由度、多一个接触约束、多一个摩擦状态，都会让求解更慢、参数更难标定、失效模式更难定位。<strong>物理仿真的核心工程能力，是在任务指标与计算预算之间找到最小可用模型，并且清楚知道这个模型在哪里会失效。</strong> 下面的小节按“先定边界、再定步进、然后处理最难的接触、最后检查可信度”的顺序展开。</p>
 <h2 id="模型边界与任务需求">模型边界与任务需求</h2>
 <p>低速移动机器人导航时，可能只需要刚体运动、轮地摩擦和碰撞；研究机械臂抓取时，接触、摩擦和关节动力学就更重要；研究视觉感知时，纹理和光照又会成为主要因素。</p>
-<p>因此模型复杂度应由研究问题决定，而不是“参数越多越真实”。</p>
+<p>因此模型复杂度应由研究问题决定，而不是“参数越多越真实”。判断边界的一个有效方法是“扰动测试”：把你怀疑不重要的物理项从模型里去掉，看任务指标是否变化。如果没有变化，就说明它对当前任务不重要，可以放心地保留在模型之外；如果指标剧烈变化，就应该把它拉回到建模范围内。</p>
+<p>这种做法的好处是把“该不该建模”从一个哲学问题变成可执行的实验。它也提醒我们，模型边界不是一次性决策：任务从“走直线”升级到“高速过弯”时，原先可以忽略的轮胎侧滑与悬架形变会突然变成主导项，边界必须重新划定。</p>
+<table>
+<thead>
+<tr>
+<th>任务类型</th>
+<th>必须建模</th>
+<th>可以近似或忽略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低速定点导航</td>
+<td>刚体运动、轮地摩擦、碰撞</td>
+<td>悬架、轮胎形变、气动</td>
+</tr>
+<tr>
+<td>机械臂抓取</td>
+<td>关节动力学、接触、摩擦锥</td>
+<td>线缆、关节间隙、热漂移</td>
+</tr>
+<tr>
+<td>视觉感知验证</td>
+<td>相机投影、纹理、光照</td>
+<td>高频振动、精确惯量</td>
+</tr>
+<tr>
+<td>高速运动控制</td>
+<td>动力学、执行器延迟与饱和</td>
+<td>精细纹理、外观细节</td>
+</tr>
+<tr>
+<td>足式行走</td>
+<td>接触刚度、摩擦、质心动力学</td>
+<td>布料、软体形变</td>
+</tr>
+<tr>
+<td>状态估计验证</td>
+<td>传感器误差模型、运动学</td>
+<td>高阶动力学项</td>
+</tr>
+</tbody>
+</table>
 <h2 id="仿真时间步进">仿真时间步进</h2>
 <p>连续系统满足</p>
 <div class="arithmatex">\[\dot x=f(x,u).\]</div>
@@ -3846,15 +3955,288 @@
     <span class="k">return</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span>
 </code></pre></div>
 <p>步长越小通常越接近连续系统，但计算量也越大。步长过大可能引入明显数值误差甚至不稳定。</p>
+<p>需要注意，误差不只是一个“精度”问题。显式欧拉对振荡系统在每个周期内会注入或耗散能量，长期积分会表现为虚构的膨胀或衰减：弹簧会越弹越高，或摆会莫名停下。因此判断步长是否合适，不能只看单帧位置是否合理，还要看长时运行下守恒量是否漂移。</p>
+<p>另有一点常被忽视：步长也应该与传感器采样率和控制器周期对齐为整数倍关系。如果控制器周期是 10 ms 而物理步长是 3 ms，那么每个控制周期内的步数会在 3 与 4 之间摇摆，造成等效延迟的抖动。让这几个周期互为整数倍，可以消除这种由离散化人为引入的不确定性。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>步长过大的表现</th>
+<th>步长过小的代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自由落体</td>
+<td>位置曲线呈阶梯状跳变</td>
+<td>步数增多、耗时上升</td>
+</tr>
+<tr>
+<td>弹簧振子</td>
+<td>振幅持续增长或衰减</td>
+<td>实时性下降</td>
+</tr>
+<tr>
+<td>接触碰撞</td>
+<td>穿透后突然弹飞</td>
+<td>求解器反复迭代</td>
+</tr>
+<tr>
+<td>闭环控制</td>
+<td>控制与状态相位错位</td>
+<td>仿真进度落后于墙钟</td>
+</tr>
+</tbody>
+</table>
+<h2 id="积分器选择与数值稳定性">积分器选择与数值稳定性</h2>
+<p>显式欧拉简单但在刚性系统上非常脆弱。工程上更常用的是半隐式（symplectic Euler）积分：先更新速度，再用新速度更新位置。</p>
+<div class="arithmatex">\[v_{k+1}=v_k+\Delta t\,a(x_k),\qquad x_{k+1}=x_k+\Delta t\,v_{k+1}.\]</div>
+<p>半隐式对哈密顿系统具有良好的能量行为，长期积分下能量在有界范围内振荡而不单调漂移，这就是多数物理引擎默认采用它的原因。高阶方法如四阶 Runge–Kutta 通过多次求导估计降低截断误差：</p>
+<div class="arithmatex">\[x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).\]</div>
+<p>其中 <span class="arithmatex">\(k_1=f(t_k,x_k)\)</span>，<span class="arithmatex">\(k_2=f(t_k+\Delta t/2,\;x_k+\Delta t\,k_1/2)\)</span>，依次类推。精度更高，代价是每步四次函数求值，并且在接触这种不连续事件附近，高阶方法的光滑假设会失效——事件本身就把解“折断”了。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>稳定性</th>
+<th>能量行为</th>
+<th>每步代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显式欧拉</td>
+<td>条件稳定，<span class="arithmatex">\(\Delta t\)</span> 受限</td>
+<td>无界漂移，易发散</td>
+<td>1 次求值</td>
+</tr>
+<tr>
+<td>半隐式欧拉</td>
+<td>条件稳定，界更宽</td>
+<td>有界振荡，近似守恒</td>
+<td>1 次求值</td>
+</tr>
+<tr>
+<td>显式中点法</td>
+<td>条件稳定，优于欧拉</td>
+<td>长期守恒性较好</td>
+<td>2 次求值</td>
+</tr>
+<tr>
+<td>RK4</td>
+<td>条件稳定，容差更大</td>
+<td>光滑段精度高</td>
+<td>4 次求值</td>
+</tr>
+<tr>
+<td>隐式欧拉</td>
+<td>无条件稳定</td>
+<td>强数值阻尼</td>
+<td>需解方程</td>
+</tr>
+</tbody>
+</table>
+<p>对线性系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>，显式欧拉的稳定条件可量化为</p>
+<div class="arithmatex">\[\Delta t&lt;\frac{2}{|\lambda_{\max}|}.\]</div>
+<p>对振荡子 <span class="arithmatex">\(\lambda=\pm j\omega\)</span>，能量每步按</p>
+<div class="arithmatex">\[E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)\]</div>
+<p>增长，而半隐式对应因子约为 <span class="arithmatex">\(\left(1+\Delta t^2\omega^2\right)^{-1}\)</span>，即略微耗散但保持有界。这两个式子是判断“步长是否够小”的实用依据：只要估计出系统最高特征频率 <span class="arithmatex">\(\omega_{\max}\)</span>，就可以反推出步长上限。</p>
+<table>
+<thead>
+<tr>
+<th>刚度 <span class="arithmatex">\(\omega_{\max}\)</span></th>
+<th>允许步长 <span class="arithmatex">\(\Delta t\)</span></th>
+<th>每秒步数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 rad/s</td>
+<td>约 0.2 s</td>
+<td>5</td>
+<td>慢速移动底盘</td>
+</tr>
+<tr>
+<td>100 rad/s</td>
+<td>约 0.02 s</td>
+<td>50</td>
+<td>常规关节运动</td>
+</tr>
+<tr>
+<td>1000 rad/s</td>
+<td>约 0.002 s</td>
+<td>500</td>
+<td>刚性接触、短连杆</td>
+</tr>
+<tr>
+<td>10000 rad/s</td>
+<td>约 0.0002 s</td>
+<td>5000</td>
+<td>刚性约束，需隐式解法</td>
+</tr>
+</tbody>
+</table>
+<p>一般建议让 <span class="arithmatex">\(\omega_{\max}\Delta t\ll 1\)</span>，工程上常取 0.1 以下。当刚度差距跨越多个量级时（例如同时存在软弹簧与硬接触），系统进入“刚性（stiff）”状态，显式方法会强迫全局步长被最快模态支配，这正是子步（substep）与隐式求解动机的来源。</p>
+<p>实践中的常见组合是：用半隐式积分作为主干，对高刚度约束补充子步，对极硬接触改用隐式求解；只有在需要高精度轨迹且接触不频繁时，才使用 RK4。换句话说，积分器的选择不是“哪个精度高就选哪个”，而是“哪个与系统的刚度分布匹配”。</p>
 <h2 id="接触和摩擦往往比自由运动更难模拟">接触和摩擦往往比自由运动更难模拟</h2>
 <p>物体悬空运动只需要积分动力学；一旦轮子接触地面、机械手抓住物体，就需要处理法向力、摩擦、碰撞恢复和约束。</p>
 <p>不同引擎采用的接触模型和求解器不同，因此“同一组参数”在不同模拟器中不一定产生完全相同结果。不要把仿真器输出当作绝对物理真值。</p>
+<p>接触之所以难，是因为它引入了不连续：力的大小取决于当前是否接触，而是否接触又取决于状态是否已越界。这种“状态与力互相定义”的结构在数学上是互补问题，不存在逐点可微的解析解，只能靠迭代或事件检测近似。任何近似都会在某些速度、刚度或载荷组合下偏离真实，而这些偏离往往恰好出现在最关键的瞬间——碰撞、抓取、起步打滑。</p>
+<table>
+<thead>
+<tr>
+<th>难点</th>
+<th>数学根源</th>
+<th>常见失真表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接触判定</td>
+<td>状态与力耦合</td>
+<td>抖动、穿透、误判分离</td>
+</tr>
+<tr>
+<td>摩擦换向</td>
+<td>静/动摩擦不连续</td>
+<td>低速爬行、停滞</td>
+</tr>
+<tr>
+<td>碰撞恢复</td>
+<td>瞬时冲量、事件检测</td>
+<td>错误弹跳高度</td>
+</tr>
+<tr>
+<td>约束摩擦锥</td>
+<td>多接触耦合</td>
+<td>抓取力分配错误</td>
+</tr>
+<tr>
+<td>数值刚度</td>
+<td>特征频率量级跨度大</td>
+<td>需要极小步长</td>
+</tr>
+</tbody>
+</table>
+<h2 id="接触与摩擦模型">接触与摩擦模型</h2>
+<p>工程上有三类主流建模方式，它们对应不同的求解哲学。</p>
+<p>第一类是<strong>库仑摩擦模型</strong>：把切向力限制在摩擦锥内，<span class="arithmatex">\(\|F_t\|\le\mu F_n\)</span>，静摩擦时物体完全不动，动摩擦时切向力等于 <span class="arithmatex">\(\mu F_n\)</span> 且方向与相对速度相反。它物理直觉清晰，但在速度过零处不连续，容易产生数值抖动。</p>
+<p>第二类是<strong>软接触（罚函数）模型</strong>：允许微小穿透 <span class="arithmatex">\(\delta\)</span>，用弹簧−阻尼模拟法向力，<span class="arithmatex">\(F_n=k_p\delta+d_p\dot\delta\)</span>，切向类似地给出弹簧力并在超出摩擦锥时截断。它实现简单、处处连续、易于求导，非常适合做可微仿真与强化学习环境；代价是引入了一个虚构的接触刚度 <span class="arithmatex">\(k_p\)</span>，接触面会“陷进去”，抓取的接触几何与真实不一致，且 <span class="arithmatex">\(k_p\)</span> 越大越接近刚体、越容易数值不稳定。</p>
+<p>第三类是<strong>互补约束（LCP/凸优化）模型</strong>：把接触写成互补条件</p>
+<div class="arithmatex">\[0\le\lambda\ \perp\ \phi(q)\ge 0,\]</div>
+<p>即“不是分离就是零力”。它不引入虚构弹簧，接触力在约束层面被精确求解，因此更接近刚体物理，也是抓取与操纵类研究偏好的方式；代价是每一步都要解一个约束问题，且当接触数多、摩擦锥复杂时求解成本较高。</p>
+<table>
+<thead>
+<tr>
+<th>建模方式</th>
+<th>核心表达式</th>
+<th>优点</th>
+<th>失真与代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>库仑摩擦</td>
+<td><span class="arithmatex">\(\lVert F_t\rVert\le\mu F_n\)</span></td>
+<td>物理直觉清晰、参数少</td>
+<td>速度过零不连续，易抖动</td>
+</tr>
+<tr>
+<td>软接触（罚函数）</td>
+<td><span class="arithmatex">\(F_n=k_p\delta+d_p\dot\delta\)</span></td>
+<td>连续可微、易并行</td>
+<td>虚构穿透，<span class="arithmatex">\(k_p\)</span> 影响稳定性</td>
+</tr>
+<tr>
+<td>互补约束</td>
+<td><span class="arithmatex">\(0\le\lambda\perp\phi\ge 0\)</span></td>
+<td>无虚构刚度、接近刚体</td>
+<td>每步解 LCP，成本高</td>
+</tr>
+</tbody>
+</table>
+<p>选择哪一类，取决于你要验证的结论是否依赖接触细节。若任务只关心“抓稳了没有”，互补约束更可信；若任务要评估策略对接触参数扰动的鲁棒性，软接触反而更方便，因为 <span class="arithmatex">\(k_p\)</span> 可以作为一个显式的随机化维度。</p>
 <h2 id="模型参数必须有物理尺度">模型参数必须有物理尺度</h2>
 <p>质量、惯量、摩擦、执行器最大力矩和控制周期不应随意填写。即使无法精确测量，也应该根据真实硬件尺寸、数据手册或简单实验给出合理范围。</p>
 <p>一个模型如果几何外观很漂亮，但质量和摩擦完全不合理，对控制和 Sim2Real 的价值仍然很低。</p>
+<p>参数标定的实用顺序是先标“影响一阶行为”的量：总质量、质心位置、最大力矩与最大速度；再标“影响能量与稳定性”的量：转动惯量、接触刚度、阻尼；最后才处理高阶细节。每一类参数都应该有一个来自数据手册或简单实验的区间，而不是一个凭感觉填写的点值。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>合理来源</th>
+<th>若填错的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总质量、质心</td>
+<td>称重 + 悬挂法</td>
+<td>力矩估算整体偏移</td>
+</tr>
+<tr>
+<td>转动惯量</td>
+<td>摆动周期实验</td>
+<td>加速/制动响应错误</td>
+</tr>
+<tr>
+<td>摩擦系数</td>
+<td>斜面滑行实验</td>
+<td>打滑与抓取失真</td>
+</tr>
+<tr>
+<td>最大力矩/转速</td>
+<td>电机数据手册</td>
+<td>控制饱和被误判</td>
+</tr>
+<tr>
+<td>控制周期</td>
+<td>实机实测</td>
+<td>延迟与相位误差</td>
+</tr>
+</tbody>
+</table>
 <h2 id="仿真精度要和任务指标对应">仿真精度要和任务指标对应</h2>
 <p>如果任务只比较规划算法的路径长度，不一定需要精细轮胎模型；如果要评估高速控制器，动力学和延迟就必须更准确。</p>
 <p>评估仿真是否“够用”时，最好比较任务相关量：转弯半径、制动距离、里程计漂移、传感器量程，而不是只看动画是否逼真。</p>
+<p>更严格的做法是为每一项任务指标定义一个“可接受误差带”。例如评估路径规划时可以接受转弯半径有 10% 误差，但评估制动距离时 10% 的误差可能直接改变安全结论。误差带一旦确定，就可以反向推出需要多小的步长、多精细的接触模型，从而避免“为了心安而过度建模”。</p>
+<table>
+<thead>
+<tr>
+<th>任务指标</th>
+<th>需要保真的量</th>
+<th>可以放宽的量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>转弯半径</td>
+<td>轮地摩擦、转向几何</td>
+<td>车身外观、惯量细节</td>
+</tr>
+<tr>
+<td>制动距离</td>
+<td>动力学、执行器延迟</td>
+<td>纹理、光照</td>
+</tr>
+<tr>
+<td>里程计漂移</td>
+<td>轮半径、打滑统计</td>
+<td>高阶接触形变</td>
+</tr>
+<tr>
+<td>抓取成功率</td>
+<td>接触模型、摩擦锥</td>
+<td>视觉细节</td>
+</tr>
+<tr>
+<td>传感器量程一致性</td>
+<td>相机/LiDAR 内参与噪声</td>
+<td>动力学精度</td>
+</tr>
+</tbody>
+</table>
 <h2 id="mujocogazebo-控制循环">MuJoCo/Gazebo 控制循环</h2>
 <p>不同模拟器的 API 不同，但控制循环都遵循“读状态—算控制—施加动作—推进仿真”：</p>
 <div class="highlight"><pre><span></span><code><span class="k">while</span> <span class="n">simulation</span><span class="o">.</span><span class="n">is_running</span><span class="p">():</span>
@@ -3864,8 +4246,163 @@
     <span class="n">simulation</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </code></pre></div>
 <p>MuJoCo 通常直接操作模型与数据对象，Gazebo 常通过插件或 ROS2 接口交换状态和命令。将模拟器差异封装在 <code>simulation</code> 适配层，可让控制与评测逻辑保持一致。</p>
+<p>这个循环里隐藏着一个容易出错的细节：<strong>控制周期与物理步长通常是两个不同的时间尺度</strong>。控制器可能以 100 Hz 运行，而物理引擎以 1 kHz 推进，那么一次控制输出需要在 10 个物理步内保持不变。如果两者混用，就会出现“控制频率被物理步长绑定”或“动作被重复施加”的错误，且这种错误在慢速运动时不明显，在高速运动时才会暴露。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>典型频率</th>
+<th>职责</th>
+<th>常见错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理求解</td>
+<td>1–4 kHz</td>
+<td>积分、接触求解</td>
+<td>步长过大导致发散</td>
+</tr>
+<tr>
+<td>控制器</td>
+<td>50–1000 Hz</td>
+<td>生成力矩/速度指令</td>
+<td>与物理步长混用</td>
+</tr>
+<tr>
+<td>传感器发布</td>
+<td>10–100 Hz</td>
+<td>生成观测与时间戳</td>
+<td>频率语义与实机不符</td>
+</tr>
+<tr>
+<td>评测/日志</td>
+<td>1–50 Hz</td>
+<td>记录指标</td>
+<td>采样过稀漏掉瞬态</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实时因子与加速手段">实时因子与加速手段</h2>
+<p>实时因子（real-time factor, RTF）定义为</p>
+<div class="arithmatex">\[\mathrm{RTF}=\frac{\text{仿真推进的时间}}{\text{墙钟消耗的时间}}.\]</div>
+<p>当 RTF 小于 1 时，仿真比现实慢，适合做精确分析；RTF 大于 1 时，仿真比现实快，这是强化学习训练的常态需求。注意 RTF 与“物理保真度”没有固定关系：一个 RTF 很高的仿真可能只是因为模型极简，而不是因为它高效。</p>
+<p>加速的基本手段有三类。第一类是<strong>减小步长需求</strong>，例如用隐式或半隐式求解器放宽稳定条件，或用软接触把刚性碰撞平滑化。第二类是<strong>子步与并行</strong>：把长步长拆成多个小步提高稳定性，或把多个环境实例并行到多核/多机，通过向量化实现批量推进。第三类是<strong>降低模型复杂度</strong>，例如用简化碰撞几何、合并连杆、冻结不动的关节。</p>
+<table>
+<thead>
+<tr>
+<th>加速手段</th>
+<th>典型加速比</th>
+<th>保真度代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>增大步长</td>
+<td>2–10 倍</td>
+<td>能量漂移、接触失真</td>
+</tr>
+<tr>
+<td>子步细化 + 大步长</td>
+<td>1.5–5 倍</td>
+<td>保持稳定但仍有截断误差</td>
+</tr>
+<tr>
+<td>简化碰撞几何</td>
+<td>2–20 倍</td>
+<td>接触范围近似，抓取易失真</td>
+</tr>
+<tr>
+<td>多环境并行/向量化</td>
+<td>近似线性于核数</td>
+<td>逻辑需支持批量接口</td>
+</tr>
+<tr>
+<td>隐式求解器</td>
+<td>视刚度而定</td>
+<td>引入数值阻尼</td>
+</tr>
+<tr>
+<td>模型降阶（冻结关节）</td>
+<td>5–50 倍</td>
+<td>丢失部分自由度动态</td>
+</tr>
+</tbody>
+</table>
+<p>需要强调，加速比不是越高越好。<strong>真正的目标是“单位算力换取的有效样本数”</strong>，而不是帧率。如果为了 10 倍加速付出的代价是引入了未经标定的接触参数，那么训练出的策略在真机上很可能因为同一个参数偏差而失效，这时加速得到的样本反而在误导训练。</p>
+<table>
+<thead>
+<tr>
+<th>RTF 区间</th>
+<th>适用场景</th>
+<th>建议策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(&lt;0.1\)</span></td>
+<td>高保真离线分析、接触研究</td>
+<td>接受慢速，优先精度</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.1\)</span>–<span class="arithmatex">\(1\)</span></td>
+<td>控制器调参、单机验证</td>
+<td>平衡步长与稳定性</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(1\)</span>–<span class="arithmatex">\(20\)</span></td>
+<td>策略训练、参数扫描</td>
+<td>并行环境 + 适度简化</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(&gt;20\)</span></td>
+<td>大规模域随机化</td>
+<td>接受降阶模型，配合真机抽检</td>
+</tr>
+</tbody>
+</table>
 <h2 id="数值稳定与物理可信是两件事">数值稳定与物理可信是两件事</h2>
 <p>仿真不爆炸只说明积分过程数值上可运行，并不代表接触、摩擦或惯量符合现实。验证时应把能量变化、静态平衡和任务指标分别检查。数值稳定性负责让结果可计算，物理校准负责让结果可解释。</p>
+<p>这两个维度经常被混淆，因为它们的表面症状相似：结果看起来“不对”。区分方法是做两个独立的检验——数值检验不问现实，只看内部一致性，例如能量是否在有界范围内、把步长减半后结果是否收敛到同一解；物理检验不问数值，只看外部一致性，例如把物体静置在斜面上是否在超过摩擦角时才下滑。两组检验都通过，结论才同时具备可计算性与可解释性。</p>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>数值稳定性视角</th>
+<th>物理可信视角</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能量变化</td>
+<td>是否有界、不单调发散</td>
+<td>是否与真实耗散量级相符</td>
+</tr>
+<tr>
+<td>步长减半</td>
+<td>结果应收敛</td>
+<td>收敛值应接近实测</td>
+</tr>
+<tr>
+<td>静置测试</td>
+<td>是否抖动/漂移</td>
+<td>摩擦角是否合理</td>
+</tr>
+<tr>
+<td>参数扰动</td>
+<td>求解是否仍收敛</td>
+<td>敏感度是否与实机一致</td>
+</tr>
+<tr>
+<td>长时运行</td>
+<td>无溢出、无 NaN</td>
+<td>无虚构漂移</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>下一步</strong>：物理模型定下来之后，下一步是把它接到具体的机器人本体与传感器上，见 <a href="../02-robot-sensor-simulation/">机器人与传感器仿真</a>；随后用 <a href="../03-reality-gap-randomization/">Reality Gap 与域随机化</a> 处理模型参数的残余不确定性；若想先补齐模型本身的数学基础，可回看 <a href="../../robotics/01-models-kinematics-dynamics/">机器人建模：运动学与动力学</a>。</p>
+</blockquote>
 
 
 
