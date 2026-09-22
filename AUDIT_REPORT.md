@@ -17,12 +17,12 @@ V6 的目标重新定义为“面向智能系统研究与工程实践的知识�
 
 ## 2. 当前规模
 
-- **12 Sections** / 5 layers
+- **12 Sections** / 5 learning domains
 - **61 core chapters**
 - **74 Markdown pages**
 - **47 local SVG teaching diagrams**
 - 理论层可执行代码块为 **0**
-- 顶部与左侧导航全部使用英文，正文保持中文
+- 顶部与左侧导航全部使用英文，正文保持中文；五个领域为 Foundations、Decision & Learning、Robotics & Perception、Systems & Simulation、Safety & Human Factors
 
 ## 3. 逐 Section 复核结果
 

@@ -31,15 +31,31 @@ theme:
   - search.highlight
 nav:
 - Home: index.md
-- Mathematics:
-  - Overview: mathematics/index.md
-  - Linear Algebra & Calculus: mathematics/01-linear-algebra-calculus.md
-  - Numerical Computation: mathematics/02-numerical-computation.md
-  - Probability & Random Variables: mathematics/03-probability-random-variables.md
-  - Conditional Probability & Bayes: mathematics/04-conditional-bayes.md
-  - Markov Processes: mathematics/05-markov-processes.md
-  - Optimization, Constraints & Uncertainty: mathematics/06-optimization-under-uncertainty.md
-- Theoretical Methods:
+- Foundations:
+  - Mathematics:
+    - Overview: mathematics/index.md
+    - Linear Algebra & Calculus: mathematics/01-linear-algebra-calculus.md
+    - Numerical Computation: mathematics/02-numerical-computation.md
+    - Probability & Random Variables: mathematics/03-probability-random-variables.md
+    - Conditional Probability & Bayes: mathematics/04-conditional-bayes.md
+    - Markov Processes: mathematics/05-markov-processes.md
+    - Optimization, Constraints & Uncertainty: mathematics/06-optimization-under-uncertainty.md
+  - Control Theory:
+    - Overview: control-theory/index.md
+    - Dynamic Models & State Space: control-theory/01-modeling-state-space.md
+    - Feedback & Stability: control-theory/02-feedback-stability.md
+    - PID Principles: control-theory/03-pid.md
+    - Optimal Control & LQR: control-theory/04-lqr.md
+    - Model Predictive Control: control-theory/05-mpc.md
+- Decision & Learning:
+  - Reinforcement Learning:
+    - Overview: reinforcement-learning/index.md
+    - MDP & Bellman Equation: reinforcement-learning/01-mdp-bellman.md
+    - Value-Based Methods: reinforcement-learning/02-value-based.md
+    - Policy Gradient & Actor–Critic: reinforcement-learning/03-policy-actor-critic.md
+    - Exploration & Partial Observability: reinforcement-learning/04-exploration-pomdp.md
+    - Model-Based vs Model-Free RL: reinforcement-learning/05-model-based-vs-model-free.md
+    - Safe, Robust & Offline RL: reinforcement-learning/06-safe-robust-offline.md
   - Game Theory:
     - Overview: game-theory/index.md
     - Game Models & Classification: game-theory/01-game-models.md
@@ -54,23 +70,7 @@ nav:
     - Communication & Information Sharing: multi-agent-systems/03-communication.md
     - Task Allocation & Distributed Decision Making: multi-agent-systems/04-allocation-distributed-decision.md
     - Multi-Agent Learning & CTDE: multi-agent-systems/05-multi-agent-learning.md
-  - Control Theory:
-    - Overview: control-theory/index.md
-    - Dynamic Models & State Space: control-theory/01-modeling-state-space.md
-    - Feedback & Stability: control-theory/02-feedback-stability.md
-    - PID Principles: control-theory/03-pid.md
-    - Optimal Control & LQR: control-theory/04-lqr.md
-    - Model Predictive Control: control-theory/05-mpc.md
-- Algorithmic Understanding:
-  - Reinforcement Learning:
-    - Overview: reinforcement-learning/index.md
-    - MDP & Bellman Equation: reinforcement-learning/01-mdp-bellman.md
-    - Value-Based Methods: reinforcement-learning/02-value-based.md
-    - Policy Gradient & Actor–Critic: reinforcement-learning/03-policy-actor-critic.md
-    - Exploration & Partial Observability: reinforcement-learning/04-exploration-pomdp.md
-    - Model-Based vs Model-Free RL: reinforcement-learning/05-model-based-vs-model-free.md
-    - Safe, Robust & Offline RL: reinforcement-learning/06-safe-robust-offline.md
-- Engineering Implementation:
+- Robotics & Perception:
   - Robotics:
     - Overview: robotics/index.md
     - Models, Kinematics & Dynamics: robotics/01-models-kinematics-dynamics.md
@@ -85,6 +85,7 @@ nav:
     - Detection & Segmentation: perception/03-detection-segmentation.md
     - Depth, 3D Vision & Point Clouds: perception/04-depth-point-cloud.md
     - Multi-Modal Perception: perception/05-multimodal.md
+- Systems & Simulation:
   - Distributed Systems:
     - Overview: distributed-systems/index.md
     - Networks & Message Passing: distributed-systems/01-network-messaging.md
@@ -99,13 +100,13 @@ nav:
     - Git Workflow: software-engineering/03-version-control.md
     - pytest & Debugging: software-engineering/04-testing-debugging.md
     - Docker, CI & Reliability: software-engineering/05-deployment-reliability.md
-- Real-World Systems:
   - Simulation & Sim2Real:
     - Overview: simulation-sim2real/index.md
     - Modeling & Physics Simulation: simulation-sim2real/01-modeling-physics.md
     - Robot & Sensor Simulation: simulation-sim2real/02-robot-sensor-simulation.md
     - Reality Gap & Domain Randomization: simulation-sim2real/03-reality-gap-randomization.md
     - Sim2Real & Real2Sim: simulation-sim2real/04-sim2real-real2sim.md
+- Safety & Human Factors:
   - Robustness & Safety:
     - Overview: robustness-safety/index.md
     - Uncertainty & Distribution Shift: robustness-safety/01-uncertainty-shift.md

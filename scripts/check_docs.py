@@ -17,8 +17,8 @@ EXPECTED_SECTIONS = [
     'human-ai-interaction',
 ]
 EXPECTED_DOMAINS = [
-    'Mathematics', 'Theoretical Methods', 'Algorithmic Understanding',
-    'Engineering Implementation', 'Real-World Systems',
+    'Foundations', 'Decision & Learning', 'Robotics & Perception',
+    'Systems & Simulation', 'Safety & Human Factors',
 ]
 ENGINEERING_SECTIONS = {
     'robotics', 'perception', 'distributed-systems', 'software-engineering',

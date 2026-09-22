@@ -10,16 +10,16 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 - **61 core chapters**
 - **74 Markdown pages**（含 Home 与 12 个 Section 首页）
 - **47 local SVG teaching diagrams**
-- **35 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
+- **28 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
 - 顶部和左侧导航使用英文；正文使用中文并保留标准英文术语
 
 ## Curriculum
 
-- **Foundations** — Mathematics for Intelligent Systems
-- **Intelligent Systems** — Reinforcement Learning, Game Theory, Multi-Agent Systems
-- **Robotics** — Control Theory, Robotics, Perception
-- **Systems** — Distributed Systems & Networking, Software Engineering
-- **Advanced Autonomous Systems** — Simulation & Sim2Real, Robustness & Safety, Human–AI Interaction
+- **Foundations** — Mathematics, Control Theory
+- **Decision & Learning** — Reinforcement Learning, Game Theory, Multi-Agent Systems
+- **Robotics & Perception** — Robotics, Perception
+- **Systems & Simulation** — Distributed Systems & Networking, Software Engineering, Simulation & Sim2Real
+- **Safety & Human Factors** — Robustness & Safety, Human–AI Interaction
 
 ## Content rules
 

@@ -4,35 +4,32 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 <figure markdown="span">
   ![CodeNebula minimum sufficient knowledge map](assets/diagrams/knowledge-map.svg)
-  <figcaption>学习路径从数学解释出发，经过理论与算法，最终落到工程实现和真实系统。</figcaption>
+  <figcaption>课程按基础、决策学习、机器人感知、系统仿真、安全与人因五个领域组织。</figcaption>
 </figure>
 
-## 阅读主线
+## 课程结构
 
-$$
-\text{数学}\longrightarrow\text{理论方法}\longrightarrow\text{算法理解}
-\longrightarrow\text{工程实现}\longrightarrow\text{真实系统}
-$$
+课程不强制一条线读到底。第一次学习可以先完成 Foundations，再根据研究方向进入 Decision & Learning 或 Robotics & Perception；Systems & Simulation 负责把方法放进可运行系统，Safety & Human Factors 贯穿真实部署。
 
-### 数学：为什么这些方法成立
+### Foundations
 
-线性代数、微积分、数值计算、概率、Bayes、Markov 过程和优化用于解释空间、变化、不确定性、递推与最优性。这里不提供 Python 数值库或调参教程。
+Mathematics 提供空间、变化、不确定性与优化语言；Control Theory 建立动态模型、反馈与稳定性。两者共同回答“系统如何表示”和“方法在什么条件下成立”。
 
-### 理论方法：问题应该怎样被描述
+### Decision & Learning
 
-博弈论、多智能体系统和控制理论定义收益、信息、反馈、稳定性与约束。理论页使用公式、关系图和模型边界，不承担工程实现教学。
+Reinforcement Learning、Game Theory 与 Multi-Agent Systems 分别讨论序贯决策、策略相互影响和多主体协调。重点是状态、收益、信息结构与更新规则之间的关系。
 
-### 算法理解：更新规则怎样连接概念
+### Robotics & Perception
 
-强化学习用 Bellman 关系、TD error、策略梯度等公式级伪代码解释“当前估计、目标值和更新方向”，避免把算法章节变成某个框架的使用手册。
+Robotics 连接模型、估计、SLAM、规划和控制；Perception 处理图像、特征、检测、深度、点云与多模态对齐。这里开始出现必要的工程代码。
 
-### 工程实现：代码只解决接口与系统问题
+### Systems & Simulation
 
-Robotics、Perception、Distributed Systems 和 Software Engineering 保留必要代码：坐标变换、PID 循环、路径规划、图像与点云处理、推理接口、TCP/UDP、Pub/Sub、ROS2、API、pytest、Docker 与 CI。
+Distributed Systems、Software Engineering 与 Simulation & Sim2Real 解释通信、接口、测试、部署、物理仿真和现实迁移，让单个算法成为可以运行、观察和恢复的系统。
 
-### 真实系统：面对误差、故障和现实差距
+### Safety & Human Factors
 
-Simulation & Sim2Real、Robustness & Safety、Human–AI Interaction 处理部署后才会暴露的问题：仿真和现实不一致、环境分布变化、组件故障、安全边界，以及人类如何监督、共享控制并在必要时接管。
+Robustness & Safety 处理不确定性、分布变化、约束和故障；Human–AI Interaction 处理控制权、信任、共享自治与接管。它们不是最后才添加的功能，而是设计真实系统时必须持续检查的条件。
 
 !!! note "内容边界"
     每个 Section 只保留能连接上下游的核心概念。代码只出现在工程实现与真实系统；图片优先使用几何解释图、状态空间图、概率关系图、优化曲面图、架构图、数据流图、系统连接图和实验结果图。
