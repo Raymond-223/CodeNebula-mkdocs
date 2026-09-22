@@ -2303,6 +2303,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#反投影的完整坐标链" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反投影的完整坐标链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#点云必须放到统一坐标系才能融合" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2318,6 +2329,28 @@
     <span class="md-ellipsis">
       
         点云裁剪与下采样
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#点云配准与-icp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        点云配准与 ICP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#点云特征与描述子" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        点云特征与描述子
       
     </span>
   </a>
@@ -3674,6 +3707,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#反投影的完整坐标链" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反投影的完整坐标链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#点云必须放到统一坐标系才能融合" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3689,6 +3733,28 @@
     <span class="md-ellipsis">
       
         点云裁剪与下采样
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#点云配准与-icp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        点云配准与 ICP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#点云特征与描述子" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        点云特征与描述子
       
     </span>
   </a>
@@ -3809,21 +3875,82 @@
 
 
 <h1 id="depth-3d-vision--point-clouds">Depth, 3D Vision &amp; Point Clouds</h1>
-<p>二维图像告诉我们像素位置和外观，却没有直接告诉“离相机多远”。深度和点云把视觉从二维投影重新扩展到三维几何，是机器人避障、建图和抓取的基础。</p>
+<p>二维图像记录了每个像素的位置与外观，却没有记录它离相机多远。<strong>深度与点云的全部价值，是把二维投影重新扩展回三维几何；而真正的工程难点不在“拿到深度”，而在“把深度换算到机器人可用的坐标系、时刻与可信度上”。</strong> 避障要的是 <span class="arithmatex">\(base\)</span> frame 下的最近障碍距离，建图要的是 <span class="arithmatex">\(map\)</span> frame 下的一致结构，抓取要的是物体表面的法向与局部曲率——这三样都不是原始深度图能直接给出的。</p>
+<p>这一章沿着一条数据链推进：<strong>深度来源 → 反投影 → 坐标变换 → 预处理 → 配准 → 特征</strong>。链上每一步都会引入误差，而且误差在下游会被放大：一个 2% 的深度相对误差，在 20 m 处就是 0.4 m 的空间偏差，足以让机器人把一条狭窄通道判成可通行或不可通行。</p>
 <figure>
   <img alt="深度可以来自双目、主动传感器或学习模型，并最终形成三维点。" src="../../assets/diagrams/depth-modalities.svg" />
 <br />
 <figcaption>不同深度来源误差特性不同，但都要经过坐标变换进入机器人几何空间。</figcaption>
 </figure>
 <h2 id="深度可以来自不同物理机制">深度可以来自不同物理机制</h2>
-<p>常见来源包括：</p>
+<p>深度不是一个传感器名词，而是一类物理量。常见来源包括：</p>
 <ul>
 <li>双目视差：利用两个相机的几何三角关系；</li>
 <li>RGB-D / ToF：主动测量光的传播或调制信息；</li>
 <li>LiDAR：直接测距形成稀疏或较密集三维点；</li>
 <li>单目深度网络：从图像外观学习相对或绝对深度。</li>
 </ul>
-<p>它们的量程、噪声、密度和失败场景都不同。</p>
+<p>它们的量程、噪声、密度和失败场景都不同。选型的第一判据不是“精度最高”，而是“<strong>在任务关心的距离区间内，误差是否小于任务余量</strong>”。1 m 内做抓取，结构光的毫米级误差绰绰有余；100 m 外做环境感知，双目视差的误差随距离平方增长，而 LiDAR 仍然稳定。</p>
+<table>
+<thead>
+<tr>
+<th>深度来源</th>
+<th>物理机制</th>
+<th>典型量程</th>
+<th>输出形态</th>
+<th>主要误差来源</th>
+<th>典型失败场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双目视差</td>
+<td>三角测量，视差 <span class="arithmatex">\(d=u_L-u_R\)</span></td>
+<td>0.3–20 m</td>
+<td>稠密视差图</td>
+<td>误匹配、纹理缺失</td>
+<td>白墙、重复纹理、逆光</td>
+</tr>
+<tr>
+<td>结构光 / RGB-D</td>
+<td>主动投射图案并解码</td>
+<td>0.2–5 m</td>
+<td>稠密深度图</td>
+<td>多路径、遮挡</td>
+<td>阳光直射、玻璃、吸光物体</td>
+</tr>
+<tr>
+<td>ToF</td>
+<td>测量调制相位差</td>
+<td>0.1–10 m</td>
+<td>深度图</td>
+<td>相位缠绕、环境光</td>
+<td>强反射、多机互扰</td>
+</tr>
+<tr>
+<td>LiDAR</td>
+<td>飞行时间测距</td>
+<td>1–200 m</td>
+<td>稀疏三维点</td>
+<td>反射率、雨雾衰减</td>
+<td>镜面、玻璃、水雾</td>
+</tr>
+<tr>
+<td>单目深度网络</td>
+<td>从外观学习先验</td>
+<td>相对深度</td>
+<td>稠密但非度量</td>
+<td>训练分布偏移</td>
+<td>未见场景、尺度模糊</td>
+</tr>
+</tbody>
+</table>
+<p>表中最后一行要特别警惕：<strong>单目网络的输出常常只有相对顺序而非真实米制尺度</strong>，直接当几何使用会破坏整个下游的度量一致性。若必须使用，应借助稀疏 LiDAR 或双目三角测量的少量真实点做尺度对齐。</p>
+<p>误差增长规律同样是选型判据。双目中基线为 <span class="arithmatex">\(b\)</span>、焦距为 <span class="arithmatex">\(f\)</span>，视差误差 <span class="arithmatex">\(\delta d\)</span> 引起的深度误差近似为</p>
+<div class="arithmatex">\[
+\delta z \approx \frac{z^{2}}{f\,b}\,\delta d,
+\]</div>
+<p>即<strong>深度误差随距离平方增长</strong>。这解释了为什么双目在 2 m 处可能优于 LiDAR，在 50 m 处却完全不可用。</p>
 <h2 id="已知深度后像素可以反投影成三维点">已知深度后，像素可以反投影成三维点</h2>
 <p>相机内参为 <span class="arithmatex">\((f_x,f_y,c_x,c_y)\)</span>，像素 <span class="arithmatex">\((u,v)\)</span> 的深度为 <span class="arithmatex">\(Z\)</span>，则</p>
 <div class="arithmatex">\[
@@ -3835,10 +3962,126 @@ Y=(v-c_y)\frac{Z}{f_y}.
     <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">cy</span><span class="p">)</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="n">fy</span>
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 </code></pre></div>
-<p>这一步把图像坐标重新映射到相机三维坐标系。</p>
+<p>这一步把图像坐标重新映射到相机三维坐标系。注意三点：第一，公式假设针孔模型且已去畸变，若图像仍带桶形畸变，必须先校正；第二，<span class="arithmatex">\(Z\)</span> 的单位决定输出的单位，混用毫米与米是最常见的低级错误；第三，反投影<strong>不会创造信息</strong>，它只是把“带噪声的深度值”搬运到三维，噪声结构被原样保留。</p>
+<p>反投影后得到的是有序深度图对应的点集（organized cloud），保留 <span class="arithmatex">\((u,v)\)</span> 与点的对应关系在后续做语义投影时非常有用。</p>
+<h2 id="反投影的完整坐标链">反投影的完整坐标链</h2>
+<p>单步反投影只到相机系，而机器人需要的是世界系。完整链条是三级变换：<strong>像素 → 相机系 → 机器人系 → 世界系</strong>。</p>
+<p>第一级由内参完成，把 <span class="arithmatex">\((u,v,d)\)</span> 变成相机光学系下的点：</p>
+<div class="arithmatex">\[
+p_c=\left(\frac{u-c_x}{f_x}d,\ \frac{v-c_y}{f_y}d,\ d\right)^{\top}.
+\]</div>
+<p>第二级由相机外参 <span class="arithmatex">\((R^{b}_{c},t^{b}_{c})\)</span> 完成，把点搬到机器人本体系：</p>
+<div class="arithmatex">\[
+p_b=R^{b}_{c}\,p_c+t^{b}_{c}.
+\]</div>
+<p>第三级由机器人位姿 <span class="arithmatex">\((R^{w}_{b},t^{w}_{b})\)</span> 完成，把点搬到世界系（或地图系）：</p>
+<div class="arithmatex">\[
+p_w=R^{w}_{b}\,R^{b}_{c}\,p_c+R^{w}_{b}\,t^{b}_{c}+t^{w}_{b}.
+\]</div>
+<p>三级合并可以写成单个刚体变换 <span class="arithmatex">\(p_w=T^{w}_{b}T^{b}_{c}p_c\)</span>，但<strong>必须逐级检查</strong>，因为每一级的误差来源完全不同：内参是标定误差，外参是安装与温漂误差，位姿是状态估计误差。把它们塞进一个矩阵里调试，等于放弃了归因能力。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>输入</th>
+<th>需要的量</th>
+<th>主要误差来源</th>
+<th>典型量级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>去畸变</td>
+<td>原始像素</td>
+<td>畸变系数 <span class="arithmatex">\(k_1,k_2,p_1,p_2\)</span></td>
+<td>标定残差</td>
+<td>亚像素到数像素</td>
+</tr>
+<tr>
+<td>内参反投影</td>
+<td><span class="arithmatex">\((u,v,d)\)</span></td>
+<td><span class="arithmatex">\(f_x,f_y,c_x,c_y\)</span></td>
+<td>焦距与主点标定</td>
+<td>0.1%–0.5% 相对误差</td>
+</tr>
+<tr>
+<td>相机 → 机器人</td>
+<td><span class="arithmatex">\(p_c\)</span></td>
+<td><span class="arithmatex">\(T^{b}_{c}\)</span>（手眼标定）</td>
+<td>安装偏差、震动</td>
+<td>0.2–2 cm 平移</td>
+</tr>
+<tr>
+<td>机器人 → 世界</td>
+<td><span class="arithmatex">\(p_b\)</span></td>
+<td>实时位姿 <span class="arithmatex">\(T^{w}_{b}\)</span></td>
+<td>里程计漂移</td>
+<td>每米 1%–2%</td>
+</tr>
+<tr>
+<td>时间补偿</td>
+<td>多传感器点</td>
+<td>时间戳与速度</td>
+<td>同步与插值</td>
+<td>速度 × 时差</td>
+</tr>
+</tbody>
+</table>
+<p>表中最后一行常被忽略：若点在世界系中还要按运动补偿，时差 <span class="arithmatex">\(\Delta t\)</span> 与速度 <span class="arithmatex">\(v\)</span> 直接产生 <span class="arithmatex">\(v\Delta t\)</span> 的位置错误。以 1.5 m/s、30 ms 时差计，就是 4.5 cm——足以让点云和图像在近处“看起来还行”，在远处完全错开。时间与坐标的耦合细节见 <a href="../05-multimodal/">多模态感知</a>。</p>
+<p>一个常见的实现是把这三级写成一个查询函数，让每个点带上时间戳后一次性完成变换：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">to_world</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T_b_c</span><span class="p">,</span> <span class="n">pose_provider</span><span class="p">,</span> <span class="n">stamp</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">K</span><span class="o">.</span><span class="n">cx</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span> <span class="o">/</span> <span class="n">K</span><span class="o">.</span><span class="n">fx</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">K</span><span class="o">.</span><span class="n">cy</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span> <span class="o">/</span> <span class="n">K</span><span class="o">.</span><span class="n">fy</span>
+    <span class="n">p_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">pose</span> <span class="o">=</span> <span class="n">pose_provider</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">stamp</span><span class="p">)</span>   <span class="c1"># interpolate pose at capture time</span>
+    <span class="k">return</span> <span class="n">pose</span> <span class="o">@</span> <span class="n">T_b_c</span> <span class="o">@</span> <span class="n">p_c</span>
+</code></pre></div>
+<p>这里的关键不是矩阵乘法，而是 <code>pose_provider.at(stamp)</code>：<strong>必须用采集时刻的位姿，而不是处理时刻的位姿</strong>。用最新位姿去变换旧点云，正是点云拖影与错位的根源。</p>
 <h2 id="点云必须放到统一坐标系才能融合">点云必须放到统一坐标系才能融合</h2>
 <p>LiDAR 点在 <code>lidar</code> frame，相机反投影点在 <code>camera</code> frame，机器人规划通常使用 <code>base</code> 或 <code>map</code> frame。不同来源的点云若没有正确外参，就无法直接叠加。</p>
-<p>因此点云处理几乎总伴随刚体变换 <span class="arithmatex">\(p_B=T^B_Ap_A\)</span>。</p>
+<p>因此点云处理几乎总伴随刚体变换 <span class="arithmatex">\(p_B=T^B_Ap_A\)</span>。这句话背后有三个易错点：</p>
+<ol>
+<li><strong>方向约定</strong>：<span class="arithmatex">\(T^{B}_{A}\)</span> 是“把 A 系的点表示成 B 系”，还是“A 系在 B 系中的位姿”？两种约定互为逆，写反了会让远处的点云朝反方向飞出去。工程上应统一为前者，并在类型名里写清楚。</li>
+<li><strong>链式拼接顺序</strong>：<span class="arithmatex">\(T^{w}_{b}T^{b}_{c}\)</span> 不能交换。旋转与平移不交换，顺序错等于把平移也旋转了一遍。</li>
+<li><strong>时间一致</strong>：坐标系本身随机器人运动，所以“统一坐标系”不仅是空间问题，也是时间问题。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>原生 frame</th>
+<th>到 <code>map</code> 需要的链</th>
+<th>精度瓶颈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>相机反投影</td>
+<td><code>camera_optical</code></td>
+<td><span class="arithmatex">\(T^{map}_{base}T^{base}_{cam}\)</span></td>
+<td>手眼标定 + 位姿</td>
+</tr>
+<tr>
+<td>LiDAR</td>
+<td><code>lidar</code></td>
+<td><span class="arithmatex">\(T^{map}_{base}T^{base}_{lidar}\)</span></td>
+<td>安装角 + 位姿</td>
+</tr>
+<tr>
+<td>IMU 轨迹</td>
+<td><code>imu</code></td>
+<td>外参 + 时间对齐</td>
+<td>零偏与积分</td>
+</tr>
+<tr>
+<td>里程计点云</td>
+<td><code>odom</code></td>
+<td><span class="arithmatex">\(T^{map}_{odom}\)</span></td>
+<td>漂移累积</td>
+</tr>
+</tbody>
+</table>
+<p>验证方法很直接：在场景里放一个已知尺寸的标定板或柱子，检查它在融合后的点云中是否仍为已知尺寸、是否与图像中的边缘对齐。<strong>尺寸和边缘双双对齐，才说明链条正确。</strong></p>
 <h2 id="点云裁剪与下采样">点云裁剪与下采样</h2>
 <p>原始点云可能包含数十万点。体素下采样、距离裁剪、地面去除等预处理可以显著减少后续计算量。关键是保留任务需要的几何结构，而不是追求所有点都留下。</p>
 <p>一个典型处理接口按固定顺序组织步骤：</p>
@@ -3848,11 +4091,239 @@ Y=(v-c_y)\frac{Z}{f_y}.
     <span class="n">cloud</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">voxel_downsample</span><span class="p">(</span><span class="n">voxel_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">transform</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
 </code></pre></div>
-<p>先清理非法值和任务外范围，再下采样，最后转换到统一坐标系，可以避免后续模块重复处理原始大点云。</p>
+<p>先清理非法值和任务外范围，再下采样，最后转换到统一坐标系，可以避免后续模块重复处理原始大点云。这个顺序不是随意的：</p>
+<ul>
+<li><strong><code>remove_non_finite</code> 必须最先</strong>：NaN 和 Inf 会污染所有后续统计量（均值、协方差、法向），也会让 KD-tree 构建失败。</li>
+<li><strong><code>crop</code> 在 <code>downsample</code> 之前</strong>：先按距离和视场裁掉无关点，再下采样，可以避免把算力浪费在很快就被丢弃的远处点上。</li>
+<li><strong><code>transform</code> 放在最后</strong>：在传感器原生 frame 下裁剪的边界（min/max range）语义清晰，变换后再裁就容易把“自车周围”和“传感器周围”搞混。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预处理步骤</th>
+<th>典型参数</th>
+<th>作用</th>
+<th>代价</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>非有限值清理</td>
+<td>—</td>
+<td>保证统计量有效</td>
+<td>极低</td>
+<td>无</td>
+</tr>
+<tr>
+<td>距离裁剪</td>
+<td>0.2–30 m</td>
+<td>剔除自车与过远噪声</td>
+<td>低</td>
+<td>裁剪过窄会丢掉远处障碍</td>
+</tr>
+<tr>
+<td>视场裁剪</td>
+<td>前向 ±60°</td>
+<td>聚焦任务方向</td>
+<td>低</td>
+<td>侧向盲区</td>
+</tr>
+<tr>
+<td>体素下采样</td>
+<td>0.03–0.20 m</td>
+<td>降点数、稳密度</td>
+<td>中</td>
+<td>体素过大丢细节</td>
+</tr>
+<tr>
+<td>地面去除</td>
+<td>RANSAC / 高度阈值</td>
+<td>减少平面冗余</td>
+<td>中高</td>
+<td>坡道与台阶被误删</td>
+</tr>
+<tr>
+<td>离群点滤波</td>
+<td>邻域点数阈值</td>
+<td>去飞点</td>
+<td>中</td>
+<td>薄结构被当噪声删掉</td>
+</tr>
+</tbody>
+</table>
+<h2 id="点云配准与-icp">点云配准与 ICP</h2>
+<p>当两台传感器（或同一传感器在两个时刻）观测同一场景，需要求它们之间的刚体变换，这就是配准。<strong>ICP（Iterative Closest Point）的核心思想是“先假设对应关系，再求解最优变换，然后重新找对应”</strong>：</p>
+<ol>
+<li>对源点云 <span class="arithmatex">\(P\)</span> 中每个点 <span class="arithmatex">\(p_i\)</span>，在目标点云 <span class="arithmatex">\(Q\)</span> 中找最近点 <span class="arithmatex">\(q_{\sigma(i)}\)</span>；</li>
+<li>固定对应关系，求解使代价最小的刚体变换 <span class="arithmatex">\(T\)</span>；</li>
+<li>用 <span class="arithmatex">\(T\)</span> 变换源点云，重复第 1 步，直到变换增量或均方误差收敛。</li>
+</ol>
+<p>对应的优化问题是</p>
+<div class="arithmatex">\[
+\min_{T\in SE(3)}\sum_{i}\left\|T p_i-q_{\sigma(i)}\right\|^{2},
+\]</div>
+<p>闭式解由对应点质心对齐 + SVD 分解得到，这就是<strong>点到点</strong>（point-to-point）代价。另一种更常用的是<strong>点到面</strong>（point-to-plane）代价，它只惩罚沿目标点法向 <span class="arithmatex">\(n_i\)</span> 方向的偏差：</p>
+<div class="arithmatex">\[
+\min_{T}\sum_{i}\left((T p_i-q_i)^{\top}n_i\right)^{2}.
+\]</div>
+<table>
+<thead>
+<tr>
+<th>代价函数</th>
+<th>度量</th>
+<th>收敛速度</th>
+<th>对初值敏感度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>点到点</td>
+<td>欧氏距离平方</td>
+<td>慢，迭代多</td>
+<td>高</td>
+<td>稠密、各向同性点云，简单可靠</td>
+</tr>
+<tr>
+<td>点到面</td>
+<td>法向投影残差</td>
+<td>快 3–10 倍</td>
+<td>中</td>
+<td>结构化场景（墙面、地面、车道）</td>
+</tr>
+<tr>
+<td>点到线</td>
+<td>沿边缘方向残差</td>
+<td>快</td>
+<td>中</td>
+<td>稀疏 LiDAR + 边缘丰富环境</td>
+</tr>
+<tr>
+<td>彩色 ICP</td>
+<td>距离 + 颜色差</td>
+<td>中</td>
+<td>高</td>
+<td>有稳定光照的 RGB-D</td>
+</tr>
+</tbody>
+</table>
+<p>ICP 的两个固有弱点必须记住。第一是<strong>局部极小</strong>：它只在当前对应关系附近下降，初值偏离太远会收敛到错误对齐（例如把相邻两堵平行的墙整体平移一格）。第二是<strong>对应关系依赖</strong>：最近点不等于真实对应点，在稀疏或重复结构（栅栏、货架、隧道）中会产生大量错配。工程对策是先做粗配准（特征匹配、RANSAC、全局描述子），再用 ICP 精配；并在迭代中引入鲁棒核（如 Huber）抑制错误对应的影响。</p>
+<p>工程实现时有几个参数直接决定成败：</p>
+<ul>
+<li><strong>最大对应距离（max correspondence distance）</strong>：超过该距离的点对不计入代价。它既是抗错配的手段，也是一条“信任半径”——设置过小会让 ICP 只做微小修正，设置过大会把错误对应一起优化；</li>
+<li><strong>收敛判据</strong>：同时检查变换增量（如平移 &lt; 1 mm、旋转 &lt; 0.01°）与均方误差的相对下降率，只用一个容易过早停止；</li>
+<li><strong>最大迭代次数</strong>：必须有硬上限，否则退化场景（如隧道）会一直游走而无法收敛；</li>
+<li><strong>降采样比例</strong>：源点云只取一部分（例如 10%）参与对应搜索，可以大幅提速而几乎不损失精度。</li>
+</ul>
+<p>判断 ICP 是否“骗了你”的方法很简单：<strong>看残差在迭代中的曲线</strong>。健康收敛是单调快速下降并迅速变平；若残差下降到某个值后震荡，说明对应关系在两组候选之间跳变；若残差很大却仍在下降，说明它正在把错误的两个结构强行对齐。<strong>残差小不等于对齐正确</strong>——把两个平面沿平面方向平移，残差可以一直是零。</p>
+<h2 id="点云特征与描述子">点云特征与描述子</h2>
+<p>原始点本身没有语义，特征让点云可被匹配、分类和识别。</p>
+<p><strong>法向量估计</strong>是最基础的局部特征。对点 <span class="arithmatex">\(p\)</span> 取 <span class="arithmatex">\(k\)</span> 近邻，计算去中心化的协方差</p>
+<div class="arithmatex">\[
+\Sigma=\frac{1}{k}\sum_{i=1}^{k}(p_i-\bar p)(p_i-\bar p)^{\top},
+\]</div>
+<p>其特征值 <span class="arithmatex">\(\lambda_1\ge\lambda_2\ge\lambda_3\)</span> 描述局部形状：<span class="arithmatex">\(\lambda_1\gg\lambda_2\approx\lambda_3\)</span> 是平面（法向为最小特征值对应的方向），<span class="arithmatex">\(\lambda_1\approx\lambda_2\gg\lambda_3\)</span> 是边缘，三者相近则是角点或体素化后的散点。<strong>法向的可靠性几乎完全由邻域尺寸决定</strong>：太小则对噪声敏感，太大则把曲面和棱边平均掉。</p>
+<p><strong>FPFH（Fast Point Feature Histogram）</strong> 在法向基础上统计邻域内点对的法向夹角分布，得到一个 33 维的描述子，对刚体变换不变、对噪声相对稳健，是粗配准阶段的常用选择。它的计算依赖每个点的邻域搜索，因此对点数非常敏感，通常要与下采样配合使用。</p>
+<table>
+<thead>
+<tr>
+<th>体素尺寸</th>
+<th>平均点数/叶</th>
+<th>法向稳定性</th>
+<th>FPFH 区分度</th>
+<th>配准代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.02 m</td>
+<td>少（5–15）</td>
+<td>差，噪声放大</td>
+<td>高但含噪</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>0.05 m</td>
+<td>中（15–40）</td>
+<td>好</td>
+<td>高</td>
+<td>中，常用折中</td>
+</tr>
+<tr>
+<td>0.10 m</td>
+<td>多（40–120）</td>
+<td>很好</td>
+<td>中</td>
+<td>低</td>
+</tr>
+<tr>
+<td>0.20 m</td>
+<td>很多</td>
+<td>过平滑</td>
+<td>低，细节丢失</td>
+<td>很低</td>
+</tr>
+</tbody>
+</table>
+<p>经验上 0.05 m 附近是室外 LiDAR 的常用折中点；近距离抓取（0.5 m 内）应显著减小，因为 0.2 m 的体素会把一个杯子压成一个点。<strong>体素尺寸应随任务尺度缩放，而不是全局统一。</strong></p>
+<p>特征还有一个容易忽视的性质：<strong>描述子的可重复性依赖于预处理的一致性</strong>。如果建图时用 0.05 m 体素、定位时用 0.10 m 体素，同一处墙壁算出的 FPFH 分布会有系统性差异，匹配分数随之下降，表现为“回环检测时灵时不灵”。因此<strong>特征提取的体素尺寸、邻域半径、法向朝向规则必须作为管线参数固化下来，并与地图一起版本化。</strong></p>
 <h2 id="深度误差会随距离和传感方式变化">深度误差会随距离和传感方式变化</h2>
 <p>双目在远距离时视差变小，深度误差迅速增大；LiDAR 可能在玻璃、强反射或雨雾条件下产生异常；单目网络则可能受训练分布影响。规划器不应把所有深度值都当成同等可靠的精确真值。</p>
+<p>把误差写成“距离的函数”是工程上最有用的做法。视差误差近似随 <span class="arithmatex">\(z^{2}\)</span> 增长；LiDAR 的单点测距误差基本与距离无关（约厘米级），但点密度随距离下降；结构光误差随距离近似线性。把这三条曲线画在同一张图上，就能直接读出“在哪个距离区间该用谁”。</p>
+<table>
+<thead>
+<tr>
+<th>距离</th>
+<th>双目（基线 0.1 m, 1 px 视差误差）</th>
+<th>LiDAR 单点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 m</td>
+<td>~0.01 m</td>
+<td>~0.02 m</td>
+<td>双目占优</td>
+</tr>
+<tr>
+<td>5 m</td>
+<td>~0.25 m</td>
+<td>~0.02 m</td>
+<td>LiDAR 占优</td>
+</tr>
+<tr>
+<td>20 m</td>
+<td>~4 m</td>
+<td>~0.03 m</td>
+<td>双目不可用</td>
+</tr>
+<tr>
+<td>50 m</td>
+<td>—</td>
+<td>~0.05 m</td>
+<td>只能依赖 LiDAR</td>
+</tr>
+</tbody>
+</table>
+<p>规划器应把深度不确定度一起传递下去：给障碍物膨胀量加上 <span class="arithmatex">\(\sigma_z\)</span> 的若干倍，而不是固定膨胀一个常数。<strong>“近距离不信双目、远距离不信视觉”应当写成代码里的距离阈值，而不是留在工程师的记忆里。</strong></p>
+<p>不确定度还可以用相对误差的形式传播。若深度相对误差为 <span class="arithmatex">\(\varepsilon=\delta z/z\)</span>，则反投影出的点沿视线方向的误差与之成正比，而横向误差由角分辨率决定、基本不随距离增长。这意味着一个远距离点的误差椭球是<strong>沿视线拉长的细长形</strong>，而不是球形——在做最近邻搜索或障碍膨胀时，用球形膨胀会低估沿视线方向的危险、高估横向的危险。严格的系统会把每个点的 <span class="arithmatex">\(3\times3\)</span> 协方差一并传递，而不是只传一个标量 <span class="arithmatex">\(\sigma_z\)</span>。</p>
 <h2 id="点云密度并不等于信息量">点云密度并不等于信息量</h2>
 <p>重复采集同一平面的大量点会增加计算量，却未必增加新的几何约束。下采样应优先保留边缘、曲率变化和稀疏区域的结构信息。处理参数需要根据定位、避障或重建任务分别选择，而不是所有任务共享同一体素大小。</p>
+<p>判断“保留是否合理”的标准是：<strong>删掉这些点之后，下游的几何约束是否变少？</strong> 一面墙上的 10 万个点提供的是同一个平面约束，删到 1000 个几乎不损失信息；而一条细电线杆上的 200 个点可能是唯一的通行边界，删到 20 个就会让规划器判错可通行区域。</p>
+<p>因此特征保留式下采样（保留高曲率、边缘、稀疏区域）通常优于均匀体素下采样，代价是实现更复杂、参数更多。实际系统的常见组合是：<strong>均匀下采样保证最坏情况下的速度上限，特征保留下采样保证关键结构不被抹掉。</strong></p>
+<p>按任务划分，保留策略应当不同：</p>
+<ul>
+<li><strong>避障</strong>：优先保留靠近机器人、位于运动方向、以及高度上可能阻挡通行的点；远处地面点可以大幅抽稀；</li>
+<li><strong>定位</strong>：优先保留<strong>几何特征丰富且稳定</strong>的区域（墙角、柱子、立面），平坦地面点对配准贡献很小；</li>
+<li><strong>抓取</strong>：优先保留目标物体附近的高密度点，远处环境点直接裁掉；</li>
+<li><strong>重建</strong>：优先保留曲率高的区域与观测角度较少的区域，密度不均会直接影响网格质量。</li>
+</ul>
+<p><strong>这四种任务的“好点云”定义互不相同</strong>，所以点云预处理不应做成一个全局共享的固定环节，而应当由各任务声明自己的抽取需求。</p>
+<blockquote>
+<p><strong>下一步</strong>：深度与点云进入统一坐标系之后，就要和相机、IMU 的数据在时间和空间上对齐，见 <a href="../05-multimodal/">多模态感知</a>。若关心点云如何变成地图，读 <a href="../../robotics/03-mapping-slam/">地图构建与 SLAM</a>；若关心深度误差如何进入状态估计的协方差，读 <a href="../../robotics/02-sensing-estimation/">机器人传感与状态估计</a>；检测框如何与点云联合使用，见 <a href="../03-detection-segmentation/">目标检测与图像分割</a>。</p>
+</blockquote>
 
 
 

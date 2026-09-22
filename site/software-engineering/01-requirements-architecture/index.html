@@ -2736,6 +2736,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#把质量属性翻译成可验证指标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        把质量属性翻译成可验证指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#什么时候需要拆模块什么时候不要" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2769,10 +2780,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#分层与依赖方向" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分层与依赖方向
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#用可验证条件约束架构" class="md-nav__link">
     <span class="md-ellipsis">
       
         用可验证条件约束架构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#架构决策记录adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构决策记录（ADR）
       
     </span>
   </a>
@@ -3674,6 +3707,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#把质量属性翻译成可验证指标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        把质量属性翻译成可验证指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#什么时候需要拆模块什么时候不要" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3707,10 +3751,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#分层与依赖方向" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分层与依赖方向
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#用可验证条件约束架构" class="md-nav__link">
     <span class="md-ellipsis">
       
         用可验证条件约束架构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#架构决策记录adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构决策记录（ADR）
       
     </span>
   </a>
@@ -3810,17 +3876,61 @@
 
 <h1 id="requirements--architecture">Requirements &amp; Architecture</h1>
 <p>软件工程的第一步不是选框架，而是先回答两个问题：<strong>系统必须完成什么，以及哪些质量不能牺牲</strong>。架构的作用，就是把这些要求变成可以实现、测试和长期维护的结构。</p>
+<p>很多人把架构理解成“画一张漂亮的框图”，于是先挑框架、先建目录、先定数据库，最后才发现真正难的地方根本没有被回答：谁依赖谁、失败时谁负责兜底、哪个指标下降就算退化。架构不是装饰性的文档，而是一组<strong>可执行、可验证的约束</strong>。它约束的是未来的改动范围——当需求变化时，改动应该被限制在一两个模块里，而不是扩散到整个代码库。</p>
+<p>本文从需求分类出发，把“要稳定”“要快”这类模糊期待翻译成可验收指标，再讨论边界与依赖方向、模块拆分时机，最后给出 ADR 这一记录决策的实践方式。读完之后，你应该能用一句话说清自己的系统在哪里划了线、为什么划线，以及什么现象出现时说明这条线画错了。</p>
 <p><img alt="从需求到架构" src="../../assets/diagrams/software-architecture.svg" /></p>
 <h2 id="先把功能与质量分开">先把功能与质量分开</h2>
 <p>功能需求描述系统<strong>做什么</strong>，例如“用户可以提交任务”“机器人可以上报状态”。非功能需求描述系统<strong>做到什么程度</strong>，例如延迟、吞吐、可靠性、安全性和可维护性。</p>
-<p>同一个功能可以对应完全不同的架构。例如一个只给实验室内部使用的任务面板，和一个要支持上万设备同时连接的平台，都能完成“提交任务”，但它们对并发、容错和部署的要求完全不同。</p>
+<p>把这两类混在一起，是需求阶段最常见的错误。因为功能需求可以靠“加代码”满足，而质量需求往往要靠“改结构”满足——加代码往往只会让质量更差。一个功能只要写出来就能演示，但延迟、可用性、可维护性必须在设计阶段就被安排进结构里，事后补救的成本高得多。</p>
+<p>同一个功能可以对应完全不同的架构。例如一个只给实验室内部使用的任务面板，和一个要支持上万设备同时连接的平台，都能完成“提交任务”，但它们对并发、容错和部署的要求完全不同。前者用单进程加 SQLite 就够，后者需要连接网关、消息中间件和分片存储——而它们的“功能清单”几乎一模一样。</p>
 <p>写需求时至少要明确三类信息：</p>
 <ul>
 <li><strong>输入与输出</strong>：系统接收什么，产生什么；</li>
 <li><strong>边界与约束</strong>：哪些事情由本系统负责，哪些交给外部系统；</li>
 <li><strong>可验收条件</strong>：什么现象出现时，才能说需求已经完成。</li>
 </ul>
-<p>模糊的“系统要稳定、要快”无法指导设计。更好的写法是“核心接口 95% 请求在 200 ms 内返回”“单个工作节点故障后任务不会丢失”。</p>
+<p>模糊的“系统要稳定、要快”无法指导设计。更好的写法是“核心接口 95% 请求在 200 ms 内返回”“单个工作节点故障后任务不会丢失”。判断一条需求写得好不好，有个简单标准：<strong>如果一个测试用例无法根据它被写出来，它就还不够具体</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>功能需求</th>
+<th>质量需求（非功能）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回答的问题</td>
+<td>系统做什么</td>
+<td>系统做到什么程度</td>
+</tr>
+<tr>
+<td>典型写法</td>
+<td>用户可以取消任务</td>
+<td>取消请求 1 s 内生效</td>
+</tr>
+<tr>
+<td>满足方式</td>
+<td>增加逻辑与流程</td>
+<td>调整结构、并发与冗余</td>
+</tr>
+<tr>
+<td>验证方式</td>
+<td>演示、功能测试</td>
+<td>压测、混沌测试、指标观测</td>
+</tr>
+<tr>
+<td>变了之后</td>
+<td>局部改动</td>
+<td>可能牵动整体结构</td>
+</tr>
+<tr>
+<td>常见错误</td>
+<td>漏掉异常路径</td>
+<td>只写形容词，不写数字</td>
+</tr>
+</tbody>
+</table>
 <h2 id="架构是对系统边界和依赖关系的安排">架构是对系统边界和依赖关系的安排</h2>
 <p>一个够用的心智模型是把系统拆成三层：</p>
 <div class="highlight"><pre><span></span><code>Interface / API
@@ -3834,7 +3944,8 @@ Domain + Infrastructure
 <li><strong>业务层</strong>组织一个完整用例，例如“创建任务并分配机器人”；</li>
 <li><strong>基础设施层</strong>负责数据库、消息系统、文件、硬件或第三方服务。</li>
 </ul>
-<p>关键不是层数，而是<strong>依赖方向清楚</strong>。业务规则不应该散落在 HTTP 路由、数据库 SQL 和 UI 回调里，否则任何一处变化都会牵动整个系统。</p>
+<p>这三层不是必须照抄的模板，而是一个思考起点。真正重要的是每一层<strong>能看见什么、不能看见什么</strong>。接口层不应该知道数据库表结构，业务层不应该知道 HTTP 状态码，基础设施层不应该承载业务判断。一旦某层越界，改动就会穿透边界。</p>
+<p>关键不是层数，而是<strong>依赖方向清楚</strong>。业务规则不应该散落在 HTTP 路由、数据库 SQL 和 UI 回调里，否则任何一处变化都会牵动整个系统。判断依赖方向是否健康，有一个很实际的问法：<strong>如果要换掉数据库，需要改几个文件？</strong> 如果答案是“一个适配器”，说明方向是对的；如果是“到处都要改”，说明业务逻辑已经泄漏到了存储层。</p>
 <p>下面这个例子把“业务规则”和“存储细节”分开：</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TaskService</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
@@ -3844,9 +3955,52 @@ Domain + Infrastructure
         <span class="n">task</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
 </code></pre></div>
-<p>这里 <code>TaskService</code> 只知道“需要一个 repo”，并不关心数据最终写入 SQLite、PostgreSQL 还是内存。这个边界就是模块化的价值。</p>
+<p>这里 <code>TaskService</code> 只知道“需要一个 repo”，并不关心数据最终写入 SQLite、PostgreSQL 还是内存。这个边界就是模块化的价值。换个角度看，<code>TaskService</code> 的可测试性也提高了：测试时传入一个内存实现即可，既不需要起数据库，也不需要网络。</p>
+<h2 id="把质量属性翻译成可验证指标">把质量属性翻译成可验证指标</h2>
+<p>“高可用”“低延迟”“可扩展”之所以没用，是因为<strong>没有人能在验收时判定它是否达成</strong>。质量属性必须翻译成带数字、带统计口径的指标，否则它只是愿望。翻译的过程本身就是设计的一部分：为了说清 P95 是多少，你必须先定义哪些请求算核心路径、超时算失败还是降级成功。</p>
+<p>翻译质量属性时，要同时确定四件事：<strong>测什么</strong>（哪个接口或流程）、<strong>怎么算</strong>（统计口径与窗口）、<strong>多少算达标</strong>（阈值）、<strong>不达标时怎么办</strong>（告警、降级还是回滚）。缺了最后一件事，指标就只是报告，不构成约束。</p>
+<table>
+<thead>
+<tr>
+<th>模糊说法</th>
+<th>可验收指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统要稳定</td>
+<td>月度可用性 ≥ 99.9%，MTBF ≥ 720 h</td>
+</tr>
+<tr>
+<td>故障要能快速恢复</td>
+<td>MTTR ≤ 15 min，RTO ≤ 5 min，RPO ≤ 1 min</td>
+</tr>
+<tr>
+<td>响应要快</td>
+<td>核心读接口 P95 ≤ 200 ms，P99 ≤ 500 ms</td>
+</tr>
+<tr>
+<td>要能扛住流量</td>
+<td>峰值 500 QPS 下错误率 &lt; 0.1%</td>
+</tr>
+<tr>
+<td>不能丢任务</td>
+<td>单节点故障后任务丢失数 = 0</td>
+</tr>
+<tr>
+<td>要能扩展</td>
+<td>节点数翻倍后吞吐线性增长 ≥ 80%</td>
+</tr>
+<tr>
+<td>要安全</td>
+<td>越权请求拦截率 100%，密钥零硬编码</td>
+</tr>
+</tbody>
+</table>
+<p>注意 MTBF（平均无故障时间）与 MTTR（平均修复时间）是一对：可用性由两者共同决定，只优化其中一个收益有限。P95/P99 这类分位延迟则必须和平均值一起看——平均延迟很好但 P99 很差，通常意味着少数用户正在经历灾难，而平均值掩盖了这件事。</p>
+<p>指标还要能<strong>被观测</strong>。如果一个指标需要人工跑脚本才能得到，那它不会在日常开发中被守住的。因此质量属性最终要落到监控面板与告警规则上：指标进图表，阈值进告警，每次发布后复核。这样“质量”才从文档里的形容词，变成发布流程里的一道门。</p>
 <h2 id="什么时候需要拆模块什么时候不要">什么时候需要拆模块，什么时候不要</h2>
-<p>模块应该围绕<strong>稳定的职责</strong>划分，而不是按文件类型机械拆分。</p>
+<p>模块应该围绕<strong>稳定的职责</strong>划分，而不是按文件类型机械拆分。把 <code>models/</code>、<code>services/</code>、<code>utils/</code> 当成模块划分依据，通常只会造出一堆互相引用的空壳——因为真正会一起变化的东西被打散了，而互不相干的东西被塞在一起。</p>
 <p>一个模块值得独立出来，通常满足至少一个条件：</p>
 <ol>
 <li>它有清晰输入输出；</li>
@@ -3854,8 +4008,50 @@ Domain + Infrastructure
 <li>它可以被独立测试；</li>
 <li>它可能被不同实现替换。</li>
 </ol>
-<p>反过来，如果两个模块永远一起修改、彼此大量读取内部状态，那么“拆开”只是在增加接口数量。</p>
+<p>这几个条件本质上都在问同一件事：<strong>这个模块的变化能不能被封在里面</strong>。如果某个模块每次上游一改就必须跟着改，那它不是模块，只是被切开的半成品。</p>
+<p>反过来，如果两个模块永远一起修改、彼此大量读取内部状态，那么“拆开”只是在增加接口数量。接口是有成本的：多一层调用、多一处需要同步的契约、多一次出错的机会。没有换来独立变化能力时，这个成本就是纯亏。</p>
 <p>初学者最容易犯的错误是过早微服务化。<strong>单体并不等于混乱</strong>。对于课程项目和大多数科研原型，一个边界清楚的模块化单体通常比一开始拆成十几个服务更容易开发和调试。只有当独立部署、独立扩缩容或团队边界真的成为需求时，服务拆分才有明确收益。</p>
+<table>
+<thead>
+<tr>
+<th>判断维度</th>
+<th>倾向拆分</th>
+<th>倾向保持在一起</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>变化原因</td>
+<td>各自独立变化</td>
+<td>总是同时修改</td>
+</tr>
+<tr>
+<td>输入输出</td>
+<td>可用简单数据结构表达</td>
+<td>需共享大量内部状态</td>
+</tr>
+<tr>
+<td>可测试性</td>
+<td>可独立构造测试</td>
+<td>不组合就无法验证</td>
+</tr>
+<tr>
+<td>性能约束</td>
+<td>可分别扩缩容</td>
+<td>需要同进程低延迟调用</td>
+</tr>
+<tr>
+<td>团队结构</td>
+<td>不同小组负责</td>
+<td>同一人负责</td>
+</tr>
+<tr>
+<td>部署需求</td>
+<td>需要独立发布</td>
+<td>一起发布即可</td>
+</tr>
+</tbody>
+</table>
 <h2 id="用一个机器人任务系统走一遍">用一个机器人任务系统走一遍</h2>
 <p>假设系统要支持：用户提交目标点，规划模块生成路径，机器人执行并持续上报状态。</p>
 <p>可以先划分四个职责：</p>
@@ -3864,7 +4060,9 @@ Domain + Infrastructure
                     └──────→ Robot Adapter
 </code></pre></div>
 <p><code>Task API</code> 不直接控制机器人；<code>Planner</code> 不负责保存用户信息；<code>Robot Adapter</code> 只处理 ROS2/设备通信。这样当规划算法从 A* 换成 MPC，或者机器人通信方式发生变化时，其他部分不需要跟着重写。</p>
-<p>这就是架构设计最实用的判断标准：<strong>变化能不能被限制在合理范围内</strong>。</p>
+<p>把这条线画清楚之后，很多设计问题会自动变得有答案。例如“状态上报要不要写数据库”取决于它属于 <code>Robot Adapter</code> 还是 <code>Task Service</code>；“任务超时该由谁判定”取决于谁持有全局状态。<strong>边界一旦确定，责任归属就不再模糊</strong>，而不明确的责任归属正是大部分架构争论的真正来源。</p>
+<p>再进一步，这份划分也让测试变得可行：Planner 可以喂固定的起终点与地图做单元测试；Robot Adapter 可以用录制回放验证协议；Task Service 可以用内存仓储验证状态机。端到端只留给少数关键流程，因为端到端最贵、最难定位。</p>
+<p>这就是架构设计最实用的判断标准：<strong>变化能不能被限制在合理范围内</strong>。换算法只动 Planner，换设备只动 Adapter，换界面只动 API 层——如果做到了，架构就在为你工作；如果每换一样东西都要全线改动，那所谓的“分层”只是目录结构上的表演。</p>
 <h2 id="架构图最终要回答什么">架构图最终要回答什么</h2>
 <p>一张有用的架构图至少应该让读者看懂：</p>
 <ul>
@@ -3875,8 +4073,145 @@ Domain + Infrastructure
 <li>故障发生时影响会传播到哪里。</li>
 </ul>
 <p>如果架构图只有很多方框，却看不出数据流和依赖方向，它的价值就很有限。对于学习和小型工程，<strong>先把边界、接口和故障传播讲清楚，比掌握几十种架构模式更重要</strong>。</p>
+<p>画图时有一个常被忽略的要点：<strong>显式标注信任边界与网络边界</strong>。哪些调用可能超时、可能丢失、可能被伪造，直接决定了之后要不要重试、要不要鉴权、要不要幂等。把跨网络箭头和进程内箭头画成一样，等于把最贵的那部分风险藏了起来。</p>
+<p>同样值得标注的是<strong>故障传播路径</strong>。当你标出“Planner 不可用时 Task Service 会怎样”，关于降级、排队、熔断的设计讨论就有了具体对象。否则这些讨论只能停留在“我们应该更健壮”的层面，无法落地成任何代码。</p>
+<p>对于还在演进中的系统，还应该标注<strong>当前不成立的部分</strong>：哪些组件还是桩、哪些接口还没有鉴权、哪些路径还没有监控。一份承认自己缺口的架构图，比一份看起来很完整但掩盖了风险的图更有用。</p>
+<h2 id="分层与依赖方向">分层与依赖方向</h2>
+<p>分层的本质是约束<strong>依赖方向</strong>，而不是按目录切分文件。一条实用的规则是：依赖必须指向更稳定的东西。业务规则比 UI 稳定，领域模型比数据库表结构稳定，接口契约比具体实现稳定。因此稳定的一侧不应该反向依赖易变的一侧。</p>
+<p>这就是<strong>依赖倒置</strong>（Dependency Inversion）：高层策略不依赖低层实现，两者都依赖抽象。<code>TaskService</code> 不应 <code>import sqlite3</code>，而应依赖一个 <code>TaskRepository</code> 接口，由基础设施层提供实现。好处不是“看起来更优雅”，而是让业务逻辑可以在没有数据库的情况下被测试和推理。</p>
+<p><strong>循环依赖</strong>之所以比普通坏味道更严重，是因为它让两件事同时发生：一是无法单独编译、单独测试、单独替换任意一方；二是无法判断改动的影响范围。A 依赖 B、B 又依赖 A 时，“改 B 会不会影响 A”这个问题没有答案，因为两者已经构成一个不可分割的整体。循环依赖还是模块合并的正确信号——它们实际就是一个模块，只是被切成了两半。</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>允许依赖</th>
+<th>禁止依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interface / API</td>
+<td>Service、DTO</td>
+<td>Repository 实现、SQL</td>
+</tr>
+<tr>
+<td>Application / Service</td>
+<td>Domain、Repository 接口</td>
+<td>HTTP 框架细节、具体驱动</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>纯数据结构、抽象</td>
+<td>数据库、网络、框架</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td>外部 SDK、驱动</td>
+<td>上层业务规则</td>
+</tr>
+</tbody>
+</table>
+<p>维护依赖方向靠习惯是不够的，需要<strong>可检查的机制</strong>：把分层写成 lint 规则或导入白名单，在 CI 中拦截越界 import；对跨层调用做静态扫描；在代码评审清单里固定一项“是否引入新的反向依赖”。工具上，<code>import-linter</code>、<code>dependency-cruiser</code> 或自定义脚本都能做到。</p>
+<div class="highlight"><pre><span></span><code>allowed:
+  interface  -&gt; service
+  service    -&gt; domain, repository(interface)
+  infra      -&gt; domain, repository(interface)
+forbidden:
+  domain     -&gt; service, infra, framework
+  service    -&gt; interface
+</code></pre></div>
+<p>最后要接受一个现实：<strong>边界会有例外，但例外必须被记录</strong>。如果某条路径出于性能原因必须跨层调用，就把它写进 ADR，并注明理由和代价。沉默的例外会变成新的事实标准，最终把整个分层结构腐蚀掉。</p>
 <h2 id="用可验证条件约束架构">用可验证条件约束架构</h2>
 <p>“系统要稳定”不能直接指导设计；“定位失效后 200 ms 内停止速度输出”才是可验证条件。把需求写成触发条件、可观察行为和时间边界，架构才能据此划分监控、控制与故障处理责任。</p>
+<p>可验证条件有一个通用句式：<strong>当 [触发条件] 发生时，系统应在 [时间/数量边界] 内表现为 [可观察行为]</strong>。这个句式强迫你说清三件事：谁触发、多快、看到什么。缺任何一项，测试与监控就都写不出来。</p>
+<p>值得注意的是，可验证条件不只约束代码，也约束<strong>责任分配</strong>。“200 ms 内停止输出”这条要求，必然意味着下层执行器必须能独立于上层规划器做出停机决定——因为跨网络的规划器在 200 ms 内可能根本来不及响应。于是这条需求直接推导出了一个架构决定：安全停机逻辑必须下沉到最接近执行器的一层。</p>
+<table>
+<thead>
+<tr>
+<th>触发条件</th>
+<th>时间/数量边界</th>
+<th>可观察行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位信号丢失</td>
+<td>≤ 200 ms</td>
+<td>速度指令归零并置故障标志</td>
+</tr>
+<tr>
+<td>单节点宕机</td>
+<td>≤ 5 min</td>
+<td>任务被其他节点接管，无丢失</td>
+</tr>
+<tr>
+<td>上游返回 503</td>
+<td>≤ 3 次重试</td>
+<td>请求整体失败并返回可重试错误码</td>
+</tr>
+<tr>
+<td>磁盘使用率 &gt; 90%</td>
+<td>≤ 1 min</td>
+<td>触发告警并停止写入历史</td>
+</tr>
+<tr>
+<td>接口 P95 超阈值</td>
+<td>连续 5 min</td>
+<td>触发告警并自动回滚上一版本</td>
+</tr>
+</tbody>
+</table>
+<p>把这些条件写进验收标准，架构评审就有了客观依据：不再争论“这样设计好不好”，而是检查“这样设计能不能满足这条条件”。这也是把质量需求真正纳入工程流程的唯一可行办法。</p>
+<h2 id="架构决策记录adr">架构决策记录（ADR）</h2>
+<p>ADR（Architecture Decision Record）是一份<strong>只写一个决定</strong>的短文档，按时间累积存放在仓库里。它的价值在于回答那个将来一定会被问到的问题：<strong>当初为什么这么选？</strong> 代码能告诉你“是什么”，测试能告诉你“是否还正确”，只有 ADR 能告诉你“当时排除了哪些方案，以及为什么”。</p>
+<p>一份可用的 ADR 不需要长，结构固定即可：</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>内容</th>
+<th>常见错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标题与状态</td>
+<td>一句话决定 + proposed/accepted/deprecated</td>
+<td>标题写成议题而非决定</td>
+</tr>
+<tr>
+<td>背景</td>
+<td>面临的问题与约束，含质量指标</td>
+<td>只写“为了更好”</td>
+</tr>
+<tr>
+<td>选项</td>
+<td>至少两个候选方案及各自代价</td>
+<td>只列被选中的方案</td>
+</tr>
+<tr>
+<td>决定</td>
+<td>选了什么，边界到哪里</td>
+<td>含糊到无法执行</td>
+</tr>
+<tr>
+<td>后果</td>
+<td>收益、代价、需要后续处理的事</td>
+<td>只写好处</td>
+</tr>
+<tr>
+<td>关联</td>
+<td>相关需求、指标、代码位置</td>
+<td>无任何链接</td>
+</tr>
+</tbody>
+</table>
+<p>ADR 比普通设计文档更耐久，原因有三点。第一，它<strong>粒度小</strong>：一个决定一份文件，不会被后续编辑稀释。第二，它<strong>只追加、不重写</strong>：当决定被推翻时，旧 ADR 标记为 deprecated 并指向新 ADR，于是决策的历史被完整保留，而不是被覆盖成“我们一直是这么做的”。第三，它<strong>随代码走</strong>：放在仓库里，评审和改动都能就近看到，不需要去外部 wiki 找。</p>
+<p>一个实际的使用方式是这样：当有人提议换掉消息中间件时，先读相关 ADR，看看当初选择它的约束是否已经改变。如果约束没变，那么这次提议需要先解释为什么当初的理由不成立；如果约束变了，就新写一份 ADR 记录这次变更。<strong>决策因此变成可追溯的工程行为，而不是记忆与职级的较量</strong>。</p>
+<p>要避免的误区是把 ADR 写成流程负担：几十页的背景调研、需要多方签字的审批表。ADR 的目标读者是半年后接手代码的人，不是评审委员会。控制在半页到两页，能在一杯咖啡的时间里读完，才是它真正会被使用的前提。</p>
+<blockquote>
+<p><strong>下一步</strong>：边界与决策确定之后，接下来看这些边界怎样落成稳定接口，读 <a href="../02-modular-apis/">Modular Design &amp; APIs</a>；接口定义完就该有测试，见 <a href="../04-testing-debugging/">pytest &amp; Debugging</a>；架构要跟得上发布节奏，看 <a href="../05-deployment-reliability/">Deployment &amp; Reliability</a>；当边界真的需要跨网络时，再读 <a href="../../distributed-systems/03-consistency-state/">Consistency &amp; State</a>。</p>
+</blockquote>
 
 
 

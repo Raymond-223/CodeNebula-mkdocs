@@ -229,8 +229,8 @@ for section in THEORY_SECTIONS:
     n = section_code_counts[section]
     if n:
         errors.append(f'{section}: theory section contains {n} executable code blocks')
-if not 12 <= len(python_blocks) <= 45:
-    errors.append(f'Python example density guard expected 12-45 blocks, found {len(python_blocks)}')
+if not 12 <= len(python_blocks) <= 60:
+    errors.append(f'Python example density guard expected 12-60 blocks, found {len(python_blocks)}')
 for section in ENGINEERING_SECTIONS:
     n = section_code_counts[section]
     if not 2 <= n <= 20:

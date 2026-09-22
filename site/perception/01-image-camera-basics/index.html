@@ -2290,6 +2290,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#内参矩阵与投影链路" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内参矩阵与投影链路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#标定流程与重投影误差" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标定流程与重投影误差
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#视觉常见失效模式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视觉常见失效模式
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3773,6 +3806,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#内参矩阵与投影链路" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内参矩阵与投影链路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#标定流程与重投影误差" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标定流程与重投影误差
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#视觉常见失效模式" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视觉常见失效模式
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3865,21 +3931,78 @@
 
 
 <h1 id="image--camera-basics">Image &amp; Camera Basics</h1>
-<p>视觉算法最终处理的是像素，但像素来自真实三维世界经过相机成像后的投影。要理解检测、深度、SLAM 或多模态融合，首先要知道<strong>一个三维点怎样变成二维像素</strong>。</p>
+<p>视觉算法最终处理的是像素，但像素来自真实三维世界经过相机成像后的投影。<strong>一个世界坐标系中的三维点，要依次经过外参刚体变换、透视除法与内参缩放三次变换才落到像素坐标上；视觉系统里大多数“看起来像算法 bug”的几何错误，都能追溯到这条链路中的某一个环节。</strong></p>
+<p>本章按“像素是什么 → 三维点如何变成像素 → 内参和外参各负责什么 → 如何标定与验证 → 成像质量在什么情况下毁掉几何”的顺序展开，为后续的特征匹配、深度估计与多模态融合打底。所有讨论都围绕同一个目标：<strong>让图像上的一个坐标可以被解释为真实空间中的一条射线。</strong></p>
 <figure>
   <img alt="三维点经过相机坐标变换和投影后落到图像平面。" src="../../assets/diagrams/camera-pipeline.svg" />
 <br />
 <figcaption>视觉几何的主线是：世界坐标 → 相机坐标 → 归一化平面 → 像素。</figcaption>
 </figure>
 <h2 id="数字图像首先是规则采样的数值阵列">数字图像首先是规则采样的数值阵列</h2>
-<p>灰度图可以写成 <span class="arithmatex">\(I(u,v)\)</span>，彩色图通常在每个像素保存 RGB 三个通道。分辨率只说明采样数量，并不直接等于几何精度；曝光、运动模糊、噪声和镜头畸变都会改变像素值。</p>
-<p>视觉算法因此既受<strong>几何关系</strong>影响，也受<strong>成像质量</strong>影响。</p>
+<p>灰度图可以写成 <span class="arithmatex">\(I(u,v)\)</span>，其中 <span class="arithmatex">\(u\)</span> 是列索引、<span class="arithmatex">\(v\)</span> 是行索引，原点通常取左上角；彩色图在每个像素保存三个通道，工程中最常见的是 RGB，而传感器原生的 Bayer 阵列则只有一个通道加颜色滤波。<strong>分辨率的含义只是“采样点有多少”，它既不等于几何精度，也不等于信息量。</strong></p>
+<p>围绕一次采样，至少有以下几件事同时发生：</p>
+<ul>
+<li>量化：8 bit 把亮度离散成 <span class="arithmatex">\(0\ldots255\)</span> 共 256 级，单级约对应满量程的 0.4%；</li>
+<li>动态范围：可记录的最亮与最暗之比，常用分贝表示 <span class="arithmatex">\(20\log_{10}(S_{\max}/S_{\min})\)</span>，普通 CMOS 约 60–70 dB，HDR 模式可到 100 dB 以上；</li>
+<li>曝光时间：单帧的积分时长，直接决定运动模糊；</li>
+<li>增益与 ISO：把模拟电压放大，亮度提升的同时噪声也被同比放大；</li>
+<li>颜色空间：sRGB 带非线性 gamma，而多数模型在归一化线性空间上训练，互换会改变像素语义；</li>
+<li>采样极限：要区分空间周期为 <span class="arithmatex">\(\Delta\)</span> 的纹理，像素投影尺度 <span class="arithmatex">\(p\)</span> 需满足 <span class="arithmatex">\(p\le\Delta/2\)</span>，否则发生混叠（aliasing）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>图像属性</th>
+<th>物理含义</th>
+<th>对算法的典型影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分辨率</td>
+<td>采样点数量</td>
+<td>决定微小目标是否有足够像素</td>
+</tr>
+<tr>
+<td>位深</td>
+<td>亮度量化级数</td>
+<td>影响弱对比度边缘能否分离</td>
+</tr>
+<tr>
+<td>曝光时间</td>
+<td>单帧积分时长</td>
+<td>决定运动模糊与噪声水平</td>
+</tr>
+<tr>
+<td>增益 / ISO</td>
+<td>模拟与数字放大</td>
+<td>提亮同时放大噪声</td>
+</tr>
+<tr>
+<td>颜色空间</td>
+<td>通道顺序与 gamma 约定</td>
+<td>影响模型输入语义一致性</td>
+</tr>
+<tr>
+<td>帧率</td>
+<td>每秒输出帧数</td>
+<td>决定可观测的最大运动速度</td>
+</tr>
+</tbody>
+</table>
+<p>视觉算法因此既受<strong>几何关系</strong>影响，也受<strong>成像质量</strong>影响。二者要分开诊断：拍同一场景换算法仍错，先查几何；换阈值能缓解但换场景又错，先查成像。</p>
 <h2 id="针孔模型描述最基本的透视投影">针孔模型描述最基本的透视投影</h2>
 <p>设相机坐标系中的三维点为 <span class="arithmatex">\((X,Y,Z)\)</span>，焦距为 <span class="arithmatex">\(f\)</span>，理想投影满足</p>
 <div class="arithmatex">\[
 x=f\frac{X}{Z},\qquad y=f\frac{Y}{Z}.
 \]</div>
-<p>同一个物体离相机越远，<span class="arithmatex">\(Z\)</span> 越大，投影尺寸越小。这就是透视关系的来源。</p>
+<p>同一个物体离相机越远，<span class="arithmatex">\(Z\)</span> 越大，投影尺寸越小。这就是透视关系的来源。写成比例形式会看得更清楚：</p>
+<div class="arithmatex">\[
+Z\begin{bmatrix}x\\y\\1\end{bmatrix}=\begin{bmatrix}X\\Y\\Z\end{bmatrix},
+\qquad (X,Y,Z)\ \text{与}\ (sX,sY,sZ)\ \text{投影到同一像素}.
+\]</div>
+<p>分子与分母同时缩放不改变结果，这就是<strong>单目的尺度歧义</strong>：仅凭一张图像无法恢复绝对距离，除非引入已知尺寸、额外帧间的运动基线，或者第二种传感器。</p>
+<p>视场角由焦距与像面尺寸共同决定，水平视场可近似写作 <span class="arithmatex">\(2\arctan\!\left(\frac{w}{2f_x}\right)\)</span>。<span class="arithmatex">\(f_x\)</span> 增大则视场变窄、远处目标占据的像素更多；这解释了为什么长焦镜头“拍得清但看得窄”，而广角镜头视野大却让每个目标只有几十个像素。</p>
 <p>实际像素还需要考虑主点和不同方向的像素尺度：</p>
 <div class="arithmatex">\[
 \begin{bmatrix}u\\v\\1\end{bmatrix}
@@ -3888,12 +4011,117 @@ K\begin{bmatrix}X/Z\\Y/Z\\1\end{bmatrix},
 \qquad
 K=\begin{bmatrix}f_x&amp;0&amp;c_x\\0&amp;f_y&amp;c_y\\0&amp;0&amp;1\end{bmatrix}.
 \]</div>
-<p><span class="arithmatex">\(K\)</span> 就是相机内参矩阵。</p>
+<p><span class="arithmatex">\(K\)</span> 就是相机内参矩阵。<span class="arithmatex">\(f_x,f_y\)</span> 的单位是像素，<span class="arithmatex">\(c_x,c_y\)</span> 是主点在像素坐标中的位置；前三项共同决定了“归一化平面上的一个方向”落在图像的哪个坐标上。</p>
 <h2 id="内参和外参解决的是两类完全不同的问题">内参和外参解决的是两类完全不同的问题</h2>
+<p><strong>内参描述相机自身的成像几何，外参描述相机相对机器人或世界坐标系的位置与姿态；两者的单位、标定方式和出错后果都不一样。</strong></p>
 <p><strong>内参</strong>描述相机自身成像几何：焦距、主点、畸变等；<strong>外参</strong>描述相机相对机器人或世界坐标系的位置和姿态。</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>内参</th>
+<th>外参</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>描述对象</td>
+<td>相机内部成像几何</td>
+<td>相机相对外部坐标系的位置姿态</td>
+</tr>
+<tr>
+<td>典型参数</td>
+<td><span class="arithmatex">\(f_x,f_y,c_x,c_y\)</span> 与畸变系数</td>
+<td>旋转 <span class="arithmatex">\(R\)</span> 与平移 <span class="arithmatex">\(t\)</span></td>
+</tr>
+<tr>
+<td>自由度</td>
+<td>4（不含畸变与 skew）</td>
+<td>6（3 旋转 + 3 平移）</td>
+</tr>
+<tr>
+<td>单位</td>
+<td>像素</td>
+<td>旋转无量纲，平移为米</td>
+</tr>
+<tr>
+<td>典型标定方式</td>
+<td>棋盘格、圆点靶、已知运动</td>
+<td>手眼标定、已知靶标、CAD 模型</td>
+</tr>
+<tr>
+<td>失效后果</td>
+<td>像素定位整体缩放或偏移</td>
+<td>检测正确但空间位置与方向错误</td>
+</tr>
+<tr>
+<td>变化频率</td>
+<td>一般较低</td>
+<td>拆装、碰撞后随时可能改变</td>
+</tr>
+</tbody>
+</table>
 <p>即使目标在图像中检测得非常准，如果外参错误，转换到机器人坐标系后仍会落在错误位置。机器人视觉里，“检测正确但导航方向不对”经常是外参或 TF 问题。</p>
+<p>量级上有两个直观例子可以区分两类错误：主点 <span class="arithmatex">\(c_x\)</span> 偏 20 px，会让整幅图像的像素定位发生平移，但相对位置关系不变；而平移外参 <span class="arithmatex">\(t_z\)</span> 偏 5 cm，在 3 m 距离上就对应约 <span class="arithmatex">\(0.95°\)</span> 的角误差，直接改变障碍物在机器人坐标系中的方位。<strong>前者通常“还能用”，后者通常直接导致决策错误。</strong></p>
+<p>两类参数的验证方式也不一样：</p>
+<ul>
+<li>内参可以离线独立校验：把已知尺寸的靶标放在多个距离上，检查投影尺度是否符合 <span class="arithmatex">\(h_{px}=f_y h/Z\)</span>；</li>
+<li>外参必须与运动或场景联合校验：让机器人绕自身轴旋转，若图像中的静态目标保持不动而机器人坐标系里的位置却在晃动，问题几乎一定出在外参或时间戳；</li>
+<li>畸变系数要与内参一起看待：只改 <span class="arithmatex">\(k_1\)</span> 而不重新拟合 <span class="arithmatex">\(f_x,f_y\)</span>，会让中心与边缘的尺度互相矛盾。</li>
+</ul>
+<p>外参还会随机械应力、温度与装配负载缓慢漂移，<strong>因此例行自检应把外参与温度、负载一起记录成时间序列，让漂移趋势在造成误判之前就被观察到。</strong></p>
 <h2 id="畸变会让理想针孔模型偏离真实镜头">畸变会让理想针孔模型偏离真实镜头</h2>
-<p>广角镜头尤其明显：直线靠近图像边缘会弯曲。标定过程通常同时估计内参和畸变参数，再把原图校正到更接近针孔模型的坐标。</p>
+<p>广角镜头尤其明显：直线靠近图像边缘会弯曲。把归一化平面上的理想点记为 <span class="arithmatex">\((x,y)\)</span>，<span class="arithmatex">\(r^2=x^2+y^2\)</span>，Brown-Conrady 模型把实际观测点写作</p>
+<div class="arithmatex">\[
+x_d = x\left(1+k_1r^2+k_2r^4+k_3r^6\right)+2p_1xy+p_2\left(r^2+2x^2\right),
+\]</div>
+<div class="arithmatex">\[
+y_d = y\left(1+k_1r^2+k_2r^4+k_3r^6\right)+p_1\left(r^2+2y^2\right)+2p_2xy,
+\]</div>
+<p>其中 <span class="arithmatex">\(k_1,k_2,k_3\)</span> 是径向系数，<span class="arithmatex">\(p_1,p_2\)</span> 是切向系数。注意 <span class="arithmatex">\((x_d,y_d)\)</span> 是<strong>观测</strong>，去畸变要的是它的逆映射，而逆映射通常没有闭式解，只能用迭代或查找表。</p>
+<table>
+<thead>
+<tr>
+<th>畸变类型</th>
+<th>主要成因</th>
+<th>视觉表现</th>
+<th>常见处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>桶形径向（<span class="arithmatex">\(k_1&lt;0\)</span>）</td>
+<td>广角、短焦镜头</td>
+<td>直线向外凸</td>
+<td>逆映射重采样</td>
+</tr>
+<tr>
+<td>枕形径向（<span class="arithmatex">\(k_1&gt;0\)</span>）</td>
+<td>长焦镜头</td>
+<td>直线向内凹</td>
+<td>逆映射重采样</td>
+</tr>
+<tr>
+<td>切向</td>
+<td>镜片与像面不平行</td>
+<td>局部剪切与偏移</td>
+<td>切向系数补偿</td>
+</tr>
+<tr>
+<td>高阶径向</td>
+<td>大畸变镜头</td>
+<td>边缘出现波纹</td>
+<td>引入 <span class="arithmatex">\(k_3\)</span></td>
+</tr>
+<tr>
+<td>鱼眼</td>
+<td>超广角设计</td>
+<td>投影模型本身不同</td>
+<td>使用等距/等积模型</td>
+</tr>
+</tbody>
+</table>
+<p>标定过程通常同时估计内参和畸变参数，再把原图校正到更接近针孔模型的坐标。<strong>去畸变会重新采样像素，边缘区域可能出现空像素，因此校正后必须重新核对有效视场和各向尺寸是否仍然匹配。</strong> 如果下游直接把去畸变图像当成“标准针孔图像”使用，却仍沿用未校正的宽度做归一化，就会得到整体偏小或偏大的框。</p>
 <p>标定不是“只做一次就永远正确”。镜头重新安装、焦距改变或机械结构变形后，参数可能需要重新估计。</p>
 <h2 id="像素投影实现">像素投影实现</h2>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">project_point</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">):</span>
@@ -3903,7 +4131,7 @@ K=\begin{bmatrix}f_x&amp;0&amp;c_x\\0&amp;f_y&amp;c_y\\0&amp;0&amp;1\end{bmatrix
     <span class="n">v</span> <span class="o">=</span> <span class="n">fy</span> <span class="o">*</span> <span class="n">Y</span> <span class="o">/</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">cy</span>
     <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span>
 </code></pre></div>
-<p>这段代码没有畸变、没有外参，但已经体现了投影最核心的 <span class="arithmatex">\(X/Z\)</span>、<span class="arithmatex">\(Y/Z\)</span> 关系。</p>
+<p>这段代码没有畸变、没有外参，但已经体现了投影最核心的 <span class="arithmatex">\(X/Z\)</span>、<span class="arithmatex">\(Y/Z\)</span> 关系。函数开头对 <span class="arithmatex">\(Z\le0\)</span> 的检查同样重要：位于相机后方或正好在光心平面上的点，投影结果是数学上没有意义的，把它当成巨大坐标传给下游会造成极难定位的错误。</p>
 <h3 id="图像读取与预处理接口">图像读取与预处理接口</h3>
 <p>进入模型前应显式固定颜色空间、尺寸和数值范围：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
@@ -3914,11 +4142,292 @@ K=\begin{bmatrix}f_x&amp;0&amp;c_x\\0&amp;f_y&amp;c_y\\0&amp;0&amp;1\end{bmatrix
 <span class="n">rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
 <span class="n">tensor_input</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">rgb</span><span class="p">,</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">384</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
 </code></pre></div>
-<p>预处理参数必须与训练阶段一致；“模型能运行”不代表输入语义正确。</p>
+<p>预处理参数必须与训练阶段一致；“模型能运行”不代表输入语义正确。缩放比例本身也是几何信息：若推理时把 1280 宽缩到 640，检测框坐标必须乘 2 才能回到原图，这个因子最好写成显式的配置，而不是散落在各处的魔数。</p>
 <h2 id="视觉坐标约定">视觉坐标约定</h2>
 <p>不同库对相机轴方向、图像原点和旋转表示可能不同。工程中必须明确：<span class="arithmatex">\(+Z\)</span> 是否朝前、像素原点在哪里、外参是 world-to-camera 还是 camera-to-world。很多“公式差一个负号”的问题，本质是坐标约定没写清。</p>
+<p>以三个最常见的体系为例：OpenCV 相机系为 <span class="arithmatex">\(x\)</span> 向右、<span class="arithmatex">\(y\)</span> 向下、<span class="arithmatex">\(z\)</span> 向前；ROS 的 optical frame 同样以 <span class="arithmatex">\(z\)</span> 为光轴、<span class="arithmatex">\(x\)</span> 向右、<span class="arithmatex">\(y\)</span> 向下；而机器人常用的 base 或 map 系则通常取 <span class="arithmatex">\(z\)</span> 向上、<span class="arithmatex">\(x\)</span> 向前。图像坐标本身也有约定：<span class="arithmatex">\(u\)</span> 沿列方向（向右增大），<span class="arithmatex">\(v\)</span> 沿行方向（向下增大），原点在左上角。</p>
+<table>
+<thead>
+<tr>
+<th>约定项</th>
+<th>常见可选</th>
+<th>不写清的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>光轴方向</td>
+<td><span class="arithmatex">\(+Z\)</span> 朝前或朝后</td>
+<td>深度符号整体反号</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v\)</span> 轴方向</td>
+<td>向下或向上</td>
+<td>图像上下镜像</td>
+</tr>
+<tr>
+<td>外参方向</td>
+<td>world-to-camera 或 camera-to-world</td>
+<td>姿态漂移而非固定偏置</td>
+</tr>
+<tr>
+<td>旋转表示</td>
+<td>矩阵、四元数、欧拉角</td>
+<td>插值与顺序歧义</td>
+</tr>
+<tr>
+<td>单位</td>
+<td>米、毫米、像素</td>
+<td>投影尺度放大 1000 倍</td>
+</tr>
+<tr>
+<td>像素中心</td>
+<td>整数坐标或像素中心加 0.5</td>
+<td>亚像素级系统性偏移</td>
+</tr>
+</tbody>
+</table>
+<p>符号错误造成的偏差可以直接估算：若 <span class="arithmatex">\(v\)</span> 的符号被弄反，投影点会绕图像中心镜像，在 <span class="arithmatex">\(c_y=540\)</span> 的图像上，一个真实位于 <span class="arithmatex">\(v=700\)</span> 的点会被算成 380，偏差 <span class="arithmatex">\(2(v-c_y)=320\)</span> px。<strong>这类错误在单帧可视化里常常“看起来还行”（因为整体仍是合理图像），只有把投影结果叠加到原图上才会暴露。</strong></p>
+<p>工程上有效的做法是把约定写进接口：每个涉及位姿的函数都显式声明输入输出的坐标系名称与旋转表示，让“差一个负号”的错误在类型或字段层面就无法悄悄发生。<strong>命名比注释更可靠——<code>T_world_camera</code> 这种量纲化的命名方式，本身就排除了方向歧义。</strong></p>
+<p>另一个高频陷阱是旋转的复合顺序。<span class="arithmatex">\(T_1T_2\)</span> 与 <span class="arithmatex">\(T_2T_1\)</span> 只在特殊情况下相等，因此链式变换必须固定约定：是从世界到相机的顺序依次右乘，还是相机到世界的顺序依次左乘。<strong>在标定、仿真与实机三处使用不同顺序，会让外参在任何单一模块里都“看起来正确”。</strong></p>
+<p>时间戳与坐标约定属于同一类问题：图像时间戳若是采集时刻而位姿是曝光结束时刻，在 <span class="arithmatex">\(2\)</span> m/s 的机器人上就会带来毫米到厘米级的错位，而这种偏差在静止标定中完全不可见。<strong>因此坐标、单位、旋转表示、时间基准这四项应当被一起写进模块的接口契约。</strong></p>
 <h2 id="分辨率与可辨识尺度">分辨率与可辨识尺度</h2>
 <p>更高分辨率只增加采样点，不会自动消除模糊、噪声或错误标定。一个目标是否可识别取决于它在图像中占据的像素数量、对比度和成像质量。选择相机和输入尺寸时，应从任务所需的最小目标尺度反推，而不是只比较总像素数。</p>
+<p>这个反推关系是线性的。物理高度为 <span class="arithmatex">\(h\)</span> 的目标在距离 <span class="arithmatex">\(Z\)</span> 处占据的像素高度为</p>
+<div class="arithmatex">\[
+h_{px}=\frac{f_y h}{Z}\quad\Longrightarrow\quad f_y\ge\frac{h_{px}\,Z}{h}.
+\]</div>
+<p>若要求 <span class="arithmatex">\(h_{px}\ge 32\)</span> px 才可稳定检测，则检测 0.1 m 的物体在 20 m 处需要 <span class="arithmatex">\(f_y\ge 32\times20/0.1=6400\)</span> px 的垂直解析度；而同样目标在 2 m 处只需 640 px。<strong>这就是“同一个相机在不同距离上表现判若两机”的原因，也是安全场景必须按距离分层报告指标的原因。</strong></p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>目标最小像素尺度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图像级分类</td>
+<td>整图</td>
+<td>与目标尺寸无关</td>
+</tr>
+<tr>
+<td>通用目标检测</td>
+<td>约 32 px 高</td>
+<td>小目标需专门的特征层或切片推理</td>
+</tr>
+<tr>
+<td>关键点与位姿</td>
+<td>约 10 px 特征尺度</td>
+<td>亚像素定位更敏感于模糊</td>
+</tr>
+<tr>
+<td>实例分割边界</td>
+<td>约 2–3 px 边界带</td>
+<td>边界误差直接压低 Dice</td>
+</tr>
+<tr>
+<td>文字识别</td>
+<td>约 16 px 字高</td>
+<td>低于此准确率急剧下降</td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是，缩小输入尺寸等价于降低有效的 <span class="arithmatex">\(f_y\)</span> 与 <span class="arithmatex">\(f_x\)</span>：把 1920 宽缩到 640，等效焦距变为原来的三分之一，可辨识尺度随之放大三倍。<strong>因此“为了降延迟而缩小输入”直接改变了系统的物理量程，必须在选型阶段就用上面的公式核算，而不是等到小目标召回掉光之后才发现。</strong></p>
+<h2 id="内参矩阵与投影链路">内参矩阵与投影链路</h2>
+<p>把世界点写作齐次坐标 <span class="arithmatex">\(\mathbf X=(X,Y,Z,1)^\top\)</span>，完整链路可以压缩成一个式子：</p>
+<div class="arithmatex">\[
+\mathbf x_{pix}\ \sim\ K\,[R\mid t]\,\mathbf X\ =\ K\left(R\,\mathbf X_{1:3}+t\right).
+\]</div>
+<p>展开后每个像素坐标都表现为两个线性的分子除以同一个分母：</p>
+<div class="arithmatex">\[
+u=f_x\frac{r_1^\top\mathbf X_{1:3}+t_x}{r_3^\top\mathbf X_{1:3}+t_z}+c_x,
+\qquad
+v=f_y\frac{r_2^\top\mathbf X_{1:3}+t_y}{r_3^\top\mathbf X_{1:3}+t_z}+c_y,
+\]</div>
+<p>其中 <span class="arithmatex">\(r_i^\top\)</span> 是旋转矩阵的第 <span class="arithmatex">\(i\)</span> 行。<strong>分母相同是透视投影的定义性特征；它既带来“近大远小”，也带来“同一个像素对应空间中的一条射线”这一不可逆性。</strong></p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位</th>
+<th>所在坐标系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(X,Y,Z\)</span></td>
+<td>世界点坐标</td>
+<td>米</td>
+<td>world</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R\)</span></td>
+<td>旋转矩阵</td>
+<td>无量纲</td>
+<td>world → camera</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(t\)</span></td>
+<td>平移向量</td>
+<td>米</td>
+<td>world → camera</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(X_c,Y_c,Z_c\)</span></td>
+<td>相机坐标系中的点</td>
+<td>米</td>
+<td>camera</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(x,y\)</span></td>
+<td>归一化平面坐标</td>
+<td>无量纲</td>
+<td>normalized plane</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(f_x,f_y\)</span></td>
+<td>焦距的像素尺度</td>
+<td>像素</td>
+<td>图像</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(c_x,c_y\)</span></td>
+<td>主点像素位置</td>
+<td>像素</td>
+<td>图像</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u,v\)</span></td>
+<td>像素坐标（列、行）</td>
+<td>像素</td>
+<td>图像</td>
+</tr>
+</tbody>
+</table>
+<p>链路里任何一项的单位错位都会让投影整体偏移：把以毫米表示的 <span class="arithmatex">\(t\)</span> 直接与以米表示的 <span class="arithmatex">\(Z\)</span> 混用，误差会放大 1000 倍；把 world-to-camera 与 camera-to-world 弄反，则相当于对同一物体先转 <span class="arithmatex">\(R\)</span> 再转 <span class="arithmatex">\(R^{-1}\)</span>，结果会随姿态漂移而不是固定偏置。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">world_to_pixel</span><span class="p">(</span><span class="n">X_w</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">X_c</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">X_w</span> <span class="o">+</span> <span class="n">t</span>
+    <span class="k">if</span> <span class="n">X_c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;point behind camera&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">X_c</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">X_c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">dist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">radial</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">k1</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">+</span> <span class="n">k2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r2</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">radial</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="n">p1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">p1</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">])</span>
+    <span class="n">uv</span> <span class="o">=</span> <span class="n">K</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">uv</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">uv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div>
+<p>正向链路是唯一的，反向链路不是：已知 <span class="arithmatex">\(Z\)</span> 时可以由像素反投影出唯一的相机坐标系点，已知 <span class="arithmatex">\(u,v\)</span> 而不知 <span class="arithmatex">\(Z\)</span> 时只能得到一条射线。这正是 ./04-depth-point-cloud.md 要处理的问题。</p>
+<h2 id="标定流程与重投影误差">标定流程与重投影误差</h2>
+<p>标准棋盘格标定（Zhang 方法）的流程可以拆成六步，每一步都有容易忽略的约束：</p>
+<ol>
+<li>打印已知格数与大格尺寸的靶标，例如 9×6 格、方格边长 25 mm，并测量实际打印尺寸而不是相信标称值；</li>
+<li>固定相机与镜头，锁定对焦环与光圈——自动对焦和变焦会在拍摄过程中改变内参；</li>
+<li>采集 15–30 张不同位姿图像，靶面覆盖图像的四个角与中心，倾斜角在 30°–45° 之间；</li>
+<li>亚像素提取角点，剔除局部模糊或反光的视角；</li>
+<li>先用线性方法求内参初值，再用非线性最小二乘联合优化内参与畸变系数；</li>
+<li>用重投影误差评估，不达标就剔除低质量视角重新标定。</li>
+</ol>
+<p>重投影误差定义为把靶标点按估计参数投影回图像后与观测点的均方根偏差：</p>
+<div class="arithmatex">\[
+e=\sqrt{\frac{1}{N}\sum_{i=1}^{N}\left\|\hat{\mathbf x}_i-\mathbf x_i\right\|_2^{2}},
+\]</div>
+<p>单位是像素。它衡量的是标定参数在<strong>训练视角内</strong>的自洽程度，因此必须在独立视角上再做一次校验，否则容易过拟合到那几十张图。</p>
+<table>
+<thead>
+<tr>
+<th>重投影误差</th>
+<th>结论</th>
+<th>常见原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小于 0.3 px</td>
+<td>优秀</td>
+<td>角点提取正常，位姿覆盖充分</td>
+</tr>
+<tr>
+<td>0.3–0.8 px</td>
+<td>可接受</td>
+<td>轻微噪声或少量视角不佳</td>
+</tr>
+<tr>
+<td>0.8–1.5 px</td>
+<td>需要复核</td>
+<td>靶面覆盖不足、模糊、畸变模型不足</td>
+</tr>
+<tr>
+<td>大于 1.5 px</td>
+<td>不可用</td>
+<td>位姿过于单一、角点错配、参数估计发散</td>
+</tr>
+</tbody>
+</table>
+<p>需要重新标定的典型情况包括：镜头被碰撞或拆装、对焦环被转动、变焦镜头改变焦距、分辨率或 ROI 与 binning 改变（内参以像素为单位，采样尺度随之变化）、温度大幅波动引起镜座热胀冷缩、以及更换同型号替代件后没有复核。<strong>工程上最可靠的做法不是“相信一次标定”，而是把重投影误差和一条已知长度的几何校验线放进例行自检，让参数漂移在造成事故前暴露出来。</strong></p>
+<h2 id="视觉常见失效模式">视觉常见失效模式</h2>
+<p>排查顺序永远是先看数据、再看算法。<strong>多数“模型不准”其实是采集阶段已经丢失了信息，此时调阈值只能掩盖症状。</strong> 下表给出典型失效模式与快速判据。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>成因</th>
+<th>排查手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>过曝（高光削顶）</td>
+<td>曝光过高、镜面反射</td>
+<td>观察直方图右侧堆积，启用自动曝光或 HDR 融合</td>
+</tr>
+<tr>
+<td>欠曝（暗部噪声）</td>
+<td>曝光不足、逆光</td>
+<td>观察直方图左侧堆积，提高曝光或主动补光</td>
+</tr>
+<tr>
+<td>运动模糊</td>
+<td>曝光期间目标或相机运动</td>
+<td>估计模糊核长度，要求像面位移小于 1 px</td>
+</tr>
+<tr>
+<td>卷帘快门</td>
+<td>逐行曝光，行间存在时间差</td>
+<td>快速平移的竖直直线变斜，改用全局快门</td>
+</tr>
+<tr>
+<td>镜头振辐（渐晕）</td>
+<td>边缘照度按 <span class="arithmatex">\(\cos^4\theta\)</span> 衰减</td>
+<td>检查四角亮度差，做平场校正或裁剪视场</td>
+</tr>
+<tr>
+<td>强光与眩光</td>
+<td>直射光源进入视场</td>
+<td>加遮光罩、调整安装角、多曝光融合</td>
+</tr>
+</tbody>
+</table>
+<p>运动模糊可以定量估算。曝光时间 <span class="arithmatex">\(\Delta t\)</span> 内目标在像面上的位移约为</p>
+<div class="arithmatex">\[
+\Delta u \approx f_x\frac{v_x}{Z}\Delta t,
+\]</div>
+<p>要求 <span class="arithmatex">\(\Delta u&lt;1\)</span> px 才不至于把边缘抹开。以 <span class="arithmatex">\(f_x=800\)</span> px、<span class="arithmatex">\(Z=5\)</span> m、横向速度 <span class="arithmatex">\(v_x=2\)</span> m/s 为例，允许的曝光时间只有 <span class="arithmatex">\(3.1\)</span> ms；白天室外常见快门常在 1–8 ms 之间，因此高速场景必须优先解决曝光而不是换模型。</p>
+<p>卷帘快门（rolling shutter）逐行曝光，行与行之间存在时间差，整帧读出时间可达 20–40 ms。对 10 m/s 的快速旋转或平移，它会产生数个像素的几何倾斜，<strong>在 SLAM 中极易被误判成外参错误或时间戳不同步</strong>：静止时标定完全正常，一旦运动起来对极几何约束就系统性偏差。</p>
+<p>镜头振辐（渐晕）使边缘照度按 <span class="arithmatex">\(\cos^4\theta\)</span> 衰减，广角镜头四角可能比中心暗 40% 以上。它同时抬高边缘区域的噪声、压低描述子的稳定性和阈值分割的可靠性，因此“图像中心特征很稳、边缘频繁丢配”常常不是描述子问题，而是照度分布问题。</p>
+<p>强光与眩光在像素层直接产生饱和与散射，直方图上表现为大片削顶。短曝光叠加可以保住高光信息，但会引入多帧对齐误差；如果下游依赖多帧一致性，还需要把对齐残差一并纳入置信度。</p>
+<blockquote>
+<p><strong>下一步</strong>：先掌握像素与三维点的对应关系，再进入 <a href="../02-feature-vision/">Feature-Based Vision</a> 学习如何在不同图像之间建立稳定对应；随后 <a href="../04-depth-point-cloud/">Depth, 3D Vision &amp; Point Clouds</a> 讨论如何把像素反投影成三维几何，<a href="../../simulation-sim2real/02-robot-sensor-simulation/">机器人传感器仿真</a> 则给出在仿真中复现这些成像误差的方法。</p>
+</blockquote>
 
 
 

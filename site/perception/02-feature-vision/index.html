@@ -2312,6 +2312,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#经典特征与学习式特征的对比" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        经典特征与学习式特征的对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#对极几何与误匹配剔除" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对极几何与误匹配剔除
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#描述子距离与比值测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        描述子距离与比值测试
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3761,6 +3794,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#经典特征与学习式特征的对比" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        经典特征与学习式特征的对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#对极几何与误匹配剔除" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对极几何与误匹配剔除
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#描述子距离与比值测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        描述子距离与比值测试
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3853,29 +3919,628 @@
 
 
 <h1 id="feature-based-vision">Feature-Based Vision</h1>
-<p>在深度网络普及以前，视觉系统常通过“找到稳定局部点 → 描述它们 → 在不同图像中匹配”来建立几何关系。这个思想今天仍然是理解视觉里程计、SLAM 和图像配准的重要基础。</p>
+<p>在深度网络普及以前，视觉系统常通过“找到稳定局部点 → 描述它们 → 在不同图像中匹配”来建立几何关系。这个思想今天仍然是理解视觉里程计、SLAM 和图像配准的重要基础。<strong>特征匹配的价值不在于“匹配到了多少个点”，而在于这些对应对是否共同支持一个一致的几何模型；一个内点比例 60% 的 200 对匹配，往往比内点比例 15% 的 800 对匹配更有用。</strong></p>
+<p>本章沿着 detect → describe → match → verify 这条主线展开：先看什么样的局部结构值得跟踪，再看如何把它编码成可比较的向量，最后把匹配放回几何约束中去检验，并用误匹配剔除回答“哪些对应可以信”。</p>
 <h2 id="好的特征点必须能被重复找到">好的特征点必须能被重复找到</h2>
-<p>角点、纹理明显的局部结构比大面积纯色区域更容易再次检测。所谓 repeatability，就是相机移动、尺度变化或轻微光照变化后，同一个真实位置仍能产生对应特征。</p>
-<p>如果一帧检测到的点下一帧完全找不到，再复杂的描述子也无法建立运动关系。</p>
+<p>角点、纹理明显的局部结构比大面积纯色区域更容易再次检测。所谓 repeatability，就是相机移动、尺度变化或轻微光照变化后，同一个真实位置仍能产生对应特征。它衡量的是<strong>物理位置在两次观测中被稳定定位的能力</strong>，与描述子好不好无关。</p>
+<p>经典检测器的判断依据各不相同：Harris 用自相关矩阵 <span class="arithmatex">\(M\)</span> 的行列式与迹构造响应</p>
+<div class="arithmatex">\[
+R=\det M-k\left(\operatorname{tr}M\right)^2,
+\]</div>
+<p>要求两个方向都有明显梯度；FAST 用圆周灰度比较做快速判定，速度可达 Harris 的数十倍；SIFT 在 DoG 尺度空间</p>
+<div class="arithmatex">\[
+D(x,y,\sigma)=L(x,y,k\sigma)-L(x,y,\sigma)
+\]</div>
+<p>中寻找极值，因此天然具备尺度不变性。</p>
+<table>
+<thead>
+<tr>
+<th>检测器</th>
+<th>可重复性的来源</th>
+<th>计算特点</th>
+<th>主要失效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Harris</td>
+<td>两方向梯度都强</td>
+<td>中等，无尺度不变</td>
+<td>尺度变化、过度模糊</td>
+</tr>
+<tr>
+<td>FAST</td>
+<td>圆形邻域灰度比较</td>
+<td>很快</td>
+<td>无方向与尺度信息</td>
+</tr>
+<tr>
+<td>SIFT</td>
+<td>DoG 尺度空间极值</td>
+<td>较慢</td>
+<td>弱纹理、强反光</td>
+</tr>
+<tr>
+<td>ORB</td>
+<td>FAST 加方向与金字塔</td>
+<td>很快</td>
+<td>大视角变化</td>
+</tr>
+<tr>
+<td>学习式检测器</td>
+<td>网络学习显著区域</td>
+<td>需要 GPU</td>
+<td>训练分布外场景</td>
+</tr>
+</tbody>
+</table>
+<p>如果一帧检测到的点下一帧完全找不到，再复杂的描述子也无法建立运动关系。<strong>repeatability 是整条管线可用的前提条件：它决定了下游能拿到的观测数量上界，而描述子只在给定这组观测的前提下决定匹配精度。</strong> 实践中的定位精度同样重要：亚像素级的角点定位误差若达到 1 px，在 <span class="arithmatex">\(f_x=800\)</span> px 下就会带来约 0.07° 的方向不确定性，多帧累积后足以污染轨迹。</p>
+<p>repeatability 可以被粗略测量：把同一场景在两种视角下的关键点投影到同一平面上，统计落在 <span class="arithmatex">\(3\)</span> px 半径内的匹配对占比。经验上，纹理丰富场景的 ORB 可以做到 0.6–0.8，SIFT 更高，而白墙上所有检测器都会掉到 0.2 以下。<strong>这个数值是上游硬约束：若 repeatability 只有 0.3，那么就算描述子完美无错，也只剩三成的观测可用。</strong></p>
+<p>还有一个常被忽略的维度是分布：检测器倾向于在对比度最高的区域堆积关键点，例如棋盘角、文字边缘，而机械臂抓取需要的物体表面可能只有几十个稳定点。<strong>因此评估 repeatability 时应当按图像区域分层，而不是只看全局平均值。</strong></p>
 <h2 id="描述子把局部图像变成可以比较的向量">描述子把局部图像变成可以比较的向量</h2>
-<p>检测只回答“哪里值得看”，描述子进一步回答“这个局部区域长什么样”。SIFT、ORB 等方法会把局部纹理编码成向量或二进制模式，匹配时比较描述子距离。</p>
+<p>检测只回答“哪里值得看”，描述子进一步回答“这个局部区域长什么样”。SIFT 把关键点邻域的梯度方向直方图组织成 128 维浮点向量，ORB 用带方向校正的二进制模式给出 256 bit 描述子，两者匹配时比较描述子距离。</p>
+<table>
+<thead>
+<tr>
+<th>描述子</th>
+<th>表示形式</th>
+<th>距离度量</th>
+<th>旋转不变</th>
+<th>尺度不变</th>
+<th>光照鲁棒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIFT</td>
+<td>128 维浮点</td>
+<td>欧氏距离</td>
+<td>主方向归一</td>
+<td>尺度空间</td>
+<td>梯度归一较好</td>
+</tr>
+<tr>
+<td>SURF</td>
+<td>64/128 维浮点</td>
+<td>欧氏距离</td>
+<td>是</td>
+<td>是</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>ORB</td>
+<td>256 bit 二进制</td>
+<td>汉明距离</td>
+<td>方向校正</td>
+<td>图像金字塔</td>
+<td>较差（无归一）</td>
+</tr>
+<tr>
+<td>SuperPoint</td>
+<td>256 维浮点</td>
+<td>欧氏/余弦</td>
+<td>学习得到</td>
+<td>学习得到</td>
+<td>较好</td>
+</tr>
+</tbody>
+</table>
 <p>因此经典特征管线可以记成：</p>
 <p><strong>detect → describe → match</strong>。</p>
+<p>描述子的关键性质是<strong>可比性而不是漂亮</strong>：同一个物理点在两个视角下产生的向量距离，必须小于它与其他物理点之间的距离。为了让这个条件成立，描述子通常要做归一化（减去均值、除以标准差），否则全局亮度变化会直接主导距离度量。<strong>归一化也带来代价——低对比度区域的梯度噪声会被放大，这正是 ORB 在弱纹理上不如 SIFT 的原因之一。</strong></p>
+<p>让向量保持可比，需要同时处理四种变化：</p>
+<ul>
+<li>平移不变：局部窗口本身的位移不应改变编码结果，因此描述子在关键点邻域内固定采样；</li>
+<li>旋转不变：先用关键点主方向对齐邻域，再编码，否则图像旋转会整体改变向量；</li>
+<li>尺度不变：在多个尺度上分别编码，或选择对尺度变化不敏感的采样模式；</li>
+<li>光照不变：关注梯度方向与相对幅值，而不是绝对灰度。</li>
+</ul>
+<p>这四项常互相牵制。例如 ORB 为了速度使用二进制位比较，天然缺少幅值归一化，于是光照变化下稳定性弱于 SIFT；而 SIFT 的浮点向量虽然鲁棒，却使匹配时的距离计算变得昂贵。<strong>描述子选择本质上是为“场景里最可能出现的那种变化”买单，而不是追求四项全优。</strong></p>
+<p>评估描述子时应固定检测器、只替换描述子，这样测到的是描述能力本身；同时更换检测与描述，收益归属将无法判断。</p>
 <h2 id="候选匹配与几何验证">候选匹配与几何验证</h2>
-<p>重复纹理、运动模糊和动态物体都会产生错误匹配。两个描述子很像，并不保证它们来自同一个真实三维点。</p>
-<p>实际系统会利用单应矩阵、基础矩阵或相机运动模型检查几何一致性。RANSAC 的作用就是在含有离群点的候选匹配中反复抽样，寻找得到多数数据支持的模型。</p>
+<p>重复纹理、运动模糊和动态物体都会产生错误匹配。两个描述子很像，并不保证它们来自同一个真实三维点。因此匹配必须分成两步：先产生候选，再用几何约束筛选。</p>
+<ul>
+<li>候选生成：暴力匹配对每个描述子找全局最近邻，复杂度为 <span class="arithmatex">\(O(N_1N_2)\)</span>；FLANN 或近似最近邻用树结构与量化把复杂度降到近似 <span class="arithmatex">\(O(N_1\log N_2)\)</span>；</li>
+<li>交叉检查（cross-check）：只保留互为最近邻的配对，能显著降低一对多的歧义；</li>
+<li>距离筛选：为每对匹配设定绝对距离上限，超过则丢弃；</li>
+<li>几何验证：用单应矩阵、基础矩阵或相机运动模型检查几何一致性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>候选策略</th>
+<th>复杂度</th>
+<th>召回</th>
+<th>误匹配倾向</th>
+<th>适用情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>暴力最近邻</td>
+<td><span class="arithmatex">\(O(N_1N_2)\)</span></td>
+<td>高</td>
+<td>重复纹理下一对多</td>
+<td>描述子数量少、追求确定结果</td>
+</tr>
+<tr>
+<td>暴力加交叉检查</td>
+<td><span class="arithmatex">\(O(N_1N_2)\)</span></td>
+<td>中</td>
+<td>明显更低</td>
+<td>通用默认设置</td>
+</tr>
+<tr>
+<td>FLANN 近似</td>
+<td>近似 <span class="arithmatex">\(O(N_1\log N_2)\)</span></td>
+<td>略低</td>
+<td>受索引参数影响</td>
+<td>描述子上万、实时要求高</td>
+</tr>
+<tr>
+<td>k 近邻加比值测试</td>
+<td>与上同</td>
+<td>中高</td>
+<td>低</td>
+<td>需要稳定的几何估计</td>
+</tr>
+</tbody>
+</table>
+<p>实际系统会利用单应矩阵、基础矩阵或相机运动模型检查几何一致性。RANSAC 的作用就是在含有离群点的候选匹配中反复抽样，寻找得到多数数据支持的模型。<strong>注意几何验证是唯一能排除“描述子偶然相似”这一系统性错误的环节；仅靠距离阈值永远无法区分真实重复结构与巧合。</strong></p>
+<p>候选策略的取舍可以量化：若粗略估计内点比例为 <span class="arithmatex">\(w\)</span>，采用交叉检查后通常能从 0.5 提升到 0.6 以上，而按前面的抽样公式，<span class="arithmatex">\(w\)</span> 从 0.5 升到 0.6 可以把所需迭代次数从约 218 次降到约 86 次。<strong>先在候选阶段去掉一半容易排除的误匹配，比在 RANSAC 之后调阈值更划算。</strong></p>
+<p>几何验证的顺序同样有讲究：先估模型、再统计内点比例，最后才决定是否采用该帧结果，并把它送入位姿或建图环节。<strong>把验证放在链路的末端，意味着失败的帧只会被丢弃，而不会把错误位姿传给下游</strong>——这是感知模块最容易守住、也最容易被违反的一条边界。</p>
 <h2 id="特征匹配最终服务的是几何关系">特征匹配最终服务的是几何关系</h2>
 <p>如果两幅图来自同一平面或相机纯旋转，单应矩阵可以描述对应；一般三维场景则会受到 epipolar geometry 约束。入门阶段不必完整推导所有矩阵，但要知道：<strong>匹配不是终点，匹配只是估计相机或物体几何关系的观测。</strong></p>
+<p>三种模型适用场景不同。单应矩阵 <span class="arithmatex">\(\mathbf x'\sim H\mathbf x\)</span> 需要 4 对点即可求解，适合平面目标、纯旋转和远距离场景；基础矩阵满足 <span class="arithmatex">\(\mathbf x'^\top F\mathbf x=0\)</span>，从 8 对点求解，不依赖内参；本质矩阵 <span class="arithmatex">\(E=[t]_\times R\)</span> 需要已知内参，从 5 对点即可求解，只包含 5 个自由度。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>最少点对数</th>
+<th>是否需要内参</th>
+<th>适用场景</th>
+<th>退化条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单应 <span class="arithmatex">\(H\)</span></td>
+<td>4</td>
+<td>否</td>
+<td>平面、纯旋转</td>
+<td>场景非平面且存在平移</td>
+</tr>
+<tr>
+<td>基础矩阵 <span class="arithmatex">\(F\)</span></td>
+<td>8</td>
+<td>否</td>
+<td>一般三维场景</td>
+<td>纯旋转导致 <span class="arithmatex">\(F\)</span> 不唯一</td>
+</tr>
+<tr>
+<td>本质矩阵 <span class="arithmatex">\(E\)</span></td>
+<td>5</td>
+<td>是</td>
+<td>已标定双目与 VO</td>
+<td>平移过小、纯旋转</td>
+</tr>
+</tbody>
+</table>
+<p>工程上更常见的做法是先估 <span class="arithmatex">\(E\)</span> 或 <span class="arithmatex">\(H\)</span>，用内点比例判断哪个模型更可信，再据此选择后续的重建方式。<strong>选错模型比不选模型的后果更严重：在非平面场景上用 <span class="arithmatex">\(H\)</span> 会得到看似内点很多但实际上结构错误的解。</strong></p>
+<p>模型选择可以按三个信号判断：</p>
+<ul>
+<li>内点比例：<span class="arithmatex">\(H\)</span> 明显高于 <span class="arithmatex">\(F\)</span> 时，场景大概率近似共面；</li>
+<li>配对的视差分布：整体视差很小说明可能是纯旋转，此时 <span class="arithmatex">\(E\)</span> 接近退化；</li>
+<li>场景先验：室内走廊对着墙面直行时出现高 <span class="arithmatex">\(H\)</span> 内点是正常的，不应据此认为“场景是平面”。</li>
+</ul>
+<p>模型选择的结果值得被记录。若某段场景上 <span class="arithmatex">\(H\)</span> 的内点比例长期高于 <span class="arithmatex">\(E\)</span>，说明前方结构近似共面，<strong>沿光轴方向的平移在该帧中是不可观测的，任何基于这一帧的深度或尺度更新都不可信</strong>。</p>
+<p>还有一个容易忽略的约束是点对的空间分布：求解 <span class="arithmatex">\(F\)</span> 或 <span class="arithmatex">\(E\)</span> 的最小样本不能全部落在同一条直线或同一个局部区域上，退化的分布会让解出的矩阵虽然满足代数方程，却没有可用的几何意义。</p>
 <h2 id="传统特征什么时候仍然很有价值">传统特征什么时候仍然很有价值</h2>
-<p>在纹理丰富、需要明确几何约束、算力有限的任务中，ORB/SIFT 仍然十分实用。它们解释性强、调试时可以直接画匹配点，而且不依赖大量训练数据。</p>
+<p>在纹理丰富、需要明确几何约束、算力有限的任务中，ORB/SIFT 仍然十分实用。它们解释性强、调试时可以直接画匹配点，而且不依赖大量训练数据。在嵌入式平台上，ORB 单帧检测加匹配常可在毫秒级完成，而同类学习式方案往往需要专用加速器。</p>
 <p>弱纹理、强光照变化和大视角变化下，学习型特征往往更稳。但无论描述子由规则还是网络产生，“检测稳定结构 → 建立对应 → 几何验证”这条逻辑不变。</p>
+<p>还有一个容易被忽视的优点：传统特征的行为可以解析地预测。<strong>阈值改变时，匹配数量与内点比例的变化方向是可推导的，这让参数整定与故障归因变得可解释；而学习式特征的行为只有统计描述，出问题时的定位成本明显更高。</strong></p>
+<p>把这些优势落到选型上，可以得到一张相当清晰的对照：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐选择</th>
+<th>主要理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>嵌入式 CPU 上实时运行</td>
+<td>ORB</td>
+<td>检测与描述常在毫秒级，内存占用小</td>
+</tr>
+<tr>
+<td>需要高精度几何标定</td>
+<td>SIFT 或 AKAZE</td>
+<td>定位精度与尺度稳定性更好</td>
+</tr>
+<tr>
+<td>室内弱纹理、少特征</td>
+<td>学习式特征</td>
+<td>可重复性优势明显</td>
+</tr>
+<tr>
+<td>需要离线逐步调试</td>
+<td>ORB 或 SIFT</td>
+<td>匹配点可视化，行为可推导</td>
+</tr>
+<tr>
+<td>完全没有训练数据</td>
+<td>ORB 或 SIFT</td>
+<td>零训练依赖，随取随用</td>
+</tr>
+<tr>
+<td>跨域部署、算力受限</td>
+<td>ORB 加几何验证</td>
+<td>无模型文件，启动即用</td>
+</tr>
+</tbody>
+</table>
+<p>量级上，1500 个 ORB 特征点的检测加描述在桌面 CPU 上通常只需几毫秒，而同等规模的学习式管线在 GPU 上也需要数十毫秒并占用显存；<strong>但前者的代价是在弱纹理场景里可能只剩几十个可用点，所以真正的决策依据是场景纹理丰富度，而不是纸面速度。</strong></p>
+<p>因此选型的建议顺序是：先测场景的可重复性与内点比例，再设定延迟与算力上限，最后才在满足约束的方案里挑精度最高的一个。<strong>先挑模型再发现延迟不达标，是感知工程中最常见的返工来源。</strong></p>
 <h2 id="匹配质量评估">匹配质量评估</h2>
 <p>100 个匹配点并不一定比 30 个更好；如果其中一半是错误对应，位姿估计会被严重破坏。评估匹配质量时更应看几何内点比例、空间分布以及是否集中在动态物体上。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>计算方式</th>
+<th>关注点</th>
+<th>陷阱</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>匹配数量</td>
+<td>候选对总数</td>
+<td>观测是否充足</td>
+<td>可能绝大多数是离群点</td>
+</tr>
+<tr>
+<td>内点比例</td>
+<td>内点数除以匹配总数</td>
+<td>几何一致性</td>
+<td>区域小的时候容易虚高</td>
+</tr>
+<tr>
+<td>空间分布</td>
+<td>匹配点包围盒与象限覆盖</td>
+<td>位姿可辨识性</td>
+<td>集中一角无法约束整体运动</td>
+</tr>
+<tr>
+<td>重投影误差</td>
+<td>内点残差中位数</td>
+<td>估计精度</td>
+<td>对异常值敏感</td>
+</tr>
+<tr>
+<td>动态占比</td>
+<td>落在运动物体上的比例</td>
+<td>是否污染位姿</td>
+<td>需要语义或先验判断</td>
+</tr>
+</tbody>
+</table>
+<p>内点比例是最有效的单一判据，但它必须与空间分布一起看：<strong>全部内点集中在一个象限时，即使比例高达 90%，估计结果对旋转分量的约束也可能很弱，因为可观测的几何基线太短。</strong></p>
+<p>一个可操作的检查流程是：先画匹配点连线，观察是否只覆盖图像局部；再统计内点在各象限的分布；最后看内点对应的深度范围——若全部集中在远处，（相机运动带来的）视差会非常小，位姿估计的方差随之放大。</p>
+<p>匹配质量还应在时间维度上被监控。<strong>内点比例从 0.7 缓慢滑落到 0.4，往往是场景正在退化的早期信号</strong>，此时切换后端或降低速度的代价远小于等到完全失配后再恢复。</p>
+<p>一个实用的判据是把“数量”和“比例”分开设门限：数量低于某个下限说明约束不足，比例低于某个下限说明约束不可信，两者都通过才认为该帧可用。以视觉里程计为例，常见做法要求有效内点不少于 30 对且内点比例不低于 0.5；<strong>只卡其中一个条件，要么在重复纹理里放行错误位姿，要么在纹理稀疏时白白丢弃可用帧。</strong></p>
+<p>最后需要区分的是“匹配质量差”和“场景确实变了”：前者表现为内点在空间上随机分布、无一致模型；后者表现为内点高度集中且模型一致，只是对应的是运动物体。<strong>这两种情况在数值上是相反的，却常常被同一个“内点比例低”的告警混在一起。</strong></p>
+<p>把这些量记录成时间序列后，就能给每一帧打一个可比较的质量标签，并在日志里直接看出“质量下降”与“场景切换”这两类事件的区别。<strong>可观测的质量，才谈得上可管理的质量。</strong></p>
 <h2 id="特征退化场景">特征退化场景</h2>
 <p>白墙、重复栅栏、强运动模糊、镜面反射都会让特征检测或匹配失效。此时继续调距离阈值通常不能从根本上解决问题。</p>
-<p>更有效的思路是引入其他几何来源、增加纹理、降低运动速度，或使用对该场景更鲁棒的学习型表示。先判断数据是否包含足够信息，再谈算法参数。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>机制</th>
+<th>表现</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>弱纹理墙面</td>
+<td>梯度不足，检测器无法定位</td>
+<td>关键点数量骤降</td>
+<td>主动纹理、改用深度或线特征</td>
+</tr>
+<tr>
+<td>重复栅栏/瓷砖</td>
+<td>多个描述子近似相同</td>
+<td>匹配严重一对多</td>
+<td>几何验证、加入位置先验</td>
+</tr>
+<tr>
+<td>大运动模糊</td>
+<td>局部结构被卷积破坏</td>
+<td>边缘被抹开、角点漂移</td>
+<td>缩短曝光、降低运动速度</td>
+</tr>
+<tr>
+<td>镜面与玻璃</td>
+<td>外观随视角变化且无真实纹理</td>
+<td>匹配随视角随机变化</td>
+<td>排除该区域或用深度传感器</td>
+</tr>
+<tr>
+<td>纯旋转</td>
+<td>平移为零，<span class="arithmatex">\(E\)</span> 退化</td>
+<td><span class="arithmatex">\(F\)</span> 解不唯一</td>
+<td>改用单应模型</td>
+</tr>
+<tr>
+<td>动态物体</td>
+<td>结构与场景不一致</td>
+<td>内点集中在局部</td>
+<td>语义掩码、鲁棒核</td>
+</tr>
+</tbody>
+</table>
+<p>更有效的思路是引入其他几何来源、增加纹理、降低运动速度，或使用对该场景更鲁棒的学习型表示。先判断数据是否包含足够信息，再谈算法参数。<strong>判断方法很直接：把匹配点画在图像上，如果人眼都无法指出对应关系，那么任何阈值调整都只是在噪声里挑数字。</strong></p>
+<p>退化在实际系统中应当被自动检测，而不是靠事后回看。可用的门限信号包括：关键点总数、候选匹配总数、内点比例、内点的空间分布熵，以及重投影误差中位数。<strong>当多项指标同时越界时，正确反应是降低对视觉的信任权重并转入回退模式，而不是继续加大计算量。</strong></p>
+<p>回退路径需要在设计阶段就准备好，常见选择有：切换到惯性或轮式里程计、降低机器人速度并等待纹理重新出现、扩大匹配搜索范围以容纳更大位移，或直接宣告该帧不可用并让上层规划减速。<strong>没有回退路径的系统在退化场景下的表现通常是“安静地输出错误结果”，这比明确报错危险得多。</strong></p>
+<p>量化门限可以用离线数据标定：在退化数据集上统计各项指标的分布，取能区分“可估计”与“不可估计”的那一档作为门限，再上线后按误报率微调。<strong>凭直觉设定门限，通常会在真实场景中被大量边界样本打穿。</strong></p>
+<p>还有一类退化来自时间维度：光照快速变化（进出隧道、云影掠过）会让同一位置的描述子在两帧之间差异剧增，即使几何完全没有变化。这类情况下提高检测阈值没有帮助，正确做法是利用惯性或模型预测填补短暂的空洞。<strong>判断它属于哪一类退化，只需要看一眼内点在时间上的连续性。</strong></p>
 <h2 id="匹配质量的几何判据">匹配质量的几何判据</h2>
 <p>好匹配不仅描述子距离小，还应共同支持一个一致的几何模型。可以通过重投影误差、内点比例和空间分布判断匹配是否可靠。大量内点若全部集中在图像一角，也可能无法稳定约束整体运动。</p>
+<p>判据可以定量化：把内点按 Sampson 距离排序，取中位数不应超过约 1 px；内点应覆盖至少三个图像象限；匹配区域的平均深度变化不应低于某个下限，否则深度靠前的近景点会主导估计。</p>
+<table>
+<thead>
+<tr>
+<th>内点比例</th>
+<th>判读</th>
+<th>建议动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大于 0.7</td>
+<td>匹配与模型高度一致</td>
+<td>直接用于位姿估计</td>
+</tr>
+<tr>
+<td>0.5–0.7</td>
+<td>可用</td>
+<td>检查分布，保留但降低权重</td>
+</tr>
+<tr>
+<td>0.3–0.5</td>
+<td>勉强</td>
+<td>换模型或增加约束后再用</td>
+</tr>
+<tr>
+<td>小于 0.3</td>
+<td>不可信</td>
+<td>丢弃该帧，退回惯性或其他传感器</td>
+</tr>
+</tbody>
+</table>
+<p>判据本身应当分两层使用。第一层是<strong>模型一致性</strong>：内点比例与重投影误差回答“这组匹配是否共同支持某个几何模型”。第二层是<strong>参数可辨识性</strong>：内点分布、视差范围与深度变化回答“这个模型是否真的能把待估参数约束住”。<strong>第一层通过、第二层不通过，是位姿估计中最隐蔽的失败模式——数值上一切正常，估计出的运动却与真实运动相差很大。</strong></p>
+<p>一个具体的例子能说明第二层为何必要：相机对着远处一面墙做前向运动时，匹配点全部集中在图像中部且视差极小，内点比例可以高达 0.9、重投影误差只有 0.3 px，但沿光轴方向的位移几乎不可观测，估计出来的深度缩放会出现数倍的漂移。<strong>此时指标越漂亮越危险，因为系统没有任何信号提示自己正在退化。</strong></p>
+<p>因此在工程实现中，建议把这四类量都记录下来并一起看：内点比例（一致性）、重投影误差中位数（精度）、内点包围盒占比（分布）、视差或深度散布（可辨识性）。任一维度的异常都应有明确的处置动作，而不是笼统地“降低置信度”。</p>
+<p>这三段判据可以收敛成一个简短的操作顺序：先看数量是否够（少于 30 对直接放弃），再看内点比例是否可信（低于 0.5 不进入解算），最后看分布与视差是否足以约束参数（包围盒过小或视差过小则输出带警告的结果）。</p>
+<p>把顺序固定下来的好处是行为可预测：<strong>同一批数据在任何人手里都会得到同样的处置，而不是取决于当天谁调的阈值。</strong> 这与状态估计中强调的“把信任度显式化”是同一条原则。</p>
+<p>需要强调的是，这些判据只在<strong>同一套预处理与同一套参数</strong>下才可比。更换描述子、改变输入分辨率或启用去畸变，都会改变内点比例的绝对数值，因此历史门限必须重新标定，而不能沿用。<strong>跨版本沿用门限，等价于用旧场景的直觉去判断新场景的输出。</strong></p>
+<h2 id="经典特征与学习式特征的对比">经典特征与学习式特征的对比</h2>
+<p>学习式方法把检测与描述一起训练，在弱纹理、大视角变化与强光照变化上通常更稳；经典方法在部署与可解释性上代价更低。选择时应同时看数据分布和硬件预算，而不是只看论文指标。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>SIFT</th>
+<th>ORB</th>
+<th>SuperPoint 类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可重复性</td>
+<td>高（尺度空间极值）</td>
+<td>中高（金字塔 FAST）</td>
+<td>很高，弱纹理下优势明显</td>
+</tr>
+<tr>
+<td>计算代价</td>
+<td>高，单帧可达数十毫秒</td>
+<td>低，常在毫秒级</td>
+<td>取决于模型，需 GPU 或 NPU</td>
+</tr>
+<tr>
+<td>光照鲁棒</td>
+<td>较好（梯度归一化）</td>
+<td>一般（无归一）</td>
+<td>好（大规模数据训练）</td>
+</tr>
+<tr>
+<td>尺度鲁棒</td>
+<td>内置尺度空间</td>
+<td>金字塔近似</td>
+<td>学习得到</td>
+</tr>
+<tr>
+<td>部署代价</td>
+<td>仅需 CPU 库</td>
+<td>极低，嵌入式友好</td>
+<td>需要模型文件与运行时</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>高，可逐步查看</td>
+<td>高</td>
+<td>低，端到端黑箱</td>
+</tr>
+<tr>
+<td>数据依赖</td>
+<td>无</td>
+<td>无</td>
+<td>训练分布外显著退化</td>
+</tr>
+</tbody>
+</table>
+<p>其中 SuperPoint 类方法输出的是 256 维浮点描述子，配套的 SuperGlue/LightGlue 用注意力机制直接预测匹配，在纹理重复场景下能把内点比例提升一个明显台阶；代价是模型体积、显存占用与首次启动延迟，以及跨域部署时的重新验证成本。</p>
+<p><strong>最稳妥的工程做法是把“检测描述”封装成可替换的接口，同时保留经典特征作为退化时的回退路径。</strong> 这样在弱纹理场景切换学习式分支，在算力受限或需要解释时退回 ORB，而下游的几何验证逻辑保持不变。</p>
+<p>切换接口本身也需要设计：两条分支必须输出相同格式的关键点与描述子容器，并声明各自的距离度量——汉明距离与欧氏距离的数值范围完全不同，<strong>若接口里只写“距离”而不写度量类型，混用会静默地把比值测试的含义改掉。</strong></p>
+<p>最后，学习式特征在训练分布外的退化往往比经典特征更突然。经典特征在弱纹理上是“慢慢变少”，可以用数量门限提前预警；学习式方法则可能在完全无关的域（例如夜间或红外图上）直接给出高置信度的错误匹配。<strong>因此引入学习式特征时，跨域验证的必要性高于同域指标提升。</strong></p>
+<h2 id="对极几何与误匹配剔除">对极几何与误匹配剔除</h2>
+<p>对极几何给出误匹配剔除的理论基础。设同一三维点在两幅图像中的归一化坐标分别为 <span class="arithmatex">\(\mathbf x\)</span> 与 <span class="arithmatex">\(\mathbf x'\)</span>，则必然满足</p>
+<div class="arithmatex">\[
+\mathbf x'^\top F\mathbf x=0,\qquad F=K'^{-\top}[t]_\times RK^{-1}.
+\]</div>
+<p>这个约束的几何含义是：第二幅图中的对应点必须落在第一幅图对应点的对极线上，因此它对匹配有明确的过滤能力。当内参已知时可直接用本质矩阵 <span class="arithmatex">\(E=[t]_\times R\)</span>，自由度从 7 降到 5，所需点对数也更少。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">orb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">ORB_create</span><span class="p">(</span><span class="n">nfeatures</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+<span class="n">kp1</span><span class="p">,</span> <span class="n">des1</span> <span class="o">=</span> <span class="n">orb</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">kp2</span><span class="p">,</span> <span class="n">des2</span> <span class="o">=</span> <span class="n">orb</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray2</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="n">matcher</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BFMatcher</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">NORM_HAMMING</span><span class="p">,</span> <span class="n">crossCheck</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">pairs</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">knnMatch</span><span class="p">(</span><span class="n">des1</span><span class="p">,</span> <span class="n">des2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">good</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="n">n</span><span class="o">.</span><span class="n">distance</span><span class="p">]</span>
+
+<span class="n">pts1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">kp1</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">queryIdx</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">good</span><span class="p">])</span>
+<span class="n">pts2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">kp2</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">trainIdx</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">good</span><span class="p">])</span>
+<span class="n">F</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findFundamentalMat</span><span class="p">(</span><span class="n">pts1</span><span class="p">,</span> <span class="n">pts2</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FM_RANSAC</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">)</span>
+<span class="n">inliers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+</code></pre></div>
+<p>RANSAC 的流程是：随机抽取最小样本集求解模型、统计满足 Sampson 距离阈值的内点、在达到设定迭代次数或内点比例足够高时停止并输出最大内点集。为保证至少一次抽到全内点样本，迭代次数需要</p>
+<div class="arithmatex">\[
+N=\frac{\log(1-p)}{\log\left(1-w^{s}\right)},
+\]</div>
+<p>其中 <span class="arithmatex">\(w\)</span> 是内点比例，<span class="arithmatex">\(s\)</span> 是最小样本数，<span class="arithmatex">\(p\)</span> 是期望成功概率。取 <span class="arithmatex">\(p=0.999\)</span>、<span class="arithmatex">\(s=5\)</span> 时，<span class="arithmatex">\(w=0.8\)</span> 只需约 18 次迭代，<span class="arithmatex">\(w=0.5\)</span> 需要约 218 次，而 <span class="arithmatex">\(w=0.3\)</span> 需要约 2839 次。<strong>这解释了为什么内点比例从 0.5 掉到 0.3 时，同一套参数会突然“失效”——不是算法变了，而是所需抽样次数增加了一个数量级。</strong></p>
+<table>
+<thead>
+<tr>
+<th>内点比例 <span class="arithmatex">\(w\)</span></th>
+<th>所需迭代次数（<span class="arithmatex">\(p=0.999\)</span>，<span class="arithmatex">\(s=5\)</span>）</th>
+<th>判读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.8</td>
+<td>约 18</td>
+<td>收敛快，结果可信</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>约 86</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>约 218</td>
+<td>可用，需设上限</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>约 2839</td>
+<td>成本高，建议换策略</td>
+</tr>
+<tr>
+<td>小于 0.2</td>
+<td>超过 10000</td>
+<td>匹配基本不可用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="描述子距离与比值测试">描述子距离与比值测试</h2>
+<p>浮点描述子（SIFT、SuperPoint）使用欧氏距离 <span class="arithmatex">\(\lVert d_1-d_2\rVert_2\)</span>，二进制描述子（ORB、BRIEF）使用汉明距离，即两个位串异或后 1 的个数。汉明距离的计算可以按位并行，这是 ORB 在 CPU 上更快的关键原因。</p>
+<table>
+<thead>
+<tr>
+<th>度量</th>
+<th>适用描述子</th>
+<th>计算方式</th>
+<th>典型阈值</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>欧氏距离</td>
+<td>SIFT、SURF、SuperPoint</td>
+<td>向量差的二范数</td>
+<td>相对阈值为主</td>
+<td>连续、区分度好</td>
+</tr>
+<tr>
+<td>汉明距离</td>
+<td>ORB、BRIEF、BRISK</td>
+<td>异或后统计置位数</td>
+<td>绝对值 40–64 bit</td>
+<td>极快、需整数阈值</td>
+</tr>
+<tr>
+<td>余弦相似度</td>
+<td>归一化学习描述子</td>
+<td>内积除以模长</td>
+<td>依赖训练分布</td>
+<td>对模长不敏感</td>
+</tr>
+</tbody>
+</table>
+<p>比单纯看绝对距离更稳健的是<strong>比值测试（ratio test）</strong>：对每个描述子取最近邻距离 <span class="arithmatex">\(d_1\)</span> 与次近邻距离 <span class="arithmatex">\(d_2\)</span>，只有当</p>
+<div class="arithmatex">\[
+\frac{d_1}{d_2}&lt;\tau
+\]</div>
+<p>时接受该匹配。它的含义是“存在一个明显优于其他候选的解释”，因此能自然排除重复纹理造成的歧义。</p>
+<p>Lowe 给出的经验值是 <span class="arithmatex">\(\tau=0.75\)</span>。它对应的取舍可以从两个方向理解：把 <span class="arithmatex">\(\tau\)</span> 收紧到 0.6，匹配更加干净、内点比例上升，但数量会显著减少，在弱纹理或小重叠区域可能只剩下十几对，导致 RANSAC 的最小样本都凑不齐；把 <span class="arithmatex">\(\tau\)</span> 放宽到 0.85 以上，数量立刻增加，但内点比例下降，按前面的迭代次数公式，抽样成本呈非线性上升。</p>
+<table>
+<thead>
+<tr>
+<th>阈值 <span class="arithmatex">\(\tau\)</span></th>
+<th>匹配数量</th>
+<th>内点比例</th>
+<th>适用情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.6</td>
+<td>很少</td>
+<td>最高</td>
+<td>纹理极丰富、对精度要求高</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>中等偏少</td>
+<td>高</td>
+<td>需要高可信度的几何估计</td>
+</tr>
+<tr>
+<td>0.75</td>
+<td>平衡</td>
+<td>中高</td>
+<td>通用默认值</td>
+</tr>
+<tr>
+<td>0.85</td>
+<td>多</td>
+<td>中低</td>
+<td>纹理稀疏、宁多勿缺</td>
+</tr>
+<tr>
+<td>0.95</td>
+<td>极多</td>
+<td>低</td>
+<td>仅在后续有强几何验证时使用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>比值测试也适用于学习式匹配</strong>：SuperGlue 类方法输出匹配置信度，可以按分位数做类似的截断。无论阈值如何选择，最关键的工程实践是把它写成可配置项并记录其对应的内点比例——因为真正决定位姿质量的始终是内点比例，而不是匹配总数。</p>
+<p>绝对距离阈值与相对比值测试应当配合使用，而不是二选一。以 SIFT 的 128 维描述子为例，典型最近邻距离量级在 100–300 之间；低于 50 几乎可以确定是同一点，高于 400 则基本是随机对应。<strong>先用绝对上限砍掉明显荒谬的候选，再用比值测试处理“两个看起来都像”的歧义，可以在不牺牲内点比例的前提下减少后续计算量。</strong></p>
+<p>阈值设定还必须考虑描述子维度的缩放关系——换用不同维度或不同归一化方式的学习式描述子时，绝对距离的量级会整体变化，此时只有比值测试仍然可比。<strong>跨描述子迁移参数时，先确认比值分布的直方图形状，再决定截断位置，比直接套用 0.75 更稳妥。</strong></p>
+<blockquote>
+<p><strong>下一步</strong>：特征给出的是稀疏对应，<a href="../01-image-camera-basics/">Image &amp; Camera Basics</a> 解释了这些像素坐标如何与三维射线对应；要把稀疏匹配扩展成稠密三维结构，可继续阅读 <a href="../04-depth-point-cloud/">Depth, 3D Vision &amp; Point Clouds</a>；在估计环节，<a href="../../robotics/02-sensing-estimation/">状态估计与传感器融合</a> 与 <a href="../../robotics/03-mapping-slam/">建图与 SLAM</a> 会用到这里的内点与鲁棒核概念。</p>
+</blockquote>
 
 
 
