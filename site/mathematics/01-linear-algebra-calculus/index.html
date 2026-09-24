@@ -660,7 +660,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        向量与系统状态
+        一、你早就在用向量，只是没这么叫
       
     </span>
   </a>
@@ -671,7 +671,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        矩阵、映射与坐标变换
+        二、误差"有多大"：范数是被逼出来的
       
     </span>
   </a>
@@ -682,21 +682,27 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性方程与最小二乘
+        三、矩阵：同一套规则同时作用在所有分量上
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、矩阵：同一套规则同时作用在所有分量上">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么矩阵乘法不能交换顺序
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        正交性与投影
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -704,10 +710,60 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        为什么工程上不做显式求逆
+        四、解方程：为什么绝大多数时候求的不是"逆"，而是"最近似解"
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="四、解方程：为什么绝大多数时候求的不是&#34;逆&#34;，而是&#34;最近似解&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 最直接的办法怎么坏掉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 把"折中"写成一个最小值问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 手算一遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-kappaatop-akappaa2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 一条代价：\(\kappa(A^\top A)=\kappa(A)^2\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -715,18 +771,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        导数与局部敏感度
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jacobian" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Jacobian 与多变量映射
+        五、投影：为什么残差必须垂直
       
     </span>
   </a>
@@ -737,10 +782,77 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        链式法则与复合系统
+        六、导数：把"变化多快"压缩成一个数
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="六、导数：把&#34;变化多快&#34;压缩成一个数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 一个被推出来的陷阱：步长不是越小越准
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jacobian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、梯度与 Jacobian：把导数搬到多变量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、梯度与 Jacobian：把导数搬到多变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 一个旋钮只管一个方向：偏导与梯度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-jacobian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 输入输出都是向量：Jacobian
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 两连杆机械臂，手算一遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -748,10 +860,27 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        特征值与特征方向
+        八、链式法则：串联的变化要乘，不能加
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="八、链式法则：串联的变化要乘，不能加">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 为什么深层结构难训练
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -759,7 +888,68 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        从局部线性化看统一性
+        九、特征值：矩阵少数"不会被扭转"的方向
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、条件数：算得出答案，不等于答案可信
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍，把数字验一遍
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、跑一遍，把数字验一遍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 最小二乘与条件数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 数值微分的步长陷阱
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查与小节
       
     </span>
   </a>
@@ -3699,7 +3889,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        向量与系统状态
+        一、你早就在用向量，只是没这么叫
       
     </span>
   </a>
@@ -3710,7 +3900,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        矩阵、映射与坐标变换
+        二、误差"有多大"：范数是被逼出来的
       
     </span>
   </a>
@@ -3721,21 +3911,27 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性方程与最小二乘
+        三、矩阵：同一套规则同时作用在所有分量上
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、矩阵：同一套规则同时作用在所有分量上">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么矩阵乘法不能交换顺序
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        正交性与投影
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3743,10 +3939,60 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        为什么工程上不做显式求逆
+        四、解方程：为什么绝大多数时候求的不是"逆"，而是"最近似解"
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="四、解方程：为什么绝大多数时候求的不是&#34;逆&#34;，而是&#34;最近似解&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 最直接的办法怎么坏掉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 把"折中"写成一个最小值问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 手算一遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-kappaatop-akappaa2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 一条代价：\(\kappa(A^\top A)=\kappa(A)^2\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3754,18 +4000,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        导数与局部敏感度
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jacobian" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Jacobian 与多变量映射
+        五、投影：为什么残差必须垂直
       
     </span>
   </a>
@@ -3776,10 +4011,77 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        链式法则与复合系统
+        六、导数：把"变化多快"压缩成一个数
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="六、导数：把&#34;变化多快&#34;压缩成一个数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 一个被推出来的陷阱：步长不是越小越准
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jacobian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、梯度与 Jacobian：把导数搬到多变量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、梯度与 Jacobian：把导数搬到多变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 一个旋钮只管一个方向：偏导与梯度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-jacobian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 输入输出都是向量：Jacobian
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 两连杆机械臂，手算一遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3787,10 +4089,27 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        特征值与特征方向
+        八、链式法则：串联的变化要乘，不能加
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="八、链式法则：串联的变化要乘，不能加">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 为什么深层结构难训练
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3798,7 +4117,68 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        从局部线性化看统一性
+        九、特征值：矩阵少数"不会被扭转"的方向
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、条件数：算得出答案，不等于答案可信
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍，把数字验一遍
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、跑一遍，把数字验一遍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 最小二乘与条件数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 数值微分的步长陷阱
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查与小节
       
     </span>
   </a>
@@ -3897,337 +4277,225 @@
 
 
 <h1 id="linear-algebra-calculus">Linear Algebra &amp; Calculus</h1>
-<p><strong>线性代数回答“状态在哪里、映射把状态变成什么”，微积分回答“输入或参数改变一点点，输出会变化多少”；两者的交汇点就是局部线性化。</strong></p>
-<p>后面的控制理论、机器人学、SLAM、优化和强化学习，几乎都在重复使用同一套工具：用向量表示系统状态，用矩阵表示状态之间的线性关系，用导数和 Jacobian 表示非线性模型在工作点附近的近似。这一章不追求课程式的完备证明，而是把三件事讲清楚——变量是什么、维度对不对、误差往哪个方向放大。读的时候建议随时问自己一句：眼前这个对象是标量、向量，还是一个映射？维度判断对了，绝大多数公式错误会在写下来的那一刻暴露；判断错了，公式看起来处处合理，代入数值却处处不对。</p>
-<figure>
-  <img alt="线性代数描述空间关系，微积分描述局部变化。" src="../../assets/diagrams/linear-algebra-calculus.svg" />
-<br />
-<figcaption>矩阵负责“怎样变换”，导数负责“改变一点会发生什么”。</figcaption>
-</figure>
-<h2 id="_1">向量与系统状态</h2>
-<p>状态空间模型的形式化写法是 <span class="arithmatex">\(\dot x=f(x,u)\)</span> 或 <span class="arithmatex">\(x_{k+1}=f(x_k,u_k)\)</span>，其中 <span class="arithmatex">\(x\)</span> 是状态、<span class="arithmatex">\(u\)</span> 是输入。判断“哪些量该进状态”有一条硬标准：<strong>状态必须是预测未来所需的充分信息</strong>——给定当前状态和未来输入，未来状态与观测的条件分布不应再依赖更早的历史。若某个量能由状态与输入唯一确定（例如平面小车的速度是位置导数），把它塞进状态只会带来冗余，让协方差矩阵出现零特征值而不再正定，滤波器随后会在这些冗余方向上产生伪相关。</p>
-<p>另一个常被忽略的问题是单位与坐标原点的选择。把位置从绝对坐标改为相对某个参考点的坐标，可以把数值尺度从 <span class="arithmatex">\(10^{5}\)</span> 降到 <span class="arithmatex">\(10^{1}\)</span>，条件数与浮点精度都会明显改善；把角度的参考轴选在运动主方向上，可以避免 <span class="arithmatex">\(\theta\approx\pi\)</span> 附近的角度环绕跳变被误判成剧烈运动。这些选择不影响物理，却直接决定同一套算法是否稳定，属于“建模阶段就能省掉调试时间”的投入。</p>
-<p>系统状态是一组必须同时知道才能预测未来的量。差分驱动小车的平面状态可以写成位置、速度与航向的列向量：</p>
+<blockquote>
+<p>这一章的四件事你在生活里都干过：把好几个数绑在一起看、量"差了多少"、按同一套规则同时改好几个数、以及"只挪一点点，结果会变多少"。读完你应该能自己推出三件事——为什么工程上几乎不"解方程"而是"求最近似解"、为什么残差必须垂直于模型的列空间、以及为什么"步长越小越准"一定会在某个地方反转。</p>
+</blockquote>
+<p><img alt="线性代数与微积分知识地图" src="../../assets/diagrams/linear-algebra-calculus.svg" /></p>
+<p>后面的控制理论、机器人学、SLAM、优化和强化学习，用的是同一套骨架：用向量表示状态、用矩阵表示映射、用导数表示"在工作点附近近似成线性"。所以这一章不追求课程式的完备证明，只带着你把每个工具<strong>为什么被迫存在</strong>推一遍。读的时候随时问自己一句：眼前这个对象是标量、向量，还是一个映射？</p>
+<hr />
+<h2 id="_1">一、你早就在用向量，只是没这么叫</h2>
+<p>车载导航报位置时你不会说"横着是 3，另外竖着是 4"，你会说"我在 (3,4)"。因为这两个数<strong>必须一起看</strong>：单独说"3"没有任何意义，它可以是任何一条线上的任何一点。当你把几个数写成一个整体、并且只允许整组一起参与运算时，你就造出了一个<strong>向量</strong>（vector）。这里的"几个数"的个数，就叫<strong>维数</strong>（dimension）。</p>
+<p>三个动作你天生就会：</p>
+<ol>
+<li><strong>叠加</strong>：起点 <span class="arithmatex">\((3,4)\)</span>，又往 <span class="arithmatex">\((1,-2)\)</span> 走了一段 → 新位置 <span class="arithmatex">\((3+1,\,4-2)=(4,2)\)</span>。这就是向量加法。</li>
+<li><strong>按比例缩放</strong>：速度只取一半，位移向量就整体乘 <span class="arithmatex">\(0.5\)</span> → <span class="arithmatex">\((6,8)\to(3,4)\)</span>。这就是数乘。</li>
+<li><strong>看"在某个方向上投了多长"</strong>：<span class="arithmatex">\((3,4)\)</span> 在正东方向 <span class="arithmatex">\((1,0)\)</span> 上投了 <span class="arithmatex">\(3\)</span>，在正北方向 <span class="arithmatex">\((0,1)\)</span> 上投了 <span class="arithmatex">\(4\)</span>。这就是内积。</li>
+</ol>
+<p>一台差分驱动小车要预测未来，状态里至少要装四个数：位置 <span class="arithmatex">\(p_x,p_y\)</span>（m）、线速度 <span class="arithmatex">\(v\)</span>（m/s）、航向角 <span class="arithmatex">\(\theta\)</span>（rad）：</p>
 <div class="arithmatex">\[
-x=\begin{bmatrix}p_x&amp;p_y&amp;v&amp;\theta\end{bmatrix}^\top ,
+x=\begin{bmatrix}p_x &amp; p_y &amp; v &amp; \theta\end{bmatrix}^\top .
 \]</div>
-<p>其中 <span class="arithmatex">\(p_x,p_y\)</span> 是位置（单位 m）、<span class="arithmatex">\(v\)</span> 是线速度（m/s）、<span class="arithmatex">\(\theta\)</span> 是航向角（rad）。之所以把它们组织成一个向量，而不是当作四个互不相干的标量，是因为向量自带结构：可以做加法（叠加位移）、可以做数乘（缩放速率）、可以做内积（度量投影长度），也可以用一次矩阵乘法同时作用在所有分量上。</p>
-<p>范数是“这个状态离原点多远、误差有多大”的度量，不同范数强调不同的误差形态，选错范数会直接改变最优解的性质：</p>
+<p><strong>为什么是这四个、不是三个？</strong> 因为判据只有一条：<strong>状态必须是预测未来所需的充分信息</strong>。给定当前 <span class="arithmatex">\(x\)</span> 和未来的输入 <span class="arithmatex">\(u\)</span>，未来就与更早的历史无关了。反过来说，任何能由 <span class="arithmatex">\(x\)</span> 和 <span class="arithmatex">\(u\)</span> 唯一算出来的量（比如平面小车的速度就是位置的导数）都不该塞进状态——塞进去只会让协方差矩阵出现零特征值、不再正定，滤波器随后会在这些冗余方向上产生凭空的相关性。</p>
+<p>这里有个"建模阶段就能省掉调试时间"的点：单位和坐标原点的选择不改变物理，却直接决定同一套算法是否稳定。把位置从绝对坐标改成相对某个参考点，数值尺度可以从 <span class="arithmatex">\(10^{5}\)</span> 降到 <span class="arithmatex">\(10^{1}\)</span>，条件数与浮点精度都会明显改善；把角度参考轴选在运动主方向上，可以避免 <span class="arithmatex">\(\theta\approx\pi\)</span> 附近的角度环绕跳变被误读成"剧烈运动"。</p>
+<hr />
+<h2 id="_2">二、误差"有多大"：范数是被逼出来的</h2>
+<p>现在有了向量，第二件事立刻出现：两组估计都错了，谁错得更狠？</p>
+<p>最直接的办法是"把每个分量的差加起来"。看一个误差 <span class="arithmatex">\(e=(3,-3)\)</span>：<span class="arithmatex">\(3+(-3)=0\)</span>，加起来是零——<strong>它看起来完美，实际上两个方向都偏了 3</strong>。正负抵消就是这个笨办法的死因。</p>
+<p>要救它只有三条路，各修一个毛病，也各留下一类偏差：</p>
+<table>
+<thead>
+<tr>
+<th>修法</th>
+<th>名字</th>
+<th>定义</th>
+<th>它的性格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先取绝对值再求和</td>
+<td><span class="arithmatex">\(L_1\)</span> 范数</td>
+<td><span class="arithmatex">\(\|x\|_1=\sum_i \|x_i\|\)</span></td>
+<td>只看总量，不在乎摊在几个方向上</td>
+</tr>
+<tr>
+<td>先平方再求和再开方</td>
+<td><span class="arithmatex">\(L_2\)</span> 范数</td>
+<td><span class="arithmatex">\(\|x\|_2=\sqrt{\sum_i x_i^2}\)</span></td>
+<td>大误差被平方放大，最怕一个坏点</td>
+</tr>
+<tr>
+<td>只看最大的那个分量</td>
+<td><span class="arithmatex">\(L_\infty\)</span> 范数</td>
+<td><span class="arithmatex">\(\|x\|_\infty=\max_i \|x_i\|\)</span></td>
+<td>只关心最坏分量，其余全不管</td>
+</tr>
+</tbody>
+</table>
+<p>这三种"性格差异"不是形容词，是可算的。比较两个候选误差 <span class="arithmatex">\(a=(2,2)\)</span> 与 <span class="arithmatex">\(b=(3,0)\)</span>：</p>
 <table>
 <thead>
 <tr>
 <th>范数</th>
-<th>定义</th>
-<th>强调什么</th>
-<th>机器人中的典型用途</th>
-<th>失效情形</th>
+<th><span class="arithmatex">\(a=(2,2)\)</span></th>
+<th><span class="arithmatex">\(b=(3,0)\)</span></th>
+<th>选谁</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><span class="arithmatex">\(L_1\)</span></td>
-<td><span class="arithmatex">\(\|x\|_1=\sum_i \|x_i\|\)</span></td>
-<td>分量绝对值之和</td>
-<td>稀疏残差、鲁棒估计损失项</td>
-<td>对小误差不平滑，梯度不稳</td>
+<td>4</td>
+<td><strong>3</strong></td>
+<td>选 <span class="arithmatex">\(b\)</span>——它宁可让一个方向错到底，也不接受"处处都错"</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(L_2\)</span></td>
-<td><span class="arithmatex">\(\|x\|_2=\sqrt{x^\top x}\)</span></td>
-<td>欧氏距离，对大误差惩罚重</td>
-<td>位姿误差、最小二乘目标</td>
-<td>单个离群点主导结果</td>
+<td><strong>2.828</strong></td>
+<td>3</td>
+<td>选 <span class="arithmatex">\(a\)</span>——平方让 <span class="arithmatex">\(b\)</span> 的 3 变得更昂贵</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(L_\infty\)</span></td>
-<td><span class="arithmatex">\(\|x\|_\infty=\max_i \|x_i\|\)</span></td>
-<td>只看最坏分量</td>
-<td>安全约束“不得超过”</td>
-<td>忽略其余分量的累积偏差</td>
+<td><strong>2</strong></td>
+<td>3</td>
+<td>选 <span class="arithmatex">\(a\)</span>——只看最坏分量</td>
 </tr>
 </tbody>
 </table>
-<p>二范数可以展开成 <span class="arithmatex">\(\|x\|_2^2=x^\top x=\sum_i x_i^2\)</span>。这个平方形式值得单独记住：最小二乘之所以叫“二乘”，就是因为目标函数写成误差向量的二范数平方，它是二次函数，求导后得到线性方程，因此有闭式解；换成 <span class="arithmatex">\(L_1\)</span> 就变成线性规划，换成 <span class="arithmatex">\(L_\infty\)</span> 变成切比雪夫逼近。范数的选择本质上决定了“我更怕一个巨大的误差，还是更怕很多个小误差”。</p>
-<p>维度与转置约定必须在动笔前定好：本区统一使用列向量，于是内积写作 <span class="arithmatex">\(x^\top y\)</span>（结果是标量），外积写作 <span class="arithmatex">\(xy^\top\)</span>（结果是矩阵）。一个 <span class="arithmatex">\(n\)</span> 维状态若被当作行向量，矩阵乘法处处需要转置，写出的公式看似对称、代入就不对齐。另一个常见障碍是单位混装：位置用 m、角度用 rad、速度用 m/s，量级可能相差几个数量级，这会让梯度下降在某些方向上前进得极慢；这类尺度问题的定量处理见 <a href="../02-numerical-computation/">数值计算</a>。</p>
-<h2 id="_2">矩阵、映射与坐标变换</h2>
-<p>同一个线性映射在不同基下的矩阵不同，这正是“矩阵表示映射、但映射不等同于矩阵”的含义。相似变换 <span class="arithmatex">\(A'=P^{-1}AP\)</span> 描述的正是同一映射在两组基下的表示，其特征值不变——这条性质在实践中很实用：判断“两个矩阵是否描述同一个物理系统”，比较特征值比逐个比较元素快得多。对角化 <span class="arithmatex">\(A=Q\Lambda Q^\top\)</span> 的价值也在于此，它把映射拆成“转到特征坐标系、各轴独立缩放、再转回来”三步，每步都廉价且可解释。</p>
-<p>还需要区分线性与仿射：<span class="arithmatex">\(y=Ax+b\)</span> 在数学上不是线性映射（除非 <span class="arithmatex">\(b=0\)</span>），但机器人里的坐标变换绝大多数是仿射。工程上的标准处理是齐次坐标——把 <span class="arithmatex">\(n\)</span> 维点补成 <span class="arithmatex">\(n+1\)</span> 维、最后一维固定为 1，于是旋转与平移可以合并成单个矩阵乘法，多个变换的复合依然只是矩阵连乘。代价是这类矩阵的逆有专门形式（平移项需要按 <span class="arithmatex">\(R^\top\)</span> 反向修正），当 <span class="arithmatex">\(R\)</span> 只是正交矩阵时逆才简洁，套用通用求逆的直觉容易写错符号。</p>
-<p>矩阵不是数字表格，而是线性映射在给定基下的表示。若 <span class="arithmatex">\(y=Ax\)</span> 且 <span class="arithmatex">\(A\in\mathbb R^{m\times n}\)</span>，则 <span class="arithmatex">\(A\)</span> 把输入空间 <span class="arithmatex">\(\mathbb R^n\)</span> 中的向量送进输出空间 <span class="arithmatex">\(\mathbb R^m\)</span>：<span class="arithmatex">\(m&lt;n\)</span> 时信息被压缩（降维、投影），<span class="arithmatex">\(m&gt;n\)</span> 时输入被嵌入更高维空间，<span class="arithmatex">\(m=n\)</span> 时可逆当且仅当 <span class="arithmatex">\(A\)</span> 满秩。</p>
+<p>所以选范数等于在回答一个问题：<strong>我更怕一个巨大的误差，还是更怕很多个中等误差？</strong> 机器人里位姿误差常用 <span class="arithmatex">\(L_2\)</span>（最小二乘的地基）、稀疏残差与鲁棒损失用 <span class="arithmatex">\(L_1\)</span>、"不得超过"的安全约束用 <span class="arithmatex">\(L_\infty\)</span>。</p>
+<p>其中 <span class="arithmatex">\(L_2\)</span> 值得单独记一下，它有一个非常好用的平方形式：</p>
 <div class="arithmatex">\[
-y=Ax,\qquad A\in\mathbb R^{m\times n},\qquad
-\dim(\ker A)+\operatorname{rank}(A)=n .
+\|x\|_2^2=x^\top x=\sum_i x_i^2 .
 \]</div>
-<p>列的解释很关键：<span class="arithmatex">\(A\)</span> 的第 <span class="arithmatex">\(j\)</span> 列就是输入基向量 <span class="arithmatex">\(e_j\)</span> 的像，所以“矩阵怎么变换空间”等价于“每一列的像落在哪里”。秩则是这些列的独立方向数；零空间 <span class="arithmatex">\(\ker A\)</span> 由全部被映射为零的输入组成，因此<strong>零空间非平凡意味着存在某些状态变化在当前观测下完全不可见</strong>——这是可观性分析的雏形。</p>
-<table>
-<thead>
-<tr>
-<th>映射类型</th>
-<th>矩阵形式</th>
-<th>几何效果</th>
-<th>出现场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>旋转</td>
-<td><span class="arithmatex">\(R^\top R=I,\ \det R=1\)</span></td>
-<td>保长度、保角度，改变朝向</td>
-<td>刚体姿态、坐标系对齐</td>
-</tr>
-<tr>
-<td>反射</td>
-<td><span class="arithmatex">\(R^\top R=I,\ \det R=-1\)</span></td>
-<td>保长度，翻转手性</td>
-<td>镜像相机模型（少见，需谨慎）</td>
-</tr>
-<tr>
-<td>缩放</td>
-<td><span class="arithmatex">\(\operatorname{diag}(s_1,\dots,s_n)\)</span></td>
-<td>各轴独立拉伸，$\kappa=\max</td>
-<td>s_i</td>
-</tr>
-<tr>
-<td>投影</td>
-<td><span class="arithmatex">\(P^2=P,\ P^\top=P\)</span></td>
-<td>压扁到低维子空间，不可逆</td>
-<td>最小二乘、平面约束</td>
-</tr>
-<tr>
-<td>状态转移</td>
-<td><span class="arithmatex">\(x_{k+1}=A x_k\)</span></td>
-<td>时间上的一步推演</td>
-<td>线性系统离散化</td>
-</tr>
-</tbody>
-</table>
-<p>矩阵乘法一般不可交换：<span class="arithmatex">\(AB\ne BA\)</span>。这不是形式上的怪癖，而是几何事实——“先旋转再平移”和“先平移再旋转”得到不同结果。机器人里的复合变换必须严格按右到左的作用顺序书写，即 <span class="arithmatex">\(T_{world\leftarrow body}=T_{world\leftarrow base}T_{base\leftarrow body}\)</span> 这类链式结构，位置与朝向的顺序一旦对调，同一条关节轨迹会让末端点落在完全不同的位置。实践建议：给每个变换显式写出“从哪个坐标系到哪个坐标系”的下标，而不是用 <span class="arithmatex">\(T_1,T_2\)</span> 之类的编号，编号法在三个以上坐标系串联时几乎必然出错。</p>
-<h2 id="_3">线性方程与最小二乘</h2>
-<p>一个纯几何的诊断方法：正规方程的条件数由 <span class="arithmatex">\(A\)</span> 的列向量夹角决定。若两列几乎平行、夹角 <span class="arithmatex">\(\phi\to0\)</span>，这两个方向上的参数几乎无法区分，<span class="arithmatex">\(\kappa\)</span> 大约按 <span class="arithmatex">\(1/\sin\phi\)</span> 的量级放大。这条关系解释了标定实验为何必须让激励覆盖多个方向——只在一个方向上采集数据，列向量必然近似共线，解出的参数虽有一组数值，但它们的和可信、各自的分量却带有巨大不确定度。</p>
-<p>由此得到实验设计的准则：让观测的几何分布尽可能“张开”。标定与系统辨识要求输入信号覆盖关心的频率范围与运动方向；SLAM 要求机器人不能只沿直线前进，否则沿运动方向与垂直方向的不确定度会相差几个数量级，回环与横向约束的价值正体现在这里。若实验已经做完才发现几何退化，唯一的路是加先验约束或正则项，而不是继续采集同一方向的数据。</p>
-<p>把未知量记为 <span class="arithmatex">\(x\)</span>，观测记为 <span class="arithmatex">\(b\)</span>，物理约束或观测模型常被整理成 <span class="arithmatex">\(Ax=b\)</span>。与其笼统说“解方程”，不如分三种情形讨论，因为它们的处理方法完全不同：</p>
-<table>
-<thead>
-<tr>
-<th>情形</th>
-<th>条件</th>
-<th>解的结构</th>
-<th>工程含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>唯一解</td>
-<td><span class="arithmatex">\(A\)</span> 方阵且 <span class="arithmatex">\(\det A\ne0\)</span></td>
-<td><span class="arithmatex">\(x=A^{-1}b\)</span></td>
-<td>约束恰好定解，如标定方程</td>
-</tr>
-<tr>
-<td>欠定</td>
-<td>未知量多于独立方程</td>
-<td>解集是仿射子空间</td>
-<td>冗余自由度，需加正则项选一个解</td>
-</tr>
-<tr>
-<td>超定</td>
-<td>方程多于未知量</td>
-<td>一般无精确解</td>
-<td>带噪观测，转最小二乘</td>
-</tr>
-<tr>
-<td>数值奇异</td>
-<td><span class="arithmatex">\(\det A\approx0\)</span> 但非零</td>
-<td>形式上有唯一解</td>
-<td>解对扰动极敏感，须看条件数</td>
-</tr>
-</tbody>
-</table>
-<p>当观测多于未知量、每条观测又带噪声时，进入最小二乘：</p>
+<p>最小二乘之所以叫"二乘"，就是因为它的目标函数写成误差向量的 <span class="arithmatex">\(L_2\)</span> 范数<strong>平方</strong>。这是个二次函数，求导后得到线性方程，因此有闭式解；换成 <span class="arithmatex">\(L_1\)</span> 目标就变成线性规划，换成 <span class="arithmatex">\(L_\infty\)</span> 变成切比雪夫逼近。</p>
+<p>最后把一条约定在动笔前定死：本区统一使用<strong>列向量</strong>，于是内积写作 <span class="arithmatex">\(x^\top y\)</span>（结果是标量），外积写作 <span class="arithmatex">\(xy^\top\)</span>（结果是矩阵）。一个 <span class="arithmatex">\(n\)</span> 维状态若被当成行向量，所有矩阵乘法都要额外转置，写出的公式看着对称、代入就不对齐。</p>
+<hr />
+<h2 id="_3">三、矩阵：同一套规则同时作用在所有分量上</h2>
+<p>设想你手上有台差速小车，你只能下两条指令：左轮速度 <span class="arithmatex">\(v_L\)</span>、右轮速度 <span class="arithmatex">\(v_R\)</span>。你真正想要的是车身前进速度 <span class="arithmatex">\(v\)</span> 和转向角速度 <span class="arithmatex">\(\omega\)</span>。这两者由两条规则给出：</p>
 <div class="arithmatex">\[
-\min_x \|Ax-b\|_2^2 .
+v=\frac{v_L+v_R}{2},\qquad \omega=\frac{v_R-v_L}{L},
 \]</div>
-<p>对 <span class="arithmatex">\(x\)</span> 求导并令其为零，得到正规方程 <span class="arithmatex">\(A^\top A x=A^\top b\)</span>，也就是最优性条件 <span class="arithmatex">\(A^\top(Ax-b)=0\)</span>。第二个写法提示了几何含义：最优残差 <span class="arithmatex">\(r=Ax^\star-b\)</span> 与 <span class="arithmatex">\(A^\top\)</span> 相乘为零，说明残差和 <span class="arithmatex">\(A\)</span> 的所有列都正交，也就是残差垂直于 <span class="arithmatex">\(A\)</span> 的列空间，不是巧合，而是“投影”的定义。</p>
-<p>要留意的失败模式有两个。第一，直接构造 <span class="arithmatex">\(A^\top A\)</span> 会把条件数平方，<span class="arithmatex">\(\kappa(A^\top A)=\kappa(A)^2\)</span>；若 <span class="arithmatex">\(A\)</span> 已经接近奇异，正规方程会先一步失去精度，实用替代是 QR 分解或 SVD，代价相近但数值表现更稳。第二，把“残差最小”当成“模型正确”：残差小只说明在平方误差意义下最接近数据，若模型本身漏掉了某个物理效应，残差里会残留结构（例如随时间单调偏移），此时继续优化权重是在拟合错误的模型。</p>
-<h2 id="_4">正交性与投影</h2>
-<p>投影的实用实现不需要构造 <span class="arithmatex">\(P\)</span>，而是走 QR 分解：把 <span class="arithmatex">\(A\)</span> 分解为 <span class="arithmatex">\(A=QR\)</span>，其中 <span class="arithmatex">\(Q\)</span> 的列标准正交、<span class="arithmatex">\(R\)</span> 为上三角，最小二乘解满足 <span class="arithmatex">\(Rx=Q^\top b\)</span>，用回代即可求得。这条路径避免构造 <span class="arithmatex">\(A^\top A\)</span>（后者会把条件数平方），代价只是分解的常数因子，是数值上最稳的常规选择。当 <span class="arithmatex">\(A\)</span> 秩亏时，改为列主元 QR 或 SVD，得到最小范数解。</p>
-<p>正交化的直觉来自 Gram–Schmidt 过程：把第 <span class="arithmatex">\(k\)</span> 列减去它在前面所有列张成子空间上的投影，剩下的就是新增的独立方向，再归一化。<span class="arithmatex">\(n\)</span> 列的几何信息因此被整理成一组互相垂直的坐标轴，这正是“投影到列空间”可以被逐列执行的原因。工程实现中更常用 Householder 或 Givens 变换代替 Gram–Schmidt，因为后者在列接近平行时误差会被反复放大。</p>
-<p>最小二乘的几何解释只有一句话：<strong>把观测向量投影到 <span class="arithmatex">\(A\)</span> 的列空间，投影点就是最优拟合，残差就是被丢弃的正交分量。</strong> 先定义内积与正交：<span class="arithmatex">\(u^\top v=0\)</span> 称为正交；若还有 <span class="arithmatex">\(\|u\|_2=\|v\|_2=1\)</span>，则称标准正交。标准正交矩阵 <span class="arithmatex">\(U\)</span>（满足 <span class="arithmatex">\(U^\top U=I\)</span>）的关键性质是它做变换不改变长度，<span class="arithmatex">\(\|Ux\|_2^2=x^\top U^\top Ux=\|x\|_2^2\)</span>，所以旋转和坐标变换不会放大误差。</p>
-<p>投影矩阵由列空间的一组标准正交基给出，并满足幂等性：</p>
+<p>其中 <span class="arithmatex">\(L=0.3\)</span> m 是轮距。把这两条规则"打包"写成一个作用在指令向量上的对象：</p>
 <div class="arithmatex">\[
-P=UU^\top,\qquad P^2=U U^\top U U^\top=UU^\top=P,\qquad P(I-P)=0 .
+\begin{bmatrix}v\\ \omega\end{bmatrix}=
+\begin{bmatrix}\tfrac12 &amp; \tfrac12\\ -\tfrac1L &amp; \tfrac1L\end{bmatrix}
+\begin{bmatrix}v_L\\ v_R\end{bmatrix}.
 \]</div>
-<p>幂等性说明投影两次等于投影一次，这正是“已经落在子空间里就再也不被改动”的代数表达；第二个恒等式说明“子空间内部分”与“垂直部分”彼此正交，因此任意向量都能唯一分解为 <span class="arithmatex">\(b=Pb+(I-P)b\)</span>，两块满足勾股关系 <span class="arithmatex">\(\|b\|_2^2=\|Pb\|_2^2+\|(I-P)b\|_2^2\)</span>。</p>
-<p>用一个三维例子把直觉钉住：取 <span class="arithmatex">\(u_1=(1,0,0)^\top\)</span>、<span class="arithmatex">\(u_2=(0,1,0)^\top\)</span>，它们张成 <span class="arithmatex">\(xy\)</span> 平面。对 <span class="arithmatex">\(b=(1,2,3)^\top\)</span> 做投影，</p>
+<p>代数字：<span class="arithmatex">\(v_L=1.0\)</span>、<span class="arithmatex">\(v_R=1.2\)</span>，得 <span class="arithmatex">\(v=1.1\)</span> m/s、<span class="arithmatex">\(\omega=(1.2-1.0)/0.3=0.667\)</span> rad/s。两条规则、两个输入、两个输出——这个 <span class="arithmatex">\(2\times2\)</span> 的数组就是一个<strong>矩阵</strong>（matrix）；它和向量的差别在于，向量是一次作用的<strong>对象</strong>，矩阵是一次作用的<strong>规则</strong>。</p>
+<p><strong>列的解释是理解矩阵最快的路。</strong> 取输入 <span class="arithmatex">\(e_1=(1,0)^\top\)</span>（只开左轮），输出是 <span class="arithmatex">\((0.5,\,-1/0.3)=(0.5,-3.333)\)</span>；取 <span class="arithmatex">\(e_2=(0,1)^\top\)</span>（只开右轮），输出是 <span class="arithmatex">\((0.5,\,+3.333)\)</span>。这两个数就是矩阵的两列。于是"矩阵怎么变换空间"等价于"每一列的像落在哪里"：左轮单独转，车向右偏；右轮单独转，车向左偏——符号刚好相反，而这个符号就写在列里。</p>
+<h3 id="_4">为什么矩阵乘法不能交换顺序</h3>
+<p>这不是形式上的怪癖，是几何事实。拿二维点 <span class="arithmatex">\((1,0)\)</span>，比较两种操作顺序，其中 <span class="arithmatex">\(R\)</span> 是绕原点转 <span class="arithmatex">\(90^\circ\)</span>（把 <span class="arithmatex">\((x,y)\)</span> 变成 <span class="arithmatex">\((-y,x)\)</span>），<span class="arithmatex">\(t\)</span> 是平移 <span class="arithmatex">\((1,0)\)</span>：</p>
+<ul>
+<li><strong>先转后移</strong>：<span class="arithmatex">\(R(1,0)=(0,1)\)</span>，再平移 → <span class="arithmatex">\((1,1)\)</span>；</li>
+<li><strong>先移后转</strong>：<span class="arithmatex">\((1,0)+(1,0)=(2,0)\)</span>，再旋转 → <span class="arithmatex">\((0,2)\)</span>。</li>
+</ul>
+<p>同一个点，落到两个完全不同的位置。所以 <span class="arithmatex">\(AB\ne BA\)</span>。工程上的应对办法很土但很有效：给每个变换显式写出"从哪个坐标系到哪个坐标系"的下标，写成 <span class="arithmatex">\(T_{world\leftarrow base}T_{base\leftarrow body}\)</span> 这种链式结构，而不是用 <span class="arithmatex">\(T_1,T_2\)</span> 编号——编号法在三个以上坐标系串联时几乎必然出错。</p>
+<hr />
+<h2 id="_5">四、解方程：为什么绝大多数时候求的不是"逆"，而是"最近似解"</h2>
+<h3 id="41">4.1 最直接的办法怎么坏掉</h3>
+<p>你要标定一个传感器斜率 <span class="arithmatex">\(k\)</span>，做了三次测量，每次得到一条方程：</p>
+<div class="arithmatex">\[
+1k=1,\qquad 2k=2,\qquad 3k=4 .
+\]</div>
+<p>前两条说 <span class="arithmatex">\(k=1\)</span>，第三条说 <span class="arithmatex">\(k=1.333\)</span>。三条方程互相矛盾——<strong>这个方程组根本没有精确解</strong>。这不是数据太脏，而是"方程个数多于未知量个数"这件事本身的性质：每条观测都带噪声，噪声之间不会互相迁就。</p>
+<p>那"分别解出来再平均"行不行？<span class="arithmatex">\(k=(1+1+1.333)/3=1.111\)</span>。看起来合理，但它对三条观测一视同仁，而第三条方程斜率更陡、它的信息其实更值钱。我们需要一个<strong>有依据的折中</strong>，而不是拍脑袋平均。</p>
+<h3 id="42">4.2 把"折中"写成一个最小值问题</h3>
+<p>折中的自然写法：让三个残差组成的向量尽量短。残差是 <span class="arithmatex">\(r=Ax-b\)</span>，于是</p>
+<div class="arithmatex">\[
+\min_x \ \|Ax-b\|_2^2 .
+\]</div>
+<p>这是上面选 <span class="arithmatex">\(L_2\)</span> 的直接后果。现在对 <span class="arithmatex">\(x\)</span> 求导并令其为零（二次函数求导是线性的），得到著名的<strong>正规方程</strong>（normal equation）：</p>
+<div class="arithmatex">\[
+A^\top A\,x=A^\top b,\qquad\text{等价于}\qquad A^\top(Ax-b)=0 .
+\]</div>
+<p>第二个写法马上给出几何含义：最优残差 <span class="arithmatex">\(r=Ax^\star-b\)</span> 被 <span class="arithmatex">\(A^\top\)</span> 一乘就是零，说明 <strong><span class="arithmatex">\(r\)</span> 与 <span class="arithmatex">\(A\)</span> 的每一列都正交</strong>——残差垂直于模型的列空间。这不是巧合，而是"投影"的定义（下一节展开）。</p>
+<h3 id="43">4.3 手算一遍</h3>
+<p>用上面的数据：<span class="arithmatex">\(A=\begin{bmatrix}1&amp;2&amp;3\end{bmatrix}^\top\)</span>，<span class="arithmatex">\(b=\begin{bmatrix}1&amp;2&amp;4\end{bmatrix}^\top\)</span>。只有一个未知量，正规方程退化成一次除法：</p>
+<div class="arithmatex">\[
+A^\top A=1^2+2^2+3^2=14,\qquad A^\top b=1\cdot1+2\cdot2+3\cdot4=17,\qquad k=\frac{17}{14}=1.2143 .
+\]</div>
+<p>回代看残差：<span class="arithmatex">\(r=(1.2143-1,\ 2.4286-2,\ 3.6429-4)=(0.2143,\ 0.4286,\ -0.3571)\)</span>。验一下正交性：</p>
+<div class="arithmatex">\[
+r^\top x=0.2143\cdot1+0.4286\cdot2-0.3571\cdot3\approx0 .
+\]</div>
+<p>真的等于零（不是"接近零"，是代数上恰好为零）。残差长度 <span class="arithmatex">\(\|r\|_2=\sqrt{70/196}\approx0.5976\)</span>。</p>
+<h3 id="44-kappaatop-akappaa2">4.4 一条代价：<span class="arithmatex">\(\kappa(A^\top A)=\kappa(A)^2\)</span></h3>
+<p>正规方程有个隐藏账单：<strong>直接构造</strong> <span class="arithmatex">\(A^\top A\)</span> 会把条件数平方。若 <span class="arithmatex">\(A\)</span> 的列几乎平行、条件数已经到 <span class="arithmatex">\(10^{4}\)</span>，那 <span class="arithmatex">\(A^\top A\)</span> 就到了 <span class="arithmatex">\(10^{8}\)</span>，双精度（约 16 位有效数字）会先丢一半精度，后面的解基本不可信。实用替代是 QR 分解或 SVD，代价相近但数值上稳得多。这件事在第十节会用真实数字验一遍。</p>
+<hr />
+<h2 id="_6">五、投影：为什么残差必须垂直</h2>
+<p>先讲直觉。你在墙上挂画，要量"画中心离目标点多远"，你会量<strong>垂直距离</strong>，不会斜着量。因为斜着量会把你已经对准的分量又算进来一遍。最小二乘做的是同一件事：把观测向量 <span class="arithmatex">\(b\)</span> 垂直地"拍"到模型的列空间上，<strong>投影点就是最优拟合，被丢弃的那段就是残差</strong>。</p>
+<p>先定义两个词：<span class="arithmatex">\(u^\top v=0\)</span> 时称 <span class="arithmatex">\(u,v\)</span> <strong>正交</strong>（orthogonal）；一组向量若两两正交且长度都为 1，就叫<strong>标准正交基</strong>（orthonormal basis），写成矩阵 <span class="arithmatex">\(U\)</span> 时满足 <span class="arithmatex">\(U^\top U=I\)</span>。标准正交矩阵做变换不改变长度：</p>
+<div class="arithmatex">\[
+\|Ux\|_2^2=x^\top U^\top Ux=\|x\|_2^2 ,
+\]</div>
+<p>所以旋转和坐标变换不会放大误差——这是它在数值算法里到处出现的原因。</p>
+<p>投影矩阵由列空间的一组标准正交基给出，并满足<strong>幂等性</strong>：</p>
+<div class="arithmatex">\[
+P=UU^\top,\qquad P^2=UU^\top UU^\top=UU^\top=P,\qquad P(I-P)=0 .
+\]</div>
+<p><span class="arithmatex">\(P^2=P\)</span> 是"已经落在子空间里，再投影一次也不再改动"的代数表达；<span class="arithmatex">\(P(I-P)=0\)</span> 说明"子空间内部分"与"垂直部分"彼此正交，于是任意向量都能唯一分解成 <span class="arithmatex">\(b=Pb+(I-P)b\)</span>，两块满足勾股关系 <span class="arithmatex">\(\|b\|_2^2=\|Pb\|_2^2+\|(I-P)b\|_2^2\)</span>。</p>
+<p>三维手上过一遍：取 <span class="arithmatex">\(u_1=(1,0,0)^\top\)</span>、<span class="arithmatex">\(u_2=(0,1,0)^\top\)</span>（它们张成 <span class="arithmatex">\(xy\)</span> 平面），对 <span class="arithmatex">\(b=(1,2,3)^\top\)</span> 投影，</p>
 <div class="arithmatex">\[
 Pb=u_1(u_1^\top b)+u_2(u_2^\top b)=1\cdot u_1+2\cdot u_2=(1,2,0)^\top ,
 \]</div>
-<p>残差 <span class="arithmatex">\(r=(0,0,3)^\top\)</span>，长度 3，恰好等于 <span class="arithmatex">\(b\)</span> 到该平面的垂直距离。把它搬到估计问题里：列空间是“模型能解释的全部方向”，投影是这个方向上最接近数据的那一点，残差是模型永远解释不了的部分。</p>
-<table>
-<thead>
-<tr>
-<th>概念</th>
-<th>代数对象</th>
-<th>判据</th>
-<th>常见误用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>正交</td>
-<td><span class="arithmatex">\(u^\top v=0\)</span></td>
-<td>内积为零</td>
-<td>把“正交”当成“独立”</td>
-</tr>
-<tr>
-<td>标准正交基</td>
-<td><span class="arithmatex">\(U^\top U=I\)</span></td>
-<td>列互相正交且单位长</td>
-<td>忘记归一化导致投影尺度错</td>
-</tr>
-<tr>
-<td>投影</td>
-<td><span class="arithmatex">\(P=UU^\top\)</span></td>
-<td><span class="arithmatex">\(P^2=P\)</span> 且 <span class="arithmatex">\(P^\top=P\)</span></td>
-<td>用非正交基构造 <span class="arithmatex">\(P\)</span>，结果不可投影</td>
-</tr>
-<tr>
-<td>残差</td>
-<td><span class="arithmatex">\(r=b-Pb\)</span></td>
-<td><span class="arithmatex">\(U^\top r=0\)</span></td>
-<td>只看 <span class="arithmatex">\(\|r\|\)</span> 不看残差结构</td>
-</tr>
-</tbody>
-</table>
-<p>投影还给出两个可直接用的工程结论。其一是“加更多观测量一定不会让最小二乘变差”：列空间变大，<span class="arithmatex">\(b\)</span> 到它的距离单调不增，这就是多传感融合的几何理由。其二是“正交分解保证能量守恒”，因此残差的平方和与拟合值的平方和相加等于数据总平方和，这也是回归中 <span class="arithmatex">\(R^2\)</span> 的定义来源。</p>
-<h2 id="_5">为什么工程上不做显式求逆</h2>
-<p>初学时习惯把 <span class="arithmatex">\(x=A^{-1}b\)</span> 当作解方程的标准答案，工程实现里却几乎不这么写。原因有三层，一层比一层严重。</p>
-<p>第一层是代价。求逆本身是 <span class="arithmatex">\(O(n^3)\)</span> 量级的稠密运算，常数比 LU 分解大 2–3 倍，得到 <span class="arithmatex">\(A^{-1}\)</span> 后还要再做一次矩阵向量乘才算出一个解。而分解求解可以复用分解结果应付多个右端项：</p>
-<table>
-<thead>
-<tr>
-<th>做法</th>
-<th>一次性代价</th>
-<th>每个新 <span class="arithmatex">\(b\)</span> 的代价</th>
-<th>数值误差特征</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>显式求逆</td>
-<td><span class="arithmatex">\(\approx 2n^3\)</span> 乘加</td>
-<td><span class="arithmatex">\(O(n^2)\)</span> 矩阵向量乘</td>
-<td>误差被放大两次，近似 <span class="arithmatex">\(\kappa^2\)</span> 量级</td>
-<td>应避免</td>
-</tr>
-<tr>
-<td>LU 分解求解</td>
-<td><span class="arithmatex">\(\approx \frac{2}{3}n^3\)</span></td>
-<td><span class="arithmatex">\(O(n^2)\)</span> 前后代</td>
-<td>按 <span class="arithmatex">\(\kappa(A)\)</span> 放大</td>
-<td>通用方阵</td>
-</tr>
-<tr>
-<td>Cholesky 求解</td>
-<td><span class="arithmatex">\(\approx \frac{1}{3}n^3\)</span></td>
-<td><span class="arithmatex">\(O(n^2)\)</span> 前后代</td>
-<td>对称正定时最省</td>
-<td><span class="arithmatex">\(A^\top A+\lambda I\)</span> 常用</td>
-</tr>
-<tr>
-<td>QR 求解</td>
-<td><span class="arithmatex">\(O(mn^2)\)</span></td>
-<td><span class="arithmatex">\(O(n^2)\)</span></td>
-<td>稳定，不平方条件数</td>
-<td>最小二乘首选</td>
-</tr>
-<tr>
-<td>迭代求解</td>
-<td>每步 <span class="arithmatex">\(O(n^2)\)</span></td>
-<td>每步 <span class="arithmatex">\(O(n^2)\)</span></td>
-<td>可用残差提前停止</td>
-<td>稀疏大系统首选</td>
-</tr>
-</tbody>
-</table>
-<p>以 <span class="arithmatex">\(n=1000\)</span> 为例，<span class="arithmatex">\(n^3=10^9\)</span>，显式求逆与 Cholesky 求解的乘加数量相差约 6 倍；若每个时间步只需要一个解，用分解直接求解几乎总是更快。若同一个矩阵需要在上万次迭代中反复使用（例如固定的预条件器），才值得考虑保存因子而非求逆。</p>
-<p>第二层是数值。求逆会把扰动放大 <span class="arithmatex">\(\kappa(A)\)</span> 倍，把求出的 <span class="arithmatex">\(A^{-1}\)</span> 再乘回 <span class="arithmatex">\(b\)</span> 时又放大一次，等效误差接近 <span class="arithmatex">\(\kappa(A)^2\)</span> 量级。若 <span class="arithmatex">\(\kappa(A)=10^8\)</span>，双精度（约 16 位有效数字）先损失 8 位，再平方后基本没有可信位数可用。</p>
-<p>第三层是不必要。真正需要的是<strong>线性方程组的解</strong>，不是<strong>逆矩阵</strong>本身。绝大多数场景（状态估计、模型预测控制、牛顿法步长、图优化中的线性化求解）都只需要 <span class="arithmatex">\(A^{-1}b\)</span> 这个动作。例外只有三类：需要矩阵的迹或需要显式协方差做解析推导、矩阵极小（<span class="arithmatex">\(n\le4\)</span>）且需要在多个右端项上反复使用、以及教学或调试时想看清结构。</p>
-<p>失败模式总结：判断某个量是否“解不动”，先看 <span class="arithmatex">\(\kappa(A)\)</span> 的量级，再看残差是否已降到观测噪声水平；若残差与噪声同量级还继续迭代，只是在把噪声拟合进解里。</p>
-<h2 id="_6">导数与局部敏感度</h2>
-<p>一元函数在一点的瞬时变化率定义为极限</p>
+<p>残差 <span class="arithmatex">\(r=(0,0,3)^\top\)</span>，长度 3，恰好等于 <span class="arithmatex">\(b\)</span> 到该平面的垂直距离。勾股也成立：<span class="arithmatex">\(1+4+9=14=5+9\)</span>。</p>
+<p>搬回估计问题里：列空间是"模型能解释的全部方向"，投影是这个方向上离数据最近的那一点，残差是模型<strong>永远解释不了</strong>的部分。由此得到两条能直接用的工程结论：</p>
+<ul>
+<li><strong>加更多观测量一定不会让最小二乘变差。</strong> 因为每加一个观测，列空间只会变大、永远不小；<span class="arithmatex">\(b\)</span> 到这个更大空间的垂直距离单调不增。这就是多传感器融合的几何理由。</li>
+<li><strong>正交分解保证"能量"守恒</strong>，拟合值与残差的平方和相加等于数据总平方和——这正是回归里 <span class="arithmatex">\(R^2\)</span> 的定义来源。</li>
+</ul>
+<hr />
+<h2 id="_7">六、导数：把"变化多快"压缩成一个数</h2>
+<p>现在换一半话题，从"空间关系"转到"变化关系"。</p>
+<p>场景：一个温度传感器，输出电压 <span class="arithmatex">\(V\)</span> 随温度 <span class="arithmatex">\(T\)</span> 上升。你不需要它的整条曲线，你只需要回答"在 <span class="arithmatex">\(20^\circ\)</span>C 附近，温度每升 <span class="arithmatex">\(1^\circ\)</span>C，输出涨多少伏"。假设这段近似为 <span class="arithmatex">\(V(T)=0.01T+0.2\)</span>，那答案就是 <span class="arithmatex">\(0.01\)</span> V/<span class="arithmatex">\(^\circ\)</span>C。于是 <span class="arithmatex">\(T=25\)</span> 时 <span class="arithmatex">\(V=0.45\)</span> V，而 <span class="arithmatex">\(T=25.1\)</span> 时不用重新标定，直接估：</p>
 <div class="arithmatex">\[
-f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad
-f(x+h)\approx f(x)+f'(x)h .
+V(25.1)\approx0.45+0.01\times0.1=0.451\ \text{V}.
 \]</div>
-<p>它回答的是“把输入挪动 <span class="arithmatex">\(h\)</span>，输出挪动大约 <span class="arithmatex">\(f'(x)h\)</span>”，这是线性近似的原型。推广到多变量标量函数 <span class="arithmatex">\(f(x_1,\dots,x_n)\)</span>，偏导数 <span class="arithmatex">\(\partial f/\partial x_i\)</span> 表示“只动第 <span class="arithmatex">\(i\)</span> 个输入、其它保持不动”的变化率，把它们摞起来就是梯度：</p>
+<p>这就是<strong>导数</strong>（derivative）的用途：它把一条曲线在某个点附近压缩成一个可以相乘的数。这个被选中的点叫<strong>工作点</strong>（operating point），"在工作点附近用一条直线代替曲线"就叫<strong>局部线性化</strong>（local linearization）：</p>
 <div class="arithmatex">\[
-\nabla f=\begin{bmatrix}\partial f/\partial x_1 \\ \vdots \\ \partial f/\partial x_n\end{bmatrix},\qquad
-f(x+\delta)\approx f(x)+\nabla f^\top \delta .
+f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad f(x+h)\approx f(x)+f'(x)h .
 \]</div>
-<p>梯度的几何含义很具体：它是函数增长最快的方向，方向导数在 <span class="arithmatex">\(\delta\)</span> 与 <span class="arithmatex">\(\nabla f\)</span> 同向时取最大值 <span class="arithmatex">\(\|\nabla f\|_2\)</span>，在垂直时为零。梯度的模长因此可以当作“当前有多陡”的指标——趋近最优解时它趋于零，这也是很多优化器把 <span class="arithmatex">\(\|\nabla f\|\le\varepsilon\)</span> 当作收敛判据的原因。</p>
+<h3 id="61">6.1 一个被推出来的陷阱：步长不是越小越准</h3>
+<p>既然定义里写着 <span class="arithmatex">\(h\to0\)</span>，很自然的想法是"数值上把 <span class="arithmatex">\(h\)</span> 取到非常小"。<strong>这个直觉一定会失效</strong>，可以推出来。</p>
+<p>用前向差分 <span class="arithmatex">\((f(x+h)-f(x))/h\)</span> 近似 <span class="arithmatex">\(f'(x)\)</span>，误差有两个来源：</p>
+<ol>
+<li><strong>截断误差</strong>：泰勒展开说真实误差约 <span class="arithmatex">\(M_2h/2\)</span>，随 <span class="arithmatex">\(h\)</span> 线性变小；</li>
+<li><strong>舍入误差</strong>：<span class="arithmatex">\(f(x+h)-f(x)\)</span> 是两个接近的数相减，浮点表示的有效位会大量相消，相对误差约 <span class="arithmatex">\(u/h\)</span>（<span class="arithmatex">\(u\approx2\times10^{-16}\)</span> 是机器精度），随 <span class="arithmatex">\(h\)</span> 变小而<strong>变大</strong>。</li>
+</ol>
+<p>两者相加约等于 <span class="arithmatex">\(u/h+M_2h/2\)</span>，对 <span class="arithmatex">\(h\)</span> 求最小值得最优步长 <span class="arithmatex">\(h\approx\sqrt{u}\approx10^{-8}\)</span>，此时误差也只能到 <span class="arithmatex">\(10^{-8}\)</span> 量级；用中心差分 <span class="arithmatex">\((f(x+h)-f(x-h))/(2h)\)</span> 精度提到 <span class="arithmatex">\(h^2\)</span> 阶，最优 <span class="arithmatex">\(h\approx u^{1/3}\approx6\times10^{-6}\)</span>。而一旦 <span class="arithmatex">\(h\)</span> 取到 <span class="arithmatex">\(10^{-16}\)</span>，<span class="arithmatex">\(x+h\)</span> 在浮点下就等于 <span class="arithmatex">\(x\)</span>，分子变成精确的 0，<strong>导数被算成 0</strong>。第十一节的第二个实验会把这条曲线扫出来。</p>
+<p>这也是自动微分（automatic differentiation）优于手工差分的根本原因：它算的是解析的链式法则，根本不经过这一步相减。</p>
+<hr />
+<h2 id="jacobian">七、梯度与 Jacobian：把导数搬到多变量</h2>
+<h3 id="71">7.1 一个旋钮只管一个方向：偏导与梯度</h3>
+<p>如果函数有 <span class="arithmatex">\(n\)</span> 个输入，你没法只谈"变化率"——得先说明<strong>动哪一个</strong>。<span class="arithmatex">\(\partial f/\partial x_i\)</span> 的含义就是"只动第 <span class="arithmatex">\(i\)</span> 个输入、其它全部按住不动"的变化率，这叫<strong>偏导数</strong>（partial derivative）。把它们摞成一列就是<strong>梯度</strong>（gradient）：</p>
+<div class="arithmatex">\[
+\nabla f=\begin{bmatrix}\partial f/\partial x_1\\ \vdots\\ \partial f/\partial x_n\end{bmatrix},\qquad
+f(x+\delta)\approx f(x)+\nabla f^\top\delta .
+\]</div>
+<p>梯度的几何含义很具体：它是函数增长最快的方向。沿 <span class="arithmatex">\(\delta\)</span> 的方向导数在 <span class="arithmatex">\(\delta\)</span> 与 <span class="arithmatex">\(\nabla f\)</span> 同向时取最大值 <span class="arithmatex">\(\|\nabla f\|_2\)</span>，垂直时为零。所以 <span class="arithmatex">\(\|\nabla f\|\)</span> 本身就是"当前有多陡"的指标，趋近最优解时它趋于零——这就是很多优化器拿 <span class="arithmatex">\(\|\nabla f\|\le\varepsilon\)</span> 当收敛判据的原因。</p>
+<h3 id="72-jacobian">7.2 输入输出都是向量：Jacobian</h3>
+<p>设 <span class="arithmatex">\(y=f(x)\)</span>，<span class="arithmatex">\(x\in\mathbb R^n\)</span>，<span class="arithmatex">\(y\in\mathbb R^m\)</span>。此时"变化率"是一个 <span class="arithmatex">\(m\times n\)</span> 的矩阵，叫 <strong>Jacobian</strong>：</p>
+<div class="arithmatex">\[
+J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad J\in\mathbb R^{m\times n},\qquad f(x+\delta)\approx f(x)+J(x)\delta .
+\]</div>
+<p><strong>维度检查是最快的自检手段</strong>：<span class="arithmatex">\(J\delta\)</span> 必须是 <span class="arithmatex">\(m\)</span> 维，所以 <span class="arithmatex">\(J\)</span> 是 <span class="arithmatex">\(m\times n\)</span>、<span class="arithmatex">\(\delta\)</span> 是 <span class="arithmatex">\(n\)</span> 维，乘积是 <span class="arithmatex">\(m\times n\)</span> 乘 <span class="arithmatex">\(n\times1\)</span> 得 <span class="arithmatex">\(m\times1\)</span>。先写维度、再填内容，能省掉大量返工。</p>
+<h3 id="73">7.3 两连杆机械臂，手算一遍</h3>
+<p>杆长 <span class="arithmatex">\(l_1=l_2=1\)</span>，关节角 <span class="arithmatex">\(\theta_1,\theta_2\)</span>，末端位置</p>
+<div class="arithmatex">\[
+x=\cos\theta_1+\cos(\theta_1+\theta_2),\qquad y=\sin\theta_1+\sin(\theta_1+\theta_2) .
+\]</div>
+<p>取工作点 <span class="arithmatex">\(\theta_1=0^\circ\)</span>、<span class="arithmatex">\(\theta_2=90^\circ\)</span>：末端在 <span class="arithmatex">\((1,1)\)</span>。对两个角度求偏导，得到</p>
+<div class="arithmatex">\[
+J=\begin{bmatrix}-1 &amp; -1\\ 1 &amp; 0\end{bmatrix}.
+\]</div>
+<p>现在验证它"能不能用"：让第一个关节多转 <span class="arithmatex">\(\Delta q=(0.01,\,0)\)</span> rad，Jacobian 预测末端位移 <span class="arithmatex">\(\Delta x\approx J\Delta q=(-0.01,\,+0.01)\)</span>。真切到 <span class="arithmatex">\((\theta_1,\theta_2)=(0.01,\ \pi/2)\)</span> 算一次：末端约在 <span class="arithmatex">\((0.98995,\ 1.00995)\)</span>，实际位移是 <span class="arithmatex">\((-0.01005,\ +0.00995)\)</span>。和预测差了不到 <span class="arithmatex">\(5\times10^{-5}\)</span>——这个偏差就是被砍掉的二阶项，约 <span class="arithmatex">\(h^2/2\)</span> 量级。<strong>线性近似只在工作点附近成立</strong>，位移一大就失控。</p>
+<p>再把 <span class="arithmatex">\(\theta_2\)</span> 调到 <span class="arithmatex">\(0^\circ\)</span>（手臂完全伸直）：两列变成 <span class="arithmatex">\((-1,-1)\)</span> 方向的倍数，<span class="arithmatex">\(J\)</span> 降秩。这时沿手臂径向的末端运动<strong>无法由任何关节速度生成</strong>——要维持它需要无穷大的关节速度。这就是<strong>奇异位形</strong>（singular configuration）。逆运动学在这类构型附近"关节速度爆炸"，根源就在这一步。</p>
 <table>
 <thead>
 <tr>
-<th>概念</th>
-<th>定义对象</th>
-<th>维数</th>
-<th>主要用途</th>
-<th>常见误用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>导数 <span class="arithmatex">\(f'\)</span></td>
-<td>标量→标量</td>
-<td>1</td>
-<td>单变量敏感度</td>
-<td>直接套到多变量上</td>
-</tr>
-<tr>
-<td>偏导 <span class="arithmatex">\(\partial f/\partial x_i\)</span></td>
-<td>标量→标量</td>
-<td>1</td>
-<td>隔离单变量作用</td>
-<td>忘记其它变量被固定</td>
-</tr>
-<tr>
-<td>梯度 <span class="arithmatex">\(\nabla f\)</span></td>
-<td>标量→向量</td>
-<td><span class="arithmatex">\(n\)</span></td>
-<td>优化下降方向</td>
-<td>行列约定混用</td>
-</tr>
-<tr>
-<td>方向导数</td>
-<td>标量→标量</td>
-<td>1</td>
-<td>沿指定方向的变化率</td>
-<td>忘记先归一化方向</td>
-</tr>
-<tr>
-<td>Jacobian <span class="arithmatex">\(J\)</span></td>
-<td>向量→向量</td>
-<td><span class="arithmatex">\(m\times n\)</span></td>
-<td>多变量映射线性化</td>
-<td>忘记它随工作点变化</td>
-</tr>
-</tbody>
-</table>
-<p>数值上求梯度不应该用极小步长的前向差分：<span class="arithmatex">\(\left(f(x+h)-f(x)\right)/h\)</span> 的相对误差约为 <span class="arithmatex">\(u/h+M_2h/2\)</span>，最优步长在 <span class="arithmatex">\(h\approx\sqrt{u}\approx10^{-8}\)</span> 附近，此时相对误差也只能到 <span class="arithmatex">\(10^{-8}\)</span> 量级；中心差分精度提高到 <span class="arithmatex">\(h^2\)</span> 阶，最优 <span class="arithmatex">\(h\approx u^{1/3}\approx6\times10^{-6}\)</span>。一旦 <span class="arithmatex">\(h\)</span> 取到 <span class="arithmatex">\(10^{-16}\)</span>，<span class="arithmatex">\(x+h\)</span> 与 <span class="arithmatex">\(x\)</span> 在浮点下已经相等，分子变成 0，导数算成 0——这是“步长越小越准”这一直觉的失效点，也是自动微分优于手工差分的根本原因。</p>
-<h2 id="jacobian">Jacobian 与多变量映射</h2>
-<p>当输入输出都是向量时，单个导数不够用了。设 <span class="arithmatex">\(y=f(x)\)</span>，<span class="arithmatex">\(x\in\mathbb R^n\)</span>，<span class="arithmatex">\(y\in\mathbb R^m\)</span>，Jacobian 是全部一阶偏导排成的矩阵：</p>
-<div class="arithmatex">\[
-J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad
-J\in\mathbb R^{m\times n},\qquad
-f(x+\delta)\approx f(x)+J(x)\,\delta .
-\]</div>
-<p>维度检查是最快的自检手段：<span class="arithmatex">\(J\delta\)</span> 必须是 <span class="arithmatex">\(m\)</span> 维，所以 <span class="arithmatex">\(J\)</span> 是 <span class="arithmatex">\(m\times n\)</span>、<span class="arithmatex">\(\delta\)</span> 是 <span class="arithmatex">\(n\)</span> 维，乘积 <span class="arithmatex">\(m\times n\)</span> 乘 <span class="arithmatex">\(n\times1\)</span> 得 <span class="arithmatex">\(m\times1\)</span>。写公式时先写维度，再填内容，可以省掉大量返工。</p>
-<p>机械臂是最自然的例子。关节角 <span class="arithmatex">\(q\)</span>、末端位姿 <span class="arithmatex">\(x\)</span>，两者的速度关系为 <span class="arithmatex">\(\dot x=J(q)\,\dot q\)</span>，其中 <span class="arithmatex">\(J\)</span> 是 <span class="arithmatex">\(6\times n\)</span> 的几何 Jacobian（<span class="arithmatex">\(n\)</span> 为关节数）。它同时承担三种任务：正运动学的速度映射、逆运动学的求解对象、以及奇异性判断。当 <span class="arithmatex">\(J\)</span> 降秩，某些末端运动方向无法由关节速度生成，机械臂在这些构型附近需要极端的关节速度才能维持末端速度，这就是奇异位形。</p>
-<table>
-<thead>
-<tr>
-<th>应用</th>
-<th>用 <span class="arithmatex">\(J\)</span> 做什么</th>
+<th>用 <span class="arithmatex">\(J\)</span> 干什么</th>
+<th>公式</th>
 <th>关键条件</th>
 <th>失效表现</th>
 </tr>
@@ -4242,38 +4510,55 @@ f(x+\delta)\approx f(x)+J(x)\,\delta .
 <tr>
 <td>逆运动学速度</td>
 <td><span class="arithmatex">\(\dot q=J^{+}\dot x\)</span></td>
-<td><span class="arithmatex">\(J\)</span> 满秩或加阻尼</td>
+<td><span class="arithmatex">\(J\)</span> 满秩，或加阻尼</td>
 <td>奇异附近关节速度爆炸</td>
 </tr>
 <tr>
-<td>EKF 观测更新</td>
-<td>线性化观测模型 <span class="arithmatex">\(h(x)\)</span></td>
-<td>估计点附近线性化有效</td>
-<td>强非线性时发散</td>
-</tr>
-<tr>
 <td>误差传播</td>
-<td><span class="arithmatex">\(\Sigma_x\approx J\Sigma_q J^\top\)</span></td>
-<td>局部线性足够</td>
+<td><span class="arithmatex">\(\Sigma_x\approx J\Sigma_qJ^\top\)</span></td>
+<td>局部线性足够好</td>
 <td>大不确定度时低估方差</td>
 </tr>
 <tr>
-<td>牛顿法</td>
+<td>牛顿法步长</td>
 <td>求解 <span class="arithmatex">\(J\Delta=\)</span> 残差</td>
 <td><span class="arithmatex">\(J\)</span> 非奇异</td>
-<td>奇异步长无解</td>
+<td>奇异性处无解</td>
 </tr>
 </tbody>
 </table>
-<p>几何理解：Jacobian 在当前构型附近，把关节空间的一个小位移映射为任务空间的切向位移，即 <span class="arithmatex">\(\Delta x\approx J(q)\Delta q\)</span>。它不是一段实现技巧，而是非线性映射在局部的线性近似。必须强调“局部”二字——构型变化后 <span class="arithmatex">\(J(q)\)</span> 随之改变；用旧构型算出的 Jacobian 去外推大位移，误差会随位移增大迅速失控。经验上，当线性近似误差不再小于测量噪声时，就该重新计算 Jacobian；在迭代式逆运动学中这通常意味着每次迭代都重算一次，代价是每步一次线性求解，这也是逆运动学比正运动学贵得多的原因。</p>
-<h2 id="_7">链式法则与复合系统</h2>
-<p>复合函数 <span class="arithmatex">\(z=g(y)\)</span>、<span class="arithmatex">\(y=f(x)\)</span> 的链式法则在一元情形是 <span class="arithmatex">\(\frac{dz}{dx}=\frac{dz}{dy}\frac{dy}{dx}\)</span>，到多变量的向量形式变成 Jacobian 矩阵连乘：</p>
+<hr />
+<h2 id="_8">八、链式法则：串联的变化要乘，不能加</h2>
+<p>先看一件你早就会的事。换汇：<span class="arithmatex">\(1\)</span> 欧元 = <span class="arithmatex">\(1.08\)</span> 美元，<span class="arithmatex">\(1\)</span> 美元 = <span class="arithmatex">\(7.2\)</span> 人民币。那 <span class="arithmatex">\(100\)</span> 欧元等于多少人民币？你会算 <span class="arithmatex">\(100\times1.08\times7.2\)</span>，而<strong>不是</strong> <span class="arithmatex">\(100\times(1.08+7.2)\)</span>。为什么乘？因为第二段汇率是"相对于第一段结果"的变化率——它作用在上一步的输出上。</p>
+<p>复合函数 <span class="arithmatex">\(z=g(y)\)</span>、<span class="arithmatex">\(y=f(x)\)</span> 的一元链式法则说的就是这个乘法：<span class="arithmatex">\(\frac{dz}{dx}=\frac{dz}{dy}\frac{dy}{dx}\)</span>。到了向量情形，每个"变化率"都升级成 Jacobian，乘法变成矩阵连乘：</p>
 <div class="arithmatex">\[
-J_{z\leftarrow x}=J_{g}\cdot J_{f},\qquad
-\frac{\partial z}{\partial x}=\frac{\partial z}{\partial y}\frac{\partial y}{\partial x}.
+J_{z\leftarrow x}=J_g\,J_f,\qquad \frac{\partial z}{\partial x}=\frac{\partial z}{\partial y}\frac{\partial y}{\partial x} .
 \]</div>
-<p>乘法顺序和函数复合顺序一致：先作用 <span class="arithmatex">\(f\)</span> 再作用 <span class="arithmatex">\(g\)</span>，矩阵就先写 <span class="arithmatex">\(J_g\)</span> 再写 <span class="arithmatex">\(J_f\)</span>。维度自动对齐——若 <span class="arithmatex">\(x\in\mathbb R^{n}\)</span>、<span class="arithmatex">\(y\in\mathbb R^{k}\)</span>、<span class="arithmatex">\(z\in\mathbb R^{m}\)</span>，则 <span class="arithmatex">\(J_f\)</span> 是 <span class="arithmatex">\(k\times n\)</span>，<span class="arithmatex">\(J_g\)</span> 是 <span class="arithmatex">\(m\times k\)</span>，乘积是 <span class="arithmatex">\(m\times n\)</span>。这条维度链本身就是证明写对了的最强证据。</p>
-<p>链式法则还解释了为什么深层结构难训练：一层层的 Jacobian 相乘，若每层把某些方向放大约 1.5 倍，10 层后累计放大约 <span class="arithmatex">\(1.5^{10}\approx57\)</span>；若每层缩小到 0.7 倍，10 层后衰减约 <span class="arithmatex">\(0.7^{10}\approx0.03\)</span>，梯度基本消失。乘性累积意味着<strong>层数越多，缩放因子的指数效应越明显</strong>，残差连接、归一化和梯度裁剪都是在控制这个乘积的谱。</p>
+<p>顺序和复合顺序一致：先作用 <span class="arithmatex">\(f\)</span> 再作用 <span class="arithmatex">\(g\)</span>，矩阵就先写 <span class="arithmatex">\(J_g\)</span> 再写 <span class="arithmatex">\(J_f\)</span>（注意函数先作用在右边）。维度自动对齐：若 <span class="arithmatex">\(x\in\mathbb R^n\)</span>、<span class="arithmatex">\(y\in\mathbb R^k\)</span>、<span class="arithmatex">\(z\in\mathbb R^m\)</span>，则 <span class="arithmatex">\(J_f\)</span> 是 <span class="arithmatex">\(k\times n\)</span>、<span class="arithmatex">\(J_g\)</span> 是 <span class="arithmatex">\(m\times k\)</span>，乘出来必须是 <span class="arithmatex">\(m\times n\)</span>。<strong>这条维度链本身就是"写对了"的最强证据。</strong></p>
+<h3 id="81">8.1 为什么深层结构难训练</h3>
+<p>链式法则是一串乘法，于是缩放因子按层数取幂。假设每层把某个方向的尺度乘 <span class="arithmatex">\(1.2\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>层数</th>
+<th>每层 <span class="arithmatex">\(1.2\)</span></th>
+<th>每层 <span class="arithmatex">\(0.9\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 层</td>
+<td><span class="arithmatex">\(1.2^{10}\approx6.19\)</span></td>
+<td><span class="arithmatex">\(0.9^{10}\approx0.349\)</span></td>
+</tr>
+<tr>
+<td>20 层</td>
+<td><span class="arithmatex">\(1.2^{20}\approx38.3\)</span></td>
+<td><span class="arithmatex">\(0.9^{20}\approx0.122\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>每层只"稍微"放大一点，20 层后梯度就是 38 倍；每层只"稍微"缩小一点，20 层后只剩一成。乘性累积意味着<strong>层数越多，缩放因子的指数效应越明显</strong>，这跟每层改动多小无关。残差连接、归一化、梯度裁剪，本质上都是在控制这个连乘乘积的谱。</p>
 <table>
 <thead>
 <tr>
@@ -4291,7 +4576,7 @@ J_{z\leftarrow x}=J_{g}\cdot J_{f},\qquad
 <td>漏掉内层导数</td>
 </tr>
 <tr>
-<td>向量链（Jacobian 连乘）</td>
+<td>向量链</td>
 <td><span class="arithmatex">\(J_gJ_f\)</span></td>
 <td>需保存中间量</td>
 <td>顺序写反</td>
@@ -4304,56 +4589,50 @@ J_{z\leftarrow x}=J_{g}\cdot J_{f},\qquad
 </tr>
 <tr>
 <td>深层网络</td>
-<td>逐层 Jacobian 乘积</td>
+<td>逐层 Jacobian 连乘</td>
 <td>与层数成正比</td>
 <td>梯度消失/爆炸</td>
 </tr>
-<tr>
-<td>时间展开（RNN）</td>
-<td>递归链式法则</td>
-<td>随时间长度增长</td>
-<td>长序列截断偏差</td>
-</tr>
 </tbody>
 </table>
-<p>反向传播、复合坐标变换的敏感度分析、EKF 中对复合模型的求导，本质都是链式法则的工程化实现。理解“Jacobian 连乘、顺序与复合一致、缩放因子按层数取幂”这三点，比记住某个自动微分框架的 API 更重要，因为前者能帮你判断梯度为什么在某处消失或爆炸。</p>
-<h2 id="_8">特征值与特征方向</h2>
-<p>对对称正定矩阵，条件数可以写成特征值之比 <span class="arithmatex">\(\kappa(A)=\lambda_{\max}/\lambda_{\min}\)</span>，这把抽象的指标变成可按方向解读的量：<span class="arithmatex">\(\lambda_{\min}\)</span> 对应“最难改变的组合方向”，信噪比最差的方向由它决定，<span class="arithmatex">\(\lambda_{\min}\)</span> 越小意味着这些方向的参数越难估计。它同时限制优化步长——约束 <span class="arithmatex">\(\alpha&lt;2/L\)</span> 中的 <span class="arithmatex">\(L\)</span> 就是最大曲率 <span class="arithmatex">\(\lambda_{\max}\)</span>，而收敛速率由 <span class="arithmatex">\(\lambda_{\min}/\lambda_{\max}\)</span> 控制。</p>
-<p>迭代法的收敛性同样由特征值刻画。把迭代写成不动点形式 <span class="arithmatex">\(x_{k+1}=Mx_k+c\)</span>，误差满足 <span class="arithmatex">\(e_{k+1}=Me_k\)</span>，于是 <span class="arithmatex">\(\|e_k\|\le\rho(M)^k\|e_0\|\)</span>，其中谱半径 <span class="arithmatex">\(\rho(M)=\max_i|\lambda_i|\)</span> 决定收敛速度：<span class="arithmatex">\(\rho(M)&lt;1\)</span> 收敛、越小越快，<span class="arithmatex">\(\rho\ge1\)</span> 发散。Jacobi 与 Gauss–Seidel 迭代、Krylov 方法、强化学习中的 Bellman 迭代，都是这条判据的不同实例——收敛的指数速度都来自同一个谱半径。</p>
-<p>矩阵作用在大多数向量上都会同时改变方向和长度，但总有少数方向只被拉伸、不被扭转。满足 <span class="arithmatex">\(Av=\lambda v\)</span>（<span class="arithmatex">\(v\ne0\)</span>）的 <span class="arithmatex">\(v\)</span> 称为特征向量，<span class="arithmatex">\(\lambda\)</span> 是特征值：<span class="arithmatex">\(A\)</span> 在这个方向上等价于一个标量缩放 <span class="arithmatex">\(\lambda\)</span>。特征值由特征方程 <span class="arithmatex">\(\det(A-\lambda I)=0\)</span> 给出。</p>
+<hr />
+<h2 id="_9">九、特征值：矩阵少数"不会被扭转"的方向</h2>
+<p>矩阵作用在大多数向量上会<strong>同时改变方向和长度</strong>，但总有少数方向只被拉伸、不被扭转。回到第三节那种迭代——反复用同一个矩阵推演状态 <span class="arithmatex">\(x_{k+1}=Ax_k\)</span>，时间长了你看到的几乎只剩这个特殊方向。</p>
+<p>满足 <span class="arithmatex">\(Av=\lambda v\)</span>（<span class="arithmatex">\(v\ne0\)</span>）的 <span class="arithmatex">\(v\)</span> 叫<strong>特征向量</strong>（eigenvector），<span class="arithmatex">\(\lambda\)</span> 叫<strong>特征值</strong>（eigenvalue）：<span class="arithmatex">\(A\)</span> 在这个方向上等价于一个标量缩放 <span class="arithmatex">\(\lambda\)</span>。它由特征方程 <span class="arithmatex">\(\det(A-\lambda I)=0\)</span> 给出。</p>
 <p>二维情形可以完全手算。取对称矩阵</p>
 <div class="arithmatex">\[
-A=\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix},\qquad
-\det(A-\lambda I)=(2-\lambda)^2-1=\lambda^2-4\lambda+3=0,
+A=\begin{bmatrix}2&amp;1\\ 1&amp;2\end{bmatrix},\qquad
+\det(A-\lambda I)=(2-\lambda)^2-1=\lambda^2-4\lambda+3=0 ,
 \]</div>
-<p>解得 <span class="arithmatex">\(\lambda_1=3\)</span>、<span class="arithmatex">\(\lambda_2=1\)</span>，对应特征向量分别为 <span class="arithmatex">\(v_1=\frac{1}{\sqrt2}(1,1)^\top\)</span> 与 <span class="arithmatex">\(v_2=\frac{1}{\sqrt2}(1,-1)^\top\)</span>。物理读法：沿 <span class="arithmatex">\((1,1)\)</span> 方向的扰动每步被放大 3 倍，沿 <span class="arithmatex">\((1,-1)\)</span> 方向原样保留。于是矩阵对任意向量的作用被分解成“沿两个互相垂直的特征方向各自缩放后再叠加”，这也解释了为什么对称矩阵的对角化 <span class="arithmatex">\(A=Q\Lambda Q^\top\)</span> 如此有用。</p>
+<p>解得 <span class="arithmatex">\(\lambda_1=3\)</span>、<span class="arithmatex">\(\lambda_2=1\)</span>，对应特征向量 <span class="arithmatex">\(v_1=\frac{1}{\sqrt2}(1,1)^\top\)</span> 与 <span class="arithmatex">\(v_2=\frac{1}{\sqrt2}(1,-1)^\top\)</span>。验一下：<span class="arithmatex">\(A(1,1)^\top=(3,3)^\top=3(1,1)^\top\)</span>，<span class="arithmatex">\(A(1,-1)^\top=(1,-1)^\top=1\cdot(1,-1)^\top\)</span>，都对。</p>
+<p><strong>迭代验证</strong>：从 <span class="arithmatex">\(x_0=(1,0)^\top\)</span> 出发，<span class="arithmatex">\(x_{k+1}=Ax_k\)</span> 得到 <span class="arithmatex">\(x_1=(2,1)\)</span>、<span class="arithmatex">\(x_2=(5,4)\)</span>、<span class="arithmatex">\(x_3=(14,13)\)</span>、<span class="arithmatex">\(x_4=(41,40)\)</span>。相邻两代的比值 <span class="arithmatex">\(4/1,\ 2.5,\ 2.8,\ 2.93\)</span> 一路逼近 <span class="arithmatex">\(3\)</span>——正好是 <span class="arithmatex">\(\lambda_{\max}\)</span>。数据不用你解释，它自己长出来了：<strong>长期行为由最大的特征值决定。</strong></p>
 <table>
 <thead>
 <tr>
 <th>条件</th>
-<th>时间行为</th>
+<th>每步行为</th>
 <th>稳定性</th>
 <th>工程含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>$</td>
-<td>\lambda</td>
-<td>&lt;1$</td>
-<td>每步衰减 $</td>
+<td><span class="arithmatex">\(\|\lambda\|&lt;1\)</span></td>
+<td>衰减 <span class="arithmatex">\(\|\lambda\|\)</span> 倍</td>
+<td>渐近稳定</td>
+<td>扰动自行消退</td>
 </tr>
 <tr>
-<td>$</td>
-<td>\lambda</td>
-<td>=1$</td>
+<td><span class="arithmatex">\(\|\lambda\|=1\)</span></td>
 <td>幅度保持</td>
+<td>临界</td>
+<td>可能持续振荡</td>
 </tr>
 <tr>
-<td>$</td>
-<td>\lambda</td>
-<td>&gt;1$</td>
-<td>每步放大 $</td>
+<td><span class="arithmatex">\(\|\lambda\|&gt;1\)</span></td>
+<td>放大 <span class="arithmatex">\(\|\lambda\|\)</span> 倍</td>
+<td>不稳定</td>
+<td>必须反馈修正</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\operatorname{Re}\lambda&lt;0\)</span>（连续）</td>
@@ -4361,72 +4640,242 @@ A=\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix},\qquad
 <td>渐近稳定</td>
 <td>连续系统判据</td>
 </tr>
-<tr>
-<td><span class="arithmatex">\(\lambda\)</span> 复数</td>
-<td>振荡，模长决定收敛</td>
-<td>由 $</td>
-<td>\lambda</td>
-</tr>
 </tbody>
 </table>
-<p>这条结论直接连到状态空间模型：连续系统 <span class="arithmatex">\(\dot x=Ax\)</span> 的稳定性由 <span class="arithmatex">\(A\)</span> 的特征值实部符号决定，<span class="arithmatex">\(\operatorname{Re}\lambda&lt;0\)</span> 表示收敛；离散化后特征值映射为 <span class="arithmatex">\(e^{\lambda\Delta t}\)</span>，稳定性条件变为落在单位圆内，稳定区域因此与采样周期强相关。旋转矩阵则满足 <span class="arithmatex">\(\lambda=e^{\pm i\theta}\)</span>，模长恒为 1，正好对应“旋转不放大也不衰减”——这是一个很好的自检：若你算出某个纯旋转矩阵有 <span class="arithmatex">\(|\lambda|\ne1\)</span>，说明矩阵写错了（例如忘记归一化或混入了缩放）。</p>
-<p>对称矩阵还有两条性质在实践中非常有用：特征值全为实数，特征向量可以选成一组正交基。协方差矩阵属于这一类，因此它的“主方向”总是一组互相垂直的轴，PCA 能直接用特征值分解或 SVD 算出来，主成分的方差就等于对应特征值；而最小的特征值对应的方向，正是数据里最不确定、最容易被噪声掩盖的方向。</p>
-<h2 id="_9">从局部线性化看统一性</h2>
-<p>常见错误可以按“出错的层次”排列：维度不匹配（行列约定混乱）、局部有效范围判断失误（用旧工作点的 Jacobian 外推大位移）、忽略条件数（解出来但数值无意义）、忽略时间步长（把局部线性化的结论直接用在长时间跨度上）。前两类能在写公式时通过自检发现，后两类只能靠对物理量级的估计发现，因而更值得警惕。</p>
-<p>把这一章串起来看，路径是：向量描述状态 → 矩阵描述线性映射 → 特征值描述映射的模态与稳定性 → 求导得到局部线性模型 → Jacobian 处理多变量与复合 → 条件数决定这些运算在数值上是否有意义。后续的控制理论、估计与优化章节，都只是在这条链上叠加物理或统计解释，数学骨架并不改变。</p>
-<p>向量、矩阵、Jacobian 与梯度并不是彼此独立的工具，它们是同一件事在不同维数下的样子。</p>
+<p>两个可以直接用的推论：</p>
+<ul>
+<li><strong>稳定性判据</strong>：连续系统 <span class="arithmatex">\(\dot x=Ax\)</span> 由 <span class="arithmatex">\(\operatorname{Re}\lambda&lt;0\)</span> 决定；离散化后特征值映射为 <span class="arithmatex">\(e^{\lambda\Delta t}\)</span>，判据变成长在单位圆内——<strong>稳定区域与采样周期强相关</strong>。</li>
+<li><strong>一个免费的自检</strong>：纯旋转矩阵满足 <span class="arithmatex">\(\lambda=e^{\pm i\theta}\)</span>，模长恒为 1（旋转既不放大也不衰减）。所以你一旦算出某个纯旋转矩阵的 <span class="arithmatex">\(|\lambda|\ne1\)</span>，一定是矩阵写错了，比如忘了归一化或混进了缩放。</li>
+<li><strong>对称矩阵</strong>特征值全为实数、特征向量可取成一组正交基。协方差矩阵正属于这类，所以它的"主方向"总是一组互相垂直的轴：PCA 能直接用特征值分解或 SVD 算出，主成分方差就等于对应特征值；而最小特征值对应的方向，正是数据里最不确定、最容易被噪声掩盖的方向。</li>
+</ul>
+<hr />
+<h2 id="_10">十、条件数：算得出答案，不等于答案可信</h2>
+<p>回到第四节那种"两条方程几乎平行"的局面，看它到底有多危险：</p>
+<div class="arithmatex">\[
+2x+y=3,\qquad 2.0001x+y=3.0001 .
+\]</div>
+<p>精确解是 <span class="arithmatex">\(x=1,\ y=1\)</span>（两式相减：<span class="arithmatex">\(0.0001x=0.0001\)</span>）。现在把第二个方程的右端<strong>只加</strong> <span class="arithmatex">\(0.0001\)</span>（相对变化约 <span class="arithmatex">\(3.3\times10^{-5}\)</span>），变成 <span class="arithmatex">\(3.0002\)</span>：两式相减得 <span class="arithmatex">\(0.0001x=0.0002\)</span>，于是 <span class="arithmatex">\(x=2\)</span>，回代得 <span class="arithmatex">\(y=-1\)</span>。</p>
+<p><strong>输入的万分之一，换来了答案的 100%（<span class="arithmatex">\(x\)</span>）和 200%（<span class="arithmatex">\(y\)</span>）。</strong> 这就是<strong>条件数</strong>（condition number）<span class="arithmatex">\(\kappa(A)\)</span> 的物理含义：解对扰动的最坏放大倍数。这两条直线几乎重合，交点沿直线滑动，位置自然极不稳定。它的定量形式是特征值之比：对对称正定矩阵，<span class="arithmatex">\(\kappa(A)=\lambda_{\max}/\lambda_{\min}\)</span>。</p>
+<p>这件事和第四节完全接得上：<span class="arithmatex">\(\kappa(A^\top A)=\kappa(A)^2\)</span>。上面这个 <span class="arithmatex">\(A\)</span> 的条件数约 <span class="arithmatex">\(10^{5}\)</span>（第十一节实测），那么 <span class="arithmatex">\(A^\top A\)</span> 的条件数就是约 <span class="arithmatex">\(10^{10}\)</span>——双精度只有约 16 位有效数字，先损失 5 位，再平方一次，可信位基本告罄。所以工程上宁可多花一点代价走 QR 或 SVD，也不去直接构造 <span class="arithmatex">\(A^\top A\)</span>。</p>
+<p>还有一条更早暴露问题的线索：正规方程的条件数由 <strong><span class="arithmatex">\(A\)</span> 的列向量夹角</strong>决定。两列几乎平行、夹角 <span class="arithmatex">\(\phi\to0\)</span> 时，这两个方向上的参数几乎无法区分，<span class="arithmatex">\(\kappa\)</span> 大约按 <span class="arithmatex">\(1/\sin\phi\)</span> 的量级放大。这直接推出实验设计的准则——<strong>让观测的几何分布尽可能"张开"</strong>：标定要让激励覆盖多个方向；SLAM 不能让机器人一直沿直线前进，否则沿运动方向与垂直方向的不确定度会差几个数量级，回环与横向约束的价值正在这里。实验做完了才发现几何退化，只能加先验约束或正则项，继续采同一方向的数据没有任何帮助。</p>
 <table>
 <thead>
 <tr>
-<th>对象</th>
-<th>输入 → 输出</th>
-<th>一阶导数形式</th>
-<th>何时退化为熟悉的特例</th>
+<th>情形</th>
+<th>条件</th>
+<th>解的结构</th>
+<th>工程含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>标量函数</td>
-<td>标量 → 标量</td>
-<td>导数 <span class="arithmatex">\(f'(x)\)</span>（<span class="arithmatex">\(1\times1\)</span>）</td>
-<td>最基础形态</td>
+<td>唯一解</td>
+<td><span class="arithmatex">\(A\)</span> 方阵且 <span class="arithmatex">\(\det A\ne0\)</span></td>
+<td><span class="arithmatex">\(x=A^{-1}b\)</span></td>
+<td>约束恰好定解</td>
 </tr>
 <tr>
-<td>标量函数</td>
-<td>向量 → 标量</td>
-<td>梯度 <span class="arithmatex">\(\nabla f\)</span>（<span class="arithmatex">\(n\times1\)</span>）</td>
-<td>优化目标函数</td>
+<td>欠定</td>
+<td>未知量多于独立方程</td>
+<td>解集是仿射子空间</td>
+<td>冗余自由度，需加正则项挑一个</td>
 </tr>
 <tr>
-<td>向量函数</td>
-<td>向量 → 向量</td>
-<td>Jacobian <span class="arithmatex">\(J\)</span>（<span class="arithmatex">\(m\times n\)</span>）</td>
-<td>传感器模型、运动学</td>
+<td>超定</td>
+<td>方程多于未知量</td>
+<td>一般无精确解</td>
+<td>带噪观测，转最小二乘</td>
 </tr>
 <tr>
-<td>线性映射</td>
-<td>向量 → 向量</td>
-<td>常数 Jacobian，等于 <span class="arithmatex">\(A\)</span></td>
-<td><span class="arithmatex">\(f(x)=Ax\)</span> 时 <span class="arithmatex">\(J=A\)</span></td>
-</tr>
-<tr>
-<td>复合映射</td>
-<td>向量 → 向量</td>
-<td>Jacobian 连乘</td>
-<td>链式法则</td>
-</tr>
-<tr>
-<td>二次型</td>
-<td>向量 → 标量</td>
-<td><span class="arithmatex">\(\nabla(x^\top Ax)=(A+A^\top)x\)</span></td>
-<td>最小二乘目标 <span class="arithmatex">\(A^\top A\)</span> 对称</td>
+<td>数值奇异</td>
+<td><span class="arithmatex">\(\det A\approx0\)</span> 但非零</td>
+<td>形式上有唯一解</td>
+<td>解对扰动极敏感，须看条件数</td>
 </tr>
 </tbody>
 </table>
-<p>把这张表反过来读，就得到了本区反复使用的思考模板：<strong>任何非线性模型，在工作点求一次导数就得到一个线性模型；而线性模型的全部性质——可解性、稳定性、条件数、误差传播——都能用前面的矩阵工具分析。</strong> 这也正是 EKF、牛顿法、LQR 和 MPC 共享同一套推导骨架的原因。</p>
-<p>读后续章节时，建议固定四步：先判断对象是标量、向量还是映射，再决定用导数、梯度还是 Jacobian；然后用维度做一次自检（<span class="arithmatex">\(m\times n\)</span> 乘 <span class="arithmatex">\(n\times1\)</span> 得 <span class="arithmatex">\(m\)</span> 维）；接着问“这个线性近似在多大的邻域内有效”；最后才关心具体数值。这个顺序能把大量“公式看起来对但结果不对”的问题挡在门外。</p>
+<p>顺带说清一件事：真正需要的是<strong>线性方程组的解</strong>，不是<strong>逆矩阵</strong>本身。求逆本身是 <span class="arithmatex">\(O(n^3)\)</span> 且常数比 LU 分解大 2–3 倍，误差还要被放大两次（近似 <span class="arithmatex">\(\kappa^2\)</span> 量级）；而分解求解可以复用分解结果应付多个右端项。只有三类场合才值得真的算逆：需要矩阵的迹或显式协方差做解析推导、矩阵极小（<span class="arithmatex">\(n\le4\)</span>）且要反复用在多个右端项上、以及教学调试时想看清结构。</p>
+<hr />
+<h2 id="_11">十一、跑一遍，把数字验一遍</h2>
+<h3 id="111">11.1 最小二乘与条件数</h3>
+<p>下面这段只用 numpy：先把第四节手算的结果复算一遍，再把第十节的"万分之一换 100%"当场演示出来。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># (1) 复算第四节：三次观测 (1,1)、(2,2)、(3,4)，拟合 y = a·x（只有一个未知量 a）</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>           <span class="c1"># 正规方程 A^T A a = A^T b</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a = </span><span class="si">{</span><span class="n">a</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">   (17/14 = </span><span class="si">{</span><span class="mi">17</span><span class="o">/</span><span class="mi">14</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;残差 r = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;r·x = </span><span class="si">{</span><span class="n">r</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">A</span><span class="p">[:,</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">   ||r|| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># (2) 第十节的两条几乎平行的方程：κ(A^T A) = κ(A)^2</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0001</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">cond(M) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cond(M^T M) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">T</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">M</span><span class="p">)</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0001</span> <span class="o">+</span> <span class="n">db</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;第二式右端 +</span><span class="si">{</span><span class="n">db</span><span class="si">:</span><span class="s2">.0e</span><span class="si">}</span><span class="s2"> -&gt; 解 = (</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">+.6f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">+.6f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>a = 1.214286   (17/14 = 1.214286)
+残差 r = [ 0.214286  0.428571 -0.357143]
+r·x = -2.00e-15   ||r|| = 0.597614
+
+cond(M) = 1.0000e+05
+cond(M^T M) = 1.0001e+10
+第二式右端 +0e+00 -&gt; 解 = (+1.000000, +1.000000)
+第二式右端 +1e-04 -&gt; 解 = (+2.000000, -1.000000)
+</code></pre></div>
+<p>三行都对上了手算：<span class="arithmatex">\(k=17/14=1.2143\)</span>、残差 <span class="arithmatex">\((3,6,-5)/14\)</span>、<span class="arithmatex">\(\|r\|=0.5976\)</span>。注意 <code>r·x</code> 打出来是 <span class="arithmatex">\(-2\times10^{-15}\)</span> 而不是精确的 0——这就是<strong>浮点舍入的地板</strong>：代数上它确实为零（我们手算得到的是 0），机器算出来的只能在 <span class="arithmatex">\(10^{-15}\)</span> 上下打转。下一章的 <a href="../02-numerical-computation/">数值计算</a> 会专门讲这个地板。</p>
+<p>后四行是第十节的现场：<span class="arithmatex">\(\kappa(M)=1.0\times10^{5}\)</span>，右端只加 <span class="arithmatex">\(10^{-4}\)</span>，解就从 <span class="arithmatex">\((1,1)\)</span> 跳到 <span class="arithmatex">\((2,-1)\)</span>；而 <span class="arithmatex">\(\kappa(M^\top M)=1.0\times10^{10}\)</span>，正好是 <span class="arithmatex">\(\kappa(M)^2\)</span> 的量级——<strong>这就是"别直接构造 <span class="arithmatex">\(A^\top A\)</span>"的定量理由</strong>。</p>
+<h3 id="112">11.2 数值微分的步长陷阱</h3>
+<p>第二个实验把第六节那条"误差先降后升"的曲线扫出来，并画在终端里。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">exact</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>                       <span class="c1"># 解析导数 = 0.540302…</span>
+
+<span class="n">hs</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">17</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>      <span class="c1"># 步长从 1e-1 一路扫到 1e-16</span>
+<span class="n">err</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;前向&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;中心&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hs</span><span class="p">:</span>
+    <span class="n">err</span><span class="p">[</span><span class="s2">&quot;前向&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span> <span class="o">/</span> <span class="n">h</span> <span class="o">-</span> <span class="n">exact</span><span class="p">))</span>
+    <span class="n">err</span><span class="p">[</span><span class="s2">&quot;中心&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">h</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">exact</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;h          前向差分误差     中心差分误差&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">:</span><span class="s2">8.0e</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">err</span><span class="p">[</span><span class="s1">&#39;前向&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">12.3e</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">err</span><span class="p">[</span><span class="s1">&#39;中心&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">12.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 终端曲线：横轴 log10(h) 从 -16 到 -1；纵轴 log10(误差) 从 2 到 -17（上=大）</span>
+<span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">64</span>
+<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;前向&quot;</span><span class="p">,</span> <span class="s2">&quot;中心&quot;</span><span class="p">):</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot; &quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cols</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hs</span><span class="p">):</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="mf">16.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">15.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">cols</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">err</span><span class="p">[</span><span class="n">tag</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="mf">1e-18</span><span class="p">)),</span> <span class="o">-</span><span class="mf">17.0</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mf">19.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">grid</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">差分误差（上=大，下=小；左=小步长，右=大步长）&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>h          前向差分误差     中心差分误差
+   1e-01      4.294e-02      9.001e-04
+   1e-02      4.216e-03      9.005e-06
+   1e-03      4.208e-04      9.005e-08
+   1e-04      4.207e-05      9.004e-10
+   1e-05      4.207e-06      1.114e-11
+   1e-06      4.207e-07      2.772e-11
+   1e-07      4.183e-08      1.943e-10
+   1e-08      2.970e-09      2.581e-09
+   1e-09      5.254e-08      2.970e-09
+   1e-10      5.848e-08      5.848e-08
+   1e-11      1.169e-06      1.169e-06
+   1e-12      4.324e-05      1.227e-05
+   1e-13      7.339e-04      1.788e-04
+   1e-14      3.707e-03      3.707e-03
+   1e-15      1.481e-02      1.481e-02
+   1e-16      5.403e-01      1.481e-02
+
+前向差分误差（上=大，下=小；左=小步长，右=大步长）
+|                                                                
+|                                                                
+|#                                                              #
+|    #   #                                                  #    
+|             #   #                                #    #        
+|                     #                        #                 
+|                         #   #        #   #                     
+|                                  #                             
+|                                                                
+|                                                                
+|                                                                
+|                                                                
+|                                                                
+|                                                                
+
+中心差分误差（上=大，下=小；左=小步长，右=大步长）
+|                                                                
+|                                                                
+|                                                                
+|#   #   #                                                      #
+|             #                                                  
+|                 #   #                                     #    
+|                         #                             #        
+|                             #    #                             
+|                                      #           #             
+|                                          #   #                 
+|                                                                
+|                                                                
+|                                                                
+|                                                                
+</code></pre></div>
+<p>读这张表：<span class="arithmatex">\(h\)</span> 从 <span class="arithmatex">\(10^{-1}\)</span> 缩到 <span class="arithmatex">\(10^{-8}\)</span>，前向差分误差从 <span class="arithmatex">\(4.29\times10^{-2}\)</span> 一路降到 <span class="arithmatex">\(2.97\times10^{-9}\)</span>——<strong>这就是"步长越小越准"成立的那半段</strong>。但过了 <span class="arithmatex">\(10^{-8}\)</span> 它就掉头上升，到 <span class="arithmatex">\(h=10^{-16}\)</span> 时误差变成 <span class="arithmatex">\(5.40\times10^{-1}\)</span>，比 <span class="arithmatex">\(h=10^{-1}\)</span> 时还大十倍。原因不是数学坏了，而是 <span class="arithmatex">\(x+h\)</span> 在浮点下已经等于 <span class="arithmatex">\(x\)</span>，分子相减得到精确的 0，<span class="arithmatex">\(0/h\)</span> 就是 0，于是导数估算成的 0 与真值差了整个 <span class="arithmatex">\(\cos(1)=0.5403\)</span>。</p>
+<p>两条曲线的形状差别也值得记：中心差分的最优区间更靠左（<span class="arithmatex">\(h\approx10^{-5}\)</span> 附近，误差低到 <span class="arithmatex">\(1.1\times10^{-11}\)</span>），最低点比前向差分低了将近两个数量级——这正是第六节说的 <span class="arithmatex">\(h^2\)</span> 阶精度换来的。终端曲线里两条都呈"U 形"（左端因舍入翘起、右端因截断翘起），只是中心差分那条整体更低更宽。</p>
+<p><strong>所以数值求导的正确做法不是"把 <span class="arithmatex">\(h\)</span> 调到最小"，而是"调到 <span class="arithmatex">\(10^{-5}\)</span> 附近就停手"。</strong></p>
+<hr />
+<h2 id="_12">十二、翻车现场速查与小节</h2>
+<p>前面每一节的"代价"都能在工程里换成一条排查线索：</p>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>最可能的原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>代入数值处处对不上</td>
+<td>维度或行列约定混用</td>
+<td>写出 <span class="arithmatex">\(m\times n\)</span> 与 <span class="arithmatex">\(n\times1\)</span>，看乘出来是不是 <span class="arithmatex">\(m\)</span> 维</td>
+</tr>
+<tr>
+<td>公式看着对称，结果不对</td>
+<td>转置用错（<span class="arithmatex">\(x^\top y\)</span> 写成了 <span class="arithmatex">\(xy^\top\)</span>）</td>
+<td>内积必须是标量，不是矩阵</td>
+</tr>
+<tr>
+<td>优化在某个方向几乎不动</td>
+<td>尺度/单位量级相差几个数量级</td>
+<td>看各列的范数量级，做一次归一化</td>
+</tr>
+<tr>
+<td>解出来的参数互相矛盾</td>
+<td>列向量近似共线（几何退化）</td>
+<td>算 <span class="arithmatex">\(\kappa(A)\)</span>，做一次 SVD 看最小奇异值</td>
+</tr>
+<tr>
+<td>残差很小但预测不准</td>
+<td>模型漏掉物理效应，残差里有结构</td>
+<td>看残差随时间的走向是否单调偏移</td>
+</tr>
+<tr>
+<td>迭代突然变成 inf/nan</td>
+<td>步长过大或矩阵接近奇异</td>
+<td>先看 <span class="arithmatex">\(\kappa\)</span>，再看是否越出了线性化邻域</td>
+</tr>
+<tr>
+<td>数值导数算出来是 0</td>
+<td>差分步长小于浮点分辨率</td>
+<td>把 <span class="arithmatex">\(h\)</span> 从 <span class="arithmatex">\(1\times10^{-8}\)</span> 扫到 <span class="arithmatex">\(1\times10^{-16}\)</span></td>
+</tr>
+<tr>
+<td>梯度逐层衰减或爆炸</td>
+<td>各层 Jacobian 的缩放因子连乘</td>
+<td>打印每层对范数的缩放比</td>
+</tr>
+</tbody>
+</table>
+<p>最后用三句话回答"为什么必须有它们"：</p>
+<ul>
+<li><strong>为什么必须有向量和矩阵</strong>：系统的状态天然是一组必须同时知道的量；把它们整组交给映射，才能用一次乘法表达"同一套规则作用在所有分量上"。</li>
+<li><strong>为什么必须转成最小二乘</strong>：带噪观测多于未知量时<strong>不存在精确解</strong>，唯一有依据的出路是让残差向量最短，而 <span class="arithmatex">\(L_2\)</span> 的平方形式恰好让求导变成线性的。</li>
+<li><strong>为什么必须关心条件数和线性化范围</strong>：数学上成立的结论只在"矩阵不太病态、位移不太大"时数值上可用。<span class="arithmatex">\(\kappa(A)\)</span> 决定"解还剩几位可信"，Jacobian 的工作点决定"这套线性模型还能用多远"。</li>
+</ul>
+<p>把全章串起来是一条链：向量描述状态 → 矩阵描述线性映射 → 特征值描述模态与稳定性 → 求导得到局部线性模型 → Jacobian 处理多变量与复合 → 条件数决定这些运算在数值上是否有意义。后面所有章节（EKF、牛顿法、LQR、MPC）都只是在这条链上叠加物理或统计解释，数学骨架不变。</p>
 <blockquote>
-<p><strong>下一步</strong>：读 <a href="../02-numerical-computation/">数值计算</a> 看这些矩阵与导数在有限精度下会损失什么，再读 <a href="../03-probability-random-variables/">概率与随机变量</a> 把协方差矩阵的结构补齐；特征值稳定性的实际应用见 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a>，Jacobian 在估计中的使用见 <a href="../../robotics/02-sensing-estimation/">感知与状态估计</a>。</p>
+<p><strong>下一步</strong>：数学本身没错，错的是它在<strong>有限精度</strong>下的表现。接着读 <a href="../02-numerical-computation/">数值计算</a>，看条件数、浮点舍入与迭代收敛如何一起决定"答案是否可信"；协方差矩阵那部分结构在 <a href="../03-probability-random-variables/">概率与随机变量</a>，特征值稳定性的实际应用见 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a>。</p>
 </blockquote>
 
 

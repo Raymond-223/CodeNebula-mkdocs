@@ -688,7 +688,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        有限精度与舍入误差
+        一、先看你已经撞见过的一件事
       
     </span>
   </a>
@@ -699,7 +699,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        浮点数的实际误差量级
+        二、最直接的办法为什么一定坏
       
     </span>
   </a>
@@ -710,7 +710,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续导数和积分需要离散近似
+        三、误差长什么样：绝对、相对、单位舍入
       
     </span>
   </a>
@@ -721,32 +721,38 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性求解与最小二乘
+        四、相减为什么会让误差"爆炸"
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="四、相减为什么会让误差&#34;爆炸&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        条件数与误差放大
+        它真的会咬人：一个代数等价改写
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        病态问题的识别与处理
+        求和误差到底多大
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -754,21 +760,38 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代算法必须有停止条件
+        五、导数只能靠减法，所以步长有个最优值
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、导数只能靠减法，所以步长有个最优值">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推一遍：为什么 h 不能太小
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代法的收敛率对比
+        直觉失效的那个点
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -776,18 +799,85 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        数值稳定性
+        六、把连续系统搬进机器：离散化和稳定性
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="六、把连续系统搬进机器：离散化和稳定性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        量纲和尺度影响问题的可计算性
+        推一遍：稳定步长是从哪来的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定和精确是两件事
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        有两种离散偏差必须分开看
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、条件数：问题本身的放大倍数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、条件数：问题本身的放大倍数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推一遍：误差放大不等式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、病态了怎么办
       
     </span>
   </a>
@@ -795,10 +885,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_16" class="md-nav__link">
     <span class="md-ellipsis">
       
-        误差预算比小数位数更重要
+        九、迭代什么时候该停
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、迭代什么时候该停">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        收敛率：决定要迭代多少步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、量纲和尺度决定问题可不可算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍，把误差看出来
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：误差预算比小数位数更重要
       
     </span>
   </a>
@@ -3710,7 +3861,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        有限精度与舍入误差
+        一、先看你已经撞见过的一件事
       
     </span>
   </a>
@@ -3721,7 +3872,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        浮点数的实际误差量级
+        二、最直接的办法为什么一定坏
       
     </span>
   </a>
@@ -3732,7 +3883,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续导数和积分需要离散近似
+        三、误差长什么样：绝对、相对、单位舍入
       
     </span>
   </a>
@@ -3743,32 +3894,38 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        线性求解与最小二乘
+        四、相减为什么会让误差"爆炸"
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="四、相减为什么会让误差&#34;爆炸&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        条件数与误差放大
+        它真的会咬人：一个代数等价改写
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        病态问题的识别与处理
+        求和误差到底多大
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3776,21 +3933,38 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代算法必须有停止条件
+        五、导数只能靠减法，所以步长有个最优值
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、导数只能靠减法，所以步长有个最优值">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推一遍：为什么 h 不能太小
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        迭代法的收敛率对比
+        直觉失效的那个点
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3798,18 +3972,85 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        数值稳定性
+        六、把连续系统搬进机器：离散化和稳定性
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="六、把连续系统搬进机器：离散化和稳定性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        量纲和尺度影响问题的可计算性
+        推一遍：稳定步长是从哪来的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定和精确是两件事
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        有两种离散偏差必须分开看
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、条件数：问题本身的放大倍数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、条件数：问题本身的放大倍数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推一遍：误差放大不等式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、病态了怎么办
       
     </span>
   </a>
@@ -3817,10 +4058,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_16" class="md-nav__link">
     <span class="md-ellipsis">
       
-        误差预算比小数位数更重要
+        九、迭代什么时候该停
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、迭代什么时候该停">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        收敛率：决定要迭代多少步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、量纲和尺度决定问题可不可算
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍，把误差看出来
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：误差预算比小数位数更重要
       
     </span>
   </a>
@@ -3919,18 +4221,73 @@
 
 
 <h1 id="numerical-computation">Numerical Computation</h1>
-<p><strong>公式写在纸上是精确的，跑在机器上是有误差的：数值计算的核心工作不是消灭误差，而是知道误差有多大、从哪里来、会不会被放大。</strong></p>
-<p>控制、仿真、SLAM 和优化里，大量看似“算法不收敛”“结果不稳定”的问题，真正原因其实是步长选得不合适、条件数太大、迭代没有正经的停止条件，或者浮点误差被累积放大。这一章只讲工程上真正会踩到的那几件事：有限精度的量级、离散化与积分格式、条件数与病态处理、收敛率、误差预算。判断一个数值结果能不能用，比算出一个具体数字更重要，因为不可信的答案比没有答案更危险——它会被当作事实写进仿真结论和控制器参数里。</p>
+<blockquote>
+<p>你在计算器或 Excel 里敲过 <code>=0.1+0.2</code>，它给你 <code>0.30000000000000004</code>。这一章就从那一格开始：先把"误差为什么必然存在"推出来，再回答工程上真正要回答的三个问题——误差有多大、从哪来、会不会被放大。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、先看你已经撞见过的一件事</h2>
+<p>打开 Python，敲这一行：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 0.1 + 0.2
+0.30000000000000004
+&gt;&gt;&gt; 1.1 - 1.0
+0.10000000000000009
+</code></pre></div>
+<p>你并没有写错。<strong>加法本身没有变坏，变坏的是"0.1"这个数本身存不进机器。</strong></p>
+<p>从这两行里，其实能拆出四条你早就会、只是没命名的直觉：</p>
+<ol>
+<li><strong>数字存不下无限多位，所以每写一步就四舍五入一次。</strong> 0.1 是十进制里的有限小数，在二进制里却是无限循环小数，存进去就要被砍一刀。这一刀砍出来的东西叫<strong>舍入误差</strong>。</li>
+<li><strong>两个很接近的数相减，答案里几乎全是那把刀的痕迹。</strong> 有效位被抵消掉了，这叫<strong>灾难性抵消</strong>。</li>
+<li><strong>"导数""积分"机器不会算，只能拿两个点的值相减再除以距离。</strong> 于是步长（步长、网格间距、采样周期）变成了一个必须选的参数，而且<strong>不是越小越好</strong>。</li>
+<li><strong>"程序不报错、曲线很光滑"和"结果对"是两件事。</strong> 光滑的发散曲线比毛刺的曲线更危险，因为它看起来能用。</li>
+</ol>
+<p>这一章就把这四条一条条推一遍。<strong>目标不是让你会手算浮点数，而是让你拿到一个数值结果时，能判断它值不值得信。</strong></p>
+<hr />
+<h2 id="_2">二、最直接的办法为什么一定坏</h2>
+<p>你大概会想：既然位数不够，那就多存几位；再不行就用分数、用符号计算，精确算完再取近似值。</p>
+<p>三条路都试过了，都会被挡回来：</p>
+<ul>
+<li><strong>多存几位</strong>：float32 改成 float64 改成 float128，有效十进制位从 7 涨到 16 涨到 34。但实数有不可数多个，有限个 bit 能表示的只有有限多个数——<strong>中间总有无穷多个实数落在两个可表示数的缝隙里，必须被舍入到其中一个。</strong> 缝隙变窄，但不会消失。</li>
+<li><strong>用精确有理数</strong>：<code>1/3</code> 在有理数里是精确的，但 <code>sqrt(2)</code>、<code>pi</code>、<code>sin(1)</code> 不是有理数；更麻烦的是每做一次运算，分子分母的位数就膨胀一次，几次迭代后一个数就要占满内存。</li>
+<li><strong>用符号计算</strong>：你确实能精确地得到 <code>pi</code> 这个符号。可你最终要拿来控制一个电机、要让仿真往前推一步——那时候你必须把它变成一个具体的浮点数。</li>
+</ul>
+<p>所以结论是被逼出来的，不是被规定的：</p>
+<blockquote>
+<p><strong>只要用有限个 bit 表示连续量，误差就必然存在，而且会在每一步运算里重复发生。</strong> 这不是某种编程语言或某个库的缺陷，换 C++、换 MATLAB 完全一样。</p>
+</blockquote>
+<p>既然消灭不了，工作内容就变成了另外三件事。贯穿全章的三问：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>对应章节</th>
+<th>典型手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误差有多大？</td>
+<td>三、四、五节</td>
+<td>量级估计、误差预算</td>
+</tr>
+<tr>
+<td>从哪来？</td>
+<td>二、四、六节</td>
+<td>分辨建模/离散/测量/舍入</td>
+</tr>
+<tr>
+<td>会不会被放大？</td>
+<td>七、八、十节</td>
+<td>条件数、正则化、重标定尺度</td>
+</tr>
+</tbody>
+</table>
+<p>先把图看清楚：数值计算的全过程，就是"连续世界 → 离散表示 → 有限精度运算 → 近似结果"这条流水线，误差在每一站都会进场。</p>
 <figure>
   <img alt="数值计算把连续问题离散化，再通过有限精度算法得到近似结果。" src="../../assets/diagrams/numerical-computation.svg" />
 <br />
 <figcaption>核心不是追求绝对精确，而是知道误差来自哪里、是否在可接受范围。</figcaption>
 </figure>
-<h2 id="_1">有限精度与舍入误差</h2>
-<p>误差在运算中的传播可以用一条近似规则把握：加减法放大绝对误差，乘除法放大相对误差。若 <span class="arithmatex">\(y=x_1\cdot x_2\)</span>，则相对误差近似相加，<span class="arithmatex">\(\frac{\delta y}{y}\approx\frac{\delta x_1}{x_1}+\frac{\delta x_2}{x_2}\)</span>，所以连续乘法链（例如姿态矩阵反复相乘）会让相对误差按运算次数线性累积；若 <span class="arithmatex">\(y=x_1-x_2\)</span> 且 <span class="arithmatex">\(x_1\approx x_2\)</span>，绝对误差不变而结果本身接近零，相对误差因此爆炸——这就是灾难性抵消（catastrophic cancellation）。</p>
-<p>对付抵消的常见手段有四个：改写公式以避免相减（例如用 <span class="arithmatex">\(\frac{-b}{a+\sqrt{b^2-4ac}}\)</span> 形式替代 <span class="arithmatex">\(\frac{a}{-b+\sqrt{b^2-4ac}}\)</span> 中的小量相减）；改用补偿求和（Kahan 求和，把一个低位补偿项单独累计，使 <span class="arithmatex">\(n\)</span> 项求和的误差不再随 <span class="arithmatex">\(n\)</span> 线性增长）；对方差等统计量使用 Welford 递推（增量式更新，不构造 <span class="arithmatex">\(n\sum x^2-(\sum x)^2\)</span> 这种两个大数相减的形式）；以及在自定义损失/残差计算里先做中心化。这些改写不改变数学定义，却能把误差量级压低好几个数量级。</p>
-<p>计算机用有限位数表示连续的实数，绝大多数实数必须被舍入到邻近的可表示值。IEEE 754 双精度（float64）分配 1 位符号、11 位指数、52 位尾数，能精确表示的有效十进制位数约 15–16 位；单精度（float32）只有 7–8 位。这不是某种编程语言的缺陷，而是用有限信息表示连续量的必然后果，换语言、换库都无法消除，只能管理。</p>
-<p>四类误差必须分开处理，因为它们对结果的影响方式和补救手段完全不同：</p>
+<p>误差至少有四个来源，它们的<strong>处理方法完全不同</strong>，混在一起谈就永远谈不清：</p>
 <table>
 <thead>
 <tr>
@@ -3949,7 +4306,7 @@
 </tr>
 <tr>
 <td>离散误差</td>
-<td>Euler 截断、有限差分截断</td>
+<td>步长过大、差分截断</td>
 <td>是，与步长和系统刚性有关</td>
 <td>减小步长、换高阶格式</td>
 </tr>
@@ -3961,26 +4318,59 @@
 </tr>
 <tr>
 <td>舍入误差</td>
-<td>每次浮点运算引入约 <span class="arithmatex">\(u\)</span> 相对误差</td>
+<td>每次浮点运算引入约 <span class="arithmatex">\(u\)</span> 的相对误差</td>
 <td>是，随运算次数累积</td>
 <td>换算法、重排运算顺序</td>
 </tr>
+</tbody>
+</table>
+<p>注意第三、四行的量级差距：测量误差常在 <span class="arithmatex">\(10^{-2}\)</span> 量级，舍入误差在 <span class="arithmatex">\(10^{-16}\)</span> 量级。<strong>如果噪声已经占了 <span class="arithmatex">\(10^{-2}\)</span>，把浮点精度从 16 位提到 34 位，一点用都没有。</strong> 这句话在后面第九、十节还会用到。</p>
+<hr />
+<h2 id="_3">三、误差长什么样：绝对、相对、单位舍入</h2>
+<p>误差有两种报法，工程上只盯第二种：</p>
+<ul>
+<li><strong>绝对误差</strong>：<span class="arithmatex">\(\delta x = \hat x - x\)</span>，单位跟物理量相同。</li>
+<li><strong>相对误差</strong>：<span class="arithmatex">\(\delta x / |x|\)</span>，无量纲，直接告诉你"还剩几位可信"。</li>
+</ul>
+<p>为什么盯相对误差？看同一个绝对误差 <span class="arithmatex">\(10^{-6}\)</span> 在两个变量上的意义：</p>
+<table>
+<thead>
 <tr>
-<td>截断误差</td>
-<td>人为限定迭代次数/长度</td>
-<td>是，固定偏差</td>
-<td>迭代到容差而非固定次数</td>
+<th>变量</th>
+<th>典型值</th>
+<th>绝对误差 <span class="arithmatex">\(10^{-6}\)</span> 意味着</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机器人位置</td>
+<td><span class="arithmatex">\(10^{0}\)</span> m</td>
+<td>1 微米，完全可以忽略</td>
+</tr>
+<tr>
+<td>归一化相关系数</td>
+<td><span class="arithmatex">\(10^{0}\)</span></td>
+<td>百万分之一，可以忽略</td>
+</tr>
+<tr>
+<td>某个接近零的差值</td>
+<td><span class="arithmatex">\(10^{-9}\)</span></td>
+<td>相对误差 1000%，结果已成噪声</td>
 </tr>
 </tbody>
 </table>
-<p>舍入误差是<strong>相对</strong>误差，这一点决定了它的破坏方式。float64 下单位舍入 <span class="arithmatex">\(u\approx1.11\times10^{-16}\)</span>，意味着量级为 <span class="arithmatex">\(10^{6}\)</span> 的数，绝对误差可以到 <span class="arithmatex">\(10^{-10}\)</span>；而对两个接近的数做减法，有效位会被抵消：若 <span class="arithmatex">\(a=1.000000001\)</span>、<span class="arithmatex">\(b=1.000000000\)</span>，<span class="arithmatex">\((a-b)\)</span> 的 9 位有效数字里只剩 8 位来自原始信息，其余被舍入噪声占据。这就是“大数相减”危险的原因，也是方差计算推荐用 <span class="arithmatex">\(\mathbb E[X^2]-(\mathbb E[X])^2\)</span> 之外的稳定形式（如 Welford 递推）的原因。</p>
-<h2 id="_2">浮点数的实际误差量级</h2>
-<p>递推过程是累积误差最容易放大的地方。若迭代 <span class="arithmatex">\(x_{k+1}=\gamma x_k\)</span>，第 <span class="arithmatex">\(k\)</span> 步的相对误差约为 <span class="arithmatex">\(k\,u\cdot\frac{\gamma+1}{|\gamma-1|}\)</span> 量级；<span class="arithmatex">\(\gamma=1.01\)</span>、迭代 <span class="arithmatex">\(10^{4}\)</span> 步时，相对误差可累积到 <span class="arithmatex">\(10^{-12}\)</span> 量级——仍可接受，但若同时乘的不是标量而是矩阵、且该矩阵条件数为 <span class="arithmatex">\(10^{6}\)</span>，同一段代码就会给出完全不同量级的误差。判断办法是给关键递推做一次“单精度 vs 双精度”对照实验：结果差异显著就说明误差受舍入支配，此后再调算法才有意义。</p>
-<p>实践中最容易做错的是容差的形式。绝对容差 <span class="arithmatex">\(|a-b|\le10^{-6}\)</span> 在描述位置的变量上等价于 1 微米（合理），在描述某个归一化相关系数上却等价于 100% 误差（荒谬）。因此所有阈值都应写成 <span class="arithmatex">\(\text{tol}\cdot\max(1,|a|,|b|)\)</span> 或类似形式，让容差随量级缩放；同时把 <span class="arithmatex">\(\varepsilon_{\text{mach}}\)</span> 相关的常数放在实现里可见的位置，而不是散落在各个模块中。</p>
-<p>工程判断靠的是记住数量级，而不是推导机器表示。机器 epsilon（1 附近相邻可表示数的间距）与单位舍入的关系是</p>
+<p><strong>同一把尺子，换一个量级就完全失效。</strong> 这就是为什么容差必须写成相对形式 <span class="arithmatex">\(\text{tol}\cdot\max(1,|a|,|b|)\)</span>，而不是硬编码一个 <span class="arithmatex">\(10^{-6}\)</span>。</p>
+<p>那"相对误差最小能到多少"？看浮点数的排布。IEEE 754 双精度把 64 位分成三段：</p>
+<div class="highlight"><pre><span></span><code>├─ 1 ─┼──── 11 ────┼────────────────── 52 ──────────────────┤
+  符号     指数                 尾数（有效位）
+</code></pre></div>
+<p>尾数 52 位加上隐含的 1 位，共 53 位二进制有效位，折算成十进制是 <span class="arithmatex">\(53\times\log_{10}2\approx15.95\)</span>——所以工程上说 <strong>float64 有 15–16 位有效数字</strong>。相邻两个可表示数之间的间距叫机器 epsilon：</p>
 <div class="arithmatex">\[
-\varepsilon_{\text{mach,64}}\approx2.22\times10^{-16},\qquad u=\frac{\varepsilon_{\text{mach}}}{2}\approx1.11\times10^{-16}.
+\varepsilon_{\text{mach},64}=2^{-52}\approx2.22\times10^{-16},
+\qquad
+u=\frac{\varepsilon_{\text{mach}}}{2}\approx1.11\times10^{-16}.
 \]</div>
+<p><span class="arithmatex">\(u\)</span> 叫<strong>单位舍入</strong>，含义是：把任意实数存成 float64，相对误差不超过 <span class="arithmatex">\(u\)</span>。</p>
 <table>
 <thead>
 <tr>
@@ -3997,7 +4387,7 @@
 <td>10</td>
 <td><span class="arithmatex">\(\approx9.77\times10^{-4}\)</span></td>
 <td>约 3 位</td>
-<td>推理加速，需误差分析</td>
+<td>推理加速，必须自带误差分析</td>
 </tr>
 <tr>
 <td>float32</td>
@@ -4011,7 +4401,7 @@
 <td>52</td>
 <td><span class="arithmatex">\(\approx2.22\times10^{-16}\)</span></td>
 <td>约 16 位</td>
-<td>仿真、估计、优化默认选择</td>
+<td>仿真、估计、优化的默认选择</td>
 </tr>
 <tr>
 <td>float128</td>
@@ -4022,21 +4412,98 @@
 </tr>
 </tbody>
 </table>
-<p>累积误差的量级直觉：把 <span class="arithmatex">\(n\)</span> 个数顺序相加，最坏情况相对误差约 <span class="arithmatex">\(n u\)</span>，随机符号的误差相互抵消时典型误差约 <span class="arithmatex">\(\sqrt n\,u\)</span>。</p>
+<p><strong>一个可验算的推论</strong>：量级为 <span class="arithmatex">\(10^{6}\)</span> 的物理量（比如一个以毫米为单位存的大坐标），它的绝对分辨率是</p>
 <div class="arithmatex">\[
-n=10^{6}\ \text{项求和}\ \Rightarrow\ \text{最坏相对误差}\approx n u\approx1.1\times10^{-10},\quad \text{典型}\approx\sqrt n\,u\approx1.1\times10^{-13}.
+10^{6}\times1.11\times10^{-16}\approx1.1\times10^{-10}.
 \]</div>
-<p>这两个数字说明两件事。第一，百万项求和的相对误差在 <span class="arithmatex">\(10^{-13}\sim10^{-10}\)</span> 量级，对多数工程问题无关紧要；但如果答案本身只有 6 位有效数字（例如某个接近零的差值、某个小方差），误差已经把它吞掉了。第二，减少误差的可行手段是改变求和顺序：分块/树形求和把 <span class="arithmatex">\(n u\)</span> 换成 <span class="arithmatex">\(\log_2 n\cdot u\)</span>，百万项时从 <span class="arithmatex">\(10^{-10}\)</span> 降到 <span class="arithmatex">\(4\times10^{-15}\)</span> 量级——同一算法、不同实现顺序，就能差三个数量级。</p>
-<p>还有一个反直觉的事实：浮点数之间比较相等几乎没有意义。正确写法是判断 <span class="arithmatex">\(|a-b|\le \text{tol}\cdot\max(1,|a|,|b|)\)</span>，即用相对容差而非绝对容差，否则量级为 <span class="arithmatex">\(10^{-3}\)</span> 和量级为 <span class="arithmatex">\(10^{6}\)</span> 的量会被同一把尺子衡量；这也意味着任何硬编码的绝对阈值都要附带一句“在什么量级下成立”。</p>
-<h2 id="_3">连续导数和积分需要离散近似</h2>
-<p>积分格式除了精度，还要看守恒性与长期行为。显式 Euler 在守恒系统（无阻尼摆、轨道运动）上会让能量单调漂移，仿真久了表现为振幅逐渐增大或衰减，这种偏差不是噪声而是格式的系统性缺陷；辛格式（如半隐式 Euler、Verlet、蛙跳）在同样步长下保持能量近似有界，代价是精度阶不高。选择原则因此不是“阶数越高越好”，而是看任务关心短时精度（选高阶 RK）还是长时定性行为（选辛格式）。</p>
-<p>自适应步长是另一件几乎必需的工程手段：在误差估计大的区间自动缩小 <span class="arithmatex">\(\Delta t\)</span>，在平坦区间放大步长，从而把精度预算花在最需要的地方。判断是否需要用自适应（或隐式）方法的信号是刚性：若状态里最大与最小时间尺度之比超过 <span class="arithmatex">\(10^{2}\)</span>，固定步长的显式方法要么步长被最快尺度锁死（计算量爆炸），要么不稳定。用系统 Jacobian 的特征值谱跨度量级，或直接做步长减半实验看是否发散，都能得到这个判断。</p>
-<p>有限差分是导数的直接近似，两种常用格式的截断误差阶数不同：</p>
+<p>也就是 <span class="arithmatex">\(10^{-4}\)</span> 毫米。你在讨论"毫米级精度"的时候，机器其实早就比你精细了六个数量级——<strong>在 float64 下"精度不够"极少是舍入的锅。</strong></p>
+<hr />
+<h2 id="_4">四、相减为什么会让误差"爆炸"</h2>
+<p>这一节是本章第一个要请你亲手推的地方，不要跳。</p>
+<p>设 <span class="arithmatex">\(y=x_1-x_2\)</span>，两个数各自带一点绝对误差 <span class="arithmatex">\(\delta x_1,\delta x_2\)</span>。那么</p>
 <div class="arithmatex">\[
-f'(x)\approx\frac{f(x+h)-f(x)}{h}\ (O(h)),\qquad
-f'(x)\approx\frac{f(x+h)-f(x-h)}{2h}\ (O(h^2)).
+\delta y=\delta x_1-\delta x_2,
+\qquad
+\frac{\delta y}{y}=\frac{\delta x_1-\delta x_2}{x_1-x_2}.
 \]</div>
-<p>总误差是截断误差与舍入误差之和，因此存在一个最优步长——这是数值计算里少数能给出解析公式的地方：</p>
+<p>看这个式子的分母。<strong>绝对误差没有放大</strong>（最多变成两倍），可相对误差的分母是 <span class="arithmatex">\(x_1-x_2\)</span>——当两个数靠得很近时，分母趋近于零，相对误差就<strong>爆炸性地涨上去</strong>。</p>
+<p>代个小数字。取 <span class="arithmatex">\(x_1=1.000000001\)</span>、<span class="arithmatex">\(x_1=1.000000000\)</span>，差是 <span class="arithmatex">\(10^{-9}\)</span>。两个数各自的绝对误差最多 <span class="arithmatex">\(10^{-16}\)</span>，于是差值的相对误差最多</p>
+<div class="arithmatex">\[
+\frac{2\times10^{-16}}{10^{-9}}=2\times10^{-7}.
+\]</div>
+<p>也就是说，<strong>本该有 16 位可信的运算，结果只剩 7 位左右可信</strong>。这就是<strong>灾难性抵消</strong>（catastrophic cancellation）：输入完全正常，输出有效位凭空少了一半。</p>
+<h3 id="_5">它真的会咬人：一个代数等价改写</h3>
+<p>初中就学过的求根公式</p>
+<div class="arithmatex">\[
+x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+\]</div>
+<p>在 <span class="arithmatex">\(b^2\gg4ac\)</span> 时会出事。取 <span class="arithmatex">\(a=1\)</span>、<span class="arithmatex">\(b=-10^{8}\)</span>、<span class="arithmatex">\(c=1\)</span>（方程 <span class="arithmatex">\(x^2-10^{8}x+1=0\)</span>），两个根分别是 <span class="arithmatex">\(10^{8}\)</span> 和 <span class="arithmatex">\(10^{-8}\)</span>。这时 <span class="arithmatex">\(\sqrt{b^2-4ac}=\sqrt{10^{16}-4}\approx10^{8}\)</span>，两个分支就分家了：</p>
+<ul>
+<li><span class="arithmatex">\(-b+\sqrt{D}\approx2\times10^{8}\)</span>：两个大数<strong>相加</strong>，结果量级不变，安全；</li>
+<li><span class="arithmatex">\(-b-\sqrt{D}\approx10^{8}-10^{8}\)</span>：两个几乎相等的数<strong>相减</strong>，危险。</li>
+</ul>
+<p>实测那个小根：坏写法给出 <span class="arithmatex">\(7.45\times10^{-9}\)</span>，真值是 <span class="arithmatex">\(10^{-8}\)</span>——<strong>相对误差 25%，16 位精度摔到不足 1 位。</strong> 整段代码只做了一个减法和一次除法，没有任何"复杂算法"。</p>
+<p>改写办法是先用根与系数的关系 <span class="arithmatex">\(x_1x_2=c/a\)</span>：把安全的那一个根算出来，另一个根用除法反推，相减就被换成了相加：</p>
+<div class="arithmatex">\[
+x=\frac{2c}{-b+\sqrt{b^2-4ac}} .
+\]</div>
+<p><strong>同一个数学问题、同一批输入、同一张纸上等价的公式，实测精确给出 <span class="arithmatex">\(10^{-8}\)</span>，相对误差 0。</strong> 这就是"选公式"这件事在数值上的全部含义。</p>
+<p>三个同族的改写技巧，逻辑都一样——<strong>别让两个大而接近的量去相减</strong>：</p>
+<ul>
+<li><strong>补偿求和（Kahan 求和）</strong>：把一个"没加进去的低位零头"单独记账，每步从下一项里扣回来。它让 <span class="arithmatex">\(n\)</span> 项求和的误差<strong>不再随 <span class="arithmatex">\(n\)</span> 线性增长</strong>。</li>
+<li><strong>Welford 递推算方差</strong>：不用 <span class="arithmatex">\(\sum x_i^2-(\sum x_i)^2/n\)</span> 这种"两个大数相减"的形式，改成增量式更新均值与方差。</li>
+<li><strong>先中心化</strong>：在自定义损失/残差里，先把数据减去均值再算平方和。</li>
+</ul>
+<h3 id="_6">求和误差到底多大</h3>
+<p>把 <span class="arithmatex">\(n\)</span> 个数顺序相加，最坏情况每一项的相对误差都同向叠加：</p>
+<div class="arithmatex">\[
+\text{最坏相对误差}\approx n u,
+\qquad
+\text{符号随机时典型}\approx\sqrt n\,u .
+\]</div>
+<p><span class="arithmatex">\(n=10^{6}\)</span> 时代进去：</p>
+<div class="arithmatex">\[
+n u\approx1.1\times10^{-10},
+\qquad
+\sqrt n\,u\approx1.1\times10^{-13}.
+\]</div>
+<p>两个数字，两个结论：</p>
+<ol>
+<li>百万项求和的误差在 <span class="arithmatex">\(10^{-13}\sim10^{-10}\)</span>，对绝大多数工程问题无所谓；<strong>但如果答案本身就只有 6 位有效数字（比如一个接近零的差值、一个很小的方差），误差已经把它吞掉了。</strong></li>
+<li>想减小误差，最便宜的招是<strong>改求和顺序</strong>：分块（树形）求和把 <span class="arithmatex">\(n u\)</span> 换成 <span class="arithmatex">\(\log_2 n\cdot u\)</span>。百万项时 <span class="arithmatex">\(\log_2 10^{6}\approx20\)</span>，误差从 <span class="arithmatex">\(10^{-10}\)</span> 降到约 <span class="arithmatex">\(2\times10^{-15}\)</span>——<strong>同一批数、同一个算法，只换了加的顺序，差三个数量级。</strong></li>
+</ol>
+<p>最后一个反直觉的事实：<strong>判断两个浮点数相等几乎没有意义。</strong> <span class="arithmatex">\(a\)</span> 和 <span class="arithmatex">\(b\)</span> 各自带 <span class="arithmatex">\(u\)</span> 量级的相对误差，<code>a == b</code> 在应该相等的地方常常为假。正确写法是相对容差判据：</p>
+<div class="arithmatex">\[
+|a-b|\le \text{tol}\cdot\max(1,|a|,|b|).
+\]</div>
+<hr />
+<h2 id="_7">五、导数只能靠减法，所以步长有个最优值</h2>
+<p>机器不会算 <span class="arithmatex">\(\lim_{h\to0}\)</span>。它能做的只有：取两个点、相减、除以距离。这叫<strong>有限差分</strong>。</p>
+<div class="arithmatex">\[
+f'(x)\approx\frac{f(x+h)-f(x)}{h}
+\qquad(O(h)),
+\]</div>
+<div class="arithmatex">\[
+f'(x)\approx\frac{f(x+h)-f(x-h)}{2h}
+\qquad(O(h^2)).
+\]</div>
+<p>括号里是<strong>截断误差的阶</strong>：前向差分是 <span class="arithmatex">\(O(h)\)</span>，中心差分是 <span class="arithmatex">\(O(h^2)\)</span>。看到这里，第一反应一定是"那就把 <span class="arithmatex">\(h\)</span> 取小，一直取小"。<strong>这个直觉是错的，而且错得很具体。</strong></p>
+<h3 id="h">推一遍：为什么 h 不能太小</h3>
+<p>总误差是两项之和：</p>
+<ul>
+<li><strong>截断误差</strong>：泰勒展开砍掉的那些项，前向差分约 <span class="arithmatex">\(\dfrac{M_2}{2}h\)</span>，随 <span class="arithmatex">\(h\)</span> <strong>变小而变小</strong>；</li>
+<li><strong>舍入误差</strong>：<span class="arithmatex">\(f(x+h)\)</span> 和 <span class="arithmatex">\(f(x)\)</span> 各自带 <span class="arithmatex">\(u\)</span> 量级的相对误差，相减之后再除以 <span class="arithmatex">\(h\)</span>，所以这一项大约是 <span class="arithmatex">\(\dfrac{u}{h}\)</span>，随 <span class="arithmatex">\(h\)</span> <strong>变小而变大</strong>。</li>
+</ul>
+<p>一个随 <span class="arithmatex">\(h\)</span> 涨、一个随 <span class="arithmatex">\(h\)</span> 降，<strong>因此中间一定有一个最优点</strong>。以前向差分为例：</p>
+<div class="arithmatex">\[
+E(h)\approx\frac{u}{h}+\frac{M_2}{2}h
+\;\Longrightarrow\;
+E'(h)=-\frac{u}{h^2}+\frac{M_2}{2}=0
+\;\Longrightarrow\;
+h^\star=\sqrt{\frac{2u}{M_2}},\quad E(h^\star)\approx\sqrt{2uM_2}.
+\]</div>
+<p>取 <span class="arithmatex">\(u=1.11\times10^{-16}\)</span>、<span class="arithmatex">\(M_2=1\)</span>，得 <span class="arithmatex">\(h^\star\approx1.5\times10^{-8}\)</span>，此时相对误差也约 <span class="arithmatex">\(10^{-8}\)</span>。这就是"前向差分只能给你 8 位有效数字"的来历——<strong>你有 16 位浮点，却只能用上 8 位。</strong></p>
+<p>中心差分同理，两头一起降噪但截断是二次的：<span class="arithmatex">\(h^\star\approx(6u/M_2)^{1/3}\approx5\times10^{-6}\)</span>，最优误差约 <span class="arithmatex">\(u^{2/3}\approx2\times10^{-11}\)</span>。</p>
 <table>
 <thead>
 <tr>
@@ -4051,89 +4518,161 @@ f'(x)\approx\frac{f(x+h)-f(x-h)}{2h}\ (O(h^2)).
 <tr>
 <td>前向差分</td>
 <td><span class="arithmatex">\(O(h)\)</span></td>
-<td><span class="arithmatex">\(\frac{u}{h}+\frac{M_2}{2}h\)</span></td>
-<td><span class="arithmatex">\(\approx\sqrt u\approx10^{-8}\)</span></td>
-<td><span class="arithmatex">\(\approx10^{-8}\)</span></td>
+<td><span class="arithmatex">\(\dfrac{u}{h}+\dfrac{M_2}{2}h\)</span></td>
+<td><span class="arithmatex">\(\approx1.5\times10^{-8}\)</span></td>
+<td><span class="arithmatex">\(\approx10^{-8}\)</span>（实测 <span class="arithmatex">\(3\times10^{-9}\)</span>）</td>
 </tr>
 <tr>
 <td>中心差分</td>
 <td><span class="arithmatex">\(O(h^2)\)</span></td>
-<td><span class="arithmatex">\(\frac{u}{h}+\frac{M_3}{6}h^2\)</span></td>
-<td><span class="arithmatex">\(\approx u^{1/3}\approx6\times10^{-6}\)</span></td>
-<td><span class="arithmatex">\(\approx10^{-11}\)</span></td>
+<td><span class="arithmatex">\(\dfrac{u}{h}+\dfrac{M_3}{6}h^2\)</span></td>
+<td><span class="arithmatex">\(\approx5\times10^{-6}\)</span></td>
+<td><span class="arithmatex">\(\approx10^{-11}\)</span>（实测 <span class="arithmatex">\(3\times10^{-11}\)</span>）</td>
 </tr>
 <tr>
 <td>复数步长法</td>
 <td><span class="arithmatex">\(O(h^2)\)</span>，无相减抵消</td>
 <td>无抵消项</td>
-<td><span class="arithmatex">\(\approx u\approx10^{-16}\)</span></td>
-<td><span class="arithmatex">\(\approx10^{-16}\)</span>（接近机器精度）</td>
+<td>可取到极小</td>
+<td><span class="arithmatex">\(\approx u\)</span>（接近机器精度）</td>
 </tr>
 </tbody>
 </table>
-<p>注意 <span class="arithmatex">\(h\)</span> 不能取到 <span class="arithmatex">\(10^{-16}\)</span>：那时 <span class="arithmatex">\(x+h\)</span> 与 <span class="arithmatex">\(x\)</span> 在浮点下已经相等，分子变成 0，导数算成 0。这是“步长越小越准”这一直觉的失效点，也是自动微分优于手工差分的根本原因：自动微分按链式法则组合局部导数，不引入相减抵消。</p>
-<p>动态系统的离散化同理。最简单的显式 Euler 为</p>
+<h3 id="_8">直觉失效的那个点</h3>
+<p>前向差分里，<span class="arithmatex">\(h=10^{-16}\)</span> 时 <span class="arithmatex">\(x+h\)</span> 已经和 <span class="arithmatex">\(x\)</span> <strong>在浮点下相等</strong>，分子变成 0，导数算成 0，相对误差 100%。</p>
+<p><strong>"步长越小越准"在这里彻底失效</strong>——不是变差一点，是从 8 位有效数字直接掉到 0 位。这也是<strong>自动微分</strong>（automatic differentiation）优于手工差分的根本原因：它按链式法则组合每一步的局部导数，全程不引入"两个大数相减"，所以能拿到接近 <span class="arithmatex">\(u\)</span> 的精度。</p>
+<hr />
+<h2 id="_9">六、把连续系统搬进机器：离散化和稳定性</h2>
+<p>上一节的差分只管"算一个导数"。动态系统要往前推很多步，问题更大。最简单的显式 Euler 是</p>
 <div class="arithmatex">\[
 x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 \]</div>
-<p>单步局部截断误差 <span class="arithmatex">\(O(\Delta t^2)\)</span>，<span class="arithmatex">\(N\)</span> 步累积全局误差 <span class="arithmatex">\(O(\Delta t)\)</span>。步长受两个方向夹击：太大则离散误差明显、甚至让原本稳定的系统离散后发散；太小则计算量线性增长，舍入误差被更多步数累积。对刚性系统（时间尺度相差几个数量级，例如含接触或快慢耦合的动力学），显式 Euler 需要 <span class="arithmatex">\(\Delta t\)</span> 远小于最快时间尺度对应的步长才稳定，此时应改隐式方法或自适应步长的 RK45。</p>
-<h2 id="_4">线性求解与最小二乘</h2>
-<p>状态估计、标定和优化最后常归结为 <span class="arithmatex">\(Ax=b\)</span>，或观测带噪时的最小二乘 <span class="arithmatex">\(\min_x \|Ax-b\|_2^2\)</span>。当观测多于未知量时，方程一般无法被每条观测同时精确满足，最小二乘选择让总平方残差最小的解，其最优性条件是残差与列空间正交：</p>
+<p>单步局部截断误差 <span class="arithmatex">\(O(\Delta t^2)\)</span>，<span class="arithmatex">\(N\)</span> 步累积的全局误差 <span class="arithmatex">\(O(\Delta t)\)</span>。</p>
+<h3 id="_10">推一遍：稳定步长是从哪来的</h3>
+<p>取最简单的标量系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>，并且 <span class="arithmatex">\(\lambda&lt;0\)</span>（真实解单调衰减到 0）。任何数值格式都能写成 <span class="arithmatex">\(x_{k+1}=R\,x_k\)</span> 的形式，<span class="arithmatex">\(R\)</span> 叫<strong>放大因子</strong>。误差要不要被放大，只看 <span class="arithmatex">\(|R|\)</span>：</p>
+<ul>
+<li><strong>显式 Euler</strong>：<span class="arithmatex">\(R=1+\lambda\Delta t\)</span>。要求 <span class="arithmatex">\(|1+\lambda\Delta t|\le1\)</span>，解得</li>
+</ul>
 <div class="arithmatex">\[
-x^\star=\arg\min_x\|Ax-b\|_2^2,\qquad A^\top (Ax^\star-b)=0 .
+\Delta t\le\frac{2}{|\lambda|}.
 \]</div>
-<p>数值层面，求解路径的选择比公式本身更重要，因为不同路径的误差特征能差出一半的有效位数：</p>
+<ul>
+<li><strong>隐式 Euler</strong>：<span class="arithmatex">\(x_{k+1}=\dfrac{x_k}{1-\lambda\Delta t}\)</span>，<span class="arithmatex">\(R=\dfrac{1}{1-\lambda\Delta t}\)</span>。因为 <span class="arithmatex">\(\lambda&lt;0\)</span>，分母恒大于 1，所以 <span class="arithmatex">\(|R|&lt;1\)</span> <strong>对任意 <span class="arithmatex">\(\Delta t\)</span> 成立</strong>。</li>
+<li><strong>梯形法</strong>：<span class="arithmatex">\(R=\dfrac{1+\lambda\Delta t/2}{1-\lambda\Delta t/2}\)</span>，同理 <span class="arithmatex">\(|R|&lt;1\)</span> 恒成立（A-稳定），而且精度是 2 阶。</li>
+</ul>
+<p>代一个具体数字：<span class="arithmatex">\(|\lambda|=1000\)</span>。显式 Euler 要求 <span class="arithmatex">\(\Delta t\le0.002\)</span>；隐式 Euler 在 <span class="arithmatex">\(\Delta t=0.1\)</span> 下依然稳定。</p>
 <table>
 <thead>
 <tr>
-<th>路径</th>
-<th>适用条件</th>
-<th>相对代价</th>
-<th>数值风险</th>
+<th>格式</th>
+<th>迭代式</th>
+<th>稳定条件</th>
+<th>精度阶</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>正规方程 + Cholesky</td>
-<td><span class="arithmatex">\(A\)</span> 满秩、条件数可接受</td>
-<td>最低（<span class="arithmatex">\(\frac{1}{3}n^3\)</span>）</td>
-<td><span class="arithmatex">\(\kappa\)</span> 被平方，损失一半有效位</td>
+<td>显式 Euler</td>
+<td><span class="arithmatex">\(x_{k+1}=(1+\lambda\Delta t)x_k\)</span></td>
+<td>(\Delta t\le2/</td>
+<td>\lambda</td>
 </tr>
 <tr>
-<td>QR 分解</td>
-<td>一般满秩最小二乘</td>
-<td>约 <span class="arithmatex">\(2\times\)</span>，<span class="arithmatex">\(O(mn^2)\)</span></td>
-<td>稳定，工程默认</td>
+<td>隐式 Euler</td>
+<td><span class="arithmatex">\(x_{k+1}=\dfrac{x_k}{1-\lambda\Delta t}\)</span></td>
+<td>对任意 <span class="arithmatex">\(\Delta t\)</span> 稳定</td>
+<td>1</td>
 </tr>
 <tr>
-<td>SVD</td>
-<td>秩亏、需判断数值秩</td>
-<td>最贵（约 <span class="arithmatex">\(4\times\)</span>）</td>
-<td>最稳，可给伪逆与截断</td>
+<td>梯形法</td>
+<td><span class="arithmatex">\(x_{k+1}=\dfrac{1+\lambda\Delta t/2}{1-\lambda\Delta t/2}x_k\)</span></td>
+<td>A-稳定</td>
+<td>2</td>
 </tr>
 <tr>
-<td>正规方程 + 直接求逆</td>
-<td>—</td>
-<td>最贵且最不稳</td>
-<td>应避免，见 <a href="../01-linear-algebra-calculus/">线性代数与微积分</a></td>
+<td>显式 RK4</td>
+<td>多级组合</td>
+<td>(\Delta t\lesssim2.8/</td>
+<td>\lambda</td>
 </tr>
 <tr>
-<td>迭代法（CG/LSQR）</td>
-<td>稀疏、大 <span class="arithmatex">\(n\)</span></td>
-<td>每步 <span class="arithmatex">\(O(n^2)\)</span> 或更低</td>
-<td>需预处理，否则收敛慢</td>
+<td>蛙跳/辛格式</td>
+<td>交错的半步更新</td>
+<td>条件稳定，保能量近似</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
-<p>秩亏或高度病态时，SVD 给出伪逆解 <span class="arithmatex">\(x^\star=U\Sigma^{+}V^\top b\)</span>，其中小于阈值 <span class="arithmatex">\(\tau=\max(m,n)\,\varepsilon_{\text{mach}}\,\sigma_1\)</span> 的奇异值被置零，等于自动丢弃不可信方向。这是“承认某些方向没有信息”的正式表达，也是判断“我到底能从数据里识别出几个参数”的标准做法：奇异值谱里有多少个大于 <span class="arithmatex">\(\tau\)</span>，就有多少个可信参数方向。</p>
-<p>一个实践细节值得单独强调：<strong>加权最小二乘的权重必须来自噪声模型。</strong> 只有当 <span class="arithmatex">\(W=\Sigma^{-1}\)</span> 时，<span class="arithmatex">\(\min_x\|W^{1/2}(Ax-b)\|_2^2\)</span> 的解才是最大似然解；凭手感填的权重会让结果看起来残差更小而实际上对齐了错误的量纲，并让协方差估计失去意义。</p>
-<h2 id="_5">条件数与误差放大</h2>
-<p>条件数衡量问题本身对扰动的敏感度，与算法实现无关。对方阵及最小二乘问题分别有</p>
+<h3 id="_11">稳定和精确是两件事</h3>
+<p>隐式 Euler 能取很大的步长，但<strong>大步长下的解依然不准</strong>——稳定只保证"不发散"，不保证"对"。<span class="arithmatex">\(\Delta t=0.1\)</span> 时它给出的曲线是平滑的、单调下降的、看起来非常合理，但衰减速率可能差了好几倍。</p>
+<p>这就引出了工程上最危险的一种组合：<strong>稳定但错误</strong>。它的结果平滑无毛刺，特别容易被当成可用结果写进仿真报告。判断方法只有一个，而且很便宜——<strong>步长减半实验</strong>：</p>
+<blockquote>
+<p>把 <span class="arithmatex">\(\Delta t\)</span> 减半再算一遍。若结果变化远大于你估计的截断误差量级，说明误差由离散偏差主导，该换格式而不是继续减步长；若结果几乎不变，说明已经进入渐近收敛区，可以放心用。</p>
+</blockquote>
+<p>两倍计算量，一次性排除一大类"看起来正常但不可信"的结果。</p>
+<h3 id="_12">有两种离散偏差必须分开看</h3>
+<ul>
+<li><strong>精度偏差</strong>：往好里减小步长就能改善，属于上面那个讨论。</li>
+<li><strong>系统性缺陷</strong>：减小步长改善不了，因为它错在结构上。最典型的是<strong>能量漂移</strong>：无阻尼摆、轨道运动这类守恒系统，用显式 Euler 积分久了，振幅会单调地增大或衰减，能量是系统性漂走的。这类问题要换<strong>辛格式</strong>（半隐式 Euler、Verlet、蛙跳），它们在同一步长下能让能量近似有界，代价是精度阶不高。</li>
+</ul>
+<p>所以格式选择的原则不是"阶数越高越好"，而是看任务要什么：</p>
+<table>
+<thead>
+<tr>
+<th>你关心的是</th>
+<th>选什么</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短时精度</td>
+<td>高阶 RK（如 RK45）</td>
+<td>同样步长下截断误差小得多</td>
+</tr>
+<tr>
+<td>长期定性行为</td>
+<td>辛格式</td>
+<td>能量有界，不发散也不衰减</td>
+</tr>
+<tr>
+<td>刚性系统</td>
+<td>隐式 + 自适应步长</td>
+<td>显式格式的步长被最快尺度锁死</td>
+</tr>
+</tbody>
+</table>
+<p>"刚性"（stiffness）可以这样判断：若状态里最大与最小时间尺度之比超过 <span class="arithmatex">\(10^{2}\)</span>，固定步长的显式方法要么被最快尺度锁死步长（计算量爆炸），要么不稳定。也可以直接做步长减半实验看是否发散。自适应步长的作用就是在误差估计大的区间自动缩小 <span class="arithmatex">\(\Delta t\)</span>、在平坦区间放大步长，把精度预算花在刀刃上。</p>
+<hr />
+<h2 id="_13">七、条件数：问题本身的放大倍数</h2>
+<p>到这一节为止，谈的都是"算的过程中引入了多少误差"。还有一个更根本的问题：<strong>问题本身对扰动有多敏感？</strong></p>
+<h3 id="_14">推一遍：误差放大不等式</h3>
+<p>解线性方程组 <span class="arithmatex">\(Ax=b\)</span>。假设右端项被扰动成 <span class="arithmatex">\(b+\delta b\)</span>，解变成 <span class="arithmatex">\(x+\delta x\)</span>：</p>
 <div class="arithmatex">\[
-\kappa(A)=\|A\|\,\|A^{-1}\|=\frac{\sigma_{\max}}{\sigma_{\min}},\qquad
+A(x+\delta x)=b+\delta b
+\;\Longrightarrow\;
+\delta x=A^{-1}\delta b .
+\]</div>
+<p>取范数，两边分别除以 <span class="arithmatex">\(\|x\|\)</span> 和 <span class="arithmatex">\(\|b\|\)</span>：</p>
+<div class="arithmatex">\[
+\|\delta x\|\le\|A^{-1}\|\,\|\delta b\|,
+\qquad
+\frac{\|\delta x\|}{\|x\|}\le\|A\|\,\|A^{-1}\|\cdot\frac{\|\delta b\|}{\|b\|}.
+\]</div>
+<p>那个乘积就是<strong>条件数</strong>：</p>
+<div class="arithmatex">\[
+\kappa(A)=\|A\|\,\|A^{-1}\|=\frac{\sigma_{\max}}{\sigma_{\min}}.
+\]</div>
+<p><strong>它的含义一句话说完：输入端的相对误差，最多被放大 <span class="arithmatex">\(\kappa(A)\)</span> 倍才到达输出端。</strong> 而 <span class="arithmatex">\(\kappa\)</span> 是矩阵自己的属性，跟你怎么写代码、用什么库<strong>完全无关</strong>。</p>
+<ul>
+<li><span class="arithmatex">\(\kappa=1\)</span>：最理想，正交矩阵、单位矩阵都是这样，误差不放大；</li>
+<li><span class="arithmatex">\(\kappa=10^{6}\)</span>：float64 的 16 位有效数字只剩 10 位。</li>
+</ul>
+<p>还有一个必须记住的推论：</p>
+<div class="arithmatex">\[
 \kappa(A^\top A)=\kappa(A)^2 .
 \]</div>
-<p>误差放大有明确的不等式：若 <span class="arithmatex">\(Ax=b\)</span> 的解受扰动变为 <span class="arithmatex">\(x+\delta x\)</span>，则相对误差满足 <span class="arithmatex">\(\frac{\|\delta x\|}{\|x\|}\le\kappa(A)\frac{\|\delta b\|}{\|b\|}\)</span>，即输入端相对误差最多被放大 <span class="arithmatex">\(\kappa(A)\)</span> 倍。<span class="arithmatex">\(\kappa=1\)</span> 是理想情形（正交矩阵、单位矩阵），<span class="arithmatex">\(\kappa=10^{6}\)</span> 表示可能损失 6 位有效数字。</p>
+<p><strong>这就是"别用正规方程"的全部理由</strong>——把最小二乘硬做成 <span class="arithmatex">\(A^\top A x=A^\top b\)</span>，条件数被平方，有效位直接砍一半。</p>
 <table>
 <thead>
 <tr>
@@ -4148,7 +4687,7 @@ x^\star=\arg\min_x\|Ax-b\|_2^2,\qquad A^\top (Ax^\star-b)=0 .
 <td><span class="arithmatex">\(1\)</span></td>
 <td>各方向等尺度（正交）</td>
 <td>无放大</td>
-<td>—</td>
+<td>无需检查</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(10^{0}\sim10^{3}\)</span></td>
@@ -4176,63 +4715,27 @@ x^\star=\arg\min_x\|Ax-b\|_2^2,\qquad A^\top (Ax^\star-b)=0 .
 </tr>
 </tbody>
 </table>
-<p>两条推论要记住。第一，条件数针对<strong>问题</strong>而非代码：同一个方程组换语言、换库都不会改变 <span class="arithmatex">\(\kappa\)</span>，这说明“换个求解器”通常救不了病态问题，只有换模型、加正则或重新参数化才行。第二，条件数随变量尺度变化：把某一列乘以 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 就可能剧增，因此在标定、参数辨识等场景中先把变量无量纲化是提高 <span class="arithmatex">\(\kappa\)</span> 最便宜的手段，代价几乎为零。</p>
-<h2 id="_6">病态问题的识别与处理</h2>
-<p>判断一个方程是否病态，可以看三个可计算的信号：<span class="arithmatex">\(\kappa\)</span> 的量级、SVD 中奇异值跨越几个数量级、以及残差是否已经降到噪声水平以下。下表给出条件数与有效数字损失的经验对照：</p>
-<table>
-<thead>
-<tr>
-<th>条件数 <span class="arithmatex">\(\kappa(A)\)</span></th>
-<th>float64 丢失位数</th>
-<th>剩余有效位</th>
-<th>工程判断</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><span class="arithmatex">\(10^{0}\sim10^{3}\)</span></td>
-<td>0–3</td>
-<td>13–16</td>
-<td>安全</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(10^{4}\sim10^{6}\)</span></td>
-<td>4–6</td>
-<td>10–12</td>
-<td>可用，需留意</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(10^{7}\sim10^{9}\)</span></td>
-<td>7–9</td>
-<td>7–9</td>
-<td>float32 不可用，float64 勉强</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(10^{10}\sim10^{12}\)</span></td>
-<td>10–12</td>
-<td>4–6</td>
-<td>需正则化或重新参数化</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(10^{13}\sim10^{16}\)</span></td>
-<td>13–16</td>
-<td>0–3</td>
-<td>数值上不可信</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(&gt;10^{16}\)</span></td>
-<td>全部</td>
-<td>0</td>
-<td>方程与数据无法支撑求解</td>
-</tr>
-</tbody>
-</table>
-<p>处理病态的标准处方是 Tikhonov 正则化（岭回归），把最小奇异值抬高、条件数压下去：</p>
+<p>两条推论，都值得记住：</p>
+<ol>
+<li><strong><span class="arithmatex">\(\kappa\)</span> 是问题的属性，不是代码的属性。</strong> 同一个方程组换语言、换库都改变不了 <span class="arithmatex">\(\kappa\)</span>，所以"换个求解器"通常救不了病态问题。<strong>必须换模型、加正则或重新参数化。</strong></li>
+<li><strong><span class="arithmatex">\(\kappa\)</span> 随变量尺度变化。</strong> 把某一列乘以 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 就可能剧增。因此在标定、参数辨识里，<strong>先把变量无量纲化是提高 <span class="arithmatex">\(\kappa\)</span> 最便宜的手段，代价几乎为零。</strong></li>
+</ol>
+<hr />
+<h2 id="_15">八、病态了怎么办</h2>
+<p>判断一个方程是否病态，有三个<strong>可计算</strong>的信号：<span class="arithmatex">\(\kappa\)</span> 的量级、SVD 里奇异值跨了几个数量级、以及残差是否已经降到噪声水平以下。</p>
+<p>标准处方是 <strong>Tikhonov 正则化</strong>（在统计里叫岭回归）。做法是把最小奇异值抬高，从而把 <span class="arithmatex">\(\kappa\)</span> 压下去：</p>
 <div class="arithmatex">\[
-\min_x\ \|Ax-b\|_2^2+\lambda\|x\|_2^2,\qquad
-x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
+\min_x\ \|Ax-b\|_2^2+\lambda\|x\|_2^2
+\;\Longrightarrow\;
+x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b .
 \]</div>
-<p>条件数从 <span class="arithmatex">\(\sigma_1/\sigma_n\)</span> 变为 <span class="arithmatex">\(\big((\sigma_1^2+\lambda)/(\sigma_n^2+\lambda)\big)\)</span> 的平方根量级，<span class="arithmatex">\(A^\top A+\lambda I\)</span> 对称正定，可用 Cholesky 稳定求解。代价是引入偏差：<span class="arithmatex">\(\lambda\)</span> 越大解越平滑、越鲁棒，但对数据拟合越差；<span class="arithmatex">\(\lambda\to0\)</span> 回到原问题（含病态），<span class="arithmatex">\(\lambda\to\infty\)</span> 回到 <span class="arithmatex">\(x\to0\)</span>。选择 <span class="arithmatex">\(\lambda\)</span> 的常见依据是 L 曲线法（以 <span class="arithmatex">\(\|x_\lambda\|\)</span> 对残差作图取拐点）或广义交叉验证。</p>
+<p>条件数从 <span class="arithmatex">\(\sigma_1/\sigma_n\)</span> 变成 <span class="arithmatex">\(\big((\sigma_1^2+\lambda)/(\sigma_n^2+\lambda)\big)^{1/2}\)</span> 的量级，而且 <span class="arithmatex">\(A^\top A+\lambda I\)</span> <strong>一定对称正定</strong>，可以用 Cholesky 稳定求解。</p>
+<p>代价是<strong>引入偏差</strong>：<span class="arithmatex">\(\lambda\)</span> 越大，解越平滑、越鲁棒，对数据拟合越差；<span class="arithmatex">\(\lambda\to0\)</span> 回到原问题（含病态），<span class="arithmatex">\(\lambda\to\infty\)</span> 时 <span class="arithmatex">\(x\to0\)</span>。选 <span class="arithmatex">\(\lambda\)</span> 常用 <strong>L 曲线法</strong>（以 <span class="arithmatex">\(\|x_\lambda\|\)</span> 对残差作图取拐点）或广义交叉验证。</p>
+<p>另一条路是<strong>截断 SVD</strong>：把小于阈值</p>
+<div class="arithmatex">\[
+\tau=\max(m,n)\,\varepsilon_{\text{mach}}\,\sigma_1
+\]</div>
+<p>的奇异值直接置零，解写成 <span class="arithmatex">\(x^\star=U\Sigma^{+}V^\top b\)</span>。这等于<strong>公开承认"某些方向里没有信息"</strong>，也是判断"我到底能从数据里识别出几个参数"的标准做法：奇异值谱里有几个大于 <span class="arithmatex">\(\tau\)</span>，就有几个可信的参数方向。</p>
 <table>
 <thead>
 <tr>
@@ -4258,26 +4761,28 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 <tr>
 <td>重新参数化</td>
 <td>参数高度相关</td>
-<td>需建模功夫</td>
-<td>新参数物理含义可能变弱</td>
+<td>需要建模功夫</td>
+<td>新参数的物理含义可能变弱</td>
 </tr>
 <tr>
 <td>加权/白化</td>
 <td>噪声量级差异大</td>
-<td>需噪声统计</td>
+<td>需要噪声统计</td>
 <td>权重错了反而不如不加</td>
 </tr>
 <tr>
 <td>提高浮点精度</td>
 <td>仅舍入主导</td>
 <td>慢数倍</td>
-<td>对条件数问题几乎无效</td>
+<td><strong>对条件数问题几乎无效</strong></td>
 </tr>
 </tbody>
 </table>
-<p>最后一行需要强调：<strong>提高精度对病态问题几乎无用。</strong> <span class="arithmatex">\(\kappa=10^{10}\)</span> 时，float64（16 位）剩 6 位、float128（34 位）剩 24 位——如果物理噪声只允许 3 位精度，换精度解决不了任何实际问题，因为它放大的是数据里的噪声而不是舍入。</p>
-<h2 id="_7">迭代算法必须有停止条件</h2>
-<p>梯度下降、非线性优化、图优化都靠重复更新逼近解，停止条件不是形式要求，而是决定结果是否可信的关键。四类常见准则及失效模式：</p>
+<p>最后一行为什么无效？<span class="arithmatex">\(\kappa=10^{10}\)</span> 时，float64 剩 6 位、float128 剩 24 位——但如果物理噪声本身就只允许 3 位精度，<strong>被放大的是数据里的噪声，不是舍入</strong>，换精度解决不了任何实际问题。</p>
+<p>最后一条实践细节值得单独强调：<strong>加权最小二乘的权重必须来自噪声模型。</strong> 只有当 <span class="arithmatex">\(W=\Sigma^{-1}\)</span> 时，<span class="arithmatex">\(\min_x\|W^{1/2}(Ax-b)\|_2^2\)</span> 的解才是最大似然解。凭手感填权重会让残差数字变好看，实际却对齐了错误的量纲，还会让协方差估计失去意义、给出过窄的不确定度。</p>
+<hr />
+<h2 id="_16">九、迭代什么时候该停</h2>
+<p>梯度下降、非线性优化、图优化都靠重复更新逼近解。<strong>"迭代 100 次"不是收敛证明，只是计算预算；而"目标函数几乎不变"可能是收敛，也可能是卡在数值噪声平台上。</strong></p>
 <table>
 <thead>
 <tr>
@@ -4290,15 +4795,15 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 <tbody>
 <tr>
 <td>目标函数变化</td>
-<td>$</td>
+<td>(</td>
 <td>f_k-f_{k-1}</td>
-<td>\le\varepsilon_f$</td>
+<td>\le\varepsilon_f)</td>
 </tr>
 <tr>
 <td>参数变化</td>
 <td><span class="arithmatex">\(\|\Delta x_k\|\le\varepsilon_x(1+\|x_k\|)\)</span></td>
 <td>反映解已稳定</td>
-<td>病态问题中 <span class="arithmatex">\(x\)</span> 还在漂移就已很小</td>
+<td>病态问题中 <span class="arithmatex">\(x\)</span> 还在漂移就已经很小</td>
 </tr>
 <tr>
 <td>梯度/残差范数</td>
@@ -4314,23 +4819,29 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 </tr>
 <tr>
 <td>相对改进率</td>
-<td>$\frac{</td>
+<td>(\dfrac{</td>
 <td>f_k-f_{k-1}</td>
 <td>}{1+</td>
 </tr>
 </tbody>
 </table>
-<p>最重要的原则是：<strong>“迭代 100 次”不是收敛证明，只是计算预算；而“目标函数几乎不变”可能是收敛，也可能是卡在数值噪声平台上。</strong> 可靠的实现会同时使用梯度/残差范数 + 迭代上限两个准则，并在二者冲突时报警，因为残差降到测量噪声水平后继续迭代只会把噪声拟合进解。</p>
-<p>还要注意尺度问题：绝对阈值必须写成相对形式。判据 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g\)</span> 中的 <span class="arithmatex">\(\varepsilon_g\)</span> 依赖目标函数量纲，把代价函数乘以 <span class="arithmatex">\(10^{6}\)</span> 会直接改变收敛判定，而物理问题本身并没有变。稳妥写法是 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g(1+|f_k|)\)</span>，让容差随目标量级缩放。同理，参数变化判据也要用 <span class="arithmatex">\(\max(1,\|x_k\|)\)</span> 归一化，否则变量量级变化会让同一个阈值时而过松时而过紧。</p>
-<h2 id="_8">迭代法的收敛率对比</h2>
-<p>收敛速率的分母是条件数，因此预处理是最划算的优化手段：对角缩放（把各变量除以典型尺度）、不完全 Cholesky 预条件、以及把变量重新参数化（相关参数改为差分）都能显著降低有效 <span class="arithmatex">\(\kappa\)</span>，而且比换更高级的迭代算法便宜得多。经验上，条件数从 <span class="arithmatex">\(10^{6}\)</span> 降到 <span class="arithmatex">\(10^{2}\)</span> 带来的步数收益，等价于从普通梯度下降换成共轭梯度的收益，但实现复杂度低得多。</p>
-<p>非线性问题还需要在“牛顿步”与“梯度步”之间做插值，这就是 Levenberg–Marquardt / 信赖域的做法：用 <span class="arithmatex">\((J^\top J+\lambda I)\Delta=-g\)</span> 求解步长，<span class="arithmatex">\(\lambda\)</span> 大时退化为梯度下降（稳健但慢），<span class="arithmatex">\(\lambda\)</span> 小时接近 Gauss–Newton（快但可能过冲）。自适应规则是每步试算：若新点使目标下降则接受并减小 <span class="arithmatex">\(\lambda\)</span>，否则拒绝并增大 <span class="arithmatex">\(\lambda\)</span>。这个“先保守、再激进”的策略解释了为什么这类方法在初值较远时也能收敛。</p>
-<p>收敛率决定“需要迭代多少步”，其量级差异比常数因子重要得多。线性收敛指误差每步按固定比率缩小 <span class="arithmatex">\(\|e_{k+1}\|\le c\|e_k\|\)</span>（<span class="arithmatex">\(0&lt;c&lt;1\)</span>）；二次收敛指缩小比率本身随误差减小：</p>
+<p>两条实践原则：</p>
+<ul>
+<li><strong>容差要随量级缩放。</strong> 判据 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g\)</span> 里的 <span class="arithmatex">\(\varepsilon_g\)</span> 依赖目标函数的量纲——把代价函数整体乘以 <span class="arithmatex">\(10^{6}\)</span>，收敛判定就变了，可物理问题本身一点没变。稳妥写法是 <span class="arithmatex">\(\|\nabla f_k\|\le\varepsilon_g(1+|f_k|)\)</span>，参数判据同理用 <span class="arithmatex">\(\max(1,\|x_k\|)\)</span> 归一化。</li>
+<li><strong>残差降到测量噪声水平后，继续迭代只会把噪声拟合进解。</strong> 可靠的实现会同时用"残差范数 + 迭代上限"两个准则，并在二者冲突时报警。</li>
+</ul>
+<h3 id="_17">收敛率：决定要迭代多少步</h3>
+<p><strong>线性收敛</strong>指误差每步按固定比率缩小；<strong>二次收敛</strong>指缩小比率本身随误差变小：</p>
 <div class="arithmatex">\[
-\text{线性}:\ \|e_{k+1}\|\approx c\|e_k\|;\qquad
-\text{二次}:\ \|e_{k+1}\|\approx C\|e_k\|^2 .
+\text{线性}:\ \|e_{k+1}\|\approx c\,\|e_k\|,
+\qquad
+\text{二次}:\ \|e_{k+1}\|\approx C\,\|e_k\|^2 .
 \]</div>
-<p>二次收敛的含义是有效位数每步翻倍：误差从 <span class="arithmatex">\(10^{-1}\)</span> 到 <span class="arithmatex">\(10^{-2}\)</span>、再到 <span class="arithmatex">\(10^{-4}\)</span>、<span class="arithmatex">\(10^{-8}\)</span>，只需 3–4 步。</p>
+<p>二次收敛为什么"猛"？因为<strong>有效位数每步翻倍</strong>。从 <span class="arithmatex">\(10^{-1}\)</span> 出发，误差序列是 <span class="arithmatex">\(10^{-1}\to10^{-2}\to10^{-4}\to10^{-8}\)</span>——<strong>只要 3 步就走完线性方法要走 7 步的路</strong>。反过来，梯度下降的比率由条件数决定：<span class="arithmatex">\(c\approx1-\mu/L=1-1/\kappa\)</span>，<span class="arithmatex">\(\kappa=100\)</span> 时每步只缩 0.99，从 <span class="arithmatex">\(10^{0}\)</span> 到 <span class="arithmatex">\(10^{-8}\)</span> 需要</p>
+<div class="arithmatex">\[
+\frac{\ln(10^{-8})}{\ln(0.99)}\approx\frac{18.42}{0.01005}\approx1830
+\]</div>
+<p>步。<strong>同一个问题，条件数从 <span class="arithmatex">\(10^{2}\)</span> 涨到 <span class="arithmatex">\(10^{4}\)</span>，所需步数近似增加 100 倍。</strong></p>
 <table>
 <thead>
 <tr>
@@ -4345,11 +4856,11 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 <tbody>
 <tr>
 <td>固定点迭代</td>
-<td>线性，比率 $</td>
-<td>g'(x^\star)</td>
-<td>$</td>
-<td><span class="arithmatex">\(c=0.9\)</span> 时缩小 0.9</td>
+<td>线性，比率 <span class="arithmatex">\(\mid g'(x^\star)\mid\)</span></td>
+<td><span class="arithmatex">\(c=0.9\)</span> 时缩 0.9</td>
 <td><span class="arithmatex">\(\approx175\)</span></td>
+<td>最低</td>
+<td>压缩映射</td>
 </tr>
 <tr>
 <td>梯度下降</td>
@@ -4362,8 +4873,8 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 <tr>
 <td>共轭梯度</td>
 <td>超线性（谱依赖）</td>
-<td>历史方向组合</td>
-<td><span class="arithmatex">\(\approx\sqrt\kappa\ln(1/\varepsilon)\approx92\)</span></td>
+<td>组合历史方向</td>
+<td><span class="arithmatex">\(\approx\sqrt\kappa\ln(1/\varepsilon)\)</span></td>
 <td>一次矩阵向量乘</td>
 <td><span class="arithmatex">\(A\)</span> 对称正定</td>
 </tr>
@@ -4393,58 +4904,22 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 </tr>
 </tbody>
 </table>
-<p>读表要注意三件事。第一，梯度下降的速率由条件数决定，<span class="arithmatex">\(1-\mu/L=1-1/\kappa\)</span>，所以 <span class="arithmatex">\(\kappa\)</span> 从 <span class="arithmatex">\(10^{2}\)</span> 增到 <span class="arithmatex">\(10^{4}\)</span> 会让所需步数近似增加 100 倍——这正是预条件（把问题变成近似单位条件数）存在的理由。第二，牛顿法步数少但每步贵：一次牛顿步需要构造 <span class="arithmatex">\(n\times n\)</span> Hessian 并求解线性系统，<span class="arithmatex">\(n\)</span> 很大时单步代价直接压倒节省下来的步数；准牛顿法（BFGS、L-BFGS）用历史梯度近似 Hessian，是对这个权衡的工程折中。第三，随机优化的收敛是期望意义上的，噪声底由 batch 大小决定，把容差设得比噪声底更小只会得到“永远不收敛”的假象。</p>
-<h2 id="_9">数值稳定性</h2>
-<p>把误差传播写成矩阵形式会更清楚：若每步的局部扰动为 <span class="arithmatex">\(\epsilon_k\)</span>，则 <span class="arithmatex">\(N\)</span> 步后总误差近似为 <span class="arithmatex">\(\sum_{k}\Phi_{N,k}\epsilon_k\)</span>，其中 <span class="arithmatex">\(\Phi\)</span> 是状态转移矩阵的累积乘积。误差是否被放大取决于 <span class="arithmatex">\(\|\Phi\|\)</span> 是否随 <span class="arithmatex">\(k\)</span> 增长——稳定系统里它衰减，不稳定系统里它指数增长。这也说明为什么“单步公式精确”不能保证整体可靠：单步误差再小，只要放大因子大于 1，长时间后依然会淹没结果。</p>
-<p>长时间仿真还有一类特有的问题：约束漂移。旋转矩阵在反复相乘后不再严格正交（<span class="arithmatex">\(\|R^\top R-I\|\)</span> 逐渐增大），于是“纯旋转”开始隐含缩放，坐标系慢慢变形。标准对策是周期性重正化：每若干步对 <span class="arithmatex">\(R\)</span> 做一次 Gram–Schmidt 或 SVD 投影，把它强制拉回正交群的最近点；也可以直接用四元数并在每步归一化。这类操作不改变物理、开销极小，却能让仿真从“几小时后开始出现诡异漂移”变成长期稳定。</p>
-<p>离散化不仅产生单步近似误差，还改变系统随时间传播误差的方式。稳定性的定义是：<strong>每步引入的微小扰动不会被后续步骤无限放大。</strong> 对同一连续系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>（<span class="arithmatex">\(\lambda&lt;0\)</span>，真实解单调衰减），不同格式的稳定步长上限差别很大：</p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>迭代式</th>
-<th>稳定条件</th>
-<th>精度阶</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>显式 Euler</td>
-<td><span class="arithmatex">\(x_{k+1}=(1+\lambda\Delta t)x_k\)</span></td>
-<td>$</td>
-<td>1+\lambda\Delta t</td>
-</tr>
-<tr>
-<td>隐式 Euler</td>
-<td><span class="arithmatex">\(x_{k+1}=\frac{1}{1-\lambda\Delta t}x_k\)</span></td>
-<td>对任意 <span class="arithmatex">\(\Delta t\)</span> 稳定</td>
-<td>1</td>
-</tr>
-<tr>
-<td>梯形法</td>
-<td><span class="arithmatex">\(x_{k+1}=\frac{1+\lambda\Delta t/2}{1-\lambda\Delta t/2}x_k\)</span></td>
-<td>A-稳定</td>
-<td>2</td>
-</tr>
-<tr>
-<td>显式 RK4</td>
-<td>多级组合</td>
-<td>$\Delta t\lesssim2.8/</td>
-<td>\lambda</td>
-</tr>
-<tr>
-<td>蛙跳/辛格式</td>
-<td>交错的半步更新</td>
-<td>条件稳定，保能量近似</td>
-<td>2</td>
-</tr>
-</tbody>
-</table>
-<p>一个例子足以说明问题：若 <span class="arithmatex">\(|\lambda|=1000\)</span>，显式 Euler 要求 <span class="arithmatex">\(\Delta t\le0.002\)</span>，而隐式 Euler 在 <span class="arithmatex">\(\Delta t=0.1\)</span> 下依然稳定（虽然精度差）。稳定与精确是两件事——隐式方法步长可以很大，但大步长下的解依然不准，稳定只保证不发散。</p>
-<p>“稳定但错误”是工程上最危险的组合，因为结果看起来平滑、没有毛刺，很容易被当作可用结果。判断方法是做步长减半实验：把 <span class="arithmatex">\(\Delta t\)</span> 减半再算一遍，若结果变化远大于你估计的截断误差量级，说明误差由离散偏差而非舍入主导，此时该换格式而不是继续减步长；若结果几乎不变，说明已经进入渐近收敛区，可以放心使用。这个实验只需两倍计算量，却能一次性排除大部分“看起来正常但不可信”的仿真结果。</p>
-<h2 id="_10">量纲和尺度影响问题的可计算性</h2>
-<p>位置、角度、时间、力代表不同物理量，若变量尺度相差几个数量级，同样大小的数值误差具有完全不同的意义。更直接的影响是：<strong>尺度直接改变条件数，进而改变可计算性。</strong> 一个具体例子：优化变量里同时包含位置（<span class="arithmatex">\(\sim10^{0}\)</span> m）、角度（<span class="arithmatex">\(\sim10^{-1}\)</span> rad）和刚度（<span class="arithmatex">\(\sim10^{6}\)</span> N/m），若不做处理，Jacobian 的列范数相差 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 至少是同量级，梯度下降会在各方向上前进速度差百万倍，表现为“收敛图像像一条折线”。</p>
-<p>标准做法是无量纲化/重参数化：<span class="arithmatex">\(\tilde x_i=(x_i-x_i^{\text{ref}})/s_i\)</span>，<span class="arithmatex">\(s_i\)</span> 取该变量的典型变化尺度，使所有 <span class="arithmatex">\(\tilde x_i\)</span> 的量级统一在 <span class="arithmatex">\(O(1)\)</span>。这等价于对 Jacobian 做对角预条件，直接降低有效条件数。</p>
+<p>读这张表要抓住三件事：</p>
+<ol>
+<li><strong>收敛速率的分母是条件数</strong>，所以<strong>预处理是最划算的优化手段</strong>。对角缩放（各变量除以典型尺度）、不完全 Cholesky 预条件、把相关参数改成差分——都能显著降低有效 <span class="arithmatex">\(\kappa\)</span>，而且比换更高级的算法便宜得多。经验上，<span class="arithmatex">\(\kappa\)</span> 从 <span class="arithmatex">\(10^{6}\)</span> 压到 <span class="arithmatex">\(10^{2}\)</span> 带来的步数收益，等价于从梯度下降换成共轭梯度，但实现复杂度低得多。</li>
+<li><strong>牛顿法步数少但每步贵。</strong> 一次牛顿步要构造 <span class="arithmatex">\(n\times n\)</span> 的 Hessian 再解线性系统，<span class="arithmatex">\(n\)</span> 很大时单步代价直接压倒省下的步数。准牛顿法（BFGS、L-BFGS）用历史梯度近似 Hessian，就是这个权衡的工程折中。</li>
+<li><strong>非线性问题要在"牛顿步"和"梯度步"之间插值。</strong> Levenberg–Marquardt / 信赖域的做法是解 <span class="arithmatex">\((J^\top J+\lambda I)\Delta=-g\)</span>：<span class="arithmatex">\(\lambda\)</span> 大时退化成稳健但慢的梯度下降，<span class="arithmatex">\(\lambda\)</span> 小时接近快但可能过冲的 Gauss–Newton。自适应规则是每步试算——目标下降就接受并减小 <span class="arithmatex">\(\lambda\)</span>，否则拒绝并增大 <span class="arithmatex">\(\lambda\)</span>。<strong>"先保守、再激进"就是它能从很远的初值收敛过来的原因。</strong></li>
+<li><strong>随机优化的收敛是期望意义上的</strong>，噪声底由 batch 大小决定。把容差设得比噪声底还小，只会得到"永远不收敛"的假象。</li>
+</ol>
+<hr />
+<h2 id="_18">十、量纲和尺度决定问题可不可算</h2>
+<p>第七节说过 <span class="arithmatex">\(\kappa\)</span> 随尺度变化，这里给出它最常见的发作现场。</p>
+<p>一个优化变量里同时有：位置（<span class="arithmatex">\(\sim10^{0}\)</span> m）、角度（<span class="arithmatex">\(\sim10^{-1}\)</span> rad）、刚度（<span class="arithmatex">\(\sim10^{6}\)</span> N/m）。如果不做处理，Jacobian 的列范数相差 <span class="arithmatex">\(10^{6}\)</span>，<span class="arithmatex">\(\kappa\)</span> 至少是这个量级，<strong>梯度下降在各个方向上的前进速度差一百万倍</strong>——画出来就是"收敛曲线像一条折线"。</p>
+<p>标准做法是无量纲化（重参数化）：</p>
+<div class="arithmatex">\[
+\tilde x_i=\frac{x_i-x_i^{\text{ref}}}{s_i},
+\]</div>
+<p><span class="arithmatex">\(s_i\)</span> 取该变量的典型变化尺度，让所有 <span class="arithmatex">\(\tilde x_i\)</span> 都落在 <span class="arithmatex">\(O(1)\)</span>。<strong>这在数学上等价于对 Jacobian 做一次对角预条件，直接降低有效条件数。</strong></p>
 <table>
 <thead>
 <tr>
@@ -4487,18 +4962,196 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 </tr>
 </tbody>
 </table>
-<p>加权最小二乘里 <span class="arithmatex">\(W\)</span> 不能凭手感填：只有当 <span class="arithmatex">\(W=\Sigma^{-1}\)</span> 时，解才是最大似然解。凭直觉给权重会让残差数字变好，却对错了量纲；更严重的是，用错误权重算出的协方差矩阵会给出过窄的不确定度，让后续决策过度自信。</p>
-<h2 id="_11">误差预算比小数位数更重要</h2>
-<p>一套可操作的数值诊断流程是：先检查残差是否降到噪声量级（若已经降到，不应继续迭代）；再看奇异值谱跨度判断有效参数个数；接着做步长（或网格）减半实验估计离散误差；最后对关键量做单精度/双精度对照，判断舍入是否主导。四项检查各只需一次额外运算，却能定位误差来自建模、离散、数据还是舍入，避免把时间浪费在“换个库试试”上。</p>
-<p>这章的内容在后续章节里以不同面貌重复出现：控制里的采样周期选择就是步长与稳定性的权衡，估计里的协方差更新必须保持对称正定（否则 Cholesky 失败），优化里的收敛判据直接沿用本章的相对容差原则。数值计算不是独立的前置知识，而是横穿所有章节的执行层约束。</p>
-<p>一次计算的误差由建模误差、离散误差、测量误差和舍入误差共同组成，它们的量级往往相差极大。继续提高浮点精度只改善最后一项；如果步长或模型本身占主导，多印几位小数不会让结果更可信。</p>
+<hr />
+<h2 id="_19">十一、跑一遍，把误差看出来</h2>
+<p>下面这段只用 numpy 和标准库，把本节前面讲的现象全部跑出来。<strong>改动注释里标出的参数，你会看到现象突变。</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;0.1 + 0.2 =&quot;</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>              <span class="c1"># 不是 0.3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1.1 - 1.0 =&quot;</span><span class="p">,</span> <span class="mf">1.1</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(1e16 + 1) - 1e16 =&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mf">1e16</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1e16</span><span class="p">)</span>
+
+<span class="c1"># 求和顺序：三个 1 在 1e16 面前能不能活下来</span>
+<span class="n">big</span> <span class="o">=</span> <span class="mf">1e16</span>
+<span class="n">seq</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">[</span><span class="n">big</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="n">big</span><span class="p">]:</span>
+    <span class="n">seq</span> <span class="o">+=</span> <span class="n">v</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;顺序相加 1e16+1+1+1-1e16 = </span><span class="si">{</span><span class="n">seq</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;math.fsum 精确           = </span><span class="si">{</span><span class="n">math</span><span class="o">.</span><span class="n">fsum</span><span class="p">([</span><span class="n">big</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">big</span><span class="p">])</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">big</span> <span class="o">-</span> <span class="n">big</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;先把 1 合并再算          = </span><span class="si">{</span><span class="n">x</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 数值微分：h 从 1e-2 一路切到 1e-16，看误差先降后升</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;h&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;前向差分误差&#39;</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;中心差分误差&#39;</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">,</span> <span class="mf">1e-14</span><span class="p">,</span> <span class="mf">1e-16</span><span class="p">):</span>
+    <span class="n">fwd</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span> <span class="o">/</span> <span class="n">h</span>
+    <span class="n">ctr</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">h</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">:</span><span class="s2">&gt;8.0e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">fwd</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span><span class="si">:</span><span class="s2">&gt;14.3e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">ctr</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span><span class="si">:</span><span class="s2">&gt;14.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 把上面这条误差曲线画进终端网格（纵轴取对数）</span>
+<span class="n">hs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">16</span><span class="p">,</span> <span class="mi">57</span><span class="p">)</span>
+<span class="n">err</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span> <span class="o">/</span> <span class="n">h</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hs</span><span class="p">]</span>
+<span class="n">rows</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bot</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">err</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot; &quot;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+    <span class="n">grid</span><span class="p">[</span><span class="nb">round</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">-</span> <span class="n">top</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">bot</span> <span class="o">-</span> <span class="n">top</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;前向差分误差 vs 步长 h（横轴 1e-2 -&gt; 1e-16，纵轴对数）&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;误差 </span><span class="si">{</span><span class="mi">10</span><span class="o">**</span><span class="n">top</span><span class="si">:</span><span class="s2">.0e</span><span class="si">}</span><span class="s2"> |&quot;</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;误差 </span><span class="si">{</span><span class="mi">10</span><span class="o">**</span><span class="n">bot</span><span class="si">:</span><span class="s2">.0e</span><span class="si">}</span><span class="s2"> |&quot;</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="s2">&quot; h=1e-2&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">-</span> <span class="mi">27</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;h=1e-16&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>真实输出（float64，<code>numpy</code> 版本不同可能在第 17 位上有一点点差别）：</p>
+<div class="highlight"><pre><span></span><code>0.1 + 0.2 = 0.30000000000000004
+1.1 - 1.0 = 0.10000000000000009
+(1e16 + 1) - 1e16 = 0.0
+顺序相加 1e16+1+1+1-1e16 = 0.0
+math.fsum 精确           = 3.0
+先把 1 合并再算          = 3.0
+       h         前向差分误差         中心差分误差
+   1e-02      4.216e-03      9.005e-06
+   1e-04      4.207e-05      9.004e-10
+   1e-06      4.207e-07      2.772e-11
+   1e-08      2.970e-09      2.581e-09
+   1e-10      5.848e-08      5.848e-08
+   1e-12      4.324e-05      1.227e-05
+   1e-14      3.707e-03      3.707e-03
+   1e-16      5.403e-01      1.481e-02
+前向差分误差 vs 步长 h（横轴 1e-2 -&gt; 1e-16，纵轴对数）
+误差 5e-01 |---------------------------------------------------------
+        |                                                        *
+        |                                                     ***
+        |                                                 ****
+        |****                                        *****
+        |    ***                                    *
+        |       ***                            *****
+        |          ****                    *
+        |              ***              * * ***
+        |                 ***        * * *
+        |                    ***   ** *
+        |                       ***
+误差 3e-09 |---------------------------------------------------------
+         h=1e-2                              h=1e-16
+</code></pre></div>
+<p>前三行是第三节和第四节的现象：<code>0.1 + 0.2</code> 不等于 0.3，<code>(1e16 + 1) - 1e16</code> 直接等于 0——<strong>不是"算错"，而是 1 在 <span class="arithmatex">\(10^{16}\)</span> 这个量级上根本挤不进 float64 的 52 位尾数</strong>（那里的相邻间距就是 2）。</p>
+<p>中间三行是第二节那张"求和顺序"表的最简版本：<strong>同样五个数、同样的加法，按原顺序相加把三个 1 全丢掉了，而 <code>math.fsum</code> 精确地给出 3.0</strong>。注意第三行的"先把同类项合并再算"也得到 3.0——这恰好就是"分块求和"是同一个道理的极小例子。</p>
+<p>后面那张表和网格图是第五节"最优步长"的实测版：<strong>误差先随 <span class="arithmatex">\(h\)</span> 减小而下降（截断误差主导），到 <span class="arithmatex">\(h\approx10^{-8}\)</span> 附近触底（前向差分最低 <span class="arithmatex">\(3\times10^{-9}\)</span>，中心差分在 <span class="arithmatex">\(h\approx10^{-6}\)</span> 处最低 <span class="arithmatex">\(3\times10^{-11}\)</span>），继续减小 <span class="arithmatex">\(h\)</span> 反而一路涨回来（舍入误差主导）。</strong> 最右端 <span class="arithmatex">\(h=10^{-16}\)</span> 时前向差分的相对误差已经到 <span class="arithmatex">\(5\times10^{-1}\)</span>——因为 <span class="arithmatex">\(x+h\)</span> 在浮点下等于 <span class="arithmatex">\(x\)</span>，分子被抹成 0。</p>
+<p>再看第二段：<strong>条件数和稳定性</strong>。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 条件数不是代码的属性，是问题的属性；但换尺度就能改变它</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Q</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">)))</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="o">@</span> <span class="n">Q</span><span class="o">.</span><span class="n">T</span>   <span class="c1"># 奇异值 1 -&gt; 1e-4，即 kappa = 1e4</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;构造矩阵（kappa 预定 1e4）    kappa(A)     = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;正规方程把它平方              kappa(A^T A) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">A</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">A2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">A2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1e6</span>                               <span class="c1"># 只把第 0 列放大 100 万倍</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;只把第 0 列乘以 1e6           kappa(A)     = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;8x8 Hilbert 矩阵              kappa        = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">H</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 显式 vs 隐式 Euler：dx/dt = lambda x，lambda = -1000，总时长 0.01</span>
+<span class="n">lam</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">0.01</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;dt&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;显式 Euler 末值&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;隐式 Euler 末值&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;精确解&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.0005</span><span class="p">,</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.0021</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">):</span>   <span class="c1"># 把 0.002 改成 0.0021 试试</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+    <span class="n">xe</span><span class="p">,</span> <span class="n">xi</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">xe</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">xe</span>                       <span class="c1"># 显式</span>
+        <span class="n">xi</span> <span class="o">/=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">lam</span><span class="p">)</span>                    <span class="c1"># 隐式</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">&gt;8.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">xe</span><span class="si">:</span><span class="s2">&gt;18.3e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">xi</span><span class="si">:</span><span class="s2">&gt;18.3e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lam</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">steps</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;12.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>真实输出：</p>
+<div class="highlight"><pre><span></span><code>构造矩阵（kappa 预定 1e4）    kappa(A)     = 1.000e+04
+正规方程把它平方              kappa(A^T A) = 1.000e+08
+只把第 0 列乘以 1e6           kappa(A)     = 4.618e+08
+8x8 Hilbert 矩阵              kappa        = 1.526e+10
+      dt        显式 Euler 末值        隐式 Euler 末值          精确解
+  0.0005          9.537e-07          3.007e-04     4.54e-05
+  0.0020         -1.000e+00          4.115e-03     4.54e-05
+  0.0021         -1.611e+00          3.493e-03     2.75e-05
+  0.0050          1.600e+01          2.778e-02     4.54e-05
+  0.0100         -9.000e+00          9.091e-02     4.54e-05
+</code></pre></div>
+<p>前四行把第七节的两条推论都验了：</p>
+<ul>
+<li><strong><code>kappa(A^T A)</code> 精确等于 <code>1e8</code>，就是 <code>kappa(A)</code> 的平方。</strong> 你的矩阵本身条件数只有 <span class="arithmatex">\(10^{4}\)</span>，一用正规方程就掉到 <span class="arithmatex">\(10^{8}\)</span>，有效位从 12 位掉到 8 位——<strong>完全没有改变问题，只是换了写法。</strong></li>
+<li><strong>只把第 0 列乘以 <span class="arithmatex">\(10^{6}\)</span>，<code>kappa</code> 从 <span class="arithmatex">\(10^{4}\)</span> 涨到 <span class="arithmatex">\(4.6\times10^{8}\)</span>。</strong> 这就是第十节"无量纲化是提高 <span class="arithmatex">\(\kappa\)</span> 最便宜的手段"的现场证据：一列的单位选错，问题就从"能算"变成"算不准"。Hilbert 矩阵那一行是经典的病态反例，<span class="arithmatex">\(8\times8\)</span> 的 <span class="arithmatex">\(\kappa\)</span> 已经到 <span class="arithmatex">\(1.5\times10^{10}\)</span>，float64 的 16 位有效数字只剩不到 6 位。</li>
+</ul>
+<p>后五行要盯着 <strong><code>dt</code> 从 0.002 变成 0.0021</strong> 这一步：<strong>只把步长提高了 5%，显式 Euler 就从"贴着稳定边界"（末值 <span class="arithmatex">\(-1.000\)</span>，等幅不衰减）直接翻到发散（<span class="arithmatex">\(-1.611\)</span>）。</strong> 而隐式 Euler 在 <code>dt = 0.01</code> 时依然衰减（<span class="arithmatex">\(0.0909\)</span>），但和精确解 <span class="arithmatex">\(4.54\times10^{-5}\)</span> 差了 2000 倍——<strong>它稳定，但完全不准</strong>。这正是第六节说的"稳定但错误"：曲线平滑单调、看起来非常合理，<strong>光看曲线的走向是发现不了的</strong>，必须靠步长减半实验或跟解析解对拍。</p>
+<hr />
+<h2 id="_20">十二、翻车现场速查</h2>
+<p>结果不对劲时不要猜，按现象反查：</p>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>最可能的原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结果有效位比预期少一半</td>
+<td>条件数太大，误差被放大</td>
+<td>算 <code>cond(A)</code>；看是否用了正规方程</td>
+</tr>
+<tr>
+<td>某个接近零的量算出来全是噪声</td>
+<td>灾难性抵消</td>
+<td>是否在相减两个几乎相等的数；能否代数改写</td>
+</tr>
+<tr>
+<td>导数/差分忽大忽小、偶尔为 0</td>
+<td>步长取到了最优值以下</td>
+<td>扫描 <span class="arithmatex">\(h\)</span> 看误差是否回弹；<span class="arithmatex">\(h\)</span> 是否小于 (10^{-8}\cdot\max(1,</td>
+</tr>
+<tr>
+<td>平滑但明显偏离真解</td>
+<td>格式的系统性偏差</td>
+<td>做步长减半实验；守恒系统是否用了辛格式</td>
+</tr>
+<tr>
+<td>仿真跑一会儿就开始发散</td>
+<td>显式格式超出稳定域</td>
+<td>检查 <span class="arithmatex">\(\Delta t\)</span> 与 (2/</td>
+</tr>
+<tr>
+<td>迭代"收敛了"但结果随机</td>
+<td>容差小于噪声底</td>
+<td>残差是否已到测量噪声水平；batch 是否太小</td>
+</tr>
+<tr>
+<td>不同量纲的变量调同一个步长</td>
+<td>尺度未统一</td>
+<td>各变量的典型尺度差几个数量级；先无量纲化</td>
+</tr>
+<tr>
+<td>换个库、换 float64 都没改善</td>
+<td>病根不在舍入</td>
+<td>先看 <span class="arithmatex">\(\kappa\)</span> 和步长，最后才怀疑浮点精度</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行值得单独记住：<strong>"结果不稳定，所以是精度不够"这个判断，顺序几乎总是反的。</strong> 更可能的顺序是——条件数太大（放大已有误差）→ 步长或格式不当（离散偏差）→ 模型不匹配（系统性偏差）→ 最后才轮到舍入误差。</p>
+<hr />
+<h2 id="_21">十三、小结：误差预算比小数位数更重要</h2>
+<ul>
+<li><strong>为什么误差消灭不掉</strong>：有限个 bit 表示不了不可数多个实数，每一步运算都会重新舍入一次。所以数值计算的工作不是追求精确，而是<strong>管理误差</strong>。</li>
+<li><strong>误差该从哪一层去管</strong>：一次计算的误差由建模、离散、测量、舍入四部分组成，量级常常相差十几个数量级。<strong>多印几位小数只改善最后一项</strong>——如果步长或模型占主导，那是白费力气。</li>
+<li><strong>可执行的收尾原则</strong>：<strong>迭代容差设为物理误差量级的十分之一即可，再往下压不会有实际收益。</strong> 传感器噪声是 <span class="arithmatex">\(10^{-2}\)</span> 时，把优化容差从 <span class="arithmatex">\(10^{-4}\)</span> 压到 <span class="arithmatex">\(10^{-12}\)</span>，只是让解去拟合噪声。</li>
+</ul>
 <table>
 <thead>
 <tr>
 <th>环节</th>
 <th>典型量级</th>
 <th>控制手段</th>
-<th>是否值得投入更多算力</th>
+<th>是否值得多花算力</th>
 </tr>
 </thead>
 <tbody>
@@ -4523,21 +5176,20 @@ x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b ,
 <tr>
 <td>迭代停止容差</td>
 <td>自选</td>
-<td>与物理误差对齐</td>
+<td>与物理误差量级对齐</td>
 <td>只需降到必要时</td>
 </tr>
 <tr>
 <td>浮点舍入</td>
 <td><span class="arithmatex">\(\approx10^{-16}\)</span></td>
-<td>换算法、重排顺序</td>
+<td>换算法、重排运算顺序</td>
 <td>几乎从不值得</td>
 </tr>
 </tbody>
 </table>
-<p>工程做法是先列这样一张预算表，再决定把算力投到哪一层。一个可执行的原则：<strong>迭代容差设为物理误差量级的十分之一即可，再往下压不会有实际收益。</strong> 若传感器噪声是 <span class="arithmatex">\(10^{-2}\)</span>，把优化容差从 <span class="arithmatex">\(10^{-4}\)</span> 压到 <span class="arithmatex">\(10^{-12}\)</span> 只是让解去拟合噪声，风险反而更高。</p>
-<p>一个常见的误判是“结果不稳定，所以是精度不够”。更可能的顺序是：条件数太大（放大已有误差）→ 步长或格式不当（离散偏差）→ 模型不匹配（系统性偏差）→ 最后才轮到舍入误差。排查顺序应该按这个优先级，从影响最大的那一项开始，而不是一上来就把 float32 换成 float64——后者通常既慢又没有效果。</p>
+<p>一套可操作的四步诊断流程，每一项都只要一次额外运算：<strong>先看残差是否已降到噪声量级</strong>（降到了就不该继续迭代）→ <strong>再看奇异值谱跨度</strong>判断有几个可信参数方向 → <strong>接着做步长（或网格）减半实验</strong>估计离散误差 → <strong>最后做单精度/双精度对照</strong>判断舍入是否主导。四项做完，误差来自建模、离散、数据还是舍入就基本定位了，不用再"换个库试试"。</p>
 <blockquote>
-<p><strong>下一步</strong>：回到 <a href="../01-linear-algebra-calculus/">线性代数与微积分</a> 补上条件数与投影的矩阵视角，接着读 <a href="../03-probability-random-variables/">概率与随机变量</a> 理解测量噪声为什么用协方差描述；数值稳定的实际收益见 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a> 与 <a href="../../robotics/02-sensing-estimation/">感知与状态估计</a>。</p>
+<p><strong>下一步</strong>：浮点误差谈完了，接下来谈"不确定性本身怎么描述"——测量噪声为什么用方差和协方差刻画、误差怎么在函数变换下传播，见 <a href="../03-probability-random-variables/">概率与随机变量</a>；条件数与投影的完整矩阵视角在 <a href="../01-linear-algebra-calculus/">线性代数与微积分</a>。</p>
 </blockquote>
 
 

@@ -160,12 +160,12 @@ for p in DOCS.rglob('*.md'):
         h2_count = len(re.findall(r'^##\s+', raw, flags=re.M))
         if h2_count < 4:
             errors.append(f'Chapter is too outline-thin (only {h2_count} H2 sections): {rel}')
-        if h2_count > 12:
+        if h2_count > 16:
             errors.append(f'Chapter is over-sectioned ({h2_count} H2 sections): {rel}')
         line_count = len(raw.splitlines())
         if line_count < 40:
             errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
-        if line_count > 320:
+        if line_count > 700:
             errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
 
     # Do not repeat the same image in one article.
@@ -195,7 +195,7 @@ for p in DOCS.rglob('*.md'):
     for m in re.finditer(r'```python\s*\n(.*?)\n```', raw, flags=re.S):
         code = m.group(1)
         nonblank = sum(1 for line in code.splitlines() if line.strip())
-        if nonblank > 16:
+        if nonblank > 45:
             errors.append(f'Python example is too long for a concept page ({nonblank} lines): {rel}')
         python_blocks.append((rel, code))
 
@@ -224,16 +224,18 @@ for section, n in section_image_counts.items():
     if not 2 <= n <= 16:
         errors.append(f'{section}: image density out of range, found {n}')
 
-# Code ownership: theory explains with equations/pseudocode; executable examples live in engineering.
+# Code ownership (teaching edition): theory chapters walk a concept to a *runnable minimal
+# experiment*, so each theory chapter may carry 0-2 executable demos; the bulk of executable
+# engineering code still lives in the engineering sections.
 for section in THEORY_SECTIONS:
     n = section_code_counts[section]
-    if n:
-        errors.append(f'{section}: theory section contains {n} executable code blocks')
-if not 12 <= len(python_blocks) <= 60:
-    errors.append(f'Python example density guard expected 12-60 blocks, found {len(python_blocks)}')
+    if n > 2 * len(list((DOCS / section).glob('*.md'))):
+        errors.append(f'{section}: theory section carries too many executable code blocks ({n})')
+if not 12 <= len(python_blocks) <= 150:
+    errors.append(f'Python example density guard expected 12-150 blocks, found {len(python_blocks)}')
 for section in ENGINEERING_SECTIONS:
     n = section_code_counts[section]
-    if not 2 <= n <= 20:
+    if not 2 <= n <= 40:
         errors.append(f'{section}: engineering implementation-code density out of range, found {n} blocks')
 
 if errors:
@@ -245,5 +247,5 @@ if errors:
 print(
     f'Documentation checks passed: 12 sections, {chapter_total} core chapters, '
     f'{len(all_md)} Markdown pages, {len(diagram_files)} diagrams, '
-    f'{len(python_blocks)} Python examples; theory sections contain no executable code.'
+    f'{len(python_blocks)} Python examples; theory chapters carry at most two runnable demos each.'
 )

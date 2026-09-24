@@ -1975,7 +1975,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        坐标系与参考框架
+        一、你其实每天都在做这三件事
       
     </span>
   </a>
@@ -1986,7 +1986,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        运动学映射
+        二、最直接的办法为什么不够
       
     </span>
   </a>
@@ -1997,10 +1997,60 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        动力学把质量、惯性和力加入模型
+        三、给"在哪里"配一门语言：齐次变换
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="三、给&#34;在哪里&#34;配一门语言：齐次变换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 一个刚体的位姿只有六个自由度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 为什么要把它们塞进一个矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 顺序为什么不能颠倒（自己推一遍）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 逆变换为什么不是"把 \(t\) 取负"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2008,7 +2058,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        旋转表示的三种形式
+        四、只谈几何会漏掉什么：运动学
       
     </span>
   </a>
@@ -2019,7 +2069,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        雅可比与奇异性
+        五、几何不够用时：把质量和力加进来
       
     </span>
   </a>
@@ -2030,7 +2080,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        差速运动模型
+        六、同一个朝向的三种写法
       
     </span>
   </a>
@@ -2041,10 +2091,49 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        坐标、单位与时间约定
+        七、雅可比与奇异：为什么手臂伸直瞬间会卡住
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="七、雅可比与奇异：为什么手臂伸直瞬间会卡住">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 雅可比就是"关节速度到末端速度"的换算表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-jtop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 力映射为什么用转置 \(J^\top\)（推一遍，别当巧合）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 奇异：分母什么时候变零
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2052,10 +2141,38 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型精度与参数标定
+        八、把它写成机器能跑的：离散形式与内部状态
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="八、把它写成机器能跑的：离散形式与内部状态">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 差速小车的离散更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 到底要存几个数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2063,7 +2180,51 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        变换链的验证方法
+        九、误差从哪来：增长规律决定你该标什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、怎么相信一条变换链：几个自检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍：把误差和在奇异附近的表现看出来
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：三句话回答三件事
       
     </span>
   </a>
@@ -3688,7 +3849,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        坐标系与参考框架
+        一、你其实每天都在做这三件事
       
     </span>
   </a>
@@ -3699,7 +3860,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        运动学映射
+        二、最直接的办法为什么不够
       
     </span>
   </a>
@@ -3710,10 +3871,60 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        动力学把质量、惯性和力加入模型
+        三、给"在哪里"配一门语言：齐次变换
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="三、给&#34;在哪里&#34;配一门语言：齐次变换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 一个刚体的位姿只有六个自由度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 为什么要把它们塞进一个矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 顺序为什么不能颠倒（自己推一遍）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 逆变换为什么不是"把 \(t\) 取负"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3721,7 +3932,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        旋转表示的三种形式
+        四、只谈几何会漏掉什么：运动学
       
     </span>
   </a>
@@ -3732,7 +3943,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        雅可比与奇异性
+        五、几何不够用时：把质量和力加进来
       
     </span>
   </a>
@@ -3743,7 +3954,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        差速运动模型
+        六、同一个朝向的三种写法
       
     </span>
   </a>
@@ -3754,10 +3965,49 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        坐标、单位与时间约定
+        七、雅可比与奇异：为什么手臂伸直瞬间会卡住
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="七、雅可比与奇异：为什么手臂伸直瞬间会卡住">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 雅可比就是"关节速度到末端速度"的换算表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-jtop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 力映射为什么用转置 \(J^\top\)（推一遍，别当巧合）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 奇异：分母什么时候变零
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3765,10 +4015,38 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型精度与参数标定
+        八、把它写成机器能跑的：离散形式与内部状态
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="八、把它写成机器能跑的：离散形式与内部状态">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 差速小车的离散更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 到底要存几个数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3776,7 +4054,51 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        变换链的验证方法
+        九、误差从哪来：增长规律决定你该标什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、怎么相信一条变换链：几个自检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、跑一遍：把误差和在奇异附近的表现看出来
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：三句话回答三件事
       
     </span>
   </a>
@@ -3875,29 +4197,67 @@
 
 
 <h1 id="models-kinematics-dynamics">Models, Kinematics &amp; Dynamics</h1>
-<p>机器人要在真实世界运动，至少要解决三件事：<strong>它在哪里、它会怎样运动、要产生这种运动需要什么力或力矩。</strong> 坐标系、运动学和动力学分别对应这三个层次，而模型精度决定了这三个层次的答案能信到什么程度。</p>
-<p>初学者最容易犯的错误是“混层求解”：用运动学去回答力的问题（比如想问电机扭矩却只算了轨迹），或者用动力学去回答几何问题（明明只关心末端位置却先建了完整惯性矩阵）。正确的做法是先判断任务处在哪一层，再决定模型的复杂度。</p>
+<blockquote>
+<p>这一章的三件事，你在电话里给朋友指路时其实全都做过，只是没说成公式。读完你应该能自己推出三件事：为什么"目标在 (2,1)"这句话根本不完整、为什么机械臂把手臂伸直的那一瞬间会卡住、以及为什么标定了轮径仍然不够。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、你其实每天都在做这三件事</h2>
+<p>你在电话里给朋友指路。三句话，藏着三种不同的信息：</p>
+<ol>
+<li>"从你现在的路口往东走 200 米。" —— 先说清<strong>他站在哪、哪个方向叫东</strong>。这是"在哪里"。</li>
+<li>"到了之后右转，再走两个路口。" —— 只描述<strong>他怎么动</strong>，没提他多重、骑车还是走路。这是"怎么动"。</li>
+<li>"最后那扇铁门很重，你得使劲推。" —— 第一次出现<strong>力</strong>。这是"要多大劲"。</li>
+</ol>
+<p>把这三句翻译成机器人学的词，就是<strong>坐标系、运动学、动力学</strong>。它们不是三个学科名字，而是你指路时自然分出的三层。<strong>后面所有公式，只是把这三句话写严。</strong></p>
+<p>最容易犯的错不是算错，而是<strong>混层</strong>：把第 2 句和第 3 句揉成一句——"右转再走两个路口要花 50 牛"。朋友会懵，因为你从没告诉他车有多重。工程上对应的错误是：想问电机扭矩，却只算了轨迹（拿运动学去答力的问题）；或者只关心末端位置，却先建了完整惯性矩阵（拿动力学去答几何问题）。<strong>先判断任务在哪一层，再决定模型建多细。</strong></p>
+<hr />
+<h2 id="_2">二、最直接的办法为什么不够</h2>
+<p>最直接的做法是照着说："目标在 (2,1)。" 这句话会在哪坏掉？你自己推一遍：</p>
+<ul>
+<li>你在<strong>楼上阳台</strong>说的，朋友在<strong>马路对面</strong>——这个 (2,1) 是相对谁量的？</li>
+<li>你说"往东"，可朋友此刻面朝西，他的"东"是你说的那个东吗？</li>
+</ul>
+<p>放到机器人身上，一个具体场面：相机看到了一个孔，它落在图像中心，于是程序里得到"目标是 (0,0)"。这个 (0,0) 是在<strong>相机坐标系</strong>里的。如果你拿底盘坐标系直接去驱动机械臂，它会朝一个完全错误的方向伸手——孔明明在正前方，手臂却往左摸。</p>
+<p>所以缺的不是一个更准的数，而是<strong>两样东西</strong>：这串数属于哪个坐标系（frame），以及坐标系之间怎么换算。把这两样补上，就叫<strong>变换</strong>。</p>
 <figure>
   <img alt="机器人建模栈：坐标系 → 运动学 → 动力学。" src="../../assets/diagrams/robot-stack.svg" />
 <br />
 <figcaption>模型栈自下而上分层：坐标系给出语言，运动学给出几何，动力学给出因果。</figcaption>
 </figure>
-<h2 id="_1">坐标系与参考框架</h2>
-<p>同一个点可以在相机坐标系、机器人底盘坐标系和地图坐标系下得到完全不同的数值。机器人系统因此不会只说“目标在 <span class="arithmatex">\((2,1)\)</span>”，而要说明“目标在 camera frame 还是 map frame”。</p>
-<p>刚体位姿通常由旋转 <span class="arithmatex">\(R\)</span> 和平移 <span class="arithmatex">\(t\)</span> 表示，齐次变换写成</p>
+<hr />
+<h2 id="_3">三、给"在哪里"配一门语言：齐次变换</h2>
+<h3 id="31">3.1 一个刚体的位姿只有六个自由度</h3>
+<p>把一本书放到桌上，你其实做了两步：先把它<strong>转一个朝向</strong>，再把它<strong>推到某个位置</strong>。朝向和位置是两类不同的信息：</p>
+<ul>
+<li>位置：3 个数（<span class="arithmatex">\(t \in \mathbb R^3\)</span>）；</li>
+<li>朝向：3 个数（旋转 <span class="arithmatex">\(R \in SO(3)\)</span>，第六节会讲为什么它写起来常常是 9 个数）。</li>
+</ul>
+<p>于是"这本书在哪"一共 6 个数，这叫 6 个自由度（DoF）。</p>
+<h3 id="32">3.2 为什么要把它们塞进一个矩阵</h3>
+<p>如果把旋转和平移分开存，"从 A 到 B 再到 C"就要写两套乘法，极容易写错。<strong>齐次变换</strong>把两者合成一个 4×4 矩阵：</p>
 <div class="arithmatex">\[
-T=\begin{bmatrix}R&amp;t\\ \mathbf 0^\top &amp;1\end{bmatrix},
+T=\begin{bmatrix}R&amp;t\\ \mathbf 0^\top &amp;1\end{bmatrix}.
 \]</div>
-<p>其中 <span class="arithmatex">\(R\in SO(3)\)</span> 满足 <span class="arithmatex">\(R^\top R=I\)</span> 且 <span class="arithmatex">\(\det R=1\)</span>。若已知 <span class="arithmatex">\(T^A_B\)</span> 和 <span class="arithmatex">\(T^B_C\)</span>，则</p>
+<p>它唯一的好处，但足以决定一切：<strong>一串变换可以直接连乘</strong>。若 <span class="arithmatex">\(T^A_B\)</span> 表示"B 坐标系在 A 坐标系中的位姿"，则</p>
 <div class="arithmatex">\[
 T^A_C=T^A_B\,T^B_C.
 \]</div>
-<p>这条链式关系就是机器人 TF 系统的数学基础。它的逆变换有闭式解：</p>
+<p>这正是机器人 TF（transform）系统的数学基础：每个传感器、每个连杆都是链条上的一节，末端位姿就是把沿链条的矩阵乘起来。</p>
+<h3 id="33">3.3 顺序为什么不能颠倒（自己推一遍）</h3>
+<p>别背"先旋转后平移"，推一下。一个点 <span class="arithmatex">\(p\)</span> 从局部坐标系变到目标坐标系是</p>
 <div class="arithmatex">\[
-\left(T^A_B\right)^{-1}=\begin{bmatrix}R^\top&amp;-R^\top t\\ \mathbf 0^\top&amp;1\end{bmatrix},
+p' = R\,p + t.
 \]</div>
-<p>注意<strong>不是</strong>简单地把 <span class="arithmatex">\(t\)</span> 取负——外参写反是机器人调试中最常见的“方向颠倒”错误来源。</p>
-<p>工程上常见的坐标系及其职责：</p>
+<p>取 <span class="arithmatex">\(p=(1,0)\)</span>、先转 <span class="arithmatex">\(90^\circ\)</span>、再平移 <span class="arithmatex">\((10,0)\)</span>：先转得 <span class="arithmatex">\(R p=(0,1)\)</span>，再加平移得 <span class="arithmatex">\((10,1)\)</span>。
+把顺序倒过来（先平移再旋转）：先得 <span class="arithmatex">\((1,0)+(10,0)=(11,0)\)</span>，再转 <span class="arithmatex">\(90^\circ\)</span> 得 <span class="arithmatex">\((0,11)\)</span>。</p>
+<p><strong><span class="arithmatex">\((10,1)\)</span> 和 <span class="arithmatex">\((0,11)\)</span> 是完全不同的位置。顺序错了不是精度问题，是方向问题。</strong></p>
+<h3 id="34-t">3.4 逆变换为什么不是"把 <span class="arithmatex">\(t\)</span> 取负"</h3>
+<p>既然 <span class="arithmatex">\(T\)</span> 的语义是"先转再移"，它的逆就是"反过来"。令 <span class="arithmatex">\(T^{-1}T=I\)</span> 解一遍：要消掉 <span class="arithmatex">\(Rp+t\)</span>，先减 <span class="arithmatex">\(t\)</span>，再乘 <span class="arithmatex">\(R^\top\)</span>（因为 <span class="arithmatex">\(R^\top R=I\)</span>），于是</p>
+<div class="arithmatex">\[
+\left(T^A_B\right)^{-1}=\begin{bmatrix}R^\top&amp;-R^\top t\\ \mathbf 0^\top&amp;1\end{bmatrix}.
+\]</div>
+<p>注意平移那块是 <span class="arithmatex">\(-R^\top t\)</span>，<strong>不是</strong> <span class="arithmatex">\(-t\)</span>。这是外参调试里"方向颠倒"错误最主要的来源：很多人在代码里把平移取负就当逆变换，只要 <span class="arithmatex">\(R\neq I\)</span> 就错了。</p>
+<p>工程上常见的坐标系及职责：</p>
 <table>
 <thead>
 <tr>
@@ -3940,24 +4300,28 @@ T^A_C=T^A_B\,T^B_C.
 </tr>
 </tbody>
 </table>
-<p>在工程层，一个二维坐标变换的小例子可以把“先旋转、再平移”的顺序固定下来：</p>
+<p>把它写成两行能跑的代码，把"先转后移"钉死：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">transform_point</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">,</span> <span class="n">yaw</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;把局部点 (px,py) 变到目标坐标系；yaw 是逆时针角度（弧度）。&quot;&quot;&quot;</span>
     <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">yaw</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">yaw</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">px</span> <span class="o">-</span> <span class="n">s</span> <span class="o">*</span> <span class="n">py</span> <span class="o">+</span> <span class="n">tx</span><span class="p">,</span> <span class="n">s</span> <span class="o">*</span> <span class="n">px</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">py</span> <span class="o">+</span> <span class="n">ty</span>
 </code></pre></div>
-<p>这里输入点位于局部坐标系，<code>tx, ty, yaw</code> 描述该坐标系相对目标坐标系的位姿。实际系统还要同时传递 frame 名称和时间戳。</p>
-<h2 id="_2">运动学映射</h2>
-<p>运动学不考虑质量和受力，只研究几何关系。对差速小车，左右轮线速度为 <span class="arithmatex">\(v_l,v_r\)</span>，轮距为 <span class="arithmatex">\(L\)</span>，车体线速度和角速度近似为</p>
+<p><code>tx, ty, yaw</code> 描述的是"局部坐标系相对目标坐标系的位姿"。真实系统里还要同时传 frame 名字和时间戳——否则你也不知道拿到的 <span class="arithmatex">\((10,1)\)</span> 是哪一刻的。</p>
+<h2 id="_4">四、只谈几何会漏掉什么：运动学</h2>
+<p>运动学只研究<strong>几何关系</strong>，完全不管质量和力。</p>
+<p><strong>差速小车</strong>：左右轮线速度 <span class="arithmatex">\(v_l, v_r\)</span>，轮距 <span class="arithmatex">\(L\)</span>。车体速度能从两个轮子直接推出来：</p>
+<ul>
+<li>车体在中间，速度是两侧的"平均"：<span class="arithmatex">\(v=\dfrac{v_r+v_l}{2}\)</span>；</li>
+<li>角速度来自两侧的速度差：<span class="arithmatex">\(\Delta t\)</span> 内两侧走过的弧长差是 <span class="arithmatex">\((v_r-v_l)\Delta t\)</span>，除以半轮距就是转过的角度，故 <span class="arithmatex">\(\omega=\dfrac{v_r-v_l}{L}\)</span>。</li>
+</ul>
 <div class="arithmatex">\[
 v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
 \]</div>
-<p>因此两轮同速时直行，速度不同则转弯。对机械臂，关节变量 <span class="arithmatex">\(q\)</span> 通过正运动学映射到末端位姿；Jacobian 则描述关节速度和末端速度的局部关系</p>
-<div class="arithmatex">\[
-\dot x=J(q)\dot q.
-\]</div>
-<p>这两层的分工可以明确列表：</p>
+<p>两轮同速直行，速度不同就转弯——完全不需要质量信息。</p>
+<p><strong>机械臂</strong>：关节变量 <span class="arithmatex">\(q\)</span> 通过正运动学映射到末端位姿；关节速度与末端速度之间是局部线性的，<span class="arithmatex">\(\dot x=J(q)\dot q\)</span>。这个 <span class="arithmatex">\(J\)</span> 就是第七节的主角。</p>
+<p>几何能回答什么、不能回答什么，列清楚：</p>
 <table>
 <thead>
 <tr>
@@ -3999,14 +4363,21 @@ v=\frac{v_r+v_l}{2},\qquad \omega=\frac{v_r-v_l}{L}.
 </tr>
 </tbody>
 </table>
-<p>运动学回答的是“怎么动”，不是“为什么能这样动”。当任务对速度或负载敏感时，运动学给出的答案会系统性偏差，且偏差随速度平方增长。</p>
-<h2 id="_3">动力学把质量、惯性和力加入模型</h2>
-<p>当控制任务需要考虑加速度、负载或高速运动时，只靠运动学就不够。机械系统常写成</p>
+<p>一句话：运动学回答"怎么动"，不回答"为什么能这样动"。</p>
+<h2 id="_5">五、几何不够用时：把质量和力加进来</h2>
+<p>什么时候非要动力学？自己推一个场景：让机械臂"沿这条轨迹走"。纯几何能告诉你每个关节该转到多少度，可你照这个角度发指令，<strong>它没动到位</strong>。为什么？因为你从没告诉控制器要出多大力，而力取决于质量、负载和速度。</p>
+<p>生活类比：推购物车。空车和装满了水，同样的"向前推"，反应完全不同。几何里根本没有"车有多重"这一项。</p>
+<p>所以要把质量、惯量、力显式写进来，得到动力学方程：</p>
 <div class="arithmatex">\[
-M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
+M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau ,
 \]</div>
-<p>其中 <span class="arithmatex">\(M(q)\in\mathbb R^{n\times n}\)</span> 表示惯性矩阵（对称正定，<span class="arithmatex">\(n\)</span> 为自由度数），<span class="arithmatex">\(C(q,\dot q)\dot q\)</span> 表示科氏力与离心力项，<span class="arithmatex">\(g(q)\)</span> 表示重力项，<span class="arithmatex">\(\tau\)</span> 是执行器力矩。</p>
-<p>每一项的量级决定了控制难度：低速时 <span class="arithmatex">\(M\ddot q\)</span> 与 <span class="arithmatex">\(C\dot q\)</span> 都可忽略，只剩 <span class="arithmatex">\(g(q)\)</span>，所以简单的 PD + 重力补偿就能稳定；高速时 <span class="arithmatex">\(C(q,\dot q)\dot q\)</span> 随 <span class="arithmatex">\(\dot q^2\)</span> 增长，若忽略它，跟踪误差会随速度平方上升。举个数值感受：二连杆臂在关节速度 5 rad/s 时离心项可能占总力矩的 20%–40%，而 1 rad/s 时不到 3%。</p>
+<p><span class="arithmatex">\(M(q)\)</span> 是惯性矩阵（对称正定，<span class="arithmatex">\(n\times n\)</span>，<span class="arithmatex">\(n\)</span> 为自由度数），<span class="arithmatex">\(C(q,\dot q)\dot q\)</span> 汇合科氏力与离心力，<span class="arithmatex">\(g(q)\)</span> 是重力项，<span class="arithmatex">\(\tau\)</span> 是执行器力矩。逐项对一遍直觉：</p>
+<ul>
+<li><span class="arithmatex">\(M(q)\ddot q\)</span>：就是 <span class="arithmatex">\(F=ma\)</span> 里的 <span class="arithmatex">\(ma\)</span>，只是多关节时每个关节的等效质量随姿态变化；</li>
+<li><span class="arithmatex">\(C(q,\dot q)\dot q\)</span>：转得快时"甩出去"的那部分力。<strong>它为什么随 <span class="arithmatex">\(\dot q^2\)</span> 长？</strong> 因为离心加速度本身就是 <span class="arithmatex">\(\omega^2 r\)</span>，再乘臂长得到力矩，所以 <span class="arithmatex">\(\propto\omega^2\)</span>；</li>
+<li><span class="arithmatex">\(g(q)\)</span>：静止时也要顶住的重力。哪怕 <span class="arithmatex">\(\dot q=\ddot q=0\)</span>，输出也必须非零。</li>
+</ul>
+<p>给个可验算的例子：末端质量 <span class="arithmatex">\(m=2\)</span> kg、臂长 <span class="arithmatex">\(l=0.5\)</span> m。<span class="arithmatex">\(\omega=1\)</span> rad/s 时离心力 <span class="arithmatex">\(F=m\omega^2 r=2\times1\times0.5=1\)</span> N（力矩 <span class="arithmatex">\(0.5\)</span> N·m）；<span class="arithmatex">\(\omega=5\)</span> rad/s 时 <span class="arithmatex">\(F=2\times25\times0.5=25\)</span> N（力矩 <span class="arithmatex">\(12.5\)</span> N·m）——<strong>同一个动作，快了 5 倍，力矩涨了 25 倍。</strong> 所以低速导航用运动学就够，高速轨迹控制必须上动力学。</p>
 <table>
 <thead>
 <tr>
@@ -4040,7 +4411,7 @@ M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
 <td>重力补偿</td>
 </tr>
 <tr>
-<td>摩擦项 <span class="arithmatex">\(F_v\dot q+F_c\text{sgn}(\dot q)\)</span></td>
+<td>摩擦 <span class="arithmatex">\(F_v\dot q+F_c\mathrm{sgn}(\dot q)\)</span></td>
 <td>黏滞 + 库仑</td>
 <td>线性 + 常量</td>
 <td>低速爬行、死区</td>
@@ -4048,13 +4419,16 @@ M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
 </tr>
 </tbody>
 </table>
-<p>移动机器人低速导航时，简单运动学模型往往已经够用；机械臂高速轨迹控制、无人机姿态控制则更依赖动力学。<strong>模型复杂度要由任务决定。</strong></p>
-<h2 id="_4">旋转表示的三种形式</h2>
-<p>姿态是机器人学里最容易出错的部分，因为同一个旋转可以写成完全不同的数值。三种主流表示各有明确的适用边界。</p>
-<p><strong>欧拉角</strong>：用三个角 <span class="arithmatex">\((\phi,\theta,\psi)\)</span> 表示，通常是绕固定轴或体轴的顺序旋转。它的优点是直观、维数最少（3）；缺点是存在<strong>万向锁（gimbal lock）</strong>：当中间角 <span class="arithmatex">\(\theta=\pm90°\)</span> 时，第一和第三旋转轴重合，雅可比秩下降，逆解不唯一。</p>
-<p><strong>旋转矩阵</strong>：<span class="arithmatex">\(R\in SO(3)\)</span>，9 个分量、6 个独立约束。优点是线性、可复合、无奇异；缺点是冗余（9 个数描述 3 个自由度），需要正交化才能保持 <span class="arithmatex">\(R^\top R=I\)</span>。</p>
-<p><strong>四元数</strong>：<span class="arithmatex">\(q=(w,x,y,z)\)</span>，单位四元数满足 <span class="arithmatex">\(\|q\|=1\)</span>，4 个数、1 个约束。优点是无奇异、插值平滑（SLERP）；缺点是符号二义性（<span class="arithmatex">\(q\)</span> 与 <span class="arithmatex">\(-q\)</span> 表示同一旋转），直接线性插值会失真。</p>
-<p>三种表示的关键对比：</p>
+<h2 id="_6">六、同一个朝向的三种写法</h2>
+<p>"朝向"是机器人里最容易出错的部分，因为同一个旋转可以写成完全不同的一组数。</p>
+<ul>
+<li><strong>欧拉角</strong>：三个角 <span class="arithmatex">\((\phi,\theta,\psi)\)</span>。最直观、数最少（3 个），但有<strong>万向锁</strong>。</li>
+<li><strong>旋转矩阵</strong>：<span class="arithmatex">\(R\in SO(3)\)</span>，9 个数。能直接连乘、无奇异，但 9 个数描述 3 个自由度，太"胖"。</li>
+<li><strong>四元数</strong>：<span class="arithmatex">\(q=(w,x,y,z)\)</span>，4 个数。无奇异、插值平滑，但 <span class="arithmatex">\(q\)</span> 与 <span class="arithmatex">\(-q\)</span> 表示同一个旋转。</li>
+</ul>
+<p><strong>万向锁不是数学事故，是可以自己推出来的。</strong> 想象你手里拿个罗盘：先让盘面"朝北"，再"抬头 90° 看天"。这时你会发现，"左右摆罗盘"和"让罗盘自转"变成了<strong>同一个动作</strong>——两个原本独立的旋钮并成了一个，你丢了一个自由度。写成角就是：中间角 <span class="arithmatex">\(\theta=\pm90°\)</span> 时，第一和第三个转轴重合，逆解不再唯一。</p>
+<p>至于旋转矩阵为什么"胖"，数约束就清楚：<span class="arithmatex">\(R^\top R=I\)</span> 给出 6 个独立方程，所以 9 个数里只有 <span class="arithmatex">\(9-6=3\)</span> 个是自由的。</p>
+<p>三种写法对比：</p>
 <table>
 <thead>
 <tr>
@@ -4093,34 +4467,56 @@ M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau,
 </tr>
 </tbody>
 </table>
-<p>从旋转矩阵到四元数的转换（数值上最稳健的写法之一）：</p>
+<p>从旋转矩阵到四元数（数值上最稳健的写法之一）：</p>
 <div class="arithmatex">\[
 w=\tfrac12\sqrt{1+R_{11}+R_{22}+R_{33}},\quad
 x=\frac{R_{32}-R_{23}}{4w},\quad
 y=\frac{R_{13}-R_{31}}{4w},\quad
 z=\frac{R_{21}-R_{12}}{4w}.
 \]</div>
-<p>当 <span class="arithmatex">\(w\to0\)</span>（旋转接近 <span class="arithmatex">\(180°\)</span>）时该公式数值不稳，必须改用最大对角元分支。这个细节说明：<strong>没有一种表示在所有场景下都安全，切换表示本身就要处理边界情形。</strong></p>
-<p>捷联积分的误差量级可以作为选型判据：IMU 在 200 Hz 下用一阶欧拉积分，姿态漂移典型 <span class="arithmatex">\(0.5°\text{–}2°/s\)</span>；用四元数积分 + 归一化可降到 <span class="arithmatex">\(0.05°\text{–}0.2°/s\)</span>；用旋转矩阵则需要每步正交化，否则误差累积更快。因此<strong>姿态积分优先用四元数，变换链优先用齐次矩阵</strong>。</p>
-<h2 id="_5">雅可比与奇异性</h2>
-<p>Jacobian 把关节速度线性映射到末端速度：</p>
+<p><strong>它自己就带着一个坑</strong>：<span class="arithmatex">\(w\to0\)</span>（旋转接近 <span class="arithmatex">\(180°\)</span>）时这个公式在除以近零的数，数值会炸开，必须改用"最大对角元"分支。所以没有一种表示在所有场景都安全——<strong>切换表示本身就要处理边界</strong>。</p>
+<p>选型判据也用误差说话：IMU 在 200 Hz 下，一阶欧拉积分姿态漂移典型 <span class="arithmatex">\(0.5°\text{–}2°/s\)</span>；四元数积分 + 归一化可降到 <span class="arithmatex">\(0.05°\text{–}0.2°/s\)</span>；旋转矩阵若不每步正交化则累积更快。<strong>姿态积分优先四元数，变换链优先齐次矩阵。</strong></p>
+<h2 id="_7">七、雅可比与奇异：为什么手臂伸直瞬间会卡住</h2>
+<h3 id="71">7.1 雅可比就是"关节速度到末端速度"的换算表</h3>
+<p>关节转一点，末端动一点，这个比例写成矩阵就是 <strong>Jacobian</strong>：</p>
 <div class="arithmatex">\[
 \dot x=J(q)\dot q,\qquad J(q)\in\mathbb R^{m\times n},
 \]</div>
-<p>其中 <span class="arithmatex">\(m\)</span> 是任务空间维数（平面任务 3，空间任务 6），<span class="arithmatex">\(n\)</span> 是关节数。对平面二连杆臂，<span class="arithmatex">\(J\)</span> 可显式写出：</p>
+<p><span class="arithmatex">\(m\)</span> 是任务空间维数（平面任务 3，空间任务 6），<span class="arithmatex">\(n\)</span> 是关节数。对平面二连杆臂，<span class="arithmatex">\(J\)</span> 能直接写出：</p>
 <div class="arithmatex">\[
 J(q)=\begin{bmatrix}-l_1\sin q_1-l_2\sin(q_1+q_2) &amp; -l_2\sin(q_1+q_2)\\ l_1\cos q_1+l_2\cos(q_1+q_2) &amp; l_2\cos(q_1+q_2)\end{bmatrix}.
 \]</div>
-<p>由此得到两条实用推论：</p>
-<ul>
-<li><strong>力映射是对偶的</strong>：<span class="arithmatex">\(\tau=J^\top(q)F\)</span>。把末端外力 <span class="arithmatex">\(F\)</span> 换算成关节力矩时用的是 <span class="arithmatex">\(J^\top\)</span>，这不是巧合，而是虚功原理的直接结果；</li>
-<li><strong>逆解在奇异位形失效</strong>：由 <span class="arithmatex">\(\dot q=J^{-1}(q)\dot x\)</span>（方阵情形）可见，当 <span class="arithmatex">\(\det J(q)\to0\)</span>，同样的末端速度需要趋于无穷的关节速度。</li>
-</ul>
+<h3 id="72-jtop">7.2 力映射为什么用转置 <span class="arithmatex">\(J^\top\)</span>（推一遍，别当巧合）</h3>
+<p>末端受一个外力 <span class="arithmatex">\(F\)</span>，要换算成关节力矩 <span class="arithmatex">\(\tau\)</span>。用<strong>虚功</strong>推：末端做一点虚位移 <span class="arithmatex">\(\delta x\)</span>，做功是 <span class="arithmatex">\(F^\top\delta x\)</span>；而 <span class="arithmatex">\(\delta x=J\delta q\)</span>，所以 <span class="arithmatex">\(F^\top\delta x=F^\top J\delta q=(J^\top F)^\top\delta q\)</span>。这部分功必须等于关节端做的功 <span class="arithmatex">\(\tau^\top\delta q\)</span>，于是</p>
+<div class="arithmatex">\[
+\tau=J^\top(q)F.
+\]</div>
+<p>这不是巧合，是"功必须相等"逼出来的——速度用 <span class="arithmatex">\(J\)</span>、力用 <span class="arithmatex">\(J^\top\)</span>，两者对偶。</p>
+<h3 id="73">7.3 奇异：分母什么时候变零</h3>
+<p>对二连杆（<span class="arithmatex">\(J\)</span> 是 2×2），行列式能算成 <span class="arithmatex">\(\det J=l_1 l_2\sin q_2\)</span>。于是一个事实自己浮出来：</p>
+<div class="arithmatex">\[
+\det J=0 \quad\Longleftrightarrow\quad q_2=0 \ \text{或}\ \pi .
+\]</div>
+<p><span class="arithmatex">\(q_2=0\)</span> 正是<strong>手臂完全伸直</strong>。再看逆解 <span class="arithmatex">\(\dot q=J^{-1}\dot x\)</span>：分母 <span class="arithmatex">\(\det J\to0\)</span> 时，同样的末端速度需要<strong>趋于无穷</strong>的关节速度。这就是"伸直那一瞬间卡住、抖动"的数学原因。</p>
 <p>奇异性的定量度量是<strong>可操作度</strong>：</p>
 <div class="arithmatex">\[
 w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
 \]</div>
-<p><span class="arithmatex">\(w\to0\)</span> 即为奇异位形。几何上它对应“所有关节运动都无法让末端沿某个方向移动”的构形。可操作度还能用奇异值解释：<span class="arithmatex">\(J\)</span> 的最小奇异值 <span class="arithmatex">\(\sigma_{\min}\)</span> 越小，末端在对应方向上的可控速度越弱。</p>
+<p><span class="arithmatex">\(w\to0\)</span> 就是奇异位形。工程上的标准解法是阻尼最小二乘（DLS），在分母上加一个 <span class="arithmatex">\(\lambda^2\)</span>：</p>
+<div class="arithmatex">\[
+\dot q=J^\top\big(JJ^\top+\lambda^2 I\big)^{-1}\dot x,
+\]</div>
+<p><span class="arithmatex">\(\lambda\)</span> 一般取 <span class="arithmatex">\(10^{-3}\text{–}10^{-1}\)</span>：太小压不住尖峰，太大引入跟踪误差。<strong>这就是"奇异附近用精度换稳定"的范式。</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dls_step</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">manipulability</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)))</span>
+</code></pre></div>
+<p>还有一个廉价技巧：慢速通过奇异区时，若 <span class="arithmatex">\(w(q)&lt;w_{th}\)</span>，把末端速度按比例缩放 <span class="arithmatex">\(\dot x\leftarrow \dot x\cdot w(q)/w_{th}\)</span>，让轨迹自然减速而不是跳变。</p>
 <table>
 <thead>
 <tr>
@@ -4133,7 +4529,7 @@ w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
 <tbody>
 <tr>
 <td>边界奇异</td>
-<td>臂完全伸展</td>
+<td>臂完全伸展（<span class="arithmatex">\(q_2=0\)</span>）</td>
 <td>末端无法继续外伸</td>
 <td>规划阶段避开工作空间边界</td>
 </tr>
@@ -4151,31 +4547,17 @@ w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
 </tr>
 </tbody>
 </table>
-<p>工程上的标准解法是阻尼最小二乘：</p>
-<div class="arithmatex">\[
-\dot q=J^\top\big(JJ^\top+\lambda^2 I\big)^{-1}\dot x,
-\]</div>
-<p><span class="arithmatex">\(\lambda\)</span> 一般取 <span class="arithmatex">\(10^{-3}\text{–}10^{-1}\)</span> 之间的值：太小无法抑制尖峰，太大会引入末端跟踪误差。这条公式是“奇异附近用牺牲精度换稳定”的典型范式。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">dls_step</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">manipulability</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)))</span>
-</code></pre></div>
-<p>慢速通过奇异区还有一个廉价技巧：在 <span class="arithmatex">\(w(q)&lt;w_{th}\)</span> 时按比例缩放末端速度，即 <span class="arithmatex">\(\dot x\leftarrow\dot x\cdot w(q)/w_{th}\)</span>，让轨迹在奇异附近自然减速而不是跳变。</p>
-<h2 id="_6">差速运动模型</h2>
-<p>二维差速车位姿为 <span class="arithmatex">\((x,y,\theta)\)</span>，在短时间 <span class="arithmatex">\(\Delta t\)</span> 内可近似更新为</p>
+<h2 id="_8">八、把它写成机器能跑的：离散形式与内部状态</h2>
+<h3 id="81">8.1 差速小车的离散更新</h3>
+<p>二维差速车位姿为 <span class="arithmatex">\((x,y,\theta)\)</span>。最省事的写法是<strong>前向欧拉</strong>，把 <span class="arithmatex">\(\theta\)</span> 固定在区间起点：</p>
 <div class="arithmatex">\[
 \begin{aligned}
-x_{k+1}&amp;=x_k+v\cos\theta_k\Delta t,\\
-y_{k+1}&amp;=y_k+v\sin\theta_k\Delta t,\\
-\theta_{k+1}&amp;=\theta_k+\omega\Delta t.
+x_{k+1}&amp;=x_k+v\cos\theta_k\,\Delta t,\\
+y_{k+1}&amp;=y_k+v\sin\theta_k\,\Delta t,\\
+\theta_{k+1}&amp;=\theta_k+\omega\,\Delta t.
 \end{aligned}
 \]</div>
-<p>这个写法把 <span class="arithmatex">\(\theta\)</span> 固定在区间起点，因此当 <span class="arithmatex">\(\omega\)</span> 较大时误差不可忽略。严格解是圆弧积分：</p>
+<p>它坏在哪？<strong>它假设整个 <span class="arithmatex">\(\Delta t\)</span> 里朝向不变，可实际上车一直在转。</strong> 严格解是圆弧积分：</p>
 <div class="arithmatex">\[
 \begin{aligned}
 x_{k+1}&amp;=x_k+\frac{v}{\omega}\big(\sin(\theta_k+\omega\Delta t)-\sin\theta_k\big),\\
@@ -4183,7 +4565,7 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
 \theta_{k+1}&amp;=\theta_k+\omega\Delta t.
 \end{aligned}
 \]</div>
-<p>两者在 <span class="arithmatex">\(\omega\to0\)</span> 时一致（需要洛必达处理）。误差量级判据：当 <span class="arithmatex">\(\omega\Delta t&lt;0.05\)</span> rad 时一阶近似相对误差 <span class="arithmatex">\(&lt;0.1\%\)</span>；当 <span class="arithmatex">\(\omega\Delta t=0.3\)</span> rad（约 <span class="arithmatex">\(17°\)</span>）时位置误差可达厘米级。因此低速导航用一阶近似，快速转向必须用圆弧模型或更小步长。</p>
+<p>两者在 <span class="arithmatex">\(\omega\to0\)</span> 时一致（要用洛必达处理）。一阶近似每步拿一条<strong>弦</strong>去代替一段<strong>弧</strong>，单步误差 <span class="arithmatex">\(\propto v\,\omega\,\Delta t^2\)</span>，累积到一个固定时长后，终点偏差随 <span class="arithmatex">\(\Delta t\)</span> <strong>线性</strong>下降——这正是第十一节量到的。<strong>所以低速导航用一阶近似，快速转向要么改用圆弧模型，要么把 <span class="arithmatex">\(\Delta t\)</span> 压小。</strong></p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">diff_drive_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">vl</span><span class="p">,</span> <span class="n">vr</span><span class="p">,</span> <span class="n">wheel_base</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
@@ -4193,7 +4575,14 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
             <span class="n">y</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">yaw</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span>
             <span class="n">yaw</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
 </code></pre></div>
-<p>这段代码没有考虑轮胎打滑、执行器动态和地形，因此适合低速平面运动，不应被当成真实车辆的完整物理模型。</p>
+<h3 id="82">8.2 到底要存几个数</h3>
+<p>把"内部状态"数清楚，能避掉很多隐藏 bug：</p>
+<ul>
+<li><strong>一条变换链</strong>：每个 frame 存一个 4×4 矩阵（16 个数，实际只有 6 个自由度，其余是约束）；</li>
+<li><strong>运动学状态</strong>：<span class="arithmatex">\(q\)</span> 有 <span class="arithmatex">\(n\)</span> 个数（<span class="arithmatex">\(n\)</span> 个关节），移动底盘还要加 <span class="arithmatex">\((x,y,\theta)\)</span> 三个数；</li>
+<li><strong>差速积分</strong>：状态就是 <span class="arithmatex">\((x,y,\theta)\)</span> 三个数——但另有一个"建模选择"：用一阶还是用圆弧？这不是状态。</li>
+</ul>
+<p>这段代码没有轮胎打滑、执行器动态和地面坡度，所以只适合低速平面运动，<strong>不要把它当成真车的完整物理模型</strong>。</p>
 <table>
 <thead>
 <tr>
@@ -4222,7 +4611,7 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
 <tr>
 <td>积分离散化</td>
 <td>一阶 vs 圆弧</td>
-<td><span class="arithmatex">\(\propto \omega\Delta t\)</span></td>
+<td>终点偏差 <span class="arithmatex">\(\propto \Delta t\)</span></td>
 <td>是（改模型）</td>
 <td>减小 <span class="arithmatex">\(\Delta t\)</span> / 圆弧积分</td>
 </tr>
@@ -4242,58 +4631,20 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
 </tr>
 </tbody>
 </table>
-<h2 id="_7">坐标、单位与时间约定</h2>
-<p>很多“算法错误”其实来自模型接口不一致：角度一处用 degree、一处用 radian；位置来自旧时间戳；相机外参方向写反；把 <code>map → base</code> 当成 <code>base → map</code> 使用。</p>
-<p>因此机器人模型落地时应明确三个约定：<strong>坐标系方向、单位、时间戳</strong>。公式本身往往比这些工程约定更简单。</p>
-<table>
-<thead>
-<tr>
-<th>约定项</th>
-<th>建议写法</th>
-<th>违约的典型后果</th>
-<th>检查方法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>单位</td>
-<td>全部 SI（m, rad, s）</td>
-<td>1000× 尺度错误</td>
-<td>断言数值范围</td>
-</tr>
-<tr>
-<td>旋转方向</td>
-<td>右手系，逆时针为正</td>
-<td>转向反了、镜像轨迹</td>
-<td>用已知点验证</td>
-</tr>
-<tr>
-<td>时间戳</td>
-<td>统一单调时钟，标注 frame</td>
-<td>TF 插值错位</td>
-<td>检查单调性</td>
-</tr>
-<tr>
-<td>变换记号</td>
-<td><span class="arithmatex">\(T^{A}_{B}\)</span> 表示“B 在 A 中的位姿”</td>
-<td>链路方向颠倒</td>
-<td>正逆变换回原点测试</td>
-</tr>
-<tr>
-<td>角度范围</td>
-<td>统一 <span class="arithmatex">\((-\pi,\pi]\)</span></td>
-<td>跨越 <span class="arithmatex">\(\pm\pi\)</span> 时跳变</td>
-<td>检查 <span class="arithmatex">\(\theta\)</span> 连续性</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_8">模型精度与参数标定</h2>
-<p>模型误差最终都会以位姿误差的形式暴露出来，而且不同参数误差的<strong>增长规律完全不同</strong>。定量地看，对差速底盘，里程计输出的位置误差可以写成</p>
+<h2 id="_9">九、误差从哪来：增长规律决定你该标什么</h2>
+<p>模型误差最后都会以位姿误差的形式暴露。对差速底盘，两类尺度误差可以加在一起：</p>
 <div class="arithmatex">\[
 \Delta p\approx \Big(\frac{\Delta r}{r}\Big)s+\Big(\frac{\Delta L}{L}\Big)\frac{s\theta}{2},
 \]</div>
-<p>其中 <span class="arithmatex">\(s\)</span> 是行进距离，<span class="arithmatex">\(\theta\)</span> 是累计转角。第一项与距离成正比（尺度误差），第二项与 <span class="arithmatex">\(s\cdot\theta\)</span> 成正比（转向尺度误差）。举个数：<span class="arithmatex">\(s=100\)</span> m、<span class="arithmatex">\(\theta=10\)</span> rad、轮径误差 1%、轮距误差 3%，则两项分别贡献约 1.0 m 和 1.5 m，合计约 2.5 m——在 100 m 的行进上已经不可接受。这解释了为什么“只标定轮径”往往不够，<strong>旋转标定必须单独做</strong>。</p>
-<p>各类参数对位姿误差的影响方式：</p>
+<p><span class="arithmatex">\(s\)</span> 是行进距离、<span class="arithmatex">\(\theta\)</span> 是累计转角。第一项随距离<strong>线性</strong>（轮径尺度），第二项随 <span class="arithmatex">\(s\theta\)</span> <strong>线性</strong>（轮距尺度）。</p>
+<p>代数字：<span class="arithmatex">\(s=100\)</span> m、<span class="arithmatex">\(\theta=10\)</span> rad、轮径误差 <span class="arithmatex">\(1\%\)</span>、轮距误差 <span class="arithmatex">\(3\%\)</span>：</p>
+<ul>
+<li>第一项：<span class="arithmatex">\(0.01\times100=1.0\)</span> m；</li>
+<li>第二项：<span class="arithmatex">\(0.03\times\dfrac{100\times10}{2}=15\)</span> m；</li>
+<li>合计约 <span class="arithmatex">\(16\)</span> m。</li>
+</ul>
+<p><strong>第二项比第一项大了 15 倍</strong>，这说明两件事：一是"只标定轮径"根本不够，旋转标定必须单独做；二是原稿若把第二项写成 1.5 m、合计 2.5 m，就是漏了一个数量级（那相当于把轮距误差当成 0.3%）。<strong>数字要重算，不能照抄。</strong></p>
+<p>各类参数对位姿误差的影响：</p>
 <table>
 <thead>
 <tr>
@@ -4342,17 +4693,19 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
 </tr>
 </tbody>
 </table>
-<p>标定实验的最小配置，按“用最少实验覆盖最多参数”原则排列：</p>
-<ol>
-<li><strong>静止段</strong>（30–60 s）：估计传感器偏置（IMU 陀螺零偏、加速度计零偏），给出测量噪声方差 <span class="arithmatex">\(\sigma^2\)</span>；</li>
-<li><strong>直线段</strong>（10 m 往返）：用外部真值（卷尺、全站仪或运动捕捉）标定轮径 <span class="arithmatex">\(r\)</span> 与每轮尺度；</li>
-<li><strong>原地旋转</strong>（正反各 5–10 圈）：标定轮距 <span class="arithmatex">\(L\)</span> 与左右轮差异；</li>
-<li><strong>方形/8 字轨迹</strong>：联合验证 <span class="arithmatex">\(r\)</span> 与 <span class="arithmatex">\(L\)</span> 的耦合，检查回环闭合误差；</li>
-<li><strong>靶标多点对位</strong>（机械臂场景）：标定外参与关节零位，至少 15–20 个位形以覆盖各关节。</li>
-</ol>
-<p>验收标准建议用两个指标：<strong>回环闭合误差</strong>（回到起点时位置误差占路径长度比例，合格线 <span class="arithmatex">\(&lt;0.5\%\)</span>）和<strong>残差白噪声性</strong>（标定后残差不应有系统性趋势，若仍有随 <span class="arithmatex">\(\theta\)</span> 增长的趋势，说明还有未辨识的尺度参数）。</p>
-<h2 id="_9">变换链的验证方法</h2>
-<p>坐标变换最可靠的检查不是盯着矩阵元素，而是选择几个已知几何关系的点进行验证：原点应落在哪里，坐标轴方向是否正确，正变换后再逆变换能否回到原点。把这些检查写成测试，能在外参更新时及时发现方向颠倒。</p>
+<p>标定实验按"用最少实验覆盖最多参数"排列：<strong>静止段</strong>（30–60 s）估 IMU 零偏与噪声方差 → <strong>直线段</strong>（10 m 往返）用卷尺/全站仪标轮径 <span class="arithmatex">\(r\)</span> → <strong>原地旋转</strong>（正反各 5–10 圈）标轮距 <span class="arithmatex">\(L\)</span> 与左右轮差异 → <strong>方形/8 字轨迹</strong>联合验证 <span class="arithmatex">\(r\)</span> 与 <span class="arithmatex">\(L\)</span> 的耦合 → <strong>靶标多点对位</strong>（机械臂）标外参与关节零位，至少 15–20 个位形。</p>
+<p>验收看两个指标：<strong>回环闭合误差</strong>（回到起点时的位置误差占路径长度，合格线 <span class="arithmatex">\(&lt;0.5\%\)</span>）和<strong>残差白噪声性</strong>（标定后残差若还随 <span class="arithmatex">\(\theta\)</span> 增长，说明还有没辨识的尺度参数）。</p>
+<hr />
+<h2 id="_10">十、怎么相信一条变换链：几个自检</h2>
+<p>坐标变换最可靠的检查不是盯着矩阵元素，而是挑几个有已知几何关系的点验证：原点该落在哪、轴方向对不对、正变换再逆变换能不能回到原点。把它写成测试，外参一更新就立刻报错。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_inverse</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">R</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">T_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="o">-</span><span class="n">R</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">t</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]],</span>
+                      <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))]])</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">T</span> <span class="o">@</span> <span class="n">T_inv</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+</code></pre></div>
 <table>
 <thead>
 <tr>
@@ -4401,16 +4754,158 @@ y_{k+1}&amp;=y_k-\frac{v}{\omega}\big(\cos(\theta_k+\omega\Delta t)-\cos\theta_k
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<p>很多"算法错误"的真正原因是模型接口不一致：角度一处用 degree、一处用 radian；位置来自旧时间戳；相机外参方向写反；把 <code>map → base</code> 当成 <code>base → map</code> 用。<strong>公式本身往往比这些工程约定简单。</strong></p>
+<hr />
+<h2 id="_11">十一、跑一遍：把误差和在奇异附近的表现看出来</h2>
+<p>下面两段只依赖标准库。第一段回答第八节"一阶近似什么时候坏"，第二段回答第七节"手臂伸直时会发生什么"。<strong>改注释里的参数，你会亲眼看到现象突变。</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">check_inverse</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
-    <span class="n">R</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-    <span class="n">T_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="o">-</span><span class="n">R</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">t</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))]])</span>
-    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">T</span> <span class="o">@</span> <span class="n">T_inv</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step_euler</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">th</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">step_arc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-12</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">step_euler</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="n">th2</span> <span class="o">=</span> <span class="n">th</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dt</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">v</span> <span class="o">/</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th2</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)),</span>
+            <span class="n">y</span> <span class="o">-</span> <span class="n">v</span> <span class="o">/</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th2</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)),</span>
+            <span class="n">th2</span><span class="p">)</span>
+
+<span class="n">v</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">omega</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span>        <span class="c1"># 车轮线速度 1 m/s，走 2 s，角速度 1 rad/s</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;v=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> m/s, omega=</span><span class="si">{</span><span class="n">omega</span><span class="si">}</span><span class="s2"> rad/s 走 </span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2"> s，一阶积分 vs 圆弧积分的终点偏差：&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">):</span>   <span class="c1"># 只改步长，看偏差怎么变</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)):</span>
+        <span class="n">e</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">step_euler</span><span class="p">(</span><span class="o">*</span><span class="n">e</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">dt</span><span class="p">),</span> <span class="n">step_arc</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  dt=</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> 偏差=</span><span class="si">{</span><span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>最后一条经验：<strong>模型的价值不在公式有多复杂，而在于它的误差是否被量化过。</strong> 一个标定过的一阶运动学模型，通常比一个未标定的完整动力学模型更有用。</p>
+<p>跑出来（只依赖标准库）：</p>
+<div class="highlight"><pre><span></span><code>v=1.0 m/s, omega=1.0 rad/s 走 2.0 s，一阶积分 vs 圆弧积分的终点偏差：
+  dt=0.005  偏差=0.00421 m
+  dt=0.01   偏差=0.00841 m
+  dt=0.02   偏差=0.01683 m
+  dt=0.04   偏差=0.03366 m
+  dt=0.08   偏差=0.06732 m
+</code></pre></div>
+<p><strong>步长翻倍、偏差也翻倍</strong>：这就是"一阶收敛"的样子，所以"把 <span class="arithmatex">\(\Delta t\)</span> 压小"不是玄学，是有斜率的。</p>
+<p>第二段：让 <span class="arithmatex">\(q_2\)</span> 从 <span class="arithmatex">\(90°\)</span> 扫到接近 <span class="arithmatex">\(0°\)</span>，看 <span class="arithmatex">\(\det J\)</span> 掉到 0、关节速度炸开，再看 DLS 把它压住；最后把可操作度画成终端里的曲线。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="n">l1</span> <span class="o">=</span> <span class="n">l2</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">jacobian</span><span class="p">(</span><span class="n">q2</span><span class="p">):</span>
+    <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">q2</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>   <span class="c1"># 截面 q1=0，此时 det J = l1*l2*sin q2</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="o">-</span><span class="n">l2</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="o">-</span><span class="n">l2</span> <span class="o">*</span> <span class="n">s</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">l1</span> <span class="o">+</span> <span class="n">l2</span> <span class="o">*</span> <span class="n">c</span><span class="p">,</span> <span class="n">l2</span> <span class="o">*</span> <span class="n">c</span><span class="p">]]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pinv_dq</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">((</span><span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">d</span><span class="p">,</span>
+                      <span class="p">(</span><span class="o">-</span><span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dls_dq</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">lam</span><span class="o">*</span><span class="n">lam</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">lam</span><span class="o">*</span><span class="n">lam</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">c</span> <span class="o">-</span> <span class="n">b</span><span class="o">*</span><span class="n">b</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">det</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">det</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;q2(deg)  |det J|     |dq|(纯逆)      |dq|(DLS lam=0.05)&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">q2</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">jacobian</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">q2</span><span class="p">))</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">J</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">q2</span><span class="si">:</span><span class="s2">&lt;7</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">det</span><span class="si">:</span><span class="s2">&lt;11.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pinv_dq</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">])</span><span class="si">:</span><span class="s2">&lt;15.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dls_dq</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">49</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;可操作度 w(q2)=|sin q2|，q2 从 0° 扫到 180°：&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">hi</span> <span class="ow">or</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">w</span> <span class="o">&gt;=</span> <span class="n">hi</span><span class="p">))</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span>
+                  <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> |</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">|&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     +&quot;</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>跑出来：</p>
+<div class="highlight"><pre><span></span><code>q2(deg)  |det J|     |dq|(纯逆)      |dq|(DLS lam=0.05)
+  90      1.0000      1.00            1.00
+  45      0.7071      2.61            2.56
+  10      0.1736      12.76           9.04
+  2       0.0349      64.05           5.69
+  0.5     0.0087      256.23          1.55
+可操作度 w(q2)=|sin q2|，q2 从 0° 扫到 180°：
+1.00 |                 ****************                 |
+0.88 |              ***                ***              |
+0.75 |           ***                      ***           |
+0.62 |         **                            **         |
+0.50 |      ***                                ***      |
+0.38 |    **                                      **    |
+0.25 |  **                                          **  |
+0.12 |**                                              **|
+     +--------------------------------------------------
+</code></pre></div>
+<p>这两段把第七、八节的主线坐实了：<strong><span class="arithmatex">\(q_2\)</span> 从 <span class="arithmatex">\(90°\)</span> 收到 <span class="arithmatex">\(0.5°\)</span>，<span class="arithmatex">\(\det J\)</span> 从 <span class="arithmatex">\(1.0000\)</span> 掉到 <span class="arithmatex">\(0.0087\)</span>，纯逆解的关节速度从 <span class="arithmatex">\(1.00\)</span> 涨到 <span class="arithmatex">\(256.23\)</span> rad/s（早就超过任何电机）；同一列里 DLS 一直压在 <span class="arithmatex">\(9\)</span> 以内。</strong> ASCII 曲线的两只"脚"就是 <span class="arithmatex">\(q_2=0°\)</span> 与 <span class="arithmatex">\(180°\)</span> 的奇异位形——<code>*</code> 最矮的地方，正是手臂完全伸直、可操作度归零的地方。</p>
+<hr />
+<h2 id="_12">十二、翻车现场速查</h2>
+<p>模型出问题时不用猜，按现象反查：</p>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>最可能的原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机械臂朝错误方向伸手</td>
+<td>frame 用错或外参方向颠倒</td>
+<td>正逆变换回原点残差；<code>map → base</code> 是否写成反过来</td>
+</tr>
+<tr>
+<td>位置数值差 1000 倍</td>
+<td>单位混用（m vs mm）</td>
+<td>断言各接口数值范围</td>
+</tr>
+<tr>
+<td>转向整体镜像</td>
+<td>旋转方向约定不一致</td>
+<td>用已知点验证右手系、逆时针为正</td>
+</tr>
+<tr>
+<td>末端在某姿态抖动/卡住</td>
+<td>奇异位形，<span class="arithmatex">\(\det J\to0\)</span></td>
+<td>算 <span class="arithmatex">\(w(q)\)</span>；改用 DLS</td>
+</tr>
+<tr>
+<td>里程计越走越偏、角度越大越偏</td>
+<td>轮距 <span class="arithmatex">\(L\)</span> 没标定（<span class="arithmatex">\(s\theta\)</span> 项）</td>
+<td>原地转圈对比真值</td>
+</tr>
+<tr>
+<td>高速轨迹跟不上</td>
+<td>忽略了 <span class="arithmatex">\(C\dot q\)</span>（<span class="arithmatex">\(\propto\dot q^2\)</span>）</td>
+<td>在最大速度工况下复验，别只在低速调</td>
+</tr>
+<tr>
+<td>姿态积分慢慢发散</td>
+<td>欧拉积分在奇异点附近</td>
+<td>换四元数 + 归一化</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_13">十三、小结：三句话回答三件事</h2>
+<ul>
+<li><strong>为什么必须有坐标系</strong>：<code>(2,1)</code> 不带 frame 就是废话；齐次变换把"先转后移"打包成可连乘的 4×4，逆变换是 <span class="arithmatex">\(-R^\top t\)</span> 而不是 <span class="arithmatex">\(-t\)</span>，这是方向颠倒错误的根。</li>
+<li><strong>为什么必须分运动学和动力学</strong>：几何告诉你"怎么动"，但不含质量，回答不了"要多大劲"；只要速度上去，离心项按 <span class="arithmatex">\(\dot q^2\)</span> 长（5 倍速度 25 倍力矩），运动学就不够了。</li>
+<li><strong>代价是什么</strong>：每个模型都带边界——欧拉角有万向锁、雅可比在伸直时奇异、一阶积分在急转弯时偏、轮径误差在长距离上累积。<strong>模型的价值不在公式多复杂，而在于它的误差是否被量化过。</strong></li>
+</ul>
 <blockquote>
-<p><strong>下一步</strong>：接着看 <a href="../02-sensing-estimation/">传感与状态估计</a> 了解如何抑制里程计漂移，用 <a href="../03-mapping-slam/">建图与 SLAM</a> 把长期位姿误差闭合掉，再用 <a href="../04-path-motion-planning/">路径与运动规划</a> 把运动学约束变成可行轨迹，最后在 <a href="../05-navigation-control/">导航与控制</a> 里把模型接到闭环控制器上，动力学细节可参考 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a>。</p>
+<p><strong>下一步</strong>：模型只告诉你"应该怎样"，真实系统还靠传感器告诉你"实际怎样"。接着看 <a href="../02-sensing-estimation/">传感与状态估计</a> 怎么把里程计漂移压下去；需要闭掉长期误差可看 <a href="../03-mapping-slam/">建图与 SLAM</a>，把运动学约束变成可行轨迹看 <a href="../04-path-motion-planning/">路径与运动规划</a>，把模型接进闭环看 <a href="../05-navigation-control/">导航与控制</a>，动力学细节可参考 <a href="../../control-theory/01-modeling-state-space/">状态空间建模</a>。</p>
 </blockquote>
 
 
