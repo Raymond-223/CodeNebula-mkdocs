@@ -913,7 +913,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        静态模型与动态状态
+        一、先看一个你已经做过无数遍的动作
       
     </span>
   </a>
@@ -924,7 +924,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续时间状态方程
+        二、静态模型为什么一定会坏
       
     </span>
   </a>
@@ -935,7 +935,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        高阶系统的状态空间表示
+        三、状态：把"记忆"写成一组数字
       
     </span>
   </a>
@@ -946,7 +946,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续模型的离散化
+        四、状态方程：把三个问题写成一行
       
     </span>
   </a>
@@ -957,7 +957,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        状态选择与可观测量
+        五、把二阶方程降成一阶向量
       
     </span>
   </a>
@@ -965,10 +965,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、\(A\) 的特征值：系统的物理属性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、\(A\) 的特征值：系统的物理属性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        换个状态变量，\(A\) 变，特征值不变
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delta-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、计算机每 \(\Delta t\) 才看一眼：离散化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、计算机每 \(\Delta t\) 才看一眼：离散化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型阶数与可辨识性
+        稳定性判据换了说法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delta-t_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、\(\Delta t\) 选错会怎样
       
     </span>
   </a>
@@ -979,7 +1035,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        平衡点与局部线性化
+        九、状态该取几个才够
       
     </span>
   </a>
@@ -990,7 +1046,35 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可控性与可观性
+        十、平衡点与线性化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、平衡点与线性化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        线性化什么时候还有效
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、输入推得动吗、眼睛看得见吗
       
     </span>
   </a>
@@ -998,10 +1082,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        建模误差的来源与影响
+        十二、模型误差：为什么相位比幅值更致命
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、跑一遍，把发散看出来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十三、跑一遍，把发散看出来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-delta-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 一阶系统：同一个模型，只改 \(\Delta t\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 无阻尼振荡器：前向欧拉为什么无条件不稳定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十四、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十五、小结：三句话
       
     </span>
   </a>
@@ -3688,7 +3833,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        静态模型与动态状态
+        一、先看一个你已经做过无数遍的动作
       
     </span>
   </a>
@@ -3699,7 +3844,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续时间状态方程
+        二、静态模型为什么一定会坏
       
     </span>
   </a>
@@ -3710,7 +3855,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        高阶系统的状态空间表示
+        三、状态：把"记忆"写成一组数字
       
     </span>
   </a>
@@ -3721,7 +3866,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        连续模型的离散化
+        四、状态方程：把三个问题写成一行
       
     </span>
   </a>
@@ -3732,7 +3877,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        状态选择与可观测量
+        五、把二阶方程降成一阶向量
       
     </span>
   </a>
@@ -3740,10 +3885,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、\(A\) 的特征值：系统的物理属性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、\(A\) 的特征值：系统的物理属性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        换个状态变量，\(A\) 变，特征值不变
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delta-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、计算机每 \(\Delta t\) 才看一眼：离散化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、计算机每 \(\Delta t\) 才看一眼：离散化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型阶数与可辨识性
+        稳定性判据换了说法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delta-t_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、\(\Delta t\) 选错会怎样
       
     </span>
   </a>
@@ -3754,7 +3955,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        平衡点与局部线性化
+        九、状态该取几个才够
       
     </span>
   </a>
@@ -3765,7 +3966,35 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        可控性与可观性
+        十、平衡点与线性化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、平衡点与线性化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        线性化什么时候还有效
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、输入推得动吗、眼睛看得见吗
       
     </span>
   </a>
@@ -3773,10 +4002,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        建模误差的来源与影响
+        十二、模型误差：为什么相位比幅值更致命
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、跑一遍，把发散看出来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十三、跑一遍，把发散看出来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-delta-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 一阶系统：同一个模型，只改 \(\Delta t\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 无阻尼振荡器：前向欧拉为什么无条件不稳定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十四、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十五、小结：三句话
       
     </span>
   </a>
@@ -3875,117 +4165,204 @@
 
 
 <h1 id="dynamic-models-state-space">Dynamic Models &amp; State Space</h1>
-<p>控制问题的第一步不是选 PID、LQR 还是 MPC，而是回答三个问题：<strong>系统现在处于什么状态，输入会怎样改变它，下一时刻会发生什么。</strong> 动态模型就是把这三个问题写成数学关系。</p>
+<blockquote>
+<p>这一章讲的是你开车时脑子里一直在做、但从没写成公式的那件事。读完你应该能自己推出三件事：为什么"油门开多少就跑多快"这种查表模型一定会翻车、为什么状态方程里那几个矩阵决定了后面<strong>所有</strong>控制器能做什么、以及为什么采样周期 <span class="arithmatex">\(\Delta t\)</span> 不是"随便选的数"，而是模型的一部分。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、先看一个你已经做过无数遍的动作</h2>
+<p>你在高速上跟车。前车距你 20 m，你要决定脚上使多大劲——加速、松油、还是点刹车。</p>
+<p>如果别人问你"你现在靠什么做判断"，你大概会说"车距 20 m"。但这不够。<strong>同样的 20 m，你的动作可以完全相反：</strong></p>
+<ul>
+<li>前车在加速、你也在加速追——你会松一点油；</li>
+<li>前车刚亮刹车灯、你们俩正在快速接近——你得立刻重刹。</li>
+</ul>
+<p>所以光知道"差多少"不足以决定"做什么"。你脑子里实际装着<strong>至少三个数</strong>：你多快、他多快、你们差多远。</p>
+<p>再看一步：你踩下刹车的那一瞬间，车速<strong>并不会立刻</strong>变成 0，它只是开始下降。也就是说，输入改变的不是状态本身，而是状态的<strong>变化率</strong>。</p>
+<p>最后：你的仪表盘只显示一个车速，但你的判断用到了三个数。<strong>能被看见的东西，和决定未来的东西，不是一回事。</strong></p>
+<p>这三条直觉就是本章的全部内容。下面先把它们命名成数学对象，再一个个推出来：</p>
+<table>
+<thead>
+<tr>
+<th>直觉</th>
+<th>名字</th>
+<th>符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>决定未来的那一组数（车速、前车速度、车距）</td>
+<td>状态</td>
+<td><span class="arithmatex">\(x\)</span></td>
+</tr>
+<tr>
+<td>你能施加的作用（油门、刹车）</td>
+<td>输入</td>
+<td><span class="arithmatex">\(u\)</span></td>
+</tr>
+<tr>
+<td>你能量到的那些数（车速表）</td>
+<td>输出</td>
+<td><span class="arithmatex">\(y\)</span></td>
+</tr>
+<tr>
+<td>"输入改变的是变化率"</td>
+<td>状态方程</td>
+<td><span class="arithmatex">\(\dot x = f(x,u)\)</span></td>
+</tr>
+</tbody>
+</table>
 <figure>
   <img alt="状态、输入和输出构成动态系统的基本关系。" src="../../assets/diagrams/control-map.svg" />
 <br />
 <figcaption>控制理论从“状态如何随输入演化”开始，再讨论反馈和控制器。</figcaption>
 </figure>
-<p>这三句话对应三个具体的数学对象：状态向量 <span class="arithmatex">\(x\)</span>、输入向量 <span class="arithmatex">\(u\)</span>、以及把两者映射到状态变化率的函数 <span class="arithmatex">\(f\)</span>。本章的任务是把它们写清楚，并说明写清楚之后能立刻回答哪些问题——稳定性判定的位置、控制器能不能用、估计器能不能收敛，都取决于这里定义的几个矩阵。</p>
-<h2 id="_1">静态模型与动态状态</h2>
-<p>代数关系 <span class="arithmatex">\(y=f(u)\)</span> 只说明当前输入与当前输出的对应关系，但真实机器人、电机和车辆都有惯性：同样的油门，在不同速度下产生不同后果；同样的位置误差，在不同速度方向下需要不同控制。静态模型缺少的记忆，就是动力学。</p>
-<p>因此控制系统必须引入<strong>状态（state）</strong>。状态的定义是精确的：一组变量，给定它和未来输入，就能唯一预测未来。例如小车的位置和速度</p>
-<div class="arithmatex">\[
-x=\begin{bmatrix}p\\v\end{bmatrix},
-\]</div>
-<p>配合 <span class="arithmatex">\(\dot p = v\)</span>、<span class="arithmatex">\(\dot v = u\)</span>，就能递推出任意未来的 <span class="arithmatex">\(p\)</span>、<span class="arithmatex">\(v\)</span>。</p>
+<hr />
+<h2 id="_2">二、静态模型为什么一定会坏</h2>
+<p>最省事的建模方式是查表：上次测过，油门 50% 给 10 N 推力，那就把这张表存下来。这叫<strong>静态模型</strong>——输出只由当前输入决定，写成 <span class="arithmatex">\(y=f(u)\)</span>。</p>
+<p>推到具体场景里，它会怎么坏：</p>
+<ul>
+<li>你挂了 5 kg 载荷，同样的 50% 油门只剩 8 N；</li>
+<li>电池从 12.6 V 掉到 10.5 V，同一个"50%"其实不再是同一个 50%；</li>
+<li>电机绕组从 25 ℃ 升到 80 ℃，磁钢弱了，推力再掉一截。</li>
+</ul>
+<p>这三条还能靠重新标定补救。真正补不了的是第四条：<strong>同样 50% 油门，静止起步和已经在 10 m/s 巡航，接下来一秒发生的事完全不同。</strong> 静态模型里根本没有"现在多快"这一栏，所以它表达不了这件事——这不是精度不够，是<strong>结构</strong>不对。</p>
+<p>那什么时候能用静态近似？看系统的<strong>时间常数</strong> <span class="arithmatex">\(\tau\)</span>（time constant）：输入跳变后，系统走到新稳态 63% 所需的时间。若控制周期 <span class="arithmatex">\(\Delta t \ll \tau\)</span>（经验上 <span class="arithmatex">\(\Delta t&lt;0.1\tau\)</span>），一步之内系统来不及变化多少，静态近似够用；若 <span class="arithmatex">\(\Delta t\)</span> 和 <span class="arithmatex">\(\tau\)</span> 同量级，静态近似就会<strong>系统性低估</strong>响应速度，用它设计的控制器必然过冲。</p>
+<p>一个数字：某电机 <span class="arithmatex">\(\tau=50\)</span> ms。</p>
 <table>
 <thead>
 <tr>
-<th>维度</th>
-<th>静态模型 <span class="arithmatex">\(y=f(u)\)</span></th>
-<th>动态模型 <span class="arithmatex">\(\dot x=f(x,u)\)</span></th>
+<th>控制周期</th>
+<th><span class="arithmatex">\(\Delta t/\tau\)</span></th>
+<th>结论</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>记忆</td>
-<td>无，输出只依赖当前输入</td>
-<td>有，状态携带历史信息</td>
+<td>1 ms（1 kHz）</td>
+<td>0.02</td>
+<td>静态近似可用，误差约 2%</td>
 </tr>
 <tr>
-<td>可逆性</td>
-<td>给定 <span class="arithmatex">\(u\)</span> 立即得 <span class="arithmatex">\(y\)</span></td>
-<td>给定 <span class="arithmatex">\(u\)</span> 需积分才能得下一状态</td>
+<td>10 ms（100 Hz）</td>
+<td>0.2</td>
+<td>勉强，需要保留一阶动态</td>
 </tr>
 <tr>
-<td>典型适用</td>
-<td>电阻分压、几何映射</td>
-<td>电机、机械臂、车辆、飞行器</td>
-</tr>
-<tr>
-<td>失效场景</td>
-<td>存在惯性或储能元件时预测全错</td>
-<td>状态定义不足时无法预测</td>
-</tr>
-<tr>
-<td>控制含义</td>
-<td>直接前馈即可</td>
-<td>需要反馈 + 状态估计</td>
+<td>50 ms（20 Hz）</td>
+<td>1.0</td>
+<td>不可用，一步内速度已变一大截</td>
 </tr>
 </tbody>
 </table>
-<p>一个量化判断：若系统存在时间常数 <span class="arithmatex">\(\tau &gt; 0\)</span> 的主导动态，而控制周期 <span class="arithmatex">\(\Delta t \ll \tau\)</span>（例如 <span class="arithmatex">\(\Delta t &lt; 0.1\tau\)</span>）时，忽略动态带来的误差在单步内可接受；当 <span class="arithmatex">\(\Delta t\)</span> 与 <span class="arithmatex">\(\tau\)</span> 同量级时，静态近似会系统性低估超调。</p>
-<h2 id="_2">连续时间状态方程</h2>
-<p>一般形式为</p>
+<p>结论：<strong>记忆必须被显式写进模型</strong>。这就是"状态"。</p>
+<hr />
+<h2 id="_3">三、状态：把"记忆"写成一组数字</h2>
+<p>先给定义，再解释它为什么长这样。</p>
+<blockquote>
+<p><strong>状态（state）</strong>：一组变量。给定它，再加上从今往后的所有输入，就能唯一确定未来。</p>
+</blockquote>
+<p>检验一个候选状态合不合格，标准只有一条：<strong>同一组数配同样的输入，会不会出现两种不同的未来？</strong> 会，就说明缺变量。</p>
+<p>举个能算的：两辆小车都在 <span class="arithmatex">\(p=0\)</span>，发动机都给 <span class="arithmatex">\(1\ \text{m/s}^2\)</span> 的加速度。第一辆初速 <span class="arithmatex">\(v=0\)</span>，1 s 后 <span class="arithmatex">\(p=0.5\)</span>；第二辆初速 <span class="arithmatex">\(v=5\)</span>，1 s 后 <span class="arithmatex">\(p=5.5\)</span>。同样的"位置 0"、同样的输入，两个不同的未来——<strong>位置单独一个数不是状态</strong>，速度也得算进来。写成向量：</p>
+<div class="arithmatex">\[
+x=\begin{bmatrix}p\\v\end{bmatrix}.
+\]</div>
+<p>补上两行关系，这组数就能自己往前走：</p>
+<div class="arithmatex">\[
+\dot p = v,\qquad \dot v = u .
+\]</div>
+<p>这里 <span class="arithmatex">\(\dot p\)</span> 读作"<span class="arithmatex">\(p\)</span> 随时间的变化率"，就是速度；<span class="arithmatex">\(\dot v\)</span> 是加速度，等于你给的输入。（"把所有高阶导数都摊成状态"这件事，第五节会一般化。）</p>
+<p>顺带回答一个后面要反复用的问题：<strong>状态必须能测到吗？</strong> 不必。车速表坏了，你仍可用轮速、加速度积分、GPS 差分去<strong>估计</strong>速度。状态是"模型内部必须记住的东西"，不是"传感器必须直接给出的东西"——这条区别就是第十一节可观性的伏笔。</p>
+<hr />
+<h2 id="_4">四、状态方程：把三个问题写成一行</h2>
+<p>第一节的三个问题，现在可以一一对号：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>数学对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>现在处于什么状态？</td>
+<td><span class="arithmatex">\(x\)</span></td>
+</tr>
+<tr>
+<td>输入怎样改变它？</td>
+<td><span class="arithmatex">\(f(\cdot)\)</span></td>
+</tr>
+<tr>
+<td>下一时刻会发生什么？</td>
+<td>对 <span class="arithmatex">\(\dot x=f(x,u)\)</span> 积分</td>
+</tr>
+</tbody>
+</table>
+<p>最一般的形式是<strong>非线性</strong>的：</p>
 <div class="arithmatex">\[
 \dot x=f(x,u),\qquad y=h(x,u),
 \]</div>
-<p>其中 <span class="arithmatex">\(x \in \mathbb{R}^n\)</span> 是状态，<span class="arithmatex">\(u \in \mathbb{R}^m\)</span> 是控制输入，<span class="arithmatex">\(y \in \mathbb{R}^p\)</span> 是可测或关心的输出。若系统在工作点附近近似线性，可以写成</p>
+<p>其中 <span class="arithmatex">\(x\in\mathbb{R}^n\)</span> 是 <span class="arithmatex">\(n\)</span> 维状态，<span class="arithmatex">\(u\in\mathbb{R}^m\)</span> 是 <span class="arithmatex">\(m\)</span> 维输入，<span class="arithmatex">\(y\in\mathbb{R}^p\)</span> 是我们关心或能够测到的那 <span class="arithmatex">\(p\)</span> 个数。</p>
+<p>如果系统在工作点附近近似线性，就写成<strong>线性</strong>的：</p>
 <div class="arithmatex">\[
-\dot x=Ax+Bu,\qquad y=Cx+Du.
+\dot x=Ax+Bu,\qquad y=Cx+Du .
 \]</div>
-<p>四个矩阵各有分工：<span class="arithmatex">\(A \in \mathbb{R}^{n \times n}\)</span> 描述“系统自身怎样演化”，<span class="arithmatex">\(B \in \mathbb{R}^{n \times m}\)</span> 描述“输入怎样作用于状态”，<span class="arithmatex">\(C\)</span> 决定“哪些组合能被观测”，<span class="arithmatex">\(D\)</span> 是输入直接穿透到输出的部分（多数机械系统 <span class="arithmatex">\(D=0\)</span>）。</p>
-<p>这两个矩阵比任何具体控制器都更基础：稳定性由 <span class="arithmatex">\(A\)</span> 的特征值决定，LQR 的 Riccati 方程以 <span class="arithmatex">\((A,B)\)</span> 为输入，MPC 的预测模型也是它们。换句话说，改控制器只改了算法，改 <span class="arithmatex">\((A,B)\)</span> 才改了系统能做什么。</p>
+<p>四个矩阵各有分工，第一次见就当场拆开：</p>
 <table>
 <thead>
 <tr>
 <th>矩阵</th>
 <th>维度</th>
 <th>它决定什么</th>
-<th>后续哪里用到</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><span class="arithmatex">\(A\)</span></td>
-<td><span class="arithmatex">\(n \times n\)</span></td>
-<td>自由响应、开口极点的位置</td>
-<td>稳定性、LQR、MPC 预测</td>
+<td><span class="arithmatex">\(n\times n\)</span></td>
+<td>系统自身的演化方式（自由响应的快慢与稳定性）</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(B\)</span></td>
-<td><span class="arithmatex">\(n \times m\)</span></td>
-<td>输入能否驱动各状态方向</td>
-<td>可控性、LQR 可行性</td>
+<td><span class="arithmatex">\(n\times m\)</span></td>
+<td>输入从哪些方向进入状态</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(C\)</span></td>
-<td><span class="arithmatex">\(p \times n\)</span></td>
-<td>哪些状态组合可被测量</td>
-<td>可观性、状态估计</td>
+<td><span class="arithmatex">\(p\times n\)</span></td>
+<td>哪些状态组合能被看见</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(D\)</span></td>
-<td><span class="arithmatex">\(p \times m\)</span></td>
-<td>输入对输出的直接通道</td>
-<td>高频前馈、代数环判断</td>
+<td><span class="arithmatex">\(p\times m\)</span></td>
+<td>输入直接穿透到输出的通道（多数机械系统 <span class="arithmatex">\(D=0\)</span>）</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_3">高阶系统的状态空间表示</h2>
-<p>考虑质量—弹簧—阻尼系统</p>
+<p><strong>为什么 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 比任何控制器都更基础？</strong> 不用宣告，代一遍就清楚。假设你设计了状态反馈</p>
 <div class="arithmatex">\[
-m\ddot p+c\dot p+kp=u.
+u=-Kx ,
 \]</div>
-<p>令 <span class="arithmatex">\(x_1=p\)</span>、<span class="arithmatex">\(x_2=\dot p\)</span>，就得到</p>
+<p>代进状态方程：</p>
+<div class="arithmatex">\[
+\dot x=Ax+B(-Kx)=(A-BK)x .
+\]</div>
+<p>闭环稳不稳、有多快，全看 <span class="arithmatex">\((A-BK)\)</span> 的特征值，而它的原材料只有 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 和你的 <span class="arithmatex">\(K\)</span>。换句话说：<strong>换控制器只是换了 <span class="arithmatex">\(K\)</span>，换 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 才是换了一个系统。</strong> <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 错了，<span class="arithmatex">\(K\)</span> 怎么调都是在优化一个不存在的对象。</p>
+<hr />
+<h2 id="_5">五、把二阶方程降成一阶向量</h2>
+<p>你早就会写二阶方程了。质量—弹簧—阻尼系统：</p>
+<div class="arithmatex">\[
+m\ddot p+c\dot p+kp=u ,
+\]</div>
+<p>左边每一项都认识：<span class="arithmatex">\(m\ddot p\)</span> 是惯性力、<span class="arithmatex">\(c\dot p\)</span> 是阻尼、<span class="arithmatex">\(kp\)</span> 是弹簧力，右边是外力。这是牛顿第二定律直接给的式子。</p>
+<p>问题是<strong>计算机不会解二阶方程</strong>。一切数值方法都是"用这一刻的值推出下一刻的值"这种一步一步的推进，每一步只能把当前值喂给右边。所以必须先把它压成一阶。</p>
+<p>令 <span class="arithmatex">\(x_1=p\)</span>、<span class="arithmatex">\(x_2=\dot p\)</span>（正是上一节那组"位置 + 速度"），于是</p>
 <div class="arithmatex">\[
 \begin{aligned}
 \dot x_1 &amp;= x_2,\\
-\dot x_2 &amp;= -\frac{k}{m}x_1-\frac{c}{m}x_2+\frac{1}{m}u.
+\dot x_2 &amp;= -\frac{k}{m}x_1-\frac{c}{m}x_2+\frac{1}{m}u .
 \end{aligned}
 \]</div>
-<p>也就是</p>
+<p>第二行就是把 <span class="arithmatex">\(m\ddot p=u-c\dot p-kp\)</span> 两边除以 <span class="arithmatex">\(m\)</span>。写成矩阵：</p>
 <div class="arithmatex">\[
 \dot x=
 \begin{bmatrix}
@@ -3994,14 +4371,16 @@ m\ddot p+c\dot p+kp=u.
 \end{bmatrix}x+
 \begin{bmatrix}
 0\\1/m
-\end{bmatrix}u.
+\end{bmatrix}u .
 \]</div>
-<p>这一步是关键：无论原方程是二阶还是更高阶，都能通过增加状态变量统一成一阶向量形式。一般地，<span class="arithmatex">\(n\)</span> 阶常微分方程需要 <span class="arithmatex">\(n\)</span> 个状态，通常取输出及其前 <span class="arithmatex">\(n-1\)</span> 阶导数为状态。</p>
-<p>同一系统换一组状态变量，<span class="arithmatex">\(A\)</span> 会变但特征值不变——<strong>特征值是系统的物理属性，不是表示的属性</strong>。例如取 <span class="arithmatex">\(x=[p,\ \dot p]^{T}\)</span> 时 <span class="arithmatex">\(A\)</span> 的特征值为</p>
+<p>这一步的价值在于它的<strong>一般性</strong>：<span class="arithmatex">\(n\)</span> 阶常微分方程就配 <span class="arithmatex">\(n\)</span> 个状态，取输出及其前 <span class="arithmatex">\(n-1\)</span> 阶导数当状态，任何高阶方程都能压成同一个形状 <span class="arithmatex">\(\dot x=Ax+Bu\)</span>。后面要用的所有工具（极点、可控性、LQR）只认这个形状，不关心你原来是几阶。</p>
+<hr />
+<h2 id="a">六、<span class="arithmatex">\(A\)</span> 的特征值：系统的物理属性</h2>
+<p>把上一节那套 <span class="arithmatex">\(A\)</span> 代进去，先算特征值（eigenvalue），即满足 <span class="arithmatex">\(\det(A-\lambda I)=0\)</span> 的 <span class="arithmatex">\(\lambda\)</span>：</p>
 <div class="arithmatex">\[
-\lambda_{1,2}=\frac{-c \pm \sqrt{c^{2}-4mk}}{2m}.
+\lambda_{1,2}=\frac{-c\pm\sqrt{c^{2}-4mk}}{2m}.
 \]</div>
-<p>当 <span class="arithmatex">\(c^2 &lt; 4mk\)</span> 时为一对共轭复根，系统欠阻尼、会振荡。有具体数字更清楚：<span class="arithmatex">\(m=1\)</span>、<span class="arithmatex">\(k=100\)</span>、<span class="arithmatex">\(c=2\)</span> 时 <span class="arithmatex">\(\omega_n=\sqrt{k/m}=10\ \text{rad/s}\)</span>、<span class="arithmatex">\(\zeta=c/(2\sqrt{mk})=0.1\)</span>，极点约为 <span class="arithmatex">\(-1 \pm 9.95j\)</span>，阻尼比只有 <span class="arithmatex">\(0.1\)</span>，超调将超过 <span class="arithmatex">\(70\%\)</span>。</p>
+<p>根号里那个 <span class="arithmatex">\(c^2-4mk\)</span> 的正负决定一切，它就是二次方程的判别式：</p>
 <table>
 <thead>
 <tr>
@@ -4019,7 +4398,7 @@ m\ddot p+c\dot p+kp=u.
 <tr>
 <td>临界阻尼</td>
 <td><span class="arithmatex">\(c^{2} = 4mk\)</span></td>
-<td>重负实根，最快无超调</td>
+<td>重负实根，最快且无超调</td>
 </tr>
 <tr>
 <td>欠阻尼</td>
@@ -4029,26 +4408,51 @@ m\ddot p+c\dot p+kp=u.
 <tr>
 <td>无阻尼</td>
 <td><span class="arithmatex">\(c = 0\)</span></td>
-<td>纯虚根，等幅振荡</td>
+<td>纯虚根，等幅振荡、永不衰减</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_4">连续模型的离散化</h2>
-<p>控制器运行在计算机上，只能每隔 <span class="arithmatex">\(\Delta t\)</span> 更新一次，因此连续模型要变成</p>
+<p>代数字：<span class="arithmatex">\(m=1\)</span>、<span class="arithmatex">\(k=100\)</span>、<span class="arithmatex">\(c=2\)</span>，得到</p>
 <div class="arithmatex">\[
-x_{k+1}=A_dx_k+B_du_k.
+\omega_n=\sqrt{k/m}=10\ \text{rad/s},\qquad
+\zeta=\frac{c}{2\sqrt{mk}}=0.1,\qquad
+\lambda_{1,2}=-1\pm 9.95j .
 \]</div>
-<p>最简单的欧拉离散化是</p>
+<p>阻尼比 <span class="arithmatex">\(\zeta=0.1\)</span> 是什么概念？二阶系统超调量有现成公式 <span class="arithmatex">\(M_p\approx e^{-\pi\zeta/\sqrt{1-\zeta^2}}\)</span>，代进去得 <span class="arithmatex">\(M_p\approx 72.9\%\)</span>：让这个振子去追一个阶跃目标，它第一趟会冲过头七成以上。</p>
+<h3 id="a_1">换个状态变量，<span class="arithmatex">\(A\)</span> 变，特征值不变</h3>
+<p>这条值得亲手推一遍，因为它回答了"<span class="arithmatex">\(A\)</span> 到底是表示还是物理"。</p>
+<p>取另一组状态 <span class="arithmatex">\(z=T^{-1}x\)</span>（<span class="arithmatex">\(T\)</span> 可逆，相当于换了一套坐标）：</p>
+<div class="arithmatex">\[
+\dot z=T^{-1}\dot x=T^{-1}A\,x=T^{-1}AT\,z .
+\]</div>
+<p>新矩阵 <span class="arithmatex">\(A'=T^{-1}AT\)</span>，它的特征多项式是</p>
+<div class="arithmatex">\[
+\det(A'-\lambda I)=\det\big(T^{-1}(A-\lambda I)T\big)=\det(T^{-1})\det(A-\lambda I)\det(T)=\det(A-\lambda I),
+\]</div>
+<p>和原来一模一样。<strong>所以特征值是系统的物理属性，<span class="arithmatex">\(A\)</span> 里那些具体数字只是你挑的坐标系的产物。</strong> 这也是为什么判断快慢和稳定性时我们只谈特征值，不谈 <span class="arithmatex">\(A\)</span> 长什么样。</p>
+<hr />
+<h2 id="delta-t">七、计算机每 <span class="arithmatex">\(\Delta t\)</span> 才看一眼：离散化</h2>
+<p>前面所有推导都默认 <span class="arithmatex">\(\dot x\)</span> 连续变化。可控制器跑在计算机上：它每隔 <span class="arithmatex">\(\Delta t\)</span> 醒一次，看一眼、算一次、输出一次，两次之间输出<strong>保持不变</strong>（这叫零阶保持）。</p>
+<p>所以真实系统的模型是<strong>离散</strong>的：</p>
+<div class="arithmatex">\[
+x_{k+1}=A_dx_k+B_du_k,
+\]</div>
+<p>下标 <span class="arithmatex">\(k\)</span> 表示第 <span class="arithmatex">\(k\)</span> 次采样，<span class="arithmatex">\(x_{k+1}\)</span> 就是下一次采样时的状态。</p>
+<p>怎么从连续拿到离散？最直观的是<strong>前向欧拉</strong>（forward Euler）：既然 <span class="arithmatex">\(\dot x\approx\frac{x_{k+1}-x_k}{\Delta t}\)</span>，就把导数换成差商：</p>
 <div class="arithmatex">\[
 x_{k+1}\approx x_k+\Delta t\,f(x_k,u_k),
 \]</div>
-<p>即 <span class="arithmatex">\(A_d \approx I+A\Delta t\)</span>、<span class="arithmatex">\(B_d \approx B\Delta t\)</span>。它直观，但步长太大时误差明显：把 <span class="arithmatex">\(e^{A\Delta t}\)</span> 展开为 <span class="arithmatex">\(I+A\Delta t+\frac{1}{2}A^{2}\Delta t^{2}+\dots\)</span>，欧拉只保留了前两项，截断误差是 <span class="arithmatex">\(O(\Delta t^{2})\)</span> 的一步、<span class="arithmatex">\(O(\Delta t)\)</span> 的全局误差。</p>
-<p>对线性系统，精确离散化满足</p>
+<p>对应到线性系统就是 <span class="arithmatex">\(A_d\approx I+A\Delta t\)</span>、<span class="arithmatex">\(B_d\approx B\Delta t\)</span>。</p>
+<p>为什么只是"约等于"？因为真答案是指数：</p>
+<div class="arithmatex">\[
+e^{A\Delta t}=I+A\Delta t+\frac{1}{2}A^{2}\Delta t^{2}+\dots ,
+\]</div>
+<p>欧拉只留下了前两项，后面整个扔了。扔掉的量级是单步 <span class="arithmatex">\(O(\Delta t^{2})\)</span>、全局 <span class="arithmatex">\(O(\Delta t)\)</span>——<span class="arithmatex">\(\Delta t\)</span> 减半误差减半，收敛不快但足够简单。对线性系统，精确形式是</p>
 <div class="arithmatex">\[
 A_d=e^{A\Delta t},\qquad
-B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
+B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau .
 \]</div>
-<p>离散系统的稳定性判据也随之改变：连续系统要求 <span class="arithmatex">\(\mathrm{Re}(\lambda_i(A))&lt;0\)</span>，离散系统要求 <span class="arithmatex">\(|\lambda_i(A_d)|&lt;1\)</span>。这两条通过 <span class="arithmatex">\(\lambda_d=e^{\lambda_c\Delta t}\)</span> 连接，把左半复平面映射到单位圆内。</p>
+<p>代价是需要矩阵指数，一般由工具库提供。</p>
 <table>
 <thead>
 <tr>
@@ -4068,8 +4472,8 @@ B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
 <tr>
 <td>后向欧拉</td>
 <td><span class="arithmatex">\((I-A\Delta t)^{-1}\)</span></td>
-<td>对稳定系统条件稳定</td>
-<td>刚性系统、需无条件稳定</td>
+<td>对稳定系统无条件稳定</td>
+<td>刚性系统</td>
 </tr>
 <tr>
 <td>梯形法</td>
@@ -4081,20 +4485,78 @@ B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
 <td>精确离散化</td>
 <td><span class="arithmatex">\(e^{A\Delta t}\)</span></td>
 <td>与连续系统完全一致</td>
-<td>线性系统、有矩阵指数工具</td>
+<td>有矩阵指数工具</td>
 </tr>
 </tbody>
 </table>
-<p>前向欧拉的危险可以用具体数字说明：无阻尼振荡器 <span class="arithmatex">\(\dot x=[0,1;-1,0]x\)</span>（<span class="arithmatex">\(\omega=1\)</span>）在前向欧拉下 <span class="arithmatex">\(A_d=I+\Delta t A\)</span> 的特征值模为 <span class="arithmatex">\(\sqrt{1+\Delta t^{2}}\)</span>，<strong>对任何 <span class="arithmatex">\(\Delta t&gt;0\)</span> 都大于 1</strong>，即无条件不稳定；而 <span class="arithmatex">\(\Delta t=0.1\)</span> 时模约为 <span class="arithmatex">\(1.005\)</span>，每步发散 <span class="arithmatex">\(0.5\%\)</span>，<span class="arithmatex">\(1000\)</span> 步后会放大到约 <span class="arithmatex">\(150\)</span> 倍。同一系统用后向欧拉，特征值模为 <span class="arithmatex">\(1/\sqrt{1+\Delta t^{2}}&lt;1\)</span>，恒稳定。这说明采样周期不是“随便选的数”，而是模型的一部分。</p>
-<h2 id="_5">状态选择与可观测量</h2>
-<p>状态需要足以预测未来，但不要求全部直接测到。车辆速度可由编码器估计，姿态可由 IMU 与视觉融合得到。反过来，把大量与未来无关的量塞进状态，只会增加估计和控制复杂度。</p>
-<p>实际建模时可按三步检查：</p>
-<ol>
-<li><strong>是否缺变量</strong>：同样的状态和输入是否可能产生明显不同的未来？若会，说明状态不完备。</li>
-<li><strong>是否能获得</strong>：状态是直接测量，还是需要估计？若需估计，对应的可观性条件是否满足。</li>
-<li><strong>模型是否够用</strong>：当前控制频率和任务精度是否真的需要更复杂的动力学？例如 <span class="arithmatex">\(1\ \text{kHz}\)</span> 控制律配上带宽 <span class="arithmatex">\(2\ \text{Hz}\)</span> 的机械对象，二阶模型通常足够。</li>
-</ol>
-<p>一个有用的经验规则是“状态维数不要超过传感器的独立信息通道数加一”。若只有位置一个测量，却用了五阶模型，多数状态将无法从数据中辨识。</p>
+<h3 id="_6">稳定性判据换了说法</h3>
+<p>连续系统的稳定条件是 <span class="arithmatex">\(\mathrm{Re}(\lambda_i(A))&lt;0\)</span>（特征值都在左半平面），离散系统变成 <span class="arithmatex">\(|\lambda_i(A_d)|&lt;1\)</span>（特征值都在单位圆内）。两者通过</p>
+<div class="arithmatex">\[
+\lambda_d=e^{\lambda_c\Delta t}
+\]</div>
+<p>连接：左半平面被指数映射进单位圆，虚轴映射到单位圆上，右半平面映射到圆外。<strong>同一条边界，换了坐标系而已。</strong></p>
+<hr />
+<h2 id="delta-t_1">八、<span class="arithmatex">\(\Delta t\)</span> 选错会怎样</h2>
+<p>现在把 <span class="arithmatex">\(A_d\approx I+A\Delta t\)</span> 单独拎出来看，因为它有一个非常具体、非常危险的失效方式。</p>
+<p>取最简单的一阶系统 <span class="arithmatex">\(\dot x=-ax+bu\)</span>，前向欧拉给出</p>
+<div class="arithmatex">\[
+x_{k+1}=(1-a\Delta t)\,x_k+b\Delta t\,u_k .
+\]</div>
+<p>系统自身稳不稳，全看那个乘子 <span class="arithmatex">\(m=1-a\Delta t\)</span>：</p>
+<div class="arithmatex">\[
+|1-a\Delta t|&lt;1\iff 0&lt;\Delta t&lt;\frac{2}{a}=2\tau .
+\]</div>
+<p>注意右边：<strong><span class="arithmatex">\(\Delta t\)</span> 的上限是时间常数的两倍</strong>。这条线跟控制器多聪明毫无关系，是模型自己画的。</p>
+<p>留一个 <span class="arithmatex">\(a=2\)</span>（即 <span class="arithmatex">\(\tau=0.5\)</span> s）的系统当钩子，看 <span class="arithmatex">\(\Delta t\)</span> 一路调大时发生什么：</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\Delta t\)</span></th>
+<th>乘子 <span class="arithmatex">\(m=1-2\Delta t\)</span></th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1 s</td>
+<td><span class="arithmatex">\(0.8\)</span></td>
+<td>正常，收敛到稳态</td>
+</tr>
+<tr>
+<td>0.5 s</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td>一步到位，不振荡</td>
+</tr>
+<tr>
+<td>0.9 s</td>
+<td><span class="arithmatex">\(-0.8\)</span></td>
+<td>稳定，但在目标上下反复跳</td>
+</tr>
+<tr>
+<td>1.0 s</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td>等幅振荡，永不收敛</td>
+</tr>
+<tr>
+<td>1.1 s</td>
+<td><span class="arithmatex">\(-1.2\)</span></td>
+<td>每步放大 20%，很快炸掉</td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="arithmatex">\(\Delta t\)</span> 不是"算得动就选多大"的工程折衷，它是特征值的一部分。</strong> 同一个系统、同一个控制器，只把采样周期从 0.9 改成 1.1，就从"能用但抖"变成"发散"。</p>
+<p>对这种情形还有一个更狠的例子——无阻尼振荡器</p>
+<div class="arithmatex">\[
+\dot x=\begin{bmatrix}0&amp;1\\-1&amp;0\end{bmatrix}x .
+\]</div>
+<p>它的 <span class="arithmatex">\(A\)</span> 的特征值是 <span class="arithmatex">\(\pm j\)</span>，连续解幅值恒定、永不衰减。前向欧拉给出 <span class="arithmatex">\(A_d=I+\Delta t A\)</span>，特征值为 <span class="arithmatex">\(1\pm j\Delta t\)</span>，模长</p>
+<div class="arithmatex">\[
+|1\pm j\Delta t|=\sqrt{1+\Delta t^{2}}&gt;1\quad(\text{任何}\ \Delta t&gt;0).
+\]</div>
+<p><strong>对任何正的采样周期都大于 1</strong>——也就是说前向欧拉把这个真实系统判成"无条件不稳定"，哪怕它本来能一直保持振幅。换成后向欧拉，特征值模是 <span class="arithmatex">\(1/\sqrt{1+\Delta t^{2}}&lt;1\)</span>，恒稳定。第十三节把这两条都跑给你看。</p>
+<hr />
+<h2 id="_7">九、状态该取几个才够</h2>
+<p>"状态要能唯一预测未来"是下限，那上限呢？把与未来无关的量塞进状态，只会让估计和控制更复杂。所以还得问"够不够用"。</p>
 <table>
 <thead>
 <tr>
@@ -4112,85 +4574,86 @@ B_d=\int_0^{\Delta t}e^{A\tau}B\,d\tau.
 <tr>
 <td>可测/可估</td>
 <td>每个状态可测或可观</td>
-<td>估计器无法收敛，反馈基于错误状态</td>
+<td>估计器不收敛，反馈基于错误状态</td>
 </tr>
 <tr>
 <td>必要性</td>
-<td>去掉该状态预测精度显著下降</td>
-<td>冗余状态增加噪声敏感度与计算量</td>
+<td>去掉它预测精度显著下降</td>
+<td>冗余状态放大噪声、增加计算量</td>
 </tr>
 <tr>
 <td>尺度一致性</td>
 <td>各状态量级不过分悬殊</td>
-<td>数值病态，Jacobian 条件数恶化</td>
+<td>数值病态，雅可比条件数恶化</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_6">模型阶数与可辨识性</h2>
-<p>增加状态可以提高表达能力，但也会增加需要估计的未知量。若传感器无法区分两个内部变量，再复杂的模型也难以从数据中可靠辨识。</p>
-<p>形式上，参数 <span class="arithmatex">\(\theta\)</span> 可辨识要求信息矩阵</p>
-<div class="arithmatex">\[
-\mathcal{I}(\theta)=\sum_{k=0}^{N-1}\frac{\partial y_k}{\partial \theta}^{T}\frac{\partial y_k}{\partial \theta}
-\]</div>
-<p>非奇异。若两个参数对输出轨迹的影响成比例（例如两个惯量只能通过它们之和影响输出），<span class="arithmatex">\(\mathcal{I}(\theta)\)</span> 秩亏，无论数据多长都分不开。</p>
-<table>
-<thead>
-<tr>
-<th>阶数</th>
-<th>表达能力</th>
-<th>需要估计的参数</th>
-<th>主要风险</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>过低</td>
-<td>无法复现主导动态</td>
-<td>少</td>
-<td>系统性偏差，控制器设计基于错模型</td>
-</tr>
-<tr>
-<td>合适</td>
-<td>覆盖工作频段内的动态</td>
-<td>与观测匹配</td>
-<td>精度与复杂度的合理折衷</td>
-</tr>
-<tr>
-<td>过高</td>
-<td>可拟合噪声但无物理意义</td>
-<td>多</td>
-<td>过拟合、条件数恶化、数值不稳定</td>
-</tr>
-</tbody>
-</table>
-<p>判断是否 “过高” 的一个量化信号是参数估计的协方差：若某参数的估计标准差与其估计值同量级，说明数据没有约束住它。此时应降阶，或增加激励、增加测量通道，而不是继续加状态。</p>
-<h2 id="_7">平衡点与局部线性化</h2>
-<p><strong>平衡点</strong>是使状态不再变化的点：存在常数 <span class="arithmatex">\(u^{*}\)</span> 使得</p>
+<p>最后一行常被忽略但很实在：位置用 m、速度用 m/s，量级可能差三个数量级，做矩阵求逆时数值上就容易出事。换个单位（比如长度改用 mm）往往比换算法更有效。</p>
+<p>一条可以当经验规则用的判据：<strong>状态维数不要超过传感器的独立信息通道数加一。</strong> 只有位置一个测量却上了五阶模型，多出来的状态根本无法从数据里区分——不是估计器不够好，是数据里没有它们。这就引出了下一节。</p>
+<hr />
+<h2 id="_8">十、平衡点与线性化</h2>
+<p>前面几节一直在用线性模型，可真实系统几乎全是非线性的（<span class="arithmatex">\(\sin\theta\)</span>、<span class="arithmatex">\(v^2\)</span> 阻力、库仑摩擦）。本节回答：线性模型凭什么能代表非线性系统。</p>
+<p><strong>平衡点（equilibrium）</strong>是让系统"不再变化"的点：存在常数 <span class="arithmatex">\(u^{*}\)</span> 使得</p>
 <div class="arithmatex">\[
 f(x^{*},u^{*})=0 .
 \]</div>
-<p>平衡点通常不唯一。单摆的 <span class="arithmatex">\(\theta=0\)</span> 与 <span class="arithmatex">\(\theta=\pi\)</span> 都是平衡点，但一个稳定、一个不稳定。线性化就是在这类点上取一阶近似，把非线性系统变成可分析的线性系统。</p>
-<p>步骤是固定的四步：</p>
+<p>为什么要专门找它？因为工程上的控制器通常就是让系统<strong>待在</strong>某个平衡点附近——悬停、定速巡航、恒温。"待在某个点附近"意味着 <span class="arithmatex">\(\delta x=x-x^{*}\)</span> 一直很小，而参数小的时候，非线性函数就可以用一阶展开替代。</p>
+<p>单摆是最好的例子，它有两个平衡点：</p>
+<ul>
+<li><span class="arithmatex">\(\theta=0\)</span>（下垂）——小扰动后摆回来，<strong>稳定</strong>；</li>
+<li><span class="arithmatex">\(\theta=\pi\)</span>（倒立）——小扰动就摔下去，<strong>不稳定</strong>。</li>
+</ul>
+<p>同一个系统、两个平衡点、行为完全相反。这说明<strong>"这个系统稳不稳"这句话本身不完整，必须问"在哪个点附近稳不稳"</strong>。线性化就是在指定点上做的。</p>
+<p>四步流程固定：</p>
 <ol>
-<li>写出 <span class="arithmatex">\(f(x,u)\)</span> 的显式表达。</li>
-<li>解 <span class="arithmatex">\(f(x^{*},u^{*})=0\)</span> 得到所有平衡点。</li>
-<li>计算 Jacobian</li>
+<li>写出 <span class="arithmatex">\(f(x,u)\)</span> 的显式表达；</li>
+<li>解 <span class="arithmatex">\(f(x^{*},u^{*})=0\)</span>，得到所有平衡点；</li>
+<li>算雅可比（Jacobian，一阶偏导矩阵）</li>
 </ol>
 <div class="arithmatex">\[
 A=\left.\frac{\partial f}{\partial x}\right|_{(x^{*},u^{*})},\qquad
-B=\left.\frac{\partial f}{\partial u}\right|_{(x^{*},u^{*})}.
+B=\left.\frac{\partial f}{\partial u}\right|_{(x^{*},u^{*})};
 \]</div>
 <ol>
-<li>令 <span class="arithmatex">\(\delta x=x-x^{*}\)</span>、<span class="arithmatex">\(\delta u=u-u^{*}\)</span>，得到线性化模型</li>
+<li>令 <span class="arithmatex">\(\delta x=x-x^{*}\)</span>、<span class="arithmatex">\(\delta u=u-u^{*}\)</span>，得到</li>
 </ol>
 <div class="arithmatex">\[
 \dot{\delta x}=A\,\delta x+B\,\delta u .
 \]</div>
-<p>线性化的合法性由余项控制。把 <span class="arithmatex">\(f\)</span> 在 <span class="arithmatex">\((x^{*},u^{*})\)</span> 处展开：</p>
+<h3 id="_9">线性化什么时候还有效</h3>
+<p>把 <span class="arithmatex">\(f\)</span> 在平衡点展开，余项是二阶的：</p>
 <div class="arithmatex">\[
-f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
+f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),\qquad J=[A\ B].
 \]</div>
-<p>其中 <span class="arithmatex">\(J=[A\ B]\)</span>。设 Hessian 的范数上界为 <span class="arithmatex">\(M\)</span>，则余项不超过 <span class="arithmatex">\(\tfrac{1}{2}M\|\delta\|^{2}\)</span>。<strong>线性化可用的经验条件是余项远小于一阶项</strong>，即 <span class="arithmatex">\(\tfrac{1}{2}M\|\delta\|^{2}\ll \|J\delta\|\)</span>；工程上常取扰动幅度不超过特征尺度的 <span class="arithmatex">\(10\%\)</span> 作为起点，再用仿真验证。</p>
+<p>设 Hessian 的范数上界为 <span class="arithmatex">\(M\)</span>，余项不超过 <span class="arithmatex">\(\tfrac{1}{2}M\|\delta\|^{2}\)</span>。<strong>只有当余项远小于一阶项时线性化才可信</strong>，即 <span class="arithmatex">\(\tfrac{1}{2}M\|\delta\|^{2}\ll\|J\delta\|\)</span>。</p>
+<p>拿单摆量一量"多远算远"。单摆里的非线性项是 <span class="arithmatex">\(\sin\theta\)</span>，在 <span class="arithmatex">\(\theta^{*}=0\)</span> 处的线性化就是 <span class="arithmatex">\(\sin\theta\approx\theta\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>偏离角</th>
+<th><span class="arithmatex">\(\sin\theta\)</span></th>
+<th>相对误差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.05 rad（约 3°）</td>
+<td>0.049979</td>
+<td>0.04%</td>
+</tr>
+<tr>
+<td>0.2 rad（约 11°）</td>
+<td>0.198669</td>
+<td>0.67%</td>
+</tr>
+<tr>
+<td>0.5 rad（约 29°）</td>
+<td>0.479426</td>
+<td>4.3%</td>
+</tr>
+</tbody>
+</table>
+<p>所以"扰动不超过特征尺度的 10%"这个经验数字是有来源的：10% 处误差已在百分之一量级，再大就得重新展开或分段建模。</p>
 <table>
 <thead>
 <tr>
@@ -4205,12 +4668,12 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
 <td>渐近稳定</td>
 <td>全部在左半平面</td>
 <td>小扰动后收敛回平衡点</td>
-<td>线性控制器可设计，LQR 有效</td>
+<td>线性控制器可设计</td>
 </tr>
 <tr>
 <td>临界</td>
 <td>落在虚轴上</td>
-<td>小扰动不衰减也不发散</td>
+<td>不衰减也不发散</td>
 <td>非线性项可能主导，需谨慎</td>
 </tr>
 <tr>
@@ -4221,35 +4684,46 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
 </tr>
 <tr>
 <td>非双曲</td>
-<td>特征值在虚轴且有重根</td>
+<td>虚轴上且有重根</td>
 <td>线性化不能判定</td>
 <td>需高阶展开或非线性分析</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_8">可控性与可观性</h2>
-<p><strong>可控性</strong>回答“输入能否把状态驱动到任意目标”。对 <span class="arithmatex">\(n\)</span> 阶系统，可控性矩阵</p>
+<hr />
+<h2 id="_10">十一、输入推得动吗、眼睛看得见吗</h2>
+<p>有了 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span>、<span class="arithmatex">\(C\)</span>，有两个问题必须在设计控制器之前回答：</p>
+<ul>
+<li><strong>可控性（controllability）</strong>：输入能不能把状态推到任意想去的地方？</li>
+<li><strong>可观性（observability）</strong>：只靠量测 <span class="arithmatex">\(y=Cx\)</span>，能不能把内部状态全反推出来？</li>
+</ul>
+<p>先建立最直观的版本。把系统换到解耦坐标（第六节已经证明换坐标不改变特征值），让每个状态独立演化：</p>
 <div class="arithmatex">\[
-\mathcal{C}=[B,\ AB,\ A^{2}B,\ \dots,\ A^{n-1}B]
+A=\begin{bmatrix}\lambda_1&amp;0\\0&amp;\lambda_2\end{bmatrix},\quad
+B=\begin{bmatrix}b_1\\b_2\end{bmatrix},\quad
+C=\begin{bmatrix}c_1&amp;c_2\end{bmatrix}.
 \]</div>
-<p>满秩（<span class="arithmatex">\(\mathrm{rank}\,\mathcal{C}=n\)</span>）即完全可控。PBH 判据给出等价的逐模态直觉：对 <span class="arithmatex">\(A\)</span> 的每个特征值 <span class="arithmatex">\(\lambda\)</span>，都要满足</p>
+<p>这时 <span class="arithmatex">\(\dot x_1=\lambda_1x_1+b_1u\)</span>、<span class="arithmatex">\(\dot x_2=\lambda_2x_2+b_2u\)</span>，一眼就能读出两件事：</p>
+<ul>
+<li>模态 1 能被输入驱动，<strong>当且仅当 <span class="arithmatex">\(b_1\neq0\)</span></strong>；<span class="arithmatex">\(b_1=0\)</span> 时它自己闷头演化，输入对它的影响恒等于零；</li>
+<li>模态 1 能被看见，<strong>当且仅当 <span class="arithmatex">\(c_1\neq0\)</span></strong>；<span class="arithmatex">\(c_1=0\)</span> 时它在输出里永远不露面。</li>
+</ul>
+<p>这就是 <strong>PBH 判据</strong>的全部直觉：<strong>逐个模态看，它有没有被输入接上、有没有被输出接上。</strong></p>
+<p>一般写法是可控性矩阵与可观性矩阵：</p>
 <div class="arithmatex">\[
-\mathrm{rank}\,[A-\lambda I,\ B]=n .
+\mathcal{C}=[B,\ AB,\ A^{2}B,\ \dots,\ A^{n-1}B],\qquad
+\mathcal{O}=\begin{bmatrix}C\\CA\\ \vdots\\ CA^{n-1}\end{bmatrix}.
 \]</div>
-<p>它的含义是：<strong>没有任何一个模态被 <span class="arithmatex">\(B\)</span> 完全挡住。</strong> 若某 <span class="arithmatex">\(\lambda\)</span> 使 <span class="arithmatex">\(A-\lambda I\)</span> 与 <span class="arithmatex">\(B\)</span> 张不满整个空间，说明存在一个状态方向的演化不受输入影响。</p>
-<p>可观性是对偶的。可观性矩阵</p>
-<div class="arithmatex">\[
-\mathcal{O}=\begin{bmatrix}C\\CA\\ \vdots\\ CA^{n-1}\end{bmatrix}
-\]</div>
-<p>满秩（<span class="arithmatex">\(\mathrm{rank}\,\mathcal{O}=n\)</span>）即完全可观；PBH 形式为对每个 <span class="arithmatex">\(\lambda\)</span> 有</p>
-<div class="arithmatex">\[
-\mathrm{rank}\begin{bmatrix}A-\lambda I\\ C\end{bmatrix}=n .
-\]</div>
-<p>为什么这两条直接决定后面章节能不能用：<strong>LQR 要求 <span class="arithmatex">\((A,B)\)</span> 可稳（stabilizable）</strong>，即不可控的部分本身已是稳定的；若某个不稳定模态不可控，代价泛函 <span class="arithmatex">\(J=\int (x^{T}Qx+u^{T}Ru)\,dt\)</span> 对该模态无界，Riccati 方程没有有意义的解。<strong>状态估计要求 <span class="arithmatex">\((A,C)\)</span> 可检测（detectable）</strong>，否则不可观的不稳定模态无法从测量中恢复，估计误差会发散。</p>
+<p><span class="arithmatex">\(\mathrm{rank}\,\mathcal{C}=n\)</span> 即完全可控，<span class="arithmatex">\(\mathrm{rank}\,\mathcal{O}=n\)</span> 即完全可观。（要凑满 <span class="arithmatex">\(n\)</span> 个线性无关的列，最多用到 <span class="arithmatex">\(A^{n-1}B\)</span>——这是凯莱—哈密顿定理保证的。）</p>
+<p>举个数得出来的例子：<span class="arithmatex">\(A=\begin{bmatrix}-1&amp;0\\0&amp;-2\end{bmatrix}\)</span>、<span class="arithmatex">\(B=\begin{bmatrix}1\\0\end{bmatrix}\)</span>、<span class="arithmatex">\(C=\begin{bmatrix}1&amp;0\end{bmatrix}\)</span>。<span class="arithmatex">\(b_2=0\)</span> 说明模态 <span class="arithmatex">\(-2\)</span> 推不动，<span class="arithmatex">\(c_2=0\)</span> 说明它同时看不见，两个矩阵的秩都只有 1。</p>
+<p><strong>为什么这两条直接决定后面章节能不能用？</strong></p>
+<ul>
+<li>LQR 要求 <span class="arithmatex">\((A,B)\)</span> <strong>可稳（stabilizable）</strong>：不可控的那部分本身已经稳定。反过来，若某个<strong>不稳定</strong>模态不可控，代价泛函 <span class="arithmatex">\(J=\int(x^{T}Qx+u^{T}Ru)\,dt\)</span> 里那一项永远减不下去，<span class="arithmatex">\(J\)</span> 无界，Riccati 方程没有有意义的解。这不是算法不够好，是没有可行解。</li>
+<li>状态估计要求 <span class="arithmatex">\((A,C)\)</span> <strong>可检测（detectable）</strong>：不可观的部分本身稳定。否则一个不可观的不稳定模态谁也没见过，估计误差只能一直发散。</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>组合</th>
 <th>可控</th>
 <th>可观</th>
 <th>含义</th>
@@ -4260,35 +4734,32 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
 <tr>
 <td>是</td>
 <td>是</td>
-<td>最小实现</td>
-<td>所有模态可驱动也可观测</td>
-<td>LQR + 观测器/Kalman 均可</td>
+<td>最小实现，所有模态既推得动又看得见</td>
+<td>LQR 与观测器/Kalman 均可</td>
 </tr>
 <tr>
 <td>是</td>
 <td>否</td>
-<td>部分模态不可观测</td>
-<td>能控制但无法估计该模态</td>
+<td>能控制，但某模态无法估计</td>
 <td>LQR 可用，估计需降阶或改传感器</td>
 </tr>
 <tr>
 <td>否</td>
 <td>是</td>
-<td>部分模态不可驱动</td>
-<td>能观测但推不动该模态</td>
-<td>估计可用，LQR 无法稳定不可控不稳定模态</td>
+<td>能观测，但某模态推不动</td>
+<td>估计可用；该模态不稳定时 LQR 救不了</td>
 </tr>
 <tr>
 <td>否</td>
 <td>否</td>
-<td>存在不可达不可观子空间</td>
-<td>该子空间完全脱离输入输出</td>
+<td>存在完全脱离输入输出的子空间</td>
 <td>只能先改结构或改测量配置</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_9">建模误差的来源与影响</h2>
-<p>即使 <span class="arithmatex">\((A,B,C)\)</span> 写对了，模型仍然可能与真实系统不符。误差主要来自三类，它们的表现和应对方式差别很大。</p>
+<hr />
+<h2 id="_11">十二、模型误差：为什么相位比幅值更致命</h2>
+<p>即使 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span>、<span class="arithmatex">\(C\)</span> 写对了，模型仍与真实系统有差距。误差主要三类，表现完全不同。</p>
 <table>
 <thead>
 <tr>
@@ -4303,12 +4774,12 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
 <td>参数误差</td>
 <td>增益、惯量、摩擦系数与实际不符</td>
 <td>影响极点位置与带宽</td>
-<td>系统辨识、在线估计、鲁棒控制器</td>
+<td>系统辨识、在线估计、鲁棒控制</td>
 </tr>
 <tr>
 <td>未建模动态</td>
 <td>忽略了柔性、延迟、执行器带宽</td>
-<td>高频相位骤降，可能引发振荡</td>
+<td>高频相位骤降，引发振荡</td>
 <td>降带宽、加低通、<span class="arithmatex">\(\mathcal{H}_\infty\)</span> 或回路整形</td>
 </tr>
 <tr>
@@ -4319,10 +4790,149 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),
 </tr>
 </tbody>
 </table>
-<p>三类误差的量级差别可以用数字说明：参数误差 <span class="arithmatex">\(20\%\)</span> 通常只让闭环带宽偏移约 <span class="arithmatex">\(10\%\)</span>；而未建模的一阶执行器延迟 <span class="arithmatex">\(5\ \text{ms}\)</span> 在带宽 <span class="arithmatex">\(30\ \text{Hz}\)</span> 处会贡献约 <span class="arithmatex">\(54^{\circ}\)</span> 的额外相位滞后，足以把相位裕度吃光。这也是“模型误差中相位误差比幅值误差更致命”的原因。</p>
-<p>实际做法是把误差当成设计约束而不是事后补救：先确定控制器需要多少相位裕度（一般要求 <span class="arithmatex">\(45^{\circ}\)</span> 以上），再检查在哪些频段模型不可信，最后决定是降带宽还是显式建模。若模型在高频完全不可信，正确的选择通常是牺牲响应速度换取鲁棒性，而不是继续加微分或提高增益。</p>
+<p>"相位误差比幅值误差更致命"在很多教材里是直接给的结论，其实一次推导就能看出来。</p>
+<p>一个纯延迟 <span class="arithmatex">\(\tau_d\)</span> 的传递函数是 <span class="arithmatex">\(e^{-s\tau_d}\)</span>，在频率 <span class="arithmatex">\(\omega\)</span> 处：</p>
+<div class="arithmatex">\[
+|e^{-j\omega\tau_d}|=1,\qquad \angle e^{-j\omega\tau_d}=-\omega\tau_d .
+\]</div>
+<p><strong>它的模恒等于 1</strong>——一个 dB 都不改，幅值裕度完全不受影响；但它带来 <span class="arithmatex">\(\omega\tau_d\)</span> 的相位滞后。代数字：<span class="arithmatex">\(\tau_d=5\)</span> ms，在 30 Hz（<span class="arithmatex">\(\omega=2\pi\cdot30=188.5\)</span> rad/s）处，</p>
+<div class="arithmatex">\[
+\omega\tau_d=188.5\times0.005=0.94\ \text{rad}\approx 54^{\circ}.
+\]</div>
+<p>一次执行器延迟就吃掉 <span class="arithmatex">\(54^{\circ}\)</span> 相位裕度，而工程上要求的裕度通常也就 <span class="arithmatex">\(45^{\circ}\sim60^{\circ}\)</span>。相比之下，参数误差 20% 一般只让闭环带宽偏移约 10%——量级差得远。</p>
+<p>所以正确做法是把误差当<strong>设计约束</strong>而不是事后补救：先定下控制器需要多少相位裕度（一般 <span class="arithmatex">\(\geq45^{\circ}\)</span>），再检查模型在哪些频段不可信，最后决定是降带宽还是把那一段动态显式建模。<strong>如果模型在高频完全不可信，正确的选择是牺牲响应速度换鲁棒性，而不是继续加微分或提高增益</strong>——后者只是往那个不可信的频段上再压一把。</p>
+<hr />
+<h2 id="_12">十三、跑一遍，把发散看出来</h2>
+<h3 id="131-delta-t">13.1 一阶系统：同一个模型，只改 <span class="arithmatex">\(\Delta t\)</span></h3>
+<p>只依赖 numpy。被控对象取第二节那个 <span class="arithmatex">\(\dot x=-2x+2u\)</span>（稳态 <span class="arithmatex">\(x=1\)</span>，<span class="arithmatex">\(\tau=0.5\)</span> s），连续解、前向欧拉、不同 <span class="arithmatex">\(\Delta t\)</span> 并排看。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 一阶系统 x&#39; = -a*x + b*u：a=2, b=2, u=1 → 稳态 x=1.0，时间常数 tau=0.5 s</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">10.0</span>
+<span class="n">exact</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>             <span class="c1"># 连续系统的解析解</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">euler</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;前向欧拉：整段模型只有 x_{k+1} = x_k + dt*f(x_k,u) 这一行&quot;&quot;&quot;</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[],</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)):</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">a</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">u</span><span class="p">)</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t=</span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2">s 时解析解 x=</span><span class="si">{</span><span class="n">exact</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">（欧拉结果应逼近它）&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  dt    欧拉末值     误差     乘子(1-a*dt)   判定&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">):</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">euler</span><span class="p">(</span><span class="n">dt</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">dt</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;稳定&quot;</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;临界等幅振荡&quot;</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;发散&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">&lt;5</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">xs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">9.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">exact</span><span class="p">(</span><span class="n">T</span><span class="p">))</span><span class="si">:</span><span class="s2">9.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">&gt;12.2f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;把序列画成终端字符网格，&#39;-&#39; 是目标线 x=1&quot;&quot;&quot;</span>
+    <span class="n">hi</span><span class="p">,</span> <span class="n">lo</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">target</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="p">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+        <span class="n">lvl</span> <span class="o">=</span> <span class="n">hi</span> <span class="o">-</span> <span class="p">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span> <span class="o">/</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span> <span class="o">/</span> <span class="p">(</span><span class="n">cols</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))]</span> <span class="o">-</span> <span class="n">lvl</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">band</span>
+                       <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">lvl</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">band</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">))</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lvl</span><span class="si">:</span><span class="s2">6.2f</span><span class="si">}</span><span class="s2"> |</span><span class="si">{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">       +&quot;</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">cols</span>
+
+<span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">同一个系统、同样 10 s，只把 dt 换成 </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2">s：&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="p">(</span><span class="n">euler</span><span class="p">(</span><span class="n">dt</span><span class="p">)))</span>
+</code></pre></div>
+<p>&lt;待实测：实验一输出&gt;</p>
+<h3 id="132">13.2 无阻尼振荡器：前向欧拉为什么无条件不稳定</h3>
+<p>第八节声称前向欧拉的特征值模 <span class="arithmatex">\(\sqrt{1+\Delta t^2}\)</span> 对任何 <span class="arithmatex">\(\Delta t&gt;0\)</span> 都大于 1。这一段把它和"每步放大多少"一起量出来。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 无阻尼振荡器 x&#39; = [0 1; -1 0] x：连续解幅值恒定，永不衰减</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="n">x0</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">backward</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;前向欧拉 A_d=I+dt*A；后向欧拉 A_d=inv(I-dt*A)&quot;&quot;&quot;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="k">if</span> <span class="n">backward</span> <span class="k">else</span> <span class="n">I</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">A</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">amp</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">x</span>
+        <span class="n">amp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">amp</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;连续系统特征值模=1.0（振幅恒定）；下表看离散化把它变成什么&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  dt     前向欧拉模   后向欧拉模   前向1000步后振幅&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">fe_amp</span><span class="p">,</span> <span class="n">fe_mod</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">be_mod</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">backward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">fe_mod</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">    </span><span class="si">{</span><span class="n">be_mod</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">    </span><span class="si">{</span><span class="n">fe_amp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;10.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">pred</span> <span class="ow">in</span> <span class="p">((</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">500</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">500</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dt=</span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2">s、1000 步后振幅 </span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">（解析预测 </span><span class="si">{</span><span class="n">pred</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">）&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;也就是说，前向欧拉每步放大 </span><span class="si">{</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">.4%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>&lt;待实测：实验二输出&gt;</p>
+<p>两段跑出来的东西正好把前面两条结论钉死：<span class="arithmatex">\(\Delta t\)</span> 过了 <span class="arithmatex">\(2\tau\)</span> 就炸，而<strong>振荡器在前向欧拉下不管 <span class="arithmatex">\(\Delta t\)</span> 多小都在涨</strong>——所以"采样周期"确实不是工程折衷，而是模型的一部分。</p>
+<hr />
+<h2 id="_13">十四、翻车现场速查</h2>
+<p>现象出现时不用猜，按表反查：</p>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>最可能的原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型预测与实测越差越远</td>
+<td>状态不完备（漏了储能元件）</td>
+<td>同一 <span class="arithmatex">\((x,u)\)</span> 是不是对应多个未来</td>
+</tr>
+<tr>
+<td>仿真发散，但物理系统能跑</td>
+<td>离散化方法或 <span class="arithmatex">\(\Delta t\)</span> 不对</td>
+<td>特征值模是否 <span class="arithmatex">\(&gt;1\)</span>；对比后向欧拉</td>
+</tr>
+<tr>
+<td>低频振荡、怎么调增益都不行</td>
+<td>采样周期与主导时间常数同量级</td>
+<td><span class="arithmatex">\(\Delta t/\tau\)</span> 是否已接近或超过 1</td>
+</tr>
+<tr>
+<td>控制器算得出、却推不动某个量</td>
+<td>该模态不可控</td>
+<td>可控性矩阵秩；PBH 逐模态看 <span class="arithmatex">\(b_i\)</span></td>
+</tr>
+<tr>
+<td>估计器一直不收敛</td>
+<td>该模态不可观</td>
+<td>可观性矩阵秩；<span class="arithmatex">\(c_i\)</span> 是否为零</td>
+</tr>
+<tr>
+<td>小信号很好、大信号失稳</td>
+<td>线性化越界</td>
+<td>扰动幅度是否超出特征尺度 10%</td>
+</tr>
+<tr>
+<td>明明带宽不高却振荡</td>
+<td>未建模延迟在吃相位裕度</td>
+<td>算 <span class="arithmatex">\(\omega\tau_d\)</span> 是几度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_14">十五、小结：三句话</h2>
+<ul>
+<li><strong>为什么必须有状态</strong>：输入改变的是变化率，不是状态本身；要让"下一步"可预测，上一刻的信息必须以状态的形式被显式携带。漏掉一个储能元件，预测就会系统性发散。</li>
+<li><strong>为什么 <span class="arithmatex">\(A\)</span> 比控制器更基础</strong>：闭环矩阵是 <span class="arithmatex">\(A-BK\)</span>，<span class="arithmatex">\(K\)</span> 只是在一个由 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 划定的空间里挑解；<span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span>、<span class="arithmatex">\(C\)</span> 还决定可控、可观——不可控的不稳定模态，任何控制器都无能为力。</li>
+<li><strong>代价是什么</strong>：模型越准，要求的状态越多、需要辨识的参数越多、对采样周期越敏感。<span class="arithmatex">\(\Delta t\)</span> 是模型的一部分（过了 <span class="arithmatex">\(2\tau\)</span> 就会把稳定系统算成发散），模型误差里相位误差又比幅值误差更致命——所以最后一关永远是"承认哪里不可信"。</li>
+</ul>
 <blockquote>
-<p><strong>下一步</strong>：把本章的 <span class="arithmatex">\((A,B)\)</span> 交给 <a href="../02-feedback-stability/">反馈与稳定性</a> 判断闭环能否稳定；用 <a href="../03-pid/">PID 原理</a> 了解不依赖精确模型的实用方案；需要显式最优性时读 <a href="../04-lqr/">最优控制与 LQR</a>，需要处理约束时读 <a href="../05-mpc/">模型预测控制</a>。微分方程与矩阵工具的回顾见 <a href="../../mathematics/01-linear-algebra-calculus/">线性代数与微积分</a>。</p>
+<p><strong>下一步</strong>：本章给出了 <span class="arithmatex">\((A,B)\)</span>，但还没回答"闭环能不能稳"。接下来进入 <a href="../02-feedback-stability/">反馈与稳定性</a>，看特征值怎么变成稳定性判据；想先找个不依赖精确模型的实用办法，看 <a href="../03-pid/">PID 原理</a>；需要显式最优性时读 <a href="../04-lqr/">最优控制与 LQR</a>，需要处理约束时读 <a href="../05-mpc/">模型预测控制</a>。微分方程与矩阵工具的回顾见 <a href="../../mathematics/01-linear-algebra-calculus/">线性代数与微积分</a>。</p>
 </blockquote>
 
 

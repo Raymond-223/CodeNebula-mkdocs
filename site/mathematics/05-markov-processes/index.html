@@ -769,32 +769,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#markov" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Markov 性与状态完整性
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        有限状态 Markov 链由转移矩阵描述
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        多步预测来自矩阵的重复作用
+        一、先看你已经会做的一件事
       
     </span>
   </a>
@@ -805,32 +783,38 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        长期行为不等于每条样本轨迹都不一样
+        二、为什么非得把历史"压缩"掉
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、为什么非得把历史&#34;压缩&#34;掉">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 最直接的办法，坏在数量上
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#markov-mdp" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        从 Markov 过程到 MDP
+        2.2 压缩：把历史折进"现在"
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        状态设计决定 Markov 性
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -838,18 +822,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        平稳分布与收敛条件
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        连续时间 Markov 链
+        三、给"只看现在"起个名字
       
     </span>
   </a>
@@ -860,7 +833,224 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        吸收态与首次到达时间
+        四、你的"现在"够不够：一个能动手做的判据
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、你的&#34;现在&#34;够不够：一个能动手做的判据">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 现场推一个：为什么"只看位置"一定不够
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-markov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 破坏 Markov 性的四类来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、把"转移"写下来：其实只需要一张表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、把&#34;转移&#34;写下来：其实只需要一张表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 手算一遍：晴雨链
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、k 步之后：为什么枚举路径不行，矩阵乘法行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、长期会稳定吗：先分清两种"稳定"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、长期会稳定吗：先分清两种&#34;稳定&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 为什么平稳分布一定存在，什么时候唯一
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 数值实现的一个坑
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#markov-mdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、动作出现之后：从 Markov 链到 MDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、连续时间版本：状态在随机时刻跳
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、跑一遍：把"收敛"和"不收敛"看出来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、跑一遍：把&#34;收敛&#34;和&#34;不收敛&#34;看出来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 晴雨链：手算的数字和代码对不对得上
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-lambda_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 三条链对比：\(|\lambda_2|\) 是怎么决定一切的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、吸收态：怎么算"多久会坏"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、吸收态：怎么算&#34;多久会坏&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 手算一个可靠性例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：三句话
       
     </span>
   </a>
@@ -3685,32 +3875,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#markov" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Markov 性与状态完整性
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        有限状态 Markov 链由转移矩阵描述
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        多步预测来自矩阵的重复作用
+        一、先看你已经会做的一件事
       
     </span>
   </a>
@@ -3721,32 +3889,38 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        长期行为不等于每条样本轨迹都不一样
+        二、为什么非得把历史"压缩"掉
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、为什么非得把历史&#34;压缩&#34;掉">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 最直接的办法，坏在数量上
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#markov-mdp" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        从 Markov 过程到 MDP
+        2.2 压缩：把历史折进"现在"
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        状态设计决定 Markov 性
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3754,18 +3928,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        平稳分布与收敛条件
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#markov_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        连续时间 Markov 链
+        三、给"只看现在"起个名字
       
     </span>
   </a>
@@ -3776,7 +3939,224 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        吸收态与首次到达时间
+        四、你的"现在"够不够：一个能动手做的判据
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、你的&#34;现在&#34;够不够：一个能动手做的判据">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 现场推一个：为什么"只看位置"一定不够
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-markov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 破坏 Markov 性的四类来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、把"转移"写下来：其实只需要一张表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、把&#34;转移&#34;写下来：其实只需要一张表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 手算一遍：晴雨链
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、k 步之后：为什么枚举路径不行，矩阵乘法行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、长期会稳定吗：先分清两种"稳定"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、长期会稳定吗：先分清两种&#34;稳定&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 为什么平稳分布一定存在，什么时候唯一
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 数值实现的一个坑
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#markov-mdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、动作出现之后：从 Markov 链到 MDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、连续时间版本：状态在随机时刻跳
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、跑一遍：把"收敛"和"不收敛"看出来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、跑一遍：把&#34;收敛&#34;和&#34;不收敛&#34;看出来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 晴雨链：手算的数字和代码对不对得上
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-lambda_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 三条链对比：\(|\lambda_2|\) 是怎么决定一切的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、吸收态：怎么算"多久会坏"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、吸收态：怎么算&#34;多久会坏&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 手算一个可靠性例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、翻车现场速查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、小结：三句话
       
     </span>
   </a>
@@ -3875,81 +4255,157 @@
 
 
 <h1 id="markov-processes">Markov Processes</h1>
-<p>Markov 性是一种状态建模假设：<strong>给定当前状态以后，预测下一步不再需要更久以前的历史。</strong> 强化学习的 MDP、很多状态估计模型都建立在这个思想上。</p>
-<p>它之所以重要，不是因为现实世界真的没有记忆，而是因为它把「记住全部历史」这件做不到的事，替换成「把历史压缩进一个状态向量」这件可以做到的事。一旦这个替换成立，长期预测、最优控制与可靠性分析都可以只围绕一个转移算子展开，计算结构从「依赖全部过去」变成「依赖现在」。</p>
-<h2 id="markov">Markov 性与状态完整性</h2>
-<p>Markov 性写成条件独立的形式：</p>
+<blockquote>
+<p>这一章讲的事你每天早上都在做，只是没写成公式。读完你应该能自己推出三件事：为什么"把历史全部记住"在数学上活不下去、把"现在"定义好之后 k 步以后会发生什么、以及为什么"长期会稳定"和"明天一定怎样"是两个完全不同的问题。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、先看你已经会做的一件事</h2>
+<p>早上出门，你站在电梯口想知道要等多久。你抬头看一眼显示屏："电梯在 12 层，正在下行"。你心里立刻有了一个估计。</p>
+<p>整个过程你没算过任何东西，但你的判断里藏着两条东西：</p>
+<ol>
+<li><strong>你只看"现在这一刻"。</strong> 电梯三分钟前在几层、十分钟前在几层，你一点都不关心。那部分历史已经被"现在在哪、往哪走"概括掉了。</li>
+<li><strong>"现在"这两个字必须装得下足够的东西。</strong> 如果显示屏只写"电梯在 12 层"、不写方向，你就估不出来了——它可能在上来，可能在下走，也可能停在那层检修。同样一句"在 12 层"，未来完全不同。</li>
+</ol>
+<p>把这两条翻译成数学，就是整章的内容：</p>
+<ul>
+<li>第 1 条叫 <strong>Markov 性</strong>（Markov property，也叫无记忆性）：预测未来只需要"现在"，不需要更早的历史。</li>
+<li>第 2 条叫 <strong>状态完整性</strong>：你说的"现在"（也就是<strong>状态</strong>，state）必须包含影响未来的全部信息。</li>
+</ul>
+<p>所以这一章不打算让你背定义，而是沿着这两条一条条走：先看"记住全部历史"为什么活不下去，再给"只看现在"起名字，然后把这个"现在"写成一个能算的对象。</p>
+<hr />
+<h2 id="_2">二、为什么非得把历史"压缩"掉</h2>
+<h3 id="21">2.1 最直接的办法，坏在数量上</h3>
+<p>最直接的做法：要预测明天的天气，就把过去所有天的天气都记住，然后建一张"历史 → 明天"的表。</p>
+<p>假设天气只有晴、雨两种，那么过去 <span class="arithmatex">\(t\)</span> 天的历史一共 <span class="arithmatex">\(2^t\)</span> 种，这张表就得有 <span class="arithmatex">\(2^t\)</span> 行：</p>
+<table>
+<thead>
+<tr>
+<th>记住多少天</th>
+<th>要区分的条数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 天</td>
+<td><span class="arithmatex">\(2^{10}=1024\)</span></td>
+</tr>
+<tr>
+<td>20 天</td>
+<td><span class="arithmatex">\(2^{20}\approx1.0\times10^{6}\)</span></td>
+</tr>
+<tr>
+<td>30 天</td>
+<td><span class="arithmatex">\(2^{30}\approx1.1\times10^{9}\)</span></td>
+</tr>
+<tr>
+<td>100 天</td>
+<td><span class="arithmatex">\(2^{100}\approx1.3\times10^{30}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>最后一行已经不是"算得慢"的问题了：<span class="arithmatex">\(10^{30}\)</span> 条记录，就算每条只写一个字节也要 <span class="arithmatex">\(10^{21}\)</span> GB。更要命的是它是活的——今天统计好的表，明天历史变长一天，就有一半的行要重新统计。<strong>"记住全部历史"不是一个很大的有限对象，它根本不是有限对象。</strong></p>
+<h3 id="22">2.2 压缩：把历史折进"现在"</h3>
+<p>现实里我们干的事是压缩。明天会不会下雨，跟"今天下没下雨"关系最大，跟三十天前那场雨几乎没关系。于是把过去 100 天压成一句话：今天是晴还是雨。</p>
+<p>压缩一定会丢信息，关键问题是<strong>丢掉的东西对预测有没有用</strong>。电梯那个例子里，"只保留楼层、丢掉方向"就丢错了——方向对预测有用，必须留下。</p>
+<p>这就推出了本章真正的核心：状态不是"越长越好"的历史记录，而是<strong>一个刚好够用的压缩</strong>。够用 = 再多给一点历史，也不能让你预测得更准。</p>
+<hr />
+<h2 id="_3">三、给"只看现在"起个名字</h2>
+<p>把 2.2 那句"再多给一点历史也不能更准"写成公式，就是 Markov 性：</p>
 <div class="arithmatex">\[
-P(S_{t+1}\mid S_t,S_{t-1},\ldots)=P(S_{t+1}\mid S_t).
+P(S_{t+1}\mid S_t,S_{t-1},\ldots,S_0)=P(S_{t+1}\mid S_t).
 \]</div>
-<p>它不是说现实世界天然没有记忆，而是说我们定义的 <span class="arithmatex">\(S_t\)</span> 已经包含预测未来所需的全部信息。这个性质也被称为条件独立性：给定 <span class="arithmatex">\(S_t\)</span> 之后，<span class="arithmatex">\(S_{t+1}\)</span> 与 <span class="arithmatex">\(S_{t-1},\ldots,S_0\)</span> 条件独立。</p>
-<p>「状态完整性」是理解一切的钥匙。判断一个状态表示是否满足 Markov 性，只需做一个实验性提问：<strong>是否存在两个不同的历史，它们在当前时刻的状态取值相同，但未来的条件分布不同？</strong> 若存在，状态就不完整，这时用任何基于当前状态的预测都会有系统性偏差。</p>
+<p>逐项拆开：</p>
+<ul>
+<li><span class="arithmatex">\(S_t\)</span> 是 <span class="arithmatex">\(t\)</span> 时刻的<strong>状态</strong>（state），一句话概括系统在那一刻的全部关键信息；</li>
+<li>竖线 <span class="arithmatex">\(\mid\)</span> 读作"在给定……的条件下"；</li>
+<li>整句话读作：<strong>已经知道今天的状态 <span class="arithmatex">\(S_t\)</span> 之后，再把更早的历史 <span class="arithmatex">\(S_{t-1},\ldots,S_0\)</span> 加进来，对明天 <span class="arithmatex">\(S_{t+1}\)</span> 的概率判断一个字都不会变。</strong></li>
+</ul>
+<p>这个性质也叫条件独立：给定 <span class="arithmatex">\(S_t\)</span> 之后，<span class="arithmatex">\(S_{t+1}\)</span> 与过去 <span class="arithmatex">\(S_{t-1},\ldots,S_0\)</span> 条件独立。</p>
+<p>这里有一个最容易误解的地方，值得停一下：<strong>Markov 性不是在说这个世界没有记忆</strong>，而是在说<strong>你写下的 <span class="arithmatex">\(S_t\)</span> 已经把该记的都记完了</strong>。所以它是对"你怎么定义状态"的声明，不是对世界的声明。同一个系统，换一个状态定义，Markov 性可能成立也可能不成立——下一节就是在处理这件事。</p>
+<hr />
+<h2 id="_4">四、你的"现在"够不够：一个能动手做的判据</h2>
+<p>判断状态定义是否完整，只需要问一句话：</p>
+<blockquote>
+<p><strong>能不能找到两段不同的历史，它们到这一刻的状态值相同，但未来的概率分布不同？</strong></p>
+</blockquote>
+<ul>
+<li>找得到 → 状态不完整，任何只用当前状态的预测都会带<strong>系统性偏差</strong>（注意：是偏差，不是噪声，多测几次也不会消失）；</li>
+<li>找不到 → 状态满足 Markov 性。</li>
+</ul>
+<p>把它套到几个常见场景上：</p>
 <table>
 <thead>
 <tr>
 <th>场景</th>
 <th>状态表示</th>
-<th>是否满足 Markov</th>
+<th>满足 Markov 性？</th>
 <th>反例</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>匀速直线运动</td>
-<td>仅位置 <span class="arithmatex">\(p\)</span></td>
+<td>只记位置 <span class="arithmatex">\(p\)</span></td>
 <td>否</td>
-<td>同一位置，向左与向右的未来完全不同</td>
+<td>同一位置，向左和向右的未来完全不同</td>
 </tr>
 <tr>
 <td>匀速直线运动</td>
-<td>位置与速度 <span class="arithmatex">\((p,v)\)</span></td>
+<td>位置加速度 <span class="arithmatex">\((p,v)\)</span></td>
 <td>近似是</td>
 <td>加速度噪声仍会破坏，但影响有限</td>
 </tr>
 <tr>
 <td>机器人定位</td>
-<td>仅当前观测</td>
+<td>只记当前观测</td>
 <td>否</td>
-<td>同一观测可能来自不同历史位置</td>
+<td>同一个观测可能来自不同的历史位置</td>
 </tr>
 <tr>
 <td>机器人定位</td>
 <td>位姿加地图</td>
 <td>是（地图固定时）</td>
-<td>动态障碍物会破坏该假设</td>
+<td>动态障碍物会破坏这个假设</td>
 </tr>
 <tr>
 <td>排队系统</td>
-<td>仅队长</td>
+<td>只记队长</td>
 <td>否</td>
-<td>同一队长，服务时间分布可能不同</td>
+<td>队长相同，服务时间的分布可能不同</td>
 </tr>
 <tr>
 <td>M/M/1 队列</td>
 <td>队长</td>
 <td>是</td>
-<td>到达与服务时间均为指数分布</td>
+<td>到达间隔与服务时间都是指数分布</td>
 </tr>
 </tbody>
 </table>
-<p>单张图像往往无法判断速度，把前几帧或显式速度加入状态后，过程才更接近 Markov。状态维度越高，Markov 性通常越容易满足，但离散化后的状态数按维数指数增长，这个张力是整章的核心代价来源。</p>
-<p>破坏 Markov 性的来源可以分成四类，区分它们有助于决定该补哪个状态变量。</p>
+<h3 id="41">4.1 现场推一个：为什么"只看位置"一定不够</h3>
+<p>不要只看表，代数字算一遍。小车此刻在 <span class="arithmatex">\(x=5\)</span> m 处，手上握着两段历史：甲的速度 <span class="arithmatex">\(+2\)</span> m/s，乙的速度 <span class="arithmatex">\(-2\)</span> m/s。取 <span class="arithmatex">\(\Delta t=0.1\)</span> s：</p>
+<ul>
+<li>甲：下一步位置集中在 <span class="arithmatex">\(5+2\times0.1=5.2\)</span> m；</li>
+<li>乙：下一步位置集中在 <span class="arithmatex">\(5-0.2=4.8\)</span> m。</li>
+</ul>
+<p>两个位置相差 0.4 m，分布完全不重叠。而"只看位置"的模型对这两段历史给出<strong>同一个</strong>预测，误差固定 0.2 m，而且这个偏差不会因为观测次数变多而变小。<strong>这就是判据里"系统性偏差"四个字的具体含义。</strong></p>
+<p>补一句更准确的话：<span class="arithmatex">\((p,v)\)</span> 只是把这个偏差压小，它并不保证严格 Markov；加速度如果本身在变化，严格的做法是把加速度也放进状态，或者把它当噪声显式建模。</p>
+<h3 id="42-markov">4.2 破坏 Markov 性的四类来源</h3>
 <table>
 <thead>
 <tr>
 <th>破坏来源</th>
 <th>具体表现</th>
-<th>是否随时间累积</th>
+<th>是否随步数累积</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>状态遗漏关键变量</td>
+<td>状态漏掉关键变量</td>
 <td>只看位置不看速度</td>
 <td>是，预测误差随步数放大</td>
 </tr>
 <tr>
-<td>观测存在未建模偏差</td>
+<td>观测有未建模偏差</td>
 <td>传感器缓慢零漂</td>
 <td>是，缓慢累积且不易察觉</td>
 </tr>
@@ -3960,55 +4416,35 @@ P(S_{t+1}\mid S_t,S_{t-1},\ldots)=P(S_{t+1}\mid S_t).
 </tr>
 <tr>
 <td>动作延迟未建模</td>
-<td>指令与实际执行差一帧</td>
+<td>指令比实际执行早一帧</td>
 <td>是，表现为持续相位滞后</td>
 </tr>
 </tbody>
 </table>
-<p>因此发现历史信息仍能显著改善预测时，正确的第一反应不是加复杂模型，而是检查状态向量里少了什么。多数情况下补一个速度项或一帧延迟项就能恢复近似 Markov 性。</p>
-<h2 id="markov_1">有限状态 Markov 链由转移矩阵描述</h2>
-<p>若状态集合为 <span class="arithmatex">\(\{1,\ldots,n\}\)</span>，转移矩阵定义为</p>
+<p>所以：<strong>发现"加上历史信息后预测明显变准"时，第一反应不该是换更复杂的模型，而是检查状态里少了什么。</strong> 多数情况下补一个速度项、或补一帧延迟项，近似 Markov 性就回来了。</p>
+<hr />
+<h2 id="_5">五、把"转移"写下来：其实只需要一张表</h2>
+<p>现在把"只看现在"变成能算的东西。假设状态只有有限个（记作 <span class="arithmatex">\(1,\ldots,n\)</span>）、时间是离散的，那么所有问题都藏在同一张数字表里：</p>
 <div class="arithmatex">\[
 P_{ij}=P(S_{t+1}=j\mid S_t=i).
 \]</div>
-<p>矩阵的每一行对应一个当前状态，每一列对应一个下一状态，因此每一行和为 1：<span class="arithmatex">\(\sum_{j=1}^{n}P_{ij}=1\)</span> 且 <span class="arithmatex">\(P_{ij}\ge0\)</span>。满足这两条性质的矩阵称为随机矩阵，注意是行和为 1 而不是列和为 1，这个约定决定了后续公式中分布写成行向量还是列向量，本文统一采用行向量约定。</p>
+<p><span class="arithmatex">\(P_{ij}\)</span> 读作"今天在状态 <span class="arithmatex">\(i\)</span>、明天到状态 <span class="arithmatex">\(j\)</span>"的概率，这张表就叫<strong>转移矩阵</strong>（transition matrix）。三条立即的推论：</p>
+<ul>
+<li><span class="arithmatex">\(P_{ij}\ge0\)</span>：概率不能为负；</li>
+<li>每一行和为 1，即 <span class="arithmatex">\(\sum_j P_{ij}=1\)</span>：今天在 <span class="arithmatex">\(i\)</span>，明天必然落在某个状态上，概率质量不能凭空多出或漏掉；</li>
+<li>约定<strong>行 = 当前状态，列 = 下一状态</strong>。这个约定决定了后面分布要写成行向量，全文统一按行向量走。</li>
+</ul>
+<p>于是分布怎么演化也定了：若 <span class="arithmatex">\(t\)</span> 时刻的分布是行向量 <span class="arithmatex">\(\mu_t\)</span>，则</p>
+<div class="arithmatex">\[
+\mu_{t+1}=\mu_tP,\qquad (\mu_{t+1})_j=\sum_i \mu_{t,i}P_{ij}.
+\]</div>
+<p>右边这个求和式子在说一句很朴素的话：<strong>明天落在 <span class="arithmatex">\(j\)</span> 的概率，等于"当前每一种可能状态 × 从它到 <span class="arithmatex">\(j\)</span> 的概率"全部加起来。</strong> 每个分量要 <span class="arithmatex">\(n\)</span> 次乘法，<span class="arithmatex">\(n\)</span> 个分量共 <span class="arithmatex">\(n^2\)</span> 次。</p>
+<h3 id="51">5.1 手算一遍：晴雨链</h3>
+<p>状态是晴、雨，转移为：晴转晴 0.8、晴转雨 0.2、雨转晴 0.3、雨转雨 0.7。</p>
 <table>
 <thead>
 <tr>
-<th>矩阵性质</th>
-<th>数学表达</th>
-<th>违反时的后果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>非负性</td>
-<td><span class="arithmatex">\(P_{ij}\ge0\)</span></td>
-<td>出现负概率，模型无意义</td>
-</tr>
-<tr>
-<td>行归一</td>
-<td>每行之和为 1</td>
-<td>概率质量凭空产生或泄漏</td>
-</tr>
-<tr>
-<td>对角元</td>
-<td>停留概率 <span class="arithmatex">\(P_{ii}\)</span></td>
-<td>自环越大概率越粘滞</td>
-</tr>
-<tr>
-<td>稀疏零元</td>
-<td>直接不可达</td>
-<td>可用图算法加速求解</td>
-</tr>
-</tbody>
-</table>
-<p>当前分布为行向量 <span class="arithmatex">\(\mu_t\)</span> 时，下一步分布为 <span class="arithmatex">\(\mu_{t+1}=\mu_tP\)</span>，逐项写成 <span class="arithmatex">\((\mu_{t+1})_j=\sum_i \mu_{t,i}P_{ij}\)</span>，含义是「所有可能的上一步状态各自按转移概率贡献到 j」。计算每个分量需要 <span class="arithmatex">\(n\)</span> 次乘法，全部分量共 <span class="arithmatex">\(n^2\)</span> 次。</p>
-<p>一个具体例子：状态为晴天与雨天，晴转晴 0.8、晴转雨 0.2、雨转晴 0.3、雨转雨 0.7。</p>
-<table>
-<thead>
-<tr>
-<th>当前状态</th>
+<th>今天</th>
 <th>转晴概率</th>
 <th>转雨概率</th>
 <th>行和</th>
@@ -4029,177 +4465,46 @@ P_{ij}=P(S_{t+1}=j\mid S_t=i).
 </tr>
 </tbody>
 </table>
-<p>从晴天出发，即 <span class="arithmatex">\(\mu_0=(1,0)\)</span>，明天是 <span class="arithmatex">\(\mu_1=(0.8,0.2)\)</span>，后天是</p>
-<div class="arithmatex">\[
-\mu_2=\big(0.8\times0.8+0.2\times0.3,\;0.8\times0.2+0.2\times0.7\big)=(0.70,0.30).
-\]</div>
-<p>注意 <span class="arithmatex">\(\mu_1\)</span> 恰好等于矩阵第一行，这并非巧合：当初始分布是单位向量时，第一步分布就是矩阵的对应行。</p>
-<h2 id="_1">多步预测来自矩阵的重复作用</h2>
-<p>k 步之后的分布由矩阵的 k 次幂给出：</p>
+<p>从今天晴天出发，<span class="arithmatex">\(\mu_0=(1,0)\)</span>，那么</p>
+<ul>
+<li><span class="arithmatex">\(\mu_1=(1\times0.8+0\times0.3,\;1\times0.2+0\times0.7)=(0.80,0.20)\)</span>；</li>
+<li><span class="arithmatex">\(\mu_2=(0.8\times0.8+0.2\times0.3,\;0.8\times0.2+0.2\times0.7)=(0.64+0.06,\;0.16+0.14)=(0.70,0.30)\)</span>。</li>
+</ul>
+<p>两个分量加起来 <span class="arithmatex">\(0.70+0.30=1.00\)</span>——"行和为 1 保证概率质量守恒"这件事，在这里看得见。另外注意 <span class="arithmatex">\(\mu_1\)</span> 恰好等于矩阵的第一行，这不是巧合：<strong>初始分布取单位向量时，第一步分布就是矩阵对应的那一行。</strong></p>
+<hr />
+<h2 id="k">六、k 步之后：为什么枚举路径不行，矩阵乘法行</h2>
+<p>要算 <span class="arithmatex">\(k\)</span> 步之后的分布，最直接的想法是枚举路径：从状态 <span class="arithmatex">\(i\)</span> 出发走 <span class="arithmatex">\(k\)</span> 步共有 <span class="arithmatex">\(n^k\)</span> 条路径，把每条的概率算出来再加。<span class="arithmatex">\(n=10\)</span>、<span class="arithmatex">\(k=20\)</span> 就是 <span class="arithmatex">\(10^{20}\)</span> 条，这条路在 <span class="arithmatex">\(k\)</span> 稍大时就死了。</p>
+<p>矩阵乘法却能一次给出答案，因为<strong>逐条路径相加本来就是矩阵乘法的定义</strong>。看两步行不行：<span class="arithmatex">\((P^2)_{ij}=\sum_l P_{il}P_{lj}\)</span>，右边就是把"先到 <span class="arithmatex">\(l\)</span>、再到 <span class="arithmatex">\(j\)</span>"里所有可能的中间站 <span class="arithmatex">\(l\)</span> 加起来——这正好是所有两条路径的概率之和。于是</p>
 <div class="arithmatex">\[
 \mu_{t+k}=\mu_tP^k,\qquad (P^k)_{ij}=P(S_{t+k}=j\mid S_t=i).
 \]</div>
-<p>这说明很多轨迹概率可以通过线性代数统一计算，而不需要逐条枚举所有路径：从状态 i 出发走 k 步共有 <span class="arithmatex">\(n^k\)</span> 条路径，而矩阵乘法只需要 <span class="arithmatex">\(\mathcal{O}(n^3 k)\)</span> 或配合快速幂的 <span class="arithmatex">\(\mathcal{O}(n^3\log k)\)</span>。</p>
-<p>把所有可能的中间状态求和，就得到 Chapman–Kolmogorov 方程 <span class="arithmatex">\(P^{k+m}=P^kP^m\)</span>，逐元素形式是 <span class="arithmatex">\((P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}\)</span>。它说明「先走 k 步再走 m 步」与「一次走 k+m 步」等价。注意 <span class="arithmatex">\(P^k\)</span> 与 <span class="arithmatex">\(P^m\)</span> 可交换，而不同矩阵之间的乘积一般不可交换，这对应真实过程中「时间不可逆序」的性质。</p>
-<p>多步预测在风险累积估算中格外有用，常见关注量及其计算方式如下。</p>
-<table>
-<thead>
-<tr>
-<th>关注量</th>
-<th>计算式</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>k 步后处于危险状态</td>
-<td><span class="arithmatex">\((\mu_tP^k)\)</span> 在危险分量上的取值</td>
-<td>提前预警与轨迹筛选</td>
-</tr>
-<tr>
-<td>k 步内至少进入一次某集合</td>
-<td>把该集合改为吸收态后计算</td>
-<td>故障可达性分析</td>
-</tr>
-<tr>
-<td>长期平均代价</td>
-<td>平稳分布加权求和</td>
-<td>稳态性能评估</td>
-</tr>
-<tr>
-<td>首次到达时间分布</td>
-<td>用吸收态改造矩阵</td>
-<td>见后文吸收态专节</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_2">长期行为不等于每条样本轨迹都不一样</h2>
-<p>某些 Markov 链经过足够长时间会趋近平稳分布，但单条轨迹仍然随机。长期分布描述的是访问频率和概率，不是「系统最终停在某个固定状态」。为把这两件事分清，引入两个不同的量：</p>
+<p><span class="arithmatex">\(k\)</span> 步之后从 <span class="arithmatex">\(i\)</span> 到 <span class="arithmatex">\(j\)</span> 的概率，就是 <span class="arithmatex">\(P^k\)</span> 的第 <span class="arithmatex">\(i\)</span> 行第 <span class="arithmatex">\(j\)</span> 列。计算量从 <span class="arithmatex">\(O(n^k)\)</span> 降到 <span class="arithmatex">\(O(n^3k)\)</span>，配合快速幂是 <span class="arithmatex">\(O(n^3\log k)\)</span>——<strong>跟 <span class="arithmatex">\(k\)</span> 成正比的是 <span class="arithmatex">\(k\)</span> 的对数，不是 <span class="arithmatex">\(k\)</span> 本身。</strong></p>
+<p>把"先走 <span class="arithmatex">\(k\)</span> 步再走 <span class="arithmatex">\(m\)</span> 步"拆开，就得到 Chapman–Kolmogorov 方程：</p>
 <div class="arithmatex">\[
-\pi_j=\lim_{t\to\infty}P(S_t=j),\qquad \frac{1}{T}\sum_{t=1}^{T}\mathbf{1}\{S_t=j\}\to\pi_j.
+P^{k+m}=P^kP^m,\qquad (P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}.
 \]</div>
-<p>前者是某一时刻处于 j 的概率，后者是一条很长轨迹中停留在 j 的时间比例。遍历定理保证两者相等，即时间平均等于空间平均。对晴雨例子，两条轨迹可能一条连着下雨、一条连着晴，但只要足够长，各自的停留比例都会收敛到同一组 <span class="arithmatex">\(\pi\)</span>。</p>
-<table>
-<thead>
-<tr>
-<th>常见混淆</th>
-<th>错误理解</th>
-<th>正确陈述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>收敛的含义</td>
-<td>系统会停在某个状态</td>
-<td>状态仍在跳，只是频率稳定</td>
-</tr>
-<tr>
-<td>收敛的对象</td>
-<td>单条轨迹的具体位置</td>
-<td>概率分布或时间平均</td>
-</tr>
-<tr>
-<td>收敛的速度</td>
-<td>一定很快</td>
-<td>由混合时间决定，可能极慢</td>
-</tr>
-<tr>
-<td>收敛的普遍性</td>
-<td>所有链都收敛</td>
-<td>周期链或多类链不收敛</td>
-</tr>
-</tbody>
-</table>
-<p>入门阶段知道这个区别即可：不要用「稳态」去预测某台具体设备下一分钟的确切状态，它只能告诉你长期出现的比例。若过程存在多个互不连通的闭合类，连比例都会依赖初始状态，这种情况在后文平稳分布专节讨论。</p>
-<h2 id="markov-mdp">从 Markov 过程到 MDP</h2>
-<p>当转移概率还受到动作影响，并且每一步产生奖励，就进入 Markov Decision Process。形式化地，MDP 由五元组定义，与纯 Markov 链的差别集中在新增的决策与回报维度。</p>
-<table>
-<thead>
-<tr>
-<th>元素</th>
-<th>含义</th>
-<th>与纯 Markov 链的关系</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><span class="arithmatex">\(\mathcal{S}\)</span></td>
-<td>状态集合</td>
-<td>完全相同</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(\mathcal{A}\)</span></td>
-<td>动作集合</td>
-<td>链中没有，是新增的决策维度</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(P(s'\mid s,a)\)</span></td>
-<td>转移概率</td>
-<td>依赖动作，形成一个条件分布族</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(R(s,a)\)</span></td>
-<td>奖励函数</td>
-<td>链中没有，是新增的标量反馈</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(\gamma\in[0,1)\)</span></td>
-<td>折扣因子</td>
-<td>链中没有，用于定义长期回报</td>
-</tr>
-</tbody>
-</table>
-<p>理解 Markov 状态后，MDP 的结构会自然很多。核心差别是：Markov 链只有一个转移矩阵，而 MDP 对每个动作都有一个转移矩阵 <span class="arithmatex">\(P_a\)</span>，因此 MDP 可以看成「一族 Markov 链加一个选择规则」。策略 <span class="arithmatex">\(\pi(a\mid s)\)</span> 的作用就是决定在每个状态上如何混合使用这些矩阵：</p>
+<p>它说的是"分两段走"和"一次走完"结果一样——这不是新定理，就是矩阵乘法的结合律。</p>
+<p>至于"顺序不能颠倒"，值得推一遍而不是背结论：<span class="arithmatex">\(P^k\)</span> 与 <span class="arithmatex">\(P^m\)</span> 都是同一个矩阵的幂，当然可交换；但两个<strong>不同</strong>的矩阵 <span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 一般不行，因为展开 <span class="arithmatex">\((AB)_{ij}=\sum_l A_{il}B_{lj}\)</span> 时 <span class="arithmatex">\(A\)</span> 必须写在左边、<span class="arithmatex">\(B\)</span> 写在右边，互换就换了被求和的对象。物理上对应的正是"先做 A 再做 B"与"先做 B 再做 A"是两个不同过程。</p>
+<hr />
+<h2 id="_6">七、长期会稳定吗：先分清两种"稳定"</h2>
+<p>一个几乎所有人第一遍都会搞错的问题：时间久了之后，系统会不会<strong>停</strong>在某个状态上？</p>
+<p>不会。状态一直在跳，稳定的是<strong>频率</strong>，不是位置。这里必须把两个量分开：</p>
 <div class="arithmatex">\[
-P^{\pi}_{ss'}=\sum_{a}\pi(a\mid s)\,P(s'\mid s,a).
+\pi_j=\lim_{t\to\infty}P(S_t=j),\qquad \frac{1}{T}\sum_{t=1}^{T}\mathbf{1}\{S_t=j\}\to\pi_j .
 \]</div>
-<p>这个式子是连接两章的桥梁：给定策略之后，MDP 就退化成一个普通 Markov 链，于是可以用本章全部工具分析它的长期行为。策略评估之所以能写成线性方程组，正是因为这件事。Bellman 方程的完整推导与求解方法见 <a href="../../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a>。</p>
-<h2 id="markov_2">状态设计决定 Markov 性</h2>
-<p>Markov 性不是环境天然附带的标签，而是相对于状态表示而言的。只记录位置而忽略速度时，同一位置的未来可能完全不同；把速度加入状态后，转移才可能近似只依赖当前状态。因此发现历史信息仍能显著改善预测时，应首先检查状态是否遗漏了关键变量。</p>
-<table>
-<thead>
-<tr>
-<th>补充项</th>
-<th>解决的失效模式</th>
-<th>状态维度代价</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>速度与角速度</td>
-<td>位置重复但运动方向不同</td>
-<td>增加 2 到 3 维</td>
-</tr>
-<tr>
-<td>上一动作</td>
-<td>执行延迟与指令排队</td>
-<td>增加 1 到动作数维</td>
-</tr>
-<tr>
-<td>障碍物相对位置</td>
-<td>动态环境破坏静态假设</td>
-<td>随障碍数线性增长</td>
-</tr>
-<tr>
-<td>传感器偏差项</td>
-<td>零漂导致的系统性误差</td>
-<td>随传感器数线性增长</td>
-</tr>
-</tbody>
-</table>
-<p>状态设计的取舍有清晰的量化趋势：维数 <span class="arithmatex">\(d\)</span> 每增加 1，若用表格表示则参数量按 <span class="arithmatex">\(|\mathcal{S}|\)</span> 的倍数增长；若用函数逼近，样本需求大致按 <span class="arithmatex">\(d\)</span> 线性到二次增长，而离散化时的状态数按 <span class="arithmatex">\(2^d\)</span> 增长。因此「加变量换 Markov 性」的收益必须与维数灾难的代价一起权衡。</p>
-<p>一个实用的折中做法是承认状态不完整，用观测历史或信念状态代替真实状态。用固定长度的观测窗口作为伪状态，在很多系统中可以恢复近似 Markov 性，代价是连续维数上升；用信念状态 <span class="arithmatex">\(b_t=P(s_t\mid z_{1:t})\)</span> 则过程严格满足 Markov 性（信念 MDP），但信念空间是单纯形，维数高于原始状态。相关的不确定性处理见 <a href="../../robustness-safety/01-uncertainty-shift/">../robustness-safety/01-uncertainty-shift.md</a>。</p>
-<h2 id="_3">平稳分布与收敛条件</h2>
-<p>平稳分布是满足</p>
+<p>前者是"空间平均"：很多条轨迹在同一时刻的分布；后者是"时间平均"：一条很长的轨迹里停在 <span class="arithmatex">\(j\)</span> 的时间比例。<strong>遍历定理</strong>保证两者相等——这是 Markov 链里最有用的一条等式，没有它，跑一条长轨迹就推不出概率结论。</p>
+<p>回到晴雨链：两条轨迹可能一条连着下三天雨、一条连着三天晴，看起来完全不一样。但把长度拉到 1000 天，各自停在雨天的<strong>比例</strong>都会逼近同一个数。这个数就是<strong>平稳分布</strong>（stationary distribution），满足</p>
 <div class="arithmatex">\[
-\pi=\pi P,\qquad \sum_j\pi_j=1,\quad \pi_j\ge0
+\pi=\pi P,\qquad \sum_j\pi_j=1,\quad \pi_j\ge0 .
 \]</div>
-<p>的分布。它的含义是：若当前分布已经是 <span class="arithmatex">\(\pi\)</span>，则经过任意多步仍然保持 <span class="arithmatex">\(\pi\)</span>。因此 <span class="arithmatex">\(\pi\)</span> 是转移矩阵的左特征向量，对应特征值 1。</p>
-<p>特征值视角能把一切说清楚。随机矩阵总有特征值 1，其余特征值满足模不超过 1。设 <span class="arithmatex">\(\lambda_2\)</span> 为模第二大的特征值，它的模决定长期行为。</p>
+<p>含义是：当前分布已经是 <span class="arithmatex">\(\pi\)</span> 时，再走任意多步还是 <span class="arithmatex">\(\pi\)</span>。手解晴雨链：设 <span class="arithmatex">\(\pi=(\pi_1,\pi_2)\)</span>，方程给出 <span class="arithmatex">\(0.8\pi_1+0.3\pi_2=\pi_1\)</span>，配上 <span class="arithmatex">\(\pi_1+\pi_2=1\)</span>，解得 <span class="arithmatex">\(\pi=(0.60,0.40)\)</span>。验算回去：<span class="arithmatex">\(0.8\times0.60+0.3\times0.40=0.48+0.12=0.60\)</span>，对上了。</p>
+<h3 id="71">7.1 为什么平稳分布一定存在，什么时候唯一</h3>
+<p>不用查定理，从"每行和为 1"就能看出存在性：每行和为 1 意味着 <span class="arithmatex">\(P\mathbf{1}=\mathbf{1}\)</span>，即 <span class="arithmatex">\(\mathbf{1}\)</span> 是特征值 1 对应的<strong>右</strong>特征向量；而随机矩阵的行和条件同时保证特征值 1 也对应一个<strong>左</strong>特征向量，把它归一化就是 <span class="arithmatex">\(\pi\)</span>。所以随机矩阵总有平稳分布，问题只剩"唯不唯一"。</p>
+<p>是否唯一、以及从任意初值能否收敛到它，由<strong>模第二大的特征值</strong> <span class="arithmatex">\(|\lambda_2|\)</span> 决定：</p>
 <table>
 <thead>
 <tr>
-<th>第二特征值模</th>
+<th>模第二大的特征值</th>
 <th>长期行为</th>
 <th>典型结构</th>
 </tr>
@@ -4211,65 +4516,96 @@ P^{\pi}_{ss'}=\sum_{a}\pi(a\mid s)\,P(s'\mid s,a).
 <td>不可约且非周期</td>
 </tr>
 <tr>
-<td>等于 1 且为负实数</td>
-<td>分布振荡，不收敛</td>
+<td>等于 1，且是负实数</td>
+<td>来回振荡，不收敛</td>
 <td>周期链，例如确定型两状态交替</td>
 </tr>
 <tr>
-<td>多个特征值模为 1</td>
+<td>有多个特征值模为 1</td>
 <td>收敛到多个平稳分布之一</td>
-<td>可约链，存在多个闭合类</td>
+<td>可约链，存在多个不相通的闭合类</td>
 </tr>
 </tbody>
 </table>
-<p>周期性的定义是所有可能返回步数的最大公约数大于 1。最简单的周期链是确定型两状态交替：从晴必然转雨、从雨必然转晴，转移矩阵对应行为 <span class="arithmatex">\((0,1)\)</span> 与 <span class="arithmatex">\((1,0)\)</span>，此时 <span class="arithmatex">\(\mu\)</span> 在两组取值之间往复，永不收敛。但只要在任一状态加上极小的自环，例如把晴转晴概率从 0 改为 0.001，模第二大的特征值立刻降到略小于 1，链变成非周期并开始收敛。这解释了为什么实际系统几乎总有停留或噪声，从而消除了严格的周期性。</p>
-<p>遍历性指不可约、非周期且正常返，它一次性保证三件事：唯一平稳分布存在、从任意初始分布收敛到它、时间平均等于空间平均。收敛速度由混合时间刻画，在总变差距离意义下有</p>
+<p><strong>周期链</strong>的定义是所有可能返回步数的最大公约数大于 1。最简单的例子是"晴必转雨、雨必转晴"，转移矩阵两行分别是 <span class="arithmatex">\((0,1)\)</span> 和 <span class="arithmatex">\((1,0)\)</span>，此时分布永远在两点之间跳：</p>
+<div class="highlight"><pre><span></span><code>确定型交替链                      晴雨链（0.8 / 0.3）
+μ0 (1.00, 0.00) 晴               μ0 (1.00, 0.00) 晴
+μ1 (0.00, 1.00) 雨               μ1 (0.80, 0.20)
+μ2 (1.00, 0.00) 晴               μ2 (0.70, 0.30)
+μ3 (0.00, 1.00) 雨               μ3 (0.65, 0.35)
+…  永远两点间跳，不收敛            …  逐步逼近 (0.60, 0.40)
+</code></pre></div>
+<p>但只要给任一状态加上极小的自环——比如把"晴转晴"从 0 改成 0.001——<span class="arithmatex">\(|\lambda_2|\)</span> 就从 1 变成 0.998，链变成非周期、开始收敛（第十节的代码会实测这一条）。这也解释了为什么现实系统几乎总在收敛：现实中总有停留和噪声，严格周期几乎不可能维持。</p>
+<p>收敛<strong>多快</strong>由特征值间隙 <span class="arithmatex">\(1-|\lambda_2|\)</span> 决定。在总变差距离意义下，混合时间（mixing time，走到与 <span class="arithmatex">\(\pi\)</span> 的距离小于 <span class="arithmatex">\(\varepsilon\)</span> 所需的步数）满足</p>
 <div class="arithmatex">\[
 t_{\mathrm{mix}}(\varepsilon)\lesssim\frac{\log(1/\varepsilon)}{1-|\lambda_2|}.
 \]</div>
-<p>这个不等式给出了可操作的诊断：模第二特征值越接近 1，收敛越慢，所需步数与 <span class="arithmatex">\(1/(1-|\lambda_2|)\)</span> 成正比。</p>
+<p>按 <span class="arithmatex">\(\varepsilon=0.01\)</span> 代进去：</p>
+<p>| 特征值间隙 <span class="arithmatex">\(1-|\lambda_2|\)</span> | 混合时间上界 | 现场含义 |
+| --- | --- | --- |
+| 0.9 | 约 5 步 | 快，短预热就够 |
+| 0.1 | 约 46 步 | 中等，预热要算进预算 |
+| 0.01 | 约 460 步 | 慢，短任务里看着像不收敛 |
+| 0.001 | 约 4605 步 | 极慢，实践中近似不可收敛 |</p>
+<p>真实系统的间隔常落在这张表的后两档，所以"跑了几百步还没稳定"多数时候不是代码写错了，而是链本身就这么慢。</p>
+<h3 id="72">7.2 数值实现的一个坑</h3>
+<p><span class="arithmatex">\(P^k\)</span> 可以靠反复乘 <span class="arithmatex">\(P\)</span> 迭代出来，但每乘一次都引入一次浮点舍入，行和会慢慢偏离 1。实践中的做法是每若干步重新归一化一次（把每行除以它自己的行和），代价可以忽略，换来的是长迭代不发散。</p>
+<hr />
+<h2 id="markov-mdp">八、动作出现之后：从 Markov 链到 MDP</h2>
+<p>到这里，转移概率 <span class="arithmatex">\(P_{ij}\)</span> 都是老天定的，你只能算、不能改。把"你能选一个动作 <span class="arithmatex">\(a\)</span>"加进来，就得到 Markov 决策过程（Markov Decision Process，MDP）。</p>
 <table>
 <thead>
 <tr>
-<th>特征值间隙</th>
-<th>大致混合时间（精度 0.01）</th>
-<th>工程含义</th>
+<th>元素</th>
+<th>含义</th>
+<th>相对纯 Markov 链</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0.9</td>
-<td>约 5 步</td>
-<td>快速混合，短预热即可</td>
+<td><span class="arithmatex">\(\mathcal{S}\)</span></td>
+<td>状态集合</td>
+<td>完全相同</td>
 </tr>
 <tr>
-<td>0.1</td>
-<td>约 46 步</td>
-<td>中等，需要在预算内预热</td>
+<td><span class="arithmatex">\(\mathcal{A}\)</span></td>
+<td>动作集合</td>
+<td>新增的决策维度</td>
 </tr>
 <tr>
-<td>0.01</td>
-<td>约 460 步</td>
-<td>慢，短任务中看起来不收敛</td>
+<td><span class="arithmatex">\(P(s'\mid s,a)\)</span></td>
+<td>转移概率</td>
+<td>不再是一张表，而是每个动作一张</td>
 </tr>
 <tr>
-<td>0.001</td>
-<td>约 4605 步</td>
-<td>极慢，实践中近似不可收敛</td>
+<td><span class="arithmatex">\(R(s,a)\)</span></td>
+<td>奖励</td>
+<td>新增的标量反馈</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\gamma\in[0,1)\)</span></td>
+<td>折扣因子</td>
+<td>新增，用来定义长期回报</td>
 </tr>
 </tbody>
 </table>
-<p>数值上还有一点值得注意：<span class="arithmatex">\(P^k\)</span> 可以迭代计算，但代入很大的 k 时浮点误差会累积，实践中常每若干步重新归一化以维持每行之和为 1。</p>
-<h2 id="markov_3">连续时间 Markov 链</h2>
-<p>离散链的每一步都有明确时间索引，而许多物理系统的状态变化发生在随机时刻。连续时间 Markov 链用速率矩阵（生成元）<span class="arithmatex">\(Q\)</span> 描述，非对角元表示瞬时转移速率：</p>
+<p>理解上只需要一句话：<strong>MDP 就是"一族 Markov 链 + 一个选链的规则"。</strong> 固定一个策略 <span class="arithmatex">\(\pi(a\mid s)\)</span>，把各动作的转移矩阵按策略加权混合：</p>
 <div class="arithmatex">\[
-Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
+P^{\pi}_{ss'}=\sum_a\pi(a\mid s)\,P(s'\mid s,a).
 \]</div>
-<p>注意最后一条：<span class="arithmatex">\(Q\)</span> 的每一行和为 0，这与离散链每行和为 1 形成对照。概率分布满足微分方程，其解用矩阵指数表示：</p>
+<p>混完以后，MDP 就退化成一个普通 Markov 链，于是这一章的全部工具立刻可用：策略评估要解的那条线性方程组，来源就是 <span class="arithmatex">\(\pi^{\pi}=\pi^{\pi}P^{\pi}\)</span>；吸收态那套 <span class="arithmatex">\(t=(I-Q)^{-1}\mathbf{1}\)</span> 也直接搬得过来——把"终止"当作吸收态就行了。</p>
+<hr />
+<h2 id="_7">九、连续时间版本：状态在随机时刻跳</h2>
+<p>前面所有内容都假设有一个统一的节拍 <span class="arithmatex">\(t=0,1,2,\ldots\)</span>。但设备故障、消息到达、粒子衰变都发生在<strong>任意时刻</strong>，硬套离散模型就得先决定"一步多长"，步长取小了慢、取大了不准。</p>
+<p>于是把"每步转移概率"换成"<strong>速率</strong>"：定义速率矩阵（也叫生成元）<span class="arithmatex">\(Q\)</span>，非对角元 <span class="arithmatex">\(Q_{ij}\)</span> 是从 <span class="arithmatex">\(i\)</span> 跳到 <span class="arithmatex">\(j\)</span> 的瞬时速率（单位 1/时间），对角元由"概率不能凭空产生"补上：</p>
+<div class="arithmatex">\[
+Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0 .
+\]</div>
+<p>注意最后一条：<strong><span class="arithmatex">\(Q\)</span> 的每行和为 0</strong>，而离散链的 <span class="arithmatex">\(P\)</span> 每行和为 1。这不是形式差异，是分工不同——<span class="arithmatex">\(P\)</span> 直接给概率，<span class="arithmatex">\(Q\)</span> 给的是概率变化的速率。分布满足微分方程，解用矩阵指数表示：</p>
 <div class="arithmatex">\[
 \frac{d\mu(t)}{dt}=\mu(t)Q,\qquad \mu(t)=\mu(0)e^{Qt}.
 \]</div>
-<p>这里的矩阵指数 <span class="arithmatex">\(e^{Qt}\)</span> 取代了离散链中的 <span class="arithmatex">\(P^k\)</span>，两种模型可以逐项对应。</p>
+<p>对应关系可以一次看完：</p>
 <table>
 <thead>
 <tr>
@@ -4290,14 +4626,14 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
 <td><span class="arithmatex">\(d\mu/dt=\mu Q\)</span></td>
 </tr>
 <tr>
-<td>多步或长时间</td>
+<td>走 k 步 / 走 t 时间</td>
 <td><span class="arithmatex">\(\mu_t=\mu_0P^t\)</span></td>
 <td><span class="arithmatex">\(\mu(t)=\mu_0e^{Qt}\)</span></td>
 </tr>
 <tr>
 <td>停留时间分布</td>
 <td>几何分布，均值由对角元决定</td>
-<td>指数分布，均值等于 $1/</td>
+<td>指数分布，均值 $1/</td>
 </tr>
 <tr>
 <td>平稳条件</td>
@@ -4311,15 +4647,15 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
 </tr>
 </tbody>
 </table>
-<p>「无记忆」在连续时间中的含义更强：停留时间必须服从指数分布。原因是指数分布是唯一满足 <span class="arithmatex">\(P(T&gt;s+t\mid T&gt;s)=P(T&gt;t)\)</span> 的连续分布，而 Markov 性要求不看已经停留了多久。若某设备寿命服从威布尔分布而非指数分布，严格来说它就不是连续时间 Markov 链。</p>
-<p>生灭过程是最常用的特例，状态为非负整数，只允许相邻转移，向上速率记为出生率、向下速率记为死亡率。对 M/M/1 队列，到达率恒为 <span class="arithmatex">\(\lambda\)</span>、服务率恒为 <span class="arithmatex">\(\mu\)</span>，令利用率 <span class="arithmatex">\(\rho=\lambda/\mu\)</span>，平稳分布有闭式解 <span class="arithmatex">\(\pi_i=(1-\rho)\rho^i\)</span>。</p>
+<p>"无记忆"在连续时间里要求比离散时间<strong>更强</strong>：停留时间必须服从指数分布。原因是指数分布是唯一满足 <span class="arithmatex">\(P(T&gt;s+t\mid T&gt;s)=P(T&gt;t)\)</span> 的连续分布——不让你看已经等了多久，就只能是它。所以如果某设备的寿命服从威布尔分布而不是指数分布，严格说它就不是连续时间 Markov 链。</p>
+<p>最常用的特例是<strong>生灭过程</strong>：状态是非负整数（比如队列长度），只允许相邻跳，往上叫出生率、往下叫死亡率。M/M/1 队列里到达率恒为 <span class="arithmatex">\(\lambda\)</span>、服务率恒为 <span class="arithmatex">\(\mu\)</span>，记利用率 <span class="arithmatex">\(\rho=\lambda/\mu\)</span>，平稳分布有闭式解 <span class="arithmatex">\(\pi_i=(1-\rho)\rho^{i}\)</span>：</p>
 <table>
 <thead>
 <tr>
-<th>利用率</th>
+<th>利用率 <span class="arithmatex">\(\rho\)</span></th>
 <th>空队列概率</th>
-<th>平均队长</th>
-<th>平均逗留时间（服务时间单位）</th>
+<th>平均队长 <span class="arithmatex">\(\rho/(1-\rho)\)</span></th>
+<th>平均逗留时间（以服务时间为单位）<span class="arithmatex">\(1/(1-\rho)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -4349,27 +4685,92 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
 </tr>
 </tbody>
 </table>
-<p>这张表说明了排队系统的非线性恶化：利用率从 0.9 提到 0.99，平均队长翻了十倍以上。若到达率不小于服务率，队列不稳定，平稳分布根本不存在，这就是平稳分布存在的前提条件。</p>
-<h2 id="_4">吸收态与首次到达时间</h2>
-<p>吸收态是指一旦进入就不再离开的状态，即该行只有一个非零元。它天然地表示终局状态。</p>
+<p>这张表是排队系统最反直觉的地方：利用率从 0.9 提到 0.99，只多了 10%，平均队长却从 9 涨到 99，<strong>涨了 11 倍</strong>。原因在闭式解里看得很清楚——队长正比于 <span class="arithmatex">\(1/(1-\rho)\)</span>，分母在接近临界时塌下去。</p>
+<p>它顺手给出了平稳分布存在的<strong>前提</strong>：必须 <span class="arithmatex">\(\lambda&lt;\mu\)</span>（即 <span class="arithmatex">\(\rho&lt;1\)</span>）。若到达率不小于服务率，队长的漂移方向是向上的，永远回不到 0，平稳分布根本不存在，上面所有公式都不适用。</p>
+<hr />
+<h2 id="_8">十、跑一遍：把"收敛"和"不收敛"看出来</h2>
+<h3 id="101">10.1 晴雨链：手算的数字和代码对不对得上</h3>
+<p>下面这段只依赖 numpy，把第五、六、七节的数字全部验一遍。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>        <span class="c1"># 行=今天，列=明天：[晴→晴, 晴→雨]</span>
+              <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]])</span>       <span class="c1"># [雨→晴, 雨→雨]</span>
+
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>        <span class="c1"># mu_0：今天是晴天</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P</span>                  <span class="c1"># 一步预测：mu_k = mu_{k-1} P</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">  mu_k=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">  行和=</span><span class="si">{</span><span class="n">mu</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>              <span class="c1"># 解 pi P = pi，最后一行换成归一化条件</span>
+<span class="n">A</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;平稳分布 pi=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">  校验 pi@P=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pi</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">lam2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>         <span class="c1"># 模第二大的特征值</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;特征值=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">  |lam2|=</span><span class="si">{</span><span class="n">lam2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;按 log(1/eps)/(1-|lam2|) 估，到 0.01 精度约 </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lam2</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> 步&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="102-lambda_2">10.2 三条链对比：<span class="arithmatex">\(|\lambda_2|\)</span> 是怎么决定一切的</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">stationary</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;解 pi P = pi 且 pi 之和为 1&quot;&quot;&quot;</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+    <span class="n">A</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">));</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">chains</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;晴雨链      &quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]]),</span>
+    <span class="s2">&quot;慢链(0.99) &quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">]]),</span>
+    <span class="s2">&quot;交替链(周期)&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]),</span>
+    <span class="s2">&quot;交替+自环.001&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.999</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">]]),</span>
+<span class="p">}</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">chains</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">stationary</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">mu</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">mu0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">):</span>                 <span class="c1"># 迭代 1000 步，取 4 个检查点</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">):</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>     <span class="c1"># 与平稳分布的总变差距离</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dist</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> |lam2|=</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">P</span><span class="p">)))[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">距离衰减（每格 0.1，上限 2.0）  列：k=1 / 4 / 16 / 64 / 200&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">chains</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">bars</span> <span class="o">=</span> <span class="n">stationary</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">mu0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">):</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="n">bars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bars</span><span class="p">))</span>
+</code></pre></div>
+<hr />
+<h2 id="_9">十一、吸收态：怎么算"多久会坏"</h2>
+<p>有些状态一旦进去就不出来了，这叫<strong>吸收态</strong>（absorbing state）：转移矩阵那一行只有一个非零元，而且落在自己身上。</p>
 <table>
 <thead>
 <tr>
 <th>领域</th>
 <th>吸收态的含义</th>
-<th>为什么用吸收态建模</th>
+<th>为什么这么建模</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>可靠性</td>
 <td>设备故障且不可修复</td>
-<td>关心到达时间而非长期分布</td>
+<td>关心"多久到达"，不关心长期分布</td>
 </tr>
 <tr>
 <td>安全性</td>
 <td>碰撞或越界已经发生</td>
-<td>一旦发生系统已失败，过程终止</td>
+<td>一旦发生，过程已经终止</td>
 </tr>
 <tr>
 <td>任务与博弈</td>
@@ -4379,23 +4780,90 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0.
 <tr>
 <td>医学随访</td>
 <td>死亡或康复</td>
-<td>后续不再属于研究人群</td>
+<td>之后不再属于研究人群</td>
 </tr>
 </tbody>
 </table>
-<p>要把问题写成线性方程组，先按结构划分状态。把状态分成瞬态集合与吸收集合，重排后的转移矩阵具有分块形式，其中瞬态之间的转移子矩阵记为 <span class="arithmatex">\(Q\)</span>，从瞬态直接进入吸收态的概率向量记为 <span class="arithmatex">\(r\)</span>。</p>
-<p>设 <span class="arithmatex">\(f\)</span> 为从各瞬态出发最终被吸收的概率，对它做一步分析得到 <span class="arithmatex">\(f=Qf+r\)</span>，于是</p>
-<div class="arithmatex">\[
-f=(I-Q)^{-1}r.
-\]</div>
-<p>设 <span class="arithmatex">\(t\)</span> 为从各瞬态出发进入吸收态所需步数的期望，每步计数加 1，得到</p>
-<div class="arithmatex">\[
-t=Q\,t+\mathbf{1},\qquad t=(I-Q)^{-1}\mathbf{1}.
-\]</div>
-<p>若关心的是到达某个特定状态而非任意吸收态，只需把该状态当作吸收态处理，在子矩阵中删去它的行列即可。矩阵 <span class="arithmatex">\(I-Q\)</span> 可逆的充要条件是从每个瞬态出发都有正概率最终被吸收；若存在既能被吸收又能在内部无限游走的闭合类，<span class="arithmatex">\(I-Q\)</span> 奇异，期望时间发散，对应「系统可能永远不故障」的情形。</p>
-<p>一个两状态可靠性例子：正常态每步故障概率为 0.01，故障态为吸收态，则期望到达时间为 <span class="arithmatex">\((1-0.99)^{-1}=100\)</span> 步。加入中间退化态后寿命会显著缩短，例如正常转退化概率 0.02、退化转故障 0.1、退化转正常 0.05，解对应的线性方程组得退化态期望约 11.8 步、正常态期望约 31 步。系统整体寿命从 100 步降到 31 步，这正是引入中间状态的价值：它把缓慢劣化这一过程显式建模出来。</p>
+<p>把状态按这个结构重排：瞬态一组、吸收态一组。设 <span class="arithmatex">\(Q\)</span> 为瞬态之间的转移子矩阵，<span class="arithmatex">\(r\)</span> 为从每个瞬态<strong>直接</strong>进入吸收态的概率向量，<span class="arithmatex">\(f\)</span> 为从各瞬态出发最终被吸收的概率。对它做一步分析：</p>
 <blockquote>
-<p><strong>下一步</strong>：读 <a href="../06-optimization-under-uncertainty/">./06-optimization-under-uncertainty.md</a> 看如何在这些随机过程上做最优决策；MDP 的 Bellman 推导见 <a href="../../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a>；若关心状态估计中 Markov 性假设如何落实，回到 <a href="../04-conditional-bayes/">./04-conditional-bayes.md</a>。</p>
+<p>第一步可能还在瞬态里打转（那部分概率是 <span class="arithmatex">\(Qf\)</span>），也可能一步就掉进吸收态（那部分是 <span class="arithmatex">\(r\)</span>）。两件事加起来就是全部，于是 <span class="arithmatex">\(f=Qf+r\)</span>。</p>
+</blockquote>
+<p>把 <span class="arithmatex">\(f\)</span> 解出来：</p>
+<div class="arithmatex">\[
+f=(I-Q)^{-1}r .
+\]</div>
+<p>同样的写法拿来算期望步数 <span class="arithmatex">\(t\)</span>——每一步都记 1 步，所以 <span class="arithmatex">\(t=Qt+\mathbf{1}\)</span>，即</p>
+<div class="arithmatex">\[
+t=(I-Q)^{-1}\mathbf{1} .
+\]</div>
+<p><span class="arithmatex">\(I-Q\)</span> 可逆的充要条件是<strong>从每个瞬态出发都有正概率最终被吸收</strong>。若存在一个既能被吸收、又能在内部无限游走的闭合类，<span class="arithmatex">\(I-Q\)</span> 奇异，期望时间发散——对应的现实情形就是"这台设备有可能永远不坏"。</p>
+<h3 id="111">11.1 手算一个可靠性例子</h3>
+<p>先看最简单的：正常态每步故障概率 0.01，故障是吸收态。只有一个瞬态，<span class="arithmatex">\(Q=[0.99]\)</span>，于是 <span class="arithmatex">\(t=(1-0.99)^{-1}=100\)</span> 步。这个数不用矩阵也知道：每步 1% 的概率，期望就是等 100 步。</p>
+<p>现在把"缓慢劣化"显式建出来：加一个退化态，正常转退化 0.02，退化转故障 0.1，退化转正常 0.05（所以退化每步停在自己这儿的概率是 <span class="arithmatex">\(1-0.1-0.05=0.85\)</span>）。瞬态子矩阵是</p>
+<div class="arithmatex">\[
+Q=\begin{pmatrix}0.98&amp;0.02\\0.05&amp;0.85\end{pmatrix},\qquad
+I-Q=\begin{pmatrix}0.02&amp;-0.02\\-0.05&amp;0.15\end{pmatrix}.
+\]</div>
+<p>解出 <span class="arithmatex">\(t=(I-Q)^{-1}\mathbf{1}\)</span>，得到从退化态出发期望 <strong>35 步</strong>、从正常态出发期望 <strong>85 步</strong>（第十节的代码会把它算出来）。这个 85 还能手推验证一下：正常态每步有 0.02 的概率掉进退化态，等它发生平均要 <span class="arithmatex">\(1/0.02=50\)</span> 步，掉进去以后平均还要 35 步，<span class="arithmatex">\(50+35=85\)</span>，对上了。</p>
+<p><strong>这里要纠正一个流传的数字</strong>：网上和一些旧讲义里写这一组转移对应的期望是"退化态 11.8 步、正常态 31 步"，与上面的矩阵对不上。按 <span class="arithmatex">\(t=(I-Q)^{-1}\mathbf{1}\)</span> 认真解一遍，正确值是 35 和 85。</p>
+<p>这两个数怎么用？如果你只知道"每步 1% 会坏"，你会得到 100 步；显式建出退化态后，从正常态出发的真实期望是 85 步——<strong>更关键的是那句"一旦进入退化态，只剩 35 步"</strong>。只盯着 85 这个总数，会漏掉检修窗口真正的入口。这正是引入中间状态的价值：它把"缓慢劣化"从一句假设变成显式可算的结构。</p>
+<hr />
+<h2 id="_10">十二、翻车现场速查</h2>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>最可能的原因</th>
+<th>先验证什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一旦把前几帧信息加进去，预测明显变准</td>
+<td>状态不完整，漏了关键变量</td>
+<td>用第四节那句判据找反例；补速度或上一动作</td>
+</tr>
+<tr>
+<td>预测越走越离谱</td>
+<td>状态漏变量，误差被 <span class="arithmatex">\(P^k\)</span> 放大</td>
+<td>拿 <span class="arithmatex">\(k=10\)</span> 的预测和实测比，别只看一步</td>
+</tr>
+<tr>
+<td>分布来回振荡、就是不收敛</td>
+<td>周期链，某状态的停留概率为 0</td>
+<td>看 $</td>
+</tr>
+<tr>
+<td>迭代很久还是不稳</td>
+<td>链本身混合慢，不是代码错</td>
+<td>估一下 $1/(1-</td>
+</tr>
+<tr>
+<td>迭代十万步后概率和不再是 1</td>
+<td>浮点舍入累积</td>
+<td>每若干步重新归一化</td>
+</tr>
+<tr>
+<td>实测队长比公式小得多</td>
+<td><span class="arithmatex">\(\rho=\lambda/\mu\)</span> 已接近 1，平稳分布勉强存在</td>
+<td>先核 <span class="arithmatex">\(\rho&lt;1\)</span>，再看是否真的到了稳态</td>
+</tr>
+<tr>
+<td>期望故障时间和实际差很多</td>
+<td>转移概率来路不明，或漏掉劣化过程</td>
+<td>显式建退化态后重算 <span class="arithmatex">\(t=(I-Q)^{-1}\mathbf{1}\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_11">十三、小结：三句话</h2>
+<ul>
+<li><strong>为什么必须有它</strong>：把"记住全部历史"换成"把历史压进一个状态"，是让长期预测从不现实（<span class="arithmatex">\(2^t\)</span> 条历史）变成一次矩阵乘法（<span class="arithmatex">\(P^k\)</span>）的唯一办法。本章所有公式——<span class="arithmatex">\(\mu_tP^k\)</span>、<span class="arithmatex">\(\pi=\pi P\)</span>、<span class="arithmatex">\(\pi Q=0\)</span>、<span class="arithmatex">\((I-Q)^{-1}\mathbf{1}\)</span>——都是这一个替换的后果。</li>
+<li><strong>代价是两件事</strong>：一是状态定义错了没有补救（第四节那句判据永远先查）；二是"长期稳定"只保证频率、不保证位置，而收敛速度由 <span class="arithmatex">\(1-|\lambda_2|\)</span> 决定，真实系统的这个数常常小到让你以为代码坏了。</li>
+<li><strong>它和下一章的关系</strong>：这里转移概率是给定的，你只能预测。一旦转移可以由你选的动作改变、并且每步带着奖励，问题就从"预测"升级成"决策"。</li>
+</ul>
+<blockquote>
+<p><strong>下一步</strong>：读 <a href="../06-optimization-under-uncertainty/">./06-optimization-under-uncertainty.md</a> 看怎么在这些随机过程上做最优决策；把"转移受动作影响"写完整就是 MDP，Bellman 方程的推导见 <a href="../../reinforcement-learning/01-mdp-bellman/">../reinforcement-learning/01-mdp-bellman.md</a>；递推滤波里那个"只依赖上一时刻"的假设，可以回看 <a href="../04-conditional-bayes/">./04-conditional-bayes.md</a>。</p>
 </blockquote>
 
 
