@@ -423,7 +423,17 @@ for a in (0.10, 0.45, 0.90, 1.00):
 跑出来是这样：
 
 ```text
-PENDING_RUN_1
+① 驻点 c/1.1，以及可行域 [-1, 1] 上的最优解
+   c= 0.35  驻点=+0.318  驻点可行=True  最优u=+0.318  J=0.0111  约束不起作用
+   c=  1.8  驻点=+1.636  驻点可行=False  最优u=+1.000  J=0.7400  约束起作用
+   c= -2.0  驻点=-1.818  驻点可行=False  最优u=-1.000  J=1.1000  约束起作用
+② 报价单：min (x-0.2)^2 s.t. x >= 0.5
+   lambda*=0.600   下界 0.5->0.49 的实际收益=0.0059 (lambda* x 0.01 = 0.0060)
+③ 步长：u0=5.0，L=2.2，收敛门槛 1/L=0.4545，发散门槛 2/L=0.909
+   alpha=0.1   迭代   62 次  u=+0.318183  J(u)=0.011136
+   alpha=0.45  迭代    4 次  u=+0.318182  J(u)=0.011136
+   alpha=0.9   迭代  761 次  u=+0.318181  J(u)=0.011136
+   alpha=1.0   迭代 2000 次  u=+1.079e+159  -> 发散
 ```
 
 ### 9.2 实验二：三条路线用同一个不确定性比一比
@@ -456,33 +466,20 @@ report("期望型", grid[C.mean(axis=1).argmin()])
 report("最坏情况型", grid[C.max(axis=1).argmin()])
 report("机会约束 95%", np.quantile(theta, 0.95))
 report("机会约束 99%", np.quantile(theta, 0.99))
-
-# 把平均代价画成终端网格：谁在制约这个选择，一眼就看得出来
-avg = C.mean(axis=1)
-rows, cols = 11, 58
-idx = np.linspace(0, len(grid) - 1, cols).round().astype(int)
-v, lo, hi = avg[idx], avg.min(), avg.max()
-canvas = [[" "] * cols for _ in range(rows)]
-for j, val in enumerate(v):
-    canvas[int(round((hi - val) / (hi - lo) * (rows - 1)))][j] = "*"
-for u, ch in ((grid[C.mean(axis=1).argmin()], "E"),
-              (grid[C.max(axis=1).argmin()], "W"),
-              (np.quantile(theta, 0.95), "c")):
-    j = int(round(u / grid[-1] * (cols - 1)))
-    for r in range(rows):
-        canvas[r][j] = ch
-print("\n平均代价 J(u) 曲线：E=期望型最优  W=最坏情况型最优  c=95% 机会约束")
-for r in range(rows):
-    print(f"  {hi - (hi - lo) * r / (rows - 1):6.3f} |" + "".join(canvas[r]))
-print("         +" + "-" * cols)
-print(f"          u={grid[0]:.1f}" + " " * (cols - 18) + f"u={grid[-1]:.1f}")
 ```
 
 跑出来是这样：
 
 ```text
-PENDING_RUN_2
+同一个不确定性，五条路线选出的 u 完全不同：
+   标称 theta=1     u=1.000  平均代价=1.3670  最坏代价=5.0990  违规率= 50.42%
+   期望型            u=1.850  平均代价=0.3698  最坏代价=1.0913  违规率=  7.47%
+   最坏情况型          u=2.000  平均代价=0.4000  最坏代价=0.4000  违规率=  0.00%
+   机会约束 95%       u=1.897  平均代价=0.3726  最坏代价=0.8750  违规率=  5.00%
+   机会约束 99%       u=1.978  平均代价=0.3920  最坏代价=0.4983  违规率=  1.00%
 ```
+
+![同一不确定性下期望型、最坏情况型与机会约束的选择位置](../assets/diagrams/optimization-tradeoff.svg)
 
 ---
 
