@@ -253,4 +253,4 @@ $$
 | 输出偏差稳定但幅度大 | 偏差而非不确定性 | 残差均值检验 | 标定、参数辨识 |
 | 置信度高但预测错 | 校准失败 | 可靠性曲线、期望校准误差 | 重新校准、温度缩放 |
 
-> **下一步**：想了解“不确定性变大”在长期运行中如何演化为故障与失效，请继续阅读 [故障检测与容错](04-fault-tolerance.md)；想知道怎么把带约束的安全策略真正放进学习回路，看 [安全学习与运行时保障](05-safe-learning-runtime.md)；偏移环境下优化目标的数学形式在 [约束优化与不确定性](../../foundations/mathematics/06-optimization-under-uncertainty.md) 里有完整推导；把不确定性接进真实机器人的导航回路，可参考 [导航与控制](../../robotics-perception/robotics/05-navigation-control.md)。
+> **下一步**：想了解“不确定性变大”在长期运行中如何演化为故障与失效，请继续阅读 [故障检测与容错](04-fault-tolerance.md)；想知道怎么把带约束的安全策略真正放进学习回路，看 [安全学习与运行时保障](05-safe-learning-runtime.md)；偏移环境下优化目标的数学形式在 [约束优化与不确定性](../../foundations/mathematics/07-optimization-under-uncertainty.md) 里有完整推导；把不确定性接进真实机器人的导航回路，可参考 [导航与控制](../../robotics-perception/robotics/05-navigation-control.md)。

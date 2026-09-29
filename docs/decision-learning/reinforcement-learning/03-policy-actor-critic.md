@@ -59,7 +59,7 @@ $$
 | --- | --- | --- |
 | 期望为零 | $\mathbb E_{a\sim\pi_\theta}[\nabla_\theta\log\pi_\theta(a\mid s)]=0$ | 任何与动作无关的常数都可自由加减 |
 | 与动作无关量正交 | $\mathbb E[\nabla_\theta\log\pi_\theta(a\mid s)\,b(s)]=0$ | baseline 不改变梯度期望 |
-| 二阶信息 | $\mathbb E[\nabla_\theta^2\log\pi_\theta]=-\mathrm{Cov}[\nabla_\theta\log\pi_\theta]$ | score 的协方差即 Fisher 信息矩阵 |
+| 二阶信息 | $\mathbb E[\nabla_\theta^2\log\pi_\theta]=-\mathrm{Cov}[\nabla_\theta\log\pi_\theta]$ | score 的协方差即 Fisher 信息矩阵（衡量策略分布对参数变化的局部敏感度） |
 
 这条“期望为零”是后面所有方差降低技巧的基础：任何只依赖状态、不依赖被采样动作的项，都不会改变梯度的期望。REINFORCE 的代价是方差量级约为 $O(T)$ 倍的回报方差，在长回合任务上往往需要成千上万条轨迹才能稳定一次更新。
 
@@ -170,6 +170,8 @@ $$
 \text{s.t.}\quad
 \mathbb E_t\!\left[D_{KL}\!\left(\pi_{\theta_{old}}(\cdot\mid s_t)\,\|\,\pi_\theta(\cdot\mid s_t)\right)\right]\le\delta ,
 $$
+
+这里先补两个第一次出现的术语。**Fisher 信息矩阵**可以理解为“策略分布对参数变化有多敏感”的局部度量；在策略梯度里，它等于 score $\nabla_\theta\log\pi_\theta$ 的协方差，因此能描述“参数动同样大小，概率分布到底变了多少”。**共轭梯度（conjugate gradient, CG）**是一种不显式求矩阵逆、只靠矩阵-向量乘法求解大型对称正定线性方程的方法，特别适合 Fisher 这种维度很大的矩阵。
 
 其中约束项用 Fisher 信息矩阵近似，$\delta$ 典型取 $0.01$。求解它需要共轭梯度与线搜索，每步代价约为一次二阶近似。PPO 用 clip 代替这个约束，本质上是把“限制 KL”换成“限制代理目标的收益”，从而把二阶问题降为一阶问题。
 
@@ -304,4 +306,4 @@ $$
 
 失效模式：学习率调低并不能阻止数据失效，因为失效源于分布变化而不是步长太大；反过来，若整批数据的 advantage 几乎全为正（例如奖励尺度全正），clip 的目标会产生“只要增大概率比就有收益”的假信号，使策略在第 2 个 epoch 就过度偏离，此时必须做 advantage 归一化。
 
-> **下一步**：把这三条线索接回基础——先看 [MDP 与 Bellman 方程](01-mdp-bellman.md) 里的回报与时域定义，再看 [值方法](02-value-based.md) 如何处理同一个信用分配问题；概率工具见 [概率与随机变量](../../foundations/mathematics/03-probability-random-variables.md)，分布偏移与安全性的延伸见 [鲁棒与安全中的不确定性](../../safety-human-factors/robustness-safety/01-uncertainty-shift.md)。
+> **下一步**：把这三条线索接回基础——先看 [MDP 与 Bellman 方程](01-mdp-bellman.md) 里的回报与时域定义，再看 [值方法](02-value-based.md) 如何处理同一个信用分配问题；概率工具见 [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md)，分布偏移与安全性的延伸见 [鲁棒与安全中的不确定性](../../safety-human-factors/robustness-safety/01-uncertainty-shift.md)。

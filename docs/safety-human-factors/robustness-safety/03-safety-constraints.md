@@ -211,7 +211,7 @@ $$v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .$$
 
 $$h(\hat x)\;\ge\;\epsilon,$$
 
-才能推出真实状态仍在安全域内。这就是“**估计不确定性直接变成安全余量**”的具体含义，也是 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 与本章相接的地方。这类“把不确定性转成集合收缩”的做法，与 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md) 中的鲁棒优化是同一思路。
+才能推出真实状态仍在安全域内。这就是“**估计不确定性直接变成安全余量**”的具体含义，也是 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 与本章相接的地方。这类“把不确定性转成集合收缩”的做法，与 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md) 中的鲁棒优化是同一思路。
 
 收缩量 $\epsilon$ 本身也需要估计：它来自传感器协方差、标定残差和地图误差的合成。实践中常用的保守做法是按 $3\sigma$ 取上界，因为协方差估计本身也有误差，直接用 $1\sigma$ 会让越界概率高到不可接受。
 
@@ -302,4 +302,4 @@ $$h(\hat x)\;\ge\;\epsilon,$$
 
 其中**边界连续性**最容易被漏掉：约束在数学上正确、在单点测试上也正确，但实现中的取整、符号判断或分支切换会在边界上产生不连续输出，进而在实机上表现为抖动或冲击。这类问题只能通过扫描边界附近的输入区间来发现，单点测试一定会放过它。
 
-> **下一步**：本章处理“不允许做什么”。当组件已经真的坏了，就需要 [Fault Detection & Tolerance](04-fault-tolerance.md) 的检测、隔离与降级；当主策略本身不可信时，见 [Safe Learning & Runtime Safety](05-safe-learning-runtime.md)。约束进入优化求解器的做法见 [Model Predictive Control](../../foundations/control-theory/05-mpc.md)，不确定性的建模见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md)，训练阶段如何把约束写进学习目标见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。
+> **下一步**：本章处理“不允许做什么”。当组件已经真的坏了，就需要 [Fault Detection & Tolerance](04-fault-tolerance.md) 的检测、隔离与降级；当主策略本身不可信时，见 [Safe Learning & Runtime Safety](05-safe-learning-runtime.md)。约束进入优化求解器的做法见 [Model Predictive Control](../../foundations/control-theory/05-mpc.md)，不确定性的建模见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md)，训练阶段如何把约束写进学习目标见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。

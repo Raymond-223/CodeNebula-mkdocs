@@ -1,5 +1,6 @@
 # Dynamic Models & State Space
 
+> 前置：如果 $s$、$j\omega$、传递函数、极点或相位裕度还陌生，请先读 [Signals, Complex Numbers, Laplace Transform & Frequency Response](00-signals-laplace-frequency.md)。本章把它们当作已定义概念。
 > 这一章讲的是你开车时脑子里一直在做、但从没写成公式的那件事。读完你应该能自己推出三件事：为什么"油门开多少就跑多快"这种查表模型一定会翻车、为什么状态方程里那几个矩阵决定了后面**所有**控制器能做什么、以及为什么采样周期 $\Delta t$ 不是"随便选的数"，而是模型的一部分。
 
 ---

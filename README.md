@@ -7,10 +7,10 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 ## Current scale
 
 - **12 Sections**，分成 5 个知识域
-- **61 core chapters**
-- **74 Markdown pages**（含 Home 与 12 个 Section 首页）
-- **47 local SVG teaching diagrams**
-- **28 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
+- **62 core chapters**
+- **75 Markdown pages**（含 Home 与 12 个 Section 首页）
+- **60 local SVG teaching diagrams**
+- **60 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
 - 顶部和左侧导航使用英文；正文使用中文并保留标准英文术语
 
 ## Curriculum

@@ -262,4 +262,4 @@ $$
 
 $\kappa$ 越大越保守，代价是在模型准确区域也过度保守，需要按任务调节。
 
-> **下一步**：模型式规划需要精确的动力学与概率工具，见 [概率与随机变量](../../foundations/mathematics/03-probability-random-variables.md) 与 [马尔可夫过程](../../foundations/mathematics/05-markov-processes.md)；仿真到现实的模型差距见 [Sim2Real 与 Real2Sim](../../systems-simulation/simulation-sim2real/04-sim2real-real2sim.md)；与值方法的对照见 [值方法](02-value-based.md)，安全性与分布偏移下的模型风险见 [鲁棒与安全中的不确定性](../../safety-human-factors/robustness-safety/01-uncertainty-shift.md)。
+> **下一步**：模型式规划需要精确的动力学与概率工具，见 [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md) 与 [马尔可夫过程](../../foundations/mathematics/06-markov-processes.md)；仿真到现实的模型差距见 [Sim2Real 与 Real2Sim](../../systems-simulation/simulation-sim2real/04-sim2real-real2sim.md)；与值方法的对照见 [值方法](02-value-based.md)，安全性与分布偏移下的模型风险见 [鲁棒与安全中的不确定性](../../safety-human-factors/robustness-safety/01-uncertainty-shift.md)。

@@ -210,4 +210,4 @@ randomization:
 
 这张表配合差距清单使用，就构成一个闭环：**测量给范围 → 训练用范围 → 实机给出新证据 → 更新范围。** 随机化范围不是一次设定就固定的常数，而是随 Real2Sim 迭代持续收敛的估计量。
 
-> **下一步**：把这一页得到的参数清单、敏感度排序和区间来源，直接带进 [Sim2Real & Real2Sim](04-sim2real-real2sim.md) 的误差预算与差距清单；对照 [建模与物理仿真](01-modeling-physics.md) 检查哪些差异应该在模型层修正，用 [机器人与传感器仿真](02-robot-sensor-simulation.md) 实现噪声与延迟注入；需要更严谨的鲁棒目标时，可参考 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md) 与 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。
+> **下一步**：把这一页得到的参数清单、敏感度排序和区间来源，直接带进 [Sim2Real & Real2Sim](04-sim2real-real2sim.md) 的误差预算与差距清单；对照 [建模与物理仿真](01-modeling-physics.md) 检查哪些差异应该在模型层修正，用 [机器人与传感器仿真](02-robot-sensor-simulation.md) 实现噪声与延迟注入；需要更严谨的鲁棒目标时，可参考 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md) 与 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。

@@ -35,19 +35,24 @@ nav:
   - Mathematics:
     - Overview: foundations/mathematics/index.md
     - Linear Algebra & Calculus: foundations/mathematics/01-linear-algebra-calculus.md
-    - Numerical Computation: foundations/mathematics/02-numerical-computation.md
-    - Probability & Random Variables: foundations/mathematics/03-probability-random-variables.md
-    - Conditional Probability & Bayes: foundations/mathematics/04-conditional-bayes.md
-    - Markov Processes: foundations/mathematics/05-markov-processes.md
-    - Optimization, Constraints & Uncertainty: foundations/mathematics/06-optimization-under-uncertainty.md
+    - Rotations & Rigid Transforms: foundations/mathematics/02-rotations-rigid-transforms.md
+    - Numerical Computation: foundations/mathematics/03-numerical-computation.md
+    - Probability & Random Variables: foundations/mathematics/04-probability-random-variables.md
+    - Conditional Probability & Bayes: foundations/mathematics/05-conditional-bayes.md
+    - Markov Processes: foundations/mathematics/06-markov-processes.md
+    - Optimization, Constraints & Uncertainty: foundations/mathematics/07-optimization-under-uncertainty.md
   - Control Theory:
     - Overview: foundations/control-theory/index.md
+    - Signals, Laplace & Frequency Response: foundations/control-theory/00-signals-laplace-frequency.md
     - Dynamic Models & State Space: foundations/control-theory/01-modeling-state-space.md
     - Feedback & Stability: foundations/control-theory/02-feedback-stability.md
     - PID Principles: foundations/control-theory/03-pid.md
     - Optimal Control & LQR: foundations/control-theory/04-lqr.md
     - Model Predictive Control: foundations/control-theory/05-mpc.md
 - Decision & Learning:
+  - Machine Learning Foundations:
+    - Overview: decision-learning/machine-learning/index.md
+    - ML & Neural Network Basics: decision-learning/machine-learning/01-ml-neural-network-basics.md
   - Reinforcement Learning:
     - Overview: decision-learning/reinforcement-learning/index.md
     - MDP & Bellman Equation: decision-learning/reinforcement-learning/01-mdp-bellman.md

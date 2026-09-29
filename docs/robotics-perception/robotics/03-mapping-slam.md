@@ -50,7 +50,7 @@ $$\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).$
 - **运动估计**：在已知数据关联的前提下，求解两帧之间的相对位姿；
 - **数据关联**：决定当前观测“属于”哪个已有结构或地图区域。
 
-扫描匹配的几何形式可以直接写出来。设当前帧点集为 $\{q_j\}$，目标帧或局部地图点集为 $\{p_j\}$，待求的相对变换为 $(R, t)$，则点到点 ICP 求解的是
+扫描匹配的几何形式可以直接写出来。这里的旋转约束不是新知识：$R\in SO(3)$ 表示 $R$ 必须始终是合法三维旋转矩阵，定义见 [数学前置：旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md)。设当前帧点集为 $\{q_j\}$，目标帧或局部地图点集为 $\{p_j\}$，待求的相对变换为 $(R, t)$，则点到点 ICP 求解的是
 
 $$\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,$$
 
@@ -90,9 +90,9 @@ $$X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}
 
 实际求解用的是 Gauss-Newton 或 Levenberg-Marquardt 迭代。把全部残差堆成向量 $e(X)$、把雅可比记为 $J = \partial e / \partial X$，则每次迭代要求解的线性系统是
 
-$$\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta X,$$
+$$\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,$$
 
-其中 $\boxplus$ 表示在流形（位姿群）上的更新。这个系统的结构决定了复杂度：位姿图的 $J$ 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，$n$ 个位姿的求解成本大致是 $O(n)$ 到 $O(n^{1.5})$；而如果当成稠密矩阵处理，成本是 $O(n^3)$，$n=1000$ 时就已不可接受。
+其中 $\boxplus$ 不是普通的“矩阵加法”。位姿 $X\in SE(3)$ 必须始终保持旋转部分满足 $R^\top R=I$，所以优化器先在当前位置附近求一个普通六维小增量 $\Delta\xi\in\mathbb R^6$（3 个平移 + 3 个小旋转），再通过指数映射把它送回 $SE(3)$。这个“局部增量 → 合法位姿”的动作就简写成 $X\boxplus\Delta\xi$；前置解释见 [数学中的流形、李群与 $\boxplus$](../../foundations/mathematics/02-rotations-rigid-transforms.md#31-流形李群和-boxplus-为什么会出现)。这个系统的结构决定了复杂度：位姿图的 $J$ 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，$n$ 个位姿的求解成本大致是 $O(n)$ 到 $O(n^{1.5})$；而如果当成稠密矩阵处理，成本是 $O(n^3)$，$n=1000$ 时就已不可接受。
 
 | 后端形式 | 状态量 | 适用规模 | 特点 |
 |---|---|---|---|

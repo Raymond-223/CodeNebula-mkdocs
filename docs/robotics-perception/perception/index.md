@@ -1,4 +1,5 @@
 # Perception
+> 神经网络、loss、backprop、CNN/RNN/Transformer 等术语以前置章节 [Machine Learning & Neural Network Basics](../../decision-learning/machine-learning/01-ml-neural-network-basics.md) 为准；本区不再首次定义这些基础概念。
 
 感知部分只保留机器人和自动驾驶最常用的视觉与三维感知基础：成像、特征、检测分割、深度点云和多模态融合。**一句话概括：感知的任务不是“让模型认出东西”，而是把物理世界转换成一份带坐标系、带时间戳、带不确定度的结构化描述，交给下游的定位、规划和控制使用。** 一份“准但不带坐标”的检测结果，对机器人来说和没有检测没有区别。
 

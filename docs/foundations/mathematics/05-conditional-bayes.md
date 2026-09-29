@@ -525,4 +525,4 @@ N=20   ML(zbar)=12.000  MAP=11.975  差=0.025
 - **代价是什么**：分母要求一次求和或积分，状态维度一高就没有解析解。工程上的三条出路是共轭先验（把积分换成参数更新）、采样近似（粒子滤波）、以及只保留比例式求最大值（MAP）。
 - **为什么先验不能丢**：起点和证据一起决定结论。低基准率时同样的似然比给出的后验差一个数量级；反过来，观测足够多以后先验权重按 $1/N$ 衰减，它会自己退场——所以先验不是信仰问题，是权重问题。
 
-> **下一步**：递推滤波里的运动模型 $p(x_t\mid x_{t-1})$ 只依赖「上一时刻」，这个性质就是 Markov 性。继续读 [./05-markov-processes.md](05-markov-processes.md)，看它怎么把递推变成一条状态转移链；分布与期望的基础见 [./03-probability-random-variables.md](03-probability-random-variables.md)；完整估计实现见 [../robotics/02-sensing-estimation.md](../../robotics-perception/robotics/02-sensing-estimation.md)。
+> **下一步**：递推滤波里的运动模型 $p(x_t\mid x_{t-1})$ 只依赖「上一时刻」，这个性质就是 Markov 性。继续读 [./06-markov-processes.md](06-markov-processes.md)，看它怎么把递推变成一条状态转移链；分布与期望的基础见 [./04-probability-random-variables.md](04-probability-random-variables.md)；完整估计实现见 [../robotics/02-sensing-estimation.md](../../robotics-perception/robotics/02-sensing-estimation.md)。

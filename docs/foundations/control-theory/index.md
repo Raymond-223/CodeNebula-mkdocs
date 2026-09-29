@@ -1,5 +1,7 @@
 # Control Theory
 
+> 建议先读 [Signals, Complex Numbers, Laplace Transform & Frequency Response](00-signals-laplace-frequency.md)。后面的 $s$、$j\omega$、传递函数与稳定裕度都以它为前置。
+
 控制理论解决的是：**怎样根据系统当前状态持续施加输入，让系统按期望方式运动，并且在扰动、误差与约束下仍然稳定。** 从动态系统的状态空间模型出发，经过反馈与稳定性分析，再到 PID、LQR、MPC 三条控制律路线，本章覆盖了机器人、自动驾驶与过程控制中最常用的控制工具链。
 
 <figure markdown="span">
@@ -86,7 +88,7 @@
 | 误差反馈直觉 | [PID 控制](03-pid.md) | 无需精确模型即可调参 |
 | 可控性 / 可稳性 | [最优控制与 LQR](04-lqr.md) | 判断能否用状态反馈镇定 |
 | 有限时域与终端代价 | [模型预测控制](05-mpc.md) | 保证滚动优化的稳定性 |
-| 约束优化与不确定性 | [约束下优化](../mathematics/06-optimization-under-uncertainty.md) | QP 与鲁棒问题求解 |
+| 约束优化与不确定性 | [约束下优化](../mathematics/07-optimization-under-uncertainty.md) | QP 与鲁棒问题求解 |
 | 参考轨迹跟踪 | [路径与运动规划](../../robotics-perception/robotics/04-path-motion-planning.md) | 把规划结果转成控制目标 |
 | 导航闭环 | [导航与控制](../../robotics-perception/robotics/05-navigation-control.md) | 定位—规划—控制串成回路 |
 | 状态估计接口 | [图像与相机基础](../../robotics-perception/perception/01-image-camera-basics.md) | 控制器拿到的状态来自感知 |

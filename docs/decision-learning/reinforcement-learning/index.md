@@ -1,4 +1,5 @@
 # Reinforcement Learning
+> 神经网络、loss、backprop、CNN/RNN/Transformer 等术语以前置章节 [Machine Learning & Neural Network Basics](../machine-learning/01-ml-neural-network-basics.md) 为准；本区不再首次定义这些基础概念。
 
 强化学习研究的是：**当每个决策都会改变未来、而未来的好坏又反过来定义当下决策的价值时，智能体如何只靠交互数据学会做决策。** 它与监督学习最大的区别在于，没有人告诉你"这一步动作的正确答案是什么"，你只看到奖励，而这个奖励只反映一步的结果。主线从 MDP 与 Bellman 方程出发，依次进入价值学习、策略学习，再处理探索、模型以及安全与离线数据问题。
 
@@ -80,8 +81,8 @@ $$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(
 | Bellman 最优性、折扣回报 | [../control-theory/04-lqr.md](../../foundations/control-theory/04-lqr.md) | 最优控制与 RL 在数学上是同一族问题：LQR 的 Riccati 递推是二次代价、线性动态下 Bellman 方程的特例，模型已知时无需采样 |
 | Nash 均衡、最佳响应 | [../game-theory/02-best-response-nash.md](../game-theory/02-best-response-nash.md) | 多智能体同时学习时"最优"不再唯一：$Q_i^*$ 依赖对手策略，收敛目标由 $Q^*=\max_a$ 变成 Nash 均衡点 |
 | CTDE（集中训练、分散执行） | [../multi-agent-systems/05-multi-agent-learning.md](../multi-agent-systems/05-multi-agent-learning.md) | 训练时用全局信息当 critic 输入，执行时只留局部观测，缓解非平稳性与信用分配 |
-| Markov 链、稳态分布 | [../mathematics/05-markov-processes.md](../../foundations/mathematics/05-markov-processes.md) | 折扣回报的有限性、策略诱导的马尔可夫链、遍历性与长期平均回报 |
-| 期望、条件期望、方差 | [../mathematics/03-probability-random-variables.md](../../foundations/mathematics/03-probability-random-variables.md) | $\mathbb E_\pi[\cdot]$ 的严格定义；TD 与 MC 目标的偏差—方差差异本质是条件期望展开程度不同 |
+| Markov 链、稳态分布 | [../mathematics/06-markov-processes.md](../../foundations/mathematics/06-markov-processes.md) | 折扣回报的有限性、策略诱导的马尔可夫链、遍历性与长期平均回报 |
+| 期望、条件期望、方差 | [../mathematics/04-probability-random-variables.md](../../foundations/mathematics/04-probability-random-variables.md) | $\mathbb E_\pi[\cdot]$ 的严格定义；TD 与 MC 目标的偏差—方差差异本质是条件期望展开程度不同 |
 | 路径规划与运动规划 | [../robotics/04-path-motion-planning.md](../../robotics-perception/robotics/04-path-motion-planning.md) | RL 输出的是策略而非路径：规划在给定目标与约束下求可行轨迹，RL 在难建模的动态里用回报学习控制律 |
 | 运行时保障、安全滤波器 | [../robustness-safety/05-safe-learning-runtime.md](../../safety-human-factors/robustness-safety/05-safe-learning-runtime.md) | 学习策略的"大概率安全"与系统的"必须安全"之间存在缺口，需要运行时监督、约束投影与回退控制 |
 

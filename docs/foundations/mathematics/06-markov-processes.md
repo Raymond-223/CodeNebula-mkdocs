@@ -444,4 +444,4 @@ $$
 - **代价是两件事**：一是状态定义错了没有补救（第四节那句判据永远先查）；二是"长期稳定"只保证频率、不保证位置，而收敛速度由 $1-|\lambda_2|$ 决定，真实系统的这个数常常小到让你以为代码坏了。
 - **它和下一章的关系**：这里转移概率是给定的，你只能预测。一旦转移可以由你选的动作改变、并且每步带着奖励，问题就从"预测"升级成"决策"。
 
-> **下一步**：读 [./06-optimization-under-uncertainty.md](06-optimization-under-uncertainty.md) 看怎么在这些随机过程上做最优决策；把"转移受动作影响"写完整就是 MDP，Bellman 方程的推导见 [../reinforcement-learning/01-mdp-bellman.md](../../decision-learning/reinforcement-learning/01-mdp-bellman.md)；递推滤波里那个"只依赖上一时刻"的假设，可以回看 [./04-conditional-bayes.md](04-conditional-bayes.md)。
+> **下一步**：读 [./07-optimization-under-uncertainty.md](07-optimization-under-uncertainty.md) 看怎么在这些随机过程上做最优决策；把"转移受动作影响"写完整就是 MDP，Bellman 方程的推导见 [../reinforcement-learning/01-mdp-bellman.md](../../decision-learning/reinforcement-learning/01-mdp-bellman.md)；递推滤波里那个"只依赖上一时刻"的假设，可以回看 [./05-conditional-bayes.md](05-conditional-bayes.md)。

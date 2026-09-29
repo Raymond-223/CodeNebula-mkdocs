@@ -271,4 +271,4 @@ $$
 
 最后一条经验：**先对齐时间，再核对坐标系，再标定噪声，最后才调算法。** 状态估计的绝大多数“算法问题”，其实是接口问题。
 
-> **下一步**：继续阅读 [建图与 SLAM](03-mapping-slam.md) 看估计误差如何在建图中被长期约束，用 [路径与运动规划](04-path-motion-planning.md) 了解协方差如何进入规划约束，回到 [模型、运动学与动力学](01-models-kinematics-dynamics.md) 补齐预测步所依赖的运动模型，概率基础可参考 [条件概率与 Bayes](../../foundations/mathematics/04-conditional-bayes.md)，时间同步细节见 [分布式时间](../../systems-simulation/distributed-systems/02-distributed-time.md)。
+> **下一步**：继续阅读 [建图与 SLAM](03-mapping-slam.md) 看估计误差如何在建图中被长期约束，用 [路径与运动规划](04-path-motion-planning.md) 了解协方差如何进入规划约束，回到 [模型、运动学与动力学](01-models-kinematics-dynamics.md) 补齐预测步所依赖的运动模型，概率基础可参考 [条件概率与 Bayes](../../foundations/mathematics/05-conditional-bayes.md)，时间同步细节见 [分布式时间](../../systems-simulation/distributed-systems/02-distributed-time.md)。

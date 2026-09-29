@@ -28,28 +28,37 @@
 3. **有限精度是真实约束。** 数学上的等价变形在浮点下可能数值不稳定。例如 $\text{softmax}$ 对 $10^3$ 量级输入直接取指数会溢出，工程实现要减去最大值；再如大数相减会造成有效位抵消。
 4. **不确定性与约束同时存在时，优化问题不再有单一答案。** 期望最优、最坏情况最优、鲁棒最优是三个不同目标，对应不同的解。
 
-本节六章分别对应上述断层的具体位置。**建议的用法是：带着一个你手上真实存在的公式来读，逐条对照，而不是按目录顺序读完。**
+本节七章分别对应上述断层的具体位置。第二章专门补机器人与视觉必需的几何分支：普通矩阵 → 旋转矩阵 → $SO(3)$（三维合法旋转）→ 刚体变换 → $SE(3)$（三维旋转 + 平移）→ 局部增量，避免这些符号到 Robotics/SLAM 才第一次出现。**建议的用法是：带着一个你手上真实存在的公式来读，逐条对照，而不是按目录顺序读完。**
 
-## 六章的依赖顺序
+## 七章的依赖顺序
 
-六章不是并列的，而是有明确的前置关系。跳过前置章节会在后面卡住。
+七章不是并列的，而是有明确的前置关系。跳过前置章节会在后面卡住。
 
 | 章节 | 前置章节 | 若跳过前置会卡在哪里 |
 | --- | --- | --- |
-| [线性代数与微积分基础](01-linear-algebra-calculus.md) | 无（起点） | 一切。$\nabla_\theta J$、雅可比、特征值都无从谈起 |
-| [数值计算基础](02-numerical-computation.md) | 线性代数 | 知道 LQR 要解 Riccati 方程，但不知道求解器为何不收敛 |
-| [概率与随机变量](03-probability-random-variables.md) | 微积分 | 期望 $\mathbb E[X]=\int x\,p(x)\,dx$ 的积分号看不懂 |
-| [条件概率与贝叶斯推断](04-conditional-bayes.md) | 概率与随机变量 | 无法理解 posterior、belief state、POMDP 的信念更新 |
-| [马尔可夫过程](05-markov-processes.md) | 条件概率与贝叶斯 | 无法理解 Bellman 方程为什么可以去掉历史 |
-| [优化、约束与不确定性](06-optimization-under-uncertainty.md) | 线性代数 + 概率 | 无法理解对偶、KKT、风险约束、分布鲁棒 |
+| [线性代数与微积分基础](01-linear-algebra-calculus.md) | 无（起点） | 矩阵、梯度、Jacobian、特征值都无从谈起 |
+| [旋转、$SO(3)$ 与刚体变换](02-rotations-rigid-transforms.md) | 线性代数中的矩阵乘法 | 到 Robotics/Perception 后会突然遇到 $SO(3)$、$SE(3)$、齐次变换、$\boxplus$（位姿局部增量更新记号） |
+| [数值计算基础](03-numerical-computation.md) | 线性代数 | 知道 LQR 要解 Riccati 方程，但不知道求解器为何不收敛 |
+| [概率与随机变量](04-probability-random-variables.md) | 微积分 | 期望 $\mathbb E[X]=\int x\,p(x)\,dx$ 的积分号看不懂 |
+| [条件概率与贝叶斯推断](05-conditional-bayes.md) | 概率与随机变量 | 无法理解 posterior、belief state、POMDP 的信念更新 |
+| [马尔可夫过程](06-markov-processes.md) | 条件概率与贝叶斯 | 无法理解 Bellman 方程为什么可以去掉历史 |
+| [优化、约束与不确定性](07-optimization-under-uncertainty.md) | 线性代数 + 概率 | 无法理解对偶、KKT、风险约束、分布鲁棒 |
 
-依赖链条可以压缩成一句话：
+依赖关系实际上有两条主线，而不是把七章硬串成一条：
 
 $$
-\text{线性代数} \to \text{数值计算} \to \text{概率} \to \text{贝叶斯} \to \text{马尔可夫} \to \text{优化}.
+\text{线性代数} \to \text{数值计算} \to \text{概率} \to \text{贝叶斯} \to \text{马尔可夫} \to \text{优化},
 $$
 
-注意数值计算被放在第二位，是因为它服务于后面全部章节：任何理论结论最终都要落到一个能在有限精度下跑出来的算法。把它放到最后学的代价是，你会在前三章一直写不出可信的实现。
+以及面向机器人/视觉的几何分支：
+
+$$
+\text{线性代数} \to \text{旋转与刚体变换} \to \text{Robotics / Perception / SLAM}.
+$$
+
+第二条就是这次补齐的关键前置：先把 $SO(3)$、$SE(3)$ 和齐次变换放在数学区定义，后面机器人章节只负责使用。
+
+注意数值计算被放在第三章，是因为它服务于后面全部章节：任何理论结论最终都要落到一个能在有限精度下跑出来的算法。把它放到最后学的代价是，你会在前三章一直写不出可信的实现。
 
 三条最容易被低估的边：
 
@@ -63,17 +72,19 @@ $$
 
 | 图上节点 | 子标签 | 它在说什么 | 关键量化关系 | 直接服务于 |
 | --- | --- | --- | --- | --- |
-| Linear algebra | vectors / matrices | 用矩阵表达线性变换与坐标系选择 | $A\mathbf x=\lambda\mathbf x$ 定义特征方向；$A=P\Lambda P^{-1}$ 对角化 | 状态空间模型、LQR、协方差传播 |
+| Linear algebra | vectors / matrices | 用矩阵表达线性变换与局部线性化 | $A\mathbf x=\lambda\mathbf x$；$J=\partial f/\partial x$ | 状态空间模型、LQR、优化 |
+| Rigid geometry | $SO(3)$ / $SE(3)$ | 用受约束矩阵表达旋转和刚体位姿 | $R^\top R=I,\det R=1$；$T=\begin{bmatrix}R&t\\0&1\end{bmatrix}$ | TF、相机外参、点云、SLAM |
 | Probability | random variables | 用分布描述未知量 | $\mathbb E[X]=\sum_x x\,p(x)$ 或 $\int x\,p(x)\,dx$；$\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2$ | 奖励期望、噪声建模 |
 | Bayes | conditioning | 观测之后如何更新对未知量的看法 | $p(\theta\mid x)=\frac{p(x\mid\theta)p(\theta)}{p(x)}$ | 信念更新、状态估计、POMDP |
 | Markov | state evolution | 无记忆的随机演化 | $p(s_{t+1}\mid s_t,\dots)=p(s_{t+1}\mid s_t)$；稳态 $\pi P=\pi$ | Bellman 方程、MDP 建模 |
 | Optimization | objectives / constraints | 在约束下选决策 | $\min_x f(x)\ \text{s.t.}\ g(x)\le 0$；KKT 条件 | 策略优化、MPC |
 | Uncertainty | stochastic / robust | 在未知存在时该优化什么 | $\min_x \mathbb E[f(x,\xi)]$ 与 $\min_x \max_{\xi\in\mathcal U} f(x,\xi)$ | 鲁棒控制、安全约束 |
 
-图的走向可以读成两条主干：
+图的走向可以读成两条主干加一条几何支线：
 
 1. **确定性主干**：Linear algebra → Optimization。适合控制类问题，特征是 $\dot x=Ax+Bu$ 这类可解析对象。
 2. **随机性主干**：Probability → Bayes → Markov → Uncertainty。适合学习与估计类问题，特征是目标里含期望。
+3. **机器人几何支线**：Linear algebra → Rigid geometry → Robotics / Perception / SLAM。它专门负责坐标系、旋转、刚体位姿和局部姿态增量。
 
 两条主干在 Optimization 的交汇点就是「随机优化」：
 
@@ -85,11 +96,13 @@ $$
 
 ## 后续章节的接口
 
-本节不追求自成一体的完整性，它存在的意义是给后面五节提供接口。下表列出最常用的几条。
+本节不追求自成一体的完整性，它存在的意义是给后续控制、学习、机器人、感知与安全章节提供前置接口。下表列出最常用的几条。
 
 | 本节概念 | 被哪一章使用 | 用来解决什么 |
 | --- | --- | --- |
 | 特征值与稳定性 | [../control-theory/01-modeling-state-space.md](../control-theory/01-modeling-state-space.md) | 由 $\dot x=Ax$ 判断稳定性：全部 $\operatorname{Re}\lambda_i(A)<0$ |
+| $SO(3)/SE(3)$ 与齐次变换 | [../../robotics-perception/robotics/01-models-kinematics-dynamics.md](../../robotics-perception/robotics/01-models-kinematics-dynamics.md) | 给旋转、机器人位姿和 TF 变换链提供严格数学对象 |
+| $SE(3)$ 的局部增量 / $\boxplus$ | [../../robotics-perception/robotics/03-mapping-slam.md](../../robotics-perception/robotics/03-mapping-slam.md) | 解释 SLAM 为什么不能直接对旋转矩阵做普通加法更新 |
 | 矩阵求逆与条件数 | [../control-theory/04-lqr.md](../control-theory/04-lqr.md) | 判断 LQR 的 Riccati 迭代是否数值可信 |
 | 期望与方差 | [../reinforcement-learning/01-mdp-bellman.md](../../decision-learning/reinforcement-learning/01-mdp-bellman.md) | 定义回报 $G_t=\sum_{k=0}^{\infty}\gamma^k r_{t+k}$ 的期望与方差 |
 | 条件概率与贝叶斯 | [../game-theory/04-sequential-bayesian.md](../../decision-learning/game-theory/04-sequential-bayesian.md) | 由观测更新对对手类型的信念 |
@@ -103,25 +116,28 @@ $$
 
 ## 阅读顺序建议
 
-不同目标的读者不需要读完全部六章。三种路径如下。
+不同目标的读者不需要读完全部七章。四种路径如下。
 
-**路径 A：只要够用（约 2 小时）。** 只读 [线性代数与微积分基础](01-linear-algebra-calculus.md) 的梯度与矩阵部分，以及 [概率与随机变量](03-probability-random-variables.md) 的期望、方差、常见分布。目标是看懂符号，不追求推导。适合只理解概念、不做实现的读者。判断可以停下的信号：你能正确读出 $\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2$ 中每一项的含义。
+**路径 A：只要够用（约 2 小时）。** 只读 [线性代数与微积分基础](01-linear-algebra-calculus.md) 的梯度与矩阵部分，以及 [概率与随机变量](04-probability-random-variables.md) 的期望、方差、常见分布。目标是看懂符号，不追求推导。适合只理解概念、不做实现的读者。判断可以停下的信号：你能正确读出 $\operatorname{Var}(X)=\mathbb E[X^2]-\mathbb E[X]^2$ 中每一项的含义。
 
 **路径 B：做控制（建议全读，顺序固定）。** 线性代数 → 数值计算 → 概率 → 优化。控制侧最重要的是特征值、条件数、二次型与约束优化。贝叶斯和马尔可夫可以先跳，回头补。读到 [../control-theory/04-lqr.md](../control-theory/04-lqr.md) 和 [../control-theory/05-mpc.md](../control-theory/05-mpc.md) 时再回来查公式。最关键的两条量化结论是：稳定性由 $\max_i\operatorname{Re}\lambda_i(A)$ 的符号决定；数值可信度由 $\kappa(A)$ 的量级决定。
 
-**路径 C：做学习与优化（建议全读，且必须读状态估计相关部分）。** 概率 → 贝叶斯 → 马尔可夫 → 优化，最后回补数值计算。学习侧的核心是期望回报、优势函数、策略梯度，全部建立在条件期望之上。马尔可夫性是 Bellman 方程成立的前提，跳过它会导致后面把「用历史做决策」和「用状态做决策」混淆。策略梯度的典型形式
+**路径 C：做机器人、视觉与 SLAM。** 固定先读 [线性代数与微积分基础](01-linear-algebra-calculus.md) → [旋转、$SO(3)$ 与刚体变换](02-rotations-rigid-transforms.md)。如果还要做状态估计，再补 [概率与随机变量](04-probability-random-variables.md) → [条件概率与贝叶斯](05-conditional-bayes.md)。这样进入 Robotics 后，$SO(3)$、$SE(3)$、齐次变换、协方差和 Bayes 都已有前置，不需要边读边猜。
+
+**路径 D：做学习与优化（建议全读，且必须读状态估计相关部分）。** 概率 → 贝叶斯 → 马尔可夫 → 优化，最后回补数值计算。学习侧的核心是期望回报、优势函数、策略梯度，全部建立在条件期望之上。马尔可夫性是 Bellman 方程成立的前提，跳过它会导致后面把「用历史做决策」和「用状态做决策」混淆。策略梯度的典型形式
 
 $$
 \nabla_\theta J(\theta)=\mathbb E_{\tau\sim p_\theta}\Big[\sum_t \nabla_\theta\log\pi_\theta(a_t\mid s_t)\,\hat A_t\Big]
 $$
 
-里同时出现了期望、条件概率、梯度三样东西，正是路径 C 三个模块的组合。
+里同时出现了期望、条件概率、梯度三样东西，正是路径 D 三个模块的组合。
 
 | 读者类型 | 必读章节 | 可跳过 | 典型受卡点 |
 | --- | --- | --- | --- |
-| 只要够用 | 1、3 | 2、4、5 | 分不清分布与密度 |
-| 做控制 | 1、2、3、6 | 4、5 | Riccati 迭代不收敛不知原因 |
-| 做学习与优化 | 3、4、5、6 | 1（若已熟） | Bellman 方程的期望写法 |
+| 只要够用 | 1、4 | 2、3、5、6、7 | 分不清矩阵运算与概率对象 |
+| 做控制 | 1、3、4、7 | 2、5、6 | Riccati / QP（二次规划）数值不稳定不知原因 |
+| 做机器人 / 视觉 / SLAM | 1、2；估计再加 4、5 | 3、6、7 可按任务补 | $SO(3)/SE(3)$、坐标链、协方差突然出现 |
+| 做学习与优化 | 4、5、6、7；梯度不熟再补 1 | 2 | Bellman 方程的期望与条件概率写法 |
 
 ## 常见误解
 
@@ -146,15 +162,16 @@ $$
 
 | 章节 | 主题 | 解决什么问题 |
 | --- | --- | --- |
-| [线性代数与微积分基础](01-linear-algebra-calculus.md) | 矩阵、特征值、梯度、雅可比 | 提供描述线性变换与变化率的基本语言 |
-| [数值计算基础](02-numerical-computation.md) | 浮点误差、条件数、迭代收敛 | 保证理论公式在有限精度下可执行、可信 |
-| [概率与随机变量](03-probability-random-variables.md) | 分布、期望、方差、常见分布 | 为随机奖励、噪声与不确定性提供度量 |
-| [条件概率与贝叶斯推断](04-conditional-bayes.md) | 条件分布、Bayes 公式、信念更新 | 回答「观测之后该怎么改变判断」 |
-| [马尔可夫过程](05-markov-processes.md) | 状态转移、无记忆性、稳态 | 为动态规划与 Bellman 方程提供前提 |
-| [优化、约束与不确定性](06-optimization-under-uncertainty.md) | 凸性、KKT、对偶、风险与鲁棒 | 在约束与不确定下选出可执行的决策 |
+| [线性代数与微积分基础](01-linear-algebra-calculus.md) | 矩阵、特征值、梯度、雅可比 | 提供线性变换与变化率的基本语言 |
+| [旋转、$SO(3)$ 与刚体变换](02-rotations-rigid-transforms.md) | $SO(2/3)$、$SE(2/3)$、齐次变换、局部增量 | 给机器人、视觉、点云和 SLAM 补齐几何前置 |
+| [数值计算基础](03-numerical-computation.md) | 浮点误差、条件数、迭代收敛 | 保证理论公式在有限精度下可执行、可信 |
+| [概率与随机变量](04-probability-random-variables.md) | 分布、期望、方差、常见分布 | 为随机奖励、噪声与不确定性提供度量 |
+| [条件概率与贝叶斯推断](05-conditional-bayes.md) | 条件分布、Bayes 公式、信念更新 | 回答「观测之后该怎么改变判断」 |
+| [马尔可夫过程](06-markov-processes.md) | 状态转移、无记忆性、稳态 | 为动态规划与 Bellman 方程提供前提 |
+| [优化、约束与不确定性](07-optimization-under-uncertainty.md) | 凸性、KKT、对偶、风险与鲁棒 | 在约束与不确定下选出可执行的决策 |
 
-六章合起来覆盖的对象是：**向量与矩阵、随机变量、条件分布、状态演化、约束目标、不确定性六类数学对象**，正好对应图上六个节点。读完这一节，你不需要成为数学专业者，但应该能在任意一篇后续材料里，快速定位某个公式属于哪一类对象、依赖哪条前置结论。
+七章合起来覆盖的对象是：**向量与矩阵、旋转与刚体位姿、随机变量、条件分布、状态演化、约束目标、不确定性七类数学对象**。其中刚体几何是从线性代数分出的机器人专用分支。读完这一节，你不需要成为数学专业者，但应该能在任意一篇后续材料里，快速定位某个公式属于哪一类对象、依赖哪条前置结论。
 
-每章的自检标准可以直接量化：第 1 章看能否手算 $2\times2$ 矩阵的特征值；第 2 章看能否解释为什么 $1/3$ 在双精度下存储不精确；第 3 章看能否区分概率质量函数与密度；第 4 章看能否手推一次 Bayes 更新；第 5 章看能否写出转移矩阵的稳态方程；第 6 章看能否写出一个含不等式约束的 KKT 条件组。全部都答得上，这一节可以视为完成。
+每章的自检标准可以直接量化：第 1 章看能否手算 $2\times2$ 矩阵特征值并解释 Jacobian；第 2 章看能否解释 $SO(3)$ 与 $SE(3)$ 的区别、手算一次齐次变换；第 3 章看能否解释为什么 $1/3$ 在双精度下存储不精确；第 4 章看能否区分概率质量函数与密度；第 5 章看能否手推一次 Bayes 更新；第 6 章看能否写出转移矩阵的稳态方程；第 7 章看能否写出一个含不等式约束的 KKT 条件组。全部都答得上，这一节可以视为完成。
 
-> **下一步**：先读 [线性代数与微积分基础](01-linear-algebra-calculus.md) 建立语言，再用 [概率与随机变量](03-probability-random-variables.md) 掌握随机性度量；若目标是控制，随后跳到 [../control-theory/01-modeling-state-space.md](../control-theory/01-modeling-state-space.md)；若目标是学习与优化，则从 [../reinforcement-learning/01-mdp-bellman.md](../../decision-learning/reinforcement-learning/01-mdp-bellman.md) 开始。
+> **下一步**：通用路线先读 [线性代数与微积分基础](01-linear-algebra-calculus.md)；如果目标是机器人、视觉或 SLAM，紧接着读 [旋转、$SO(3)$ 与刚体变换](02-rotations-rigid-transforms.md)；如果目标是学习，则转到 [概率与随机变量](04-probability-random-variables.md) → [条件概率与贝叶斯](05-conditional-bayes.md)。

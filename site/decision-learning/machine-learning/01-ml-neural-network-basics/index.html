@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="面向智能系统研究与工程实践的知识地图，从数学原理走向真实系统。" name="description"/>
+<link href="https://raymond-223.github.io/CodeNebula-mkdocs/decision-learning/machine-learning/01-ml-neural-network-basics/" rel="canonical"/>
+
+
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>Machine Learning &amp; Neural Network Basics - CodeNebula</title>
+<link href="../../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link href="../../../stylesheets/extra.css" rel="stylesheet"/>
+<link href="../../../css/custom.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#mdp-bellman-equation">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="CodeNebula" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="CodeNebula">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            CodeNebula
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+              Machine Learning &amp; Neural Network Basics
+            </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../foundations/mathematics/">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../">
+          
+  
+  
+    
+  
+  Decision &amp; Learning
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../robotics-perception/robotics/">
+          
+  
+  
+    
+  
+  Robotics &amp; Perception
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../systems-simulation/distributed-systems/">
+          
+  
+  
+    
+  
+  Systems &amp; Simulation
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../safety-human-factors/robustness-safety/">
+          
+  
+  
+    
+  
+  Safety &amp; Human Factors
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+
+
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    Decision &amp; Learning
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    Reinforcement Learning
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset"><h1 id="machine-learning-neural-network-basics">Machine Learning &amp; Neural Network Basics</h1>
+<blockquote>
+<p>后面的 DQN、Actor–Critic、目标检测、分割、RNN 和 Transformer 都默认你知道这一章。这里不讲完整机器学习课程，只建立后文不再重复解释的最小前置。</p>
+</blockquote>
+<h2 id="一机器学习到底在学什么">一、机器学习到底在学什么</h2>
+<p>普通程序是“人写规则，机器执行”；机器学习是“给数据和评价标准，让参数自己调整”。</p>
+<p>一条数据通常写成</p>
+<p><span class="math display">\[
+(x,y),
+\]</span></p>
+<p>其中 <span class="math inline">\(x\)</span> 是<strong>输入/特征</strong>（feature），<span class="math inline">\(y\)</span> 是希望预测的<strong>目标/标签</strong>（target/label）。模型写成</p>
+<p><span class="math display">\[
+\hat y=f_\theta(x),
+\]</span></p>
+<p><span class="math inline">\(\theta\)</span> 是模型里允许训练改变的参数。</p>
+<p>三类最常见问题：</p>
+<ul>
+<li><strong>回归</strong>：预测连续值，如距离、温度、速度；</li>
+<li><strong>分类</strong>：预测离散类别，如猫/狗、可行驶/不可行驶；</li>
+<li><strong>无监督学习</strong>：没有人工标签，从数据本身找结构，如聚类、降维。</li>
+</ul>
+<p>后面的深度学习与强化学习，本质上仍是在调整 <span class="math inline">\(\theta\)</span>，只是“标签从哪里来”和“损失怎么定义”不同。</p>
+<h2 id="二损失函数模型必须知道错了多少">二、损失函数：模型必须知道“错了多少”</h2>
+<p>训练必须先把好坏变成一个数，这个数叫<strong>损失函数</strong>（loss）。</p>
+<p>回归常用均方误差：</p>
+<p><span class="math display">\[
+L=\frac1N\sum_{i=1}^N(\hat y_i-y_i)^2.
+\]</span></p>
+<p>分类模型通常先输出一组未归一化分数 <strong>logits</strong> <span class="math inline">\(z_1,\dots,z_C\)</span>，再用 softmax 变成概率：</p>
+<p><span class="math display">\[
+p_k=\frac{e^{z_k}}{\sum_j e^{z_j}}.
+\]</span></p>
+<p>若真实类别是 <span class="math inline">\(y\)</span>，交叉熵损失为</p>
+<p><span class="math display">\[
+L=-\log p_y.
+\]</span></p>
+<p>预测正确且概率高，损失小；把错误类别说得越肯定，损失越大。</p>
+<h2 id="三训练验证测试为什么必须分开">三、训练、验证、测试为什么必须分开</h2>
+<p>如果模型在训练数据上表现很好，不代表它学会了规律，也可能只是把样本记住。这叫<strong>过拟合</strong>（overfitting）。</p>
+<p>所以数据通常分成：</p>
+<ul>
+<li><strong>training set</strong>：真正参与参数更新；</li>
+<li><strong>validation set</strong>：选择超参数、决定何时停止；</li>
+<li><strong>test set</strong>：最后一次评价泛化能力，不能拿来反复调参。</li>
+</ul>
+<p>训练误差继续下降但验证误差开始上升，就是典型过拟合信号。</p>
+<h2 id="四batchepoch-和学习率">四、Batch、Epoch 和学习率</h2>
+<p>一次把所有训练数据都算完再更新参数很贵，所以通常每次只取一小批样本，这一批叫 <strong>mini-batch</strong>。</p>
+<ul>
+<li><strong>batch size</strong>：一次更新用多少样本；</li>
+<li><strong>iteration / step</strong>：完成一次参数更新；</li>
+<li><strong>epoch</strong>：整个训练集大致被遍历一遍；</li>
+<li><strong>learning rate</strong>：每次更新走多大一步。</li>
+</ul>
+<p>学习率太大可能发散，太小则训练非常慢。</p>
+<h2 id="五神经网络很多线性变换-非线性串起来">五、神经网络：很多“线性变换 + 非线性”串起来</h2>
+<p>最简单的一层写成</p>
+<p><span class="math display">\[
+z=Wx+b,
+\]</span></p>
+<p>但如果一直只堆线性层，多层仍等价于一层线性变换。必须插入<strong>激活函数</strong>（activation），例如 ReLU：</p>
+<p><span class="math display">\[
+\operatorname{ReLU}(z)=\max(0,z).
+\]</span></p>
+<p>于是一个多层感知机 MLP 可以写成</p>
+<p><span class="math display">\[
+h_1=\sigma(W_1x+b_1),\qquad
+\hat y=W_2h_1+b_2.
+\]</span></p>
+<p>这里：</p>
+<ul>
+<li>输入层接收特征；</li>
+<li>隐藏层学习中间表示；</li>
+<li>输出层产生最终 logits、数值或动作参数。</li>
+</ul>
+<h2 id="六反向传播不是另一种优化算法">六、反向传播不是另一种优化算法</h2>
+<p>模型训练要最小化 <span class="math inline">\(L(\theta)\)</span>。梯度下降需要 <span class="math inline">\(\nabla_\theta L\)</span>。网络可能有几百万个参数，手工逐个求导不现实。</p>
+<p><strong>反向传播（backpropagation）</strong>做的只是高效应用链式法则：从损失开始，沿计算图反向把梯度传给每个参数。</p>
+<p>例如</p>
+<p><span class="math display">\[
+x\rightarrow z=wx\rightarrow \hat y=\sigma(z)\rightarrow L
+\]</span></p>
+<p>有</p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial w}
+=
+\frac{\partial L}{\partial \hat y}
+\frac{\partial \hat y}{\partial z}
+\frac{\partial z}{\partial w}.
+\]</span></p>
+<p>之后优化器（SGD、Adam 等）才使用这个梯度更新参数。<strong>反向传播负责算梯度，优化器负责用梯度走一步。</strong> 两者不要混淆。</p>
+<h2 id="七正则化dropout-和归一化">七、正则化、Dropout 和归一化</h2>
+<p>为了减少过拟合，常见方法包括：</p>
+<ul>
+<li><strong>weight decay / L2 正则</strong>：惩罚过大的权重；</li>
+<li><strong>dropout</strong>：训练时随机屏蔽一部分神经元，减少对单一路径的依赖；</li>
+<li><strong>data augmentation</strong>：对输入做合理变换，扩大有效训练分布；</li>
+<li><strong>early stopping</strong>：验证集不再改善就停止。</li>
+</ul>
+<p>输入数值尺度差异很大时，还要先做<strong>归一化/标准化</strong>，否则梯度在不同方向上的尺度差异会让优化变困难。</p>
+<h2 id="八cnn为什么图像不用普通-mlp">八、CNN：为什么图像不用普通 MLP</h2>
+<p>图像 <span class="math inline">\(H\times W\times C\)</span> 的像素很多，普通全连接层会产生海量参数，而且完全忽略“相邻像素更相关”的结构。</p>
+<p>卷积神经网络 <strong>CNN</strong> 用一个小窗口在整张图上共享同一组权重：</p>
+<ul>
+<li><strong>局部连接</strong>：只看附近区域；</li>
+<li><strong>权重共享</strong>：同一个卷积核在不同位置重复使用；</li>
+<li>因而参数少，并天然适合提取边缘、纹理、局部形状。</li>
+</ul>
+<p>卷积层输出通常叫 <strong>feature map</strong>。随着层数增加，感受野变大，特征从边缘逐步变成更高层语义。</p>
+<h2 id="九rnn为什么序列需要记住前面">九、RNN：为什么序列需要“记住前面”</h2>
+<p>对时间序列，只看当前 <span class="math inline">\(x_t\)</span> 往往不够。循环神经网络写成</p>
+<p><span class="math display">\[
+h_t=f(h_{t-1},x_t),
+\]</span></p>
+<p><span class="math inline">\(h_t\)</span> 是<strong>隐藏状态</strong>，把过去压缩成当前记忆。LSTM/GRU 是更稳定的 RNN 变体，用门控缓解长序列训练中的梯度消失。</p>
+<p>后面的 POMDP、轨迹预测和多传感器时序融合都会用到这个思路。</p>
+<h2 id="十attention-与-transformer让每个位置自己决定该看谁">十、Attention 与 Transformer：让每个位置自己决定该看谁</h2>
+<p>RNN 必须按时间一步一步处理。Attention 的思路不同：每个位置直接对其他位置算“相关程度”。</p>
+<p>最核心形式是</p>
+<p><span class="math display">\[
+\operatorname{Attention}(Q,K,V)
+=\operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt d}\right)V.
+\]</span></p>
+<p>可以把它理解为：</p>
+<ul>
+<li><span class="math inline">\(Q\)</span>（query）：我现在想找什么；</li>
+<li><span class="math inline">\(K\)</span>（key）：每个位置能提供什么索引；</li>
+<li><span class="math inline">\(V\)</span>（value）：真正要取回的信息；</li>
+<li><span class="math inline">\(QK^\top\)</span>：匹配程度；</li>
+<li>softmax：把匹配程度归一化成权重。</li>
+</ul>
+<p><strong>Transformer</strong>就是把多头 Attention、前馈网络、残差连接和归一化等模块堆起来。它本身不知道顺序，因此序列任务通常还要加入位置编码。</p>
+<p>后文看到 DETR、视觉 Transformer、序列 Transformer 时，不需要重新把它当成一种神秘模型：核心仍是“按相关性加权汇总信息”。</p>
+<h2 id="十一进入后续章节前应会的最小词表">十一、进入后续章节前应会的最小词表</h2>
+<table>
+<thead>
+<tr class="header">
+<th>术语</th>
+<th>最小含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature / label</td>
+<td>输入信息 / 监督目标</td>
+</tr>
+<tr class="even">
+<td>regression / classification</td>
+<td>连续值预测 / 类别预测</td>
+</tr>
+<tr class="odd">
+<td>parameter <span class="math inline">\(\theta\)</span></td>
+<td>训练会改变的模型参数</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>衡量预测错误的标量</td>
+</tr>
+<tr class="odd">
+<td>logits</td>
+<td>softmax 前的未归一化分类分数</td>
+</tr>
+<tr class="even">
+<td>softmax</td>
+<td>把 logits 变成和为 1 的分布</td>
+</tr>
+<tr class="odd">
+<td>cross entropy</td>
+<td>分类常用损失</td>
+</tr>
+<tr class="even">
+<td>batch / epoch</td>
+<td>一次更新的数据量 / 全数据大致遍历一次</td>
+</tr>
+<tr class="odd">
+<td>backprop</td>
+<td>用链式法则高效计算梯度</td>
+</tr>
+<tr class="even">
+<td>MLP</td>
+<td>全连接神经网络</td>
+</tr>
+<tr class="odd">
+<td>CNN</td>
+<td>利用局部连接和权重共享处理图像</td>
+</tr>
+<tr class="even">
+<td>RNN</td>
+<td>用隐藏状态处理序列</td>
+</tr>
+<tr class="odd">
+<td>Attention</td>
+<td>按相关性从其他位置汇总信息</td>
+</tr>
+<tr class="even">
+<td>Transformer</td>
+<td>以 Attention 为核心的序列/视觉架构</td>
+</tr>
+<tr class="odd">
+<td>overfitting</td>
+<td>训练集很好、未见数据变差</td>
+</tr>
+</tbody>
+</table>
+<p>做到这里，后面的 DQN、Actor–Critic、检测、分割、RNN 与 Transformer 才算有完整前置。</p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<div class="md-progress" data-md-component="progress" role="progressbar"></div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

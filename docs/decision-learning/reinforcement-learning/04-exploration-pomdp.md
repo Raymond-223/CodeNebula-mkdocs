@@ -245,4 +245,4 @@ RNN/Transformer 可以把历史压缩成内部状态，但只有当历史中真�
 
 把这条判断落到工程流程上，可以按下面的顺序处理：先看观测是否足以区分状态（可辨识性检查），再看历史是否被有效利用（记忆检查），最后才调整探索强度（调度检查）。顺序反了，最典型的后果是把一个信息缺失问题反复调探索参数，最终得到一个高方差、低回报、行为抖动但不自知的智能体。
 
-> **下一步**：探索与信念状态的数学基础见 [马尔可夫过程](../../foundations/mathematics/05-markov-processes.md) 与 [概率与随机变量](../../foundations/mathematics/03-probability-random-variables.md)；观测与状态估计的机器人侧实现见 [感知与估计](../../robotics-perception/robotics/02-sensing-estimation.md)；回到 [MDP 与 Bellman 方程](01-mdp-bellman.md) 对照完全可观测情形，多智能体下的部分可观测问题见 [多智能体学习](../multi-agent-systems/05-multi-agent-learning.md)。
+> **下一步**：探索与信念状态的数学基础见 [马尔可夫过程](../../foundations/mathematics/06-markov-processes.md) 与 [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md)；观测与状态估计的机器人侧实现见 [感知与估计](../../robotics-perception/robotics/02-sensing-estimation.md)；回到 [MDP 与 Bellman 方程](01-mdp-bellman.md) 对照完全可观测情形，多智能体下的部分可观测问题见 [多智能体学习](../multi-agent-systems/05-multi-agent-learning.md)。

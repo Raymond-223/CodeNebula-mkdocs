@@ -127,4 +127,4 @@ $$\max_\theta \ \mathbb{E}_{\delta\sim\mathcal{D}}[J(\theta,\delta)], \qquad \ma
 
 实践上建议固定报告一组最小集合：成功率、P50/P95 延迟、碰撞次数、最坏单次损失、以及测试覆盖的场景数量与每场景样本数。样本数不足时，尾部估计本身就不可信——**没有足够样本的 $\mathrm{CVaR}$ 只是一个更漂亮的平均值**。
 
-> **下一步**：本章给出的是度量框架。下一章 [Safety Constraints](03-safety-constraints.md) 说明如何把不可接受的后果写成约束，[Fault Detection & Tolerance](04-fault-tolerance.md) 处理组件级失效，[Safe Learning & Runtime Safety](05-safe-learning-runtime.md) 则给出运行时兜底机制。训练阶段如何把这些约束写进目标，见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)；约束形式化的数学背景见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md)。
+> **下一步**：本章给出的是度量框架。下一章 [Safety Constraints](03-safety-constraints.md) 说明如何把不可接受的后果写成约束，[Fault Detection & Tolerance](04-fault-tolerance.md) 处理组件级失效，[Safe Learning & Runtime Safety](05-safe-learning-runtime.md) 则给出运行时兜底机制。训练阶段如何把这些约束写进目标，见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)；约束形式化的数学背景见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md)。

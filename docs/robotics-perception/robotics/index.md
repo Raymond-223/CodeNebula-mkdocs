@@ -28,6 +28,20 @@
 
 因此读这一节时建议随身带三个量：**误差量级、可行余量、控制周期**。三者一旦不满足余量大于误差，后面的算法优化都是徒劳。
 
+### 进入 Robotics 前，前置必须闭合
+
+这部分不假设你已经学过完整机器人学，但下面五块必须在前文见过。右栏就是“如果没见过，先回哪里补”。
+
+| 前置 | 进入 Robotics 后会在哪里用 | 前置位置 |
+| --- | --- | --- |
+| 向量、矩阵、矩阵乘法 | 坐标变换、动力学、滤波、规划几乎处处使用 | [线性代数与微积分基础](../../foundations/mathematics/01-linear-algebra-calculus.md) |
+| 旋转矩阵、$SO(3)$、$SE(3)$、齐次变换 | TF、相机外参、点云配准、SLAM 位姿 | [旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md) |
+| 导数与 Jacobian | 机械臂速度映射、EKF 线性化、优化 | [梯度与 Jacobian](../../foundations/mathematics/01-linear-algebra-calculus.md#八梯度与-jacobian把导数搬到多变量) |
+| 概率、条件概率与贝叶斯 | 传感噪声、卡尔曼滤波、状态估计 | [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md) → [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md) |
+| 状态空间与优化 | 动态模型、LQR/MPC、SLAM 后端最小二乘 | [建模与状态空间](../../foundations/control-theory/01-modeling-state-space.md)；[优化、约束与不确定性](../../foundations/mathematics/07-optimization-under-uncertainty.md) |
+
+这里的要求是“会读、会做最小计算”，不是“完整学完”。例如 $SO(3)$ 只要求你看到 $R\in SO(3)$ 时知道它是合法旋转矩阵，看到 $T\in SE(3)$ 时知道它是旋转 + 平移；李群的严格证明不属于本网页的最小前置。
+
 ## 六章的推进逻辑
 
 | 顺序 | 章节 | 输入 | 输出 | 核心问题 |
@@ -44,7 +58,7 @@
 
 下图给出机器人栈的闭环结构，逐节点解释如下。
 
-**Geometry / frames（几何与坐标系）** 是整个栈的语言。所有位姿都写成某个坐标系下的变换，二维情形是
+**Geometry / frames（几何与坐标系）** 是整个栈的语言。这里不再第一次引入群符号：数学前置已经定义了 [旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md)。只回忆：$SO(2)$ 是二维旋转，$SE(2)$ 是“二维旋转 + 二维平移”；三维对应 $SO(3)$ 与 $SE(3)$。所有位姿都写成某个坐标系下的变换，二维情形是
 
 $$T=\begin{bmatrix}R(\theta)&t\\ 0&1\end{bmatrix}\in SE(2),$$
 
@@ -54,7 +68,7 @@ $$T=\begin{bmatrix}R(\theta)&t\\ 0&1\end{bmatrix}\in SE(2),$$
 
 **Sensing / measurements（传感与测量）** 把物理世界变成带噪声的数字：$z=h(x)+v$，$v\sim\mathcal{N}(0,R)$。噪声协方差 $R$ 不是贬义，它是算法判断“该信多少”的依据。
 
-**Estimation / state belief（估计与状态信念）** 把多源观测融合成一个带不确定度的状态：$\hat x,\ \Sigma$。它连接上下游——往上给规划器可靠位姿，往下把地图信息反馈给定位。递推形式的核心是贝叶斯更新，见 [条件概率与贝叶斯](../../foundations/mathematics/04-conditional-bayes.md)。
+**Estimation / state belief（估计与状态信念）** 把多源观测融合成一个带不确定度的状态：$\hat x,\ \Sigma$。它连接上下游——往上给规划器可靠位姿，往下把地图信息反馈给定位。递推形式的核心是贝叶斯更新，见 [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md)。
 
 **Planning / path & motion（规划）** 在约束下搜索代价最小的运动方案：$\min\ \text{cost}(\sigma)$ s.t. 无碰撞且满足动力学。它处理的是“未来”，因此必须显式面对地图不完备和障碍会动这两件事。
 
@@ -87,9 +101,10 @@ $$\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),$$
 
 | 机器人概念 | 用在哪章 | 解决什么 |
 | --- | --- | --- |
+| $SO(3)/SE(3)$、齐次变换 | [旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md) | 先定义旋转、刚体位姿、变换复合与局部增量，避免到 Robotics 才第一次见群符号 |
 | 雅可比矩阵 $J(q)$ | [建模与状态空间](../../foundations/control-theory/01-modeling-state-space.md) | 关节速度映射到末端速度：$\dot x=J(q)\dot q$，力映射用 $J^{\mathsf T}$ |
 | 坐标变换与齐次矩阵 | [建模与状态空间](../../foundations/control-theory/01-modeling-state-space.md) | 统一状态空间表达，保证坐标系一致 |
-| 卡尔曼滤波 | [条件概率与贝叶斯](../../foundations/mathematics/04-conditional-bayes.md) | 递归贝叶斯融合，输出 $\hat x,\Sigma$ |
+| 卡尔曼滤波 | [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md) | 递归贝叶斯融合，输出 $\hat x,\Sigma$ |
 | TF 与时间同步 | [分布式时间](../../systems-simulation/distributed-systems/02-distributed-time.md) | 多传感器时间对齐，避免用过期位姿 |
 | 节点通信与消息 | [网络与消息](../../systems-simulation/distributed-systems/01-network-messaging.md) | 传感器、规划、控制节点之间的数据流 |
 | 点云与深度图 | [深度与点云](../perception/04-depth-point-cloud.md) | 从观测构造障碍表示与局部代价地图 |
@@ -150,4 +165,4 @@ $$\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),$$
 4. [路径规划与运动规划](04-path-motion-planning.md) —— A*、RRT、PRM 与轨迹优化，从图搜索到动态可行的轨迹。
 5. [机器人导航与控制](05-navigation-control.md) —— 全局/局部分层、Pure Pursuit 与 Stanley、调参顺序与实机失效模式。
 
-> **下一步**：如果只读两章，选 [机器人模型、运动学与动力学](01-models-kinematics-dynamics.md) 和 [机器人导航与控制](05-navigation-control.md)——它们定义了整条闭环的两端。想先补齐数学基础可从 [条件概率与贝叶斯](../../foundations/mathematics/04-conditional-bayes.md) 入手；想直接看闭环控制的理论地基，见 [反馈与稳定性](../../foundations/control-theory/02-feedback-stability.md)；关注仿真到实机的落地路径，见 [机器人传感仿真](../../systems-simulation/simulation-sim2real/02-robot-sensor-simulation.md)。
+> **下一步**：如果只读两章，选 [机器人模型、运动学与动力学](01-models-kinematics-dynamics.md) 和 [机器人导航与控制](05-navigation-control.md)——它们定义了整条闭环的两端。想先补齐数学基础可从 [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md) 入手；想直接看闭环控制的理论地基，见 [反馈与稳定性](../../foundations/control-theory/02-feedback-stability.md)；关注仿真到实机的落地路径，见 [机器人传感仿真](../../systems-simulation/simulation-sim2real/02-robot-sensor-simulation.md)。

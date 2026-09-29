@@ -178,7 +178,7 @@ def prepare_cloud(cloud, transform):
 2. 固定对应关系，求解使代价最小的刚体变换 $T$；
 3. 用 $T$ 变换源点云，重复第 1 步，直到变换增量或均方误差收敛。
 
-对应的优化问题是
+对应的优化问题写成下面这样。这里 $SE(3)$ 表示所有合法三维刚体变换，即旋转 $R\in SO(3)$ 与平移 $t\in\mathbb R^3$ 的组合；如果符号陌生，先看 [数学前置：旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md)。
 
 $$
 \min_{T\in SE(3)}\sum_{i}\left\|T p_i-q_{\sigma(i)}\right\|^{2},

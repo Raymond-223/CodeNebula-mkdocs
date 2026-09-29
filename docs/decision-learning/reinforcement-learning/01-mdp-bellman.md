@@ -315,4 +315,4 @@ Bellman 分解依赖状态足以概括与未来有关的历史，并且回报可
 
 最后要提醒的是，前四条前提在仿真中通常被"写死"而察觉不到，第五条则会在数小时的训练里慢慢显现：同一个超参数配置在上午有效、下午失效，往往不是代码问题，而是环境在漂移。
 
-> **下一步**：继续阅读 [02-value-based.md](02-value-based.md)，看 Bellman 关系如何在模型未知时变成 TD 与 Q-Learning 更新；若你更关心最优控制的连续版本，可对照 [../control-theory/04-lqr.md](../../foundations/control-theory/04-lqr.md)；关于马尔可夫链与稳态分布的数学前提，见 [../mathematics/05-markov-processes.md](../../foundations/mathematics/05-markov-processes.md)；期望与条件期望的严格定义见 [../mathematics/03-probability-random-variables.md](../../foundations/mathematics/03-probability-random-variables.md)。
+> **下一步**：继续阅读 [02-value-based.md](02-value-based.md)，看 Bellman 关系如何在模型未知时变成 TD 与 Q-Learning 更新；若你更关心最优控制的连续版本，可对照 [../control-theory/04-lqr.md](../../foundations/control-theory/04-lqr.md)；关于马尔可夫链与稳态分布的数学前提，见 [../mathematics/06-markov-processes.md](../../foundations/mathematics/06-markov-processes.md)；期望与条件期望的严格定义见 [../mathematics/04-probability-random-variables.md](../../foundations/mathematics/04-probability-random-variables.md)。

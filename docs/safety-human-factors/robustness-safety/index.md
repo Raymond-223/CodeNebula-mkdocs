@@ -144,7 +144,7 @@ $$\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) > 0\}\right|}{\left|\mathcal{
 | 本节概念 | 对接章节 | 借什么 | 还什么 |
 |---|---|---|---|
 | 约束优化形式 | [Model Predictive Control](../../foundations/control-theory/05-mpc.md) | 预测模型与在线求解 | 硬约束与余量预算 |
-| 随机/鲁棒/机会约束 | [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md) | 不确定性集合的数学形式 | 可验证的可行性条件 |
+| 随机/鲁棒/机会约束 | [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md) | 不确定性集合的数学形式 | 可验证的可行性条件 |
 | $\mathrm{CVaR}$ 与安全约束 | [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md) | 风险约束下的策略优化 | 训练期的风险上限 |
 | 不确定性表达 | [Trust & Explainability](../human-ai-interaction/04-trust-explainability.md) | 置信度校准方法 | 可解释的失效原因 |
 | 故障与超时重试 | [Fault Tolerance（分布式）](../../systems-simulation/distributed-systems/04-fault-tolerance.md) | 超时、重试、法定人数 | 安全相关的降级语义 |
@@ -216,4 +216,4 @@ $$\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) > 0\}\right|}{\left|\mathcal{
 
 无论处于哪个阶段，有四件事都不应省略：给每个安全相关的量写出**可验证条件**（值、阈值、适用范围）；用**分位数和最大值**报告结果而不只报平均；给关键约束留出**由延迟和估计误差算出的余量**；确保存在一个**独立于主策略的兜底路径**并演练过它。
 
-> **下一步**：从 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 开始，它建立了后续四章共用的不确定性语言。约束的数学形式见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/06-optimization-under-uncertainty.md)，训练期的风险约束见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。
+> **下一步**：从 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 开始，它建立了后续四章共用的不确定性语言。约束的数学形式见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md)，训练期的风险约束见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。
