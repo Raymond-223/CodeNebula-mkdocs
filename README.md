@@ -46,18 +46,23 @@ mkdocs serve
 ```text
 docs/
 ├── assets/diagrams/
-├── mathematics/
-├── reinforcement-learning/
-├── game-theory/
-├── multi-agent-systems/
-├── control-theory/
-├── robotics/
-├── perception/
-├── distributed-systems/
-├── software-engineering/
-├── simulation-sim2real/
-├── robustness-safety/
-└── human-ai-interaction/
+├── foundations/
+│   ├── mathematics/
+│   └── control-theory/
+├── decision-learning/
+│   ├── reinforcement-learning/
+│   ├── game-theory/
+│   └── multi-agent-systems/
+├── robotics-perception/
+│   ├── robotics/
+│   └── perception/
+├── systems-simulation/
+│   ├── distributed-systems/
+│   ├── software-engineering/
+│   └── simulation-sim2real/
+└── safety-human-factors/
+    ├── robustness-safety/
+    └── human-ai-interaction/
 ```
 
 `python scripts/check_docs.py` 会检查目录规模、英文导航、本地链接、公式分隔、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。

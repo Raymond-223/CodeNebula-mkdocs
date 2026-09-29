@@ -33,94 +33,94 @@ nav:
 - Home: index.md
 - Foundations:
   - Mathematics:
-    - Overview: mathematics/index.md
-    - Linear Algebra & Calculus: mathematics/01-linear-algebra-calculus.md
-    - Numerical Computation: mathematics/02-numerical-computation.md
-    - Probability & Random Variables: mathematics/03-probability-random-variables.md
-    - Conditional Probability & Bayes: mathematics/04-conditional-bayes.md
-    - Markov Processes: mathematics/05-markov-processes.md
-    - Optimization, Constraints & Uncertainty: mathematics/06-optimization-under-uncertainty.md
+    - Overview: foundations/mathematics/index.md
+    - Linear Algebra & Calculus: foundations/mathematics/01-linear-algebra-calculus.md
+    - Numerical Computation: foundations/mathematics/02-numerical-computation.md
+    - Probability & Random Variables: foundations/mathematics/03-probability-random-variables.md
+    - Conditional Probability & Bayes: foundations/mathematics/04-conditional-bayes.md
+    - Markov Processes: foundations/mathematics/05-markov-processes.md
+    - Optimization, Constraints & Uncertainty: foundations/mathematics/06-optimization-under-uncertainty.md
   - Control Theory:
-    - Overview: control-theory/index.md
-    - Dynamic Models & State Space: control-theory/01-modeling-state-space.md
-    - Feedback & Stability: control-theory/02-feedback-stability.md
-    - PID Principles: control-theory/03-pid.md
-    - Optimal Control & LQR: control-theory/04-lqr.md
-    - Model Predictive Control: control-theory/05-mpc.md
+    - Overview: foundations/control-theory/index.md
+    - Dynamic Models & State Space: foundations/control-theory/01-modeling-state-space.md
+    - Feedback & Stability: foundations/control-theory/02-feedback-stability.md
+    - PID Principles: foundations/control-theory/03-pid.md
+    - Optimal Control & LQR: foundations/control-theory/04-lqr.md
+    - Model Predictive Control: foundations/control-theory/05-mpc.md
 - Decision & Learning:
   - Reinforcement Learning:
-    - Overview: reinforcement-learning/index.md
-    - MDP & Bellman Equation: reinforcement-learning/01-mdp-bellman.md
-    - Value-Based Methods: reinforcement-learning/02-value-based.md
-    - Policy Gradient & Actor–Critic: reinforcement-learning/03-policy-actor-critic.md
-    - Exploration & Partial Observability: reinforcement-learning/04-exploration-pomdp.md
-    - Model-Based vs Model-Free RL: reinforcement-learning/05-model-based-vs-model-free.md
-    - Safe, Robust & Offline RL: reinforcement-learning/06-safe-robust-offline.md
+    - Overview: decision-learning/reinforcement-learning/index.md
+    - MDP & Bellman Equation: decision-learning/reinforcement-learning/01-mdp-bellman.md
+    - Value-Based Methods: decision-learning/reinforcement-learning/02-value-based.md
+    - Policy Gradient & Actor–Critic: decision-learning/reinforcement-learning/03-policy-actor-critic.md
+    - Exploration & Partial Observability: decision-learning/reinforcement-learning/04-exploration-pomdp.md
+    - Model-Based vs Model-Free RL: decision-learning/reinforcement-learning/05-model-based-vs-model-free.md
+    - Safe, Robust & Offline RL: decision-learning/reinforcement-learning/06-safe-robust-offline.md
   - Game Theory:
-    - Overview: game-theory/index.md
-    - Game Models & Classification: game-theory/01-game-models.md
-    - Best Response & Nash Equilibrium: game-theory/02-best-response-nash.md
-    - Zero-Sum Games & Minimax: game-theory/03-zero-sum-minimax.md
-    - Sequential & Bayesian Games: game-theory/04-sequential-bayesian.md
-    - Repeated Games & Learning: game-theory/05-repeated-learning.md
+    - Overview: decision-learning/game-theory/index.md
+    - Game Models & Classification: decision-learning/game-theory/01-game-models.md
+    - Best Response & Nash Equilibrium: decision-learning/game-theory/02-best-response-nash.md
+    - Zero-Sum Games & Minimax: decision-learning/game-theory/03-zero-sum-minimax.md
+    - Sequential & Bayesian Games: decision-learning/game-theory/04-sequential-bayesian.md
+    - Repeated Games & Learning: decision-learning/game-theory/05-repeated-learning.md
   - Multi-Agent Systems:
-    - Overview: multi-agent-systems/index.md
-    - Agents & System Architectures: multi-agent-systems/01-agents-architectures.md
-    - Cooperation, Competition & Coordination: multi-agent-systems/02-coordination.md
-    - Communication & Information Sharing: multi-agent-systems/03-communication.md
-    - Task Allocation & Distributed Decision Making: multi-agent-systems/04-allocation-distributed-decision.md
-    - Multi-Agent Learning & CTDE: multi-agent-systems/05-multi-agent-learning.md
+    - Overview: decision-learning/multi-agent-systems/index.md
+    - Agents & System Architectures: decision-learning/multi-agent-systems/01-agents-architectures.md
+    - Cooperation, Competition & Coordination: decision-learning/multi-agent-systems/02-coordination.md
+    - Communication & Information Sharing: decision-learning/multi-agent-systems/03-communication.md
+    - Task Allocation & Distributed Decision Making: decision-learning/multi-agent-systems/04-allocation-distributed-decision.md
+    - Multi-Agent Learning & CTDE: decision-learning/multi-agent-systems/05-multi-agent-learning.md
 - Robotics & Perception:
   - Robotics:
-    - Overview: robotics/index.md
-    - Models, Kinematics & Dynamics: robotics/01-models-kinematics-dynamics.md
-    - Sensing & State Estimation: robotics/02-sensing-estimation.md
-    - Mapping & SLAM: robotics/03-mapping-slam.md
-    - Path & Motion Planning: robotics/04-path-motion-planning.md
-    - Navigation & Control: robotics/05-navigation-control.md
+    - Overview: robotics-perception/robotics/index.md
+    - Models, Kinematics & Dynamics: robotics-perception/robotics/01-models-kinematics-dynamics.md
+    - Sensing & State Estimation: robotics-perception/robotics/02-sensing-estimation.md
+    - Mapping & SLAM: robotics-perception/robotics/03-mapping-slam.md
+    - Path & Motion Planning: robotics-perception/robotics/04-path-motion-planning.md
+    - Navigation & Control: robotics-perception/robotics/05-navigation-control.md
   - Perception:
-    - Overview: perception/index.md
-    - Image & Camera Basics: perception/01-image-camera-basics.md
-    - Feature-Based Vision: perception/02-feature-vision.md
-    - Detection & Segmentation: perception/03-detection-segmentation.md
-    - Depth, 3D Vision & Point Clouds: perception/04-depth-point-cloud.md
-    - Multi-Modal Perception: perception/05-multimodal.md
+    - Overview: robotics-perception/perception/index.md
+    - Image & Camera Basics: robotics-perception/perception/01-image-camera-basics.md
+    - Feature-Based Vision: robotics-perception/perception/02-feature-vision.md
+    - Detection & Segmentation: robotics-perception/perception/03-detection-segmentation.md
+    - Depth, 3D Vision & Point Clouds: robotics-perception/perception/04-depth-point-cloud.md
+    - Multi-Modal Perception: robotics-perception/perception/05-multimodal.md
 - Systems & Simulation:
   - Distributed Systems:
-    - Overview: distributed-systems/index.md
-    - Networks & Message Passing: distributed-systems/01-network-messaging.md
-    - Time & Asynchrony: distributed-systems/02-distributed-time.md
-    - Consistency & Distributed State: distributed-systems/03-consistency-state.md
-    - Fault Tolerance: distributed-systems/04-fault-tolerance.md
-    - DDS & ROS2: distributed-systems/05-middleware-ros2-dds.md
+    - Overview: systems-simulation/distributed-systems/index.md
+    - Networks & Message Passing: systems-simulation/distributed-systems/01-network-messaging.md
+    - Time & Asynchrony: systems-simulation/distributed-systems/02-distributed-time.md
+    - Consistency & Distributed State: systems-simulation/distributed-systems/03-consistency-state.md
+    - Fault Tolerance: systems-simulation/distributed-systems/04-fault-tolerance.md
+    - DDS & ROS2: systems-simulation/distributed-systems/05-middleware-ros2-dds.md
   - Software Engineering:
-    - Overview: software-engineering/index.md
-    - Requirements & Architecture: software-engineering/01-requirements-architecture.md
-    - Modular Design & APIs: software-engineering/02-modular-apis.md
-    - Git Workflow: software-engineering/03-version-control.md
-    - pytest & Debugging: software-engineering/04-testing-debugging.md
-    - Docker, CI & Reliability: software-engineering/05-deployment-reliability.md
+    - Overview: systems-simulation/software-engineering/index.md
+    - Requirements & Architecture: systems-simulation/software-engineering/01-requirements-architecture.md
+    - Modular Design & APIs: systems-simulation/software-engineering/02-modular-apis.md
+    - Git Workflow: systems-simulation/software-engineering/03-version-control.md
+    - pytest & Debugging: systems-simulation/software-engineering/04-testing-debugging.md
+    - Docker, CI & Reliability: systems-simulation/software-engineering/05-deployment-reliability.md
   - Simulation & Sim2Real:
-    - Overview: simulation-sim2real/index.md
-    - Modeling & Physics Simulation: simulation-sim2real/01-modeling-physics.md
-    - Robot & Sensor Simulation: simulation-sim2real/02-robot-sensor-simulation.md
-    - Reality Gap & Domain Randomization: simulation-sim2real/03-reality-gap-randomization.md
-    - Sim2Real & Real2Sim: simulation-sim2real/04-sim2real-real2sim.md
+    - Overview: systems-simulation/simulation-sim2real/index.md
+    - Modeling & Physics Simulation: systems-simulation/simulation-sim2real/01-modeling-physics.md
+    - Robot & Sensor Simulation: systems-simulation/simulation-sim2real/02-robot-sensor-simulation.md
+    - Reality Gap & Domain Randomization: systems-simulation/simulation-sim2real/03-reality-gap-randomization.md
+    - Sim2Real & Real2Sim: systems-simulation/simulation-sim2real/04-sim2real-real2sim.md
 - Safety & Human Factors:
   - Robustness & Safety:
-    - Overview: robustness-safety/index.md
-    - Uncertainty & Distribution Shift: robustness-safety/01-uncertainty-shift.md
-    - Robustness, Risk & Reliability: robustness-safety/02-robustness-risk.md
-    - Safety Constraints: robustness-safety/03-safety-constraints.md
-    - Fault Detection & Tolerance: robustness-safety/04-fault-tolerance.md
-    - Safe Learning & Runtime Safety: robustness-safety/05-safe-learning-runtime.md
+    - Overview: safety-human-factors/robustness-safety/index.md
+    - Uncertainty & Distribution Shift: safety-human-factors/robustness-safety/01-uncertainty-shift.md
+    - Robustness, Risk & Reliability: safety-human-factors/robustness-safety/02-robustness-risk.md
+    - Safety Constraints: safety-human-factors/robustness-safety/03-safety-constraints.md
+    - Fault Detection & Tolerance: safety-human-factors/robustness-safety/04-fault-tolerance.md
+    - Safe Learning & Runtime Safety: safety-human-factors/robustness-safety/05-safe-learning-runtime.md
   - Human–AI Interaction:
-    - Overview: human-ai-interaction/index.md
-    - Interaction & Levels of Automation: human-ai-interaction/01-human-ai-automation.md
-    - Human-in-the-Loop: human-ai-interaction/02-human-in-loop.md
-    - Shared Autonomy: human-ai-interaction/03-shared-autonomy.md
-    - Trust & Explainability: human-ai-interaction/04-trust-explainability.md
-    - Intervention & Takeover: human-ai-interaction/05-intervention-takeover.md
+    - Overview: safety-human-factors/human-ai-interaction/index.md
+    - Interaction & Levels of Automation: safety-human-factors/human-ai-interaction/01-human-ai-automation.md
+    - Human-in-the-Loop: safety-human-factors/human-ai-interaction/02-human-in-loop.md
+    - Shared Autonomy: safety-human-factors/human-ai-interaction/03-shared-autonomy.md
+    - Trust & Explainability: safety-human-factors/human-ai-interaction/04-trust-explainability.md
+    - Intervention & Takeover: safety-human-factors/human-ai-interaction/05-intervention-takeover.md
 markdown_extensions:
 - admonition
 - attr_list

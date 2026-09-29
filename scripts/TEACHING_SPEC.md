@@ -1,7 +1,7 @@
 # CodeNebula 零基础教学改写规范（v1，已由用户批准）
 
 用户已批准把全站章节按「零基础教学」标准重写。范本是已上线的
-`/home/lxz/cn-teach/docs/control-theory/03-pid.md`（PID 章）。写任何一章之前，
+`/home/lxz/cn-teach/docs/foundations/control-theory/03-pid.md`（PID 章）。写任何一章之前，
 **先完整读一遍这个范本**，模仿它的推进方式，而不是只模仿排版。
 
 ## 0. 这一版要解决什么

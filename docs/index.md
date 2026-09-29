@@ -192,22 +192,22 @@ $$T_{\text{read}} \approx m\,(a + b\,d),$$
 
 | 接口 | 建议入口 | 你要带走什么 |
 |---|---|---|
-| 表示与数学语言 | [Mathematics](./mathematics/index.md) | 空间、概率与优化的统一符号 |
-| 反馈与稳定性 | [Control Theory](./control-theory/index.md) | 回路与稳定条件 |
-| 序贯决策 | [Reinforcement Learning](./reinforcement-learning/index.md) | 状态、收益与更新规则 |
-| 策略互动 | [Game Theory](./game-theory/index.md) | 均衡与最优应对 |
-| 多主体协调 | [Multi-Agent Systems](./multi-agent-systems/index.md) | 通信与任务分配 |
-| 本体与运动 | [Robotics](./robotics/index.md) | 从模型到规划控制 |
-| 环境理解 | [Perception](./perception/index.md) | 从图像到位姿与语义 |
-| 系统与容错 | [Distributed Systems](./distributed-systems/index.md) | 时延、一致性与故障处理 |
-| 工程化与部署 | [Software Engineering](./software-engineering/index.md) | 接口、测试与可靠性 |
-| 仿真与现实迁移 | [Simulation & Sim2Real](./simulation-sim2real/index.md) | 仿真到真机的差距来源 |
-| 鲁棒与安全 | [Robustness & Safety](./robustness-safety/index.md) | 不确定性、约束与故障 |
-| 人机协作 | [Human–AI Interaction](./human-ai-interaction/index.md) | 控制权、信任与接管 |
+| 表示与数学语言 | [Mathematics](foundations/mathematics/index.md) | 空间、概率与优化的统一符号 |
+| 反馈与稳定性 | [Control Theory](foundations/control-theory/index.md) | 回路与稳定条件 |
+| 序贯决策 | [Reinforcement Learning](decision-learning/reinforcement-learning/index.md) | 状态、收益与更新规则 |
+| 策略互动 | [Game Theory](decision-learning/game-theory/index.md) | 均衡与最优应对 |
+| 多主体协调 | [Multi-Agent Systems](decision-learning/multi-agent-systems/index.md) | 通信与任务分配 |
+| 本体与运动 | [Robotics](robotics-perception/robotics/index.md) | 从模型到规划控制 |
+| 环境理解 | [Perception](robotics-perception/perception/index.md) | 从图像到位姿与语义 |
+| 系统与容错 | [Distributed Systems](systems-simulation/distributed-systems/index.md) | 时延、一致性与故障处理 |
+| 工程化与部署 | [Software Engineering](systems-simulation/software-engineering/index.md) | 接口、测试与可靠性 |
+| 仿真与现实迁移 | [Simulation & Sim2Real](systems-simulation/simulation-sim2real/index.md) | 仿真到真机的差距来源 |
+| 鲁棒与安全 | [Robustness & Safety](safety-human-factors/robustness-safety/index.md) | 不确定性、约束与故障 |
+| 人机协作 | [Human–AI Interaction](safety-human-factors/human-ai-interaction/index.md) | 控制权、信任与接管 |
 
 判断横切主题是否被处理过，可以用一个简单问题自检：当某个条件变化（时延增大、置信度下降、坐标系不一致、组件失效）时，系统会表现出什么？答不上来，通常说明对应的横切接口还没有被设计。
 
 !!! note "内容边界"
     每个 Section 只保留能连接上下游的核心概念。代码只出现在工程实现与真实系统；图片优先使用几何解释图、状态空间图、概率关系图、优化曲面图、架构图、数据流图、系统连接图和实验结果图。
 
-> **下一步**：第一次来建议从 [Mathematics](./mathematics/index.md) 开始；若目标是做机器人系统，可直接进入 [Robotics](./robotics/index.md) 的导读页确认前置需求；若关注人机协作，则可从 [Human–AI Interaction](./human-ai-interaction/index.md) 进入。
+> **下一步**：第一次来建议从 [Mathematics](foundations/mathematics/index.md) 开始；若目标是做机器人系统，可直接进入 [Robotics](robotics-perception/robotics/index.md) 的导读页确认前置需求；若关注人机协作，则可从 [Human–AI Interaction](safety-human-factors/human-ai-interaction/index.md) 进入。

@@ -16,6 +16,20 @@ EXPECTED_SECTIONS = [
     'software-engineering', 'simulation-sim2real', 'robustness-safety',
     'human-ai-interaction',
 ]
+SECTION_PATHS = {
+    'mathematics': 'foundations/mathematics',
+    'control-theory': 'foundations/control-theory',
+    'reinforcement-learning': 'decision-learning/reinforcement-learning',
+    'game-theory': 'decision-learning/game-theory',
+    'multi-agent-systems': 'decision-learning/multi-agent-systems',
+    'robotics': 'robotics-perception/robotics',
+    'perception': 'robotics-perception/perception',
+    'distributed-systems': 'systems-simulation/distributed-systems',
+    'software-engineering': 'systems-simulation/software-engineering',
+    'simulation-sim2real': 'systems-simulation/simulation-sim2real',
+    'robustness-safety': 'safety-human-factors/robustness-safety',
+    'human-ai-interaction': 'safety-human-factors/human-ai-interaction',
+}
 EXPECTED_DOMAINS = [
     'Foundations', 'Decision & Learning', 'Robotics & Perception',
     'Systems & Simulation', 'Safety & Human Factors',
@@ -81,15 +95,21 @@ for label in labels:
         errors.append(f'Navigation label is not English-only: {label}')
 
 # Curriculum size: guard both bloat and accidental over-compression.
-section_dirs = [p for p in DOCS.iterdir() if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css'}]
-actual_sections = sorted(p.name for p in section_dirs)
-if actual_sections != sorted(EXPECTED_SECTIONS):
-    errors.append(f'Section directories mismatch: {actual_sections}')
+expected_groups = {
+    'foundations', 'decision-learning', 'robotics-perception',
+    'systems-simulation', 'safety-human-factors',
+}
+content_dirs = {
+    p.name for p in DOCS.iterdir()
+    if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css'}
+}
+if content_dirs != expected_groups:
+    errors.append(f'Top-level content directories mismatch: {sorted(content_dirs)}')
 
 chapter_total = 0
 chapter_counts = {}
 for name in EXPECTED_SECTIONS:
-    d = DOCS / name
+    d = DOCS / SECTION_PATHS[name]
     if not (d / 'index.md').is_file():
         errors.append(f'Missing section overview: {name}/index.md')
         continue
@@ -184,9 +204,10 @@ for p in DOCS.rglob('*.md'):
         if not dest.exists():
             errors.append(f'Broken local link: {rel} -> {target}')
 
-    # Collect code/image density by section.
+    # Collect code/image density by subject section inside the navigation hierarchy.
     try:
-        section = p.relative_to(DOCS).parts[0]
+        parts = p.relative_to(DOCS).parts
+        section = parts[1] if len(parts) >= 2 and parts[0] in expected_groups else parts[0]
     except Exception:
         section = None
     if section in section_code_counts:
@@ -229,7 +250,7 @@ for section, n in section_image_counts.items():
 # engineering code still lives in the engineering sections.
 for section in THEORY_SECTIONS:
     n = section_code_counts[section]
-    if n > 2 * len(list((DOCS / section).glob('*.md'))):
+    if n > 2 * len(list((DOCS / SECTION_PATHS[section]).glob('*.md'))):
         errors.append(f'{section}: theory section carries too many executable code blocks ({n})')
 if not 12 <= len(python_blocks) <= 150:
     errors.append(f'Python example density guard expected 12-150 blocks, found {len(python_blocks)}')

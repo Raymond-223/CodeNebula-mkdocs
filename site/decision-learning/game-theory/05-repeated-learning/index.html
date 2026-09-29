@@ -1,0 +1,4442 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="面向智能系统研究与工程实践的知识地图，从数学原理走向真实系统。">
+      
+      
+      
+        <link rel="canonical" href="https://raymond-223.github.io/CodeNebula-mkdocs/decision-learning/game-theory/05-repeated-learning/">
+      
+      
+        <link rel="prev" href="../04-sequential-bayesian/">
+      
+      
+        <link rel="next" href="../../multi-agent-systems/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Repeated Games & Learning - CodeNebula</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#repeated-games-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CodeNebula" class="md-header__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CodeNebula
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Repeated Games & Learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../foundations/mathematics/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../reinforcement-learning/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Decision & Learning
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../robotics-perception/robotics/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Robotics & Perception
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../systems-simulation/distributed-systems/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Systems & Simulation
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../safety-human-factors/robustness-safety/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Safety & Human Factors
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CodeNebula" class="md-nav__button md-logo" aria-label="CodeNebula" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CodeNebula
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../foundations/mathematics/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/01-linear-algebra-calculus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra & Calculus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/02-numerical-computation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Numerical Computation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/03-probability-random-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability & Random Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/04-conditional-bayes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditional Probability & Bayes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/05-markov-processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markov Processes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/mathematics/06-optimization-under-uncertainty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization, Constraints & Uncertainty
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../foundations/control-theory/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Control Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/control-theory/01-modeling-state-space/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Models & State Space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/control-theory/02-feedback-stability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feedback & Stability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/control-theory/03-pid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PID Principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/control-theory/04-lqr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimal Control & LQR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundations/control-theory/05-mpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Predictive Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision & Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Decision & Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reinforcement-learning/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement Learning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reinforcement Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/01-mdp-bellman/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDP & Bellman Equation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/02-value-based/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Value-Based Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/03-policy-actor-critic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy Gradient & Actor–Critic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/04-exploration-pomdp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploration & Partial Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/05-model-based-vs-model-free/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-Based vs Model-Free RL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reinforcement-learning/06-safe-robust-offline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safe, Robust & Offline RL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Game Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-game-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Models & Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-best-response-nash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Best Response & Nash Equilibrium
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-zero-sum-minimax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zero-Sum Games & Minimax
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-sequential-bayesian/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sequential & Bayesian Games
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repeated Games & Learning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repeated Games & Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        历史依赖策略
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        未来越重要，当前行为越可能考虑长期关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贴现因子与长期收益
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        重复不等于一定产生合作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习规则描述玩家怎样根据经验调整策略
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        无遗憾学习与收敛性质
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定收益不代表已经收敛到某个均衡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对工程系统最重要的是历史会改变对手
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多智能体学习中的非平稳性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验里最好检查单边偏离还能赚多少
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        把一次收益和长期关系分开
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../multi-agent-systems/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Systems
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multi-Agent Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-agent-systems/01-agents-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents & System Architectures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-agent-systems/02-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cooperation, Competition & Coordination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-agent-systems/03-communication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Communication & Information Sharing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-agent-systems/04-allocation-distributed-decision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Allocation & Distributed Decision Making
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-agent-systems/05-multi-agent-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Learning & CTDE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics & Perception
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robotics & Perception
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../robotics-perception/robotics/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robotics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/robotics/01-models-kinematics-dynamics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models, Kinematics & Dynamics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/robotics/02-sensing-estimation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensing & State Estimation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/robotics/03-mapping-slam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mapping & SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/robotics/04-path-motion-planning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Path & Motion Planning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/robotics/05-navigation-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Navigation & Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../robotics-perception/perception/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Perception
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Perception
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/perception/01-image-camera-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image & Camera Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/perception/02-feature-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature-Based Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/perception/03-detection-segmentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Detection & Segmentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/perception/04-depth-point-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Depth, 3D Vision & Point Clouds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../robotics-perception/perception/05-multimodal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Modal Perception
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Systems & Simulation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Systems & Simulation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../systems-simulation/distributed-systems/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed Systems
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Distributed Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/distributed-systems/01-network-messaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networks & Message Passing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/distributed-systems/02-distributed-time/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time & Asynchrony
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/distributed-systems/03-consistency-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency & Distributed State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/distributed-systems/04-fault-tolerance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/distributed-systems/05-middleware-ros2-dds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DDS & ROS2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../systems-simulation/software-engineering/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/software-engineering/01-requirements-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements & Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/software-engineering/02-modular-apis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modular Design & APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/software-engineering/03-version-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/software-engineering/04-testing-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pytest & Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/software-engineering/05-deployment-reliability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker, CI & Reliability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../systems-simulation/simulation-sim2real/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation & Sim2Real
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Simulation & Sim2Real
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/simulation-sim2real/01-modeling-physics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling & Physics Simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/simulation-sim2real/02-robot-sensor-simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot & Sensor Simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/simulation-sim2real/03-reality-gap-randomization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reality Gap & Domain Randomization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../systems-simulation/simulation-sim2real/04-sim2real-real2sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sim2Real & Real2Sim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety & Human Factors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Safety & Human Factors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../safety-human-factors/robustness-safety/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robustness & Safety
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robustness & Safety
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/robustness-safety/01-uncertainty-shift/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Uncertainty & Distribution Shift
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/robustness-safety/02-robustness-risk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robustness, Risk & Reliability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/robustness-safety/03-safety-constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety Constraints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/robustness-safety/04-fault-tolerance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Detection & Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/robustness-safety/05-safe-learning-runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safe Learning & Runtime Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../safety-human-factors/human-ai-interaction/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human–AI Interaction
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Human–AI Interaction
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/human-ai-interaction/01-human-ai-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interaction & Levels of Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/human-ai-interaction/02-human-in-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/human-ai-interaction/03-shared-autonomy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared Autonomy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/human-ai-interaction/04-trust-explainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust & Explainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety-human-factors/human-ai-interaction/05-intervention-takeover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intervention & Takeover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        历史依赖策略
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        未来越重要，当前行为越可能考虑长期关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贴现因子与长期收益
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        重复不等于一定产生合作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习规则描述玩家怎样根据经验调整策略
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        无遗憾学习与收敛性质
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        稳定收益不代表已经收敛到某个均衡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对工程系统最重要的是历史会改变对手
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多智能体学习中的非平稳性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验里最好检查单边偏离还能赚多少
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        把一次收益和长期关系分开
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../reinforcement-learning/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Decision & Learning
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Game Theory
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="repeated-games-learning">Repeated Games &amp; Learning</h1>
+<p>一次博弈只看当前收益，重复互动则让<strong>历史和未来后果进入今天的决策</strong>：同一个静态博弈，重复以后可以产生完全不同的行为。判断的关键不是「玩了几轮」，而是贴现因子有多高、行为是否可观察、惩罚是否可信。本页从历史依赖策略出发，量化贴现因子对合作的门槛、无遗憾学习的收敛性质，以及多智能体学习中环境非平稳带来的收敛失效。</p>
+<h2 id="_1">历史依赖策略</h2>
+<p>在重复博弈里，玩家不再只选择「合作 / 背叛」这一个动作，而是选择一条把历史映射到动作的规则：</p>
+<div class="arithmatex">\[
+s_i : \mathcal{H}^{t} \to \mathcal{A}_i,
+\]</div>
+<p>其中 <span class="arithmatex">\(\mathcal{H}^{t} = (a^0, a^1, \dots, a^{t-1})\)</span> 是到时刻 <span class="arithmatex">\(t\)</span> 为止的公开行动历史，<span class="arithmatex">\(\mathcal{A}_i\)</span> 是玩家的动作集合。历史本身因此成为策略的输入，而不仅仅是观察记录。不同的历史函数可以在一维动作空间里产生完全不同的长期结果，即使它们在一步博弈里选择的是同一个动作。</p>
+<p>用经典囚徒困境作为基准，收益取「背叛诱惑 <span class="arithmatex">\(T = 5\)</span>、共同合作 <span class="arithmatex">\(R = 3\)</span>、共同背叛 <span class="arithmatex">\(P = 1\)</span>、被骗 <span class="arithmatex">\(S = 0\)</span>」，满足 <span class="arithmatex">\(T &gt; R &gt; P &gt; S\)</span> 与 <span class="arithmatex">\(2R &gt; T + S\)</span>：</p>
+<table>
+<thead>
+<tr>
+<th>动作组合</th>
+<th>玩家 1</th>
+<th>玩家 2</th>
+<th>是否帕累托最优</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合作 / 合作</td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td>是</td>
+</tr>
+<tr>
+<td>背叛 / 合作</td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td>否（一方被榨取）</td>
+</tr>
+<tr>
+<td>合作 / 背叛</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td>否</td>
+</tr>
+<tr>
+<td>背叛 / 背叛</td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td>否（一次性 Nash 均衡）</td>
+</tr>
+</tbody>
+</table>
+<p>一次性博弈的唯一均衡是双方都背叛，收益 <span class="arithmatex">\((1,1)\)</span>，但重复后可能出现合作。四种常见历史规则的行为差异如下：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>历史规则</th>
+<th>对背叛的响应</th>
+<th>主要弱点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Always Defect</td>
+<td>永远背叛</td>
+<td>无</td>
+<td>无法建立合作</td>
+</tr>
+<tr>
+<td>Tit-for-Tat</td>
+<td>复制对手上一轮动作</td>
+<td>立即回敬一轮</td>
+<td>噪声下陷入互相报复</td>
+</tr>
+<tr>
+<td>Grim Trigger</td>
+<td>一旦被背叛则永久背叛</td>
+<td>永久惩罚</td>
+<td>一次误判永久毁掉合作</td>
+</tr>
+<tr>
+<td>Win-Stay-Lose-Shift</td>
+<td>收益下降就换动作</td>
+<td>主动纠偏</td>
+<td>对随机噪声敏感</td>
+</tr>
+</tbody>
+</table>
+<p>策略的复杂度本身也影响可被学习性：Tit-for-Tat 只依赖对手最近一轮的动作（记忆长度 <span class="arithmatex">\(1\)</span>），Grim Trigger 需要记住「是否发生过背叛」（记忆长度 <span class="arithmatex">\(T\)</span>），而最优策略的记忆需求随博弈规模增长。历史规则越复杂，对手越难推断你的意图，你自己也越难在噪声下保持稳定。</p>
+<h2 id="_2">未来越重要，当前行为越可能考虑长期关系</h2>
+<p>重复博弈的目标函数是贴现收益和，常用折扣因子 <span class="arithmatex">\(\delta \in [0,1)\)</span> 表示对未来收益的重视程度：</p>
+<div class="arithmatex">\[
+U_i = \sum_{t=0}^{\infty} \delta^{t} u_i(t), \qquad \sum_{t=0}^{\infty} \delta^{t} = \frac{1}{1-\delta}.
+\]</div>
+<p><span class="arithmatex">\(\delta\)</span> 越接近 <span class="arithmatex">\(1\)</span>，未来项衰减越慢，远期收益在总和中占比越大。<span class="arithmatex">\(\delta = 0\)</span> 表示只看当下，等价于一次性博弈；<span class="arithmatex">\(\delta \to 1\)</span> 表示近乎无限耐心。这一条量化了直觉：<strong>一次性占便宜（<span class="arithmatex">\(T - R\)</span>）换来的即时收益，要与未来失去合作（<span class="arithmatex">\(R - P\)</span>）的损失做比较</strong>，比较结果完全由 <span class="arithmatex">\(\delta\)</span> 决定。</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\delta\)</span></th>
+<th>几何和的乘子 <span class="arithmatex">\(1/(1-\delta)\)</span></th>
+<th>10 步后的权重 <span class="arithmatex">\(\delta^{10}\)</span></th>
+<th>决策倾向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(0.0\)</span></td>
+<td><span class="arithmatex">\(1.00\)</span></td>
+<td><span class="arithmatex">\(0.000\)</span></td>
+<td>只关心当前</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\)</span></td>
+<td><span class="arithmatex">\(2.00\)</span></td>
+<td><span class="arithmatex">\(0.001\)</span></td>
+<td>短期即短视</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.9\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+<td><span class="arithmatex">\(0.349\)</span></td>
+<td>长期关系显著</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.99\)</span></td>
+<td><span class="arithmatex">\(100.00\)</span></td>
+<td><span class="arithmatex">\(0.904\)</span></td>
+<td>近乎完全耐心</td>
+</tr>
+</tbody>
+</table>
+<p>注意 <span class="arithmatex">\(\delta = 0.9\)</span> 时第 10 步的权重仍有 <span class="arithmatex">\(0.349\)</span>，而 <span class="arithmatex">\(\delta = 0.5\)</span> 时衰减到 <span class="arithmatex">\(0.001\)</span>，量级差了三百多倍。这在工程上对应「交互频率」：如果对手每 10 轮就换一次，<span class="arithmatex">\(\delta = 0.5\)</span> 的系统几乎看不到长期关系，而 <span class="arithmatex">\(\delta = 0.9\)</span> 的系统仍然会为一个远期回报让利。</p>
+<h2 id="_3">贴现因子与长期收益</h2>
+<p>在 Grim Trigger 下可以解析地解出「合作可以维持」的临界贴现因子。合作路径的贴现总收益是</p>
+<div class="arithmatex">\[
+V_{\text{coop}} = R + \delta R + \delta^{2} R + \cdots = \frac{R}{1-\delta}.
+\]</div>
+<p>若在某一轮背叛，则当轮拿到 <span class="arithmatex">\(T\)</span>，之后永久进入惩罚期，每轮只有 <span class="arithmatex">\(P\)</span>：</p>
+<div class="arithmatex">\[
+V_{\text{defect}} = T + \delta P + \delta^{2} P + \cdots = T + \frac{\delta P}{1-\delta}.
+\]</div>
+<p>合作可维持的条件是 <span class="arithmatex">\(V_{\text{coop}} \ge V_{\text{defect}}\)</span>，整理后得到临界值</p>
+<div class="arithmatex">\[
+\delta^{\star} = \frac{T - R}{T - P}.
+\]</div>
+<p>代入 <span class="arithmatex">\(T = 5\)</span>、<span class="arithmatex">\(R = 3\)</span>、<span class="arithmatex">\(P = 1\)</span>，得 <span class="arithmatex">\(\delta^{\star} = (5-3)/(5-1) = 0.5\)</span>。也就是说只要 <span class="arithmatex">\(\delta &gt; 0.5\)</span>，长期合作就是可自持的均衡。三个具体数值的对比：</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\delta\)</span></th>
+<th>合作总收益 <span class="arithmatex">\(V_{\text{coop}}\)</span></th>
+<th>背叛总收益 <span class="arithmatex">\(V_{\text{defect}}\)</span></th>
+<th>是否维持合作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(0.9\)</span></td>
+<td><span class="arithmatex">\(30.00\)</span></td>
+<td><span class="arithmatex">\(14.00\)</span></td>
+<td>是，安全裕度 <span class="arithmatex">\(16.00\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.5\)</span></td>
+<td><span class="arithmatex">\(6.00\)</span></td>
+<td><span class="arithmatex">\(6.00\)</span></td>
+<td>临界，恰好无差异</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(0.4\)</span></td>
+<td><span class="arithmatex">\(5.00\)</span></td>
+<td><span class="arithmatex">\(5.67\)</span></td>
+<td>否，背叛更赚</td>
+</tr>
+</tbody>
+</table>
+<p>这张表说明两件事：一是 <span class="arithmatex">\(0.9\)</span> 与 <span class="arithmatex">\(0.5\)</span> 的差别不是「好一点」，而是合作安全裕度从 <span class="arithmatex">\(16\)</span> 掉到 <span class="arithmatex">\(0\)</span>；二是临界点附近的策略极脆弱，任何观测噪声或 <span class="arithmatex">\(\delta\)</span> 的估计误差都可能把合作推下悬崖。临界值对参数的敏感度是</p>
+<div class="arithmatex">\[
+\frac{\partial \delta^{\star}}{\partial T} = \frac{R - P}{(T-P)^{2}} &gt; 0,
+\]</div>
+<p>即诱惑值 <span class="arithmatex">\(T\)</span> 越大，合作门槛越高；若 <span class="arithmatex">\(T = 8\)</span>（例如一次大额违约能带来八倍收益），门槛升到 <span class="arithmatex">\((8-3)/(8-1) \approx 0.714\)</span>，此时 <span class="arithmatex">\(\delta = 0.5\)</span> 的系统必然破裂。</p>
+<h2 id="_4">重复不等于一定产生合作</h2>
+<p>「重复博弈支持合作」这句话有大量前提，缺一不可：行为必须可被观察到（否则无法惩罚）、互动必须足够长期（<span class="arithmatex">\(\delta\)</span> 足够高）、惩罚必须可信（对手愿意执行）。任何一个条件破裂，合作都可能消失。</p>
+<table>
+<thead>
+<tr>
+<th>前提条件</th>
+<th>破裂后的后果</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>行为可观察</td>
+<td>无法定位背叛者，惩罚落空</td>
+<td>共享资源的隐蔽滥用</td>
+</tr>
+<tr>
+<td>轮次足够长</td>
+<td><span class="arithmatex">\(\delta &lt; \delta^{\star}\)</span>，单次背叛更划算</td>
+<td>项目临近结束</td>
+</tr>
+<tr>
+<td>惩罚可信</td>
+<td>威胁被忽略，回到一次性均衡</td>
+<td>无成本的口头警告</td>
+</tr>
+<tr>
+<td>身份稳定</td>
+<td>对手每轮换人，声誉无从积累</td>
+<td>匿名在线交易</td>
+</tr>
+</tbody>
+</table>
+<p>特别重要的是「最后一轮效应」：如果玩家知道第 <span class="arithmatex">\(T\)</span> 轮就是终点，逆向归纳会让合作在最后一轮崩塌，并向前逐轮传染直到合作完全消失——这意味着<strong>有限且已知终点的重复博弈，无论 <span class="arithmatex">\(\delta\)</span> 多高都无法维持合作</strong>。现实改法是引入「继续概率」：若每轮结束后以概率 <span class="arithmatex">\(p\)</span> 继续，则等效贴现因子为</p>
+<div class="arithmatex">\[
+\delta_{\text{eff}} = \delta \cdot p .
+\]</div>
+<p>取 <span class="arithmatex">\(\delta = 0.9\)</span>、<span class="arithmatex">\(p = 0.95\)</span>，得 <span class="arithmatex">\(\delta_{\text{eff}} = 0.855 &gt; 0.5\)</span>，合作仍可维持；但若 <span class="arithmatex">\(p = 0.5\)</span>，则 <span class="arithmatex">\(\delta_{\text{eff}} = 0.45 &lt; 0.5\)</span>，合作崩溃。这解释了为什么「长期合作框架」比「明确到期日的一次性合约」更容易产生合作行为。</p>
+<h2 id="_5">学习规则描述玩家怎样根据经验调整策略</h2>
+<p>重复博弈里的均衡概念是静态的（「什么策略组合稳定」），而学习规则描述的是动态过程（「策略如何随时间变化」）。两者相关但不能混为一谈。常见的学习规则：</p>
+<table>
+<thead>
+<tr>
+<th>学习规则</th>
+<th>更新量</th>
+<th>需要的对手模型</th>
+<th>收敛性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fictitious Play</td>
+<td>按观测频率估计对手策略并对它最佳响应</td>
+<td>需要经验频率</td>
+<td>零和、势博弈中收敛到 Nash</td>
+</tr>
+<tr>
+<td>Regret Matching</td>
+<td>按累计正遗憾成比例提高动作概率</td>
+<td>不需要显式模型</td>
+<td>平均策略趋近粗相关均衡</td>
+</tr>
+<tr>
+<td>表格 Q-Learning</td>
+<td>用时序差分更新状态-动作价值</td>
+<td>把自己的转移当环境</td>
+<td>单智能体平稳 MDP 下收敛</td>
+</tr>
+<tr>
+<td>策略梯度</td>
+<td>沿回报梯度更新参数化策略</td>
+<td>需要基线估计</td>
+<td>平稳环境下收敛到局部最优</td>
+</tr>
+</tbody>
+</table>
+<p>区别要点：Fictitious Play 与 Regret Matching 是<strong>博弈论驱动</strong>、有理论收敛保证的规则；Q-Learning 与策略梯度来自单智能体 RL，其收敛证明建立在「环境平稳」的假设上，一旦对手同时学习，这个假设就破裂（见后文非平稳性一节）。实践上一个常见做法是把两类方法混用：用无遗憾学习保证长期平均不被利用，用 Q-Learning 处理有状态转移的部分。</p>
+<h2 id="_6">无遗憾学习与收敛性质</h2>
+<p>无遗憾（no-regret）学习给了「学习会不会到均衡」一个可量化的答案。玩家 <span class="arithmatex">\(i\)</span> 在第 <span class="arithmatex">\(T\)</span> 轮之后的累计外部遗憾定义为</p>
+<div class="arithmatex">\[
+\mathcal{R}_T = \max_{a \in \mathcal{A}_i} \sum_{t=1}^{T} \Big( \, u_i\big(a,\, a_{-i}^{t}\big) - u_i\big(a_i^{t},\, a_{-i}^{t}\big) \, \Big),
+\]</div>
+<p>它衡量的是「如果整段历史都固定选某个动作 <span class="arithmatex">\(a\)</span>，能比实际多拿多少收益」。若 <span class="arithmatex">\(\mathcal{R}_T / T \to 0\)</span>，即平均遗憾趋于 <span class="arithmatex">\(0\)</span>，则该玩家是 no-regret 的。</p>
+<p>Regret Matching 是构造这种策略的标准方式。设第 <span class="arithmatex">\(t\)</span> 轮动作 <span class="arithmatex">\(a\)</span> 的累计遗憾为 <span class="arithmatex">\(R_t(a)\)</span>，取正部分后归一化得到下一轮策略：</p>
+<div class="arithmatex">\[
+\sigma_{t+1}(a) = \frac{\big[ R_t(a) \big]^{+}}{\sum_{a' \in \mathcal{A}_i} \big[ R_t(a') \big]^{+}}, \qquad [x]^{+} = \max(x, 0).
+\]</div>
+<p>其理论性质是：在 <span class="arithmatex">\(T\)</span> 轮后累计遗憾上界为 <span class="arithmatex">\(O(\sqrt{T})\)</span>，因此平均遗憾以 <span class="arithmatex">\(O(1/\sqrt{T})\)</span> 趋近 <span class="arithmatex">\(0\)</span>。数值上，<span class="arithmatex">\(T = 10^{4}\)</span> 时平均遗憾量级约为 <span class="arithmatex">\(10^{-2}\)</span>，<span class="arithmatex">\(T = 10^{6}\)</span> 时约为 <span class="arithmatex">\(10^{-3}\)</span>——收敛很慢但确实发生。</p>
+<p>收敛到哪类均衡需要注意：两个都使用 no-regret 学习的玩家，其<strong>经验平均策略</strong>趋于一个粗相关均衡（coarse correlated equilibrium），这比 Nash 均衡更弱（Nash 均衡是它的特例）。也就是说 no-regret 保证的是「长期平均不被利用」，而不是「最终每个时刻都处在 Nash」。还有一个实用细节：如果两个玩家用<strong>相同</strong>的学习规则且完全对称，可能长期停在同一条循环轨迹上，此时时间平均收敛但瞬时策略不收敛。与零和结构里博弈值的对应关系见 <a href="../03-zero-sum-minimax/">零和博弈与 Minimax</a>。</p>
+<h2 id="_7">稳定收益不代表已经收敛到某个均衡</h2>
+<p>仿真中几条收益曲线变平，可能只是学习率变小、探索率衰减、策略陷入循环或奖励被平滑，而不代表已经到达均衡。要声称达到某类均衡，必须检查对应的<strong>偏离收益</strong>，而不是只看 reward 是否不再变化。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能的真实原因</th>
+<th>是否需要继续排查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收益曲线变平</td>
+<td>学习率 <span class="arithmatex">\(\alpha_t \to 0\)</span></td>
+<td>是，检查探索是否仍在进行</td>
+</tr>
+<tr>
+<td>收益周期性波动</td>
+<td>策略在循环中（非平稳）</td>
+<td>是，检查时间平均是否稳定</td>
+</tr>
+<tr>
+<td>双方收益稳定但很低</td>
+<td>落入共同次优陷阱</td>
+<td>是，检查是否存在互利的单边偏离</td>
+</tr>
+<tr>
+<td>收益稳定且可利用度低</td>
+<td>接近均衡</td>
+<td>否，但需报告置信区间</td>
+</tr>
+</tbody>
+</table>
+<p>判断的量化指标是可利用度（exploitability）：固定其他玩家的策略，让某个玩家单独做最佳响应，若提升量超过阈值 <span class="arithmatex">\(\epsilon\)</span>（例如收益尺度的 <span class="arithmatex">\(1\%\)</span>），则当前组合仍可被利用。这与 Nash 均衡的定义（不存在有利的单边偏离）直接对应，比「曲线是否变平」更接近问题本质。</p>
+<h2 id="_8">对工程系统最重要的是历史会改变对手</h2>
+<p>单智能体视角下，其他玩家通常被当成环境的一部分。但在多智能体在线学习时，对手或队友也会根据过去的互动更新策略，因此「环境」会随你的行为而改变。重复博弈提供了理解这种长期相互适应的基本视角，也解释了为什么同一个算法在离线数据上有效、在在线对抗中却失效。</p>
+<table>
+<thead>
+<tr>
+<th>视角</th>
+<th>对手被建模为</th>
+<th>环境是否随自己变化</th>
+<th>理论保证来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单智能体 RL</td>
+<td>平稳转移核的一部分</td>
+<td>否（假设平稳）</td>
+<td>MDP 收敛定理</td>
+</tr>
+<tr>
+<td>重复博弈</td>
+<td>有策略的理性玩家</td>
+<td>是</td>
+<td>均衡与贴现比较</td>
+</tr>
+<tr>
+<td>多智能体学习</td>
+<td>同时学习的策略集合</td>
+<td>是，且非平稳</td>
+<td>均衡近似 / 博弈论保证</td>
+</tr>
+</tbody>
+</table>
+<p>一个具体的量级感受：两个机器人竞争任务分配时，若一方把「对方固定抢占资源」当成环境规律写进策略，则对方一旦改用退让策略，自己的收益会从预期值骤降。这类失败的根源不是算法弱，而是<strong>建模假设（环境平稳）与现实（对手在学）不一致</strong>。因此工程上需要显式记录的不只是收益，还包括策略本身的演化轨迹：动作分布、对历史模式的响应、以及对不同对手的适应速度。否则无法区分「合作来自稳定的激励结构」还是「偶然的同步」。</p>
+<h2 id="_9">多智能体学习中的非平稳性</h2>
+<p>单智能体 RL 的收敛保证依赖一个核心假设：转移核 <span class="arithmatex">\(P(s' \mid s, a)\)</span> 不随时间变化。当多个智能体同时用 Q-Learning 或策略梯度学习时，第 <span class="arithmatex">\(i\)</span> 个玩家看到的环境其实是</p>
+<div class="arithmatex">\[
+P_i^{t}(s' \mid s, a_i) = \sum_{a_{-i}} P\big(s' \mid s, a_i, a_{-i}\big)\, \pi_{-i}^{t}(a_{-i} \mid s),
+\]</div>
+<p>而 <span class="arithmatex">\(\pi_{-i}^{t}\)</span> 随轮次 <span class="arithmatex">\(t\)</span> 变化，于是 <span class="arithmatex">\(P_i^{t}\)</span> 是<strong>非平稳</strong>的。这直接破坏了 Q-Learning 收敛证明里的不动点论证：Bellman 算子的目标值每轮都在移动，价值估计可能持续震荡甚至发散。</p>
+<table>
+<thead>
+<tr>
+<th>非平稳来源</th>
+<th>对学习的影响</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对手策略持续更新</td>
+<td>转移核随时间漂移</td>
+<td>集中训练分散执行（CTDE）</td>
+</tr>
+<tr>
+<td>探索噪声变化</td>
+<td>经验分布失真</td>
+<td>共享经验回放、对手建模</td>
+</tr>
+<tr>
+<td>奖励相互耦合</td>
+<td>信用分配困难</td>
+<td>反事实基线、差分奖励</td>
+</tr>
+<tr>
+<td>策略循环</td>
+<td>无法收敛到不动点</td>
+<td>平均策略、元博弈求解</td>
+</tr>
+</tbody>
+</table>
+<p>常用的缓解思路是把「学习什么」和「怎么用」分离：集中训练阶段允许看到全局状态和他人动作以稳定学习目标，执行阶段只用自己的局部观测。即便如此，收敛保证通常退化为「收敛到某类近似均衡集合」，而不是单智能体意义上的唯一最优点。另一种思路是把学习目标从「找不动点」换成「让平均遗憾趋近零」，用上一节的 no-regret 性质替代单智能体的收敛保证。更完整的算法与失效分析见 <a href="../../multi-agent-systems/05-multi-agent-learning/">多智能体学习</a>。</p>
+<h2 id="_10">实验里最好检查单边偏离还能赚多少</h2>
+<p>判断一个稳定策略是否接近均衡，最贴近定义的做法是构造单边偏离测试：固定其他玩家的策略 <span class="arithmatex">\(\pi_{-i}\)</span>，让玩家 <span class="arithmatex">\(i\)</span> 单独搜索最佳响应</p>
+<div class="arithmatex">\[
+\Delta_i = \max_{\pi_i'} \; \mathbb{E}\Big[ \, u_i\big(\pi_i', \pi_{-i}\big) \, \Big] - \mathbb{E}\Big[ \, u_i\big(\pi_i, \pi_{-i}\big) \, \Big].
+\]</div>
+<p>若 <span class="arithmatex">\(\Delta_i\)</span> 显著为正，说明当前策略组合仍可被利用，稳定只是假象。举一个数值感受：若当前共同收益是每轮 <span class="arithmatex">\(3\)</span>，而单边背叛能吃一次 <span class="arithmatex">\(5\)</span>，则 <span class="arithmatex">\(\Delta_i = 5 - 3 = 2\)</span>；配合上一节的贴现比较，只有当 <span class="arithmatex">\(\delta &gt; 0.5\)</span> 时这 <span class="arithmatex">\(2\)</span> 个单位的即时诱惑才会被未来损失抵消。</p>
+<table>
+<thead>
+<tr>
+<th>测试项</th>
+<th>度量</th>
+<th>判定阈值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单边偏离收益</td>
+<td><span class="arithmatex">\(\Delta_i\)</span></td>
+<td><span class="arithmatex">\(\le \epsilon \cdot \text{收益尺度}\)</span></td>
+<td>直接对应 Nash 定义</td>
+</tr>
+<tr>
+<td>可利用度</td>
+<td><span class="arithmatex">\(\max_i \Delta_i\)</span></td>
+<td>越接近 <span class="arithmatex">\(0\)</span> 越好</td>
+<td>整体均衡质量</td>
+</tr>
+<tr>
+<td>平均遗憾</td>
+<td><span class="arithmatex">\(\mathcal{R}_T / T\)</span></td>
+<td><span class="arithmatex">\(O(1/\sqrt{T})\)</span> 量级</td>
+<td>无遗憾学习进度</td>
+</tr>
+<tr>
+<td>收益方差</td>
+<td><span class="arithmatex">\(\mathrm{Var}(u_i)\)</span></td>
+<td>突然升高提示非平稳</td>
+<td>策略漂移信号</td>
+</tr>
+</tbody>
+</table>
+<p>实践建议：每次报告「收敛」结论时，同时给出 <span class="arithmatex">\(\Delta_i\)</span>、收益方差和探索率曲线三项证据，否则无法排除「学习率衰减造成的假稳定」。</p>
+<h2 id="_11">把一次收益和长期关系分开</h2>
+<p>重复博弈中，当前动作同时产生两种后果：即时收益，以及对对手未来预期的影响。贴现因子越高，后一种效应越重要。分析实验时应当把这两部分显式拆开：</p>
+<div class="arithmatex">\[
+U_i = \underbrace{u_i^{t}}_{\text{即时收益}} + \underbrace{\frac{\delta}{1-\delta}\, \bar{u}_i^{\text{future}}}_{\text{关系价值}} .
+\]</div>
+<p>用前面的数字感受量级差异：<span class="arithmatex">\(\delta = 0.9\)</span> 时 <span class="arithmatex">\(\delta/(1-\delta) = 9\)</span>，意味着未来平均每轮 <span class="arithmatex">\(1\)</span> 单位的收益变动，在今天的等价价值是 <span class="arithmatex">\(9\)</span>；而 <span class="arithmatex">\(\delta = 0.5\)</span> 时这个倍率只有 <span class="arithmatex">\(1\)</span>。所以同一个「暂时让利 <span class="arithmatex">\(2\)</span> 以换取长期合作」，在 <span class="arithmatex">\(\delta = 0.9\)</span> 下的等价收益是 <span class="arithmatex">\(9 \times 1 - 2\)</span>（净赚），在 <span class="arithmatex">\(\delta = 0.5\)</span> 下则变成 <span class="arithmatex">\(1 \times 1 - 2 = -1\)</span>（亏本）。</p>
+<table>
+<thead>
+<tr>
+<th>记录项</th>
+<th>用途</th>
+<th>不记录的后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>即时收益 <span class="arithmatex">\(u_i^{t}\)</span></td>
+<td>衡量当期表现</td>
+<td>无法区分让利与失败</td>
+</tr>
+<tr>
+<td>策略变化轨迹</td>
+<td>判断是否在适应对手</td>
+<td>误把循环当成收敛</td>
+</tr>
+<tr>
+<td>对历史的响应</td>
+<td>检验是否真在使用历史</td>
+<td>无法判断合作是否来自激励</td>
+</tr>
+<tr>
+<td>贴现因子估计</td>
+<td>计算关系价值</td>
+<td>无法评估长期决策是否合理</td>
+</tr>
+</tbody>
+</table>
+<p>三个失败模式值得单独标记：一是把短期高收益误读为策略优越（很可能只是榨取了对手的一次失误）；二是把长期低收益误读为算法不行（可能是为了维持关系主动让利）；三是在 <span class="arithmatex">\(\delta\)</span> 估计错误时做出错误的合作 / 背叛决策，因为临界值 <span class="arithmatex">\(\delta^{\star} = (T-R)/(T-P)\)</span> 对 <span class="arithmatex">\(T\)</span> 和 <span class="arithmatex">\(P\)</span> 的估计非常敏感——<span class="arithmatex">\(P\)</span> 从 <span class="arithmatex">\(1\)</span> 降到 <span class="arithmatex">\(0.5\)</span> 时，门槛就从 <span class="arithmatex">\(0.5\)</span> 升到 <span class="arithmatex">\(0.556\)</span>。</p>
+<blockquote>
+<p><strong>下一步</strong>：回到零和结构与对抗鲁棒性的对应，见 <a href="../03-zero-sum-minimax/">零和博弈与 Minimax</a>；复习顺序行动与承诺可信度对重复关系的制约，见 <a href="../04-sequential-bayesian/">序贯与贝叶斯博弈</a>；如果关心多智能体学习的算法细节与收敛失效，见 <a href="../../multi-agent-systems/05-multi-agent-learning/">多智能体学习</a>；如果关心单智能体 MDP 的收敛前提，见 <a href="../../reinforcement-learning/01-mdp-bellman/">MDP 与 Bellman 方程</a>。</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
