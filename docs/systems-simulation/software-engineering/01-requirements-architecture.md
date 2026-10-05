@@ -6,7 +6,7 @@
 
 ![从需求到架构](../../assets/diagrams/software-architecture.svg)
 
-## 先把功能与质量分开
+## 功能需求与质量属性
 
 功能需求描述系统**做什么**，例如“用户可以提交任务”“机器人可以上报状态”。非功能需求描述系统**做到什么程度**，例如延迟、吞吐、可靠性、安全性和可维护性。
 
@@ -208,3 +208,4 @@ ADR 比普通设计文档更耐久，原因有三点。第一，它**粒度小**
 要避免的误区是把 ADR 写成流程负担：几十页的背景调研、需要多方签字的审批表。ADR 的目标读者是半年后接手代码的人，不是评审委员会。控制在半页到两页，能在一杯咖啡的时间里读完，才是它真正会被使用的前提。
 
 > **下一步**：边界与决策确定之后，接下来看这些边界怎样落成稳定接口，读 [Modular Design & APIs](02-modular-apis.md)；接口定义完就该有测试，见 [pytest & Debugging](04-testing-debugging.md)；架构要跟得上发布节奏，看 [Deployment & Reliability](05-deployment-reliability.md)；当边界真的需要跨网络时，再读 [Consistency & State](../distributed-systems/03-consistency-state.md)。
+

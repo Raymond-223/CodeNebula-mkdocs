@@ -9,7 +9,7 @@
   <figcaption>人工接管必须给人足够状态信息和理解时间。</figcaption>
 </figure>
 
-## 接管为什么是一个状态迁移问题
+## 接管状态机
 
 接管不是二元事件，而是一个由离散状态与有向边构成的迁移系统。把系统在任一时刻的接管相关状态记为
 
@@ -314,3 +314,4 @@ $$\lambda_t = \frac{N_{\text{takeover}}}{T_{\text{operate}}}.$$
 因此人工接管也需要像故障恢复一样定期测试，而不是只在界面保留一个按钮。接管机制若从未被真正触发测试，往往会在事故时刻暴露模式切换、输入设备或权限问题。
 
 > **下一步**：本章给出控制权转移的时序与度量，[Interaction & Levels of Automation](01-human-ai-automation.md) 界定控制权归属，[Human-in-the-Loop](02-human-in-loop.md) 说明人插在哪一环，[Shared Autonomy](03-shared-autonomy.md) 处理连续融合，[Trust & Explainability](04-trust-explainability.md) 保证操作者能正确理解系统状态。自动降级与运行时监控见 [Safe Learning & Runtime Safety](../robustness-safety/05-safe-learning-runtime.md)，安全约束与延迟预算见 [Safety Constraints](../robustness-safety/03-safety-constraints.md)，与之衔接的导航控制接口见 [Navigation & Control](../../robotics-perception/robotics/05-navigation-control.md)。
+

@@ -54,7 +54,7 @@ Model-free 把真实交互直接变成参数更新：价值方法用 TD 误差�
 
 失效模式：样本效率低带来一个连锁后果——探索预算被摊薄。真实机器人上，只有当单次试错成本足够低（如仿真环境）时，纯 model-free 才是合理选择。
 
-## Model-Based：先学模型再规划
+## Model-Based：模型学习与规划
 
 Model-based 的核心动作是：用已收集的数据拟合 $\hat T$ 与 $\hat R$，再用模型生成本来需要真实交互才能获得的信息。常见形态包括：
 
@@ -231,7 +231,7 @@ $$
 
 失效模式：当想象样本权重 $\beta$ 或比例过高时，价值函数会被模型偏差完全主导，表现为策略在真实环境中持续撞上“模型没预测到的”障碍；这类失败往往在训练曲线上不明显（因为训练用的正是错误模型），只能在真实环境中暴露。
 
-## 模型误差如何进入闭环
+## 模型误差的闭环传播
 
 模型误差进入闭环有两条独立路径，必须分开处理。
 
@@ -263,3 +263,4 @@ $$
 $\kappa$ 越大越保守，代价是在模型准确区域也过度保守，需要按任务调节。
 
 > **下一步**：模型式规划需要精确的动力学与概率工具，见 [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md) 与 [马尔可夫过程](../../foundations/mathematics/06-markov-processes.md)；仿真到现实的模型差距见 [Sim2Real 与 Real2Sim](../../systems-simulation/simulation-sim2real/04-sim2real-real2sim.md)；与值方法的对照见 [值方法](02-value-based.md)，安全性与分布偏移下的模型风险见 [鲁棒与安全中的不确定性](../../safety-human-factors/robustness-safety/01-uncertainty-shift.md)。
+

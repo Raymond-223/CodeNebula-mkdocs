@@ -9,7 +9,7 @@
 
 对机器人系统来说，分布式不是可选架构而是默认现实：感知、规划、控制常运行在不同进程甚至不同主机上，中间隔着网络与调度器。**一旦有网络，就必然有延迟、乱序和分区**，因此这一节的每一章都在回答同一个问题：在这些不完美条件下，系统如何仍然可预测。
 
-## 本节要解决的问题
+## 学习目标
 
 单机程序里“函数调用”是可靠的：同步、有返回值、不会丢。分布式系统打破的正是这些假设：
 
@@ -252,3 +252,4 @@ $$d_{\text{total}} = \sum_{i=1}^{n} d_i, \qquad d_{\text{total}} + J_{\max} \le 
   - 出口：每条 QoS 配置都能解释“为什么是这样”。
 
 > **下一步**：从 [Networks & Message Passing](01-network-messaging.md) 开始，先建立“消息在网络中会经历什么”的直觉，再进入时间与一致性。多机场景下的消息重复与陈旧问题见 [Allocation & Distributed Decision](../../decision-learning/multi-agent-systems/04-allocation-distributed-decision.md)。
+

@@ -101,7 +101,7 @@ $$S_k = \max\big(0,\ S_{k-1} + r_k - \nu\big),$$
 | MTFA | 误报间隔的期望 | 大于任务时长的 10 倍 | 由 $P_{FA}$ 与频率决定 |
 | 定位正确率 | 报警指向真实故障源 | 高于 90% | 依赖独立信息源数量 |
 
-## 检测之后还要判断谁出了问题
+## 故障隔离与故障定位
 
 两个编码器读数不一致，只能说明至少一个有问题。结合 IMU、车辆运动模型或第三个传感器，才能进一步做 fault isolation。没有隔离就直接丢弃某个传感器，可能反而删除了正确数据。
 
@@ -309,3 +309,4 @@ $$P_{FA}\cdot C_{FA} \approx P_{MD}\cdot C_{MD} .$$
 也就是说，代价比 $C_{MD}/C_{FA}$ 直接决定阈值应当朝哪个方向偏。当后果差距在一百倍以上时，宁可让 MTFA 降到几分钟，也不能让漏报概率停在 1e-3 量级——把 $C_{MD}/C_{FA}$ 写出来，比争论“阈值取 3$\sigma$ 还是 4$\sigma$”更有用。
 
 > **下一步**：检测与降级解决“组件出错之后怎么办”。当问题出在主策略本身而不是硬件时，见 [Safe Learning & Runtime Safety](05-safe-learning-runtime.md)；分布式链路上的超时、重试与副本一致性见 [Fault Tolerance in Distributed Systems](../../systems-simulation/distributed-systems/04-fault-tolerance.md)，整体风险度量框架见 [Robustness, Risk & Reliability](02-robustness-risk.md)，部署阶段的健康检查与回滚见 [Deployment & Reliability](../../systems-simulation/software-engineering/05-deployment-reliability.md)。
+

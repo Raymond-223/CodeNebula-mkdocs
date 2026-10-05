@@ -8,7 +8,7 @@
   <figcaption>Reinforcement Learning 的核心概念关系。</figcaption>
 </figure>
 
-## 本节要解决的问题
+## 学习目标
 
 监督学习里样本是 $(x,y)$，损失函数直接告诉你错在哪里。强化学习里样本是 $(s_t,a_t,r_{t+1},s_{t+1})$，你只得到一个标量奖励，于是至少有三层麻烦：
 
@@ -153,3 +153,4 @@ $$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(
 六章的依赖是单向的：01 不依赖任何后文，02 / 03 / 05 只依赖 01，04 / 06 依赖前面全部。因此即使时间有限，也建议至少按 `01 → 02 → 03` 完成一遍，其中 01 的压缩映射与 02 的半梯度是理解后续所有"训练不稳定"报告的共同前提。
 
 > **下一步**：从 [01-mdp-bellman.md](01-mdp-bellman.md) 开始，先把 Bellman 递推手算一遍；如果你更关心"数据从哪来"，可直接跳到 [05-model-based-vs-model-free.md](05-model-based-vs-model-free.md)；如果你要部署到真实系统，请务必先读 [06-safe-robust-offline.md](06-safe-robust-offline.md) 与 [../robustness-safety/05-safe-learning-runtime.md](../../safety-human-factors/robustness-safety/05-safe-learning-runtime.md)。
+

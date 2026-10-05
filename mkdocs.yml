@@ -1,5 +1,5 @@
 site_name: CodeNebula
-site_description: 面向智能系统研究与工程实践的知识地图，从数学原理走向真实系统。
+site_description: 面向零基础读者的智能系统讲解手册，从逐步计算走向真实系统。
 site_url: https://raymond-223.github.io/CodeNebula-mkdocs/
 theme:
   name: material

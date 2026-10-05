@@ -216,7 +216,7 @@ $$\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) > \delta,\; \hat\pi_\beta(
 
 一个具体例子可以一次区分三者：用六个月历史日志训练仓储 AGV 是 Offline；地面摩擦系数、载重分布会随季节和批次变化是 Robust；车体绝不能进入人员工作区是 Safe。三条改造路径互不替代：扩大数据集不解决约束，加约束不解决摩擦漂移，域随机化也不解决"数据里根本没有那种动作"。
 
-## 为什么离线评估很难
+## 离线策略评估的困难
 
 离线 RL 最容易被低估的环节是评估。**策略改进需要验证，而验证需要环境交互——这个前提在离线设定下恰好被剥夺。** $J(\pi)$ 的真值不存在于任何数据中，它是关于反事实轨迹的期望。
 
@@ -261,3 +261,4 @@ $$\hat J(\pi)\ \text{可信},\quad \text{仅当}\quad \mathbb P_{s\sim d^{\pi}}\
 因此，离线项目的正确起点不是选算法，而是先量化数据覆盖，再决定允许声称什么级别的结论；算法只决定在这个上限之内能逼近多少。
 
 > **下一步**：继续阅读 [Model-based 与 Model-free](05-model-based-vs-model-free.md) 理解模型误差如何被多步展开放大，[探索与 POMDP](04-exploration-pomdp.md) 看在线探索为何在安全约束下不可用，[策略梯度与 Actor-Critic](03-policy-actor-critic.md) 掌握拉格朗日乘子挂到哪个梯度上，以及 [多智能体学习与 CTDE](../multi-agent-systems/05-multi-agent-learning.md) 看约束与离线问题在多个 Agent 同时学习时如何进一步变难。
+
