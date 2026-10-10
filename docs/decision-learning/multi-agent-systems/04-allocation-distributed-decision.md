@@ -4,7 +4,7 @@
 >
 > 先会手算这个最小例子，再加入容量、通信和故障，你就能看懂为什么匈牙利算法、拍卖和分布式决策只是不同信息条件下的求解方式。
 
-## 任务分配的代价矩阵
+## 先把任务分配写成代价矩阵
 
 假设 $c_{ij}$ 表示 Agent $i$ 执行任务 $j$ 的代价，例如距离、时间或能耗。全部代价排成矩阵 $C=[c_{ij}]$，行是主体、列是任务。
 
@@ -251,4 +251,3 @@ $$
 代价估计本身往往依赖运动规划（见 [导航与控制](../../robotics-perception/robotics/05-navigation-control.md)），而其不确定性下的权衡与 [安全、鲁棒与离线强化学习](../reinforcement-learning/06-safe-robust-offline.md) 中的鲁棒建模思路相通；多主体协同学习中分配与策略的联合优化，可进一步参考 [多智能体学习](05-multi-agent-learning.md)。
 
 > **下一步**：分配决定了角色与任务归属，而这些决策依赖主体间的信息交换，请阅读 [通信与信息共享](03-communication.md)；若关心多主体如何在交互中学习策略，见 [多智能体学习](05-multi-agent-learning.md)；单主体的规划与马尔可夫决策基础见 [MDP 与 Bellman 方程](../reinforcement-learning/01-mdp-bellman.md)；分配与协调背后的博弈结构见 [合作、竞争与协调](02-coordination.md)。
-

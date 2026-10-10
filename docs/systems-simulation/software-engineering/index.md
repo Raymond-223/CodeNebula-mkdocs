@@ -7,7 +7,7 @@
   <figcaption>Software Engineering 的核心概念关系。</figcaption>
 </figure>
 
-## 学习目标
+## 本节要解决的问题
 
 研究型项目和课堂作业最大的差别，不在于代码量，而在于**代码需要被谁使用、使用多久**。一次性实验脚本可以只有一个文件、没有测试、硬编码路径；而一个要交给下一届学生、要继续发论文、要在实机上反复运行的系统，必须处理完全不同的要求。
 
@@ -224,4 +224,3 @@ $n=3$ 时是 3 条，$n=8$ 时是 28 条，$n=20$ 时是 190 条。**沟通路�
   - 出口：换一台机器能一条命令起来，出问题能回退。
 
 > **下一步**：从 [需求、边界与软件架构](01-requirements-architecture.md) 开始，按顺序读完五章；如果正在调试跨模块问题，可以直接跳到 [测试与调试](04-testing-debugging.md)，再结合 [ROS 2 与 DDS 中间件](../distributed-systems/05-middleware-ros2-dds.md) 检查接口契约。涉及多机部署与参数分发时，另见 [第 2 章 · 时间与异步](../distributed-systems/02-distributed-time.md) 与 [任务分配与分布式决策](../../decision-learning/multi-agent-systems/04-allocation-distributed-decision.md)。
-

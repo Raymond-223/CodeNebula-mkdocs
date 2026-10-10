@@ -7,7 +7,7 @@
   <figcaption>Robotics 的核心概念关系。</figcaption>
 </figure>
 
-## 学习目标
+## 本节要解决的问题
 
 读这一节之前，常见的困惑是“公式都懂，但不知道装在哪”。具体表现为三类问题：
 
@@ -36,7 +36,7 @@
 | --- | --- | --- |
 | 向量、矩阵、矩阵乘法 | 坐标变换、动力学、滤波、规划几乎处处使用 | [线性代数与微积分基础](../../foundations/mathematics/01-linear-algebra-calculus.md) |
 | 旋转矩阵、$SO(3)$、$SE(3)$、齐次变换 | TF、相机外参、点云配准、SLAM 位姿 | [旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md) |
-| 导数与 Jacobian | 机械臂速度映射、EKF 线性化、优化 | [梯度与 Jacobian](../../foundations/mathematics/01-linear-algebra-calculus.md#gradient-jacobian-hessian) |
+| 导数与 Jacobian | 机械臂速度映射、EKF 线性化、优化 | [梯度与 Jacobian](../../foundations/mathematics/01-linear-algebra-calculus.md#八梯度与-jacobian把导数搬到多变量) |
 | 概率、条件概率与贝叶斯 | 传感噪声、卡尔曼滤波、状态估计 | [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md) → [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md) |
 | 状态空间与优化 | 动态模型、LQR/MPC、SLAM 后端最小二乘 | [建模与状态空间](../../foundations/control-theory/01-modeling-state-space.md)；[优化、约束与不确定性](../../foundations/mathematics/07-optimization-under-uncertainty.md) |
 
@@ -166,4 +166,3 @@ $$\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),$$
 5. [机器人导航与控制](05-navigation-control.md) —— 全局/局部分层、Pure Pursuit 与 Stanley、调参顺序与实机失效模式。
 
 > **下一步**：如果只读两章，选 [机器人模型、运动学与动力学](01-models-kinematics-dynamics.md) 和 [机器人导航与控制](05-navigation-control.md)——它们定义了整条闭环的两端。想先补齐数学基础可从 [条件概率与贝叶斯](../../foundations/mathematics/05-conditional-bayes.md) 入手；想直接看闭环控制的理论地基，见 [反馈与稳定性](../../foundations/control-theory/02-feedback-stability.md)；关注仿真到实机的落地路径，见 [机器人传感仿真](../../systems-simulation/simulation-sim2real/02-robot-sensor-simulation.md)。
-

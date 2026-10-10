@@ -9,7 +9,7 @@
 
 五章不是五个独立话题，而是同一条主线上的五个环节。概念地图里的节点恰好标记了这条主线：**Automation（role split）→ Human input（approval / feedback）→ Shared control（blend authority）→ Trust（calibration）→ Takeover（safe handoff）**。前半部分决定“谁负责什么”，中间决定“人的输入如何进入闭环”，最后决定“出问题时如何把控制权安全地交还”。
 
-## 学习目标
+## 本节要解决的问题
 
 人机系统失败的原因很少是“算法不够强”，而更常见的是一组职责与状态问题。这些问题在开发阶段往往不显现，只有在长时监督、场景突变或故障叠加时才集中暴露，因此越晚处理代价越高。
 
@@ -182,7 +182,7 @@ $$t_{\text{comm}} + t_{\text{ui}} < T_{\text{warn}},$$
 因此排查不应止步于定位单个现象，而要沿着“状态可见性 → 反馈生效 → 融合可预测 → 信任校准 → 接管及时”的顺序逐项确认。
 如果某一环的判据无法给出，就说明这一环尚未被真正设计过。
 
-## 人机系统验收测试
+## 验收视角：人机系统如何被测试
 
 与算法模块不同，人机系统不能只用精度指标验收。可用的最小验收集合是行为层面的：它要求系统在时间压力与信息不足下仍然表现可接受。
 
@@ -209,5 +209,3 @@ $$t_{\text{comm}} + t_{\text{ui}} < T_{\text{warn}},$$
 只有在这样的约束下，人机系统的“可用”才是可验证的，而不是事后解释出来的。
 
 > **下一步**：从 [Interaction & Levels of Automation](01-human-ai-automation.md) 开始，它把“自动化程度”还原成可写进文档的职责矩阵；随后 [Human-in-the-Loop](02-human-in-loop.md) 与 [Shared Autonomy](03-shared-autonomy.md) 处理人的输入如何进入闭环，[Trust & Explainability](04-trust-explainability.md) 与 [Intervention & Takeover](05-intervention-takeover.md) 处理理解与安全交还。
-
-

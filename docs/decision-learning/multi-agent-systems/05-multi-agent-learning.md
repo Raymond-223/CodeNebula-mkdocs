@@ -6,7 +6,7 @@
 
 ![CTDE](../../assets/diagrams/ctde.svg)
 
-## Actor、Critic 与 Q 值
+## 先把 Actor、Critic、Q 值讲清楚
 
 本章会频繁出现几个强化学习词，但理解 CTDE 不需要先完整学完所有算法。先把它们压缩成一个最小闭环：
 
@@ -328,4 +328,3 @@ $$
 最后一条经验：**能通过队友替换和通信中断测试的策略，才算学到了协作；只能在自己训练组合里跑通的，通常只是巧合。** 评估集必须包含训练期从未出现的队友与通信条件，否则测出来的仍是训练分布内的记忆能力。
 
 > **下一步**：继续阅读 [协作与共识机制](02-coordination.md) 了解策略之上的分配层设计，用 [通信与信息共享](03-communication.md) 处理 $\tau_i$ 中消息通道的延迟与丢包，回到 [任务分配与分布式决策](04-allocation-distributed-decision.md) 看全局目标如何落到个体，并对照 [多智能体系统导论](01-agents-architectures.md) 补齐智能体结构前提，算法基础则参考 [策略梯度与 Actor-Critic](../reinforcement-learning/03-policy-actor-critic.md)。
-

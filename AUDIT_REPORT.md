@@ -1,52 +1,90 @@
-# CodeNebula 零基础讲解手册重构记录
+# CodeNebula V6 — Theory-to-System Content Audit
 
-## 重构目标
+## 1. 本轮修正目标
 
-本项目定位为面向零基础读者的智能系统讲解手册，不再以“最小知识地图”或复习提纲为写作目标。正文遵循以下规则：
+V6 的目标重新定义为“面向智能系统研究与工程实践的知识地图”，而不是 AI 编程入门网站。内容依赖链为：
 
-1. 小标题直接使用知识点名称，不用问题句或宣传式文案；
-2. 后文不用的前置知识删除；
-3. 后文确实依赖的知识必须给出定义、符号、逐步计算、适用条件和失效情况；
-4. 新术语在首次使用处解释，不集中堆成预习词表；
-5. 代码用于验证手算或说明工程接口，不代替推导；
-6. 经验阈值必须说明条件，否则改为定性判据或删除。
+```text
+数学 → 理论方法 → 算法理解 → 工程实现 → 真实系统
+```
 
-## 当前规模
+代码归属执行以下约束：
 
-- 13 个主题 Section；
-- 64 篇核心正文；
-- 13 篇 Section 导读和 1 篇首页；
-- 合计 78 个 Markdown 页面。
+- Mathematics、Game Theory、Reinforcement Learning、Multi-Agent Systems 与 Control Theory 不含可执行代码；
+- RL 使用公式级更新规则，明确当前估计、目标值与更新方向；
+- Robotics、Perception、Distributed Systems、Software Engineering 与 Simulation 承担工程示例；
+- 图片用于几何关系、状态空间、概率/优化关系、架构、数据流和系统连接，不使用代码或软件界面截图。
 
-## 前置知识处理
+## 2. 当前规模
 
-| 知识点 | 后续用途 | 处理结果 |
-|---|---|---|
-| QR 分解 | 后文没有实际推导或计算依赖 | 从核心知识链删除 |
-| SVD | 机械臂奇异性、截断 SVD、退化协方差、点云配准 | 保留并补充矩形矩阵手算 |
-| Moore–Penrose 伪逆 | 最小二乘、最小范数解、机械臂逆运动学 | 保留并补充逐步计算 |
-| 阻尼伪逆 | 机械臂奇异附近的速度抑制 | 从正则化目标推导，并解释奇异方向增益 |
-| Cholesky 分解 | 正则化方程、SLAM 稀疏求解 | 保留并补充因子分解、前代和回代 |
-| LU 分解 | 后文没有形成知识依赖 | 不作为核心知识点展开 |
+- **12 Sections** / 5 learning domains
+- **61 core chapters**
+- **74 Markdown pages**
+- **47 local SVG teaching diagrams**
+- 理论层可执行代码块为 **0**
+- 顶部与左侧导航全部使用英文，正文保持中文；五个领域为 Foundations、Decision & Learning、Robotics & Perception、Systems & Simulation、Safety & Human Factors
 
-## 已完成的重点修改
+## 3. 逐 Section 复核结果
 
-- 重写首页定位、真实页面统计和学习结构；
-- 导航和页面一级标题统一为英文，中文正文中的重要术语保留标准英文名称；
-- 将问题式标题批量改为知识点标题；
-- 线性代数章节删除孤立的 QR 简介，新增完整 SVD 与伪逆教学段落；
-- 修正“增加观测必然减小最小二乘残差”的错误表述；
-- 数值计算章节修正正则化条件数公式，新增 Cholesky 手算；
-- 机器学习章节新增 MSE、softmax、交叉熵、反向传播、二维卷积和 Attention 的数字计算；
-- 机器人章节从正则化目标推导阻尼最小二乘，并删除无条件的经验参数范围；
-- 点云章节补充质心对齐、相关矩阵、SVD、旋转和平移的完整配准步骤；
-- 删除或改写脱离设备和实验条件的精确经验数字。
+### Mathematics for Intelligent Systems
 
-## 验收项目
+保留线性代数/微积分、数值计算、概率、Bayes、Markov、优化六个节点。重点解释负梯度、局部/全局最优、Lagrange multiplier、离散化、误差来源和稳定性，不再出现 NumPy 或工具调用。
 
-- `mkdocs build --strict`；
-- 所有内部 Markdown 链接和本地图片可解析；
-- Python 代码块通过语法解析；
-- 导航目标与实际页面一致；
-- 标题中不再使用“为什么、怎么、如何”等提问式结构；
-- QR 不再作为未被后文使用的孤立知识点出现。
+### Reinforcement Learning
+
+保留 MDP/Bellman、Value-Based、Policy/Actor-Critic、探索与部分可观测、Model-Based vs Model-Free、安全/鲁棒/离线 RL。实现片段已改为数学更新式与算法关系，不依赖 PyTorch 或训练框架。
+
+### Game Theory
+
+围绕参与者、策略、收益、信息、行动顺序与重复交互展开。收益矩阵改为数学表示，不包含求解器代码。
+
+### Multi-Agent Systems
+
+保留 Agent 架构、协调、通信、任务分配/分布式决策、MARL/CTDE。理论消息、任务触发和反应式策略均改为形式化描述，网络实现移到 Distributed Systems。
+
+### Control Theory
+
+保持建模与状态空间 → 反馈与稳定性 → PID → LQR → MPC 的连续逻辑。离散更新和 PID 的可执行实现移到 Robotics，理论页只解释机制与成立条件。
+
+### Robotics
+
+保留坐标变换、差速运动、状态估计、A*、PID 控制循环等小型工程例子，并明确坐标系、单位、时间戳与执行器边界。
+
+### Perception
+
+保留图像读取与预处理、投影/反投影、点云处理流程和模型推理接口。代码围绕稳定的数据契约，不扩展为框架教程。
+
+### Distributed Systems & Networking
+
+保留 TCP/UDP、Pub/Sub、版本更新、退避容错、ROS2 Topic/Service 与 DDS QoS。实现服务于通信语义，不扩展 Raft/Paxos/CRDT。
+
+### Software Engineering
+
+只保留需求/架构、模块/API、Git、pytest、Docker、CI 与必要调试示例，不继续扩展企业级工具清单。
+
+### Simulation & Sim2Real
+
+保留物理推进、MuJoCo/Gazebo 抽象交互循环、传感器模拟接口、Reality Gap/随机化和 Sim2Real/Real2Sim 闭环。
+
+### Robustness & Safety
+
+按不确定性/分布偏移 → 风险/可靠性 → 安全约束 → 故障处理 → Runtime Safety 展开，强调条件、指标和退化模式。
+
+### Human–AI Interaction
+
+只保留自动化权限、人机在环、共享自治、信任/解释、干预/接管，重点解释控制权与安全交接。
+
+## 4. 图片与代码策略
+
+图片总量控制在 47 张，主要用于闭环、数据流、几何关系、系统架构和算法结构。Section 首页保留概念总图，正文只在可视化确实降低理解成本时使用。
+
+工程代码覆盖坐标变换、PID 循环、ROS2 Topic/Service、A*、图像预处理、点云流程、推理接口、TCP/UDP、Pub/Sub、容错、API、pytest、Docker、CI、MuJoCo/Gazebo 抽象循环和传感器模拟。理论层不再使用可执行代码。
+
+## 5. 最终静态验收
+
+- 所有导航目标均存在且无孤立 Markdown 页面；
+- 无失效旧交叉引用或同页重复图片；
+- 无 LaTeX 控制字符损坏；
+- 所有本地图片和页面链接均可解析；
+- Python 示例通过语法解析；
+- `mkdocs build --strict` 已在本机完整通过。

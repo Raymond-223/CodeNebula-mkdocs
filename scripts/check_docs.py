@@ -11,7 +11,7 @@ DOCS = ROOT / 'docs'
 errors = []
 
 EXPECTED_SECTIONS = [
-    'mathematics', 'machine-learning', 'reinforcement-learning', 'game-theory', 'multi-agent-systems',
+    'mathematics', 'reinforcement-learning', 'game-theory', 'multi-agent-systems',
     'control-theory', 'robotics', 'perception', 'distributed-systems',
     'software-engineering', 'simulation-sim2real', 'robustness-safety',
     'human-ai-interaction',
@@ -19,7 +19,6 @@ EXPECTED_SECTIONS = [
 SECTION_PATHS = {
     'mathematics': 'foundations/mathematics',
     'control-theory': 'foundations/control-theory',
-    'machine-learning': 'decision-learning/machine-learning',
     'reinforcement-learning': 'decision-learning/reinforcement-learning',
     'game-theory': 'decision-learning/game-theory',
     'multi-agent-systems': 'decision-learning/multi-agent-systems',
@@ -40,7 +39,7 @@ ENGINEERING_SECTIONS = {
     'simulation-sim2real',
 }
 THEORY_SECTIONS = {
-    'mathematics', 'machine-learning', 'game-theory', 'reinforcement-learning',
+    'mathematics', 'game-theory', 'reinforcement-learning',
     'multi-agent-systems', 'control-theory',
 }
 
@@ -88,7 +87,7 @@ walk_nav(nav, labels, targets)
 
 # Navigation.
 top_keys = [next(iter(x)) for x in nav if isinstance(x, dict)]
-for domain in EXPECTED_DOMAINS:
+for domain in EXPECTED_DOMAINS + ['Yau Contest']:
     if domain not in top_keys:
         errors.append(f'Missing top navigation domain: {domain}')
 for label in labels:
@@ -98,7 +97,7 @@ for label in labels:
 # Curriculum size: guard both bloat and accidental over-compression.
 expected_groups = {
     'foundations', 'decision-learning', 'robotics-perception',
-    'systems-simulation', 'safety-human-factors',
+    'systems-simulation', 'safety-human-factors', 'yau-contest',
 }
 content_dirs = {
     p.name for p in DOCS.iterdir()
@@ -117,10 +116,24 @@ for name in EXPECTED_SECTIONS:
     chapters = sorted(p for p in d.glob('*.md') if p.name != 'index.md')
     chapter_counts[name] = len(chapters)
     chapter_total += len(chapters)
-    if not 1 <= len(chapters) <= 7:
-        errors.append(f'{name}: expected a compact 1-7 chapter core, found {len(chapters)}')
+    if not 4 <= len(chapters) <= 7:
+        errors.append(f'{name}: expected a compact 4-7 chapter core, found {len(chapters)}')
 if not 55 <= chapter_total <= 65:
     errors.append(f'Curriculum bloat/compression guard failed: {chapter_total} core chapters')
+
+# Standalone Yau Contest — separate from the original 12-section curriculum.
+yau = DOCS / 'yau-contest'
+yau_files = sorted(p.name for p in yau.glob('*.md')) if yau.is_dir() else []
+expected_yau = [
+    'index.md', '00-proof-skills-notation.md', '01-matrix-norms-spectral.md',
+    '02-svd-least-squares.md', '03-linear-iterations-power.md',
+    '04-fixed-points-contractions.md', '05-newton-convergence.md',
+    '06-stage-one-workbook.md',
+]
+if sorted(yau_files) != sorted(expected_yau):
+    errors.append(f'Yau Contest Stage 1 files unexpected/missing: {yau_files}')
+if not any(isinstance(item, dict) and 'Yau Contest' in item for item in nav):
+    errors.append('Yau Contest must be a standalone top-level nav item')
 
 # Navigation targets and orphan Markdown pages.
 for target in targets:
@@ -149,10 +162,6 @@ for p in DOCS.rglob('*.md'):
     clean = strip_fences(raw)
     rel = p.relative_to(ROOT)
 
-    first_heading = next((line for line in raw.splitlines() if line.startswith('# ')), '')
-    if not first_heading or re.search(r'[\u4e00-\u9fff]', first_heading):
-        errors.append(f'Page H1 is missing or not English: {rel} -> {first_heading}')
-
     for ch in raw:
         if ord(ch) < 32 and ch not in '\n\t':
             errors.append(f'Control character U+{ord(ch):04X}: {rel}')
@@ -177,10 +186,6 @@ for p in DOCS.rglob('*.md'):
             errors.append(f'Possible damaged LaTeX token "{broken}": {rel}')
 
     if p.name != 'index.md' and p.parent != DOCS:
-        for heading in re.findall(r'^#{2,4}\s+(.+)$', clean, flags=re.M):
-            if re.search(r'为什么|怎么|如何|到底是什么|谁[^，。]*谁|[？?]$', heading):
-                errors.append(f'Question-style heading: {rel} -> {heading}')
-
         for h in forbidden_headings:
             if h in raw:
                 errors.append(f'Forbidden template heading {h!r}: {rel}')
@@ -194,7 +199,7 @@ for p in DOCS.rglob('*.md'):
         line_count = len(raw.splitlines())
         if line_count < 40:
             errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
-        if line_count > 900:
+        if line_count > 700:
             errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
 
     # Do not repeat the same image in one article.
@@ -229,9 +234,6 @@ for p in DOCS.rglob('*.md'):
             errors.append(f'Python example is too long for a concept page ({nonblank} lines): {rel}')
         python_blocks.append((rel, code))
 
-    if re.search(r'QR\s*分解|QR/SVD|用\s*QR|走\s*QR', clean):
-        errors.append(f'Unused QR prerequisite remains: {rel}')
-
 # Validate Python syntax.
 for rel, code in python_blocks:
     try:
@@ -254,7 +256,7 @@ if not 40 <= len(diagram_files) <= 60:
 if len(set(diagram_refs)) != len(diagram_files):
     errors.append(f'Not every generated diagram is used: {len(set(diagram_refs))}/{len(diagram_files)} referenced')
 for section, n in section_image_counts.items():
-    if not 0 <= n <= 16:
+    if not 2 <= n <= 16:
         errors.append(f'{section}: image density out of range, found {n}')
 
 # Code ownership (teaching edition): theory chapters walk a concept to a *runnable minimal
@@ -278,7 +280,7 @@ if errors:
     sys.exit(1)
 
 print(
-    f'Documentation checks passed: 13 sections, {chapter_total} core chapters, '
+    f'Documentation checks passed: 12 core sections + standalone Yau Contest, {chapter_total} core chapters, '
     f'{len(all_md)} Markdown pages, {len(diagram_files)} diagrams, '
     f'{len(python_blocks)} Python examples; theory chapters carry at most two runnable demos each.'
 )

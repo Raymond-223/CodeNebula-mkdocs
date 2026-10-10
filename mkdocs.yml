@@ -1,5 +1,5 @@
 site_name: CodeNebula
-site_description: 面向零基础读者的智能系统讲解手册，从逐步计算走向真实系统。
+site_description: 面向智能系统研究与工程实践的知识地图，从数学原理走向真实系统。
 site_url: https://raymond-223.github.io/CodeNebula-mkdocs/
 theme:
   name: material
@@ -31,6 +31,16 @@ theme:
   - search.highlight
 nav:
 - Home: index.md
+- Yau Contest:
+  - Overview: yau-contest/index.md
+  - Stage 1 — Matrix Theory & Iteration:
+    - Proof Skills & Notation: yau-contest/00-proof-skills-notation.md
+    - Matrix Norms & Spectral Theory: yau-contest/01-matrix-norms-spectral.md
+    - SVD & Least Squares: yau-contest/02-svd-least-squares.md
+    - Linear Iterations & Power Method: yau-contest/03-linear-iterations-power.md
+    - Fixed Points & Contractions: yau-contest/04-fixed-points-contractions.md
+    - Newton's Method & Convergence Order: yau-contest/05-newton-convergence.md
+    - Stage 1 Exam Workbook: yau-contest/06-stage-one-workbook.md
 - Foundations:
   - Mathematics:
     - Overview: foundations/mathematics/index.md

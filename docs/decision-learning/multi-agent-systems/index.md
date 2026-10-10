@@ -7,7 +7,7 @@
   <figcaption>Multi Agent Systems 的核心概念关系。</figcaption>
 </figure>
 
-## 学习目标
+## 本节要解决的问题
 
 单智能体 RL 的世界里，环境动力学 $P(s'\mid s,a)$ 是稳定的：策略变了，世界不会跟着变。多智能体系统的第一层困难就是**这个前提被破坏**。设 $n$ 个 Agent，联合动作 $\mathbf a=(a_1,\dots,a_n)$，则 Agent $i$ 感受到的有效动力学是
 
@@ -161,4 +161,3 @@ MAS 不是一个孤立模块，它同时借用博弈论（多主体目标的数�
 阅读建议：若在做机器人系统，按 01 → 04 → 03 顺序读更顺；若在做学习算法，按 01 → 02 → 05 读，把通信与分配当作"学习之外的外生约束"看待。
 
 > **下一步**：从 [智能体与多智能体系统架构](01-agents-architectures.md) 开始，先解决"谁算 Agent"与"系统分几层"的问题；需要数学基础时配合阅读 [最佳响应与 Nash 均衡](../game-theory/02-best-response-nash.md) 与 [MDP 与 Bellman](../reinforcement-learning/01-mdp-bellman.md)。
-

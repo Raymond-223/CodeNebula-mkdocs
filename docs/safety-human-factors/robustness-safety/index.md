@@ -9,7 +9,7 @@
 
 概念地图给出的主线是：**Uncertainty（noise / shift）→ Risk（robustness）→ Constraints（safe set）→ Faults（detect & recover）→ Runtime（assure / override）**。这是一条从“认识问题”到“强制保护”的递进链：前半部分回答“什么会让系统变差”，后半部分回答“当它真的变差时，谁能够阻止后果”。
 
-## 学习目标
+## 本节要解决的问题
 
 安全不是一个功能，而是一组可验证条件。下面这些问题如果没有明确答案，系统就还没有被工程化：
 
@@ -217,4 +217,3 @@ $$\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) > 0\}\right|}{\left|\mathcal{
 无论处于哪个阶段，有四件事都不应省略：给每个安全相关的量写出**可验证条件**（值、阈值、适用范围）；用**分位数和最大值**报告结果而不只报平均；给关键约束留出**由延迟和估计误差算出的余量**；确保存在一个**独立于主策略的兜底路径**并演练过它。
 
 > **下一步**：从 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 开始，它建立了后续四章共用的不确定性语言。约束的数学形式见 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md)，训练期的风险约束见 [Safe, Robust & Offline RL](../../decision-learning/reinforcement-learning/06-safe-robust-offline.md)。
-

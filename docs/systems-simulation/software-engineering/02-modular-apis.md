@@ -6,7 +6,7 @@
 
 ![API 契约](../../assets/diagrams/api-contract.svg)
 
-## 模块边界与接口契约
+## 先把模块边界写成契约
 
 接口可以理解成一份契约：调用者提供什么，服务承诺返回什么，失败时怎样表达。
 
@@ -66,7 +66,7 @@ def create_task(payload, service):
 
 一个健康的判断标准是：**路由层应该薄到可以一眼看完**。当某个路由函数超过几十行、出现多层嵌套判断或直接拼 SQL，几乎可以确定业务逻辑已经错位，应该被搬进 Service。
 
-## REST 资源与状态码
+## REST 只需要先掌握资源和状态码
 
 REST 的入门重点只有三个：
 
@@ -232,4 +232,3 @@ API 字段名称不变，并不代表接口兼容。单位、默认值、错误�
 维护接口的长期健康，本质上是一种习惯：**把接口当成对外承诺，而不是内部实现的一部分**。承诺可以扩展，但不能悄悄改变。做到这一点，团队就可以各自独立演进，而不必担心某次发布把别人打挂；做不到，再好的模块划分也会在集成阶段被消耗掉。
 
 > **下一步**：接口写清楚之后，就该用测试固定住它的行为，读 [pytest & Debugging](04-testing-debugging.md)；边界如何划分来自架构决策，见 [Requirements & Architecture](01-requirements-architecture.md)；当接口跨网络、需要一致性与重试语义时，参考 [Consistency & State](../distributed-systems/03-consistency-state.md)；错误与重试的可靠性设计可延伸阅读 [Fault Tolerance](../distributed-systems/04-fault-tolerance.md)。
-
