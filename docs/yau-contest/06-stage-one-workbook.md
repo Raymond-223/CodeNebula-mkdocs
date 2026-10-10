@@ -1,233 +1,502 @@
-# Stage 1 Exam Workbook
+# Worked Problems
 
-> 这一章不是新的数学教材，而是**如何把前六章转成试卷分数**的手册。它包含原题定位、哪些小问优先做、怎样检查证明是否完整、限时模拟规则及一次可以直接复用的复盘表。全部题号来自你上传的2010–2026真题中相应年份的应用与计算数学个人试卷；教学例题由本专题重写，没有大段转录真题原文。
+本章把前六章的定义和定理用于完整证明。每道题都明确条件、目标和逻辑方向；所有题目均为教学重写。
 
----
+## Problem 1: Induced Norm and Spectral Radius
 
-## 一、为什么不建议从第一年第一题刷到最后一年
-
-你的任务不是做完全部论文式综合题，而是用有限时间获得几类**可重复、可证明、对AI仍有用**的能力。按年份顺序刷题，容易把时间花在有限元、特殊函数、辛几何或临时出现的图论题上。
-
-更有效的是按**证明结构**分组：
-
-1. **谱定理/正交分解**：SVD、Rayleigh商、最小范数解。
-2. **误差方程 $e_{k+1}=Be_k$**：线性迭代收敛和谱半径。
-3. **压缩映射 $\|e_{k+1}\|\le q\|e_k\|$**：不动点存在唯一性、误差界。
-4. **Taylor主导项 $e_{k+1}=Ce_k^p+\cdots$**：Newton、割线、高阶加速。
-
-先熟练掌握四种证明框架，再去看新的算法外壳。
-
-## 二、真题矩阵：从哪里开始，做到哪一步
-
-| 真题 | 第一轮投入级别 | 你现在可以尝试的内容 | 为什么 |
-| --- | --- | --- | --- |
-| 2021 Problem 3 | A · 先做 | 方程唯一根、压缩性、误差步数 | 概念少，证明链完整 |
-| 2021 Problem 4 | A · 先做 | SVD表示全部最小二乘解、最小范数 | AI价值高，知识集中 |
-| 2017 Problem 4(a)(b) | A · 先做 | 迭代矩阵、谱半径与幂零 | 只需两个核心结论 |
-| 2022 Problem 3(a)(b) | A · 先做 | 行严格对角占优、矩阵范数 | 容易从基础证明写起 |
-| 2020 Problem 3 | A · 再做 | 幂法的谱展开与收敛 | 直接复用矩阵谱理论 |
-| 2023 Problem 3 | A · 再做 | 幂法、迭代分析 | 注意原题的附加条件 |
-| 2017 Problem 2(a) | B · 再做 | Steffensen局部二次收敛 | Taylor展开较密集 |
-| 2022 Problem 2 | B · 再做 | 二维不动点与Jacobian条件 | 补充少量多元微积分 |
-| 2016 Problem 4 | B · 选做 | 反幂法与扰动 | 偏数值误差，略难 |
-| 2025 Problem 2 | B · 选做 | 谱半径与结构矩阵 | 利用谱理论，不必为特例建体系 |
-| 2026 Problem 5 | B · 选做 | 奇异值、转置、固定点 | 看懂子问条件很重要 |
-| 2026 Problem 4 | C · 后置 | 带位移QR迭代 | 对首次学习补课成本偏高 |
-| 2025 Problem 1 | C · 后置难问 | 多点迭代高阶参数设计 | 优先会做前面的展开 |
-
-这里 A/B/C 表示**本专题的备赛顺序**，不是官方题目难度或分值评定。某年难度会因为具体附加假设大幅变化；“先做”也不保证能一次完成全部小问。
-
-## 三、读一道题的五步法
-
-以“证明某个迭代法收敛”为例，不论题目长度，先画一张小表：
-
-| 问题 | 应该在草稿纸写什么 |
-| --- | --- |
-| 1. 求什么？ | 收敛？唯一解？收敛速度？全部还是局部？ |
-| 2. 给了哪些条件？ | 矩阵是否对称？函数是否可微？初值属于哪一区间？ |
-| 3. 关键未知量是什么？ | 固定点 $x^*$ 或根 $\alpha$；先写它满足的方程 |
-| 4. 能否构造误差？ | $e_k=x_k-x^*$；求 $e_{k+1}$ 与 $e_k$ 的关系 |
-| 5. 用哪个模板收尾？ | 谱半径、压缩映射、Taylor高阶误差、范数不等式 |
-
-别一看到“证明”就开始抄记忆中的定理。比如 $\rho(B)<1$ 只适用于特定的**线性误差递推**；非线性问题没有直接给出常矩阵 $B$，不能强行使用。
-
-## 四、教学题A：一题串起矩阵迭代与特征值
-
-**题目（自编）**：设 $A=\mathrm{diag}(2,4)$，希望求解 $Ax=b$。定义迭代
+设
 
 $$
-x_{k+1}=x_k+\eta(b-Ax_k),\quad \eta>0.
+B=\begin{pmatrix}0&3\\0&1/2\end{pmatrix}.
 $$
 
-求所有使迭代从任意初值收敛的 $\eta$，并给出最佳的收敛因子。
+计算 $\rho(B)$ 与 $\|B\|_\infty$，并判断 $B^k$ 是否趋于零。
 
-**解答第1步**：精确解是 $x^*=A^{-1}b$，满足 $Ax^*=b$。
+### Solution
 
-**解答第2步**：相减构造误差：
+$B$ 是上三角矩阵，特征值为对角元 $0$ 与 $1/2$，所以
+
+$$
+\rho(B)=\frac12.
+$$
+
+最大绝对行和为
+
+$$
+\|B\|_\infty=\max\{3,1/2\}=3.
+$$
+
+虽然 $\|B\|_\infty>1$，但 $\rho(B)<1$，因此由 spectral radius criterion，$B^k\to0$。
+
+还可直接计算。设
+
+$$
+B^k=\begin{pmatrix}0&a_k\\0&2^{-k}\end{pmatrix}.
+$$
+
+由 $B^{k+1}=B^kB$ 得 $a_{k+1}=a_k/2$，且 $a_1=3$，所以
+
+$$
+B^k=\begin{pmatrix}0&3\cdot2^{-(k-1)}\\0&2^{-k}\end{pmatrix}\to0.
+$$
+
+这个例子说明 $\|B\|<1$ 是方便的充分条件，不是收敛的必要条件。
+
+## Problem 2: Strict Diagonal Dominance
+
+设 $A=(a_{ij})\in\mathbb C^{n\times n}$ 满足
+
+$$
+|a_{ii}|>\sum_{j\ne i}|a_{ij}|
+\qquad(i=1,\ldots,n).
+$$
+
+证明 $A$ 可逆。
+
+### Solution by the Maximum Component
+
+只需证明 $Ax=0$ 只有零解。反设存在 $x\ne0$ 满足 $Ax=0$。选择指标 $i$ 使
+
+$$
+|x_i|=\max_j|x_j|>0.
+$$
+
+第 $i$ 行给出
+
+$$
+a_{ii}x_i=-\sum_{j\ne i}a_{ij}x_j.
+$$
+
+取绝对值：
+
+$$
+|a_{ii}|,|x_i|
+\le\sum_{j\ne i}|a_{ij}|,|x_j|
+\le\left(\sum_{j\ne i}|a_{ij}|\right)|x_i|.
+$$
+
+由于 $|x_i|>0$，约去它得到
+
+$$
+|a_{ii}|\le\sum_{j\ne i}|a_{ij}|,
+$$
+
+与严格对角占优矛盾。因此 $\ker(A)=\{0\}$。方阵上的单射等价于可逆，故 $A$ 可逆。$\square$
+
+## Problem 3: Least-Squares Characterization
+
+设 $A\in\mathbb R^{m\times n}$、$b\in\mathbb R^m$。证明 $x_*$ 是 least-squares solution 当且仅当
+
+$$
+A^T(Ax_*-b)=0.
+$$
+
+### Necessity
+
+目标函数
+
+$$
+f(x)=\|Ax-b\|_2^2
+$$
+
+在整个 $\mathbb R^n$ 可微。若 $x_*$ 是全局最小点，也是局部最小点，因此
+
+$$
+\nabla f(x_*)=2A^T(Ax_*-b)=0.
+$$
+
+### Sufficiency
+
+若 $A^T(Ax_*-b)=0$，则任取 $h\in\mathbb R^n$，
+
+$$
+\begin{aligned}
+f(x_*+h)-f(x_*)
+&=2h^TA^T(Ax_*-b)+\|Ah\|_2^2\\
+&=\|Ah\|_2^2\ge0.
+\end{aligned}
+$$
+
+故 $x_*$ 是全局最小点。两个方向均已证明。$\square$
+
+注意：这里不要求 $A$ 满列秩。满列秩只决定解是否唯一。
+
+## Problem 4: All Least-Squares Solutions
+
+设
+
+$$
+A=\begin{pmatrix}
+1&0&1\\
+0&1&1
+\end{pmatrix},
+\qquad
+b=\begin{pmatrix}1\\1\end{pmatrix}.
+$$
+
+求全部 least-squares solutions 与 minimum-norm solution。
+
+### Exact Solution Set
+
+这里 $Ax=b$ 本身相容：
+
+$$
+x_1+x_3=1,
+\qquad
+x_2+x_3=1.
+$$
+
+令 $x_3=t$，则全部解为
+
+$$
+x(t)=\begin{pmatrix}1-t\\1-t\\t\end{pmatrix}.
+$$
+
+因为残差能达到零，这些也正是全部 least-squares solutions。
+
+### Minimum-Norm Solution
+
+计算
+
+$$
+\|x(t)\|_2^2
+=2(1-t)^2+t^2
+=3t^2-4t+2.
+$$
+
+求导得 $6t-4=0$，所以 $t=2/3$。因此
+
+$$
+x_{\min}=\begin{pmatrix}1/3\\1/3\\2/3\end{pmatrix}.
+$$
+
+也可用满行秩公式
+
+$$
+A^+=A^T(AA^T)^{-1}.
+$$
+
+先算
+
+$$
+AA^T=\begin{pmatrix}2&1\\1&2\end{pmatrix},
+\qquad
+(AA^T)^{-1}=\frac13\begin{pmatrix}2&-1\\-1&2\end{pmatrix}.
+$$
+
+于是 $A^+b=(1/3,1/3,2/3)^T$，与直接最小化一致。
+
+## Problem 5: Optimal Richardson Parameter
+
+设 $A=\operatorname{diag}(2,4)$，使用
+
+$$
+x_{k+1}=x_k+\eta(b-Ax_k),
+\qquad \eta>0.
+$$
+
+求对任意初值收敛的 $\eta$ 范围及最优收敛因子。
+
+### Error Matrix
+
+精确解 $x^*$ 满足 $Ax^*=b$。相减得
 
 $$
 e_{k+1}=(I-\eta A)e_k.
 $$
 
-**解答第3步**：迭代矩阵为 $B=\mathrm{diag}(1-2\eta,1-4\eta)$，所以
+迭代矩阵为
 
 $$
-\rho(B)=\max(|1-2\eta|,|1-4\eta|).
+B_\eta=\operatorname{diag}(1-2\eta,1-4\eta).
 $$
 
-**解答第4步**：需要二者均小于1。第一项要求 $0<\eta<1$，第二项要求 $0<\eta<1/2$；交集是
+### Convergence Interval
+
+需要
 
 $$
-\boxed{0<\eta<1/2.}
+|1-2\eta|<1,
+\qquad
+|1-4\eta|<1.
 $$
 
-**解答第5步**：最小化两端绝对值最大值，最优时正负两侧模相等：$1-2\eta=-(1-4\eta)$，得到 $\eta=1/3$，最优收敛因子为 $1/3$。
-
-一题既训练谱半径，也展示最基本的**梯度下降求二次优化问题**；这是非常值得你的AI方向学透的内容。
-
-## 五、教学题B：一题串起不动点与误差步数
-
-**题目（自编）**：$g(x)=(x+2)/4$，$x_0=0$，证明唯一不动点存在，求保证 $|x_n-x^*|<10^{-6}$ 的一个足够步数。
-
-**第1步**：固定点满足 $x^*=(x^*+2)/4$，所以 $x^*=2/3$。
-
-**第2步**：$|g(x)-g(y)|=|x-y|/4$，在 $\mathbb R$ 上压缩常数 $q=1/4$，且 $\mathbb R$ 在通常距离下完备。Banach定理保证唯一性和全局收敛。
-
-**第3步**：由误差方程得 $e_n=(1/4)^ne_0$，所以 $|e_n|=(2/3)4^{-n}$。
-
-**第4步**：要求 $(2/3)4^{-n}<10^{-6}$，即 $n>\ln((2/3)10^6)/\ln4\approx9.67$，因此取 $n=10$ 足够。
-
-这里你既可以用Banach通用误差界，也可以利用线性映射直接得到更紧的精确误差式。在考场里**优先选更直接且条件完整**的方法。
-
-## 六、教学题C：怎样改成证明题而不是数值题
-
-**题目（自编）**：设 $A\in\mathbb R^{m\times n}$，$b\in\mathbb R^m$，证明 $x$ 是最小二乘解的充要条件为 $A^T(Ax-b)=0$。
-
-**必要性**：目标 $f(x)=\|Ax-b\|^2$ 可微，若 $x$ 是最小点，则梯度为零：$\nabla f(x)=2A^T(Ax-b)=0$。
-
-**充分性**：若该式为零，则对任意扰动 $h$，展开
+第一式给出 $0<\eta<1$，第二式给出 $0<\eta<1/2$，所以
 
 $$
-\begin{aligned}
-\|A(x+h)-b\|^2
-&=\|Ax-b\|^2+2h^TA^T(Ax-b)+\|Ah\|^2\\
-&=\|Ax-b\|^2+\|Ah\|^2\\
-&\ge\|Ax-b\|^2.
-\end{aligned}
+\boxed{0<\eta<1/2}.
 $$
 
-因此 $x$ 确为全局最小点。这个证明同时包含**必要性、充分性**，并且不需要 $A$ 满列秩。
+### Optimal Parameter
 
-这道自编题能作为2021 Problem 4前的过渡练习。
+收敛因子为
 
-## 七、限时训练：第一轮不要一上来模拟整张卷
+$$
+q(\eta)=\max\{|1-2\eta|,|1-4\eta|\}.
+$$
 
-| 轮次 | 限时 | 训练内容 | 验收标准 |
-| --- | --- | --- | --- |
-| 1 | 25分钟 | 2021 Problem 3相关小问 | 条件、区间、误差界完整 |
-| 2 | 35分钟 | 2021 Problem 4相关小问 | 解的参数化与最小范数证明完整 |
-| 3 | 30分钟 | 2017 Problem 4(a)(b) | 分清充分性和必要性 |
-| 4 | 30分钟 | 2020 Problem 3 | 主特征值、初始方向、谱间隙假设都写全 |
-| 5 | 120分钟 | 从一份较近年份试卷自选适合题型 | 做出取舍，记录完成哪些小问 |
+最优点使区间两端等模异号：
 
-单题限时属于训练建议，不是官方每题时限。不要依赖“拿了多少分”的主观猜测；真题若缺少统一官方评分细则，请先按**是否独立完成目标小问**评估。
+$$
+1-2\eta=-(1-4\eta).
+$$
 
-## 八、错题复盘表：每一道写四行就够
+所以 $\eta_*=1/3$，且 $q(\eta_*)=1/3$。
 
-每次练习请复制一份：
+## Problem 6: Nilpotent Finite-Step Convergence
 
-| 字段 | 例子 |
-| --- | --- |
-| 真题定位 | 2021 / Applied & Computational Mathematics / Problem 4(b) |
-| 我卡住的第一步 | 没看出零空间分量可自由选择 |
-| 缺少的最小知识 | 正交基分解 $x=V_ry+V_0z$ |
-| 下次可复用的证明模板 | 最小范数来自正交分解下的毕达哥拉斯 |
+设 $B\in\mathbb C^{n\times n}$ 且 $\rho(B)=0$。证明迭代
 
-一个高效的错题记录应该回答**下次再见到什么特征，我就知道用什么工具**，而不仅是“这题我不会”。
+$$
+x_{k+1}=Bx_k+c
+$$
 
-## 九、第一阶段毕业测验
+至多 $n$ 步到达固定点。
 
-请在不看答案的条件下完成下面六项。能够完成其中五项，并对剩下的一项知道缺在哪里，才建议进入ODE与凸优化的后续阶段：
+### Solution
 
-1. 在3分钟内解释特征值、谱半径、矩阵范数的区别。
-2. 完整证明对称矩阵Rayleigh商上下界。
-3. 从SVD推导秩亏矩阵全部最小二乘解及最小范数解。
-4. 写出线性固定点迭代的误差递推并证明谱半径判据。
-5. 对一个一维压缩映射证明存在唯一性，并算出满足 $10^{-6}$ 精度的步数。
-6. 从Taylor展开证明简单根附近Newton法的局部二次收敛，说明为什么重根不适用。
+$\rho(B)=0$ 意味着全部特征值为零，因此特征多项式为
 
-!!! success "什么时候结束 Stage 1"
-    不要求你能做所有矩阵题或全部Newton题。当前阶段只需做到：**遇到矩阵迭代、SVD最小二乘、一维不动点和基础Newton收敛题时，至少有一条可以从定义走到结论的证明路线。** 同时保留放弃位移QR高级证明、复杂特殊函数题的权利。
+$$
+p_B(t)=t^n.
+$$
 
-## 十、参考资源：只选需要的页，不读整本书
+由 Cayley–Hamilton theorem，
 
-- **Trefethen & Bau, _Numerical Linear Algebra_**：查SVD、QR、最小二乘、特征值与幂法时使用。
-- **MIT 18.335 — Introduction to Numerical Methods**：<https://ocw.mit.edu/courses/18-335j-introduction-to-numerical-methods-spring-2019/>。把讲义当作对应题型的拓展材料。
-- **Burden & Faires, _Numerical Analysis_**：查不动点定理、Newton法、收敛阶；不同版本章节号可能不同，按目录主题找。
-- **丘赛官方历年笔试试题**：<https://yau-contest.com/lists-jxxg.html>。优先对照你已上传的2010–2026压缩包中个人赛应用与计算数学试卷。
+$$
+p_B(B)=B^n=0.
+$$
 
-!!! note "资料使用方式"
-    本阶段所有定义、主定理、推导和例题都已经写在专题内部。上述教材和课程是**可选深化**，不是让你先回去翻完厚书才能继续。
+因为 $1$ 不是特征值，$I-B$ 可逆，固定点 $x^*=(I-B)^{-1}c$ 唯一。误差满足
 
-## 十一、按天完成的十次学习任务
+$$
+e_n=B^ne_0=0.
+$$
 
-如果每天只有45–90分钟，可以用十次短任务替代大块通读。建议每次**先不看答案尝试15分钟**，然后才看推导。
+故 $x_n=x^*$。注意这不是渐近收敛，而是有限步精确到达。
 
-| 次数 | 阅读对象 | 必须产出的内容 |
-| --- | --- | --- |
-| Day 1 | Proof Skills | 写出量词、充分必要条件和一道收敛证明 |
-| Day 2 | Matrix Norms前半 | 手算2个矩阵的特征值、1/2/∞范数 |
-| Day 3 | Matrix Norms后半 | 完整证明Rayleigh商和对角占优可逆性 |
-| Day 4 | SVD前半 | 手算秩亏矩阵的SVD、投影与零空间 |
-| Day 5 | SVD后半 | 独立推导最小范数最小二乘解 |
-| Day 6 | Linear Iterations前半 | 从原迭代整理成误差矩阵，证明谱半径判据 |
-| Day 7 | Linear Iterations后半 | 推导幂法方向误差与反幂法变换 |
-| Day 8 | Fixed Points | 完整证明压缩映射、给定误差算步数 |
-| Day 9 | Newton | 写出局部二次收敛证明与重根反例 |
-| Day 10 | Exam Workbook | 完成2道历年题对应小问并做复盘 |
+## Problem 7: Contraction and Iteration Count
 
-这十次任务只是**第一遍识别短板的框架**，并不是十天内保底冲奖。如果某天独立证明失败，把这个点增加为一到三天的专题复训，比硬推进更有收益。
+设
 
-## 十二、两份真正应该自己写出来的答卷
+$$
+g(x)=\frac{x+2}{4},
+\qquad x_0=0.
+$$
 
-**答卷A：线性迭代必要充分证明（不看教材重写）**
+证明存在唯一不动点，并求保证 $|x_n-x^*|<10^{-6}$ 的最小整数 $n$。
 
-题设 $x_{k+1}=Bx_k+c$。请在一页纸上独立写出：
+### Banach Conditions
 
-1. 若 $\rho(B)<1$，为什么 $I-B$ 可逆，从而存在唯一固定点？
-2. 为什么 $e_{k+1}=Be_k$，从而 $e_k=B^ke_0$？
-3. 为什么所有 $|\lambda_i(B)|<1$ 推出 $B^k\to0$（包括不可对角化的情况）？
-4. 若 $B^k\to0$，如何由任意特征向量反推出 $|\lambda_i(B)|<1$？
-5. 如果只说“某个初值收敛”，哪里推不出必要性？
+$g:\mathbb R\to\mathbb R$，而 $\mathbb R$ 完备。并且
 
-**答卷B：SVD最小范数完整证明（不看教材重写）**
+$$
+|g(x)-g(y)|=\frac14|x-y|,
+$$
 
-题设 $A\in\mathbb R^{m\times n}$、秩 $r<n$。请独立写出：
+故 $q=1/4$。Banach theorem 给出唯一不动点和任意初值的收敛性。
 
-1. $A=U_r\Sigma_rV_r^T$ 的尺寸和每个符号的意义。
-2. 为什么任意 $x$ 可分解为 $V_ry+V_0z$，且两部分互相正交？
-3. 如何利用列空间与正交补，把目标 $\|Ax-b\|^2$ 写成两项平方和？
-4. 为什么所有最小二乘解都能写为 $V_r\Sigma_r^{-1}U_r^Tb+V_0z$？
-5. 为什么 $z=0$ 给出最小范数，并能用最小非零奇异值证明范数上界？
+固定点满足
 
-这两份答卷可以当作你自己的**证明能力基线**。如果只能做数值题，优先补证明模板；如果能完整写出两份，再去做更难的真题效率会高很多。
+$$
+x^*=\frac{x^*+2}{4},
+$$
 
-## 十三、学习是否过度：哪些题应该直接放弃
+所以 $x^*=2/3$。
 
-现实备赛需要为投入划线，尤其你更看重未来AI科研的可复用价值。
+### Exact Error Count
 
-| 看到的题目特征 | 第一轮建议 | 何时回头补 |
-| --- | --- | --- |
-| SVD、幂法、矩阵范数、收敛阶 | 优先做、争取完整解答 | 立即 |
-| 不动点定理、Jacobian、参数化Newton | 尝试基础小问，复杂高阶后置 | 练熟1D后 |
-| 二阶微分方程离散稳定性 | 此阶段可先跳 | 下一阶段ODE/PDE时 |
-| 有限元弱形式、Sobolev估计 | 不主动补 | 如果后期证明分数需要且时间允许 |
-| 很多陌生特殊函数、辛积分几何 | 第一轮跳过 | 只有真题重复度高或科研需要再补 |
-| 复杂图论/数论独立大题 | 只用现有离散数学基础尝试 | 不为单题系统重学 |
+误差精确满足
 
-!!! note "备赛策略的风险"
-    故意忽略大块知识必然牺牲某些年份的题目覆盖率。这是你主动提出的取舍，不保证每年有固定数量的“可得分题”。最终仍应定期用**整张试卷**检查是否出现系统性盲区，再决定要不要补某个专题。
+$$
+e_n=4^{-n}e_0,
+\qquad
+|e_n|=\frac23,4^{-n}.
+$$
 
+要求
 
-**前一章**：[Newton's Method & Convergence Order](05-newton-convergence.md)  
-**专题总览**：[Yau Contest](index.md)
+$$
+\frac23,4^{-n}<10^{-6}.
+$$
+
+等价于
+
+$$
+n>\frac{\log((2/3)10^6)}{\log4}\approx9.67.
+$$
+
+所以最小整数为 $n=10$。
+
+## Problem 8: Local Newton Bound
+
+设 $f(\alpha)=0$，并且在 $I=[\alpha-r,\alpha+r]$ 上
+
+$$
+|f'(x)|\ge2,
+\qquad
+|f''(x)|\le6.
+$$
+
+证明 Newton error 满足
+
+$$
+|e_{k+1}|\le\frac32|e_k|^2
+$$
+
+并给出保证 $I$ 不变的一个半径条件。
+
+### Solution
+
+Taylor remainder 给出
+
+$$
+e_{k+1}=\frac{f''(\xi_k)}{2f'(x_k)}e_k^2.
+$$
+
+因此
+
+$$
+|e_{k+1}|
+\le\frac6{2\cdot2}|e_k|^2
+=\frac32|e_k|^2.
+$$
+
+若希望 $|e_k|\le r$ 推出 $|e_{k+1}|\le r$，充分条件是
+
+$$
+\frac32r^2\le r.
+$$
+
+对 $r>0$，等价于 $r\le2/3$。因此只要给定导数界确实在该区间成立，并取 $r\le2/3$，Newton map 将区间送回自身。
+
+## Problem 9: Power Method Rate
+
+设
+
+$$
+A=\begin{pmatrix}5&0\\0&2\end{pmatrix},
+\qquad
+x_0=\begin{pmatrix}1\\3\end{pmatrix}.
+$$
+
+求归一化迭代方向与主特征向量的误差比例，并估计达到 $10^{-4}$ 所需步数。
+
+### Solution
+
+$$
+A^kx_0
+=\begin{pmatrix}5^k\\3\cdot2^k\end{pmatrix}
+=5^k\begin{pmatrix}1\\3(2/5)^k\end{pmatrix}.
+$$
+
+相对第二分量为 $3(2/5)^k$。要求
+
+$$
+3(2/5)^k\le10^{-4},
+$$
+
+所以
+
+$$
+k\ge
+\frac{\log(10^{-4}/3)}{\log(2/5)}
+\approx11.25.
+$$
+
+取 $k=12$ 足够。
+
+## Problem 10: Proof Audit
+
+下面的“证明”试图说明 $\rho(B)<1$：
+
+> 从 $x_0=0$ 开始计算，观察到 $x_k$ 收敛，所以迭代对任意初值收敛，因此 $\rho(B)<1$。
+
+指出错误并给出反例。
+
+### Solution
+
+谱半径判据的必要性要求“对任意初始误差 $e_0$，$B^ke_0\to0$”。单个初值可能恰好没有不稳定特征方向分量。
+
+取
+
+$$
+B=\begin{pmatrix}2&0\\0&1/2\end{pmatrix},
+\qquad c=0,
+\qquad x_0=0.
+$$
+
+该初值产生恒零数列，当然收敛；但 $\rho(B)=2>1$。即使取非零初值 $(0,1)^T$，也会收敛，而含第一坐标分量的初值会发散。
+
+## Problem 11: Best Rank-One Approximation
+
+设
+
+$$
+A=\operatorname{diag}(4,2,1).
+$$
+
+求 $A$ 在 operator norm 和 Frobenius norm 下的最佳 rank-one approximation，并计算两种最小误差。
+
+### Singular Value Decomposition
+
+$A$ 已经是非负对角矩阵，因此可取
+
+$$
+U=V=I_3,
+\qquad
+\Sigma=\operatorname{diag}(4,2,1).
+$$
+
+三个 singular values 为 $\sigma_1=4$、$\sigma_2=2$、$\sigma_3=1$。截断到第一项得到
+
+$$
+A_1=\sigma_1u_1v_1^T
+=\begin{pmatrix}
+4&0&0\\
+0&0&0\\
+0&0&0
+\end{pmatrix}.
+$$
+
+### Optimality and Errors
+
+由 Eckart–Young theorem，$A_1$ 同时在两种范数下达到最佳 rank-one approximation。残差为
+
+$$
+A-A_1=\operatorname{diag}(0,2,1).
+$$
+
+因此 operator-norm error 是下一奇异值：
+
+$$
+\min_{\operatorname{rank}(B)\le1}\|A-B\|_2
+=\|A-A_1\|_2
+=\sigma_2
+=2.
+$$
+
+Frobenius-norm error 是被舍弃奇异值平方和的平方根：
+
+$$
+\min_{\operatorname{rank}(B)\le1}\|A-B\|_F
+=\|A-A_1\|_F
+=\sqrt{\sigma_2^2+\sigma_3^2}
+=\sqrt5.
+$$
+
+两种误差不同，因为 operator norm 只测量残差最强的伸缩方向，而 Frobenius norm 累计所有被舍弃方向的平方能量。
+
+## Further Exercises
+
+1. 对一个 $3\times2$ 矩阵完整计算 compact SVD，并核对所有矩阵尺寸。
+2. 构造一个连续 self-map，具有唯一不动点但 Picard iteration 形成二周期。
+3. 对重数为 $m$ 的根，推导 Newton method 的线性误差因子 $(m-1)/m$。
+4. 证明当 $A$ symmetric positive definite 时，$\|I-\eta A\|_2=\max_i|1-\eta\lambda_i|$。
+5. 从 Steffensen expansion 重新计算二次误差系数，检查 $g'(\alpha)=0$ 与 $g''(\alpha)=0$ 的特殊情况。
+6. 对 $A=\operatorname{diag}(1,4,9)$、shift $\mu=3.8$，写出 shifted inverse iteration 对三个特征方向的放大因子，并判断最终提取哪个特征向量。
+
+这些练习的目标是独立重建证明。若某一步只能写“显然”，应补出所用的定义、不等式或定理。
+
+**Previous:** [Newton's Method & Convergence Order](05-newton-convergence.md)  
+**Overview:** [Yau Contest](index.md)

@@ -72,6 +72,18 @@ def walk_nav(node, labels, targets):
         targets.append(node)
 
 
+def walk_nav_pages(node, pages):
+    if isinstance(node, list):
+        for item in node:
+            walk_nav_pages(item, pages)
+    elif isinstance(node, dict):
+        for label, value in node.items():
+            if isinstance(value, str):
+                pages[value] = str(label)
+            else:
+                walk_nav_pages(value, pages)
+
+
 class _MkDocsLoader(yaml.SafeLoader):
     """SafeLoader that tolerates MkDocs-only YAML tags such as !!python/name:."""
 
@@ -84,6 +96,8 @@ cfg = yaml.load((ROOT / 'mkdocs.yml').read_text(encoding='utf-8'), Loader=_MkDoc
 nav = cfg.get('nav', [])
 labels, targets = [], []
 walk_nav(nav, labels, targets)
+nav_pages = {}
+walk_nav_pages(nav, nav_pages)
 
 # Navigation.
 top_keys = [next(iter(x)) for x in nav if isinstance(x, dict)]
@@ -162,10 +176,44 @@ for p in DOCS.rglob('*.md'):
     clean = strip_fences(raw)
     rel = p.relative_to(ROOT)
 
+    h1 = re.search(r'^#\s+(.+?)\s*$', clean, flags=re.M)
+    if not h1:
+        errors.append(f'Missing page H1: {rel}')
+    else:
+        h1_text = re.sub(r'\s*\{[^}]*\}\s*$', '', h1.group(1)).strip()
+        if re.search(r'[\u4e00-\u9fff]', h1_text):
+            errors.append(f'Page H1 must be English: {rel} -> {h1_text}')
+        target = p.relative_to(DOCS).as_posix()
+        if target in nav_pages and nav_pages[target] not in {'Home', 'Overview'} and h1_text != nav_pages[target]:
+            errors.append(
+                f'Page H1 does not match navigation label: {rel} -> '
+                f'{h1_text!r} != {nav_pages[target]!r}'
+            )
+
+    if p.is_relative_to(DOCS / 'foundations') or p.is_relative_to(DOCS / 'yau-contest'):
+        direct_heading_pattern = re.compile(
+            r'^(#{2,4})\s+.*(?:为什么|怎么|如何|什么是|到底|何时|是否|能否|忘了|'
+            r'先看|先把|翻车|小结|自检|跑一遍|三句话|[？?]).*$',
+            flags=re.M,
+        )
+        for match in direct_heading_pattern.finditer(clean):
+            errors.append(f'Question/casual-style heading: {rel} -> {match.group(0)}')
+
+    if p.is_relative_to(DOCS / 'yau-contest'):
+        if re.search(r'^#{2,4}\s+.*\$', clean, flags=re.M):
+            errors.append(f'Yau heading contains inline math and may render poorly: {rel}')
+        for unused_term in ('QR decomposition', 'nuclear norm', 'Sobolev', 'BFGS'):
+            if unused_term in clean:
+                errors.append(f'Unused advanced term in Yau handbook ({unused_term}): {rel}')
+        if p.name != 'index.md' and len(raw.splitlines()) < 250:
+            errors.append(f'Yau theory chapter is not detailed enough: {rel}')
+
     for ch in raw:
         if ord(ch) < 32 and ch not in '\n\t':
             errors.append(f'Control character U+{ord(ch):04X}: {rel}')
             break
+    if '\ufffd' in raw:
+        errors.append(f'Unicode replacement character (encoding damage): {rel}')
     if '\t' in raw:
         errors.append(f'Tab character in Markdown (possible LaTeX corruption): {rel}')
 

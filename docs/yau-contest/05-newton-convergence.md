@@ -1,317 +1,374 @@
 # Newton's Method & Convergence Order
 
-> 你可能已经在数值计算课里按公式算过Newton法：$x_{k+1}=x_k-f(x_k)/f'(x_k)$。丘赛关心的不只是代入，而是：**公式为什么这么来？何时收敛？为何常说“二次收敛”？如果加入参数，怎样通过消掉误差的低次项提高阶数？** 本章完全重新推导，既不预设你记得Taylor展开，也不要求你先学泛函分析。
+Newton's method 是局部线性化产生的求根方法。本章先从 Taylor theorem 推导迭代式，再严格证明简单根附近的局部二次收敛，并分析重根、割线法和 Steffensen acceleration。
 
----
+## Root-Finding Problem
 
-## 一、从“画一条切线”推导Newton法
-
-假设我们要找方程 $f(x)=0$ 的一个根 $\alpha$。当前猜测是 $x_k$，距离真根可能还有误差。用切线近似函数：
+目标是求 $f(x)=0$ 的根 $\alpha$。当前近似为 $x_k$。在 $x_k$ 附近使用一阶 Taylor approximation：
 
 $$
 f(x)\approx f(x_k)+f'(x_k)(x-x_k).
 $$
 
-令右边为0，就得到切线与横轴的交点：
+令近似式在 $x_{k+1}$ 为零：
 
 $$
 0=f(x_k)+f'(x_k)(x_{k+1}-x_k).
 $$
 
-整理得Newton迭代：
+若 $f'(x_k)\ne0$，得到 Newton iteration：
 
 $$
 \boxed{x_{k+1}=x_k-\frac{f(x_k)}{f'(x_k)}}.
 $$
 
-这个推导依赖 $f'(x_k)\ne0$。如果导数非常接近0，步长可能变得很大，甚至离根更远。
+实际实现中必须检查分母。$f'(x_k)$ 很小时，Newton step 可能非常大。
 
-**计算例子**：用Newton法求 $\sqrt2$，令 $f(x)=x^2-2$。有 $f'(x)=2x$，故
+## Square-Root Example
+
+求 $\sqrt a$ 等价于解 $f(x)=x^2-a=0$。Newton iteration 为
 
 $$
-x_{k+1}=\frac12\left(x_k+\frac2{x_k}\right).
+x_{k+1}
+=x_k-\frac{x_k^2-a}{2x_k}
+=\frac12\left(x_k+\frac a{x_k}\right).
 $$
 
-若 $x_0=1$，则 $x_1=1.5$、$x_2\approx1.41667$、$x_3\approx1.41422$。数值越来越接近 $\sqrt2$ 是现象，接下来要解释这个速度。
+对 $a=2$、$x_0=1$：
 
-## 二、收敛阶到底是什么意思
+$$
+x_1=1.5,
+\quad
+x_2=\frac{17}{12}\approx1.41667,
+\quad
+x_3\approx1.41422.
+$$
 
-设真根为 $\alpha$，误差 $e_k=x_k-\alpha$。若序列已经收敛，并且存在 $p\ge1$、$C\in(0,\infty)$ 使
+这是数值现象；收敛性还需要证明。
+
+## Order of Convergence
+
+设 $e_k=x_k-\alpha$。若 $e_k\to0$，且存在 $p\ge1$、$C\in(0,\infty)$ 使
 
 $$
 \lim_{k\to\infty}\frac{|e_{k+1}|}{|e_k|^p}=C,
 $$
 
-就说该方法具有（严格意义上的）$p$ 阶收敛。把这个式子写成近似误差递推：
+则收敛阶为 $p$，$C$ 是 asymptotic error constant。
+
+- $p=1$ 且 $C<1$：linear convergence；
+- $1<p<2$：superlinear convergence；
+- $p=2$：quadratic convergence。
+
+若极限为零，实际阶数可能高于 $p$；若只知道 $|e_{k+1}|\le C|e_k|^p$，通常只能得到至少 $p$ 阶的控制。
+
+## Local Quadratic Convergence Theorem
+
+**定理。** 设 $f$ 在根 $\alpha$ 的某邻域中二次连续可微，满足
 
 $$
-|e_{k+1}|\approx C|e_k|^p.
+f(\alpha)=0,
+\qquad
+f'(\alpha)\ne0.
 $$
 
-- $p=1$ 且 $0<C<1$：**线性收敛**，每一步大致乘固定比例。
-- $p=2$：**二次收敛**，误差大致平方，靠近真根后很快。
-- $1<p<2$：**超线性但低于二次**，典型例子是割线法。
-
-如果主导系数恰好为0，实际阶数可能更高，不能不检验系数就宣称“恰好二阶”。
-
-### 一个可以手算的直觉例子
-
-若当前误差为 $10^{-2}$，线性递推 $e_{k+1}=0.5e_k$ 要很多步才达到 $10^{-8}$；而二次递推 $e_{k+1}=e_k^2$ 只需 $10^{-2}\to10^{-4}\to10^{-8}$ 两次。二次收敛的优势出现在**已经足够接近真根**时；不代表远距离起点一定会顺利。
-
-## 三、严格推导Newton法的局部二次收敛
-
-设 $f(\alpha)=0$、$f'(\alpha)\ne0$，且 $f$ 在根附近二次连续可微。用 $x_k=\alpha+e_k$。围绕根做Taylor展开：
+则存在 $\alpha$ 的一个闭邻域 $I$，使任意 $x_0\in I$ 产生的 Newton iteration 都有定义并收敛到 $\alpha$。此外存在 $C>0$ 使
 
 $$
-f(\alpha+e_k)=f'(\alpha)e_k+\frac12f''(\alpha)e_k^2+o(e_k^2),
+|e_{k+1}|\le C|e_k|^2.
 $$
 
+若进一步 $f''(\alpha)\ne0$，则
+
 $$
-f'(\alpha+e_k)=f'(\alpha)+f''(\alpha)e_k+o(e_k).
+\lim_{k\to\infty}
+\frac{e_{k+1}}{e_k^2}
+=\frac{f''(\alpha)}{2f'(\alpha)},
 $$
 
-将二式代入Newton更新，误差变成
+故收敛阶恰为 $2$。
+
+### Error Identity with Taylor Remainder
+
+以 $x_k$ 为展开点，对根 $\alpha$ 使用 Taylor theorem：存在 $\xi_k$ 位于 $x_k$ 与 $\alpha$ 之间，使
+
+$$
+0=f(\alpha)
+=f(x_k)+f'(x_k)(\alpha-x_k)
++\frac12f''(\xi_k)(\alpha-x_k)^2.
+$$
+
+除以 $f'(x_k)$ 并整理：
+
+$$
+\alpha-left(x_k-\frac{f(x_k)}{f'(x_k)}\right)
+=\frac{f''(\xi_k)}{2f'(x_k)}(\alpha-x_k)^2.
+$$
+
+括号内正是 $x_{k+1}$，所以
+
+$$
+e_{k+1}
+=\frac{f''(\xi_k)}{2f'(x_k)}e_k^2.
+$$
+
+### Invariant Neighborhood
+
+因为 $f'(\alpha)\ne0$ 且 $f'$ 连续，可取半径 $r_0>0$ 和常数 $m>0$，使
+
+$$
+|f'(x)|\ge m
+$$
+
+在 $I_0=[\alpha-r_0,\alpha+r_0]$ 上成立。又因 $f''$ 连续，在紧区间上有界：
+
+$$
+|f''(x)|\le M.
+$$
+
+于是只要 $x_k\in I_0$，
+
+$$
+|e_{k+1}|\le\frac{M}{2m}|e_k|^2.
+$$
+
+记 $C=M/(2m)$。若 $C=0$，上式已经给出 $e_{k+1}=0$，Newton iteration 一步到根。以下设 $C>0$，缩小半径为
+
+$$
+r\le\min\{r_0,1/(2C)\}.
+$$
+
+若 $|e_k|\le r$，则
+
+$$
+|e_{k+1}|
+\le C|e_k|^2
+\le Cr|e_k|
+\le\frac12|e_k|
+\le r.
+$$
+
+因此区间不变，所有迭代都有定义，且误差至少按比例 $1/2$ 收缩到零。这完成局部收敛证明。
+
+### Asymptotic Constant
+
+当 $x_k\to\alpha$ 时，$\xi_k\to\alpha$。由连续性，
+
+$$
+\frac{e_{k+1}}{e_k^2}
+=\frac{f''(\xi_k)}{2f'(x_k)}
+\to\frac{f''(\alpha)}{2f'(\alpha)}.
+$$
+
+若极限非零，Newton's method 恰为二阶。
+
+## Exact Error for the Square-Root Iteration
+
+令 $\alpha=\sqrt a>0$。由
+
+$$
+x_{k+1}=\frac12\left(x_k+\frac{\alpha^2}{x_k}\right)
+$$
+
+可直接得到
 
 $$
 \begin{aligned}
-e_{k+1}&=e_k-\frac{f(\alpha+e_k)}{f'(\alpha+e_k)}\\
-&=\frac{f''(\alpha)}{2f'(\alpha)}e_k^2+o(e_k^2).
+e_{k+1}
+&=\frac{x_k^2+\alpha^2-2\alpha x_k}{2x_k}\\
+&=\frac{(x_k-\alpha)^2}{2x_k}\\
+&=\frac{e_k^2}{2x_k}.
 \end{aligned}
 $$
 
-于是当 $f''(\alpha)\ne0$ 且迭代局部收敛时，渐近收敛阶为2；如果 $f''(\alpha)=0$，可能出现更高的局部阶。
-
-上面是渐近展开版。**如果题目要求真正的收敛保证**，需要补上“初值足够近”这一段：
-
-1. 取 $\alpha$ 附近闭小区间 $I$，使 $|f'(x)|\ge m>0$，$|f''(x)|\le M$。
-2. 由带余项的Taylor公式，在 $x\in I$ 时得到
+若 $x_k\to\alpha$，则
 
 $$
-\left|x-\frac{f(x)}{f'(x)}-\alpha\right|
-\le\frac{M}{2m}|x-\alpha|^2.
+\frac{e_{k+1}}{e_k^2}\to\frac1{2\alpha},
 $$
 
-3. 选择半径 $r$ 使 $Cr<1$（$C=M/(2m)$），Newton映射就把以 $\alpha$ 为中心的这个小区间送回自身。
-4. 因而初始误差小于 $r$ 时，误差递推 $|e_{k+1}|\le C|e_k|^2$ 保证局部收敛。
+所以收敛阶恰为二阶。
 
-**这四步才是一份相对完整的局部二次收敛证明。** 只写一个Taylor展开并不自动保证任意初值收敛。
+对 $x_0>0$ 还能证明全局单调行为：由 AM–GM inequality，$x_1\ge\alpha$；当 $x_k\ge\alpha$ 时，$x_{k+1}\le x_k$ 且 $x_{k+1}\ge\alpha$。因此从第一步起单调有下界，极限只能是 $\alpha$。
 
-## 四、常见的两个失效案例
+## Multiple Roots
 
-**例1：根是重根。** 令 $f(x)=x^2$，真根 $\alpha=0$。Newton法给出
-
-$$
-x_{k+1}=x_k-\frac{x_k^2}{2x_k}=\frac12x_k,
-$$
-
-实际是线性收敛而不是二次收敛。原因是 $f'(\alpha)=0$，破坏了单根条件。
-
-**例2：从不合适的初值出发。** 对 $f(x)=x^3-2x+2$，若从 $x_0=0$ 开始，则 $x_1=1$、$x_2=0$，迭代进入周期2，不会到达实根。结论：Newton法是**局部快**，而不是**无条件全局快**。
-
-!!! tip "考试写证明的习惯"
-    先在纸面上写“$f(\alpha)=0$, $f'(\alpha)\ne0$, $f''$ 连续, 初值足够近”，再展开。任何一个假设丢失都可能让结论不成立。
-
-## 五、割线法：不想求导时怎么办
-
-Newton法要计算 $f'(x_k)$。如果函数导数很贵或不可直接获得，可以用相邻两点的割线斜率近似：
+若 $\alpha$ 是重数 $m\ge2$ 的根，可写
 
 $$
-f'(x_k)\approx\frac{f(x_k)-f(x_{k-1})}{x_k-x_{k-1}}.
+f(x)=(x-\alpha)^m h(x),
+\qquad h(\alpha)\ne0.
 $$
 
-代入Newton式得到
+标准 Newton method 的渐近误差满足
 
 $$
-\boxed{x_{k+1}=x_k-f(x_k)\frac{x_k-x_{k-1}}{f(x_k)-f(x_{k-1})}}.
+e_{k+1}=\frac{m-1}{m}e_k+O(e_k^2),
 $$
 
-在简单根附近、满足适当光滑和非退化假设时，割线法有渐近误差关系
+所以只线性收敛。
+
+以 $f(x)=(x-1)^3$ 为例，
 
 $$
-e_{k+1}\approx C e_ke_{k-1}.
+x_{k+1}
+=x_k-\frac{(x_k-1)^3}{3(x_k-1)^2}
+=1+\frac23(x_k-1),
 $$
 
-假设误差大致满足 $|e_k|\approx D|e_{k-1}|^p$，再结合递推关系，会得到 $p^2=p+1$，正根为
+故 $e_{k+1}=(2/3)e_k$。
+
+若已知重数 $m$，modified Newton method
+
+$$
+x_{k+1}=x_k-m\frac{f(x_k)}{f'(x_k)}
+$$
+
+可恢复局部二次收敛。
+
+## Global Failure Example
+
+对
+
+$$
+f(x)=x^3-2x+2,
+$$
+
+从 $x_0=0$ 出发，
+
+$$
+x_1=0-\frac2{-2}=1,
+$$
+
+$$
+x_2=1-\frac1{1}=0.
+$$
+
+迭代进入周期 $0\leftrightarrow1$，不会趋向实根。这说明局部二次收敛不等于任意初值全局收敛。
+
+## Secant Method
+
+secant method 用割线斜率代替导数：
+
+$$
+f'(x_k)\approx
+\frac{f(x_k)-f(x_{k-1})}{x_k-x_{k-1}}.
+$$
+
+得到
+
+$$
+\boxed{
+x_{k+1}=x_k-f(x_k)
+\frac{x_k-x_{k-1}}{f(x_k)-f(x_{k-1})}
+}.
+$$
+
+要求 $x_k\ne x_{k-1}$ 且 $f(x_k)\ne f(x_{k-1})$。
+
+在简单根附近，对足够光滑的 $f$，误差主项为
+
+$$
+e_{k+1}
+=\frac{f''(\alpha)}{2f'(\alpha)}e_ke_{k-1}
++o(e_ke_{k-1}).
+$$
+
+若假设 $|e_k|\asymp |e_{k-1}|^p$，则一边量级为 $|e_k|^p$，另一边量级为 $|e_k||e_{k-1}|\asymp|e_{k-1}|^{p+1}$。比较指数得
+
+$$
+p^2=p+1,
+$$
+
+正根为
 
 $$
 p=\frac{1+\sqrt5}{2}\approx1.618.
 $$
 
-这就是割线法的典型超线性收敛阶。它比Newton的二次收敛慢一些，但少了显式求导需求。真正的阶数证明还须处理常数与极限存在，本节先掌握这种误差结构和推导思路。
+完整定理还需要证明误差比极限存在；这里保留主误差关系，是因为后续综合题会实际使用它。
 
-## 六、Steffensen方法：用函数值加速不动点
+## Steffensen Acceleration
 
-考虑普通不动点法 $x_{k+1}=g(x_k)$。如果 $g'(\alpha)$ 不为0，通常只有线性收敛。Steffensen法通过**额外计算 $g(g(x))$** 消掉主导的一阶误差项。
-
-定义 $y=g(x)$、$z=g(y)$。更新为
+设 fixed-point iteration $x_{k+1}=g(x_k)$，固定点为 $\alpha$。定义
 
 $$
-\boxed{G(x)=x-\frac{(y-x)^2}{z-2y+x}}.
+y=g(x),
+\qquad
+z=g(y),
 $$
 
-这也是2017 Problem 2 的核心算法。分母相当于连续两次差分之差；当分母为零或接近零时公式不能直接使用。
-
-### 为什么会加速
-
-设根为 $\alpha$ 且 $g(\alpha)=\alpha$。在 $\alpha$ 附近做Taylor展开，令 $a=g'(\alpha)$。当 $a\ne1$ 且满足适当光滑性时，
+Steffensen map 为
 
 $$
-g(\alpha+e)=\alpha+ae+be^2+O(e^3)
+G(x)=x-\frac{(y-x)^2}{z-2y+x},
 $$
 
-（其中 $b=g''(\alpha)/2$），再将它代入 $g(g(x))$ 与更新式，$e$ 的一次项会**相互抵消**，得到
+前提是分母非零。
+
+### Local Error Expansion
+
+设 $g$ 三次连续可微，且
 
 $$
-G(\alpha+e)-\alpha=O(e^2).
+g(\alpha+e)
+=\alpha+ae+be^2+O(e^3),
 $$
 
-这说明在局部可以获得至少二次的误差缩减；如果二次主导系数非零，则严格为二次收敛。**不能**在 $g'(\alpha)=1$ 或分母退化时不加条件地套用。
-
-## 七、高阶参数迭代：只学“消低阶项”一种核心手法
-
-这类题表面会写出两到三个函数求值，再给参数 $a,b$，要求把收敛阶做到最高。你不需要背每个方法的名字，应该掌握统一操作：
-
-1. 设根 $\alpha$，误差 $e=x-\alpha$。
-2. 把 $f(\alpha+e)$、$f'(\alpha+e)$ 展开到题目要求的阶数。
-3. 逐步代入中间更新，所有表达都写成 $e$ 的幂级数。
-4. 先让一次项系数为零，再让二次项系数为零，逐步解出参数条件。
-5. 检查首个未消掉的非零系数，说明最终收敛阶与局部条件。
-
-这条思路可用于2017年的加速题、2025年的多点迭代题。但如果2025整题需要很长的高阶展开，**第一轮只完成参数设计的基础小问**，不要为了它投入大量符号计算训练。
-
-## 八、完整例题：Newton法求平方根的误差平方律
-
-取 $f(x)=x^2-a$（$a>0$），真根 $\alpha=\sqrt a$。Newton更新为
+其中 $a=g'(\alpha)$、$b=g''(\alpha)/2$。则
 
 $$
-x_{k+1}=\frac12\left(x_k+\frac a{x_k}\right).
+y-x=(a-1)e+be^2+O(e^3),
 $$
 
-假设 $x_k>0$。直接用真根表达 $a=\alpha^2$：
+并且
 
 $$
-\begin{aligned}
-x_{k+1}-\alpha
-&=\frac{x_k^2+\alpha^2-2\alpha x_k}{2x_k}\\
-&=\frac{(x_k-\alpha)^2}{2x_k}.
-\end{aligned}
+z-2y+x=(a-1)^2e+b(a^2+a-2)e^2+O(e^3).
 $$
 
-因此
+当 $a\ne1$ 时，可约去一阶因子并展开分式，得到
 
 $$
-\boxed{e_{k+1}=\frac{e_k^2}{2x_k}.}
+G(\alpha+e)-\alpha
+=\frac{ab}{a-1}e^2+O(e^3).
 $$
 
-当 $x_k\to\alpha>0$，分母趋向 $2\alpha$，所以它局部二次收敛。这个例题甚至不需要调用一般Taylor定理，完整展示了**从迭代式推误差方程**的技巧。
+因此若 $a\ne1$ 且 $ab\ne0$，Steffensen iteration 局部恰为二阶；若二次系数为零，阶数可能更高。若 $a=1$，分母的一阶项消失，不能套用上述结论。
 
-```python
-import math
-x = 1.0
-root = math.sqrt(2.0)
-for k in range(5):
-    print(k, x, abs(x - root))
-    x = 0.5 * (x + 2.0 / x)
-```
+## Multivariate Newton Method
 
-## 九、考场失误与自测题
-
-| 失误 | 更准确的答案 |
-| --- | --- |
-| “Newton法二次收敛”不写任何条件 | 写明简单根、足够光滑、初值足够近 |
-| 只从图像上看起来收敛 | 建立 $|e_{k+1}|\le C|e_k|^2$ |
-| 忘记分母可能为0 | 每个更新分式都检查合法性 |
-| 把“$O(e^2)$”说成“恰好二阶” | 严格阶数需检查二次项是否非零 |
-| 高阶题只写出展开结果 | 要显示参数如何使低阶系数消失 |
-
-**练习1**：对 $f(x)=x^2-3$，从 $x_0=2$ 写出两次Newton迭代。**答**：$x_1=7/4$，$x_2=(7/4+12/7)/2=97/56$。
-
-**练习2**：对 $f(x)=x^2$，证明Newton法只线性收敛。**答**：$x_{k+1}=x_k/2$，故 $e_{k+1}/e_k=1/2$。
-
-**练习3**：假设 $e_{k+1}=3e_k^2+O(e_k^3)$，若 $e_k\to0$，收敛阶是多少？**答**：2，渐近误差常数3。
-
-**练习4**：重新从Taylor公式证明第三节的局部界 $|e_{k+1}|\le M|e_k|^2/(2m)$，重点写清 $m,M$ 的定义。
-
-**真题**：先看2017 Problem 2和2020 Problem 2，再试2025 Problem 1的基础展开；高级二维Steffensen和复杂高阶参数问题可以作为选做。
-
-## 十、从忘记求导开始：链式法则与Taylor余项
-
-假设你已经忘了微分方法，可以先做这个最短复习。对 $f(x)=x^3$，$f'(x)=3x^2$、$f''(x)=6x$。对复合函数 $f(g(x))$，链式法则是
+对 $F:\mathbb R^n\to\mathbb R^n$，一阶线性化为
 
 $$
-\frac{d}{dx}f(g(x))=f'(g(x))g'(x).
+F(x_k+s)\approx F(x_k)+J_F(x_k)s.
 $$
 
-例如 $h(x)=\sin(x^2)$，则 $h'(x)=\cos(x^2)\cdot2x$。Newton法只需要一阶导数；分析**收敛阶**时需要把误差展开到二阶甚至更高。
-
-Taylor定理带余项的常见形式：若 $f$ 在两点之间具有连续二阶导数，则
+令右侧为零，Newton step $s_k$ 由线性方程
 
 $$
-f(\alpha+e)=f(\alpha)+f'(\alpha)e+\frac12f''(\xi)e^2
+J_F(x_k)s_k=-F(x_k)
 $$
 
-其中 $\xi$ 在 $\alpha$ 和 $\alpha+e$ 之间。这能直接控制误差，而不必假设幂级数可以无限展开。
+确定，再令 $x_{k+1}=x_k+s_k$。数值实现应求解线性方程，不应显式形成 $J_F(x_k)^{-1}$。
 
-**证明Newton界的另一种方法**：用根的Taylor展开，以 $x$ 为展开点，有
-
-$$
-0=f(\alpha)=f(x)+f'(x)(\alpha-x)+\frac12 f''(\xi)(\alpha-x)^2.
-$$
-
-整理得
+对于优化问题 $\min f(x)$，求解的是 $\nabla f(x)=0$，因此 Newton step 满足
 
 $$
-\alpha-\left(x-\frac{f(x)}{f'(x)}\right)
-=\frac{f''(\xi)}{2f'(x)}(\alpha-x)^2.
+\nabla^2f(x_k)s_k=-\nabla f(x_k).
 $$
 
-取绝对值，并用 $|f''(\xi)|\le M$、$|f'(x)|\ge m$，立即得到误差平方界。这一证明短，而且各个常数来自**明确的函数界**，很适合在考场完整写出。
+根求解与优化形式相似，但对象不同。
 
-## 十一、为什么不能把“求导为零”当作根求解
+## Exercises
 
-在优化课里，你可能用 $f'(x)=0$ 寻找最优点；但在Newton根求解里，目标是解原方程 $f(x)=0$。二者是不同任务。
+1. 对 $f(x)=x^2-3$、$x_0=2$ 计算两次 Newton iteration。
+2. 对 $f(x)=x^2$ 证明标准 Newton method 只线性收敛。
+3. 从 Taylor remainder 重新证明 $|e_{k+1}|\le M|e_k|^2/(2m)$。
+4. 对 $f(x)=(x-2)^4$ 推导标准 Newton iteration 的误差因子，并写出已知重数时的 modified method。
+5. 验证 $g(x)=\cos x$ 的 Steffensen iteration 在其固定点附近满足二阶条件。
 
-- 优化：给目标 $F(x)$，令 $f(x)=F'(x)$，Newton步骤需要 $f'(x)=F''(x)$，因此出现Hessian。
-- 求根：给残差函数 $f(x)$，直接令 $f(x)=0$，Newton使用 $f'(x)$。
+**Answers.** 第 1 题 $x_1=7/4$、$x_2=97/56$。第 2 题 $x_{k+1}=x_k/2$。第 4 题 $e_{k+1}=3e_k/4$，modified method 使用系数 $4$。
 
-多元方程 $F(x)=0$（$F:\mathbb R^n\to\mathbb R^n$）的Newton法写成
-
-$$
-J_F(x_k)s_k=-F(x_k),\qquad x_{k+1}=x_k+s_k.
-$$
-
-实际程序应**求解线性方程**来获得 $s_k$，而不是显式形成 $J_F(x_k)^{-1}$。这与SVD章中“不轻易求逆”的数值思想一致。
-
-对于一般非线性优化问题 $\min f(x)$，有限维Newton步的结构是
-
-$$
-\nabla^2 f(x_k)s_k=-\nabla f(x_k).
-$$
-
-两式形式相似，却来自不同的残差定义。第一次看到题目时，先确认“方程的零点”还是“目标函数的极值”，能避免直接套错导数。
-
-## 十二、三道必须练会的证明小题
-
-**题A（误差界）**：假设 $|f'(x)|\ge2$、$|f''(x)|\le6$ 在根附近恒成立，求Newton误差平方的系数上界。  
-**答案**：$|e_{k+1}|\le\frac6{2\cdot2}|e_k|^2=1.5|e_k|^2$。这不是全局收敛保证，还必须检验初值落在保留该界的邻域中。
-
-**题B（失效原因）**：$f(x)=(x-1)^3$ 的Newton迭代怎样收敛？  
-**解答**：$f'(x)=3(x-1)^2$，当 $x\ne1$ 时
-
-$$
-x_{k+1}=x_k-\frac{x_k-1}{3}
-=1+\frac23(x_k-1).
-$$
-
-所以 $e_{k+1}=\frac23e_k$，仅线性收敛。失效原因是根处导数为0，是三重根。
-
-**题C（高阶思路）**：若某方法展开后 $e_{k+1}=(1-a)e_k+(2a-b)e_k^2+3e_k^3+O(e_k^4)$，如何选参数使收敛尽可能快？  
-**解答**：先令 $1-a=0$ 得 $a=1$；再令 $2a-b=0$ 得 $b=2$；于是误差主导项是 $3e_k^3$，若迭代局部收敛则为三阶。这是演示参数设计的**自编代数模型**，不代表某一年真题的真实迭代公式。
-
-!!! important "你的第一阶段学习上限"
-    学会一维Newton、割线法和Steffensen的基本局部误差分析即可。暂不为函数空间Newton、Hessian算子可逆性、BFGS在Sobolev空间中的严格证明大量补课；它们对你未来AI也许有用，但当前性价比不高。
-
-
-**前一章**：[Fixed Points & Contractions](04-fixed-points-contractions.md)  
-**下一章**：[Stage 1 Exam Workbook →](06-stage-one-workbook.md)  
-**返回专题**：[Yau Contest](index.md)
+**Previous:** [Fixed Points & Contractions](04-fixed-points-contractions.md)  
+**Next:** [Worked Problems](06-stage-one-workbook.md)

@@ -1,90 +1,80 @@
-# CodeNebula V6 — Theory-to-System Content Audit
+# Content Audit Report
 
-## 1. 本轮修正目标
+## Audit Scope
 
-V6 的目标重新定义为“面向智能系统研究与工程实践的知识地图”，而不是 AI 编程入门网站。内容依赖链为：
+本轮审校覆盖独立的 `Yau Contest` 专题、`Foundations / Mathematics`、`Foundations / Control Theory`，并检查由标题变更影响的站内链接、导航和公式渲染配置。
 
-```text
-数学 → 理论方法 → 算法理解 → 工程实现 → 真实系统
-```
+## Yau Contest Reconstruction
 
-代码归属执行以下约束：
+原专题具有三个结构问题：先修内容被追加在章节末尾；证明、学习建议和考试策略混排；若干高级术语只被点名，没有形成可计算、可证明的知识链。本轮将全部八个页面按教材结构重写。
 
-- Mathematics、Game Theory、Reinforcement Learning、Multi-Agent Systems 与 Control Theory 不含可执行代码；
-- RL 使用公式级更新规则，明确当前估计、目标值与更新方向；
-- Robotics、Perception、Distributed Systems、Software Engineering 与 Simulation 承担工程示例；
-- 图片用于几何关系、状态空间、概率/优化关系、架构、数据流和系统连接，不使用代码或软件界面截图。
+当前内容为：
 
-## 2. 当前规模
+1. `Proof Language & Calculus`：量词、逻辑、证明方法、极限、完备性、导数、Taylor theorem 与收敛阶；
+2. `Matrix Norms & Spectral Theory`：向量范数、诱导矩阵范数、次乘性、spectral radius、spectral theorem、Rayleigh quotient、正定性与 Gershgorin theorem；
+3. `SVD & Least Squares`：正交投影、正规方程、SVD 构造、pseudoinverse、全部最小二乘解、minimum-norm solution 与 low-rank approximation；
+4. `Linear Iterations & Power Method`：误差矩阵、谱半径充要条件、Jordan block 证明、stationary iterations 与 power method；
+5. `Fixed Points & Contractions`：完备度量空间、Banach fixed-point theorem 的完整证明、先验与后验误差界，以及二维压缩映射算例；
+6. `Newton's Method & Convergence Order`：带余项的局部二次收敛证明、重根、secant method、Steffensen acceleration 与多元 Newton；
+7. `Worked Problems`：十一道完整推导题和进一步练习。
 
-- **12 Sections** / 5 learning domains
-- **61 core chapters**
-- **74 Markdown pages**
-- **47 local SVG teaching diagrams**
-- 理论层可执行代码块为 **0**
-- 顶部与左侧导航全部使用英文，正文保持中文；五个领域为 Foundations、Decision & Learning、Robotics & Perception、Systems & Simulation、Safety & Human Factors
+删除了学习日程、通关标准、错题复盘和按年份刷题等复习资料结构。没有后续用途且未展开的术语也已删除；保留的算法均给出定义、成立条件或后续练习。
 
-## 3. 逐 Section 复核结果
+## Mathematical Rigor
 
-### Mathematics for Intelligent Systems
+主要修正包括：
 
-保留线性代数/微积分、数值计算、概率、Bayes、Markov、优化六个节点。重点解释负梯度、局部/全局最优、Lagrange multiplier、离散化、误差来源和稳定性，不再出现 NumPy 或工具调用。
+- 把存在性、唯一性和迭代收敛性分为不同命题；
+- 给出 $\rho(B)<1\iff B^k\to0$ 对不可对角化矩阵的 Jordan block 证明；
+- 给出 SVD 从 $A^TA$ 的 spectral theorem 出发的构造，并逐项检查矩阵尺寸；
+- 推导全部 least-squares solutions 与唯一 minimum-norm solution；
+- 证明 Eckart–Young theorem 在 operator norm 与 Frobenius norm 下的最佳低秩误差；
+- 完整证明 Banach fixed-point theorem，并区分先验和后验误差界；
+- 在二维闭区域上逐项验证 self-map、Jacobian norm、唯一不动点和迭代次数；
+- 使用 Taylor remainder 建立 Newton invariant neighborhood，而不是只给渐近展开；
+- 对重根、错误初值、非正规矩阵瞬态放大等情况给出反例。
 
-### Reinforcement Learning
+## Heading Normalization
 
-保留 MDP/Bellman、Value-Based、Policy/Actor-Critic、探索与部分可观测、Model-Based vs Model-Free、安全/鲁棒/离线 RL。实现片段已改为数学更新式与算法关系，不依赖 PyTorch 或训练框架。
+- 顶部导航和页面 H1 使用英文；
+- Yau Contest 的 H2/H3 全部为英文知识点名称；
+- Foundations 中的问句式、对话式和“复习资料式”标题改为知识点名称；
+- 公式不再出现在 Yau Contest 的 H2/H3 中，降低目录与锚点渲染风险；
+- 为 `Gradient, Jacobian and Hessian` 与 `Lie Group boxplus` 设置稳定显式锚点，并修复 Robotics 中的旧链接。
 
-### Game Theory
+## Formula Verification
 
-围绕参与者、策略、收益、信息、行动顺序与重复交互展开。收益矩阵改为数学表示，不包含求解器代码。
+八个 Yau 页面中的 display-math 分隔符全部成对，行内公式没有未闭合美元符号。构建后生成的 `arithmatex` 节点数量与 Markdown 源公式数量逐页一致：
 
-### Multi-Agent Systems
+| Page | Math expressions |
+| --- | ---: |
+| Proof Language & Calculus | 144 |
+| Matrix Norms & Spectral Theory | 133 |
+| SVD & Least Squares | 197 |
+| Linear Iterations & Power Method | 130 |
+| Fixed Points & Contractions | 179 |
+| Newton's Method & Convergence Order | 144 |
+| Worked Problems | 150 |
+| Overview | 23 |
 
-保留 Agent 架构、协调、通信、任务分配/分布式决策、MARL/CTDE。理论消息、任务触发和反应式策略均改为形式化描述，网络实现移到 Distributed Systems。
+## Automated Checks
 
-### Control Theory
+`scripts/check_docs.py` 新增以下约束：
 
-保持建模与状态空间 → 反馈与稳定性 → PID → LQR → MPC 的连续逻辑。离散更新和 PID 的可执行实现移到 Robotics，理论页只解释机制与成立条件。
+- 页面 H1 必须为英文；
+- 非通用导航标签应与页面 H1 一致；
+- Foundations 与 Yau Contest 不允许问句式或对话式 H2/H3；
+- Yau Contest 的小标题不允许嵌入行内公式；
+- Yau 理论章节必须达到最低讲解深度；
+- 检测 Unicode replacement character，防止编码损坏；
+- 检测未被讲解、也未被使用的高级术语重新进入专题。
 
-### Robotics
+## Current Scale and Validation
 
-保留坐标变换、差速运动、状态估计、A*、PID 控制循环等小型工程例子，并明确坐标系、单位、时间戳与执行器边界。
+- 12 个主课程 Section，另有独立 Yau Contest；
+- 63 篇主课程核心章节；
+- 86 个 Markdown 页面；
+- 60 张本地 SVG；
+- 60 个 Python 示例。
 
-### Perception
-
-保留图像读取与预处理、投影/反投影、点云处理流程和模型推理接口。代码围绕稳定的数据契约，不扩展为框架教程。
-
-### Distributed Systems & Networking
-
-保留 TCP/UDP、Pub/Sub、版本更新、退避容错、ROS2 Topic/Service 与 DDS QoS。实现服务于通信语义，不扩展 Raft/Paxos/CRDT。
-
-### Software Engineering
-
-只保留需求/架构、模块/API、Git、pytest、Docker、CI 与必要调试示例，不继续扩展企业级工具清单。
-
-### Simulation & Sim2Real
-
-保留物理推进、MuJoCo/Gazebo 抽象交互循环、传感器模拟接口、Reality Gap/随机化和 Sim2Real/Real2Sim 闭环。
-
-### Robustness & Safety
-
-按不确定性/分布偏移 → 风险/可靠性 → 安全约束 → 故障处理 → Runtime Safety 展开，强调条件、指标和退化模式。
-
-### Human–AI Interaction
-
-只保留自动化权限、人机在环、共享自治、信任/解释、干预/接管，重点解释控制权与安全交接。
-
-## 4. 图片与代码策略
-
-图片总量控制在 47 张，主要用于闭环、数据流、几何关系、系统架构和算法结构。Section 首页保留概念总图，正文只在可视化确实降低理解成本时使用。
-
-工程代码覆盖坐标变换、PID 循环、ROS2 Topic/Service、A*、图像预处理、点云流程、推理接口、TCP/UDP、Pub/Sub、容错、API、pytest、Docker、CI、MuJoCo/Gazebo 抽象循环和传感器模拟。理论层不再使用可执行代码。
-
-## 5. 最终静态验收
-
-- 所有导航目标均存在且无孤立 Markdown 页面；
-- 无失效旧交叉引用或同页重复图片；
-- 无 LaTeX 控制字符损坏；
-- 所有本地图片和页面链接均可解析；
-- Python 示例通过语法解析；
-- `mkdocs build --strict` 已在本机完整通过。
+静态内容检查通过，`mkdocs build --strict` 通过。构建过程没有报告失效页面、失效锚点或 Markdown 警告。

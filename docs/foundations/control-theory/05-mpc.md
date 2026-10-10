@@ -66,7 +66,7 @@ $$\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\beg
 | $\Phi$ | $nN\times n$ | 零输入自由响应映射 |
 | $\Gamma$ | $nN\times mN$ | 输入到状态的传递映射 |
 
-## 约束是 MPC 与普通最优反馈的重要区别
+## MPC Constraints
 
 典型 MPC 问题写成
 
@@ -208,7 +208,7 @@ $$\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.$$
 
 工程上，终端代价几乎总是要加的，因为它既提升稳定性、又能让较短的 $N$ 达到较长时域的效果；终端集则可以视算力与保守程度取舍。
 
-## 何时该用 MPC、何时不该
+## MPC 的适用范围
 
 MPC 不是"更高级所以更好"，而是一个有明确适用边界的工具。判断标准可归纳为四条：约束是否强硬且必须满足、模型是否足够准、算力是否够、控制频率是否够低。四条都满足时 MPC 优势显著；任一条严重不满足时，PID 或 LQR 往往更划算。
 

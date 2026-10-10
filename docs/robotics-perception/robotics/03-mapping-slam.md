@@ -92,7 +92,7 @@ $$X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}
 
 $$\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,$$
 
-其中 $\boxplus$ 不是普通的“矩阵加法”。位姿 $X\in SE(3)$ 必须始终保持旋转部分满足 $R^\top R=I$，所以优化器先在当前位置附近求一个普通六维小增量 $\Delta\xi\in\mathbb R^6$（3 个平移 + 3 个小旋转），再通过指数映射把它送回 $SE(3)$。这个“局部增量 → 合法位姿”的动作就简写成 $X\boxplus\Delta\xi$；前置解释见 [数学中的流形、李群与 $\boxplus$](../../foundations/mathematics/02-rotations-rigid-transforms.md#31-流形李群和-boxplus-为什么会出现)。这个系统的结构决定了复杂度：位姿图的 $J$ 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，$n$ 个位姿的求解成本大致是 $O(n)$ 到 $O(n^{1.5})$；而如果当成稠密矩阵处理，成本是 $O(n^3)$，$n=1000$ 时就已不可接受。
+其中 $\boxplus$ 不是普通的“矩阵加法”。位姿 $X\in SE(3)$ 必须始终保持旋转部分满足 $R^\top R=I$，所以优化器先在当前位置附近求一个普通六维小增量 $\Delta\xi\in\mathbb R^6$（3 个平移 + 3 个小旋转），再通过指数映射把它送回 $SE(3)$。这个“局部增量 → 合法位姿”的动作就简写成 $X\boxplus\Delta\xi$；前置解释见 [流形、李群与 $\boxplus$](../../foundations/mathematics/02-rotations-rigid-transforms.md#lie-group-boxplus)。这个系统的结构决定了复杂度：位姿图的 $J$ 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，$n$ 个位姿的求解成本大致是 $O(n)$ 到 $O(n^{1.5})$；而如果当成稠密矩阵处理，成本是 $O(n^3)$，$n=1000$ 时就已不可接受。
 
 | 后端形式 | 状态量 | 适用规模 | 特点 |
 |---|---|---|---|

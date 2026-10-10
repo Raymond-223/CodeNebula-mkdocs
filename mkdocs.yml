@@ -34,13 +34,13 @@ nav:
 - Yau Contest:
   - Overview: yau-contest/index.md
   - Stage 1 — Matrix Theory & Iteration:
-    - Proof Skills & Notation: yau-contest/00-proof-skills-notation.md
+    - Proof Language & Calculus: yau-contest/00-proof-skills-notation.md
     - Matrix Norms & Spectral Theory: yau-contest/01-matrix-norms-spectral.md
     - SVD & Least Squares: yau-contest/02-svd-least-squares.md
     - Linear Iterations & Power Method: yau-contest/03-linear-iterations-power.md
     - Fixed Points & Contractions: yau-contest/04-fixed-points-contractions.md
     - Newton's Method & Convergence Order: yau-contest/05-newton-convergence.md
-    - Stage 1 Exam Workbook: yau-contest/06-stage-one-workbook.md
+    - Worked Problems: yau-contest/06-stage-one-workbook.md
 - Foundations:
   - Mathematics:
     - Overview: foundations/mathematics/index.md
@@ -53,7 +53,7 @@ nav:
     - Optimization, Constraints & Uncertainty: foundations/mathematics/07-optimization-under-uncertainty.md
   - Control Theory:
     - Overview: foundations/control-theory/index.md
-    - Signals, Laplace & Frequency Response: foundations/control-theory/00-signals-laplace-frequency.md
+    - Signals, Complex Numbers, Laplace Transform & Frequency Response: foundations/control-theory/00-signals-laplace-frequency.md
     - Dynamic Models & State Space: foundations/control-theory/01-modeling-state-space.md
     - Feedback & Stability: foundations/control-theory/02-feedback-stability.md
     - PID Principles: foundations/control-theory/03-pid.md
@@ -62,7 +62,7 @@ nav:
 - Decision & Learning:
   - Machine Learning Foundations:
     - Overview: decision-learning/machine-learning/index.md
-    - ML & Neural Network Basics: decision-learning/machine-learning/01-ml-neural-network-basics.md
+    - Machine Learning & Neural Network Basics: decision-learning/machine-learning/01-ml-neural-network-basics.md
   - Reinforcement Learning:
     - Overview: decision-learning/reinforcement-learning/index.md
     - MDP & Bellman Equation: decision-learning/reinforcement-learning/01-mdp-bellman.md

@@ -7,10 +7,10 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 ## Standalone contest track
 
 - 顶部导航新增 **Yau Contest**（`docs/yau-contest/`），完全位于 `Foundations` 之外。
-- 当前交付 **Stage 1: Matrix Theory & Iteration**：一篇总览与七篇教材式Markdown课程。
-- 面向计算机/AI专业、曾修过计算型数学课程但可能忘了基础的读者：定理和符号都在竞赛专题内重讲，**不依赖 Foundations 文件内容**。
-- 采用“概念—详细推导—证明—例题—真题索引—自测”结构，并依据2010–2026年应用与计算数学个人试卷进行有选择的真题映射。
-- 现有12个 Section、62篇核心章节、旧页面、旧导航顺序及资源均原样保留；丘赛是额外的独立区域。
+- 当前交付 **Stage 1: Matrix Theory & Iteration**：一篇总览、六篇理论讲解和一篇完整例题集。
+- 面向需要从定义重新建立知识链的读者：定理、符号与先修微积分都在专题内重讲，**不依赖 Foundations 文件内容**。
+- 采用“定义—条件—完整证明—反例—手算例题—练习”结构，明确区分必要条件、充分条件和充要条件。
+- Foundations 的二、三级标题已同步改为知识点名称；导航与页面 H1 使用英文，中文正文保留英文标准术语。
 
 ## Current scale
 
@@ -18,7 +18,7 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 - **63 core chapters**
 - **86 Markdown pages**（含 Home、12 个 Section 首页与独立丘赛专题）
 - **60 local SVG teaching diagrams**
-- **64 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
+- **60 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
 - 顶部和左侧导航使用英文；正文使用中文并保留标准英文术语
 
 ## Curriculum
@@ -69,9 +69,9 @@ docs/
 │   ├── software-engineering/
 │   └── simulation-sim2real/
 ├── safety-human-factors/
-└── yau-contest/  # standalone Stage 1 contest track
     ├── robustness-safety/
-    └── human-ai-interaction/
+│   └── human-ai-interaction/
+└── yau-contest/  # standalone Stage 1 mathematical handbook
 ```
 
-`python scripts/check_docs.py` 会检查目录规模、英文导航、本地链接、公式分隔、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。
+`python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、知识点式标题、本地链接、公式分隔、Yau 章节深度、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。

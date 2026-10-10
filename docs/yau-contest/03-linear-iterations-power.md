@@ -1,324 +1,394 @@
 # Linear Iterations & Power Method
 
-> 线性迭代这类题常给一个看似复杂的更新公式，要求“写出收敛的充分必要条件”。不要被公式吓住：**把未知解减掉，得到误差递推，再分析迭代矩阵的谱半径**，就是核心方法。本章从一元递推开始，完整过渡到矩阵迭代、幂法和反幂法。
+线性迭代的核心不是“多算几步”，而是从更新式提取 error propagation matrix，并判断它的幂是否趋于零。本章给出完整充要条件，然后推导 Jacobi、Gauss–Seidel、Richardson 与 power method。
 
----
+## Scalar Linear Iteration
 
-## 一、从一元递推理解“迭代”
-
-我们先解最简单的数列：
+先考虑
 
 $$
-x_{k+1}=0.6x_k+2.
+x_{k+1}=ax_k+c.
 $$
 
-若存在极限 $x^*$，则 $x^*=0.6x^*+2$，得到 $x^*=5$。令误差 $e_k=x_k-5$，则 $e_{k+1}=0.6e_k$，因此
+若 $a\ne1$，固定点为 $x^*=c/(1-a)$。令 $e_k=x_k-x^*$，则
 
 $$
-e_k=0.6^ke_0\longrightarrow0.
+e_{k+1}=ae_k,
+\qquad
+e_k=a^ke_0.
 $$
 
-这里有两个独立问题：**不动点是否存在**和**是否从任意初值收敛到它**。候选极限由代数方程给出，而全局收敛来自误差因子 $|0.6|<1$。
+因此对任意初值收敛当且仅当 $|a|<1$。$a<0$ 时误差会交替变号，但只要 $|a|<1$ 仍然收敛。
 
-如果把0.6改成1.2，不动点仍然能算出，但除非初始值恰好是这个不动点，误差会按 $1.2^k$ 放大。矩阵迭代只是把系数0.6换成一个矩阵。
-
-## 二、矩阵线性迭代与误差方程
+## Stationary Matrix Iteration
 
 考虑
 
 $$
 x_{k+1}=Bx_k+c,
-\qquad B\in\mathbb R^{n\times n}.
+\qquad B\in\mathbb C^{n\times n}.
 $$
 
-固定点满足 $x^*=Bx^*+c$，即 $(I-B)x^*=c$。若 $I-B$ 可逆，则固定点唯一：
+若存在固定点 $x^*$，则 $(I-B)x^*=c$。相减得到
 
 $$
-x^*=(I-B)^{-1}c.
+e_{k+1}=Be_k,
+\qquad
+e_k=B^ke_0.
 $$
 
-现在做最关键的一步：**两式相减**。
+所以“对任意初值收敛到同一个固定点”等价于 $B^k\to0$。
+
+## Spectral Radius Criterion
+
+**定理。** 对方阵 $B$，以下命题等价：
+
+1. $B^k\to0$；
+2. $\rho(B)<1$；
+3. 对每个初值，$x_{k+1}=Bx_k+c$ 收敛到唯一固定点 $(I-B)^{-1}c$。
+
+### Necessity
+
+若 $B^k\to0$，任取特征对 $Bv=\lambda v$，$v\ne0$，则
 
 $$
-\begin{aligned}
-e_{k+1}&=x_{k+1}-x^*\\
-&=Bx_k+c-(Bx^*+c)\\
-&=B(x_k-x^*)=Be_k.
-\end{aligned}
+B^kv=\lambda^kv\to0.
 $$
 
-反复递推得到 $e_k=B^ke_0$。所以问题被精确化成：**什么时候 $B^k\to0$？**
+因此 $|\lambda|<1$。对所有特征值成立，所以 $\rho(B)<1$。
 
-### 迭代收敛的充分必要条件
+### Sufficiency for Diagonalizable Matrices
 
-在有限维空间，
-
-$$
-\boxed{B^k\to0\quad\Longleftrightarrow\quad\rho(B)<1.}
-$$
-
-因此对任意初值全局收敛的关键条件就是 $\rho(B)<1$。此时 $1$ 不是 $B$ 的特征值，$I-B$ 可逆，所以固定点也唯一存在。
-
-**充分性怎么证明？** 若 $B$ 可对角化，写 $B=V\Lambda V^{-1}$，则 $B^k=V\Lambda^kV^{-1}$；所有 $|\lambda_i|<1$，所以 $\Lambda^k\to0$。一般矩阵不一定可对角化，此时使用Jordan分解：Jordan块的幂由 $k^j\lambda^{k-j}$ 组成，多项式增长压不过 $|\lambda|^k$ 的指数衰减，因此仍趋0。
-
-**必要性怎么证明？** 如果 $B^k\to0$，取任意复特征向量 $v\ne0$，有 $B^kv=\lambda^kv\to0$，所以每个特征值必须满足 $|\lambda|<1$。
-
-!!! warning "题目中的量词非常重要"
-    “存在某个初始向量使误差趋零”**不足以**推出 $\rho(B)<1$；例如取 $e_0=0$ 永远收敛。定理说的是**对任意初始向量**收敛。
-
-## 三、如何从原始线性方程推出迭代矩阵
-
-给定方程 $Ax=b$。把 $A$ 拆成两块，例如 $A=M-N$，若 $M$ 可逆，则
+若 $B=V\Lambda V^{-1}$，则
 
 $$
-Mx_{k+1}=Nx_k+b.
+B^k=V\Lambda^kV^{-1}.
 $$
 
-移项得到
+$\rho(B)<1$ 意味着每个 $|\lambda_i|<1$，故 $\Lambda^k\to0$，从而 $B^k\to0$。
+
+### Sufficiency for General Matrices
+
+一般矩阵在复数域可写为 Jordan form $B=PJP^{-1}$。一个大小为 $s$ 的 Jordan block 为
 
 $$
-x_{k+1}=\underbrace{M^{-1}N}_{B}x_k+M^{-1}b.
+J_\lambda=\lambda I+N,
+\qquad N^s=0.
 $$
 
-于是收敛条件是 $\rho(M^{-1}N)<1$。不需要先求出真实解 $x^*$，只要识别迭代矩阵就可分析。
-
-**例子：** 取
+由二项式公式，
 
 $$
-A=\begin{pmatrix}4&1\\1&3\end{pmatrix},\quad
-D=\begin{pmatrix}4&0\\0&3\end{pmatrix}.
+J_\lambda^k
+=\sum_{j=0}^{s-1}\binom{k}{j}\lambda^{k-j}N^j.
 $$
 
-Jacobi迭代对应 $M=D$、$N=D-A$，即
+当 $|\lambda|<1$ 时，每项都是“至多 $k^j$ 的多项式”乘“指数衰减 $|\lambda|^k$”，因此趋于零。全部 Jordan blocks 都趋于零，所以 $J^k\to0$，进而 $B^k=PJ^kP^{-1}\to0$。
+
+### Existence and Uniqueness of the Fixed Point
+
+$\rho(B)<1$ 时，$1$ 不是 $B$ 的特征值，故 $I-B$ 可逆，固定点唯一。还可使用 Neumann series：
 
 $$
-B_J=I-D^{-1}A=\begin{pmatrix}0&-1/4\\-1/3&0\end{pmatrix}.
+(I-B)^{-1}=\sum_{j=0}^{\infty}B^j.
 $$
 
-其特征值为 $\pm1/\sqrt{12}$，谱半径小于1，因此对任意初值收敛。这里矩阵元素有负数完全不影响结论；关键看**特征值的模**。
-
-## 四、Jacobi、Gauss–Seidel、Richardson：只学共同骨架
-
-对 $A=D+L+U$（$D$ 对角、$L$ 严格下三角、$U$ 严格上三角）：
-
-| 方法 | 迭代形式 | 迭代矩阵 |
-| --- | --- | --- |
-| Jacobi | $Dx_{k+1}=b-(L+U)x_k$ | $-D^{-1}(L+U)$ |
-| Gauss–Seidel | $(D+L)x_{k+1}=b-Ux_k$ | $-(D+L)^{-1}U$ |
-| Richardson | $x_{k+1}=x_k+\omega(b-Ax_k)$ | $I-\omega A$ |
-
-暂时不用背“某类矩阵下Gauss–Seidel总收敛”之类的完整理论。先能**自己推到右列**，再用谱半径或特定矩阵的二范数估计判断。
-
-Richardson在对称正定 $A$ 上尤其值得掌握。若特征值落在 $0<\lambda_{\min}\le\lambda_i\le\lambda_{\max}$，则收敛条件为
+因为部分和满足
 
 $$
-\max_i|1-\omega\lambda_i|<1
-\quad\Longleftrightarrow\quad
-0<\omega<\frac{2}{\lambda_{\max}}.
+(I-B)\sum_{j=0}^{N}B^j=I-B^{N+1}\to I.
 $$
 
-这可以直接用在梯度下降求解二次函数，因为 $\nabla(\frac12x^TAx-b^Tx)=Ax-b$。
+## Matrix Splitting
 
-## 五、2017 Problem 4(a)(b)：为什么是高性价比题
-
-2017年一道真题给出 $Ax_{k+1}=b-Bx_k$，其中 $A$ 可逆。把它化为
+线性系统 $Ax=b$ 可通过 splitting
 
 $$
-x_{k+1}=-A^{-1}Bx_k+A^{-1}b.
+A=M-N
 $$
 
-迭代矩阵是 $T=-A^{-1}B$，故对任意初值收敛的充要条件为
+改写为
 
 $$
-\rho(T)=\rho(A^{-1}B)<1.
+Mx_{k+1}=Nx_k+b,
 $$
 
-题目还问：若 $\rho(A^{-1}B)=0$，为什么至多 $n$ 步就收敛？因为所有特征值都为0，特征多项式就是 $t^n$。由**Cayley–Hamilton定理**，$T^n=0$。误差为 $e_n=T^ne_0=0$，所以第 $n$ 步恰好等于固定点。
-
-这里一次解题串起三个易补的知识点：误差递推、谱半径、Cayley–Hamilton。对计算机学生来说投入回报很高。
-
-## 六、幂法：从“不断乘A”到主特征向量
-
-幂法不是为了求 $Ax=b$，而是为了求绝对值最大的特征值及其特征向量。设 $A$ 为对称矩阵，有单位正交特征向量 $v_i$，并假定
+即
 
 $$
-|\lambda_1|>|\lambda_2|\ge\cdots\ge|\lambda_n|.
+x_{k+1}=M^{-1}Nx_k+M^{-1}b.
 $$
 
-把初值写为 $x_0=\sum_i c_iv_i$，其中 **$c_1\neq0$**。那么
+迭代矩阵是 $B=M^{-1}N$，对任意初值收敛当且仅当
 
 $$
-A^kx_0=\lambda_1^k\left[c_1v_1+\sum_{i=2}^nc_i\left(\frac{\lambda_i}{\lambda_1}\right)^kv_i\right].
+\rho(M^{-1}N)<1.
 $$
 
-因为 $|\lambda_i/\lambda_1|<1$，括号里除 $c_1v_1$ 外其余项都衰减。所以**方向**趋向主特征向量的方向，速度受 $|\lambda_2/\lambda_1|^k$ 控制。
+分析时不需要先知道精确解，只需识别迭代矩阵。
 
-实际迭代每步归一化，以防数值溢出：
+## Jacobi Method
 
-$$
-y_{k+1}=Ax_k,\quad x_{k+1}=\frac{y_{k+1}}{\|y_{k+1}\|_2}.
-$$
-
-当主特征值为负时，单位向量可能正负交替，不一定逐点收敛到**固定符号**的 $v_1$；但其一维方向和Rayleigh商仍可收敛。这是证明时需要说清楚的细节。
-
-### 幂法常见失效
-
-1. $c_1=0$：初值与主特征向量正交，乘多少次都无法产生该方向（精确运算下）。
-2. $|\lambda_1|=|\lambda_2|$：没有严格模间隙，收敛方向未必唯一。
-3. $A$ 非正规：特征向量可能不正交；上面这份正交分解证明不能不加修改地照搬。
-4. $A^kx_0$ 变得极大或极小：必须归一化，避免浮点溢出或下溢。
-
-## 七、反幂法与位移：为什么接近特征值反而有用
-
-普通幂法强调最大模特征值。要找接近 $\mu$ 的特征值，可以研究
+写
 
 $$
-(A-\mu I)^{-1}v_i=\frac1{\lambda_i-\mu}v_i.
+A=D+L+U,
 $$
 
-离 $\mu$ 最近的特征值，对应的倒数通常绝对值最大，于是可对 $(A-\mu I)^{-1}$ 做幂法。实际每步解线性方程，不直接形成逆矩阵：
+其中 $D$ 是对角部分，$L,U$ 分别是严格下三角和上三角部分。Jacobi method 为
 
 $$
-(A-\mu I)y_{k+1}=x_k,\qquad
-x_{k+1}=y_{k+1}/\|y_{k+1}\|_2.
+Dx_{k+1}=b-(L+U)x_k,
 $$
 
-为什么接近特征值时矩阵病态，计算出的特征向量方向却可能仍很好？因为希望提取的方向正好被逆变换**特别强地放大**；归一化以后，其他方向比例变小。这是2016 Problem 4 探讨的现象，但题目还涉及后向误差扰动，比基础幂法进阶一些。
-
-## 八、完整例题：用2×2矩阵估计迭代速度
-
-取 $A=\mathrm{diag}(5,2)$，初值 $x_0=(1,1)^T$。经过 $k$ 次幂运算：
+故
 
 $$
-A^kx_0=\begin{pmatrix}5^k\\2^k\end{pmatrix}
-=5^k\begin{pmatrix}1\\(2/5)^k\end{pmatrix}.
+B_J=-D^{-1}(L+U)=I-D^{-1}A.
 $$
 
-因此它的方向偏离 $e_1$ 的量级为 $(2/5)^k$。若希望第二坐标与第一坐标比值不超过 $10^{-3}$，只需
+**例子。** 对
 
 $$
-(2/5)^k\le 10^{-3}
-\quad\Longrightarrow\quad
-k\ge \frac{\ln(10^{-3})}{\ln(2/5)}\approx7.54.
+A=\begin{pmatrix}4&1\\1&3\end{pmatrix},
 $$
 
-所以取 $k=8$ 即可。重点不是数字8，而是**用收敛因子定量估计次数**。
+有
 
-```python
-import numpy as np
-A = np.diag([5., 2.])
-x = np.array([1., 1.])
-for k in range(8):
-    x = A @ x
-    x = x / np.linalg.norm(x)
-print('normalized direction:', x)
-print('Rayleigh quotient:', float(x @ A @ x))
-```
+$$
+B_J=\begin{pmatrix}0&-1/4\\-1/3&0\end{pmatrix}.
+$$
 
-## 九、错误清单与练习
+特征值为 $\pm1/\sqrt{12}$，所以 $\rho(B_J)<1$，Jacobi iteration 对任意初值收敛。
 
-| 错误答案 | 缺少了什么 |
-| --- | --- |
-| “解存在，因此迭代收敛” | 解存在与算法收敛是两个问题 |
-| “算了3次都变小，所以收敛” | 应分析 $B^k$ 或谱半径 |
-| “幂法总会找到最大特征值” | 要求初值方向、模间隙等假设 |
-| “谱半径为0，所以矩阵本身为0” | 非零幂零矩阵也有谱半径0 |
-| “求 $(A-\mu I)^{-1}$ 就是反幂法” | 实际数值算法应解线性方程，避免显式求逆 |
+## Gauss–Seidel Method
 
-**练习1**：若 $B=\operatorname{diag}(0.8,-0.6)$，证明 $x_{k+1}=Bx_k+c$ 对任意初值收敛。**答题关键**：$\rho(B)=0.8<1$，$e_k=B^ke_0\to0$。
+Gauss–Seidel 使用当前轮已经更新的分量：
 
-**练习2**：若 $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$，它是零矩阵吗？迭代误差几步变为0？**答案**：不是零矩阵；$B^2=0$，两步后误差恰好为零。
+$$
+(D+L)x_{k+1}=b-Ux_k,
+$$
 
-**练习3**：对 $A=\operatorname{diag}(6,1)$、$x_0=(1,1)^T$，写出 $A^kx_0$ 并给主方向误差比。**答案**：$6^k(1,6^{-k})^T$，比例 $6^{-k}$。
+所以
 
-**真题**：先做2017 Problem 4(a)(b)，再做2020 Problem 3、2023 Problem 3；2016 Problem 4作为进阶。2026 Problem 4的带位移QR方法不属于本阶段最低学习门槛，时间少可以后置。
+$$
+B_{GS}=-(D+L)^{-1}U.
+$$
 
-## 十、再从头看一眼初等线性方程组：迭代为什么被发明
-
-对于方程 $Ax=b$，你可能习惯高斯消元一次求解。若矩阵维度很大、稀疏（绝大多数元素为0），直接消元可能占用大量内存。迭代法尝试使用便宜的乘法或三角方程求解，一步一步逼近答案。
-
-以
+对二维系统
 
 $$
 \begin{cases}
 4x+y=1,\\
-x+3y=2
+x+3y=2,
 \end{cases}
 $$
 
-为例，Jacobi法把每个未知数都用上一步的值计算：
+Jacobi 同时使用旧值：
 
 $$
-x_{k+1}=\frac{1-y_k}{4},\qquad
+x_{k+1}=\frac{1-y_k}{4},
+\qquad
 y_{k+1}=\frac{2-x_k}{3}.
 $$
 
-Gauss–Seidel法则在第二个更新里立即使用新求出的 $x_{k+1}$：
+Gauss–Seidel 第二式使用刚得到的 $x_{k+1}$：
 
 $$
-x_{k+1}=\frac{1-y_k}{4},\qquad
+x_{k+1}=\frac{1-y_k}{4},
+\qquad
 y_{k+1}=\frac{2-x_{k+1}}{3}.
 $$
 
-两种方法只是信息使用顺序不同，却对应两个不同的迭代矩阵，可能具有不同收敛速度。每当真题给一个新迭代格式，先问：“它用的是旧值还是新值？能否化成 $x_{k+1}=Bx_k+c$？”
+二者不能仅凭名称比较速度，应比较各自迭代矩阵的谱半径。
 
-### 非对称矩阵的一个陷阱：误差可能先变大
+## Richardson Iteration
 
-取
+Richardson iteration 为
+
+$$
+x_{k+1}=x_k+\omega(b-Ax_k),
+$$
+
+其迭代矩阵为
+
+$$
+B_\omega=I-\omega A.
+$$
+
+若 $A$ symmetric positive definite，特征值满足
+
+$$
+0<\lambda_{\min}\le\lambda_i\le\lambda_{\max},
+$$
+
+则收敛条件为
+
+$$
+|1-\omega\lambda_i|<1
+\quad\text{for all }i,
+$$
+
+等价于
+
+$$
+0<\omega<\frac{2}{\lambda_{\max}}.
+$$
+
+最优固定步长使区间两端的误差因子等模：
+
+$$
+1-\omega\lambda_{\min}
+=-(1-\omega\lambda_{\max}),
+$$
+
+所以
+
+$$
+\omega_*=\frac{2}{\lambda_{\min}+\lambda_{\max}},
+$$
+
+对应收敛因子
+
+$$
+q_*=\frac{\kappa_2(A)-1}{\kappa_2(A)+1}.
+$$
+
+条件数越大，$q_*$ 越接近 $1$，迭代越慢。
+
+## Norm Bounds and Transient Growth
+
+若某个诱导范数下 $\|B\|=q<1$，则
+
+$$
+\|e_k\|\le q^k\|e_0\|.
+$$
+
+这是简单的非渐近误差界。但 $\rho(B)<1$ 不保证预先指定的 $\|B\|_2<1$。非正规矩阵可能先放大误差再最终衰减，例如
 
 $$
 B=\begin{pmatrix}0&10\\0&0\end{pmatrix}.
 $$
 
-它有 $B^2=0$，所以任意初始误差在两步后就变成0，但如果从 $e_0=(0,1)^T$ 开始，第一步误差是 $e_1=(10,0)^T$，长度从1跳到10。
+$B^2=0$，所以两步后误差归零；但某些向量第一步会被放大十倍。
 
-因此 $\rho(B)<1$ 意味着**最终收敛**，不意味着二范数误差**每一步单调变小**。这种区分在非正规矩阵、深度网络传播和数值动力系统里都有价值。
+## Nilpotent Iterations
 
-## 十一、迭代次数的估计：不要只会写“趋于零”
-
-如果能证明某个矩阵范数满足 $\|B\|\le q<1$，那么
+若 $\rho(B)=0$，则所有特征值为零，特征多项式为 $p_B(t)=t^n$。Cayley–Hamilton theorem 说明 $p_B(B)=0$，故
 
 $$
-\|e_k\|\le\|B^k\|\|e_0\|\le q^k\|e_0\|.
+B^n=0.
 $$
 
-给定误差目标 $\varepsilon$，希望 $q^k\|e_0\|\le\varepsilon$。当 $q\in(0,1)$ 且 $e_0\ne0$ 时，取对数得
+所以误差至多经过 $n$ 步精确归零。注意 $\rho(B)=0$ 不意味着 $B=0$，只意味着 $B$ 是 nilpotent。
+
+## Power Method
+
+power method 用于求模最大的特征值及其特征向量。先假设 $A$ 可对角化，有特征向量基 $v_1,\ldots,v_n$，并且
 
 $$
-k\ge \frac{\ln(\varepsilon/\|e_0\|)}{\ln q}.
+|\lambda_1|>|\lambda_2|\ge\cdots\ge|\lambda_n|.
 $$
 
-因为 $\ln q<0$，不等式翻转方向；最终取不小于右边的整数。这个判据比只写“谱半径小于1”更贴近实际算法成本。
-
-若只知道 $\rho(B)<1$ 而 $\|B\|_2\ge1$，不能直接把 $q$ 取为 $\rho(B)$ 并写 $\|B^k\|_2\le\rho(B)^k$。对于一般矩阵，可建立形如 $\|B^k\|\le Cq^k$ 的界，其中 $\rho(B)<q<1$，常数 $C$ 与矩阵和范数有关。考试需要特别小心这个逻辑间隙。
-
-## 十二、谱半径和矩阵多项式：看懂Cayley–Hamilton
-
-每个 $n\times n$ 方阵都有特征多项式
+若初值
 
 $$
-p_A(t)=\det(tI-A)=t^n+c_{n-1}t^{n-1}+\cdots+c_0.
+x_0=\sum_{i=1}^nc_iv_i,
+\qquad c_1\ne0,
 $$
 
-Cayley–Hamilton定理说 $p_A(A)=0$，即把变量 $t$ 换成矩阵 $A$，多项式求值得到零矩阵。比如
+则
 
 $$
-B=\begin{pmatrix}0&1\\0&0\end{pmatrix}
+A^kx_0
+=\lambda_1^k
+\left(
+c_1v_1+
+\sum_{i=2}^nc_i
+\left(\frac{\lambda_i}{\lambda_1}\right)^k v_i
+\right).
 $$
 
-的特征多项式是 $t^2$，由定理得 $B^2=0$；这里你直接乘矩阵也能验证。
+归一化后方向趋向 $v_1$，渐近方向误差由 $|\lambda_2/\lambda_1|^k$ 控制。
 
-如果一个 $n\times n$ 矩阵的谱半径为0，所有特征值都是0，特征多项式就是 $t^n$，由此得到 $B^n=0$。这个结论正好回答2017 Problem 4(b)“有限步恰好收敛”的问题。这是一个非常短、但容易在考场想不起来的工具。
+这里“方向趋向”允许相差一个符号：若主特征值 $\lambda_1<0$，归一化向量可能在 $v_1$ 与 $-v_1$ 之间交替，但它所张成的一维 eigenspace 仍然收敛。
 
-## 十三、再做两道训练题
+实际算法为
 
-**题A**：令 $B=\operatorname{diag}(0.2,0.9)$，解释为什么会收敛，但收敛可能很慢。  
-**答**：$\rho(B)=0.9<1$；若初始误差在第二坐标有非零分量，误差中仍保留 $0.9^k$，需要许多步才能衰减到很小。
+$$
+y_{k+1}=Ax_k,
+\qquad
+x_{k+1}=\frac{y_{k+1}}{\|y_{k+1}\|_2}.
+$$
 
-**题B**：对称正定矩阵 $A$ 的特征值都在 $[1,9]$。Richardson法 $x_{k+1}=x_k+\omega(b-Ax_k)$，选择最优固定步长。  
-**答**：收敛要求 $0<\omega<2/9$。令两端因子 $1-\omega$ 与 $1-9\omega$ 模长相等，得 $\omega=2/(1+9)=0.2$，最大模因子为 $0.8$。这说明步长选择是由谱区间而不是凭经验设定。
+Rayleigh quotient
 
+$$
+\mu_k=\frac{x_k^TAx_k}{x_k^Tx_k}
+$$
 
-**前一章**：[SVD & Least Squares](02-svd-least-squares.md)  
-**下一章**：[Fixed Points & Contractions →](04-fixed-points-contractions.md)  
-**返回专题**：[Yau Contest](index.md)
+可用于估计特征值，特别是 $A$ 对称时。
+
+### Failure Conditions
+
+power method 可能失败或不能给出唯一方向：
+
+- $c_1=0$，初值没有主特征向量分量；
+- 最大模特征值不唯一；
+- 最大模特征值形成复共轭对，实迭代可能旋转；
+- 谱隙很小，$|\lambda_2/\lambda_1|$ 接近 $1$，收敛很慢。
+
+## Inverse Iteration and Shift
+
+若 $A$ 可逆，则 $A^{-1}$ 的特征值为 $1/\lambda_i$。对 $(A-\mu I)^{-1}$ 使用 power method，会突出最接近 shift $\mu$ 的特征值，因为
+
+$$
+(A-\mu I)^{-1}v_i
+=\frac1{\lambda_i-\mu}v_i.
+$$
+
+数值实现每步求解
+
+$$
+(A-\mu I)y_{k+1}=x_k
+$$
+
+而不是显式计算逆矩阵。
+
+## Complete Example
+
+设
+
+$$
+A=\begin{pmatrix}5&0\\0&2\end{pmatrix},
+\qquad x_0=\begin{pmatrix}1\\1\end{pmatrix}.
+$$
+
+则
+
+$$
+A^kx_0
+=\begin{pmatrix}5^k\\2^k\end{pmatrix}
+=5^k\begin{pmatrix}1\\(2/5)^k\end{pmatrix}.
+$$
+
+第二坐标相对第一坐标的比例是 $(2/5)^k$。要使比例不超过 $10^{-3}$，需要
+
+$$
+k\ge\frac{\log(10^{-3})}{\log(2/5)}\approx7.54,
+$$
+
+因此 $k=8$ 足够。
+
+## Exercises
+
+1. 对 $B=\operatorname{diag}(0.8,-0.6)$ 证明任意初值收敛，并给出误差界。
+2. 对 $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ 计算 $B^k$，说明误差几步归零。
+3. 对 $A=\operatorname{diag}(6,1)$、$x_0=(1,1)^T$，给出 power method 的方向误差。
+4. 推导 $2\times2$ symmetric positive definite 矩阵的最优 Richardson 参数。
+5. 说明“某一个特殊初值收敛”为什么不能推出 $\rho(B)<1$。
+
+**Answer to 5.** 可取 $B=\operatorname{diag}(2,1/2)$ 与 $e_0=(0,1)^T$；该初值误差收敛，但 $\rho(B)=2$。
+
+**Previous:** [SVD & Least Squares](02-svd-least-squares.md)  
+**Next:** [Fixed Points & Contractions](04-fixed-points-contractions.md)

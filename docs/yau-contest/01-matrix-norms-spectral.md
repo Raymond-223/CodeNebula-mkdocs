@@ -1,319 +1,357 @@
 # Matrix Norms & Spectral Theory
 
-> “矩阵谱半径小于1，所以迭代收敛”是这阶段的高频结论之一。但如果你已经忘了特征值是什么、范数如何计算、对称性起什么作用，就无法写出这个证明。本章从 $2\times2$ 矩阵重新开始，直到你能独立处理矩阵范数、正定性和谱半径。
+矩阵既可以看成数字表，也可以看成 linear map。后一个观点解释了范数、特征值、正定性和迭代收敛之间的关系。
 
----
+## Linear Maps and Matrix Dimensions
 
-## 一、重新认识矩阵：不是数字表，而是变换
-
-矩阵 $A\in\mathbb R^{m\times n}$ 表示一个线性映射：输入 $n$ 维向量 $x$，输出 $m$ 维向量 $Ax$。例如
+$A\in\mathbb R^{m\times n}$ 定义映射
 
 $$
-A=\begin{pmatrix}2&0\\0&3\end{pmatrix},\qquad
-A\begin{pmatrix}1\\1\end{pmatrix}=\begin{pmatrix}2\\3\end{pmatrix}.
+A:\mathbb R^n\to\mathbb R^m,
+\qquad x\mapsto Ax.
 $$
 
-它把第一个坐标放大2倍，第二个放大3倍。矩阵乘法是**先后施加两个变换**：$ABx$ 意味着先 $B$ 后 $A$，顺序通常不能交换。
-
-必须先恢复四个词：
-
-- **可逆**：方阵存在 $A^{-1}$ 使 $A^{-1}A=I$。对于方阵，它等价于列向量线性无关、行列式非零、零空间只有零向量。
-- **秩**：$\mathrm{rank}(A)$ 是列空间维数，即有多少个互相独立的列方向。
-- **对称**：$A^T=A$，实对称矩阵可以选择一组正交单位特征向量。
-- **正定**：若对所有非零 $x$ 都有 $x^TAx>0$，就称（实对称）$A$ 正定。对称正定矩阵的特征值均为正。
-
-别只背四个定义。试着解释为什么 $A=\begin{pmatrix}1&2\\2&4\end{pmatrix}$ 不可逆：第二列恰好是第一列两倍，信息已经丢失。
-
-## 二、特征值从哪里来
-
-一个向量沿矩阵作用后**方向不变或反向**，称为特征向量：
+矩阵的 $n$ 列是标准基向量 $e_1,\ldots,e_n$ 的像。若
 
 $$
-Av=\lambda v,\qquad v\neq0.
+A=\begin{pmatrix}1&2\\3&4\end{pmatrix},
 $$
 
-$\lambda$ 是对应特征值。把它改写成 $(A-\lambda I)v=0$。这个方程有非零解的条件是 $A-\lambda I$ 不可逆，因此
+则 $Ae_1=(1,3)^T$、$Ae_2=(2,4)^T$。矩阵乘法 $AB$ 表示先施加 $B$，再施加 $A$，所以一般 $AB\ne BA$。
+
+### Rank, Kernel, and Column Space
+
+零空间 kernel 与列空间 column space 定义为
+
+$$
+\ker(A)=\{x:Ax=0\},
+\qquad
+\operatorname{Col}(A)=\{Ax:x\in\mathbb R^n\}.
+$$
+
+rank–nullity theorem 给出
+
+$$
+\operatorname{rank}(A)+\dim\ker(A)=n.
+$$
+
+因此 $A$ 的列线性无关当且仅当 $\ker(A)=\{0\}$。
+
+## Eigenvalues and Eigenvectors
+
+非零向量 $v$ 若满足
+
+$$
+Av=\lambda v,
+$$
+
+则 $v$ 是 eigenvector，$\lambda$ 是 eigenvalue。它表示 $A$ 在方向 $v$ 上只做伸缩或反向。
+
+方程可写为 $(A-\lambda I)v=0$。存在非零解当且仅当
 
 $$
 \det(A-\lambda I)=0.
 $$
 
-手算例子：
+**手算例子。** 设
 
 $$
-A=\begin{pmatrix}2&0\\0&5\end{pmatrix},\qquad
-\det(A-\lambda I)=(2-\lambda)(5-\lambda).
+A=\begin{pmatrix}2&1\\1&2\end{pmatrix}.
 $$
 
-特征值是2、5，对应的标准基向量分别为 $e_1,e_2$。
-
-**谱半径**定义为
+特征多项式为
 
 $$
-\rho(A)=\max_{1\le i\le n}|\lambda_i(A)|.
+\det(A-\lambda I)
+=(2-\lambda)^2-1
+=(\lambda-1)(\lambda-3).
 $$
 
-这里有个坑：矩阵有负特征值时，谱半径看的是**绝对值**。如特征值为 $-4$ 和 $2$，谱半径是4，不是2。
+对应 $\lambda_1=3$ 可取 $v_1=(1,1)^T$；对应 $\lambda_2=1$ 可取 $v_2=(1,-1)^T$。
 
-复特征值也允许出现，例如实矩阵旋转90度时的特征值是 $i,-i$，谱半径仍是1。
+## Vector Norms
 
-## 三、向量范数与矩阵范数：别再只记一个“二范数”
+vector norm $\|\cdot\|$ 必须满足：
 
-向量 $x=(x_1,\dots,x_n)^T$ 的三种常见范数为
+1. 正定性：$\|x\|\ge0$，且 $\|x\|=0\iff x=0$；
+2. 齐次性：$\|\alpha x\|=|\alpha|\|x\|$；
+3. 三角不等式：$\|x+y\|\le\|x\|+\|y\|$。
+
+常见范数为
 
 $$
-\|x\|_1=\sum_i|x_i|,\quad
-\|x\|_2=\sqrt{\sum_i x_i^2},\quad
+\|x\|_1=\sum_i|x_i|,
+\qquad
+\|x\|_2=\sqrt{\sum_i x_i^2},
+\qquad
 \|x\|_\infty=\max_i|x_i|.
 $$
 
-对 $x=(3,-4)^T$，分别是7、5、4。
+对 $x=(1,-2,2)^T$，三者分别为 $5,3,2$。
 
-**诱导矩阵范数**：考虑 $A$ 最多能把一个非零向量的长度放大多少倍。
-
-$$
-\|A\|_p=\sup_{x\ne0}\frac{\|Ax\|_p}{\|x\|_p}.
-$$
-
-于是从定义立刻得到：
+有限维空间中所有范数等价：任意两个范数 $\|\cdot\|_a,\|\cdot\|_b$ 之间存在常数 $c,C>0$，使
 
 $$
-\|Ax\|_p\le\|A\|_p\|x\|_p.
+c\|x\|_a\le\|x\|_b\le C\|x\|_a.
 $$
 
-这不只是实用不等式，而是范数定义的直接推论。几个方便计算的结论：
+因此有限维中的“是否收敛”不依赖所选范数，但数值界的常数会依赖范数。
+
+## Induced Matrix Norms
+
+由向量范数诱导的 operator norm 定义为
 
 $$
-\|A\|_1=\max_j\sum_i|a_{ij}|,\qquad
-\|A\|_\infty=\max_i\sum_j|a_{ij}|.
+\|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}
+=\sup_{\|x\|=1}\|Ax\|.
 $$
 
-记忆：一范数看**列绝对值和**，无穷范数看**行绝对值和**。
-
-对于矩阵二范数：
+它表示 $A$ 对单位向量的最大放大倍数。由定义立即得到 compatibility：
 
 $$
-\|A\|_2=\sqrt{\lambda_{\max}(A^TA)}=\sigma_{\max}(A).
+\|Ax\|\le\|A\|\|x\|.
 $$
 
-这条关系在下一章从SVD理解。注意它**不等于**把矩阵所有元素平方后开根号；后者是 Frobenius 范数 $\|A\|_F$。
+三个常用诱导范数有显式公式：
 
-## 四、证明诱导范数的次乘性
+$$
+\|A\|_1=\max_j\sum_i|a_{ij}|,
+$$
 
-丘赛证明题常会要求你从定义推一个不等式。例子：
+即最大绝对列和；
+
+$$
+\|A\|_\infty=\max_i\sum_j|a_{ij}|,
+$$
+
+即最大绝对行和；
+
+$$
+\|A\|_2=\sigma_{\max}(A)
+=\sqrt{\lambda_{\max}(A^TA)}.
+$$
+
+最后一个公式会在 SVD 章节证明。
+
+### Frobenius Norm
+
+Frobenius norm 定义为
+
+$$
+\|A\|_F=\sqrt{\sum_{i,j}a_{ij}^2}
+=\sqrt{\operatorname{tr}(A^TA)}.
+$$
+
+它是矩阵元素构成向量后的 Euclidean norm，但对 $n>1$ 并不是由同一个 $n$ 维向量范数诱导的 operator norm。仍有
+
+$$
+\|AB\|_F\le\|A\|_2\|B\|_F.
+$$
+
+## Submultiplicativity
+
+**定理。** 任意诱导矩阵范数满足
 
 $$
 \|AB\|\le\|A\|\|B\|.
 $$
 
-这里的范数均为同一向量范数诱导的算子范数。**证明不能直接说“显然”。** 按定义：
+**证明。** 对任意 $x\ne0$，
 
 $$
-\begin{aligned}
-\|AB\|&=\sup_{\|x\|=1}\|ABx\|\\
-&\le\sup_{\|x\|=1}\|A\|\,\|Bx\|\\
-&\le\|A\|\|B\|.
-\end{aligned}
+\|ABx\|
+\le\|A\|\|Bx\|
+\le\|A\|\|B\|\|x\|.
 $$
 
-这个套路以后会不停出现：要证明矩阵范数不等式，先把它化为**任意向量上的不等式**，再取上确界。
+两边除以 $\|x\|$，再对所有 $x\ne0$ 取上确界，即得结论。$\square$
 
-谱半径与诱导范数有关系：$\rho(A)\le\|A\|$。对复特征向量同样使用相应复空间上的算子范数即可证明：若 $Av=\lambda v$，则
+这个证明说明“诱导”不是装饰：正是定义中的最大放大倍数带来了乘法相容性。
 
-$$
-|\lambda|\|v\|=\|Av\|\le\|A\|\|v\|.
-$$
+## Spectral Radius
 
-由于 $v\neq0$，除以 $\|v\|$，得到 $|\lambda|\le\|A\|$。对所有特征值取最大值即可。
-
-!!! warning "一个经常扣分的混淆"
-    $\|A\|<1\Rightarrow\rho(A)<1$，但反过来对某个**事先固定**的范数未必成立。不能把“谱半径小于1”直接替换成“二维欧氏算子范数小于1”。例如 $A=\begin{pmatrix}0&10\\0&0\end{pmatrix}$ 的谱半径是0，而二范数是10。
-
-## 五、实对称矩阵与正交对角化
-
-一般矩阵未必能找到 $n$ 个线性无关特征向量。实对称矩阵却有一个强有力的定理：
+spectral radius 定义为
 
 $$
-A=A^T\quad\Longrightarrow\quad A=Q\Lambda Q^T,
-\qquad Q^TQ=I,
+\rho(A)=\max_{\lambda\in\sigma(A)}|\lambda|,
 $$
 
-其中 $\Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_n)$，特征值全为实数，$Q$ 的列是单位正交特征向量。
+其中 $\sigma(A)$ 是全部特征值的集合。特征值可以是负数或复数，所以必须取模。
 
-你暂时不需要重证明谱定理，但要**会用谱定理证明其推论**。最重要的是 Rayleigh 商。
-
-对于非零 $x$，定义
+**定理。** 对任意诱导矩阵范数，
 
 $$
-R_A(x)=\frac{x^TAx}{x^Tx}.
+\rho(A)\le\|A\|.
 $$
 
-令 $y=Q^Tx$，由于正交矩阵保持长度，
+**证明。** 若 $Av=\lambda v$ 且 $v\ne0$，则
 
 $$
-R_A(x)=\frac{\sum_i\lambda_i y_i^2}{\sum_i y_i^2}.
+|\lambda|\|v\|
+=\|\lambda v\|
+=\|Av\|
+\le\|A\|\|v\|.
 $$
 
-这里每个 $y_i^2/\sum_j y_j^2\ge0$，全部权重加起来是1。Rayleigh商因此是特征值的加权平均：
+约去 $\|v\|$ 得 $|\lambda|\le\|A\|$，再对全部特征值取最大值。对于复特征值，在 $\mathbb C^n$ 上使用同一诱导范数。$\square$
 
-$$
-\lambda_{\min}(A)\le R_A(x)\le\lambda_{\max}(A).
-$$
-
-取对应特征向量，左右界都可以达到。因此也有
-
-$$
-\lambda_{\min}=\min_{\|x\|_2=1}x^TAx,\qquad
-\lambda_{\max}=\max_{\|x\|_2=1}x^TAx.
-$$
-
-**正定性因此等价于** $\lambda_{\min}>0$。这比盲目计算主子式更适合后面的算法分析。
-
-## 六、Gershgorin 圆盘与严格对角占优
-
-当特征值很难显式求出时，能不能不算根就知道它们大概在哪里？Gershgorin圆盘定理给出：任何特征值都落在至少一个圆盘
-
-$$
-D_i=\left\{z\in\mathbb C:\ |z-a_{ii}|\le\sum_{j\ne i}|a_{ij}|\right\}
-$$
-
-里面。
-
-它的证明值得理解：设 $Av=\lambda v$，挑一个最大分量 $|v_i|=\|v\|_\infty$。第 $i$ 行满足
-
-$$
-(\lambda-a_{ii})v_i=\sum_{j\ne i}a_{ij}v_j.
-$$
-
-取绝对值并用 $|v_j|\le|v_i|$，得到
-
-$$
-|\lambda-a_{ii}|\le\sum_{j\ne i}|a_{ij}|.
-$$
-
-证明只需要矩阵乘法和三角不等式，非常适合训练证明能力。
-
-如果每行满足 $|a_{ii}|>\sum_{j\ne i}|a_{ij}|$，矩阵称为**严格行对角占优**。这时所有Gershgorin圆盘都不包含0，故 $A$ 不可逆吗？**恰好相反：0不是特征值，因此 $A$ 可逆。**
-
-这类证明直接帮助解决 2022 Problem 3 的基础小问。
-
-## 七、三道循序渐进的完整例题
-
-**例1：计算范数。** 令
-
-$$
-A=\begin{pmatrix}1&-2\\3&4\end{pmatrix}.
-$$
-
-第一列绝对值和是4，第二列是6，因此 $\|A\|_1=6$。第一行绝对值和是3，第二行是7，因此 $\|A\|_\infty=7$。注意这并不意味着二范数也是7；它需要计算 $A^TA$ 的最大特征值。
-
-**例2：不用行列式求正定下界。** 对称矩阵 $A$ 的全部特征值都大于等于2。由Rayleigh商结论，任意 $x$ 满足 $x^TAx\ge2\|x\|_2^2$。这里对 $x=0$ 也成立；对 $x\ne0$ 用 Rayleigh 商乘回 $\|x\|_2^2$ 即得。
-
-**例3：证明对角占优可逆。** 假设 $Ax=0$ 且 $x\ne0$，选 $|x_i|$ 最大的分量。第 $i$ 行方程给出
-
-$$
-|a_{ii}|\,|x_i|\le\sum_{j\ne i}|a_{ij}|\,|x_j|\le\left(\sum_{j\ne i}|a_{ij}|\right)|x_i|.
-$$
-
-但严格行对角占优使右侧系数小于左侧系数，矛盾。故齐次系统只有零解，$A$ 可逆。这是不用Gershgorin定理的**直接证明法**。
-
-## 八、动手实验与常见错误
-
-```python
-import numpy as np
-A = np.array([[0.0, 10.0], [0.0, 0.0]])
-print('eigenvalues:', np.linalg.eigvals(A))
-print('spectral radius:', max(abs(np.linalg.eigvals(A))))
-print('operator 2-norm:', np.linalg.norm(A, 2))
-```
-
-你会看到谱半径0而二范数10。**实验作用是帮你找到反例，证明仍然必须写出来。**
-
-| 常见错误 | 为什么错 | 该如何检查 |
-| --- | --- | --- |
-| 把 $\rho(A)$ 当成 $\|A\|_2$ | 只有特定条件（如正常矩阵）才相等 | 随手测试非对称上三角矩阵 |
-| 把 $A^TA$ 写成 $AA$ | $A$ 可以是非方阵 | 每一步检查矩阵尺寸 |
-| 看到 $x^TAx>0$ 就说 $A$ 对称 | 二次型只由对称部分决定 | 对称性必须单独假设 |
-| 把对角占优写成 $\ge$ | 弱对角占优不能保证可逆 | 例如零矩阵就满足非严格不等式 |
-
-## 九、练习与通关标准
-
-1. **基础**：计算 $A=\begin{pmatrix}2&-1\\1&3\end{pmatrix}$ 的 $1$ 范数与 $\infty$ 范数。答案：$4$ 和 $4$。
-2. **证明**：证明 $\rho(A)\le\|A\|_2$。提示：从特征向量出发；如果特征值是复数，记得使用复向量空间。
-3. **证明**：证明实对称矩阵 $A$ 正定当且仅当全部特征值正。提示：在正交特征向量基下分解二次型。
-4. **真题**：完成 2022 Problem 3 的 (a)(b)；能做到后再尝试 (c)(d)。
-
-本章达到“会证明”的标准是：**不看答案重新写出Rayleigh商上下界、Gershgorin界、严格对角占优可逆性**，并能够解释每个证明用了什么前提。
-
-## 十、专门给计算专业学生的四个“从头补”问题
-
-### 问题A：$A^TA$ 为什么重要
-
-对于任意实矩阵 $A\in\mathbb R^{m\times n}$，$A^TA$ 一定是 $n\times n$ 实对称矩阵，因为
-
-$$
-(A^TA)^T=A^T(A^T)^T=A^TA.
-$$
-
-而且对任意 $x$，
-
-$$
-x^TA^TAx=\|Ax\|_2^2\ge0.
-$$
-
-所以 $A^TA$ **半正定**；当且仅当 $A$ 列满秩时，$x\ne0\Rightarrow Ax\ne0$，它才是正定。这个结论直接解释了正规方程 $A^TAx=A^Tb$ 为什么在列满秩时有唯一解。你不用在另一门数学课寻找前置，下一章会完整重做。
-
-### 问题B：特征值、奇异值和矩阵范数为什么不是一回事
-
-以
+反向不成立。矩阵
 
 $$
 A=\begin{pmatrix}0&10\\0&0\end{pmatrix}
 $$
 
-为例，特征多项式是 $\lambda^2$，所以两个特征值都是0。但
+满足 $A^2=0$，故全部特征值为零，$\rho(A)=0$；但 $\|A\|_2=10$。
+
+## Symmetric Matrices and Spectral Theorem
+
+实矩阵 $A$ 若满足 $A^T=A$，称为 real symmetric matrix。
+
+**Spectral Theorem.** 每个实对称矩阵都存在正交矩阵 $Q$ 和实对角矩阵 $\Lambda$，使
 
 $$
-A^TA=\begin{pmatrix}0&0\\0&100\end{pmatrix},
+A=Q\Lambda Q^T,
+\qquad Q^TQ=I.
 $$
 
-最大奇异值为10，二范数为10。它能把向量 $(0,1)^T$ 放大10倍，却没有非零特征值。这说明“沿某个方向的瞬时放大”与“反复作用的长期趋势”不同。
+$Q$ 的列是标准正交特征向量，$\Lambda$ 的对角元是对应特征值。
 
-### 问题C：对角化与正交对角化有什么区别
+### Rayleigh Quotient
 
-若存在可逆矩阵 $V$ 使 $A=V\Lambda V^{-1}$，叫**可对角化**。只有 $V$ 的列还能取成正交单位向量时，才能写 $A=Q\Lambda Q^T$。后一种结构对实对称矩阵总成立，推导范数和二次型就简单得多。
+对 $x\ne0$，Rayleigh quotient 定义为
 
-例如 $A=\begin{pmatrix}1&1\\0&2\end{pmatrix}$ 有两个不同特征值，故可对角化；但它不对称，所以不可能写成实正交对角化形式 $Q\Lambda Q^T$，否则右边一定对称。
+$$
+R_A(x)=\frac{x^TAx}{x^Tx}.
+$$
 
-### 问题D：行列式小和病态是不是一回事
+若 $A$ 对称，设 $A=Q\Lambda Q^T$ 且 $y=Q^Tx$。由于 $Q$ 正交，$x^Tx=y^Ty$，于是
 
-不是。行列式接近0不一定意味着条件数大，因为行列式随整体尺度一起变化；把 $A$ 乘以 $10^{-9}$，行列式会缩小许多，但 $\kappa_2(10^{-9}A)=\kappa_2(A)$。真正与求解扰动敏感性相关的量是条件数
+$$
+R_A(x)
+=\frac{\sum_i\lambda_i y_i^2}{\sum_i y_i^2}.
+$$
+
+令 $w_i=y_i^2/\sum_jy_j^2$，则 $w_i\ge0$ 且 $\sum_iw_i=1$。因此 Rayleigh quotient 是特征值的加权平均：
+
+$$
+\lambda_{\min}(A)
+\le R_A(x)
+\le\lambda_{\max}(A).
+$$
+
+上下界分别在最小、最大特征值的特征向量方向取得。
+
+## Positive Definiteness
+
+实对称矩阵 $A$ 称为 positive definite，若对所有 $x\ne0$，
+
+$$
+x^TAx>0.
+$$
+
+利用谱定理，
+
+$$
+x^TAx
+=y^T\Lambda y
+=\sum_i\lambda_i y_i^2.
+$$
+
+因此
+
+$$
+A\succ0
+\quad\Longleftrightarrow\quad
+\lambda_i(A)>0\ \text{for all }i.
+$$
+
+非对称矩阵即使特征值全正，也不能直接称作正定矩阵；二次型只依赖其对称部分 $(A+A^T)/2$。
+
+## Gram Matrix
+
+对任意 $A\in\mathbb R^{m\times n}$，
+
+$$
+(A^TA)^T=A^TA,
+$$
+
+且
+
+$$
+x^TA^TAx=\|Ax\|_2^2\ge0.
+$$
+
+所以 $A^TA$ 总是 symmetric positive semidefinite。并且
+
+$$
+A^TA\succ0
+\quad\Longleftrightarrow\quad
+\ker(A)=\{0\}
+\quad\Longleftrightarrow\quad
+A\text{ has full column rank}.
+$$
+
+这条结论解释了满列秩时正规方程具有唯一解，也构成 SVD 的入口。
+
+## Gershgorin Circle Theorem
+
+对方阵 $A=(a_{ij})$，定义第 $i$ 个 Gershgorin disc：
+
+$$
+D_i=\left\{z\in\mathbb C:
+|z-a_{ii}|\le\sum_{j\ne i}|a_{ij}|
+\right\}.
+$$
+
+**定理。** $A$ 的每个特征值至少落在一个 $D_i$ 中。
+
+**证明。** 设 $Av=\lambda v$，选择满足 $|v_i|=\|v\|_\infty>0$ 的指标 $i$。第 $i$ 行给出
+
+$$
+(\lambda-a_{ii})v_i=\sum_{j\ne i}a_{ij}v_j.
+$$
+
+取绝对值并用 $|v_j|\le|v_i|$：
+
+$$
+|\lambda-a_{ii}|,|v_i|
+\le\sum_{j\ne i}|a_{ij}|,|v_j|
+\le\left(\sum_{j\ne i}|a_{ij}|\right)|v_i|.
+$$
+
+约去 $|v_i|$ 即得 $\lambda\in D_i$。$\square$
+
+若 $|a_{ii}|>\sum_{j\ne i}|a_{ij}|$ 对每行成立，则零不属于任何圆盘，因此 $0$ 不是特征值，$A$ 可逆。
+
+## Condition Number
+
+若 $A$ 可逆，二范数 condition number 为
 
 $$
 \kappa_2(A)=\|A\|_2\|A^{-1}\|_2
-=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}
+=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}.
 $$
 
-（这里假定方阵 $A$ 可逆）。这个比例越大，相对扰动可能被放大得越严重。后面使用SVD求解最小二乘时，这比单看行列式更有用。
+在线性系统 $Ax=b$ 中，若只有右端发生小扰动 $\delta b$，则
 
-## 十一、强化练习：从定义到反例
+$$
+\frac{\|\delta x\|}{\|x\|}
+\le
+\kappa(A)
+\frac{\|\delta b\|}{\|b\|}.
+$$
 
-**题A**：实对称矩阵 $A$ 的所有特征值满足 $\lambda_i\in[2,5]$。证明 $2\|x\|_2^2\le x^TAx\le5\|x\|_2^2$。  
-**解答**：取正交特征向量基，把 $x=Qy$，则 $x^TAx=\sum_i\lambda_i y_i^2$，逐项夹在 $2y_i^2$ 与 $5y_i^2$ 之间，求和并用 $\|y\|=\|x\|$。
+条件数描述问题对输入扰动的敏感性，不等于某个算法的舍入误差。
 
-**题B**：证明对任意非零向量 $x$ 有 $\|Ax\|_2/\|x\|_2\le\|A\|_2$，并说明什么时候可以取到等号。  
-**解答**：不等式是诱导范数定义；取最大奇异值对应的右奇异向量即可取等号。若矩阵为零，任何非零向量都取等号。
+## Exercises
 
-**题C**：证明 $\|A\|_\infty$ 等于最大行绝对值和。  
-**解答**：先对每个分量估计 $|(Ax)_i|\le(\sum_j|a_{ij}|)\|x\|_\infty$，于是得到上界；再挑最大行 $i^*$，令 $x_j$ 取 $a_{i^*j}$ 的符号（零元素可任取 $\pm1$），有 $\|x\|_\infty=1$ 且该行等于绝对值和，从而取得下界。
+1. 计算 $A=\begin{pmatrix}2&-1\\1&3\end{pmatrix}$ 的 $1$-norm、$\infty$-norm 与 Frobenius norm。
+2. 证明 $\|A^k\|\le\|A\|^k$。
+3. 对 $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$ 计算 Rayleigh quotient 的最小值和最大值。
+4. 证明严格行对角占优矩阵可逆，不使用 Gershgorin theorem，而从 $Ax=0$ 选取最大模分量证明。
+5. 给出 $\rho(A)<1$ 但 $\|A\|_2>1$ 的矩阵，并直接计算验证。
 
-**题D**：给一个谱半径小于1但二范数大于1的矩阵。  
-**解答**：取 $A=\begin{pmatrix}0&10\\0&0\end{pmatrix}$。它满足 $A^2=0$，长期幂会归零，但第一步可能放大某些向量。
+**Answers.** 第 1 题为 $4,4,\sqrt{15}$。第 3 题为 $1,3$。第 5 题可用本章的幂零矩阵例子。
 
-!!! note "为什么这四题适合你"
-    它们不是生僻数学技巧，而是数值优化、神经网络参数谱分析、矩阵计算稳定性共同使用的基础。学完它们，之后面对“证明一个算法稳定/收敛”，会更容易找到合适的范数估计。
-
-
-**前一章**：[Proof Skills & Notation](00-proof-skills-notation.md)  
-**下一章**：[SVD & Least Squares →](02-svd-least-squares.md)  
-**返回专题**：[Yau Contest](index.md)
+**Previous:** [Proof Language & Calculus](00-proof-skills-notation.md)  
+**Next:** [SVD & Least Squares](02-svd-least-squares.md)

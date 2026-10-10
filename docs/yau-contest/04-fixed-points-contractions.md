@@ -1,253 +1,366 @@
 # Fixed Points & Contractions
 
-> “反复代入直到数值不变”只是一种计算方法。丘赛会进一步要求：**这个不动点真的存在吗？是不是唯一？为什么每个初值都能到达它？做到 $10^{-8}$ 误差需要多少步？** 这一章从初中函数与高中数列的直觉出发，把四个问题变成四段可复用的证明。
+fixed-point iteration 把方程求解写成反复应用一个映射。本章严格区分不动点的存在性、唯一性和算法收敛性，并完整证明 Banach fixed-point theorem。
 
----
+## Fixed Points and Picard Iteration
 
-## 一、什么叫不动点
-
-对一个函数 $g$，若某个 $x^*$ 满足
+若映射 $g:X\to X$ 满足
 
 $$
 g(x^*)=x^*,
 $$
 
-就称 $x^*$ 是 $g$ 的**不动点**。画图理解：曲线 $y=g(x)$ 与直线 $y=x$ 的交点就是不动点。
-
-方程求根通常能改写为不动点问题。例如要求 $f(x)=0$，可构造 $g(x)=x-\eta f(x)$，那么满足 $g(x)=x$ 的点就是 $f(x)=0$ 的点（当 $\eta\ne0$）。但**不同的 $g$ 会有完全不同的迭代表现**，即使它们的不动点相同。
-
-最简单的迭代叫 Picard 迭代：
+则 $x^*$ 称为 fixed point。Picard iteration 为
 
 $$
 x_{k+1}=g(x_k).
 $$
 
-每一步拿上一步的输出当下一步输入。
+方程 $f(x)=0$ 可通过 $g(x)=x-\eta f(x)$ 改写为 fixed-point equation，但不同 $\eta$ 会产生不同的收敛行为。
 
-## 二、存在、唯一、收敛，是三个不同问题
+存在性、唯一性和迭代收敛性是三个不同命题。$g(x)=x^2$ 有两个不动点 $0,1$；从 $x_0=1/2$ 出发趋于 $0$，从 $x_0=3/2$ 出发发散。
 
-假设 $g(x)=x^2$，不动点方程 $x^2=x$ 有两个解：$0,1$。从 $x_0=0.5$ 出发，迭代趋向0；从 $x_0=1.5$ 出发，数列迅速增长。所以：
+## Metric Spaces and Completeness
 
-- **存在性**问的是有没有满足 $g(x)=x$ 的点；
-- **唯一性**问的是有没有两个或更多；
-- **收敛性**问的是算法是否到达某个点，通常还依赖初值。
+metric $d:X\times X\to[0,\infty)$ 满足：
 
-不能把“求出一不动点”当成“证明从所有初值收敛”。
+1. $d(x,y)=0\iff x=y$；
+2. $d(x,y)=d(y,x)$；
+3. $d(x,z)\le d(x,y)+d(y,z)$。
 
-### 连续映射与区间不变性
+在 $\mathbb R^n$ 中，$d(x,y)=\|x-y\|_2$ 是常用距离。
 
-若 $g:[a,b]\to[a,b]$ 连续，那么区间内**至少存在**不动点。理由：$h(x)=g(x)-x$，有 $h(a)\ge0$、$h(b)\le0$，利用介值定理即可。这只能证明存在，**还不能证明唯一或迭代收敛**。
+metric space $(X,d)$ 称为 complete，如果每个 Cauchy sequence 都收敛到 $X$ 中的点。$\mathbb R^n$ 完备；闭子集仍完备；开区间 $(0,1)$ 不完备，因为 $x_k=1/k$ 是其中的 Cauchy sequence，但极限 $0$ 不在该区间。
 
-## 三、从导数理解压缩映射
+## Self-Maps and Contractions
 
-假设对区间内任意 $x,y$，都有
-
-$$
-|g(x)-g(y)|\le q|x-y|,\qquad 0\le q<1.
-$$
-
-称 $g$ 在该区间上是**压缩映射**。这表示任意两点经过 $g$ 后距离都会缩短，至多保留原来的 $q$ 倍。
-
-可微时，一个方便的充分条件是
+$g:X\to X$ 是 self-map，表示迭代不会离开 $X$。若存在 $q\in[0,1)$ 使对所有 $x,y\in X$，
 
 $$
-\sup_{x\in[a,b]}|g'(x)|\le q<1.
+d(g(x),g(y))\le q,d(x,y),
 $$
 
-由中值定理 $g(x)-g(y)=g'(\xi)(x-y)$ 即可证明压缩不等式。
+则 $g$ 是 contraction mapping，$q$ 是 contraction factor。
 
-!!! important "检查顺序，别跳步"
-    必须同时检查**映射把区间送回自身** $g([a,b])\subseteq[a,b]$、**压缩常数** $q<1$、以及**区间非空且完备**（闭区间满足）。只会检查导数小于1而不保证迭代留在区间内，是常见缺漏。
-
-## 四、Banach不动点定理：完整证明思想
-
-如果 $g$ 是某个非空完备度量空间上的压缩映射，则：**存在唯一不动点；从任意初始点出发的迭代都收敛到它。** 对闭区间可以不需要泛函分析，直接证明。
-
-**第一步：相邻距离收缩。**
+在实区间上，若 $g$ 可微且
 
 $$
-|x_{k+1}-x_k|\le q|x_k-x_{k-1}|\le q^k|x_1-x_0|.
+\sup_{x\in I}|g'(x)|\le q<1,
 $$
 
-**第二步：任意远的两个迭代值也很接近。** 对 $m>n$，利用三角不等式与等比数列：
+由 Mean Value Theorem 可得压缩不等式。仅有导数界还不够，必须同时验证 $g(I)\subseteq I$。
+
+## Banach Fixed-Point Theorem
+
+**定理。** 设 $(X,d)$ 是非空完备度量空间，$g:X\to X$ 是 contraction mapping，压缩因子为 $q<1$。则：
+
+1. $g$ 在 $X$ 中存在唯一不动点 $x^*$；
+2. 对任意 $x_0\in X$，Picard iteration $x_{k+1}=g(x_k)$ 收敛到 $x^*$；
+3. 具有可计算的先验与后验误差界。
+
+### Step 1: Successive Differences
+
+由压缩性，
 
 $$
-|x_m-x_n|\le \sum_{j=n}^{m-1}|x_{j+1}-x_j|
-\le\frac{q^n}{1-q}|x_1-x_0|.
+d(x_{k+1},x_k)
+\le q,d(x_k,x_{k-1})
+\le\cdots\le q^k d(x_1,x_0).
 $$
 
-右侧随 $n\to\infty$ 趋零，因此 $(x_n)$ 是Cauchy数列。闭区间中的Cauchy数列一定收敛到某个 $x^*$。
+### Step 2: Cauchy Property
 
-**第三步：极限确实是不动点。** $g$ 连续，所以 $x_{n+1}=g(x_n)$ 取极限得到 $x^*=g(x^*)$。
-
-**第四步：唯一性。** 若 $x^*,y^*$ 都是不动点，那么
+对 $m>n$，由三角不等式，
 
 $$
-|x^*-y^*|=|g(x^*)-g(y^*)|\le q|x^*-y^*|.
+\begin{aligned}
+d(x_m,x_n)
+&\le\sum_{j=n}^{m-1}d(x_{j+1},x_j)\\
+&\le\sum_{j=n}^{m-1}q^j d(x_1,x_0)\\
+&\le\frac{q^n}{1-q}d(x_1,x_0).
+\end{aligned}
 $$
 
-因为 $q<1$，只可能 $|x^*-y^*|=0$，即两点相同。
+右侧随 $n\to\infty$ 趋于零，因此 $(x_n)$ 是 Cauchy sequence。
 
-## 五、两种误差界：一定要能自己推出来
+### Step 3: Existence
 
-考试常要求估算迭代次数。记 $e_k=x_k-x^*$，有
-
-$$
-|e_{k+1}|\le q|e_k|\le q^{k+1}|e_0|.
-$$
-
-但实际我们不知道 $x^*$，所以 $|e_0|$ 不一定可直接计算。Banach证明给出更实用的**后验可用界**：
+$X$ 完备，所以存在 $x^*\in X$ 使 $x_n\to x^*$。contraction mapping 自动连续，因为
 
 $$
-\boxed{|x_n-x^*|\le\frac{q^n}{1-q}|x_1-x_0|.}
+d(g(x),g(y))\le qd(x,y).
 $$
 
-还可以写成相邻两次迭代的形式：
+故
 
 $$
-|x_n-x^*|\le\frac{q}{1-q}|x_n-x_{n-1}|,
-\qquad n\ge1.
+x^*=\lim_{n\to\infty}x_{n+1}
+=\lim_{n\to\infty}g(x_n)
+=g(x^*).
 $$
 
-这两式有不同用途：第一式方便预估需要多少步；第二式可以根据本次迭代实际变化判断是否该停止。
+### Step 4: Uniqueness
 
-### 从误差容限求迭代次数
-
-给定目标误差 $\varepsilon$，要求
+若 $x^*,y^*$ 都是不动点，则
 
 $$
-\frac{q^n}{1-q}|x_1-x_0|\le\varepsilon.
+d(x^*,y^*)
+=d(g(x^*),g(y^*))
+\le qd(x^*,y^*).
 $$
 
-若 $q\in(0,1)$，对数取值为负，变换不等式时要改变方向：
+由于 $q<1$，只能有 $d(x^*,y^*)=0$，即 $x^*=y^*$。$\square$
+
+## Error Bounds
+
+令 $m\to\infty$，由证明中的估计得到 a priori bound：
 
 $$
-n\ge \frac{\ln\!\left(\varepsilon(1-q)/|x_1-x_0|\right)}{\ln q}.
+\boxed{
+d(x_n,x^*)
+\le\frac{q^n}{1-q}d(x_1,x_0)
+}.
 $$
 
-最后向上取整，且步数不能为负。对 $q=0$ 的常数映射单独处理，一步就能到固定点。
-
-## 六、完整例题：二分之一余弦不动点
-
-考虑 $g(x)=\tfrac12\cos x$，选择闭区间 $I=[-1,1]$。
-
-**第一步（自映射）**：对 $x\in I$，$|g(x)|\le\frac12$，所以 $g(I)\subset I$。
-
-**第二步（压缩）**：$g'(x)=-\tfrac12\sin x$，因此 $|g'(x)|\le\tfrac12$，可取 $q=1/2$。
-
-**第三步（套定理）**：$I$ 是闭区间，满足完备性。Banach定理给出 $I$ 中唯一不动点，且从 $I$ 内任意初值出发收敛。
-
-**第四步（给次数）**：若 $x_0=0$，则 $x_1=1/2$，误差界为
+把迭代从 $x_{n-1}$ 重新编号，也得到 a posteriori bound：
 
 $$
-|x_n-x^*|\le \frac{(1/2)^n}{1-1/2}\cdot\frac12=2^{-n}.
+\boxed{
+d(x_n,x^*)
+\le\frac{q}{1-q}d(x_n,x_{n-1})
+}.
 $$
 
-因此要确保误差 $<10^{-8}$，只需取 $2^{-n}<10^{-8}$，例如 $n=27$。
+第一式适合预估迭代次数，第二式适合根据已经观察到的相邻差决定停止。
 
-这与 2021 Problem 3 的思路高度相关；原题还要求先证明方程解在某个给定区间内，并采用给定初值。解真题时要按照它的区间与精度条件重新写，不能直接照搬这个教学例子。
-
-## 七、推广到二维：先把符号换成向量
-
-当 $x=(x_1,x_2)^T$、$g:\mathbb R^2\to\mathbb R^2$，不动点变成向量方程 $x=g(x)$。误差从绝对值变成范数：
+若要求 a priori bound 不超过 $\varepsilon$，需要
 
 $$
-\|g(x)-g(y)\|\le q\|x-y\|.
+\frac{q^n}{1-q}d(x_1,x_0)\le\varepsilon.
 $$
 
-对可微向量函数，Jacobian为
+当 $0<q<1$ 时，$\log q<0$，故
 
 $$
-J_g(x)=\begin{pmatrix}
-\partial g_1/\partial x_1&\partial g_1/\partial x_2\\
-\partial g_2/\partial x_1&\partial g_2/\partial x_2
-\end{pmatrix}.
+n\ge
+\frac{\log\left(\varepsilon(1-q)/d(x_1,x_0)\right)}{\log q}.
 $$
 
-若在一个**凸、闭、非空且自身映射的区域**中有 $\|J_g(x)\|\le q<1$，由沿线段的积分或多维中值估计可证明压缩性，于是二维迭代收敛。
+最后向上取整。$q=0$ 时 $g$ 是常值映射，一步到达不动点，应单独处理。
 
-!!! warning "局部谱半径和全局压缩是两回事"
-    $\rho(J_g(x^*))<1$ 通常支持局部收敛分析，却不能凭此断言对**所有初值**全局收敛。全局证明还需要区域不变性、统一估计等条件。
+## Complete Scalar Example
 
-2022 Problem 2 是二维不动点迭代题，非常适合作为本章进阶练习。建议先把一维误差界练熟，再处理二维Jacobian。
+设
 
-## 八、什么时候压缩定理不管用
+$$
+g(x)=\frac12\cos x,
+\qquad I=[-1,1].
+$$
 
-- $|g'(x)|$ 在区间里可能大于1：不能直接用统一压缩估计，需缩小区域或换工具。
-- 映射不把区间送回区间：即使初始区域内满足导数界，下一步也可能走出分析区域。
-- 有多个不动点：不可能在包含这些不动点的同一个区域上满足严格压缩。
-- $g'(x^*)=1$：一阶局部收敛判据不足，需要高阶项分析。
+**Self-map.** 对 $x\in I$，$|g(x)|\le1/2$，所以 $g(I)\subseteq I$。
 
-注意**不能使用Banach定理**不等于**迭代一定不收敛**。定理给的是充分条件，而不是所有可收敛方法的完整分类。
+**Contraction.** $g'(x)=-(1/2)\sin x$，所以 $|g'(x)|\le1/2$。可取 $q=1/2$。
 
-## 九、练习与答案
+**Completeness.** $I$ 是 $\mathbb R$ 的非空闭子集，因此完备。
 
-**练习1**：$g(x)=\tfrac14x+3$ 在 $\mathbb R$ 上是不是压缩映射？固定点是多少？  
-**答案**：压缩常数 $1/4$；固定点 $x^*=4$。
+Banach theorem 保证 $I$ 中存在唯一不动点，且从任意 $x_0\in I$ 出发收敛。若 $x_0=0$，则 $x_1=1/2$，先验误差界为
 
-**练习2**：给 $g(x)=\cos x$，能否直接在整个 $\mathbb R$ 上使用 $q<1$ 的导数上界？  
-**答案**：不能，$\sup_{x\in\mathbb R}|g'(x)|=1$。可考虑局部或合适区间上的更精细分析。
+$$
+|x_n-x^*|
+\le\frac{(1/2)^n}{1-1/2}\cdot\frac12
+=2^{-n}.
+$$
 
-**练习3**：已知 $q=1/3$，$|x_1-x_0|=2$，给出 $|x_4-x^*|$ 的上界。  
-**答案**：$(1/3)^4\cdot2/(1-1/3)=1/27$。
+要保证误差严格小于 $10^{-8}$，取 $n=27$ 即可，因为 $2^{-27}<10^{-8}$。
 
-**练习4**：证明一维压缩映射不可能有两个不动点。**答案要点**：对两个固定点应用压缩不等式，得到 $d\le qd$，因 $q<1$ 只能 $d=0$。
+## Existence without Contraction
 
-**真题路线**：2021 Problem 3 先完整做，之后再试 2022 Problem 2。若自己无法写出误差次数，回本章第五节；若无法证明唯一性，回第四节。
+若 $g:[a,b]\to[a,b]$ 连续，则至少存在一个不动点。定义
 
-## 十、把“改写成不动点”当成一项设计工作
+$$
+h(x)=g(x)-x.
+$$
 
-同一个方程可以用无数种不动点迭代求解。取方程 $x^2-2=0$，正根为 $\sqrt2$。选取参数 $\eta>0$，构造
+由于 $g(a)\ge a$ 与 $g(b)\le b$，有 $h(a)\ge0$、$h(b)\le0$。Intermediate Value Theorem 给出 $c\in[a,b]$ 使 $h(c)=0$。
+
+这个结论只保证存在，不保证唯一，也不保证 Picard iteration 收敛。例如 $g(x)=1-x$ 将 $[0,1]$ 映回自身且连续，唯一不动点为 $1/2$；但除非 $x_0=1/2$，迭代会在 $x_0$ 与 $1-x_0$ 之间振荡。
+
+## Local Fixed-Point Convergence
+
+设 $g(x^*)=x^*$、$g'$ 在 $x^*$ 附近连续且 $|g'(x^*)|<1$。可取 $q$ 满足
+
+$$
+|g'(x^*)|<q<1.
+$$
+
+由连续性，存在半径 $r>0$，使 $|x-x^*|\le r$ 时 $|g'(x)|\le q$。于是
+
+$$
+|g(x)-x^*|
+=|g(x)-g(x^*)|
+\le q|x-x^*|
+\le qr<r.
+$$
+
+因此闭区间 $[x^*-r,x^*+r]$ 是 invariant set，Banach theorem 给出局部收敛。
+
+若 $|g'(x^*)|>1$，不动点通常是 repelling。若 $|g'(x^*)|=1$，一阶判据没有结论，必须检查更高阶项。
+
+## Vector Contractions
+
+设 $D\subset\mathbb R^n$ 非空、闭且凸，$g:D\to D$ continuously differentiable。若某个诱导范数下
+
+$$
+\sup_{x\in D}\|J_g(x)\|\le q<1,
+$$
+
+则 $g$ 是 contraction。
+
+对 $x,y\in D$，凸性保证线段 $y+t(x-y)$ 留在 $D$。由微积分基本定理，
+
+$$
+g(x)-g(y)
+=\int_0^1J_g(y+t(x-y))(x-y)\,dt.
+$$
+
+取范数得
+
+$$
+\|g(x)-g(y)\|
+\le\int_0^1q\|x-y\|\,dt
+=q\|x-y\|.
+$$
+
+只知道 $\rho(J_g(x^*))<1$ 是局部线性化信息，不能直接推出整个区域上的统一 contraction。
+
+## Two-Dimensional Worked Example
+
+在闭方形 $D=[0,1]^2$ 上定义
+
+$$
+g(x,y)
+=\left(\frac{x+y}{4},\frac{x-y}{4}+\frac12\right).
+$$
+
+先验证 self-map 条件。对 $(x,y)\in D$，
+
+$$
+0\le \frac{x+y}{4}\le\frac12,
+\qquad
+\frac14\le\frac{x-y}{4}+\frac12\le\frac34,
+$$
+
+故 $g(D)\subset D$。它的 Jacobian 是常矩阵
+
+$$
+J_g=
+\begin{pmatrix}
+1/4&1/4\\
+1/4&-1/4
+\end{pmatrix},
+\qquad
+J_g^TJ_g=\frac18I.
+$$
+
+因此 Euclidean operator norm 为
+
+$$
+\|J_g\|_2=\sqrt{\lambda_{\max}(J_g^TJ_g)}
+=\frac1{2\sqrt2}=:q<1.
+$$
+
+$D$ 是 $\mathbb R^2$ 的闭子集，所以在 Euclidean metric 下完备。Banach theorem 因而保证 $g$ 在 $D$ 内有唯一 fixed point，且从 $D$ 内任意初值出发的 Picard iteration 都收敛。
+
+固定点方程等价于
+
+$$
+3x-y=0,
+\qquad
+5y-x=2.
+$$
+
+解得
+
+$$
+(x^*,y^*)=\left(\frac17,\frac37\right).
+$$
+
+若取 $z_0=(0,0)^T$，则 $z_1=(0,1/2)^T$，所以 $\|z_1-z_0\|_2=1/2$。先验误差界为
+
+$$
+\|z_n-z^*\|_2
+\le \frac{q^n}{1-q}\,\frac12.
+$$
+
+要保证该上界不超过 $\varepsilon$，只需
+
+$$
+n\ge
+\frac{\log\!\bigl(2\varepsilon(1-q)\bigr)}{\log q}.
+$$
+
+取 $\varepsilon=10^{-4}$ 与 $q=1/(2\sqrt2)$，右端约为 $8.61$，故 $n=9$ 次迭代足够。这一例子完整展示了二维情形中的 self-map、Jacobian norm、存在唯一性、误差上界和迭代次数。
+
+## Fixed-Point Design
+
+同一方程可以产生不同迭代。对 $f(x)=x^2-2=0$，取
 
 $$
 g_\eta(x)=x-\eta(x^2-2).
 $$
 
-它的任何不动点都满足 $x^2=2$。但导数
+在正根 $\alpha=\sqrt2$，
 
 $$
-g_\eta'(x)=1-2\eta x
+g_\eta'(\alpha)=1-2\eta\sqrt2.
 $$
 
-会随 $\eta$ 改变。在正根附近，如果 $|1-2\eta\sqrt2|<1$，可得到局部压缩的可能性；若取一个很大的 $\eta$，迭代反而可能发散。
-
-这说明不能说“方程有解，所以随便迭代就行”。你的计算机直觉会把它理解为**算法设计自由度**：同一目标函数，可以选择不同更新规则，收敛范围和速度差别很大。
-
-## 十一、一个充分条件与一个局部结论的区别
-
-经常看到教科书说：“如果 $|g'(x^*)|<1$，那么迭代局部收敛。”这个结论与Banach定理的全局版本有关，但并不完全相同。
-
-若 $g'$ 在 $x^*$ 附近连续，且 $|g'(x^*)|<1$，则可选一个足够小的闭区间 $I$，使其中所有点都满足 $|g'|\le q<1$。还要检查 $g$ 将 $I$ 映射回自己。因为 $g(x^*)=x^*$，
+局部吸引的必要条件是
 
 $$
-|g(x)-x^*|=|g(x)-g(x^*)|\le q|x-x^*|,
+|1-2\eta\sqrt2|<1,
 $$
 
-故以 $x^*$ 为中心的足够小区间自动映射回自身。这给出**局部**收敛，而不是所有 $x\in\mathbb R$ 出发都能收敛。
+即 $0<\eta<1/\sqrt2$。当 $\eta=1/(2\sqrt2)$ 时导数为零，线性误差项消失，局部速度可能提高。算法设计的核心正是调整误差映射，而不只是保持相同不动点。
 
-如果 $|g'(x^*)|>1$，通常在足够接近但不等于 $x^*$ 的位置误差被放大，此不动点表现为排斥性的。等于1则是一种边界情况，必须看更高阶展开；例如 $g(x)=x-x^3$ 在0附近可能从足够小的初值收敛，但导数 $g'(0)=1$。
+## Exact Error and Theorem Bound
 
-## 十二、再做一个从头到尾的精度题
+考虑
 
-**教学题（自编）**：在 $I=[0,1]$ 上用 $g(x)=\frac14(x+1)$，从 $x_0=0$ 出发求不动点，并保证误差严格小于 $10^{-5}$。
+$$
+g(x)=\frac{x+1}{4},
+\qquad x_0=0.
+$$
 
-**解题过程**：
+固定点为 $x^*=1/3$，且
 
-1. 自映射：若 $x\in[0,1]$，则 $g(x)\in[1/4,1/2]\subset[0,1]$。
-2. 压缩：$g'(x)=1/4$，故 $q=1/4<1$。
-3. 唯一解：$x^*=\frac14(x^*+1)$，所以 $x^*=1/3$。
-4. 误差：线性关系给出 $x_n-x^*=(1/4)^n(x_0-x^*)$，因此 $|e_n|=(1/3)4^{-n}$。
-5. 要求 $(1/3)4^{-n}<10^{-5}$，即 $4^n>1/(3\times10^{-5})\approx33333.3$。因为 $4^7=16384$、$4^8=65536$，故 $n=8$ 足够。
+$$
+e_{n+1}=\frac14e_n,
+\qquad
+|e_n|=\frac13\,4^{-n}.
+$$
 
-如果考试只允许使用压缩常数和相邻迭代差，那么同样可用更保守的误差上界。这道题教你：**有显式误差方程时，最好用精确递推；没有时，再用通用定理。**
+要使 $|e_n|<10^{-5}$，需 $4^n>1/(3\times10^{-5})$，所以 $n=8$ 足够。
 
-### 三个检查问题
+Banach 先验界使用 $q=1/4$、$|x_1-x_0|=1/4$：
 
-- 是否写明闭区间和自映射？
-- 是否证明了唯一性，而不仅是解出固定点？
-- 最后是严格小于 $\varepsilon$ 还是小于等于 $\varepsilon$？若等号边界，取整步数可能差一。
+$$
+|e_n|
+\le\frac{(1/4)^n}{1-1/4}\cdot\frac14
+=\frac13\,4^{-n}.
+$$
 
+在这个线性例子中，通用界恰好等于精确误差。
 
-**前一章**：[Linear Iterations & Power Method](03-linear-iterations-power.md)  
-**下一章**：[Newton's Method & Convergence Order →](05-newton-convergence.md)  
-**返回专题**：[Yau Contest](index.md)
+## Exercises
+
+1. 证明 $g(x)=x/4+3$ 在 $\mathbb R$ 上是 contraction，并求唯一不动点。
+2. 说明 $g(x)=\cos x$ 为什么不能直接在整个 $\mathbb R$ 上使用统一 $q<1$ 的导数界。
+3. 已知 $q=1/3$、$|x_1-x_0|=2$，计算 $|x_4-x^*|$ 的先验上界。
+4. 给出有唯一不动点但 Picard iteration 不收敛的连续 self-map。
+5. 设 $g:\mathbb R^2\to\mathbb R^2$ 为 $g(x)=Bx+c$。证明它在某诱导范数下为 contraction 时，结论与线性迭代章节一致。
+
+**Answers.** 第 1 题压缩因子 $1/4$，固定点 $4$。第 3 题上界为 $1/27$。第 4 题可取 $g(x)=1-x$ 于 $[0,1]$。
+
+**Previous:** [Linear Iterations & Power Method](03-linear-iterations-power.md)  
+**Next:** [Newton's Method & Convergence Order](05-newton-convergence.md)

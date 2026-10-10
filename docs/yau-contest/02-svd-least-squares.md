@@ -1,314 +1,614 @@
 # SVD & Least Squares
 
-> 在AI里，你也许直接调用 `numpy.linalg.lstsq` 或PCA；在丘赛里，老师会反过来问：**为什么这样算的解是最优的？当矩阵不满秩时会怎样？为什么截断奇异值就能找到最佳低秩近似？** 本章从投影和正交开始，不预设你还记得任何SVD公式。
+本章从正交投影开始，推导 least-squares problem、Singular Value Decomposition (SVD)、Moore–Penrose pseudoinverse 以及全部最小二乘解。每个矩阵的尺寸都会明确写出。
 
----
+## Orthogonality and Projection
 
-## 一、最小二乘从哪里来：方程可能根本解不出来
-
-设 $A\in\mathbb R^{m\times n}$，给定 $b\in\mathbb R^m$。想求 $Ax=b$，可有三种情况：
-
-- 恰有一个解：$b$ 在列空间中，且列满秩。
-- 有无穷多个解：$b$ 可被表示，但某些列线性相关。
-- 没有精确解：$b$ 不在 $A$ 的列空间内，此时只能找**最接近**的向量 $Ax$。
-
-最小二乘就是求
-
-$$
-\min_{x\in\mathbb R^n}\|Ax-b\|_2^2.
-$$
-
-为什么是二范数平方？因为它连续可微，而且有清晰的几何意义：让 $Ax$ 成为 $b$ 在列空间 $\operatorname{Col}(A)$ 上的正交投影。
-
-例如 $A=(1,1)^T$、$b=(2,0)^T$，只能拟合到 $(x,x)^T$。误差平方
-
-$$
-\|Ax-b\|_2^2=(x-2)^2+x^2=2(x-1)^2+2,
-$$
-
-所以最优 $x=1$，拟合值 $(1,1)^T$，残差 $b-Ax=(1,-1)^T$ 与列 $(1,1)^T$ 正交。
-
-## 二、为什么会出现正规方程
-
-目标函数为 $f(x)=(Ax-b)^T(Ax-b)$。展开得
-
-$$
-f(x)=x^TA^TAx-2b^TAx+b^Tb.
-$$
-
-对 $x$ 求梯度，得到 $\nabla f(x)=2A^T(Ax-b)$。极小点必须满足
-
-$$
-A^T(Ax-b)=0\quad\Longleftrightarrow\quad A^TAx=A^Tb.
-$$
-
-这叫**正规方程**。它也等价于残差 $r=b-Ax$ 与 $A$ 每一列都正交。
-
-!!! warning "正规方程不等于最佳数值实现"
-    如果 $A$ 病态，$A^TA$ 的条件数在满列秩的二范数情形下等于 $\kappa_2(A)^2$，问题可能更不稳定。理论推导可以用正规方程，数值求解通常更倾向 QR 或 SVD，而不是显式计算 $(A^TA)^{-1}$。
-
-如果 $A$ 列满秩，正规方程有唯一解 $x=(A^TA)^{-1}A^Tb$。**如果不满秩，上式失效**，因为 $A^TA$ 不可逆；2021年丘赛正是利用这个难点出题。
-
-## 三、正交向量和投影：SVD的前置
-
-两向量内积为零，叫正交；单位长度且两两正交，叫标准正交组。设 $u$ 为单位向量，则向量 $b$ 在 $u$ 方向上的投影为
+向量 $u,v\in\mathbb R^m$ 正交，记为 $u\perp v$，当且仅当 $u^Tv=0$。若 $u$ 是单位向量，则 $b$ 在 $u$ 方向的正交投影为
 
 $$
 \operatorname{proj}_u(b)=(u^Tb)u.
 $$
 
-若 $U_r=[u_1,\ldots,u_r]$ 的列标准正交，投影矩阵为
+若 $U\in\mathbb R^{m\times r}$ 的列标准正交，即 $U^TU=I_r$，则
 
 $$
-P=U_rU_r^T.
+P=UU^T
 $$
 
-检查两个重要性质：
+是到 $\operatorname{Col}(U)$ 的 orthogonal projector。它满足
 
 $$
-P^2=U_r(U_r^TU_r)U_r^T=P,\qquad P^T=P.
+P^T=P,
+\qquad
+P^2=P.
 $$
 
-所以 $Pb$ 是 $b$ 在 $\operatorname{Col}(U_r)$ 中的正交投影。对于任意同一子空间内的 $y$，把 $b-y$ 拆成互相正交的两部分：
+第二式的计算为
+
+$$
+P^2=UU^TUU^T=U(U^TU)U^T=UU^T=P.
+$$
+
+对任意 $b$，$Pb\in\operatorname{Col}(U)$，且
+
+$$
+U^T(b-Pb)=U^Tb-U^TUU^Tb=0,
+$$
+
+所以残差 $b-Pb$ 与整个列空间正交。
+
+### Best Approximation Property
+
+任取 $y\in\operatorname{Col}(U)$，有正交分解
 
 $$
 b-y=(b-Pb)+(Pb-y).
 $$
 
-毕达哥拉斯定理说明
+两项互相正交，故 Pythagorean theorem 给出
 
 $$
-\|b-y\|_2^2=\|b-Pb\|_2^2+\|Pb-y\|_2^2\ge\|b-Pb\|_2^2.
+\|b-y\|_2^2
+=\|b-Pb\|_2^2+\|Pb-y\|_2^2
+\ge\|b-Pb\|_2^2.
 $$
 
-这就**证明了**投影给出最接近的点，而不只是记住一条公式。
+因此 $Pb$ 是列空间中距离 $b$ 最近的唯一向量。
 
-## 四、从零理解奇异值分解
+## Least-Squares Problem
 
-任意实矩阵 $A\in\mathbb R^{m\times n}$ 都存在SVD：
-
-$$
-A=U\Sigma V^T,
-$$
-
-其中 $U,V$ 是正交矩阵，$\Sigma$ 是非负对角元素的矩形矩阵，非零对角元素按降序记为 $\sigma_1\ge\cdots\ge\sigma_r>0$，$r=\operatorname{rank}(A)$。
-
-几何意义：$V^T$ 先**旋转或反射输入空间**，$\Sigma$ 沿互相正交方向**伸缩**，$U$ 再将结果**旋转或反射到输出空间**。
-
-等价地，只写非零部分：
+给定 $A\in\mathbb R^{m\times n}$ 与 $b\in\mathbb R^m$，least-squares problem 为
 
 $$
-A=U_r\Sigma_rV_r^T=\sum_{i=1}^r\sigma_i u_iv_i^T.
+\min_{x\in\mathbb R^n}\|Ax-b\|_2^2.
 $$
 
-这里 $u_i\in\mathbb R^m$，$v_i\in\mathbb R^n$，且 $Av_i=\sigma_i u_i$，$A^Tu_i=\sigma_i v_i$。因此
+目标不是让 $x$ 接近 $b$，而是让可达到的向量 $Ax\in\operatorname{Col}(A)$ 接近 $b$。
+
+令 $f(x)=\|Ax-b\|_2^2$，展开得
 
 $$
-A^TAv_i=\sigma_i^2v_i.
+f(x)=x^TA^TAx-2b^TAx+b^Tb.
 $$
 
-于是奇异值就是 $A^TA$ 非负特征值的平方根。**注意特征值与奇异值不同：非对称矩阵的特征值可能为负或复数，但奇异值永远非负。**
+因此
 
-## 五、从SVD推导伪逆和全部最小二乘解
+$$
+\nabla f(x)=2A^T(Ax-b).
+$$
 
-把 $V=[V_r\ V_0]$ 扩充成正交基。任何 $x$ 可唯一写成
+驻点满足 normal equations：
+
+$$
+A^TAx=A^Tb.
+$$
+
+### Necessity and Sufficiency
+
+正规方程不仅必要，而且充分。若 $A^T(Ax_*-b)=0$，则对任意 $h$，
+
+$$
+\begin{aligned}
+\|A(x_*+h)-b\|_2^2
+&=\|Ax_*-b+Ah\|_2^2\\
+&=\|Ax_*-b\|_2^2
++2h^TA^T(Ax_*-b)+\|Ah\|_2^2\\
+&=\|Ax_*-b\|_2^2+\|Ah\|_2^2\\
+&\ge\|Ax_*-b\|_2^2.
+\end{aligned}
+$$
+
+所以 $x_*$ 是全局最小点。反过来，可微函数的无约束局部最小点必须满足梯度为零，因此正规方程也是必要条件。
+
+最小二乘解唯一当且仅当 $\ker(A)=\{0\}$。如果存在 $0\ne h\in\ker(A)$，则 $x_*+h$ 与 $x_*$ 有同一个拟合值；若零空间平凡，目标差中的 $\|Ah\|^2$ 对 $h\ne0$ 严格为正。
+
+## Singular Value Decomposition
+
+**SVD Theorem.** 对任意 $A\in\mathbb R^{m\times n}$，存在正交矩阵
+
+$$
+U\in\mathbb R^{m\times m},
+\qquad
+V\in\mathbb R^{n\times n},
+$$
+
+以及矩形对角矩阵 $\Sigma\in\mathbb R^{m\times n}$，使
+
+$$
+A=U\Sigma V^T.
+$$
+
+$\Sigma$ 的非零对角元为
+
+$$
+\sigma_1\ge\sigma_2\ge\cdots\ge\sigma_r>0,
+\qquad r=\operatorname{rank}(A),
+$$
+
+称为 singular values。
+
+### Construction from the Spectral Theorem
+
+$A^TA$ 是实对称半正定矩阵，因此存在正交矩阵 $V$ 使
+
+$$
+A^TA=V\Lambda V^T,
+\qquad
+\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n),
+\quad \lambda_i\ge0.
+$$
+
+定义 $\sigma_i=\sqrt{\lambda_i}$。对每个 $\sigma_i>0$，令
+
+$$
+u_i=\frac{Av_i}{\sigma_i}.
+$$
+
+则
+
+$$
+u_i^Tu_j
+=\frac{v_i^TA^TAv_j}{\sigma_i\sigma_j}
+=\frac{\lambda_jv_i^Tv_j}{\sigma_i\sigma_j}
+=\delta_{ij}.
+$$
+
+所以这些 $u_i$ 标准正交。再把它们补成 $\mathbb R^m$ 的标准正交基，即得到 $U$。同时
+
+$$
+Av_i=\sigma_i u_i,
+\qquad
+A^Tu_i=\sigma_i v_i
+$$
+
+对正奇异值成立，从而 $A=U\Sigma V^T$。
+
+还需检查零特征值对应的方向。若 $\lambda_i=0$，则
+
+$$
+\|Av_i\|_2^2
+=v_i^TA^TAv_i
+=\lambda_i\|v_i\|_2^2
+=0,
+$$
+
+所以 $Av_i=0$。因此 $V$ 中所有列——包括零奇异值对应的列——都满足 $Av_i=\sigma_i u_i$ 的矩阵形式，这才完整得到 $AV=U\Sigma$，即 $A=U\Sigma V^T$。
+
+### Compact SVD
+
+只保留正奇异值对应的向量，得到 compact SVD：
+
+$$
+A=U_r\Sigma_rV_r^T,
+$$
+
+其中
+
+$$
+U_r\in\mathbb R^{m\times r},
+\quad
+\Sigma_r\in\mathbb R^{r\times r},
+\quad
+V_r\in\mathbb R^{n\times r}.
+$$
+
+这里 $\operatorname{Col}(A)=\operatorname{Col}(U_r)$，而 $\ker(A)=\operatorname{Col}(V_0)$，其中 $V=[V_r\ V_0]$。
+
+## Hand Calculation of an SVD
+
+取
+
+$$
+A=\begin{pmatrix}1&1\\1&-1\\0&0\end{pmatrix}.
+$$
+
+第一步计算
+
+$$
+A^TA
+=\begin{pmatrix}2&0\\0&2\end{pmatrix}.
+$$
+
+特征值均为 $2$，故奇异值 $\sigma_1=\sigma_2=\sqrt2$。可取
+
+$$
+v_1=\begin{pmatrix}1\\0\end{pmatrix},
+\qquad
+v_2=\begin{pmatrix}0\\1\end{pmatrix}.
+$$
+
+然后
+
+$$
+u_1=\frac{Av_1}{\sqrt2}
+=\frac1{\sqrt2}\begin{pmatrix}1\\1\\0\end{pmatrix},
+\qquad
+u_2=\frac{Av_2}{\sqrt2}
+=\frac1{\sqrt2}\begin{pmatrix}1\\-1\\0\end{pmatrix}.
+$$
+
+补上 $u_3=(0,0,1)^T$，得到
+
+$$
+U=\begin{pmatrix}
+1/\sqrt2&1/\sqrt2&0\\
+1/\sqrt2&-1/\sqrt2&0\\
+0&0&1
+\end{pmatrix},
+\quad
+\Sigma=\begin{pmatrix}
+\sqrt2&0\\0&\sqrt2\\0&0
+\end{pmatrix},
+\quad V=I_2.
+$$
+
+直接相乘可验证 $U\Sigma V^T=A$。
+
+## Moore–Penrose Pseudoinverse
+
+若 $A=U\Sigma V^T$，定义 $\Sigma^+$：将每个正奇异值 $\sigma_i$ 换成 $1/\sigma_i$，再转置矩形形状。Moore–Penrose pseudoinverse 为
+
+$$
+A^+=V\Sigma^+U^T
+=V_r\Sigma_r^{-1}U_r^T.
+$$
+
+它满足四个 Penrose equations：
+
+$$
+AA^+A=A,
+\qquad
+A^+AA^+=A^+,
+$$
+
+$$
+(AA^+)^T=AA^+,
+\qquad
+(A^+A)^T=A^+A.
+$$
+
+由 compact SVD 可直接算出
+
+$$
+AA^+=U_rU_r^T,
+\qquad
+A^+A=V_rV_r^T.
+$$
+
+例如，
+
+$$
+AA^+A
+=U_r\Sigma_rV_r^TV_r\Sigma_r^{-1}U_r^TU_r\Sigma_rV_r^T
+=U_r\Sigma_rV_r^T
+=A.
+$$
+
+同理 $A^+AA^+=A^+$。而 $U_rU_r^T$ 与 $V_rV_r^T$ 都是对称矩阵，所以另外两个 Penrose equations 也成立。
+
+前者是到 $\operatorname{Col}(A)$ 的正交投影，后者是到 $\operatorname{Col}(A^T)$ 的正交投影。
+
+### Full-Rank Formulas
+
+若 $A$ 满列秩，$A^TA$ 可逆。由 compact SVD，
+
+$$
+A^TA=V\Sigma^2V^T,
+$$
+
+所以
+
+$$
+(A^TA)^{-1}A^T
+=V\Sigma^{-2}V^TV\Sigma U^T
+=V\Sigma^{-1}U^T
+=A^+.
+$$
+
+因此满列秩时
+
+$$
+\boxed{A^+=(A^TA)^{-1}A^T.}
+$$
+
+若 $A$ 满行秩，则 $AA^T$ 可逆，同理得到
+
+$$
+\boxed{A^+=A^T(AA^T)^{-1}.}
+$$
+
+这两个公式只在相应的满秩条件下成立；一般情形必须回到 SVD 定义。
+
+## All Least-Squares Solutions
+
+将 $V=[V_r\ V_0]$。任意 $x\in\mathbb R^n$ 可唯一写成
 
 $$
 x=V_ry+V_0z.
 $$
 
-因为 $AV_0=0$，所以 $Ax=U_r\Sigma_ry$。要最小化 $\|Ax-b\|^2$，先把 $b$ 分解为列空间投影 $U_rU_r^Tb$ 和正交残差，得到
+因为 $AV_0=0$，
 
 $$
-\|Ax-b\|_2^2=\|\Sigma_ry-U_r^Tb\|_2^2+\|(I-U_rU_r^T)b\|_2^2.
+Ax=U_r\Sigma_ry.
 $$
 
-第一项在 $y=\Sigma_r^{-1}U_r^Tb$ 时为零，而 $z$ 完全任意。因此所有最小二乘解为
+再将 $b$ 分解为列空间部分与正交补：
 
 $$
-\boxed{x=V_r\Sigma_r^{-1}U_r^Tb+V_0z,\qquad z\ \text{任意}.}
+b=U_rU_r^Tb+(I-U_rU_r^T)b.
 $$
 
-两部分正交，故
+于是
 
 $$
-\|x\|_2^2=\|\Sigma_r^{-1}U_r^Tb\|_2^2+\|z\|_2^2.
+\|Ax-b\|_2^2
+=\|\Sigma_ry-U_r^Tb\|_2^2
++\|(I-U_rU_r^T)b\|_2^2.
 $$
 
-最小长度必在 $z=0$ 时取得，因此**最小范数最小二乘解**为
+第二项与 $y,z$ 无关，第一项在
 
 $$
-\boxed{x_{\min}=A^+b,\quad A^+=V_r\Sigma_r^{-1}U_r^T.}
+y=\Sigma_r^{-1}U_r^Tb
 $$
 
-你现在已经知道了“伪逆”这个公式**为什么**成立。不要只在脑中背 $A^+=V\Sigma^+U^T$，而应能自己重做上述正交分解证明。
-
-### 与 2021 Problem 4 的对接
-
-该题恰好针对秩亏矩阵 $A$ 的SVD：先写全部最小二乘解，再证明最小范数解，并建立界。由
+时为零。因此全部最小二乘解为
 
 $$
-\|x_{\min}\|_2=\|\Sigma_r^{-1}U_r^Tb\|_2
-\le \|\Sigma_r^{-1}\|_2\|U_r^Tb\|_2
-\le\frac{\|b\|_2}{\sigma_r}
+\boxed{x=A^+b+V_0z,qquad z\in\mathbb R^{n-r}.}
 $$
 
-就得到由**最小非零奇异值**控制的范数上界。
-
-记住“非零”二字：当 $A$ 秩亏时，最小奇异值可以是0，但伪逆只对正奇异值取倒数。
-
-## 六、截断SVD与低秩逼近：AI为什么真的会用它
-
-如果只保留最大的 $k$ 个奇异值：
+等价地，也可写成
 
 $$
-A_k=\sum_{i=1}^k\sigma_i u_iv_i^T,
+x=A^+b+(I-A^+A)w,
+\qquad w\in\mathbb R^n.
 $$
 
-则 $\operatorname{rank}(A_k)\le k$。它丢弃了较弱的方向，却在同秩限制下保持尽可能小的近似误差。Eckart–Young定理表明：
+### Minimum-Norm Solution
+
+两部分 $A^+b\in\operatorname{Col}(V_r)$ 与 $V_0z\in\operatorname{Col}(V_0)$ 正交，所以
 
 $$
-\min_{\operatorname{rank}(B)\le k}\|A-B\|_2=\sigma_{k+1},
+\|A^+b+V_0z\|_2^2
+=\|A^+b\|_2^2+\|z\|_2^2.
 $$
 
-$$
-\min_{\operatorname{rank}(B)\le k}\|A-B\|_F=\sqrt{\sum_{i>k}\sigma_i^2}.
-$$
-
-第一轮至少要**理解并能证明固定SVD方向下的误差公式**；全面的最佳逼近证明可留到强化阶段。这个概念可直接迁移到PCA、低秩矩阵近似、模型压缩。
-
-另外认识两个范数：
+最小值唯一在 $z=0$ 取得。因此
 
 $$
-\|A\|_F=\sqrt{\sum_i\sigma_i^2},\qquad
-\|A\|_*=\sum_i\sigma_i.
+\boxed{x_{\min}=A^+b}
 $$
 
-核范数 $\|A\|_*$ 在低秩优化里常作为秩的凸替代；2018年相关题会用到。
+是唯一的 minimum-norm least-squares solution。
 
-## 七、两个可手算的例子
+## Complete Rank-Deficient Example
 
-**例1：矩形矩阵的伪逆。** 设 $A=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$、$b=(2,3,7)^T$。列空间是前两坐标平面，投影 $Pb=(2,3,0)^T$，最小二乘解是 $x=(2,3)^T$，误差范数是7。这里 $A$ 不是方阵，也完全不需要先“求逆”。
-
-**例2：秩亏最小范数。** 设 $A=\begin{pmatrix}1&1\\0&0\end{pmatrix}$，$b=(2,1)^T$。目标最小值在 $x_1+x_2=2$ 时取得。所有解为 $(t,2-t)^T$，范数平方
+设
 
 $$
-t^2+(2-t)^2=2(t-1)^2+2
+A=\begin{pmatrix}1&1\\0&0\end{pmatrix},
+\qquad
+b=\begin{pmatrix}2\\1\end{pmatrix}.
 $$
 
-最小时 $t=1$，故最小范数解 $(1,1)^T$。为什么不是 $(2,0)^T$？因为沿零空间方向移动不会改变拟合值，却会增大向量长度。
-
-## 八、计算实验：正常方程与SVD的差别
-
-```python
-import numpy as np
-A = np.array([[1., 1.], [1., 1.000001], [1., 0.999999]])
-b = np.array([2., 2.000001, 1.999999])
-x_svd = np.linalg.lstsq(A, b, rcond=None)[0]
-x_normal = np.linalg.solve(A.T @ A, A.T @ b)
-print('SVD solution:', x_svd)
-print('normal equation:', x_normal)
-print('condition numbers:', np.linalg.cond(A), np.linalg.cond(A.T @ A))
-```
-
-这个例子是用来**观察**问题病态时正规方程条件数放大；不能凭一次打印说SVD在任何问题都优于其他分解。请先判断矩阵维数，再预测结果。
-
-## 九、易错点与自测
-
-| 易错点 | 正确处理 |
-| --- | --- |
-| $A$ 秩亏还使用 $(A^TA)^{-1}$ | 应改用SVD、伪逆及零空间参数化 |
-| 把“有最小二乘解”当成“唯一” | 只有零空间为零时才唯一 |
-| 把残差 $b-Ax$ 当成任意方向 | 最优残差必须与列空间正交 |
-| 把全部特征值当成奇异值 | 奇异值由 $A^TA$ 定义，非负 |
-
-**练习1**：证明正交投影矩阵 $P=UU^T$ 满足 $P^2=P$。**答案要点**：使用 $U^TU=I$。
-
-**练习2**：对例2的 $A,b$，证明 $\|Ax-b\|_2$ 的最小值为1。**答案要点**：残差的第二坐标始终为 $-1$，而第一坐标可令为0。
-
-**练习3**：若正奇异值为 $10,2,0.5$，求 $\|A\|_2,\|A\|_F,\|A\|_*$。**答案**：$10,\sqrt{104.25},12.5$。
-
-**真题**：2021 Problem 4 应完整做；2018核范数与2026 Problem 5 可选做。独立重做 2021 Problem 4 的SVD推导，才算掌握本章。
-
-## 十、如果忘了SVD：亲手从 $A^TA$ 算一遍
-
-拿一个非常简单的矩阵
+目标为
 
 $$
-A=\begin{pmatrix}3&0\\0&2\\0&0\end{pmatrix}.
+\|Ax-b\|_2^2=(x_1+x_2-2)^2+1.
 $$
 
-**先检查形状**：$A$ 是 $3\times2$，因此 $A^TA$ 是 $2\times2$；它不可能有3个线性无关的右奇异向量。
-
-计算
+所以全部最小二乘解满足 $x_1+x_2=2$，可写成
 
 $$
-A^TA=\begin{pmatrix}9&0\\0&4\end{pmatrix}.
+x=\begin{pmatrix}t\\2-t\end{pmatrix}.
 $$
 
-这一步已经告诉我们两个正奇异值是 $3,2$，右奇异向量是 $v_1=(1,0)^T$、$v_2=(0,1)^T$。由定义 $u_i=Av_i/\sigma_i$ 得
+其范数平方为
 
 $$
-u_1=(1,0,0)^T,\qquad u_2=(0,1,0)^T.
+t^2+(2-t)^2=2(t-1)^2+2,
 $$
 
-任选第三个与它们正交的单位向量 $u_3=(0,0,1)^T$，可组成完整正交矩阵 $U$。矩形对角矩阵 $\Sigma$ 为
+故最小范数解为 $(1,1)^T$。
+
+从 SVD 计算：正奇异值是 $\sqrt2$，
 
 $$
-\Sigma=\begin{pmatrix}3&0\\0&2\\0&0\end{pmatrix}.
+u_1=\begin{pmatrix}1\\0\end{pmatrix},
+\qquad
+v_1=\frac1{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}.
 $$
 
-本例中 $V=I_2$，所以 $A=U\Sigma V^T$ 直接成立。从这个最简单的例子就能看出：**$A$ 是矩形不妨碍SVD成立**；区别只是 $U,\Sigma,V$ 的尺寸需要检查。
-
-再看 $A=\begin{pmatrix}1&1\\0&0\end{pmatrix}$：
+于是
 
 $$
-A^TA=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+A^+
+=v_1\frac1{\sqrt2}u_1^T
+=\begin{pmatrix}1/2&0\\1/2&0\end{pmatrix},
 $$
 
-它的特征值是2与0，奇异值为 $\sqrt2$ 和0。正奇异值对应 $v_1=\frac1{\sqrt2}(1,1)^T$，$u_1=Av_1/\sqrt2=(1,0)^T$；零奇异值对应零空间方向 $v_2=\frac1{\sqrt2}(1,-1)^T$。如果你能不看答案完整算出这两个小例子，就已经具备SVD题的基础计算能力。
+从而 $A^+b=(1,1)^T$，与直接计算一致。
 
-## 十一、最小二乘中的唯一性：证明不能只写“梯度为零”
+## Stability of Normal Equations
 
-把 $x_*$ 看成某个最小二乘解，令 $r_*=Ax_*-b$。对于任意 $h$：
+若 $A$ 满列秩，则
 
 $$
-\|A(x_*+h)-b\|_2^2=\|r_*\|_2^2+2h^TA^Tr_*+\|Ah\|_2^2.
+\kappa_2(A^TA)=\kappa_2(A)^2.
 $$
 
-若 $A^Tr_*=0$，中间项消失，目标函数差为 $\|Ah\|^2\ge0$，因此 $x_*$ 是全局最小点。**这是充分性的证明**，即使 $A$ 不满秩也仍成立。
+因为 $A^TA$ 的特征值是 $\sigma_i(A)^2$，所以
 
-什么时候最小二乘解唯一？恰好是 $\ker A=\{0\}$：
+$$
+\kappa_2(A^TA)
+=\frac{\sigma_{\max}^2}{\sigma_{\min}^2}
+=\kappa_2(A)^2.
+$$
 
-- 如果 $Ah=0$ 且 $h\ne0$，那么 $x_*+h$ 与 $x_*$ 有同一个拟合值，所以解不唯一。
-- 反过来，若两个不同最小二乘解 $x_1,x_2$ 存在，它们的拟合值都等于 $b$ 的列空间投影，因此 $A(x_1-x_2)=0$，零空间非平凡。
+因此正规方程适合理论推导，但数值计算中可能放大病态性。本专题使用 SVD 分析秩亏、敏感性和最小范数解。
 
-这两段才把“当且仅当”的逻辑闭合。
+## Low-Rank Approximation
 
-### 为什么不直接对 $A$ 求逆
+rank-$k$ approximation 要在所有秩不超过 $k$ 的矩阵中寻找最接近 $A$ 的矩阵。设
 
-当 $m\ne n$ 时，普通逆矩阵 $A^{-1}$ 根本没有定义；当 $A$ 为方阵但奇异时，逆也不存在。即使 $A$ 可逆，数值程序直接形成 $A^{-1}$ 通常不是最好选择。**知道逆存在**是理论问题，**如何稳定求解线性系统**是计算问题。
 
-## 十二、练一道更加贴近竞赛的投影证明
+$$
+A=\sum_{i=1}^r\sigma_i u_iv_i^T,
+\qquad
+\sigma_1\ge\cdots\ge\sigma_r>0.
+$$
 
-**题目（自编）**：设 $U\in\mathbb R^{m\times r}$ 满足 $U^TU=I_r$，证明对任意 $b\in\mathbb R^m$，$Ub^*$ 在空间 $\operatorname{Col}(U)$ 中与 $b$ 距离最近时，$b^*=U^Tb$。
+truncated SVD 定义为
 
-**做法**：任意候选向量写作 $Uy$。令 $P=UU^T$，则 $b-Pb$ 与 $\operatorname{Col}(U)$ 正交。因而
+$$
+A_k=\sum_{i=1}^k\sigma_i u_iv_i^T.
+$$
+
+它保留最大的 $k$ 个伸缩方向，且 $\operatorname{rank}(A_k)=k$（当 $k\le r$）。
+
+### Eckart–Young Theorem in Operator Norm
+
+**定理。** 对 $0\le k<r$，
+
+$$
+\min_{\operatorname{rank}(B)\le k}\|A-B\|_2
+=\sigma_{k+1},
+$$
+
+且 $A_k$ 取得最小值。
+
+**下界证明。** 任取 $\operatorname{rank}(B)\le k$。考虑维数为 $k+1$ 的子空间
+
+$$
+S=\operatorname{span}\{v_1,\ldots,v_{k+1}\}.
+$$
+
+线性映射 $B|_S:S\to\mathbb R^m$ 的秩至多为 $k$，所以其零空间在 $S$ 中至少一维。故存在单位向量
+
+$$
+x=\sum_{i=1}^{k+1}c_iv_i\in S,
+\qquad Bx=0.
+$$
+
+于是
 
 $$
 \begin{aligned}
-\|b-Uy\|^2
-&=\|(b-Pb)+(Pb-Uy)\|^2\\
-&=\|b-Pb\|^2+\|U(U^Tb-y)\|^2\\
-&=\|b-Pb\|^2+\|U^Tb-y\|^2.
+\|A-B\|_2
+&\ge\|(A-B)x\|_2\\
+&=\|Ax\|_2\\
+&=\sqrt{\sum_{i=1}^{k+1}\sigma_i^2c_i^2}\\
+&\ge\sigma_{k+1}
+\sqrt{\sum_{i=1}^{k+1}c_i^2}\\
+&=\sigma_{k+1}.
 \end{aligned}
 $$
 
-最后一步用 $U^TU=I_r$。目标在 $y=U^Tb$ 时最小且唯一，所以投影系数就是 $U^Tb$。
+**达到下界。** 因为
 
-**迁移到AI**：将数据矩阵的列投到一个正交低维空间，实际上就是同一套结构；所以学习这道证明不是为了纯数学形式，而是为了理解低维表示的最优性。
+$$
+A-A_k=\sum_{i=k+1}^r\sigma_i u_iv_i^T,
+$$
 
+其最大奇异值正是 $\sigma_{k+1}$，所以
 
-**前一章**：[Matrix Norms & Spectral Theory](01-matrix-norms-spectral.md)  
-**下一章**：[Linear Iterations & Power Method →](03-linear-iterations-power.md)  
-**返回专题**：[Yau Contest](index.md)
+$$
+\|A-A_k\|_2=\sigma_{k+1}.
+$$
+
+上下界相同，定理得证。$\square$
+
+### Eckart–Young Theorem in Frobenius Norm
+
+同一个 $A_k$ 也满足
+
+$$
+\min_{\operatorname{rank}(B)\le k}\|A-B\|_F
+=\sqrt{\sum_{i=k+1}^r\sigma_i^2}.
+$$
+
+先看达到值：SVD 的秩一项在 Frobenius inner product 下互相正交，因此
+
+$$
+\|A-A_k\|_F^2
+=\sum_{i=k+1}^r\sigma_i^2.
+$$
+
+再证下界。令 $P$ 是到 $\operatorname{Col}(B)$ 的正交投影，则 $PB=B$，且
+
+$$
+A-B=(I-P)A+(PA-B).
+$$
+
+两项的每一列分别落在正交子空间中，所以
+
+$$
+\|A-B\|_F^2
+=\|(I-P)A\|_F^2+\|PA-B\|_F^2
+\ge\|(I-P)A\|_F^2.
+$$
+
+把 $P$ 写到左奇异向量基中。令 $p_i=u_i^TPu_i$，则 $0\le p_i\le1$，并且
+
+$$
+\sum_i p_i=\operatorname{tr}(P)=\operatorname{rank}(P)\le k.
+$$
+
+于是
+
+$$
+\|PA\|_F^2
+=\sum_{i=1}^r\sigma_i^2p_i
+\le\sum_{i=1}^k\sigma_i^2.
+$$
+
+因此
+
+$$
+\|(I-P)A\|_F^2
+=\|A\|_F^2-\|PA\|_F^2
+\ge\sum_{i=k+1}^r\sigma_i^2.
+$$
+
+这给出所需下界。
+
+### Numerical Example
+
+设
+
+$$
+A=\begin{pmatrix}5&0&0\\0&2&0\\0&0&1\end{pmatrix}.
+$$
+
+最佳 rank-$1$ approximation 为
+
+$$
+A_1=\begin{pmatrix}5&0&0\\0&0&0\\0&0&0\end{pmatrix}.
+$$
+
+误差为
+
+$$
+\|A-A_1\|_2=2,
+\qquad
+\|A-A_1\|_F=\sqrt{2^2+1^2}=\sqrt5.
+$$
+
+最佳 rank-$2$ approximation 保留 $5,2$ 两个奇异值，对应误差分别为 $1$ 与 $1$。
+
+## Exercises
+
+1. 证明 $P=UU^T$ 对称且幂等，并证明 $I-P$ 也是正交投影。
+2. 对 $A=\operatorname{diag}(3,2,0)$ 写出 full SVD 与 compact SVD。
+3. 对 $A=(1\ 1)$、$b=2$，写出全部精确解及最小范数解。
+4. 证明 $\|A^+b\|_2\le\|b\|_2/\sigma_r$，其中 $\sigma_r$ 是最小正奇异值。
+5. 证明 least-squares residual $r=b-AA^+b$ 与 $\operatorname{Col}(A)$ 正交。
+6. 对奇异值为 $8,3,1$ 的矩阵，计算最佳 rank-$1$ approximation 在 operator norm 与 Frobenius norm 下的误差。
+
+**Answers.** 第 3 题为 $(t,2-t)^T$，最小范数解 $(1,1)^T$。第 4 题由 $A^+b=\sum_{i=1}^r(u_i^Tb)v_i/\sigma_i$ 与正交性得到。第 6 题分别为 $3$ 与 $\sqrt{10}$。
+
+**Previous:** [Matrix Norms & Spectral Theory](01-matrix-norms-spectral.md)  
+**Next:** [Linear Iterations & Power Method](03-linear-iterations-power.md)

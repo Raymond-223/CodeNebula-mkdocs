@@ -1,256 +1,290 @@
-# Proof Skills & Notation
+# Proof Language & Calculus
 
-> 你能算出一个矩阵的特征值，但题目写“证明迭代收敛”时不知道从何下笔。根本原因通常不是数学天赋，而是**读符号、写条件、组织证明**这三个习惯尚未建立。这章把后面所有材料需要的证明语言从零补齐；即使 Foundations 已经教过向量和微积分，这里也完整重讲。
+本章建立后续证明所需的语言和微积分工具。内容按依赖顺序排列，不假设读者记得量词、极限、导数或 Taylor theorem。
 
----
+## Sets, Functions, and Quantifiers
 
-## 一、先把常用数学符号读成中文
-
-| 符号 | 怎么读 | 典型含义 | 初学最容易错 |
-| --- | --- | --- | --- |
-| $x\in\mathbb R^n$ | $x$ 属于 $n$ 维实向量空间 | $x=(x_1,\dots,x_n)^T$ | $n$ 是维数，不是第 $n$ 次方 |
-| $A\in\mathbb R^{m\times n}$ | $A$ 是 $m$ 行 $n$ 列矩阵 | $Ax\in\mathbb R^m$ | 矩阵乘法需要维数匹配 |
-| $A^T$ | $A$ 的转置 | 行、列交换 | $A^T$ 不是逆矩阵 |
-| $A^{-1}$ | 逆矩阵 | $AA^{-1}=I$ | 不可逆矩阵不能这么写 |
-| $\forall,\exists$ | 任意、存在 | 命题中的量词 | “存在一个”不能替代“任意” |
-| $\Rightarrow,\Leftrightarrow$ | 推出、当且仅当 | 单向或双向逻辑 | 证明充分条件不等于必要充分 |
-| $\|x\|_2$ | 欧氏长度 | $\sqrt{x_1^2+\cdots+x_n^2}$ | 向量范数和矩阵范数不同 |
-| $\lambda,\rho(A)$ | 特征值、谱半径 | $\rho(A)=\max_i|\lambda_i(A)|$ | 最大特征值和最大模特征值不同 |
-| $x_k\to x^*$ | 数列收敛 | 距离极限越来越小 | 前几步变小不等于证明收敛 |
-| $O(h^p)$ | 大 O 记号 | 误差上界的阶 | 不能把 $O$ 当成普通数字约掉 |
-
-线性代数里，一行 $Ax=b$ 隐含着维数关系：若 $A$ 是 $3\times2$，则 $x\in\mathbb R^2$，$b\in\mathbb R^3$。每次计算前先检查维数，会避免很多“符号正确、式子不成立”的错误。
-
-## 二、把代数运算重新想清楚
-
-从两个向量开始：
+集合是对象的总体。$x\in S$ 表示 $x$ 属于集合 $S$，$A\subseteq B$ 表示 $A$ 的每个元素也属于 $B$。常见数集为
 
 $$
-x=\begin{pmatrix}1\\2\end{pmatrix},\qquad y=\begin{pmatrix}3\\-1\end{pmatrix},
-\qquad x^Ty=1\cdot3+2\cdot(-1)=1.
+\mathbb N\subset\mathbb Z\subset\mathbb Q\subset\mathbb R\subset\mathbb C.
 $$
 
-$x^Ty$ 叫**内积**，输出一个数；$xy^T$ 是**外积**，输出一个矩阵。二者不能混淆：
+函数 $f:X\to Y$ 把定义域 $X$ 中每个元素映到陪域 $Y$ 中唯一元素。两个量词决定命题的逻辑结构：
+
+- universal quantifier：$\forall x\in X$，对所有 $x$；
+- existential quantifier：$\exists x\in X$，存在至少一个 $x$。
+
+量词顺序不能交换。例如
 
 $$
-xy^T=\begin{pmatrix}3&-1\\6&-2\end{pmatrix}.
+\forall x\in\mathbb R\;\exists y\in\mathbb R:\ y>x
 $$
 
-矩阵的作用是把一个向量变为另一个向量。例如
+为真；但 $\exists y\in\mathbb R\;\forall x\in\mathbb R:\ y>x$ 为假。
+
+### Negation of Quantified Statements
 
 $$
-A=\begin{pmatrix}2&1\\0&3\end{pmatrix},\quad
-Ax=\begin{pmatrix}4\\6\end{pmatrix}.
+\neg(\forall x\in X, P(x))\iff \exists x\in X, \neg P(x),
 $$
 
-矩阵乘法通常**不交换**：$AB$ 与 $BA$ 即使都存在，也通常不相等。转置具有反序性：$(AB)^T=B^TA^T$。后面证明SVD与线性迭代时，这条看似简单的规则会反复出现。
-
-数的绝对值 $|a|$、向量的长度 $\|x\|_2$ 和矩阵范数 $\|A\|_2$ 有不同含义；它们之间通过 $\|Ax\|_2\le\|A\|_2\|x\|_2$ 连接。这里不要求你记住矩阵范数公式，下一章会从定义证明。
-
-## 三、什么叫数学证明
-
-**计算题**：给 $A$ 和 $b$，算出 $x$。**证明题**：不代入某个具体数字，而是说明在题目规定的全部情况下为什么都成立。
-
-以命题“若 $x>1$，则 $x^2>1$”为例：
-
-- 已知：$x>1$。
-- 待证：$x^2>1$。
-- 关键一步：$x^2-1=(x-1)(x+1)$。
-- 因为 $x-1>0$ 且 $x+1>0$，故 $x^2-1>0$。
-
-这个证明只用了题目给出的条件。相反，“令 $x=2$，确实有 $4>1$”不是证明，因为它只检验了一个例子。
-
-下面是一份通用证明格式：
-
-> **已知**某个对象满足哪些假设。**令**某个误差量或辅助变量。**由**哪个定义、定理或不等式，得到中间结论。**因为**参数满足某个条件，所以可以应用该定理。**于是**得到目标式，证毕。
-
-如果写“显然”“容易得到”，最好检查是否把真正的得分步骤省略了。
-
-## 四、必要条件、充分条件与反例
-
-命题 $P\Rightarrow Q$ 意思是“$P$ 成立足以推出 $Q$”；并不自动表示 $Q\Rightarrow P$。
-
-举例：若 $A$ 是单位矩阵，则 $A$ 可逆；但可逆矩阵未必是单位矩阵。若题目要证明“迭代对任意初始值收敛**当且仅当** $\rho(B)<1$”，必须分别证明：
-
-1. **充分性**：$\rho(B)<1\Rightarrow$ 收敛。
-2. **必要性**：若对任意初始值都收敛 $\Rightarrow\rho(B)<1$。
-
-证明必要性常用**反证法**：假设 $\rho(B)\ge1$，构造某个初值方向使误差不趋于零。这一技巧在 2017 Problem 4 中非常重要。
-
-反例用于推翻过强的说法。比如“所有特征值都为正，矩阵就一定对称”是假的，因为 $\begin{pmatrix}1&1\\0&2\end{pmatrix}$ 的特征值是 $1,2$，它却不对称。以后每遇到定理，都要问：**去掉某个假设后还成立吗？**
-
-## 五、极限、收敛与误差序列
-
-数列 $x_k$ 收敛到 $x^*$ 的定义是：对任意 $\varepsilon>0$，存在整数 $N$，使得 $k\ge N$ 时都有 $|x_k-x^*|<\varepsilon$。
-
-通俗地说，不管你给多严的误差要求，只要走足够多步，后面的**所有步**都能进入误差范围。
-
-设 $x_k=1+2^{-k}$，极限为 $1$，误差 $e_k=x_k-1=2^{-k}$。因为
-
 $$
-|e_{k+1}|=\tfrac12|e_k|,
+\neg(\exists x\in X, P(x))\iff \forall x\in X, \neg P(x).
 $$
 
-每一步误差减半，因此不仅能证明收敛，还能定量估计需要多少步。
+一个反例足以推翻全称命题，却不能证明另一个全称命题。
 
-如果误差是向量，则改用 $\|e_k\|_2$ 或其他范数。**误差向量** $e_k=x_k-x^*$ 是后面所有迭代法的统一语言。
+## Implication and Equivalence
 
-!!! warning "不要把数值现象当证明"
-    计算机跑了1000步，看起来越来越接近答案，只能叫经验现象。若要证明收敛，通常需要一个不依赖具体实验的界，例如 $\|e_k\|\le Cq^k$，其中 $0<q<1$。
+$P\Rightarrow Q$ 表示 $P$ 是 $Q$ 的充分条件，$Q$ 是 $P$ 的必要条件。$P\Longleftrightarrow Q$ 表示两边等价，必须分别证明两个方向。
 
-## 六、Taylor展开与大 O：为Newton法做准备
-
-假设 $f$ 足够光滑。在 $x$ 附近，函数可以写成
+逆否命题
 
 $$
-f(x+h)=f(x)+f'(x)h+\frac{f''(x)}{2}h^2+O(h^3).
+P\Rightarrow Q
+\quad\Longleftrightarrow\quad
+\neg Q\Rightarrow\neg P
 $$
 
-这句话包含三层意思：常数项是函数值；一阶项描述切线；二阶项描述曲率；余下的误差至多是某个常数倍的 $|h|^3$（在足够小的 $h$ 范围内）。
+与原命题等价。逆命题 $Q\Rightarrow P$ 一般不等价。
 
-严格地，$r(h)=O(h^3)$ 当 $h\to0$，意味着存在 $C,\delta>0$，当 $0<|h|<\delta$ 时，$|r(h)|\le C|h|^3$。注意 **$O(h^3)$ 是对函数余项的描述，不是一个固定数**。
+## Direct Proof, Contradiction, and Counterexample
 
-例如 $f(x)=e^x$ 在 $0$ 附近：
+### Direct Proof
 
-$$
-e^h=1+h+\frac12h^2+O(h^3).
-$$
+**命题。** 若 $a,b$ 为偶数，则 $a+b$ 为偶数。
 
-在Newton法里经常把 $h$ 换成当前误差 $e_k$；于是 $O(e_k^2)$ 表示误差平方级，正是“二次收敛”的来源。
+**证明。** 存在整数 $m,n$ 使 $a=2m$、$b=2n$，于是 $a+b=2(m+n)$。由于 $m+n\in\mathbb Z$，故结论成立。$\square$
 
-常用规则：若 $r(h)=O(h^2)$、$s(h)=O(h^3)$，则 $r+s=O(h^2)$；若 $a$ 是固定有界常数，则 $ar=O(h^2)$；但未知参数可能随 $h$ 爆炸时不能随便这么做。
+### Proof by Contradiction
 
-## 七、完整例题：证明一个迭代收敛
+**命题。** $\sqrt2$ 不是有理数。
 
-考虑
+**证明。** 假设 $\sqrt2=p/q$，其中 $p,q$ 是互素正整数。则 $p^2=2q^2$，所以 $p$ 为偶数，记 $p=2r$。代回得 $q^2=2r^2$，故 $q$ 也为偶数，与互素矛盾。$\square$
 
-$$
-x_{k+1}=\frac12x_k+1,\qquad x_0\in\mathbb R.
-$$
+### Counterexample
 
-**第一步：先找可能的极限。** 若极限存在，代入 $x^*=\frac12x^*+1$，得到 $x^*=2$。注意这只找到候选极限，**还没证明收敛**。
-
-**第二步：构造误差。** 令 $e_k=x_k-2$，则
+“特征值全为正的实矩阵一定对称”是错误命题，因为
 
 $$
-e_{k+1}=x_{k+1}-2=\tfrac12(x_k-2)=\tfrac12e_k.
+A=\begin{pmatrix}1&1\\0&2\end{pmatrix}
 $$
 
-**第三步：递推并估计。** $e_k=2^{-k}e_0$，所以 $|e_k|=2^{-k}|e_0|\to0$。
+的特征值为 $1,2$，但 $A^T\ne A$。
 
-**结论：** 对任意初始值 $x_0$，迭代收敛到唯一不动点 $2$。这就是标准的“候选极限 → 误差方程 → 严格上界”的证明模板。
+## Mathematical Induction
 
-## 八、自测题与答案
-
-**题1（向量与矩阵）**：给出 $A=\begin{pmatrix}1&2\\0&3\end{pmatrix}$，$x=(1,-1)^T$，分别计算 $Ax$、$x^TAx$。  
-**答**：$Ax=(-1,-3)^T$；$x^TAx=2$。判断二次型时必须先知道它是一个数。
-
-**题2（量词）**：“存在 $x_0$ 使迭代收敛”与“任意 $x_0$ 都使迭代收敛”是否等价？  
-**答**：不等价；即使映射会发散，只要初值正好是不动点，仍可存在一个不动的初值。
-
-**题3（Taylor）**：求 $\sin h$ 在0处的前三个非零项。  
-**答**：$\sin h=h-h^3/6+h^5/120+O(h^7)$。
-
-**题4（证明）**：证明 $x_{k+1}=\frac13x_k+\frac23$ 从任何实数出发收敛，并给出误差。  
-**答**：固定点是 $1$，$e_{k+1}=\frac13e_k$，故 $|e_k|=3^{-k}|x_0-1|\to0$。
-
-!!! success "本章通关标准"
-    不查资料解释 $\forall$ 与 $\exists$ 的区别，能自己写出一次误差递推证明，并能说清楚 $O(h^2)$ 到底限制了什么。若做不到，请不要急着看特征值收敛证明。
-
-## 九、补上最容易遗忘的微积分：导数、连续与中值定理
-
-丘赛常用微积分结论，其实不多，但必须知道每个定理的**适用条件**。如果你记得公式却说不清条件，就请花半小时重做本节。
-
-### 导数究竟描述什么
-
-导数的定义是
+数学归纳法包含基础步骤、归纳假设和归纳步骤。以
 
 $$
-f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}.
+1+2+\cdots+n=\frac{n(n+1)}2
 $$
 
-它表示在 $x$ 附近，函数输出对微小输入变化的一阶响应。比如 $f(x)=x^2$：
+为例，$n=1$ 时成立。若 $n=k$ 时成立，则
 
 $$
-\frac{(x+h)^2-x^2}{h}=2x+h\to2x.
+1+\cdots+k+(k+1)
+=\frac{k(k+1)}2+(k+1)
+=\frac{(k+1)(k+2)}2.
 $$
 
-所以 $f'(x)=2x$。**导数是极限，不是一个差商公式**。有限差商只在 $h$ 足够小时近似导数，差商的浮点误差与截断误差在后续阶段再专门讨论。
+因此命题对所有正整数成立。
 
-### 中值定理为什么反复出现
+## Absolute Value and Norms
 
-若 $f$ 在 $[a,b]$ 连续，在 $(a,b)$ 可微，那么存在 $\xi\in(a,b)$ 使
+绝对值满足三角不等式 $|a+b|\le |a|+|b|$。Euclidean norm 为
+
+$$
+\|x\|_2=\sqrt{x_1^2+\cdots+x_n^2}.
+$$
+
+Cauchy–Schwarz inequality 为
+
+$$
+|x^Ty|\le \|x\|_2\|y\|_2.
+$$
+
+**证明。** 若 $y=0$，结论成立。若 $y\ne0$，对任意 $t\in\mathbb R$，
+
+$$
+0\le\|x-ty\|_2^2
+=\|x\|_2^2-2t x^Ty+t^2\|y\|_2^2.
+$$
+
+右侧二次多项式恒非负，故判别式不大于零，从而
+
+$$
+(x^Ty)^2\le\|x\|_2^2\|y\|_2^2.
+$$
+
+等号成立当且仅当 $x,y$ 线性相关。
+
+## Sequences and Limits
+
+数列 $(x_k)$ 收敛到 $L$ 的精确定义是
+
+$$
+\forall\varepsilon>0,
+\ \exists N\in\mathbb N,
+\ \forall k\ge N,
+\quad |x_k-L|<\varepsilon.
+$$
+
+**例子。** 对 $x_k=1/k$，给定 $\varepsilon>0$，取整数 $N>1/\varepsilon$。当 $k\ge N$ 时，$|x_k|\le1/N<\varepsilon$，故 $x_k\to0$。
+
+### Cauchy Sequence and Completeness
+
+数列 $(x_k)$ 是 Cauchy sequence，如果
+
+$$
+\forall\varepsilon>0,
+\ \exists N,
+\ \forall m,n\ge N,
+\quad |x_m-x_n|<\varepsilon.
+$$
+
+实数空间 $\mathbb R$ 是 complete：每个 Cauchy 数列都收敛到某个实数。后面的 Banach fixed-point theorem 正是用完备性把“迭代项彼此靠近”转化成“存在极限”。
+
+## Continuity and Intermediate Value Theorem
+
+函数 $f$ 在 $a$ 连续，表示 $\lim_{x\to a}f(x)=f(a)$。其 $\varepsilon$–$\delta$ 形式为
+
+$$
+\forall\varepsilon>0,
+\ \exists\delta>0,
+\quad |x-a|<\delta
+\Rightarrow |f(x)-f(a)|<\varepsilon.
+$$
+
+**Intermediate Value Theorem.** 若 $f$ 在 $[a,b]$ 连续，且 $f(a)f(b)<0$，则存在 $c\in(a,b)$ 使 $f(c)=0$。
+
+这个定理给出存在性，但不给唯一性。
+
+## Derivative and Mean Value Theorem
+
+导数定义为
+
+$$
+f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}h.
+$$
+
+对 $f(x)=x^2$，差商为 $2x+h$，所以 $f'(x)=2x$。
+
+**Mean Value Theorem.** 若 $f$ 在 $[a,b]$ 连续、在 $(a,b)$ 可微，则存在 $\xi\in(a,b)$ 使
 
 $$
 f(b)-f(a)=f'(\xi)(b-a).
 $$
 
-这使一个不易估计的“函数值之差”转化为“导数乘以距离”。若在区间内 $|f'(x)|\le q$，就有
+因此若 $|f'(x)|\le M$ 在区间内成立，就有
 
 $$
-|f(b)-f(a)|\le q|b-a|.
+|f(b)-f(a)|\le M|b-a|.
 $$
 
-本阶段的不动点压缩条件就是从这里来的。这解释了为什么一维固定点题通常先让你算 $g'(x)$：它并不是无关紧要的微积分热身，而是在寻找一个对**任意两个点**都成立的距离缩小不等式。
+## Gradient, Jacobian, and Hessian
 
-### 多元微分的最低必需量
-
-当 $f:\mathbb R^n\to\mathbb R$ 时，梯度是所有偏导数组成的列向量：
+对 $f:\mathbb R^n\to\mathbb R$，gradient 是
 
 $$
-\nabla f(x)=\begin{pmatrix}\partial f/\partial x_1\\\vdots\\\partial f/\partial x_n\end{pmatrix}.
+\nabla f(x)=
+\begin{pmatrix}
+\partial f/\partial x_1\\
+\vdots\\
+\partial f/\partial x_n
+\end{pmatrix}.
 $$
 
-当 $g:\mathbb R^n\to\mathbb R^m$，Jacobian是 $m\times n$ 矩阵 $J_g(x)$，第 $(i,j)$ 项是 $\partial g_i/\partial x_j$。例如
+对 $g:\mathbb R^n\to\mathbb R^m$，Jacobian matrix 为
 
 $$
-g(x_1,x_2)=\begin{pmatrix}x_1^2+x_2\\x_1x_2\end{pmatrix},\quad
-J_g(x)=\begin{pmatrix}2x_1&1\\x_2&x_1\end{pmatrix}.
+J_g(x)=
+\left(\frac{\partial g_i}{\partial x_j}\right)_{m\times n}.
 $$
 
-后面的二维不动点题会用 $J_g$ 控制误差，基本思路是把“导数的绝对值”换成“Jacobian的矩阵范数”。
-
-## 十、基础证明技巧：归纳、三角不等式、柯西不等式
-
-### 数学归纳法
-
-若命题关于自然数 $k$，可以用两步：先证明 $k=0$ 成立；再假定 $k$ 成立，推出 $k+1$ 成立。比如已知 $e_{k+1}=Be_k$，证明
+标量函数的 Hessian matrix 是 $\nabla^2 f(x)$。例如
 
 $$
-e_k=B^ke_0.
+f(x_1,x_2)=x_1^2+3x_1x_2+2x_2^2
 $$
 
-起点 $e_0=B^0e_0$ 成立；归纳假定第 $k$ 步成立，则 $e_{k+1}=Be_k=B^{k+1}e_0$。以后任何“不断迭代”的公式都值得先确认这一逻辑。
-
-### 三角不等式
-
-对向量范数 $\|u+v\|\le\|u\|+\|v\|$。它不是等式：仅在特定方向关系下才取等号。若迭代差值满足 $\|x_{j+1}-x_j\|\le q^jC$，那么
+满足
 
 $$
-\|x_m-x_n\|\le\sum_{j=n}^{m-1}\|x_{j+1}-x_j\|
-\le\frac{q^n}{1-q}C.
+\nabla f=
+\begin{pmatrix}2x_1+3x_2\\3x_1+4x_2\end{pmatrix},
+\qquad
+\nabla^2 f=
+\begin{pmatrix}2&3\\3&4\end{pmatrix}.
 $$
 
-这就是压缩映射证明Cauchy性的关键技巧。
+## Taylor Theorem
 
-### Cauchy–Schwarz不等式
+若 $f$ 在包含 $x$ 与 $x+h$ 的区间上二次连续可微，则存在两点之间的 $\xi$ 使
 
 $$
-|u^Tv|\le\|u\|_2\|v\|_2.
+f(x+h)=f(x)+f'(x)h+\frac12 f''(\xi)h^2.
 $$
 
-它是投影和最小二乘的基本工具。例如单位向量 $u$ 上的投影长度是 $|u^Tb|\le\|b\|_2$，说明“投影不会把长度放大”。
+若 $f$ 三次连续可微，也可写成
 
-如果你记不住证明，可以考虑 $\|u-tv\|_2^2\ge0$：它是关于实数 $t$ 的非负二次式。由判别式不大于0，可推出 $(u^Tv)^2\le\|u\|_2^2\|v\|_2^2$。对于 $v=0$ 的情况单独显然成立。
+$$
+f(x+h)=f(x)+f'(x)h+\frac12f''(x)h^2+O(h^3).
+$$
 
-### 训练：把一句“显然”扩成三行证明
+$r(h)=O(h^p)$ 表示存在 $C,\delta>0$，当 $|h|<\delta$ 时 $|r(h)|\le C|h|^p$。而 $r(h)=o(h^p)$ 表示 $r(h)/h^p\to0$。
 
-命题：若 $B$ 对所有向量满足 $\|Bx\|_2\le q\|x\|_2$ 且 $0\le q<1$，证明 $\|B^kx\|_2\le q^k\|x\|_2$。
+对 $e^x$ 在 $0$ 展开：
 
-推导：第1步 $\|Bx\|\le q\|x\|$；第2步 $\|B^2x\|=\|B(Bx)\|\le q\|Bx\|\le q^2\|x\|$；一般步由归纳法得到 $\|B^{k+1}x\|\le q\|B^kx\|\le q^{k+1}\|x\|$。
+$$
+e^h=1+h+\frac{h^2}{2}+O(h^3).
+$$
 
-**注意反过来不能乱说**：并非一切谱半径小于1的矩阵在默认的二范数下都有 $\|B\|_2<1$。矩阵范数与谱半径的区别将在下一章从头讲。
+## Error Sequences and Convergence Order
 
+定义 error $e_k=x_k-x^*$。若存在 $p\ge1$ 与 $C\in(0,\infty)$ 使
 
-**下一章**：[Matrix Norms & Spectral Theory →](01-matrix-norms-spectral.md)  
-**返回专题**：[Yau Contest](index.md)
+$$
+\lim_{k\to\infty}\frac{|e_{k+1}|}{|e_k|^p}=C,
+$$
+
+则称迭代具有 $p$ 阶收敛。$p=1$ 且 $C<1$ 为 linear convergence；$p=2$ 为 quadratic convergence。
+
+只证明 $e_{k+1}=O(e_k^2)$ 通常只能说明至少二阶；要断言恰为二阶，还须证明二次项系数非零。
+
+## Complete Proof Example
+
+考虑
+
+$$
+x_{k+1}=\frac12x_k+1.
+$$
+
+固定点为 $x^*=2$。令 $e_k=x_k-2$，则
+
+$$
+e_{k+1}=\frac12e_k,
+\qquad
+e_k=2^{-k}e_0.
+$$
+
+因为 $2^{-k}\to0$，故任意初值都收敛到 $2$。要保证 $|e_k|\le\varepsilon$，只需
+
+$$
+k\ge \frac{\log(|e_0|/\varepsilon)}{\log2}.
+$$
+
+这个证明包含候选极限、误差方程、极限和步数界，逻辑闭合。
+
+## Exercises
+
+1. 写出“每个实对称矩阵都有实特征值”的量词结构及否定。
+2. 使用 Cauchy–Schwarz inequality 证明 Euclidean norm 的三角不等式。
+3. 用 $\varepsilon$–$N$ 定义证明 $3^{-k}\to0$。
+4. 对 $f(x)=\log x$ 写出以 $x=1$ 为中心的二阶 Taylor expansion。
+5. 对 $x_{k+1}=x_k/3+2/3$ 求固定点、精确误差式及达到 $10^{-6}$ 误差所需的充分步数。
+
+**Answers.** 第 3 题可取 $N>\log(1/\varepsilon)/\log3$。第 4 题为 $\log(1+h)=h-h^2/2+O(h^3)$。第 5 题固定点为 $1$，且 $e_k=3^{-k}e_0$。
+
+**Next:** [Matrix Norms & Spectral Theory](01-matrix-norms-spectral.md)
