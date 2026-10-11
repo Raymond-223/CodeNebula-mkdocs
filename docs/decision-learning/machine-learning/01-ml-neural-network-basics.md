@@ -1,6 +1,8 @@
-# Machine Learning & Neural Network Basics
+# Machine Learning Training Basics
 
-> 后面的 DQN、Actor–Critic、目标检测、分割、RNN 和 Transformer 都默认你知道这一章。这里不讲完整机器学习课程，只建立后文不再重复解释的最小前置。
+> 本章只建立训练机制：数据怎样进入模型、损失如何衡量错误、链式法则怎样产生梯度、优化器怎样更新参数。CNN、RNN、Attention 与 Transformer 的结构放在下一章。
+
+开始前应能完成三类基础计算：矩阵乘向量、对一元复合函数使用链式法则、理解训练集与概率的基本含义。若其中任何一项不熟悉，先看 [线性代数与微积分基础](../../foundations/mathematics/01-linear-algebra-calculus.md) 和 [概率与随机变量](../../foundations/mathematics/04-probability-random-variables.md)。本章结束后先学习 [Neural Network Architectures](02-neural-network-architectures.md)，再进入 DQN、Actor–Critic 或视觉模型章节。
 
 ## 一、机器学习的目标
 
@@ -126,6 +128,113 @@ $$
 
 之后优化器（SGD、Adam 等）才使用这个梯度更新参数。**反向传播负责算梯度，优化器负责用梯度走一步。** 两者不要混淆。
 
+### 一次完整的数值反向传播
+
+先用只有一个参数的模型把全过程算完。设输入 $x=2$、目标 $y=1$、初始权重 $w=0.5$，模型与平方损失为
+
+$$
+\hat y=wx,
+\qquad
+L=\frac12(\hat y-y)^2.
+$$
+
+**前向计算。** 当前预测为 $\hat y=0.5\times2=1$，损失为零，因此梯度也为零。这个例子没有产生更新，所以把目标改成 $y=3$：
+
+$$
+\hat y=1,
+\qquad
+L=\frac12(1-3)^2=2.
+$$
+
+**反向计算。** 沿计算图从右向左：
+
+$$
+\frac{\partial L}{\partial \hat y}=\hat y-y=-2,
+\qquad
+\frac{\partial \hat y}{\partial w}=x=2,
+$$
+
+所以
+
+$$
+\frac{\partial L}{\partial w}
+=\frac{\partial L}{\partial\hat y}
+ \frac{\partial\hat y}{\partial w}
+=(-2)\times2=-4.
+$$
+
+**参数更新。** 取学习率 $\eta=0.1$，梯度下降得到
+
+$$
+w_{\text{new}}=w-\eta\frac{\partial L}{\partial w}
+=0.5-0.1(-4)=0.9.
+$$
+
+再次前向计算，$\hat y_{\text{new}}=0.9\times2=1.8$，新损失为 $\tfrac12(1.8-3)^2=0.72$，确实低于原来的 $2$。多层网络只是把这条“前向保存中间量—反向乘局部导数—优化器更新参数”的链变长，并把标量换成向量和矩阵。
+
+### 两层网络的完整梯度
+
+标量例子之后，再算一次真正含隐藏层的网络。设输入 $x=2$，隐藏层有两个神经元：
+
+$$
+z=W_1x+b_1,
+\qquad h=\operatorname{ReLU}(z),
+\qquad \hat y=W_2h+b_2,
+$$
+
+其中
+
+$$
+W_1=\begin{pmatrix}1\\-0.5\end{pmatrix},\quad
+b_1=\begin{pmatrix}0\\2\end{pmatrix},\quad
+W_2=\begin{pmatrix}3&-1\end{pmatrix},\quad b_2=0.
+$$
+
+取目标 $y=4$、损失 $L=\tfrac12(\hat y-y)^2$。前向计算为
+
+$$
+z=\begin{pmatrix}2\\1\end{pmatrix},\qquad
+h=\begin{pmatrix}2\\1\end{pmatrix},\qquad
+\hat y=3\cdot2-1\cdot1=5,\qquad L=\frac12.
+$$
+
+反向计算从标量损失开始。先有
+
+$$
+\frac{\partial L}{\partial\hat y}=\hat y-y=1.
+$$
+
+输出层的局部关系是 $\hat y=W_2h+b_2$，所以
+
+$$
+\frac{\partial L}{\partial W_2}
+=\frac{\partial L}{\partial\hat y}h^T
+=\begin{pmatrix}2&1\end{pmatrix},
+\qquad
+\frac{\partial L}{\partial b_2}=1,
+$$
+
+并把梯度传回隐藏向量：
+
+$$
+\frac{\partial L}{\partial h}
+=W_2^T\frac{\partial L}{\partial\hat y}
+=\begin{pmatrix}3\\-1\end{pmatrix}.
+$$
+
+两个 $z$ 分量都为正，因此 ReLU 在这里的导数都是 $1$，从而 $\partial L/\partial z=(3,-1)^T$。最后由 $z=W_1x+b_1$ 得
+
+$$
+\frac{\partial L}{\partial W_1}
+=\frac{\partial L}{\partial z}x
+=\begin{pmatrix}6\\-2\end{pmatrix},
+\qquad
+\frac{\partial L}{\partial b_1}
+=\begin{pmatrix}3\\-1\end{pmatrix}.
+$$
+
+这次计算展示了反向传播的两个核心规则：线性层的权重梯度是“上游梯度乘输入”，传回输入的梯度要乘转置矩阵；激活层则按分量乘局部导数。更深的网络只是在重复这两步。
+
 ## 七、正则化、Dropout 和归一化
 
 为了减少过拟合，常见方法包括：
@@ -137,54 +246,7 @@ $$
 
 输入数值尺度差异很大时，还要先做**归一化/标准化**，否则梯度在不同方向上的尺度差异会让优化变困难。
 
-## 八、卷积神经网络（CNN）与图像结构
-
-图像 $H\times W\times C$ 的像素很多，普通全连接层会产生海量参数，而且完全忽略“相邻像素更相关”的结构。
-
-卷积神经网络 **CNN** 用一个小窗口在整张图上共享同一组权重：
-
-- **局部连接**：只看附近区域；
-- **权重共享**：同一个卷积核在不同位置重复使用；
-- 因而参数少，并天然适合提取边缘、纹理、局部形状。
-
-卷积层输出通常叫 **feature map**。随着层数增加，感受野变大，特征从边缘逐步变成更高层语义。
-
-## 九、循环神经网络（RNN）与序列记忆
-
-对时间序列，只看当前 $x_t$ 往往不够。循环神经网络写成
-
-$$
-h_t=f(h_{t-1},x_t),
-$$
-
-$h_t$ 是**隐藏状态**，把过去压缩成当前记忆。LSTM/GRU 是更稳定的 RNN 变体，用门控缓解长序列训练中的梯度消失。
-
-后面的 POMDP、轨迹预测和多传感器时序融合都会用到这个思路。
-
-## 十、Attention 与 Transformer：让每个位置自己决定该看谁
-
-RNN 必须按时间一步一步处理。Attention 的思路不同：每个位置直接对其他位置算“相关程度”。
-
-最核心形式是
-
-$$
-\operatorname{Attention}(Q,K,V)
-=\operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt d}\right)V.
-$$
-
-可以把它理解为：
-
-- $Q$（query）：我现在想找什么；
-- $K$（key）：每个位置能提供什么索引；
-- $V$（value）：真正要取回的信息；
-- $QK^\top$：匹配程度；
-- softmax：把匹配程度归一化成权重。
-
-**Transformer**就是把多头 Attention、前馈网络、残差连接和归一化等模块堆起来。它本身不知道顺序，因此序列任务通常还要加入位置编码。
-
-后文看到 DETR、视觉 Transformer、序列 Transformer 时，不需要重新把它当成一种神秘模型：核心仍是“按相关性加权汇总信息”。
-
-## 十一、进入后续章节前应会的最小词表
+## 八、进入网络结构前应会的最小词表
 
 | 术语 | 最小含义 |
 |---|---|
@@ -198,10 +260,8 @@ $$
 | batch / epoch | 一次更新的数据量 / 全数据大致遍历一次 |
 | backprop | 用链式法则高效计算梯度 |
 | MLP | 全连接神经网络 |
-| CNN | 利用局部连接和权重共享处理图像 |
-| RNN | 用隐藏状态处理序列 |
-| Attention | 按相关性从其他位置汇总信息 |
-| Transformer | 以 Attention 为核心的序列/视觉架构 |
 | overfitting | 训练集很好、未见数据变差 |
 
-做到这里，后面的 DQN、Actor–Critic、检测、分割、RNN 与 Transformer 才算有完整前置。
+做到这里，已经具备理解网络结构如何训练的前置。下一章将分别计算卷积、循环状态和 Attention，而不只列出术语。
+
+**下一章：** [神经网络结构](02-neural-network-architectures.md)

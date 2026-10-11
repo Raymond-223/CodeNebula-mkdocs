@@ -127,6 +127,17 @@ body, input { font-family: Inter, "Noto Sans SC", "Microsoft YaHei", system-ui, 
   100% { background-position: 0% 50%; }
 }
 
+/* Respect the operating-system accessibility preference. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 
 /* V3 teaching visuals: figures are content, not decoration. */
 .md-typeset figure {

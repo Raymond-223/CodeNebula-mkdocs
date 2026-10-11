@@ -300,7 +300,7 @@ $$
 
 这张表是排队系统最反直觉的地方：利用率从 0.9 提到 0.99，只多了 10%，平均队长却从 9 涨到 99，**涨了 11 倍**。原因在闭式解里看得很清楚——队长正比于 $1/(1-\rho)$，分母在接近临界时塌下去。
 
-它顺手给出了平稳分布存在的**前提**：必须 $\lambda<\mu$（即 $\rho<1$）。若到达率不小于服务率，队长的漂移方向是向上的，永远回不到 0，平稳分布根本不存在，上面所有公式都不适用。
+它顺手给出了正常平稳分布存在的**前提**：必须 $\lambda<\mu$（即 $\rho<1$）。若 $\lambda>\mu$，队长具有向上的正漂移；若 $\lambda=\mu$，链是零常返（null recurrent）的：从有限队长出发仍会以概率 1 返回 0，但平均返回时间无限，因此同样不存在可归一化的平稳概率分布。两种情况下上表公式都不适用。
 
 ---
 
@@ -327,7 +327,7 @@ pi = np.linalg.solve(A, np.array([0.0, 1.0]))
 print(f"平稳分布 pi={np.round(pi, 4)}  校验 pi@P={np.round(pi @ P, 4)}")
 
 w = np.linalg.eigvals(P)
-lam2 = sorted(abs(w))[1]         # 模第二大的特征值
+lam2 = sorted(abs(w), reverse=True)[1]  # 按模降序后的第二项
 print(f"特征值={np.round(w, 4)}  |lam2|={lam2:.4f}")
 print(f"按 log(1/eps)/(1-|lam2|) 估，到 0.01 精度约 {np.log(100) / (1 - lam2):.0f} 步")
 ```
@@ -360,17 +360,19 @@ for name, P in chains.items():
     for k in range(1, 1001):                 # 迭代 1000 步，取 4 个检查点
         mu = mu @ P
         if k in (1, 10, 100, 1000):
-            dist[k] = abs(mu - pi).sum()     # 与平稳分布的总变差距离
+            dist[k] = 0.5 * abs(mu - pi).sum()  # 总变差距离 = L1 距离的一半
     line = "  ".join(f"k={k}:{v:.4f}" for k, v in dist.items())
-    print(f"{name} |lam2|={sorted(abs(np.linalg.eigvals(P)))[1]:.3f}  {line}")
+    eig_mod = sorted(abs(np.linalg.eigvals(P)), reverse=True)
+    print(f"{name} |lam2|={eig_mod[1]:.3f}  {line}")
 
-print("\n距离衰减（每格 0.1，上限 2.0）  列：k=1 / 4 / 16 / 64 / 200")
+print("\n总变差距离（每格 0.1，上限 1.0）  列：k=1 / 4 / 16 / 64 / 200")
 for name, P in chains.items():
     pi, mu, bars = stationary(P), mu0.copy(), []
     for k in range(1, 201):
         mu = mu @ P
         if k in (1, 4, 16, 64, 200):
-            bars.append("#" * int(round(abs(mu - pi).sum() * 10)))
+            tv = 0.5 * abs(mu - pi).sum()
+            bars.append("#" * int(round(tv * 10)))
     print(f"{name} " + " | ".join(bars))
 ```
 

@@ -46,7 +46,8 @@
 | --- | --- | --- |
 | [证明语言与微积分](00-proof-skills-notation.md) | 量词、充分必要条件、极限、泰勒定理（Taylor theorem） | 能把命题写成带量词的形式，并检查证明是否覆盖全部条件 |
 | [矩阵范数与谱理论](01-matrix-norms-spectral.md) | 向量范数、算子范数、谱半径、谱定理 | 能证明次乘性、瑞利商（Rayleigh quotient）界和谱半径基本结论 |
-| [奇异值分解与最小二乘](02-svd-least-squares.md) | 正交投影、奇异值分解（SVD）、伪逆（pseudoinverse）、最小范数解、低秩逼近 | 能从 $A^TA$ 手算奇异值分解，推导全部最小二乘解，并证明最佳低秩误差 |
+| [奇异值分解与最小二乘](02-svd-least-squares.md) | 正交投影、最小二乘、奇异值分解（SVD） | 能从 $A^TA$ 手算奇异值分解，并解释投影与正规方程 |
+| [伪逆与低秩逼近](02-pseudoinverse-low-rank.md) | 伪逆（pseudoinverse）、最小范数解、条件数、低秩逼近 | 能推导全部最小二乘解，并证明最佳低秩误差 |
 | [线性迭代与幂法](03-linear-iterations-power.md) | 定常迭代（stationary iteration）、谱半径判据、幂法 | 能从迭代式推出误差方程并证明充要条件 |
 | [不动点与压缩映射](04-fixed-points-contractions.md) | 完备度量空间、巴拿赫定理（Banach theorem）、误差界 | 能逐步证明存在性、唯一性、收敛性和迭代次数界 |
 | [牛顿法与收敛阶](05-newton-convergence.md) | 泰勒余项（Taylor remainder）、局部二次收敛、重根 | 能写出带邻域条件的局部收敛证明 |

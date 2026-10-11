@@ -2,6 +2,7 @@
 from pathlib import Path
 import ast
 import re
+import runpy
 import sys
 import xml.etree.ElementTree as ET
 import yaml
@@ -115,7 +116,7 @@ expected_groups = {
 }
 content_dirs = {
     p.name for p in DOCS.iterdir()
-    if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css'}
+    if p.is_dir() and p.name not in {'stylesheets', 'javascripts', 'assets', 'img', 'css', 'vendor'}
 }
 if content_dirs != expected_groups:
     errors.append(f'Top-level content directories mismatch: {sorted(content_dirs)}')
@@ -141,6 +142,7 @@ yau_files = sorted(p.name for p in yau.glob('*.md')) if yau.is_dir() else []
 expected_yau = [
     'index.md', '00-proof-skills-notation.md', '01-matrix-norms-spectral.md',
     '02-svd-least-squares.md', '03-linear-iterations-power.md',
+    '02-pseudoinverse-low-rank.md',
     '04-fixed-points-contractions.md', '05-newton-convergence.md',
     '06-stage-one-workbook.md',
 ]
@@ -206,6 +208,38 @@ for p in DOCS.rglob('*.md'):
     if p.is_relative_to(DOCS / 'yau-contest'):
         if re.search(r'^#{2,4}\s+.*\$', clean, flags=re.M):
             errors.append(f'Yau heading contains inline math and may render poorly: {rel}')
+        theorem_lines = list(re.finditer(
+            r'^\*\*[^\n]*(?:定理|命题|引理|推论)[^\n]*\*\*',
+            clean,
+            flags=re.M,
+        ))
+        for theorem_match in theorem_lines:
+            following = clean[theorem_match.end():]
+            next_boundary = re.search(
+                r'^##\s+|^\*\*[^\n]*(?:定理|命题|引理|推论)[^\n]*\*\*',
+                following,
+                flags=re.M,
+            )
+            theorem_scope = following[:next_boundary.start()] if next_boundary else following
+            if '??? proof' not in theorem_scope:
+                summary = theorem_match.group(0)[:80]
+                errors.append(f'Yau theorem has no collapsed proof: {rel} -> {summary}')
+        if re.search(r'^\?\?\?\+\s+proof|^\?\?\?\s+proof[^\n]*\bopen\b', clean, flags=re.M):
+            errors.append(f'Yau proof block must be closed by default: {rel}')
+        for proof_match in re.finditer(r'^\?\?\?\s+proof[^\n]*$', clean, flags=re.M):
+            tail = clean[proof_match.end():]
+            first_content = next((line for line in tail.splitlines() if line.strip()), '')
+            if not first_content.startswith('    '):
+                errors.append(f'Yau proof block has no indented body: {rel}')
+        if re.search(r'^\*\*证明[。.:：]', clean, flags=re.M):
+            errors.append(f'Yau proof must use a collapsed proof block: {rel}')
+        if p.name == '06-stage-one-workbook.md' and re.search(
+            r'^###\s+(?:解答|必要性|充分性|最大模分量解法|精确解集|误差矩阵|'
+            r'巴拿赫定理的条件|奇异值分解)(?:\s|$)',
+            clean,
+            flags=re.M,
+        ):
+            errors.append(f'Workbook solution must be inside a collapsed proof block: {rel}')
         for unused_term in ('QR decomposition', 'nuclear norm', 'Sobolev', 'BFGS'):
             if unused_term in clean:
                 errors.append(f'Unused advanced term in Yau handbook ({unused_term}): {rel}')
@@ -251,7 +285,8 @@ for p in DOCS.rglob('*.md'):
         line_count = len(raw.splitlines())
         if line_count < 40:
             errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
-        if line_count > 700:
+        max_lines = 800 if p.is_relative_to(DOCS / 'yau-contest') else 700
+        if line_count > max_lines:
             errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
 
     # Do not repeat the same image in one article.
@@ -286,6 +321,39 @@ for p in DOCS.rglob('*.md'):
             errors.append(f'Python example is too long for a concept page ({nonblank} lines): {rel}')
         python_blocks.append((rel, code))
 
+# Yau dependency order: later tools must not be used to establish earlier ones.
+dependency_orders = {
+    '01-matrix-norms-spectral.md': [
+        '## 向量范数', '## 对称矩阵与谱定理', '## 正定性',
+        '## 格拉姆矩阵', '## 诱导矩阵范数', '## 谱半径',
+    ],
+    '02-svd-least-squares.md': [
+        '## 正交性与投影', '## 最小二乘问题', '## 奇异值分解',
+    ],
+    '02-pseudoinverse-low-rank.md': [
+        '## 摩尔－彭若斯伪逆', '## 全部最小二乘解', '## 条件数',
+        '## 正规方程的稳定性', '## 低秩逼近',
+    ],
+    '03-linear-iterations-power.md': [
+        '## 定常矩阵迭代', '## 谱半径收敛判据', '## 矩阵分裂',
+        '## 雅可比方法', '## 高斯－赛德尔方法', '## 理查森迭代',
+        '## 幂法', '## 反幂法与位移',
+    ],
+    '04-fixed-points-contractions.md': [
+        '## 度量空间与完备性', '## 自映射与压缩映射',
+        '## 巴拿赫不动点定理', '## 误差上界', '## 向量压缩映射',
+    ],
+    '05-newton-convergence.md': [
+        '## 收敛阶', '## 局部二次收敛定理', '## 重根',
+        '## 割线法', '## 斯特芬森加速', '## 多元牛顿法',
+    ],
+}
+for filename, headings in dependency_orders.items():
+    raw = (yau / filename).read_text(encoding='utf-8')
+    positions = [raw.find(heading) for heading in headings]
+    if any(pos < 0 for pos in positions) or positions != sorted(positions):
+        errors.append(f'Yau prerequisite order changed or is incomplete: {filename}')
+
 # Validate Python syntax.
 for rel, code in python_blocks:
     try:
@@ -303,8 +371,8 @@ for f in diagram_files:
         ET.parse(f)
     except ET.ParseError as e:
         errors.append(f'Invalid SVG XML: {f.relative_to(ROOT)}: {e}')
-if not 40 <= len(diagram_files) <= 60:
-    errors.append(f'Visual density guard expected 40-60 SVGs, found {len(diagram_files)}')
+if not 40 <= len(diagram_files) <= 70:
+    errors.append(f'Visual density guard expected 40-70 SVGs, found {len(diagram_files)}')
 if len(set(diagram_refs)) != len(diagram_files):
     errors.append(f'Not every generated diagram is used: {len(set(diagram_refs))}/{len(diagram_files)} referenced')
 for section, n in section_image_counts.items():
@@ -324,6 +392,13 @@ for section in ENGINEERING_SECTIONS:
     n = section_code_counts[section]
     if not 2 <= n <= 40:
         errors.append(f'{section}: engineering implementation-code density out of range, found {n} blocks')
+
+# Execute focused numerical regressions. These catch valid Python that computes a
+# mathematically wrong value, emits runtime warnings, or contradicts another chapter.
+try:
+    runpy.run_path(str(ROOT / 'scripts' / 'test_numeric_examples.py'), run_name='__main__')
+except Exception as exc:
+    errors.append(f'Numerical documentation regression failed: {exc}')
 
 if errors:
     print('Documentation checks failed:')

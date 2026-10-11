@@ -1,5 +1,5 @@
 # Reinforcement Learning
-> 神经网络、loss、backprop、CNN/RNN/Transformer 等术语以前置章节 [Machine Learning & Neural Network Basics](../machine-learning/01-ml-neural-network-basics.md) 为准；本区不再首次定义这些基础概念。
+> loss 与 backprop 以前置章节 [Machine Learning Training Basics](../machine-learning/01-ml-neural-network-basics.md) 为准；CNN、RNN 与 Transformer 见 [Neural Network Architectures](../machine-learning/02-neural-network-architectures.md)。本区不再首次定义这些基础概念。
 
 强化学习研究的是：**当每个决策都会改变未来、而未来的好坏又反过来定义当下决策的价值时，智能体如何只靠交互数据学会做决策。** 它与监督学习最大的区别在于，没有人告诉你"这一步动作的正确答案是什么"，你只看到奖励，而这个奖励只反映一步的结果。主线从 MDP 与 Bellman 方程出发，依次进入价值学习、策略学习，再处理探索、模型以及安全与离线数据问题。
 

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1502,6 +1532,8 @@
       
         
       
+        
+      
     
     
     
@@ -1570,7 +1602,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -4245,7 +4305,7 @@
 
 <h1 id="perception">Perception</h1>
 <blockquote>
-<p>神经网络、loss、backprop、CNN/RNN/Transformer 等术语以前置章节 <a href="../../decision-learning/machine-learning/01-ml-neural-network-basics/">Machine Learning &amp; Neural Network Basics</a> 为准；本区不再首次定义这些基础概念。</p>
+<p>loss 与 backprop 以前置章节 <a href="../../decision-learning/machine-learning/01-ml-neural-network-basics/">Machine Learning Training Basics</a> 为准；CNN、RNN 与 Transformer 见 <a href="../../decision-learning/machine-learning/02-neural-network-architectures/">Neural Network Architectures</a>。本区不再首次定义这些基础概念。</p>
 </blockquote>
 <p>感知部分只保留机器人和自动驾驶最常用的视觉与三维感知基础：成像、特征、检测分割、深度点云和多模态融合。<strong>一句话概括：感知的任务不是“让模型认出东西”，而是把物理世界转换成一份带坐标系、带时间戳、带不确定度的结构化描述，交给下游的定位、规划和控制使用。</strong> 一份“准但不带坐标”的检测结果，对机器人来说和没有检测没有区别。</p>
 <p>这一节的目标是建立一条完整链路：<strong>像素 → 特征 → 语义 → 几何 → 融合</strong>。链路每一环的输出都是下一环的输入，因此判断“这一环做得好不好”，标准不是指标好看，而是<strong>它交给下游的信息是否够用、是否诚实</strong>。</p>
@@ -4628,11 +4688,11 @@ K\begin{bmatrix}R &amp; t\end{bmatrix}
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

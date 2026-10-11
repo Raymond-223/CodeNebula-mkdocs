@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1505,6 +1535,8 @@
       
         
       
+        
+      
     
     
     
@@ -1573,7 +1605,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -4734,11 +4794,12 @@ m=(\text{sender},\text{type},\text{payload},t_{send},\text{ttl}).
 <li><strong>持续失联</strong>：释放共享任务、回到安全区域、进入本地自治模式。</li>
 <li><strong>完全孤立</strong>：退回单机策略，只保证自身安全，不做跨主体承诺。</li>
 </ul>
-<p>形式化地，设可用邻居比例为 <span class="arithmatex">\(p\in[0,1]\)</span>，则系统性能指标（如吞吐、覆盖率）通常满足</p>
+<p>设可用邻居比例为 <span class="arithmatex">\(p\in[0,1]\)</span>。设计目标应是让安全约束在 <span class="arithmatex">\(p\)</span> 降低时仍成立，而任务性能 <span class="arithmatex">\(\operatorname{Perf}(p)\)</span> 的形状必须由具体模型或实验确定。不能一般性地断言</p>
 <div class="arithmatex">\[
-\text{Perf}(p)\ \ge\ \text{Perf}(0)+p\cdot\big(\text{Perf}(1)-\text{Perf}(0)\big),
+\operatorname{Perf}(p)\ge
+\operatorname{Perf}(0)+p\bigl(\operatorname{Perf}(1)-\operatorname{Perf}(0)\bigr),
 \]</div>
-<p>即通信带来效率增益，但 <span class="arithmatex">\(p=0\)</span> 时仍有 <span class="arithmatex">\(\text{Perf}(0)&gt;0\)</span> 的安全底线。<strong>能通信时提高协作效率，不能通信时仍保持安全</strong>，比追求零丢包更符合真实系统。</p>
+<p>因为这相当于要求性能曲线位于端点连线之上，需要额外的凹性等假设；例如 <span class="arithmatex">\(\operatorname{Perf}(p)=p^2\)</span> 就不满足它。可普遍要求的是：明确 <span class="arithmatex">\(p=0\)</span> 时的本地安全策略，并对特定通信模型测量性能曲线。<strong>能通信时提高协作效率，不能通信时仍保持安全</strong>，比假设一个未经验证的性能下界更可靠。</p>
 <table>
 <thead>
 <tr>
@@ -4750,19 +4811,19 @@ m=(\text{sender},\text{type},\text{payload},t_{send},\text{ttl}).
 </thead>
 <tbody>
 <tr>
-<td><span class="arithmatex">\(p\ge 0.8\)</span></td>
+<td>正常通信区间</td>
 <td>正常协作</td>
 <td>常规协调</td>
 <td>完整</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(0.3\le p&lt;0.8\)</span></td>
+<td>低于本系统告警阈值</td>
 <td>部分退化</td>
 <td>降速、保守避让</td>
 <td>完整</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(0&lt;p&lt;0.3\)</span></td>
+<td>低于本系统退出阈值</td>
 <td>严重退化</td>
 <td>释放任务、回撤</td>
 <td>完整</td>
@@ -4775,6 +4836,7 @@ m=(\text{sender},\text{type},\text{payload},t_{send},\text{ttl}).
 </tr>
 </tbody>
 </table>
+<p>表中的区间边界必须由任务动力学、拓扑和实测链路共同标定，不存在通用于所有多智能体系统的 <span class="arithmatex">\(0.8\)</span> 或 <span class="arithmatex">\(0.3\)</span> 阈值。</p>
 <h2 id="_8">信息价值与通信成本</h2>
 <p>一条消息的价值取决于它是否会改变接收者的决策。如果接收后动作完全不变，这条消息大概率只消耗带宽。设计通信机制时，可以比较有消息和无消息时的决策差异，把发送频率与信息价值联系起来。</p>
 <p>设发送一条消息的成本为 <span class="arithmatex">\(c\)</span>（带宽、能耗、延迟占用的折算），收益为 <span class="arithmatex">\(V(s)\)</span>（决策改善量），则只有当</p>
@@ -4878,39 +4940,30 @@ B_{\text{need}} = 32\ \text{B}\times 20\ \text{Hz}\times 9 \times 10 = 57{,}600\
 </table>
 <p>从表可见，<strong>同样的协调效果，消息设计不同会带来 4 个数量级以上的带宽差异</strong>。当一个系统在 20 Hz 全广播下吃力，把它改成事件触发或分层后，通常能腾出绝大部分带宽。估算时还要留出 2~3 倍余量，因为 <span class="arithmatex">\(\rho\to1\)</span> 时延迟会非线性上升。</p>
 <h2 id="_10">延迟、丢包与一致性影响</h2>
-<p>延迟对控制回路的破坏是<strong>非线性的</strong>：小延迟几乎无感，超过某个临界值后闭环系统迅速失稳。设控制周期为 <span class="arithmatex">\(T\)</span>，若延迟 <span class="arithmatex">\(\tau\)</span> 满足</p>
-<div class="arithmatex">\[
-\tau &gt; \frac{T}{2},
-\]</div>
-<p>则基于旧状态的决策可能落在完全错误的相位上。对避障、编队等高动态任务，这个门槛尤其严格。</p>
+<p>延迟会增加相位滞后并降低稳定裕度，但临界值取决于被控对象、控制器、采样保持和消息用途。不能脱离模型普遍断言 <span class="arithmatex">\(\tau&gt;T/2\)</span> 就会失稳。对给定线性模型，可把延迟写入闭环特征方程或用频率响应计算相位裕度；对一般系统，应通过延迟扫描实验确定可接受区间。</p>
 <table>
 <thead>
 <tr>
-<th>延迟范围</th>
-<th>控制回路影响</th>
-<th>典型可接受上限</th>
+<th>延迟相对任务时间尺度</th>
+<th>可能影响</th>
+<th>处理方式</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><span class="arithmatex">\(&lt;10\)</span> ms</td>
-<td>几乎无感</td>
-<td>高频编队控制</td>
+<td>远小于闭环时间常数</td>
+<td>影响可能较小</td>
+<td>仍需计入裕度</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(10\sim50\)</span> ms</td>
-<td>轻微滞后</td>
-<td>中速导航</td>
+<td>与闭环时间常数同量级</td>
+<td>明显滞后</td>
+<td>预测、降速或重设计控制器</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(50\sim200\)</span> ms</td>
-<td>明显滞后，需减速</td>
-<td>慢速任务分配</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(&gt;200\)</span> ms</td>
-<td>闭环失稳风险</td>
-<td>仅用于非实时意图同步</td>
+<td>大于任务决策时限</td>
+<td>信息失去动作价值</td>
+<td>丢弃过期消息或切换本地策略</td>
 </tr>
 </tbody>
 </table>
@@ -4932,32 +4985,32 @@ B_{\text{need}} = 32\ \text{B}\times 20\ \text{Hz}\times 9 \times 10 = 57{,}600\
 <tr>
 <td>0</td>
 <td>0 ms</td>
-<td>100%</td>
+<td>由无丢包基线测量</td>
 <td>无</td>
 </tr>
 <tr>
 <td>0.1</td>
 <td>≈ 5.6 ms</td>
-<td>≈ 95%</td>
-<td>无</td>
+<td>需要实验测量</td>
+<td>视任务裕度决定</td>
 </tr>
 <tr>
 <td>0.3</td>
 <td>≈ 21 ms</td>
-<td>≈ 85%</td>
-<td>降速</td>
+<td>需要实验测量</td>
+<td>可能降速</td>
 </tr>
 <tr>
 <td>0.5</td>
 <td>50 ms</td>
-<td>≈ 65%</td>
-<td>释放任务、保守避让</td>
+<td>需要实验测量</td>
+<td>考虑释放任务、保守避让</td>
 </tr>
 <tr>
 <td>0.9</td>
 <td>450 ms</td>
-<td>≈ 20%</td>
-<td>进入单机自治</td>
+<td>需要实验测量</td>
+<td>通常应进入单机自治</td>
 </tr>
 </tbody>
 </table>
@@ -5079,11 +5132,11 @@ b_{\text{event}}\sim 10^{-2}b_0,\quad b_{\text{intent}}\sim 10^{-4}b_0,\quad b_{
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
@@ -695,6 +695,8 @@
       
         
       
+        
+      
     
     
     
@@ -811,6 +813,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1633,6 +1663,8 @@
       
         
       
+        
+      
     
     
     
@@ -1701,7 +1733,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -4325,7 +4385,7 @@
 </figure>
 <p>“最小充分”的含义是：只保留后续反复依赖、能够解释真实系统、或者删掉后会造成认知断层的内容。因此读的时候会遇到刻意的取舍——算法只保留能代表一类思想的方法，图片只用于解释几何关系、数据流与系统边界，代码只用于把公式落到实现。</p>
 <h2 id="_1">独立竞赛专题</h2>
-<p><strong><a href="yau-contest/">Yau Contest — Computational and Applied Mathematics</a></strong> 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 <strong>Stage 1: Matrix Theory &amp; Iteration</strong>，包含七章教材式内容，从最基础的数学证明语言讲到SVD、谱半径、幂法、压缩映射和Newton收敛。</p>
+<p><strong><a href="yau-contest/">Yau Contest — Computational and Applied Mathematics</a></strong> 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 <strong>Stage 1: Matrix Theory &amp; Iteration</strong>，包含八章教材式内容，从最基础的数学证明语言讲到 SVD、谱半径、幂法、压缩映射和 Newton 收敛。</p>
 <p>这个专题是针对<strong>投入时间有限、希望知识也服务AI科研</strong>的读者的选择性备赛线，不以试卷全部题目全做出来为目标。</p>
 <h2 id="_2">课程结构</h2>
 <p>课程不强制一条线读到底，但领域之间存在真实的<strong>前置偏序</strong>：Foundations 是无前置的根，Decision &amp; Learning 与 Robotics &amp; Perception 是两条并列分支，Systems &amp; Simulation 需要至少一条分支作为载体，Safety &amp; Human Factors 则贯穿真实部署。</p>
@@ -4376,48 +4436,48 @@
 <thead>
 <tr>
 <th>领域</th>
-<th>章数</th>
-<th>约页数</th>
+<th style="text-align: right;">核心章数</th>
+<th>主要目标层次</th>
 <th>是否可跳过</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Foundations</td>
-<td>11</td>
-<td>约 11 页</td>
+<td style="text-align: right;">13</td>
+<td>会计算，并能判断定理或工程判据的适用条件</td>
 <td>不建议</td>
 </tr>
 <tr>
 <td>Decision &amp; Learning</td>
-<td>16</td>
-<td>约 16 页</td>
+<td style="text-align: right;">16</td>
+<td>会建立决策模型、解释算法更新并用于小型算例</td>
 <td>按方向</td>
 </tr>
 <tr>
 <td>Robotics &amp; Perception</td>
-<td>10</td>
-<td>约 10 页</td>
+<td style="text-align: right;">10</td>
+<td>会把方法连接到坐标、噪声和物理约束</td>
 <td>按方向</td>
 </tr>
 <tr>
 <td>Systems &amp; Simulation</td>
-<td>14</td>
-<td>约 14 页</td>
+<td style="text-align: right;">14</td>
+<td>会实现、测量并诊断可运行系统</td>
 <td>按方向</td>
 </tr>
 <tr>
 <td>Safety &amp; Human Factors</td>
-<td>10</td>
-<td>约 10 页</td>
+<td style="text-align: right;">10</td>
+<td>会识别失效条件并设计验证与降级方案</td>
 <td>不建议</td>
 </tr>
 </tbody>
 </table>
-<p>整门课程的规模约为</p>
-<div class="arithmatex">\[|P_{\text{full}}| = \sum_{D} n_D \approx 61\ \text{页},\]</div>
-<p>其中 <span class="arithmatex">\(n_D\)</span> 是领域 <span class="arithmatex">\(D\)</span> 的页数。若只想建立某一方向的可用能力，通常需要其中 30 页左右。</p>
-<p>表里“章数”与“约页数”刻意取一致，目的是让读者在规划时间时有一个诚实的一阶估计，而不是被“章节很多”或“很快能读完”这两种错觉之一误导。</p>
+<p>五个领域的核心课程规模为</p>
+<div class="arithmatex">\[|P_{\text{core}}| = \sum_{D} n_D = 63\ \text{章}.\]</div>
+<p>其中 <span class="arithmatex">\(n_D\)</span> 是领域 <span class="arithmatex">\(D\)</span> 的核心章节数。除此之外，站点还有 2 篇独立的 Machine Learning 入门正文，以及 8 篇 Yau Contest 专题正文；它们不重复计入上述 63 篇核心章节。若只想建立某一方向的可用能力，通常需要其中约 30 篇核心章节，再按具体依赖补充相应专题。</p>
+<p>这里统计 Markdown 核心章节，而不是浏览器排版后的纸张页数；不同章节的证明与例题密度不同，不能再用“一章约等于一页”估算学习时间。</p>
 <p>前置关系不是为了设置门槛，而是为了让后面的内容有落脚点。例如 Control Theory 里的稳定性概念会反复出现在 Robotics 的控制回路和 Safety 的降级策略中；Mathematics 里的概率语言会出现在 Perception 的估计与 Robustness 的分布变化里。缺少这些落脚点，后面的内容就只剩结论。</p>
 <p>因此这张表更准确的用法是反向查：当你在某个章节读不下去时，回到这张表确认它的前置是否已经建立，而不是继续硬读。</p>
 <h2 id="_3">五个领域各自解决的典型问题</h2>
@@ -4627,7 +4687,7 @@
 <tr>
 <td>建立完整视野</td>
 <td>Foundations → Robotics &amp; Perception → Decision &amp; Learning → Systems &amp; Simulation → Safety &amp; Human Factors</td>
-<td>全部（约 61 页）</td>
+<td>全部 63 篇核心章节，并按需补 Machine Learning 与 Yau Contest 专题</td>
 </tr>
 <tr>
 <td>做控制与机器人</td>
@@ -4968,11 +5028,11 @@
       <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

@@ -37,6 +37,7 @@ nav:
     - Proof Language & Calculus: yau-contest/00-proof-skills-notation.md
     - Matrix Norms & Spectral Theory: yau-contest/01-matrix-norms-spectral.md
     - SVD & Least Squares: yau-contest/02-svd-least-squares.md
+    - Pseudoinverse & Low-Rank Approximation: yau-contest/02-pseudoinverse-low-rank.md
     - Linear Iterations & Power Method: yau-contest/03-linear-iterations-power.md
     - Fixed Points & Contractions: yau-contest/04-fixed-points-contractions.md
     - Newton's Method & Convergence Order: yau-contest/05-newton-convergence.md
@@ -62,7 +63,8 @@ nav:
 - Decision & Learning:
   - Machine Learning Foundations:
     - Overview: decision-learning/machine-learning/index.md
-    - Machine Learning & Neural Network Basics: decision-learning/machine-learning/01-ml-neural-network-basics.md
+    - Machine Learning Training Basics: decision-learning/machine-learning/01-ml-neural-network-basics.md
+    - Neural Network Architectures: decision-learning/machine-learning/02-neural-network-architectures.md
   - Reinforcement Learning:
     - Overview: decision-learning/reinforcement-learning/index.md
     - MDP & Bellman Equation: decision-learning/reinforcement-learning/01-mdp-bellman.md
@@ -151,7 +153,7 @@ extra_css:
 - css/custom.css
 extra_javascript:
 - javascripts/mathjax.js
-- https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+- vendor/mathjax/es5/tex-mml-chtml.js
 plugins:
 - search:
     lang:

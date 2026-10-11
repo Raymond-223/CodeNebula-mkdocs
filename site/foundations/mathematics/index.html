@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1505,6 +1535,8 @@
       
         
       
+        
+      
     
     
     
@@ -1573,7 +1605,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -4292,7 +4352,7 @@
 <p>逐一展开：</p>
 <ol>
 <li><strong>符号先于语义。</strong> 离散分布用概率质量函数，求和恒为 1；连续分布用概率密度，积分才为 1，而密度本身可以大于 1。把两者混用会导致把「概率为零」和「不可能」混为一谈 —— 连续分布下每个点的概率都是零，但事件确实会发生。</li>
-<li><strong>可微与可解是两回事。</strong> <span class="arithmatex">\(\nabla_\theta J(\theta)=0\)</span> 是必要条件而非充分条件；只有凸性才能把它升级为充要条件。非凸问题上，梯度为零的点可能是极小、极大或鞍点。</li>
+<li><strong>可微与可解是两回事。</strong> <span class="arithmatex">\(\nabla_\theta J(\theta)=0\)</span> 通常只是局部最优的一阶必要条件。在无约束、可微、凸优化等条件下，梯度为零才是全局最优的充要条件；非凸问题上，梯度为零的点可能是极小、极大或鞍点。</li>
 <li><strong>有限精度是真实约束。</strong> 数学上的等价变形在浮点下可能数值不稳定。例如 <span class="arithmatex">\(\text{softmax}\)</span> 对 <span class="arithmatex">\(10^3\)</span> 量级输入直接取指数会溢出，工程实现要减去最大值；再如大数相减会造成有效位抵消。</li>
 <li><strong>不确定性与约束同时存在时，优化问题不再有单一答案。</strong> 期望最优、最坏情况最优、鲁棒最优是三个不同目标，对应不同的解。</li>
 </ol>
@@ -4712,11 +4772,11 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

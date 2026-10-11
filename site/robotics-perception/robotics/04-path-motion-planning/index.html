@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1502,6 +1532,8 @@
       
         
       
+        
+      
     
     
     
@@ -1570,7 +1602,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -4446,11 +4506,11 @@
 <h2 id="_1">图搜索适合已经离散化的空间</h2>
 <p>栅格地图中，每个格子可以看作节点，相邻可通行格子之间形成边。Dijkstra 根据累计代价扩展节点；A* 在此基础上加入启发函数 <span class="arithmatex">\(h(n)\)</span>，优先搜索更可能靠近目标的方向：</p>
 <div class="arithmatex">\[f(n)=g(n)+h(n).\]</div>
-<p>这里 <span class="arithmatex">\(g(n)\)</span> 是从起点到节点 <span class="arithmatex">\(n\)</span> 的已知最小代价，<span class="arithmatex">\(h(n)\)</span> 是对 <span class="arithmatex">\(n\)</span> 到目标剩余代价的估计。只要启发函数不高估真实剩余代价，A* 仍能保持最优性，同时通常比 Dijkstra 少扩展大量无关区域。</p>
+<p>这里 <span class="arithmatex">\(g(n)\)</span> 是当前已找到的起点到节点 <span class="arithmatex">\(n\)</span> 的最小候选代价；节点按正确条件从队列弹出后，这个值才会被最终确认。<span class="arithmatex">\(h(n)\)</span> 是对 <span class="arithmatex">\(n\)</span> 到目标剩余代价的估计。在边权非负、启发函数不高估、并对不一致启发正确处理节点重新打开的前提下，A* 能保持最优性，同时通常比 Dijkstra 少扩展无关区域。</p>
 <p>离散化本身有两个容易忽略的参数：</p>
 <ul>
 <li><strong>栅格分辨率</strong> <span class="arithmatex">\(r\)</span>：<span class="arithmatex">\(r\)</span> 取小则路径精细、计算量与内存按 <span class="arithmatex">\(O(r^{-2})\)</span> 增长；<span class="arithmatex">\(r\)</span> 取大则窄通道可能被“抹平”，出现假不可达。</li>
-<li><strong>连通度</strong>：4 邻域只能走水平/垂直，路径长度比欧氏距离最多长 <span class="arithmatex">\((\sqrt{2}-1)/\sqrt{2}\approx 29\%\)</span>；8 邻域允许对角，误差降到约 <span class="arithmatex">\(8\%\)</span>，代价是转弯更生硬。</li>
+<li><strong>连通度</strong>：4 邻域只能走水平或垂直。以欧氏最短距离为分母，最坏方向是 <span class="arithmatex">\(45^\circ\)</span>，此时相对超长比例为 <span class="arithmatex">\(\sqrt2-1\approx41.4\%\)</span>；8 邻域允许对角，最坏相对误差约为 <span class="arithmatex">\(8.2\%\)</span>，代价是转弯更生硬。</li>
 </ul>
 <p>因此“图搜索能用”的前提是：<strong>环境的空间维度和分辨率已经让状态空间可枚举。</strong> 一旦维度升到 7 自由度机械臂，直接网格化的节点数是 <span class="arithmatex">\(O(r^{-7})\)</span>，这条路线就崩了。</p>
 <p>另一个容易吃亏的地方是<strong>边的代价定义</strong>。同一张栅格图，边的权重取法不同，搜索出来的路径风格完全不同：</p>
@@ -4491,7 +4551,7 @@
 </tbody>
 </table>
 <p>其中 <span class="arithmatex">\(c_v\in[0,1]\)</span> 是节点 <span class="arithmatex">\(v\)</span> 的代价地图取值（0 表示完全自由，1 表示致命障碍），<span class="arithmatex">\(\lambda\ge 0\)</span> 是惩罚强度。<strong>只要 <span class="arithmatex">\(c_v\ge 0\)</span>，这类加权代价仍然非负，A* 的可采纳性条件不受影响</strong>；但如果为了“抄近道”允许负代价，Dijkstra 与 A* 的最优性证明立刻失效。</p>
-<p>工程上还有两个实现细节直接影响扩展节点数：用<strong>开放列表（open list）</strong> 保存待扩展节点、<strong>封闭列表（closed list）</strong> 记录已定型节点，能避免重复入队；当多条路径代价相等时，按 <span class="arithmatex">\(h\)</span> 值做 tie-breaking（优先扩展 <span class="arithmatex">\(h\)</span> 更小的）可以把扩展节点数再降 10%–30%，且完全不影响最优性。</p>
+<p>工程上还有两个实现细节直接影响扩展节点数：用<strong>开放列表（open list）</strong> 保存待扩展节点、<strong>封闭列表（closed list）</strong> 记录已定型节点，能避免重复入队；当多条路径代价相等时，按 <span class="arithmatex">\(h\)</span> 值做 tie-breaking（优先扩展 <span class="arithmatex">\(h\)</span> 更小的）通常会改变扩展顺序，并可能减少扩展节点数。减少幅度依赖地图、启发函数和重复节点处理策略，不能写成脱离实验条件的固定百分比；在一致启发函数和正确实现下，这种平局处理不改变最优性。</p>
 <h2 id="_2">图搜索与启发函数</h2>
 <p>三种最常用变体的差别只在优先级函数的构造，但工程后果差别很大。</p>
 <table>
@@ -4501,7 +4561,7 @@
 <th>优先级 <span class="arithmatex">\(f(n)\)</span></th>
 <th>最优性</th>
 <th>完备性</th>
-<th>典型扩展节点数（同一地图）</th>
+<th>示意性的相对扩展量</th>
 </tr>
 </thead>
 <tbody>
@@ -4510,35 +4570,35 @@
 <td><span class="arithmatex">\(g(n)\)</span></td>
 <td>最优</td>
 <td>完备</td>
-<td>约 <span class="arithmatex">\(6.0\times10^{5}\)</span></td>
+<td>通常最多</td>
 </tr>
 <tr>
 <td>A*</td>
 <td><span class="arithmatex">\(g(n)+h(n)\)</span>，<span class="arithmatex">\(h\)</span> 可采纳</td>
 <td>最优</td>
 <td>完备</td>
-<td>约 <span class="arithmatex">\(4.0\times10^{4}\)</span></td>
+<td>随启发函数变紧而减少</td>
 </tr>
 <tr>
 <td>加权 A*（<span class="arithmatex">\(\varepsilon=1.5\)</span>）</td>
 <td><span class="arithmatex">\(g(n)+1.5\,h(n)\)</span></td>
 <td>有界次优</td>
 <td>完备</td>
-<td>约 <span class="arithmatex">\(8.0\times10^{3}\)</span></td>
+<td>通常少于 A*</td>
 </tr>
 <tr>
 <td>贪婪最佳优先</td>
 <td><span class="arithmatex">\(h(n)\)</span></td>
 <td>不保证</td>
-<td>非完备（有限图完备）</td>
-<td>约 <span class="arithmatex">\(1.5\times10^{3}\)</span></td>
+<td>有限图上完备</td>
+<td>可能很少，但可能严重绕路</td>
 </tr>
 </tbody>
 </table>
-<p>上表取自一张 <span class="arithmatex">\(1000\times1000\)</span> 栅格、障碍占比 20%、起点到目标直线距离约 900 格、最优路径长度 <span class="arithmatex">\(L^{*}\approx1400\)</span> 格的标准设定。可以清楚看到：<strong>从 Dijkstra 到加权 A*，扩展节点数下降了近两个数量级，代价是最优路径最多长 <span class="arithmatex">\((\varepsilon-1)\)</span>。</strong></p>
+<p>上表只表达算法之间常见的相对趋势，不是某张未提供生成代码的地图上的测量结果。实际扩展节点数必须同时报告地图、邻接规则、启发函数、平局策略、重复节点处理和随机种子。加权 A* 的可证明结论是解代价满足相应的次优上界，而不是扩展节点数必然下降某个固定比例。</p>
 <p>启发函数的两个性质决定结论：</p>
 <ul>
-<li><strong>可采纳性（admissible）</strong>：对所有节点 <span class="arithmatex">\(h(n)\le h^{*}(n)\)</span>，即永不高估。可采纳 <span class="arithmatex">\(\Rightarrow\)</span> A<em> 返回最优解。<span class="arithmatex">\(h\equiv 0\)</span> 时 A</em> 退化成 Dijkstra。</li>
+<li><strong>可采纳性（admissible）</strong>：对所有节点 <span class="arithmatex">\(h(n)\le h^{*}(n)\)</span>，即永不高估。在非负边权和正确重复节点处理下，可采纳启发使 A<em> 返回最优解。<span class="arithmatex">\(h\equiv 0\)</span> 时 A</em> 退化成 Dijkstra。</li>
 <li><strong>一致性（consistent / monotone）</strong>：<span class="arithmatex">\(h(n)\le c(n,n')+h(n')\)</span>。一致性是可采纳的充分条件，且保证每个节点最多被扩展一次；不一致但可采纳的启发函数仍最优，但可能重复扩展节点。</li>
 </ul>
 <p>常用启发函数的紧致程度：</p>
@@ -4578,14 +4638,14 @@
 </tr>
 </tbody>
 </table>
-<p><strong>启发函数的“估计误差”直接换算成扩展节点数。</strong> 记相对误差 <span class="arithmatex">\(\eta=(h^{*}-h)/h^{*}\)</span>，在均匀代价栅格上，A* 的扩展区域近似是一个以起点和终点为焦点的椭圆，其面积随 <span class="arithmatex">\(\eta\)</span> 增大而膨胀。<span class="arithmatex">\(\eta=0\)</span>（完美启发）时只扩展最优路径上的节点；<span class="arithmatex">\(\eta=1\)</span>（<span class="arithmatex">\(h=0\)</span>，即 Dijkstra）时扩展到整个可达区域。这解释了为什么花力气设计紧致启发函数通常是划算的。</p>
+<p><strong>启发函数越紧，通常需要扩展的候选区域越小。</strong> 在均匀代价栅格上，可把 A* 的候选区域近似理解成一个以起点和终点为焦点的区域；启发越松，这个区域越宽。即使 <span class="arithmatex">\(h=h^*\)</span>，若存在多条等长路径，平局策略仍可能扩展多个满足 <span class="arithmatex">\(f=C^*\)</span> 的节点，不能绝对地说“只扩展一条路径”。当 <span class="arithmatex">\(h=0\)</span> 时算法退化成 Dijkstra；在目标从优先队列弹出前，它通常处理的是起点代价不超过最优目标距离 <span class="arithmatex">\(C^*\)</span> 的节点，而不是无条件扩展整个可达区域。</p>
 <p>加权 A* 引入次优上界：若 <span class="arithmatex">\(h\)</span> 可采纳，<span class="arithmatex">\(f=g+\varepsilon h\)</span> 搜索得到的解满足</p>
 <div class="arithmatex">\[C\le \varepsilon\cdot C^{*},\]</div>
-<p>即最坏情况下路径代价是最优的 <span class="arithmatex">\(\varepsilon\)</span> 倍。<span class="arithmatex">\(\varepsilon=1.5\)</span> 时允许最多 50% 的额外代价，但实测往往只有 3%–10%——<strong>次优界是上界，不是期望值。</strong></p>
+<p>即最坏情况下路径代价是最优的 <span class="arithmatex">\(\varepsilon\)</span> 倍。<span class="arithmatex">\(\varepsilon=1.5\)</span> 时理论上允许最多 50% 的额外代价；实际差距取决于地图、启发函数和平局策略，不能脱离实验条件给出固定百分比。<strong>次优界是上界，不是期望值。</strong></p>
 <h2 id="_3">采样规划适合高维连续空间</h2>
 <p>机械臂有很多关节，自由空间难以完整离散化。RRT 一类方法通过随机采样逐步构造可达树，不需要先显式建立整个配置空间网格。</p>
 <p>其核心流程是：每次随机取一个配置 <span class="arithmatex">\(q_{\text{rand}}\)</span>，找到树中距离最近的节点 <span class="arithmatex">\(q_{\text{near}}\)</span>，沿连线朝 <span class="arithmatex">\(q_{\text{rand}}\)</span> 前进固定步长 <span class="arithmatex">\(\delta\)</span> 得到 <span class="arithmatex">\(q_{\text{new}}\)</span>，若这段线段无碰撞则加入树中。因此搜索树是<strong>边探索边生长</strong>的，而不是预先存在的。</p>
-<p>这一族方法的关键优势是<strong>复杂度随维度增长温和</strong>（通常接近 <span class="arithmatex">\(O(\log n)\)</span> 级别的碰撞检测次数），对 7–30 维配置空间仍然可用；代价是它不保证找到最优解，而且每次运行结果不同。</p>
+<p>这一族方法不需要完整枚举高维配置空间，因此在网格法难以承受的高维问题中仍可能实用。若用平衡空间索引，单次最近邻查询平均可接近 <span class="arithmatex">\(O(\log n)\)</span>；这不是整个规划过程的碰撞检测复杂度。每次扩展通常至少要检查一条候选边，运行到 <span class="arithmatex">\(n\)</span> 次采样时碰撞检测调用量通常随尝试次数近似线性增长，而每次检测本身的代价还取决于机器人几何、边离散精度和障碍数量。RRT 不保证最优，且每次运行结果不同。</p>
 <p>“配置”在这里有严格含义：配置 <span class="arithmatex">\(q\)</span> 是完整描述机器人形态的广义坐标，<span class="arithmatex">\(d\)</span> 自由度机械臂的配置空间 <span class="arithmatex">\(\mathcal{C}\)</span> 是 <span class="arithmatex">\(d\)</span> 维流形，障碍区 <span class="arithmatex">\(\mathcal{C}_{\text{obs}}\)</span> 是那些会让机器人发生碰撞的配置集合。规划的目标是找到一条完全落在自由空间</p>
 <div class="arithmatex">\[\mathcal{C}_{\text{free}}=\mathcal{C}\setminus\mathcal{C}_{\text{obs}}\]</div>
 <p>内的连续曲线。碰撞检测看的是<strong>整条边</strong> <span class="arithmatex">\(q(s)=(1-s)q_{\text{near}}+s\,q_{\text{new}},\ s\in[0,1]\)</span>，而不是两个端点——这是采样规划里最容易被实现错的地方，也是“路径穿墙”的典型来源。</p>
@@ -4643,7 +4703,7 @@
 <li><strong>重选父节点</strong>：对新节点 <span class="arithmatex">\(q_{\text{new}}\)</span>，在以它为中心半径 <span class="arithmatex">\(r(n)\)</span> 的邻域内，选累计代价最小的节点作为父节点；</li>
 <li><strong>重连（rewire）</strong>：把邻域内已有节点尝试改接到 <span class="arithmatex">\(q_{\text{new}}\)</span> 上，若绕行代价更低则改接。</li>
 </ol>
-<p>半径需满足 <span class="arithmatex">\(r(n)=\gamma\left(\frac{\log n}{n}\right)^{1/d}\)</span>（<span class="arithmatex">\(d\)</span> 为空间维度），才能保证渐近最优。维度越高，同一 <span class="arithmatex">\(n\)</span> 下有效半径越小，收敛越慢——<strong>在 7 维机械臂上，RRT* 往往需要数万次采样才明显优于 RRT。</strong></p>
+<p>在常见理论假设下，邻域半径要按 <span class="arithmatex">\(r(n)=\gamma\left(\frac{\log n}{n}\right)^{1/d}\)</span> 的量级选择（实现中通常还会与一个最大半径取最小），且常数 <span class="arithmatex">\(\gamma\)</span> 必须满足与自由空间体积和维数有关的条件，才能得到渐近最优结论。维度越高，有限采样下覆盖空间越困难；需要多少次采样才能体现优势取决于具体配置空间、碰撞检测器和终止预算，不能用固定次数概括。</p>
 <p>参数敏感性是实机上更实际的约束：</p>
 <table>
 <thead>
@@ -4651,37 +4711,37 @@
 <th>参数</th>
 <th>取值偏小</th>
 <th>取值偏大</th>
-<th>经验起点</th>
+<th>设定依据</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>步长 <span class="arithmatex">\(\delta\)</span></td>
 <td>采样效率低、树增长慢</td>
-<td>易“跳过”窄通道、碰撞检测变粗</td>
-<td>机器人特征尺寸的 1–2 倍</td>
+<td>易跨过窄通道，边检查更困难</td>
+<td>在配置空间度量下标定；关节角与平移量必须先统一尺度</td>
 </tr>
 <tr>
 <td>目标偏置概率</td>
-<td>收敛慢</td>
-<td>易被困在局部、树偏斜</td>
-<td>0.05–0.10</td>
+<td>直接朝目标的尝试少</td>
+<td>探索不足，容易反复撞向同一区域</td>
+<td>用代表性场景和固定预算做成功率/耗时验证</td>
 </tr>
 <tr>
 <td>碰撞检测余量</td>
-<td>贴障碍，实机抖动</td>
+<td>贴障碍，对模型误差敏感</td>
 <td>通道被堵，误判不可达</td>
-<td>机器人半径 + 5–10 cm</td>
+<td>由定位、几何模型和跟踪误差的不确定性预算确定</td>
 </tr>
 <tr>
-<td>邻域半径 <span class="arithmatex">\(\gamma\)</span></td>
-<td>退化为普通 RRT</td>
-<td>计算量爆炸</td>
-<td>由 <span class="arithmatex">\(r(n)\)</span> 公式定标</td>
+<td>邻域常数 <span class="arithmatex">\(\gamma\)</span></td>
+<td>重连机会不足</td>
+<td>邻居过多，计算量上升</td>
+<td>满足理论下界后再按有限样本计算预算验证</td>
 </tr>
 </tbody>
 </table>
-<p>“找不到路径”在采样规划中有两种截然不同的含义：一是真无解，二是<strong>采样不够或余量过大导致概率性漏检</strong>。诊断方法是固定随机种子重复跑 20–50 次：若偶尔成功，说明是概率问题而非拓扑问题。</p>
+<p>“找不到路径”在采样规划中有两种截然不同的含义：一是真无解，二是<strong>采样不够或余量过大导致概率性漏检</strong>。诊断时应先固定时间或采样预算，再使用一组预先记录的随机种子重复实验并报告成功率；若同一场景有时成功、有时失败，至少说明有限预算下存在随机性，但仍不能仅凭偶发成功或失败断言拓扑性质。</p>
 <h2 id="_5">路径与轨迹不完全相同</h2>
 <p>路径主要描述几何位置序列；轨迹还包含时间、速度和加速度。一个几何上不碰障碍的急转弯，车辆可能因为最小转弯半径而无法执行。</p>
 <p>正式地，路径是映射 <span class="arithmatex">\(\sigma:[0,1]\to\mathcal{C}_{\text{free}}\)</span>，<span class="arithmatex">\(\sigma(s)\)</span> 只依赖弧长参数 <span class="arithmatex">\(s\)</span>；轨迹是映射 <span class="arithmatex">\(x:[0,T]\to\mathcal{C}\)</span>，同时给出各时刻的速度与加速度，必须满足微分约束</p>
@@ -4690,11 +4750,16 @@
 <div class="arithmatex">\[R_{\min}=\frac{v^{2}}{a_{\max}}.\]</div>
 <p><span class="arithmatex">\(v=3\ \text{m/s}\)</span>、<span class="arithmatex">\(a_{\max}=3\ \text{m/s}^2\)</span> 时 <span class="arithmatex">\(R_{\min}=3\ \text{m}\)</span>；路径若给出半径 1 m 的直角弯，则必须降速到 <span class="arithmatex">\(v=\sqrt{a_{\max}R}\approx1.73\ \text{m/s}\)</span> 才能执行。<strong>几何可行 ≠ 动态可行</strong>，这正是“路径”与“轨迹”分层的必要性。</p>
 <p>从路径到轨迹的这一步叫<strong>时间参数化（time parameterization）</strong>：给定路径 <span class="arithmatex">\(\sigma(s)\)</span>，求一个单调递增的时间映射 <span class="arithmatex">\(s(t)\)</span>，使速度与加速度落在限值内：</p>
-<div class="arithmatex">\[v(t)=\dot s(t)\le v_{\max},\qquad a(t)=\ddot s(t)\le a_{\max}.\]</div>
+<div class="arithmatex">\[
+\dot x(t)=\sigma'(s)\dot s,
+\qquad
+\ddot x(t)=\sigma''(s)\dot s^2+\sigma'(s)\ddot s.
+\]</div>
+<p>若 <span class="arithmatex">\(s\)</span> 是弧长参数，则 <span class="arithmatex">\(\|\sigma'(s)\|=1\)</span>，所以速度大小为 <span class="arithmatex">\(|\dot s|\)</span>；但物理加速度同时包含切向项 <span class="arithmatex">\(\sigma'(s)\ddot s\)</span> 与由路径曲率产生的法向项 <span class="arithmatex">\(\sigma''(s)\dot s^2\)</span>。因此约束应分别检查切向加速度、法向加速度或直接检查 <span class="arithmatex">\(\|\ddot x(t)\|\)</span>，不能把 <span class="arithmatex">\(\ddot s\)</span> 当作全部加速度。</p>
 <p>沿路径的几何曲率 <span class="arithmatex">\(\kappa(s)\)</span> 给出额外的向心约束</p>
 <div class="arithmatex">\[\dot s^{2}(t)\,\kappa(s(t))\le a_{\text{lat,max}},\]</div>
 <p>即<strong>曲率越大，允许的速度上限越低</strong>：<span class="arithmatex">\(\kappa=1\ \text{m}^{-1}\)</span>、<span class="arithmatex">\(a_{\text{lat,max}}=4\ \text{m/s}^2\)</span> 时 <span class="arithmatex">\(v\le2\ \text{m/s}\)</span>。工程上常用的做法是先把限速曲线按曲率算出来，再对它做前后向扫描取最小，最后按最小时间律积分出 <span class="arithmatex">\(s(t)\)</span>。</p>
-<p>另一个实际约束是<strong>避障余量随时间变化</strong>：静态地图上安全的位置，在有动态障碍时可能不再安全。因此轨迹层通常只在 3–10 s 的预测视界内做完整参数化，超出视界仍用路径表示。</p>
+<p>另一个实际约束是<strong>避障余量随时间变化</strong>：静态地图上安全的位置，在有动态障碍时可能不再安全。因此轨迹层通常只在有限预测视界内做完整参数化，超出视界仍可用路径或较粗预测表示；视界长度必须由传感器范围、预测误差、速度和制动距离共同确定，不能给出跨系统通用的秒数。</p>
 <p>因此真实规划通常要把机器人尺寸、最大速度、转向约束和安全距离加入可行性检查。</p>
 <h2 id="_6">轨迹优化与动力学可行性</h2>
 <p>轨迹优化把规划写成带约束的数值优化问题：在满足动力学与障碍约束的前提下最小化一个代价泛函。常见形式为</p>
@@ -4961,11 +5026,11 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

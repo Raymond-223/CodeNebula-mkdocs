@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1796,6 +1826,8 @@
       
         
       
+        
+      
     
     
     
@@ -1864,7 +1896,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -5235,18 +5295,24 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),\qquad J=[A\ B].
 <li><strong>可控性（controllability）</strong>：输入能不能把状态推到任意想去的地方？</li>
 <li><strong>可观性（observability）</strong>：只靠量测 <span class="arithmatex">\(y=Cx\)</span>，能不能把内部状态全反推出来？</li>
 </ul>
-<p>先建立最直观的版本。把系统换到解耦坐标（第六节已经证明换坐标不改变特征值），让每个状态独立演化：</p>
+<p>先建立一个带明确限制的直观版本。假设系统是单输入、单输出，<span class="arithmatex">\(A\)</span> 可对角化，并且下面两个特征值互不相同。换到特征向量坐标后：</p>
 <div class="arithmatex">\[
 A=\begin{bmatrix}\lambda_1&amp;0\\0&amp;\lambda_2\end{bmatrix},\quad
 B=\begin{bmatrix}b_1\\b_2\end{bmatrix},\quad
 C=\begin{bmatrix}c_1&amp;c_2\end{bmatrix}.
 \]</div>
-<p>这时 <span class="arithmatex">\(\dot x_1=\lambda_1x_1+b_1u\)</span>、<span class="arithmatex">\(\dot x_2=\lambda_2x_2+b_2u\)</span>，一眼就能读出两件事：</p>
+<p>这时 <span class="arithmatex">\(\dot x_1=\lambda_1x_1+b_1u\)</span>、<span class="arithmatex">\(\dot x_2=\lambda_2x_2+b_2u\)</span>。在“特征值互不相同”这个条件下，可以读出：</p>
 <ul>
 <li>模态 1 能被输入驱动，<strong>当且仅当 <span class="arithmatex">\(b_1\neq0\)</span></strong>；<span class="arithmatex">\(b_1=0\)</span> 时它自己闷头演化，输入对它的影响恒等于零；</li>
 <li>模态 1 能被看见，<strong>当且仅当 <span class="arithmatex">\(c_1\neq0\)</span></strong>；<span class="arithmatex">\(c_1=0\)</span> 时它在输出里永远不露面。</li>
 </ul>
-<p>这就是 <strong>PBH 判据</strong>的全部直觉：<strong>逐个模态看，它有没有被输入接上、有没有被输出接上。</strong></p>
+<p>这给出 <strong>PBH 判据</strong>的直觉：<strong>逐个左特征向量方向检查输入是否接入，逐个右特征向量方向检查输出是否看见。</strong> 不能把“每个 <span class="arithmatex">\(b_i\ne0\)</span>”无条件推广到重复特征值或一般坐标。反例是</p>
+<div class="arithmatex">\[
+A=\begin{bmatrix}0&amp;0\\0&amp;0\end{bmatrix},
+\qquad
+B=\begin{bmatrix}1\\1\end{bmatrix}.
+\]</div>
+<p>虽然两个分量都非零，但 <span class="arithmatex">\([B,AB]=\begin{bmatrix}1&amp;0\\1&amp;0\end{bmatrix}\)</span> 的秩只有 1，系统并不完全可控。因此一般情形必须使用下面的秩判据，或等价的 PBH 判据 <span class="arithmatex">\(\operatorname{rank}[\lambda I-A,\ B]=n\)</span>。</p>
 <p>一般写法是可控性矩阵与可观性矩阵：</p>
 <div class="arithmatex">\[
 \mathcal{C}=[B,\ AB,\ A^{2}B,\ \dots,\ A^{n-1}B],\qquad
@@ -5532,11 +5598,11 @@ C=\begin{bmatrix}c_1&amp;c_2\end{bmatrix}.
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

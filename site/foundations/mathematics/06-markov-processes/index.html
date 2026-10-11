@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -564,6 +564,8 @@
       
         
       
+        
+      
     
     
     
@@ -680,6 +682,34 @@
     
   
     SVD & Least Squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yau-contest/02-pseudoinverse-low-rank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudoinverse & Low-Rank Approximation
   
 
     
@@ -1841,6 +1871,8 @@
       
         
       
+        
+      
     
     
     
@@ -1909,7 +1941,35 @@
   <span class="md-ellipsis">
     
   
-    Machine Learning & Neural Network Basics
+    Machine Learning Training Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../decision-learning/machine-learning/02-neural-network-architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Network Architectures
   
 
     
@@ -5217,7 +5277,7 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0 .
 </tbody>
 </table>
 <p>这张表是排队系统最反直觉的地方：利用率从 0.9 提到 0.99，只多了 10%，平均队长却从 9 涨到 99，<strong>涨了 11 倍</strong>。原因在闭式解里看得很清楚——队长正比于 <span class="arithmatex">\(1/(1-\rho)\)</span>，分母在接近临界时塌下去。</p>
-<p>它顺手给出了平稳分布存在的<strong>前提</strong>：必须 <span class="arithmatex">\(\lambda&lt;\mu\)</span>（即 <span class="arithmatex">\(\rho&lt;1\)</span>）。若到达率不小于服务率，队长的漂移方向是向上的，永远回不到 0，平稳分布根本不存在，上面所有公式都不适用。</p>
+<p>它顺手给出了正常平稳分布存在的<strong>前提</strong>：必须 <span class="arithmatex">\(\lambda&lt;\mu\)</span>（即 <span class="arithmatex">\(\rho&lt;1\)</span>）。若 <span class="arithmatex">\(\lambda&gt;\mu\)</span>，队长具有向上的正漂移；若 <span class="arithmatex">\(\lambda=\mu\)</span>，链是零常返（null recurrent）的：从有限队长出发仍会以概率 1 返回 0，但平均返回时间无限，因此同样不存在可归一化的平稳概率分布。两种情况下上表公式都不适用。</p>
 <hr />
 <h2 id="_6">十、马尔可夫链收敛实验</h2>
 <h3 id="101">10.1 晴雨链的数值验证</h3>
@@ -5238,7 +5298,7 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0 .
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;平稳分布 pi=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">  校验 pi@P=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pi</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-<span class="n">lam2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>         <span class="c1"># 模第二大的特征值</span>
+<span class="n">lam2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 按模降序后的第二项</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;特征值=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">  |lam2|=</span><span class="si">{</span><span class="n">lam2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;按 log(1/eps)/(1-|lam2|) 估，到 0.01 精度约 </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lam2</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> 步&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -5268,17 +5328,19 @@ Q_{ij}\ge0\ (i\ne j),\qquad Q_{ii}=-\sum_{j\ne i}Q_{ij},\qquad \sum_j Q_{ij}=0 .
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">):</span>                 <span class="c1"># 迭代 1000 步，取 4 个检查点</span>
         <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">):</span>
-            <span class="n">dist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>     <span class="c1"># 与平稳分布的总变差距离</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># 总变差距离 = L1 距离的一半</span>
     <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dist</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> |lam2|=</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">P</span><span class="p">)))[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">eig_mod</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">P</span><span class="p">)),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> |lam2|=</span><span class="si">{</span><span class="n">eig_mod</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">距离衰减（每格 0.1，上限 2.0）  列：k=1 / 4 / 16 / 64 / 200&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">总变差距离（每格 0.1，上限 1.0）  列：k=1 / 4 / 16 / 64 / 200&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">chains</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">bars</span> <span class="o">=</span> <span class="n">stationary</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">mu0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">):</span>
         <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">200</span><span class="p">):</span>
-            <span class="n">bars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)))</span>
+            <span class="n">tv</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">bars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">tv</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)))</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bars</span><span class="p">))</span>
 </code></pre></div>
 <hr />
@@ -5456,11 +5518,11 @@ I-Q=\begin{pmatrix}0.02&amp;-0.02\\-0.05&amp;0.15\end{pmatrix}.
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../../../vendor/mathjax/es5/tex-mml-chtml.js"></script>
       
     
   </body>

@@ -11,7 +11,7 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 ## 独立竞赛专题
 
-**[Yau Contest — Computational and Applied Mathematics](yau-contest/index.md)** 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 **Stage 1: Matrix Theory & Iteration**，包含七章教材式内容，从最基础的数学证明语言讲到SVD、谱半径、幂法、压缩映射和Newton收敛。
+**[Yau Contest — Computational and Applied Mathematics](yau-contest/index.md)** 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 **Stage 1: Matrix Theory & Iteration**，包含八章教材式内容，从最基础的数学证明语言讲到 SVD、谱半径、幂法、压缩映射和 Newton 收敛。
 
 这个专题是针对**投入时间有限、希望知识也服务AI科研**的读者的选择性备赛线，不以试卷全部题目全做出来为目标。
 
@@ -29,21 +29,21 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 这一偏序可以写成一个依赖关系：若领域 $D_i$ 是 $D_j$ 的前置，记 $D_i \prec D_j$，则合法阅读顺序就是该偏序的一个线性扩展。
 
-| 领域 | 章数 | 约页数 | 是否可跳过 |
-|---|---|---|---|
-| Foundations | 11 | 约 11 页 | 不建议 |
-| Decision & Learning | 16 | 约 16 页 | 按方向 |
-| Robotics & Perception | 10 | 约 10 页 | 按方向 |
-| Systems & Simulation | 14 | 约 14 页 | 按方向 |
-| Safety & Human Factors | 10 | 约 10 页 | 不建议 |
+| 领域 | 核心章数 | 主要目标层次 | 是否可跳过 |
+|---|---:|---|---|
+| Foundations | 13 | 会计算，并能判断定理或工程判据的适用条件 | 不建议 |
+| Decision & Learning | 16 | 会建立决策模型、解释算法更新并用于小型算例 | 按方向 |
+| Robotics & Perception | 10 | 会把方法连接到坐标、噪声和物理约束 | 按方向 |
+| Systems & Simulation | 14 | 会实现、测量并诊断可运行系统 | 按方向 |
+| Safety & Human Factors | 10 | 会识别失效条件并设计验证与降级方案 | 不建议 |
 
-整门课程的规模约为
+五个领域的核心课程规模为
 
-$$|P_{\text{full}}| = \sum_{D} n_D \approx 61\ \text{页},$$
+$$|P_{\text{core}}| = \sum_{D} n_D = 63\ \text{章}.$$
 
-其中 $n_D$ 是领域 $D$ 的页数。若只想建立某一方向的可用能力，通常需要其中 30 页左右。
+其中 $n_D$ 是领域 $D$ 的核心章节数。除此之外，站点还有 2 篇独立的 Machine Learning 入门正文，以及 8 篇 Yau Contest 专题正文；它们不重复计入上述 63 篇核心章节。若只想建立某一方向的可用能力，通常需要其中约 30 篇核心章节，再按具体依赖补充相应专题。
 
-表里“章数”与“约页数”刻意取一致，目的是让读者在规划时间时有一个诚实的一阶估计，而不是被“章节很多”或“很快能读完”这两种错觉之一误导。
+这里统计 Markdown 核心章节，而不是浏览器排版后的纸张页数；不同章节的证明与例题密度不同，不能再用“一章约等于一页”估算学习时间。
 
 前置关系不是为了设置门槛，而是为了让后面的内容有落脚点。例如 Control Theory 里的稳定性概念会反复出现在 Robotics 的控制回路和 Safety 的降级策略中；Mathematics 里的概率语言会出现在 Perception 的估计与 Robustness 的分布变化里。缺少这些落脚点，后面的内容就只剩结论。
 
@@ -111,7 +111,7 @@ $$|P_{\text{full}}| = \sum_{D} n_D \approx 61\ \text{页},$$
 
 | 目标 | 建议顺序 | 大约页数 |
 |---|---|---|
-| 建立完整视野 | Foundations → Robotics & Perception → Decision & Learning → Systems & Simulation → Safety & Human Factors | 全部（约 61 页） |
+| 建立完整视野 | Foundations → Robotics & Perception → Decision & Learning → Systems & Simulation → Safety & Human Factors | 全部 63 篇核心章节，并按需补 Machine Learning 与 Yau Contest 专题 |
 | 做控制与机器人 | Mathematics → Control Theory → Robotics → Perception → Safety & Human Factors | 约 30 页 |
 | 做学习与决策 | Mathematics → Reinforcement Learning → Game Theory → Multi-Agent Systems → Systems & Simulation | 约 30 页 |
 | 做系统工程 | Foundations（略读）→ Robotics & Perception → Systems & Simulation → Safety & Human Factors | 约 35 页 |
