@@ -62,7 +62,7 @@
 
 ---
 
-## 三、State Variables
+## 三、状态变量（State Variables）
 
 先给定义，再解释它为什么长这样。
 

@@ -1,8 +1,8 @@
 # Matrix Norms & Spectral Theory
 
-矩阵既可以看成数字表，也可以看成 linear map。后一个观点解释了范数、特征值、正定性和迭代收敛之间的关系。
+矩阵既可以看成数字表，也可以看成线性映射（linear map）。后一个观点解释了范数、特征值、正定性和迭代收敛之间的关系。
 
-## Linear Maps and Matrix Dimensions
+## 线性映射与矩阵维数
 
 $A\in\mathbb R^{m\times n}$ 定义映射
 
@@ -19,9 +19,9 @@ $$
 
 则 $Ae_1=(1,3)^T$、$Ae_2=(2,4)^T$。矩阵乘法 $AB$ 表示先施加 $B$，再施加 $A$，所以一般 $AB\ne BA$。
 
-### Rank, Kernel, and Column Space
+### 秩、核与列空间
 
-零空间 kernel 与列空间 column space 定义为
+零空间（kernel）与列空间（column space）定义为
 
 $$
 \ker(A)=\{x:Ax=0\},
@@ -29,7 +29,7 @@ $$
 \operatorname{Col}(A)=\{Ax:x\in\mathbb R^n\}.
 $$
 
-rank–nullity theorem 给出
+秩－零化度定理（rank–nullity theorem）给出
 
 $$
 \operatorname{rank}(A)+\dim\ker(A)=n.
@@ -37,7 +37,7 @@ $$
 
 因此 $A$ 的列线性无关当且仅当 $\ker(A)=\{0\}$。
 
-## Eigenvalues and Eigenvectors
+## 特征值与特征向量
 
 非零向量 $v$ 若满足
 
@@ -45,7 +45,7 @@ $$
 Av=\lambda v,
 $$
 
-则 $v$ 是 eigenvector，$\lambda$ 是 eigenvalue。它表示 $A$ 在方向 $v$ 上只做伸缩或反向。
+则 $v$ 是特征向量（eigenvector），$\lambda$ 是特征值（eigenvalue）。它表示 $A$ 在方向 $v$ 上只做伸缩或反向。
 
 方程可写为 $(A-\lambda I)v=0$。存在非零解当且仅当
 
@@ -69,9 +69,9 @@ $$
 
 对应 $\lambda_1=3$ 可取 $v_1=(1,1)^T$；对应 $\lambda_2=1$ 可取 $v_2=(1,-1)^T$。
 
-## Vector Norms
+## 向量范数
 
-vector norm $\|\cdot\|$ 必须满足：
+向量范数（vector norm）$\|\cdot\|$ 必须满足：
 
 1. 正定性：$\|x\|\ge0$，且 $\|x\|=0\iff x=0$；
 2. 齐次性：$\|\alpha x\|=|\alpha|\|x\|$；
@@ -97,16 +97,16 @@ $$
 
 因此有限维中的“是否收敛”不依赖所选范数，但数值界的常数会依赖范数。
 
-## Induced Matrix Norms
+## 诱导矩阵范数
 
-由向量范数诱导的 operator norm 定义为
+由向量范数诱导的算子范数（operator norm）定义为
 
 $$
 \|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}
 =\sup_{\|x\|=1}\|Ax\|.
 $$
 
-它表示 $A$ 对单位向量的最大放大倍数。由定义立即得到 compatibility：
+它表示 $A$ 对单位向量的最大放大倍数。由定义立即得到相容性（compatibility）：
 
 $$
 \|Ax\|\le\|A\|\|x\|.
@@ -131,24 +131,24 @@ $$
 =\sqrt{\lambda_{\max}(A^TA)}.
 $$
 
-最后一个公式会在 SVD 章节证明。
+最后一个公式会在奇异值分解（SVD）章节证明。
 
-### Frobenius Norm
+### 弗罗贝尼乌斯范数（Frobenius Norm）
 
-Frobenius norm 定义为
+弗罗贝尼乌斯范数定义为
 
 $$
 \|A\|_F=\sqrt{\sum_{i,j}a_{ij}^2}
 =\sqrt{\operatorname{tr}(A^TA)}.
 $$
 
-它是矩阵元素构成向量后的 Euclidean norm，但对 $n>1$ 并不是由同一个 $n$ 维向量范数诱导的 operator norm。仍有
+它是矩阵元素构成向量后的欧几里得范数（Euclidean norm），但对 $n>1$ 并不是由同一个 $n$ 维向量范数诱导的算子范数。仍有
 
 $$
 \|AB\|_F\le\|A\|_2\|B\|_F.
 $$
 
-## Submultiplicativity
+## 次乘性
 
 **定理。** 任意诱导矩阵范数满足
 
@@ -168,9 +168,9 @@ $$
 
 这个证明说明“诱导”不是装饰：正是定义中的最大放大倍数带来了乘法相容性。
 
-## Spectral Radius
+## 谱半径
 
-spectral radius 定义为
+谱半径（spectral radius）定义为
 
 $$
 \rho(A)=\max_{\lambda\in\sigma(A)}|\lambda|,
@@ -203,11 +203,11 @@ $$
 
 满足 $A^2=0$，故全部特征值为零，$\rho(A)=0$；但 $\|A\|_2=10$。
 
-## Symmetric Matrices and Spectral Theorem
+## 对称矩阵与谱定理
 
-实矩阵 $A$ 若满足 $A^T=A$，称为 real symmetric matrix。
+实矩阵 $A$ 若满足 $A^T=A$，称为实对称矩阵（real symmetric matrix）。
 
-**Spectral Theorem.** 每个实对称矩阵都存在正交矩阵 $Q$ 和实对角矩阵 $\Lambda$，使
+**谱定理（Spectral Theorem）。** 每个实对称矩阵都存在正交矩阵 $Q$ 和实对角矩阵 $\Lambda$，使
 
 $$
 A=Q\Lambda Q^T,
@@ -216,9 +216,9 @@ $$
 
 $Q$ 的列是标准正交特征向量，$\Lambda$ 的对角元是对应特征值。
 
-### Rayleigh Quotient
+### 瑞利商（Rayleigh Quotient）
 
-对 $x\ne0$，Rayleigh quotient 定义为
+对 $x\ne0$，瑞利商定义为
 
 $$
 R_A(x)=\frac{x^TAx}{x^Tx}.
@@ -231,7 +231,7 @@ R_A(x)
 =\frac{\sum_i\lambda_i y_i^2}{\sum_i y_i^2}.
 $$
 
-令 $w_i=y_i^2/\sum_jy_j^2$，则 $w_i\ge0$ 且 $\sum_iw_i=1$。因此 Rayleigh quotient 是特征值的加权平均：
+令 $w_i=y_i^2/\sum_jy_j^2$，则 $w_i\ge0$ 且 $\sum_iw_i=1$。因此瑞利商是特征值的加权平均：
 
 $$
 \lambda_{\min}(A)
@@ -241,9 +241,9 @@ $$
 
 上下界分别在最小、最大特征值的特征向量方向取得。
 
-## Positive Definiteness
+## 正定性
 
-实对称矩阵 $A$ 称为 positive definite，若对所有 $x\ne0$，
+实对称矩阵 $A$ 称为正定矩阵（positive definite matrix），若对所有 $x\ne0$，
 
 $$
 x^TAx>0.
@@ -267,7 +267,7 @@ $$
 
 非对称矩阵即使特征值全正，也不能直接称作正定矩阵；二次型只依赖其对称部分 $(A+A^T)/2$。
 
-## Gram Matrix
+## 格拉姆矩阵（Gram Matrix）
 
 对任意 $A\in\mathbb R^{m\times n}$，
 
@@ -281,7 +281,7 @@ $$
 x^TA^TAx=\|Ax\|_2^2\ge0.
 $$
 
-所以 $A^TA$ 总是 symmetric positive semidefinite。并且
+所以 $A^TA$ 总是对称半正定矩阵（symmetric positive semidefinite matrix）。并且
 
 $$
 A^TA\succ0
@@ -291,11 +291,11 @@ A^TA\succ0
 A\text{ has full column rank}.
 $$
 
-这条结论解释了满列秩时正规方程具有唯一解，也构成 SVD 的入口。
+这条结论解释了满列秩时正规方程具有唯一解，也构成奇异值分解的入口。
 
-## Gershgorin Circle Theorem
+## 格什戈林圆盘定理（Gershgorin Circle Theorem）
 
-对方阵 $A=(a_{ij})$，定义第 $i$ 个 Gershgorin disc：
+对方阵 $A=(a_{ij})$，定义第 $i$ 个格什戈林圆盘（Gershgorin disc）：
 
 $$
 D_i=\left\{z\in\mathbb C:
@@ -323,9 +323,9 @@ $$
 
 若 $|a_{ii}|>\sum_{j\ne i}|a_{ij}|$ 对每行成立，则零不属于任何圆盘，因此 $0$ 不是特征值，$A$ 可逆。
 
-## Condition Number
+## 条件数
 
-若 $A$ 可逆，二范数 condition number 为
+若 $A$ 可逆，二范数条件数（condition number）为
 
 $$
 \kappa_2(A)=\|A\|_2\|A^{-1}\|_2
@@ -343,15 +343,15 @@ $$
 
 条件数描述问题对输入扰动的敏感性，不等于某个算法的舍入误差。
 
-## Exercises
+## 练习
 
-1. 计算 $A=\begin{pmatrix}2&-1\\1&3\end{pmatrix}$ 的 $1$-norm、$\infty$-norm 与 Frobenius norm。
+1. 计算 $A=\begin{pmatrix}2&-1\\1&3\end{pmatrix}$ 的 $1$-范数、$\infty$-范数与弗罗贝尼乌斯范数。
 2. 证明 $\|A^k\|\le\|A\|^k$。
-3. 对 $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$ 计算 Rayleigh quotient 的最小值和最大值。
-4. 证明严格行对角占优矩阵可逆，不使用 Gershgorin theorem，而从 $Ax=0$ 选取最大模分量证明。
+3. 对 $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$ 计算瑞利商的最小值和最大值。
+4. 证明严格行对角占优矩阵可逆，不使用格什戈林圆盘定理，而从 $Ax=0$ 选取最大模分量证明。
 5. 给出 $\rho(A)<1$ 但 $\|A\|_2>1$ 的矩阵，并直接计算验证。
 
-**Answers.** 第 1 题为 $4,4,\sqrt{15}$。第 3 题为 $1,3$。第 5 题可用本章的幂零矩阵例子。
+**答案。** 第 1 题为 $4,4,\sqrt{15}$。第 3 题为 $1,3$。第 5 题可用本章的幂零矩阵例子。
 
-**Previous:** [Proof Language & Calculus](00-proof-skills-notation.md)  
-**Next:** [SVD & Least Squares](02-svd-least-squares.md)
+**上一章：** [证明语言与微积分](00-proof-skills-notation.md)  
+**下一章：** [奇异值分解与最小二乘](02-svd-least-squares.md)

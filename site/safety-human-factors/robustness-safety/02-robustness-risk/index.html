@@ -3786,10 +3786,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#var-cvar" class="md-nav__link">
+  <a href="#varcvar" class="md-nav__link">
     <span class="md-ellipsis">
       
-        VaR 与 CVaR：如何度量尾部风险
+        风险价值（VaR）与条件风险价值（CVaR）
       
     </span>
   </a>
@@ -4255,10 +4255,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#var-cvar" class="md-nav__link">
+  <a href="#varcvar" class="md-nav__link">
     <span class="md-ellipsis">
       
-        VaR 与 CVaR：如何度量尾部风险
+        风险价值（VaR）与条件风险价值（CVaR）
       
     </span>
   </a>
@@ -4484,7 +4484,7 @@
 <p>安全任务因此需要同时看尾部失败、最大损失、碰撞率等指标，而不是只报告 mean reward。用一个非对称损失函数可以把这件事写成</p>
 <div class="arithmatex">\[J_\text{risk} = \mathbb{E}[L(s,a)] = \underbrace{L_\text{mild}}_{\text{通常可接受}} + \underbrace{\lambda \sum_i p_i L_i}_{\text{罕见但不可接受}},\]</div>
 <p>当 <span class="arithmatex">\(\lambda\)</span> 远大于 1 时，罕见事件在目标函数中被显著放大。但要注意：<strong>用一个很大的惩罚系数并不等于真的避免了它</strong>，它只是改变了优化偏好，并不改变策略在分布外行为失控的可能性。</p>
-<h2 id="var-cvar">VaR 与 CVaR：如何度量尾部风险</h2>
+<h2 id="varcvar">风险价值（VaR）与条件风险价值（CVaR）</h2>
 <p>只报平均值会把风险稀释掉。金融与安全领域常用的两个尾部度量可以直接搬到机器人系统上。设任务损失 <span class="arithmatex">\(L\)</span> 为随机变量，置信水平 <span class="arithmatex">\(\alpha\in(0,1)\)</span>：</p>
 <div class="arithmatex">\[\mathrm{VaR}_\alpha(L)=\inf\{\ell : \Pr(L\le \ell)\ge \alpha\}, \qquad \mathrm{CVaR}_\alpha(L)=\mathbb{E}\big[L \mid L\ge \mathrm{VaR}_\alpha(L)\big].\]</div>
 <p><span class="arithmatex">\(\mathrm{VaR}\)</span> 是分位点，<span class="arithmatex">\(\mathrm{CVaR}\)</span> 是“超过分位点之后的平均损失”。两者最关键的区别在于可优化性：</p>

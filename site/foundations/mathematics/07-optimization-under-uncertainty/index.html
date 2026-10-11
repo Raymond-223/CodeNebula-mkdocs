@@ -1222,12 +1222,12 @@
   <a href="#objective-function" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、Objective Function
+        三、目标函数（Objective Function）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="三、Objective Function">
+    <nav class="md-nav" aria-label="三、目标函数（Objective Function）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1378,19 +1378,19 @@
   <a href="#lagrange-multipliers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、Lagrange Multipliers
+        七、拉格朗日乘子（Lagrange Multipliers）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="七、Lagrange Multipliers">
+    <nav class="md-nav" aria-label="七、拉格朗日乘子（Lagrange Multipliers）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#71-complementary-slackness" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 Complementary Slackness
+        7.1 互补松弛条件（Complementary Slackness）
       
     </span>
   </a>
@@ -4465,12 +4465,12 @@
   <a href="#objective-function" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、Objective Function
+        三、目标函数（Objective Function）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="三、Objective Function">
+    <nav class="md-nav" aria-label="三、目标函数（Objective Function）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4621,19 +4621,19 @@
   <a href="#lagrange-multipliers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、Lagrange Multipliers
+        七、拉格朗日乘子（Lagrange Multipliers）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="七、Lagrange Multipliers">
+    <nav class="md-nav" aria-label="七、拉格朗日乘子（Lagrange Multipliers）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#71-complementary-slackness" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 Complementary Slackness
+        7.1 互补松弛条件（Complementary Slackness）
       
     </span>
   </a>
@@ -4873,7 +4873,7 @@
 </ol>
 <p>第 1 件是第三节，第 2 件是第四节。两件事合起来就是"数值优化"的全部骨架。</p>
 <hr />
-<h2 id="objective-function">三、Objective Function</h2>
+<h2 id="objective-function">三、目标函数（Objective Function）</h2>
 <p>先看结论的形状，再回头拆每一项：</p>
 <div class="arithmatex">\[
 \min_x\ f(x)\quad \text{s.t.}\quad g_i(x)\le 0\ (i=1,\dots,m),\qquad h_j(x)=0\ (j=1,\dots,p).
@@ -5186,7 +5186,7 @@ f(y)\ \ge\ f(x^*)-t\|\nabla f(x^*)\|^2\ &lt;\ f(x^*),
 </table>
 <p>第三行要特别小心。<strong>"可行域是不是空的"本身就是一个独立的优化问题</strong>，实用的检验是先求最小违反量：不等式项取正部平方、等式项取平方，把所有项加起来最小化；如果这个最小值严格大于零，原问题就是不可行的。别指望求解器替你判断——"最小违反解"和"合法最优解"长得非常像。</p>
 <hr />
-<h2 id="lagrange-multipliers">七、Lagrange Multipliers</h2>
+<h2 id="lagrange-multipliers">七、拉格朗日乘子（Lagrange Multipliers）</h2>
 <p>第六节那个 <span class="arithmatex">\(\lambda\)</span> 到现在还只是个符号。它其实有一个可以直接算出来的含义。</p>
 <p>看一维问题：<span class="arithmatex">\(\min f(x)\)</span>，约束 <span class="arithmatex">\(x\ge b\)</span>。当无约束驻点小于 <span class="arithmatex">\(b\)</span> 时，最优解落在边界 <span class="arithmatex">\(x=b\)</span> 上。把约束写成 <span class="arithmatex">\(b-x\le 0\)</span>，构造拉格朗日函数</p>
 <div class="arithmatex">\[
@@ -5234,7 +5234,7 @@ f(y)\ \ge\ f(x^*)-t\|\nabla f(x^*)\|^2\ &lt;\ f(x^*),
 </tr>
 </tbody>
 </table>
-<h3 id="71-complementary-slackness">7.1 Complementary Slackness</h3>
+<h3 id="71-complementary-slackness">7.1 互补松弛条件（Complementary Slackness）</h3>
 <p>把目标和约束合起来，得到拉格朗日函数</p>
 <div class="arithmatex">\[
 \mathcal{L}(x,\lambda,\nu)=f(x)+\sum_i\lambda_i g_i(x)+\sum_j\nu_j h_j(x).

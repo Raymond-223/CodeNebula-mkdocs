@@ -1193,12 +1193,12 @@
   <a href="#gradient-jacobian-hessian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、梯度、Jacobian 与 Hessian
+        七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="七、梯度、Jacobian 与 Hessian">
+    <nav class="md-nav" aria-label="七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1216,7 +1216,7 @@
   <a href="#72-jacobian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.2 输入输出都是向量：Jacobian
+        7.2 向量输入与向量输出：雅可比矩阵（Jacobian）
       
     </span>
   </a>
@@ -1227,7 +1227,7 @@
   <a href="#73-hessian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 Hessian 与二阶变化
+        7.3 海森矩阵（Hessian）与二阶变化
       
     </span>
   </a>
@@ -1254,12 +1254,12 @@
   <a href="#chain-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、Chain Rule
+        八、链式法则（Chain Rule）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="八、Chain Rule">
+    <nav class="md-nav" aria-label="八、链式法则（Chain Rule）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4609,12 +4609,12 @@
   <a href="#gradient-jacobian-hessian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、梯度、Jacobian 与 Hessian
+        七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="七、梯度、Jacobian 与 Hessian">
+    <nav class="md-nav" aria-label="七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4632,7 +4632,7 @@
   <a href="#72-jacobian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.2 输入输出都是向量：Jacobian
+        7.2 向量输入与向量输出：雅可比矩阵（Jacobian）
       
     </span>
   </a>
@@ -4643,7 +4643,7 @@
   <a href="#73-hessian" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 Hessian 与二阶变化
+        7.3 海森矩阵（Hessian）与二阶变化
       
     </span>
   </a>
@@ -4670,12 +4670,12 @@
   <a href="#chain-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、Chain Rule
+        八、链式法则（Chain Rule）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="八、Chain Rule">
+    <nav class="md-nav" aria-label="八、链式法则（Chain Rule）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5070,7 +5070,7 @@ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad f(x+h)\approx f(x)+f'(x)h .
 <p>两者相加约等于 <span class="arithmatex">\(u/h+M_2h/2\)</span>，对 <span class="arithmatex">\(h\)</span> 求最小值得最优步长 <span class="arithmatex">\(h\approx\sqrt{u}\approx10^{-8}\)</span>，此时误差也只能到 <span class="arithmatex">\(10^{-8}\)</span> 量级；用中心差分 <span class="arithmatex">\((f(x+h)-f(x-h))/(2h)\)</span> 精度提到 <span class="arithmatex">\(h^2\)</span> 阶，最优 <span class="arithmatex">\(h\approx u^{1/3}\approx6\times10^{-6}\)</span>。而一旦 <span class="arithmatex">\(h\)</span> 取到 <span class="arithmatex">\(10^{-16}\)</span>，<span class="arithmatex">\(x+h\)</span> 在浮点下就等于 <span class="arithmatex">\(x\)</span>，分子变成精确的 0，<strong>导数被算成 0</strong>。第十一节的第二个实验会把这条曲线扫出来。</p>
 <p>这也是自动微分（automatic differentiation）优于手工差分的根本原因：它算的是解析的链式法则，根本不经过这一步相减。</p>
 <hr />
-<h2 id="gradient-jacobian-hessian">七、梯度、Jacobian 与 Hessian</h2>
+<h2 id="gradient-jacobian-hessian">七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）</h2>
 <h3 id="71">7.1 偏导数与梯度</h3>
 <p>如果函数有 <span class="arithmatex">\(n\)</span> 个输入，你没法只谈"变化率"——得先说明<strong>动哪一个</strong>。<span class="arithmatex">\(\partial f/\partial x_i\)</span> 的含义就是"只动第 <span class="arithmatex">\(i\)</span> 个输入、其它全部按住不动"的变化率，这叫<strong>偏导数</strong>（partial derivative）。把它们摞成一列就是<strong>梯度</strong>（gradient）：</p>
 <div class="arithmatex">\[
@@ -5078,13 +5078,13 @@ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad f(x+h)\approx f(x)+f'(x)h .
 f(x+\delta)\approx f(x)+\nabla f^\top\delta .
 \]</div>
 <p>梯度的几何含义很具体：它是函数增长最快的方向。沿 <span class="arithmatex">\(\delta\)</span> 的方向导数在 <span class="arithmatex">\(\delta\)</span> 与 <span class="arithmatex">\(\nabla f\)</span> 同向时取最大值 <span class="arithmatex">\(\|\nabla f\|_2\)</span>，垂直时为零。所以 <span class="arithmatex">\(\|\nabla f\|\)</span> 本身就是"当前有多陡"的指标，趋近最优解时它趋于零——这就是很多优化器拿 <span class="arithmatex">\(\|\nabla f\|\le\varepsilon\)</span> 当收敛判据的原因。</p>
-<h3 id="72-jacobian">7.2 输入输出都是向量：Jacobian</h3>
+<h3 id="72-jacobian">7.2 向量输入与向量输出：雅可比矩阵（Jacobian）</h3>
 <p>设 <span class="arithmatex">\(y=f(x)\)</span>，<span class="arithmatex">\(x\in\mathbb R^n\)</span>，<span class="arithmatex">\(y\in\mathbb R^m\)</span>。此时"变化率"是一个 <span class="arithmatex">\(m\times n\)</span> 的矩阵，叫 <strong>Jacobian</strong>：</p>
 <div class="arithmatex">\[
 J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad J\in\mathbb R^{m\times n},\qquad f(x+\delta)\approx f(x)+J(x)\delta .
 \]</div>
 <p><strong>维度检查是最快的自检手段</strong>：<span class="arithmatex">\(J\delta\)</span> 必须是 <span class="arithmatex">\(m\)</span> 维，所以 <span class="arithmatex">\(J\)</span> 是 <span class="arithmatex">\(m\times n\)</span>、<span class="arithmatex">\(\delta\)</span> 是 <span class="arithmatex">\(n\)</span> 维，乘积是 <span class="arithmatex">\(m\times n\)</span> 乘 <span class="arithmatex">\(n\times1\)</span> 得 <span class="arithmatex">\(m\times1\)</span>。先写维度、再填内容，能省掉大量返工。</p>
-<h3 id="73-hessian">7.3 Hessian 与二阶变化</h3>
+<h3 id="73-hessian">7.3 海森矩阵（Hessian）与二阶变化</h3>
 <p>标量函数 <span class="arithmatex">\(f(x)\)</span> 的梯度 <span class="arithmatex">\(\nabla f\)</span> 仍然随 <span class="arithmatex">\(x\)</span> 改变。再对梯度求一次导数，得到 <strong>Hessian 矩阵</strong>：</p>
 <div class="arithmatex">\[
 H_{ij}=\frac{\partial^2 f}{\partial x_i\partial x_j},\qquad H=\nabla^2 f.
@@ -5138,7 +5138,7 @@ J=\begin{bmatrix}-1 &amp; -1\\ 1 &amp; 0\end{bmatrix}.
 </tbody>
 </table>
 <hr />
-<h2 id="chain-rule">八、Chain Rule</h2>
+<h2 id="chain-rule">八、链式法则（Chain Rule）</h2>
 <p>先看一件你早就会的事。换汇：<span class="arithmatex">\(1\)</span> 欧元 = <span class="arithmatex">\(1.08\)</span> 美元，<span class="arithmatex">\(1\)</span> 美元 = <span class="arithmatex">\(7.2\)</span> 人民币。那 <span class="arithmatex">\(100\)</span> 欧元等于多少人民币？你会算 <span class="arithmatex">\(100\times1.08\times7.2\)</span>，而<strong>不是</strong> <span class="arithmatex">\(100\times(1.08+7.2)\)</span>。为什么乘？因为第二段汇率是"相对于第一段结果"的变化率——它作用在上一步的输出上。</p>
 <p>复合函数 <span class="arithmatex">\(z=g(y)\)</span>、<span class="arithmatex">\(y=f(x)\)</span> 的一元链式法则说的就是这个乘法：<span class="arithmatex">\(\frac{dz}{dx}=\frac{dz}{dy}\frac{dy}{dx}\)</span>。到了向量情形，每个"变化率"都升级成 Jacobian，乘法变成矩阵连乘：</p>
 <div class="arithmatex">\[

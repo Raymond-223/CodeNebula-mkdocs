@@ -35,7 +35,7 @@
 
 ---
 
-## 三、Objective Function
+## 三、目标函数（Objective Function）
 
 先看结论的形状，再回头拆每一项：
 
@@ -243,7 +243,7 @@ $$
 
 ---
 
-## 七、Lagrange Multipliers
+## 七、拉格朗日乘子（Lagrange Multipliers）
 
 第六节那个 $\lambda$ 到现在还只是个符号。它其实有一个可以直接算出来的含义。
 
@@ -278,7 +278,7 @@ $$
 | 很大 | 约束是主要瓶颈 | 改进它的收益最大 |
 | 不唯一 | 多个约束梯度共线 | 模型有冗余约束，应删掉 |
 
-### 7.1 Complementary Slackness
+### 7.1 互补松弛条件（Complementary Slackness）
 
 把目标和约束合起来，得到拉格朗日函数
 

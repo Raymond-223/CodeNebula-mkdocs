@@ -1867,7 +1867,7 @@
   <a href="#model-free" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Model-Free：直接从经验学习
+        无模型方法（Model-Free）
       
     </span>
   </a>
@@ -1878,7 +1878,7 @@
   <a href="#model-based" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Model-Based：先学模型再规划
+        基于模型的方法（Model-Based）
       
     </span>
   </a>
@@ -1966,7 +1966,7 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型误差如何进入闭环
+        模型误差的闭环传播
       
     </span>
   </a>
@@ -4258,7 +4258,7 @@
   <a href="#model-free" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Model-Free：直接从经验学习
+        无模型方法（Model-Free）
       
     </span>
   </a>
@@ -4269,7 +4269,7 @@
   <a href="#model-based" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Model-Based：先学模型再规划
+        基于模型的方法（Model-Based）
       
     </span>
   </a>
@@ -4357,7 +4357,7 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        模型误差如何进入闭环
+        模型误差的闭环传播
       
     </span>
   </a>
@@ -4522,7 +4522,7 @@ Q(s,a)\leftarrow Q(s,a)+\alpha\big[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\big],
 </tr>
 </tbody>
 </table>
-<h2 id="model-free">Model-Free：直接从经验学习</h2>
+<h2 id="model-free">无模型方法（Model-Free）</h2>
 <p>Model-free 把真实交互直接变成参数更新：价值方法用 TD 误差，策略方法用策略梯度。它的优点是目标与数据来源一致，不存在“在错误模型上优化出错误策略”的风险；代价是每条经验只被间接使用一次或几次。</p>
 <p>从样本复杂度看，经典结果给出 model-free 的样本量随状态空间规模线性甚至更高增长，而 model-based 可以做到与状态数近似无关的量级（对连续状态在覆盖假设下）。这解释了为什么在真实机器人上试错昂贵时，model-based 几乎是默认方向。</p>
 <table>
@@ -4562,7 +4562,7 @@ Q(s,a)\leftarrow Q(s,a)+\alpha\big[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\big],
 </tbody>
 </table>
 <p>失效模式：样本效率低带来一个连锁后果——探索预算被摊薄。真实机器人上，只有当单次试错成本足够低（如仿真环境）时，纯 model-free 才是合理选择。</p>
-<h2 id="model-based">Model-Based：先学模型再规划</h2>
+<h2 id="model-based">基于模型的方法（Model-Based）</h2>
 <p>Model-based 的核心动作是：用已收集的数据拟合 <span class="arithmatex">\(\hat T\)</span> 与 <span class="arithmatex">\(\hat R\)</span>，再用模型生成本来需要真实交互才能获得的信息。常见形态包括：</p>
 <ul>
 <li><strong>Learned dynamics + MPC</strong>：用预测模型滚动优化，每一步求解有限时域最优控制问题；</li>
@@ -4968,7 +4968,7 @@ Q(s,a)\leftarrow Q(s,a)+\alpha\Big[\underbrace{r+\gamma\max_{a'}Q(s',a')}_{\text
 </tbody>
 </table>
 <p>失效模式：当想象样本权重 <span class="arithmatex">\(\beta\)</span> 或比例过高时，价值函数会被模型偏差完全主导，表现为策略在真实环境中持续撞上“模型没预测到的”障碍；这类失败往往在训练曲线上不明显（因为训练用的正是错误模型），只能在真实环境中暴露。</p>
-<h2 id="_8">模型误差如何进入闭环</h2>
+<h2 id="_8">模型误差的闭环传播</h2>
 <p>模型误差进入闭环有两条独立路径，必须分开处理。</p>
 <p>第一条是<strong>多步预测误差放大</strong>，即前面给出的 <span class="arithmatex">\(O(L^H\epsilon)\)</span> 上界。它随规划时域指数增长，缓解手段是缩短 <span class="arithmatex">\(H\)</span>、提高模型精度或引入不确定性惩罚。</p>
 <p>第二条是 <strong>model exploitation</strong>：策略会主动搜索模型中“被系统性高估”的区域。由于策略优化目标是最大化 <span class="arithmatex">\(\hat Q\)</span>，而</p>

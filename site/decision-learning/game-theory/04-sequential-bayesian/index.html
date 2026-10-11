@@ -2100,10 +2100,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stackelberg" class="md-nav__link">
+  <a href="#stackelberg-game-" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Stackelberg 领导者—跟随者结构
+        斯塔克尔伯格博弈（Stackelberg Game）的领导者－跟随者结构
       
     </span>
   </a>
@@ -4255,10 +4255,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stackelberg" class="md-nav__link">
+  <a href="#stackelberg-game-" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Stackelberg 领导者—跟随者结构
+        斯塔克尔伯格博弈（Stackelberg Game）的领导者－跟随者结构
       
     </span>
   </a>
@@ -4517,7 +4517,7 @@ s_i : \mathcal{H}_i \to \mathcal{A}_i, \qquad \mathcal{H}_i = \{h : \text{轮到
 <li>均衡路径为「进入 → 默许」，收益 <span class="arithmatex">\((1, 1)\)</span>，而「反击」这个威胁不会被执行。</li>
 </ol>
 <p>失败条件需要说清楚：逆向归纳要求博弈有限、每个信息集是单节点（完全信息）、且收益是共同知识。一旦存在无限轮次、隐藏动作或不完全信息，直接反推会失效，必须换成不动点求解或信念更新的方法。此外，当存在多个均衡时，逆向归纳只给出「每个子博弈各自最优」的组合，不保证它是收益最高的那个。</p>
-<h2 id="stackelberg">Stackelberg 领导者—跟随者结构</h2>
+<h2 id="stackelberg-game-">斯塔克尔伯格博弈（Stackelberg Game）的领导者－跟随者结构</h2>
 <p>Stackelberg 博弈是最简洁的序贯结构：领导者先承诺策略 <span class="arithmatex">\(x_L\)</span>，跟随者观察到后选择最佳响应 <span class="arithmatex">\(x_F = \mathrm{BR}(x_L)\)</span>。领导者的真实目标不是 <span class="arithmatex">\(\max_{x_L} f_L(x_L, \cdot)\)</span>，而是把这个响应函数代入后的</p>
 <div class="arithmatex">\[
 \max_{x_L} \; f_L\big(x_L,\ \mathrm{BR}(x_L)\big).

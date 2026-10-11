@@ -1772,7 +1772,7 @@
   <a href="#td" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TD 学习与自举目标
+        时序差分学习（TD）与自举目标
       
     </span>
   </a>
@@ -1791,10 +1791,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#q-learning" class="md-nav__link">
+  <a href="#q-q-learning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Q-Learning 更新
+        Q 学习（Q-Learning）更新
       
     </span>
   </a>
@@ -1824,10 +1824,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dqn-bellman" class="md-nav__link">
+  <a href="#q-dqnbellman-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DQN 的 Bellman 目标
+        深度 Q 网络（DQN）的贝尔曼目标（Bellman Target）
       
     </span>
   </a>
@@ -4236,7 +4236,7 @@
   <a href="#td" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TD 学习与自举目标
+        时序差分学习（TD）与自举目标
       
     </span>
   </a>
@@ -4255,10 +4255,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#q-learning" class="md-nav__link">
+  <a href="#q-q-learning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Q-Learning 更新
+        Q 学习（Q-Learning）更新
       
     </span>
   </a>
@@ -4288,10 +4288,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dqn-bellman" class="md-nav__link">
+  <a href="#q-dqnbellman-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DQN 的 Bellman 目标
+        深度 Q 网络（DQN）的贝尔曼目标（Bellman Target）
       
     </span>
   </a>
@@ -4438,7 +4438,7 @@
 <p>假设在同一个状态下有两个动作：A 眼前得到 1 分但之后结束，B 眼前 0 分、下一步却能稳定得到 3 分。只看即时奖励会选 A，但价值方法要比较的是<strong>动作之后的长期总收益</strong>。</p>
 <p>Q-Learning 的核心更新其实只有一句：把当前估计往“一步奖励 + 下一状态最好价值”靠近。TD、自举、DQN 和 Double DQN 都是在解决这句话如何更稳、更大规模地成立。</p>
 </blockquote>
-<h2 id="td">TD 学习与自举目标</h2>
+<h2 id="td">时序差分学习（TD）与自举目标</h2>
 <p>如果直接用完整回报 <span class="arithmatex">\(G_t\)</span> 更新 <span class="arithmatex">\(V(s_t)\)</span>，必须等未来真正发生：</p>
 <div class="arithmatex">\[G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots .\]</div>
 <p>TD 的做法是只走一步，就用当前估计构造目标：</p>
@@ -4550,7 +4550,7 @@
 </table>
 <p>一个常用的定量直觉：设单步奖励方差为 <span class="arithmatex">\(\sigma^2\)</span>、折扣 <span class="arithmatex">\(\gamma\)</span>，MC 目标方差约为 <span class="arithmatex">\(\sigma^2\frac{1-\gamma^{2(T-t)}}{1-\gamma^2}\)</span>，当 <span class="arithmatex">\(\gamma=0.99\)</span>、视界 <span class="arithmatex">\(100\)</span> 步时约为 <span class="arithmatex">\(50\sigma^2\)</span>；TD(0) 的方差约为 <span class="arithmatex">\(\sigma^2\)</span> 量级。反过来，若 <span class="arithmatex">\(V\)</span> 的相对误差为 <span class="arithmatex">\(\eta\)</span>，TD 目标偏差量级约为 <span class="arithmatex">\(\gamma\eta V\)</span>，在 <span class="arithmatex">\(\gamma=0.99\)</span> 时几乎原样传给下一步。</p>
 <p>使用建议很明确：<strong>回合短且奖励稀疏 → MC 或大 <span class="arithmatex">\(n\)</span>；回合长、需要在线 → 小 <span class="arithmatex">\(n\)</span>；不确定时用 <span class="arithmatex">\(n\)</span> 或 <span class="arithmatex">\(\lambda\)</span> 作可调开关，一般 <span class="arithmatex">\(n\)</span> 取 3～20 或 <span class="arithmatex">\(\lambda\)</span> 取 0.9～0.99 能兼顾两者。</strong> 失败模式也有特征：MC 表现为"学习曲线方差大、同一策略两次评估差很多"；TD 表现为"曲线平滑但收敛值明显偏离真实回报，且在覆盖不足的状态区域偏差最大"。</p>
-<h2 id="q-learning">Q-Learning 更新</h2>
+<h2 id="q-q-learning">Q 学习（Q-Learning）更新</h2>
 <p>Q-Learning 用最优下一动作构造 TD 目标：</p>
 <div class="arithmatex">\[y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a'),\]</div>
 <p>更新为</p>
@@ -4742,7 +4742,7 @@
 </tbody>
 </table>
 <p>这里有一个经常被忽略的判断：<strong>动作维度决定用不用价值方法，状态维度决定用不用神经网络。</strong> 状态连续但动作离散，DQN 依然是最自然的选择；动作连续，即使状态只有 2 维，<span class="arithmatex">\(\arg\max_a Q(s,a;\theta)\)</span> 也会变成每步一次非凸优化。</p>
-<h2 id="dqn-bellman">DQN 的 Bellman 目标</h2>
+<h2 id="q-dqnbellman-target">深度 Q 网络（DQN）的贝尔曼目标（Bellman Target）</h2>
 <p>DQN 的目标没有变，只是 Q 值由网络输出：</p>
 <div class="arithmatex">\[y=r+\gamma\max_{a'}Q(s',a';\theta^-),\]</div>
 <p>在线网络参数是 <span class="arithmatex">\(\theta\)</span>，目标网络参数是 <span class="arithmatex">\(\theta^-\)</span>。训练损失可以写成</p>

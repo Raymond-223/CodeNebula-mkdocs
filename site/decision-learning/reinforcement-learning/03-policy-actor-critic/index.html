@@ -1822,7 +1822,7 @@
   <a href="#baseline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Baseline 与方差降低
+        基线（Baseline）与方差降低
       
     </span>
   </a>
@@ -1830,10 +1830,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#actorcritic" class="md-nav__link">
+  <a href="#-actorcritic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Actor–Critic 架构
+        演员－评论家架构（Actor–Critic）
       
     </span>
   </a>
@@ -1844,7 +1844,7 @@
   <a href="#ppo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PPO 的更新约束
+        近端策略优化（PPO）的更新约束
       
     </span>
   </a>
@@ -1877,7 +1877,7 @@
   <a href="#gae" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GAE 与优势估计的插值
+        广义优势估计（GAE）与优势估计的插值
       
     </span>
   </a>
@@ -4258,7 +4258,7 @@
   <a href="#baseline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Baseline 与方差降低
+        基线（Baseline）与方差降低
       
     </span>
   </a>
@@ -4266,10 +4266,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#actorcritic" class="md-nav__link">
+  <a href="#-actorcritic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Actor–Critic 架构
+        演员－评论家架构（Actor–Critic）
       
     </span>
   </a>
@@ -4280,7 +4280,7 @@
   <a href="#ppo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PPO 的更新约束
+        近端策略优化（PPO）的更新约束
       
     </span>
   </a>
@@ -4313,7 +4313,7 @@
   <a href="#gae" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GAE 与优势估计的插值
+        广义优势估计（GAE）与优势估计的插值
       
     </span>
   </a>
@@ -4525,7 +4525,7 @@ G_t=\sum_{l=0}^{T-t-1}\gamma^{l}r_{t+l+1}.
 </tbody>
 </table>
 <p>这条“期望为零”是后面所有方差降低技巧的基础：任何只依赖状态、不依赖被采样动作的项，都不会改变梯度的期望。REINFORCE 的代价是方差量级约为 <span class="arithmatex">\(O(T)\)</span> 倍的回报方差，在长回合任务上往往需要成千上万条轨迹才能稳定一次更新。</p>
-<h2 id="baseline">Baseline 与方差降低</h2>
+<h2 id="baseline">基线（Baseline）与方差降低</h2>
 <p>直接使用回报做权重通常方差很大。可以减去一个只依赖状态的 baseline <span class="arithmatex">\(b(s)\)</span>，并令</p>
 <div class="arithmatex">\[
 Q^\pi(s,a)-V^\pi(s)=A^\pi(s,a).
@@ -4573,7 +4573,7 @@ b^*(s)\approx\frac{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\,G\mid s]}{\mathbb 
 </tbody>
 </table>
 <p>失效模式：若 Critic 早期严重不准，<span class="arithmatex">\(G_t-V_\phi(s_t)\)</span> 会出现数值很大但符号错误的权重；更新方向仍然无偏（因为与动作无关的项期望为零），但方差可能不降反升。更隐蔽的问题是把 baseline 与动作采样耦合起来（例如用同批数据内该动作的平均回报做 baseline），这会引入真实偏差，而不只是噪声。</p>
-<h2 id="actorcritic">Actor–Critic 架构</h2>
+<h2 id="-actorcritic">演员－评论家架构（Actor–Critic）</h2>
 <p>Actor–Critic 把两件事拆开：</p>
 <ul>
 <li><strong>Actor</strong>：策略 <span class="arithmatex">\(\pi_\theta\)</span>，决定动作；</li>
@@ -4638,7 +4638,7 @@ b^*(s)\approx\frac{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\,G\mid s]}{\mathbb 
 </tbody>
 </table>
 <p>需要注意的是，Actor 与 Critic 通常共享部分特征表示，这会带来耦合：若 Critic 的损失过大，梯度会污染共享特征，使策略学到的表示偏向于预测价值而不是区分动作。工程上常用的做法是给 Critic 略大的学习率、对回传到共享层的 Critic 梯度做截断，或者干脆分离两套网络。</p>
-<h2 id="ppo">PPO 的更新约束</h2>
+<h2 id="ppo">近端策略优化（PPO）的更新约束</h2>
 <p>策略梯度最大的问题之一，是参数一步改得过大时，采样数据很快变成“旧策略的数据”，性能甚至可能突然崩掉。PPO 先定义新旧策略对同一动作的概率比：</p>
 <div class="arithmatex">\[
 \rho_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\theta_{old}}(a_t\mid s_t)} .
@@ -4791,7 +4791,7 @@ D_{KL}(\pi_{old}\|\pi_\theta)\approx\frac{1}{2}\,\mathbb E_t[(\rho_t-1)^2],
 </tr>
 </tbody>
 </table>
-<h2 id="gae">GAE 与优势估计的插值</h2>
+<h2 id="gae">广义优势估计（GAE）与优势估计的插值</h2>
 <p><span class="arithmatex">\(\lambda\)</span> 的语义正好可以用两个端点说清楚：它在偏差与方差之间连续插值。</p>
 <p>当 <span class="arithmatex">\(\lambda=0\)</span> 时，求和只剩第一项：</p>
 <div class="arithmatex">\[

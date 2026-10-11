@@ -1629,7 +1629,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        一、机器学习到底在学什么
+        一、机器学习的目标
       
     </span>
   </a>
@@ -1651,7 +1651,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、训练、验证、测试为什么必须分开
+        三、训练集、验证集与测试集
       
     </span>
   </a>
@@ -1703,10 +1703,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cnn-mlp" class="md-nav__link">
+  <a href="#cnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、CNN：为什么图像不用普通 MLP
+        八、卷积神经网络（CNN）与图像结构
       
     </span>
   </a>
@@ -1717,7 +1717,7 @@
   <a href="#rnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        九、RNN：为什么序列需要“记住前面”
+        九、循环神经网络（RNN）与序列记忆
       
     </span>
   </a>
@@ -4247,7 +4247,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        一、机器学习到底在学什么
+        一、机器学习的目标
       
     </span>
   </a>
@@ -4269,7 +4269,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、训练、验证、测试为什么必须分开
+        三、训练集、验证集与测试集
       
     </span>
   </a>
@@ -4321,10 +4321,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cnn-mlp" class="md-nav__link">
+  <a href="#cnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、CNN：为什么图像不用普通 MLP
+        八、卷积神经网络（CNN）与图像结构
       
     </span>
   </a>
@@ -4335,7 +4335,7 @@
   <a href="#rnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        九、RNN：为什么序列需要“记住前面”
+        九、循环神经网络（RNN）与序列记忆
       
     </span>
   </a>
@@ -4459,7 +4459,7 @@
 <blockquote>
 <p>后面的 DQN、Actor–Critic、目标检测、分割、RNN 和 Transformer 都默认你知道这一章。这里不讲完整机器学习课程，只建立后文不再重复解释的最小前置。</p>
 </blockquote>
-<h2 id="_1">一、机器学习到底在学什么</h2>
+<h2 id="_1">一、机器学习的目标</h2>
 <p>普通程序是“人写规则，机器执行”；机器学习是“给数据和评价标准，让参数自己调整”。</p>
 <p>一条数据通常写成</p>
 <div class="arithmatex">\[
@@ -4492,7 +4492,7 @@ p_k=\frac{e^{z_k}}{\sum_j e^{z_j}}.
 L=-\log p_y.
 \]</div>
 <p>预测正确且概率高，损失小；把错误类别说得越肯定，损失越大。</p>
-<h2 id="_3">三、训练、验证、测试为什么必须分开</h2>
+<h2 id="_3">三、训练集、验证集与测试集</h2>
 <p>如果模型在训练数据上表现很好，不代表它学会了规律，也可能只是把样本记住。这叫<strong>过拟合</strong>（overfitting）。</p>
 <p>所以数据通常分成：</p>
 <ul>
@@ -4555,7 +4555,7 @@ x\rightarrow z=wx\rightarrow \hat y=\sigma(z)\rightarrow L
 <li><strong>early stopping</strong>：验证集不再改善就停止。</li>
 </ul>
 <p>输入数值尺度差异很大时，还要先做<strong>归一化/标准化</strong>，否则梯度在不同方向上的尺度差异会让优化变困难。</p>
-<h2 id="cnn-mlp">八、CNN：为什么图像不用普通 MLP</h2>
+<h2 id="cnn">八、卷积神经网络（CNN）与图像结构</h2>
 <p>图像 <span class="arithmatex">\(H\times W\times C\)</span> 的像素很多，普通全连接层会产生海量参数，而且完全忽略“相邻像素更相关”的结构。</p>
 <p>卷积神经网络 <strong>CNN</strong> 用一个小窗口在整张图上共享同一组权重：</p>
 <ul>
@@ -4564,7 +4564,7 @@ x\rightarrow z=wx\rightarrow \hat y=\sigma(z)\rightarrow L
 <li>因而参数少，并天然适合提取边缘、纹理、局部形状。</li>
 </ul>
 <p>卷积层输出通常叫 <strong>feature map</strong>。随着层数增加，感受野变大，特征从边缘逐步变成更高层语义。</p>
-<h2 id="rnn">九、RNN：为什么序列需要“记住前面”</h2>
+<h2 id="rnn">九、循环神经网络（RNN）与序列记忆</h2>
 <p>对时间序列，只看当前 <span class="arithmatex">\(x_t\)</span> 往往不够。循环神经网络写成</p>
 <div class="arithmatex">\[
 h_t=f(h_{t-1},x_t),

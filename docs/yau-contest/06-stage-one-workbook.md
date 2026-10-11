@@ -2,7 +2,7 @@
 
 本章把前六章的定义和定理用于完整证明。每道题都明确条件、目标和逻辑方向；所有题目均为教学重写。
 
-## Problem 1: Induced Norm and Spectral Radius
+## 问题一：诱导范数与谱半径
 
 设
 
@@ -12,7 +12,7 @@ $$
 
 计算 $\rho(B)$ 与 $\|B\|_\infty$，并判断 $B^k$ 是否趋于零。
 
-### Solution
+### 解答
 
 $B$ 是上三角矩阵，特征值为对角元 $0$ 与 $1/2$，所以
 
@@ -26,7 +26,7 @@ $$
 \|B\|_\infty=\max\{3,1/2\}=3.
 $$
 
-虽然 $\|B\|_\infty>1$，但 $\rho(B)<1$，因此由 spectral radius criterion，$B^k\to0$。
+虽然 $\|B\|_\infty>1$，但 $\rho(B)<1$，因此由谱半径收敛判据（spectral radius criterion），$B^k\to0$。
 
 还可直接计算。设
 
@@ -42,7 +42,7 @@ $$
 
 这个例子说明 $\|B\|<1$ 是方便的充分条件，不是收敛的必要条件。
 
-## Problem 2: Strict Diagonal Dominance
+## 问题二：严格对角占优
 
 设 $A=(a_{ij})\in\mathbb C^{n\times n}$ 满足
 
@@ -53,7 +53,7 @@ $$
 
 证明 $A$ 可逆。
 
-### Solution by the Maximum Component
+### 最大模分量解法
 
 只需证明 $Ax=0$ 只有零解。反设存在 $x\ne0$ 满足 $Ax=0$。选择指标 $i$ 使
 
@@ -83,15 +83,15 @@ $$
 
 与严格对角占优矛盾。因此 $\ker(A)=\{0\}$。方阵上的单射等价于可逆，故 $A$ 可逆。$\square$
 
-## Problem 3: Least-Squares Characterization
+## 问题三：最小二乘解的刻画
 
-设 $A\in\mathbb R^{m\times n}$、$b\in\mathbb R^m$。证明 $x_*$ 是 least-squares solution 当且仅当
+设 $A\in\mathbb R^{m\times n}$、$b\in\mathbb R^m$。证明 $x_*$ 是最小二乘解（least-squares solution）当且仅当
 
 $$
 A^T(Ax_*-b)=0.
 $$
 
-### Necessity
+### 必要性
 
 目标函数
 
@@ -105,7 +105,7 @@ $$
 \nabla f(x_*)=2A^T(Ax_*-b)=0.
 $$
 
-### Sufficiency
+### 充分性
 
 若 $A^T(Ax_*-b)=0$，则任取 $h\in\mathbb R^n$，
 
@@ -121,7 +121,7 @@ $$
 
 注意：这里不要求 $A$ 满列秩。满列秩只决定解是否唯一。
 
-## Problem 4: All Least-Squares Solutions
+## 问题四：全部最小二乘解
 
 设
 
@@ -134,9 +134,9 @@ A=\begin{pmatrix}
 b=\begin{pmatrix}1\\1\end{pmatrix}.
 $$
 
-求全部 least-squares solutions 与 minimum-norm solution。
+求全部最小二乘解与最小范数解（minimum-norm solution）。
 
-### Exact Solution Set
+### 精确解集
 
 这里 $Ax=b$ 本身相容：
 
@@ -152,9 +152,9 @@ $$
 x(t)=\begin{pmatrix}1-t\\1-t\\t\end{pmatrix}.
 $$
 
-因为残差能达到零，这些也正是全部 least-squares solutions。
+因为残差能达到零，这些也正是全部最小二乘解。
 
-### Minimum-Norm Solution
+### 最小范数解
 
 计算
 
@@ -186,7 +186,7 @@ $$
 
 于是 $A^+b=(1/3,1/3,2/3)^T$，与直接最小化一致。
 
-## Problem 5: Optimal Richardson Parameter
+## 问题五：理查森迭代的最优参数
 
 设 $A=\operatorname{diag}(2,4)$，使用
 
@@ -197,7 +197,7 @@ $$
 
 求对任意初值收敛的 $\eta$ 范围及最优收敛因子。
 
-### Error Matrix
+### 误差矩阵
 
 精确解 $x^*$ 满足 $Ax^*=b$。相减得
 
@@ -211,7 +211,7 @@ $$
 B_\eta=\operatorname{diag}(1-2\eta,1-4\eta).
 $$
 
-### Convergence Interval
+### 收敛区间
 
 需要
 
@@ -227,7 +227,7 @@ $$
 \boxed{0<\eta<1/2}.
 $$
 
-### Optimal Parameter
+### 最优参数
 
 收敛因子为
 
@@ -243,7 +243,7 @@ $$
 
 所以 $\eta_*=1/3$，且 $q(\eta_*)=1/3$。
 
-## Problem 6: Nilpotent Finite-Step Convergence
+## 问题六：幂零矩阵的有限步收敛
 
 设 $B\in\mathbb C^{n\times n}$ 且 $\rho(B)=0$。证明迭代
 
@@ -253,7 +253,7 @@ $$
 
 至多 $n$ 步到达固定点。
 
-### Solution
+### 解答
 
 $\rho(B)=0$ 意味着全部特征值为零，因此特征多项式为
 
@@ -275,7 +275,7 @@ $$
 
 故 $x_n=x^*$。注意这不是渐近收敛，而是有限步精确到达。
 
-## Problem 7: Contraction and Iteration Count
+## 问题七：压缩映射与迭代次数
 
 设
 
@@ -286,7 +286,7 @@ $$
 
 证明存在唯一不动点，并求保证 $|x_n-x^*|<10^{-6}$ 的最小整数 $n$。
 
-### Banach Conditions
+### 巴拿赫定理的条件
 
 $g:\mathbb R\to\mathbb R$，而 $\mathbb R$ 完备。并且
 
@@ -294,7 +294,7 @@ $$
 |g(x)-g(y)|=\frac14|x-y|,
 $$
 
-故 $q=1/4$。Banach theorem 给出唯一不动点和任意初值的收敛性。
+故 $q=1/4$。巴拿赫定理给出唯一不动点和任意初值的收敛性。
 
 固定点满足
 
@@ -304,7 +304,7 @@ $$
 
 所以 $x^*=2/3$。
 
-### Exact Error Count
+### 精确误差与次数
 
 误差精确满足
 
@@ -328,7 +328,7 @@ $$
 
 所以最小整数为 $n=10$。
 
-## Problem 8: Local Newton Bound
+## 问题八：牛顿法的局部误差界
 
 设 $f(\alpha)=0$，并且在 $I=[\alpha-r,\alpha+r]$ 上
 
@@ -338,7 +338,7 @@ $$
 |f''(x)|\le6.
 $$
 
-证明 Newton error 满足
+证明牛顿法误差（Newton error）满足
 
 $$
 |e_{k+1}|\le\frac32|e_k|^2
@@ -346,9 +346,9 @@ $$
 
 并给出保证 $I$ 不变的一个半径条件。
 
-### Solution
+### 解答
 
-Taylor remainder 给出
+泰勒余项给出
 
 $$
 e_{k+1}=\frac{f''(\xi_k)}{2f'(x_k)}e_k^2.
@@ -368,9 +368,9 @@ $$
 \frac32r^2\le r.
 $$
 
-对 $r>0$，等价于 $r\le2/3$。因此只要给定导数界确实在该区间成立，并取 $r\le2/3$，Newton map 将区间送回自身。
+对 $r>0$，等价于 $r\le2/3$。因此只要给定导数界确实在该区间成立，并取 $r\le2/3$，牛顿映射（Newton map）将区间送回自身。
 
-## Problem 9: Power Method Rate
+## 问题九：幂法的收敛速度
 
 设
 
@@ -382,7 +382,7 @@ $$
 
 求归一化迭代方向与主特征向量的误差比例，并估计达到 $10^{-4}$ 所需步数。
 
-### Solution
+### 解答
 
 $$
 A^kx_0
@@ -406,7 +406,7 @@ $$
 
 取 $k=12$ 足够。
 
-## Problem 10: Proof Audit
+## 问题十：证明辨析
 
 下面的“证明”试图说明 $\rho(B)<1$：
 
@@ -414,7 +414,7 @@ $$
 
 指出错误并给出反例。
 
-### Solution
+### 解答
 
 谱半径判据的必要性要求“对任意初始误差 $e_0$，$B^ke_0\to0$”。单个初值可能恰好没有不稳定特征方向分量。
 
@@ -428,7 +428,7 @@ $$
 
 该初值产生恒零数列，当然收敛；但 $\rho(B)=2>1$。即使取非零初值 $(0,1)^T$，也会收敛，而含第一坐标分量的初值会发散。
 
-## Problem 11: Best Rank-One Approximation
+## 问题十一：最佳秩一逼近
 
 设
 
@@ -436,9 +436,9 @@ $$
 A=\operatorname{diag}(4,2,1).
 $$
 
-求 $A$ 在 operator norm 和 Frobenius norm 下的最佳 rank-one approximation，并计算两种最小误差。
+求 $A$ 在算子范数（operator norm）和弗罗贝尼乌斯范数（Frobenius norm）下的最佳秩一逼近（rank-one approximation），并计算两种最小误差。
 
-### Singular Value Decomposition
+### 奇异值分解
 
 $A$ 已经是非负对角矩阵，因此可取
 
@@ -448,7 +448,7 @@ U=V=I_3,
 \Sigma=\operatorname{diag}(4,2,1).
 $$
 
-三个 singular values 为 $\sigma_1=4$、$\sigma_2=2$、$\sigma_3=1$。截断到第一项得到
+三个奇异值（singular values）为 $\sigma_1=4$、$\sigma_2=2$、$\sigma_3=1$。截断到第一项得到
 
 $$
 A_1=\sigma_1u_1v_1^T
@@ -459,15 +459,15 @@ A_1=\sigma_1u_1v_1^T
 \end{pmatrix}.
 $$
 
-### Optimality and Errors
+### 最优性与误差
 
-由 Eckart–Young theorem，$A_1$ 同时在两种范数下达到最佳 rank-one approximation。残差为
+由埃卡特－杨定理（Eckart–Young theorem），$A_1$ 同时在两种范数下达到最佳秩一逼近。残差为
 
 $$
 A-A_1=\operatorname{diag}(0,2,1).
 $$
 
-因此 operator-norm error 是下一奇异值：
+因此算子范数误差（operator-norm error）是下一奇异值：
 
 $$
 \min_{\operatorname{rank}(B)\le1}\|A-B\|_2
@@ -476,7 +476,7 @@ $$
 =2.
 $$
 
-Frobenius-norm error 是被舍弃奇异值平方和的平方根：
+弗罗贝尼乌斯范数误差（Frobenius-norm error）是被舍弃奇异值平方和的平方根：
 
 $$
 \min_{\operatorname{rank}(B)\le1}\|A-B\|_F
@@ -485,18 +485,18 @@ $$
 =\sqrt5.
 $$
 
-两种误差不同，因为 operator norm 只测量残差最强的伸缩方向，而 Frobenius norm 累计所有被舍弃方向的平方能量。
+两种误差不同，因为算子范数只测量残差最强的伸缩方向，而弗罗贝尼乌斯范数累计所有被舍弃方向的平方能量。
 
-## Further Exercises
+## 进一步练习
 
-1. 对一个 $3\times2$ 矩阵完整计算 compact SVD，并核对所有矩阵尺寸。
-2. 构造一个连续 self-map，具有唯一不动点但 Picard iteration 形成二周期。
-3. 对重数为 $m$ 的根，推导 Newton method 的线性误差因子 $(m-1)/m$。
-4. 证明当 $A$ symmetric positive definite 时，$\|I-\eta A\|_2=\max_i|1-\eta\lambda_i|$。
-5. 从 Steffensen expansion 重新计算二次误差系数，检查 $g'(\alpha)=0$ 与 $g''(\alpha)=0$ 的特殊情况。
-6. 对 $A=\operatorname{diag}(1,4,9)$、shift $\mu=3.8$，写出 shifted inverse iteration 对三个特征方向的放大因子，并判断最终提取哪个特征向量。
+1. 对一个 $3\times2$ 矩阵完整计算紧致奇异值分解（compact SVD），并核对所有矩阵尺寸。
+2. 构造一个连续自映射，使其具有唯一不动点，但皮卡迭代形成二周期。
+3. 对重数为 $m$ 的根，推导牛顿法的线性误差因子 $(m-1)/m$。
+4. 证明当 $A$ 对称正定时，$\|I-\eta A\|_2=\max_i|1-\eta\lambda_i|$。
+5. 从斯特芬森展开（Steffensen expansion）重新计算二次误差系数，检查 $g'(\alpha)=0$ 与 $g''(\alpha)=0$ 的特殊情况。
+6. 对 $A=\operatorname{diag}(1,4,9)$、位移（shift）$\mu=3.8$，写出带位移的反幂迭代（shifted inverse iteration）对三个特征方向的放大因子，并判断最终提取哪个特征向量。
 
 这些练习的目标是独立重建证明。若某一步只能写“显然”，应补出所用的定义、不等式或定理。
 
-**Previous:** [Newton's Method & Convergence Order](05-newton-convergence.md)  
-**Overview:** [Yau Contest](index.md)
+**上一章：** [牛顿法与收敛阶](05-newton-convergence.md)  
+**专题概览：** [丘成桐竞赛专题](index.md)

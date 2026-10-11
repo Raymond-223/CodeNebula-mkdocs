@@ -1427,7 +1427,7 @@
   <a href="#lqr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 代价函数
+        线性二次型调节器（LQR）的代价函数
       
     </span>
   </a>
@@ -1460,7 +1460,7 @@
   <a href="#lqr_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 依赖一个可以信任的线性模型
+        线性二次型调节器（LQR）的线性模型条件
       
     </span>
   </a>
@@ -1471,7 +1471,7 @@
   <a href="#lqr-pidmpc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 与 PID、MPC 的关系
+        线性二次型调节器（LQR）与比例－积分－微分控制（PID）、模型预测控制（MPC）的关系
       
     </span>
   </a>
@@ -1490,10 +1490,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#riccati" class="md-nav__link">
+  <a href="#riccati-equation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Riccati 方程与反馈增益
+        黎卡提方程（Riccati Equation）与反馈增益
       
     </span>
   </a>
@@ -1501,10 +1501,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bryson" class="md-nav__link">
+  <a href="#brysons-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bryson 规则与权重初值
+        布赖森规则（Bryson's Rule）与权重初值
       
     </span>
   </a>
@@ -1515,7 +1515,7 @@
   <a href="#lqr_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        积分作用与 LQR 的结合
+        积分作用与线性二次型调节器（LQR）的结合
       
     </span>
   </a>
@@ -4225,7 +4225,7 @@
   <a href="#lqr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 代价函数
+        线性二次型调节器（LQR）的代价函数
       
     </span>
   </a>
@@ -4258,7 +4258,7 @@
   <a href="#lqr_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 依赖一个可以信任的线性模型
+        线性二次型调节器（LQR）的线性模型条件
       
     </span>
   </a>
@@ -4269,7 +4269,7 @@
   <a href="#lqr-pidmpc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LQR 与 PID、MPC 的关系
+        线性二次型调节器（LQR）与比例－积分－微分控制（PID）、模型预测控制（MPC）的关系
       
     </span>
   </a>
@@ -4288,10 +4288,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#riccati" class="md-nav__link">
+  <a href="#riccati-equation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Riccati 方程与反馈增益
+        黎卡提方程（Riccati Equation）与反馈增益
       
     </span>
   </a>
@@ -4299,10 +4299,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bryson" class="md-nav__link">
+  <a href="#brysons-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bryson 规则与权重初值
+        布赖森规则（Bryson's Rule）与权重初值
       
     </span>
   </a>
@@ -4313,7 +4313,7 @@
   <a href="#lqr_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        积分作用与 LQR 的结合
+        积分作用与线性二次型调节器（LQR）的结合
       
     </span>
   </a>
@@ -4421,7 +4421,7 @@
 <br />
 <figcaption>LQR 用固定反馈增益实现最优线性控制；MPC 则在每个周期显式优化未来轨迹。</figcaption>
 </figure>
-<h2 id="lqr">LQR 代价函数</h2>
+<h2 id="lqr">线性二次型调节器（LQR）的代价函数</h2>
 <p>在写 LQR 之前，先回顾它依赖的“状态空间模型”。<strong>状态</strong> <span class="arithmatex">\(x_k\)</span> 是一组足以描述系统当前情况的变量，<strong>输入</strong> <span class="arithmatex">\(u_k\)</span> 是控制器能主动施加的量。以一维小车为例，可以取</p>
 <div class="arithmatex">\[
 x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
@@ -4578,7 +4578,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </tbody>
 </table>
 <p>注意极端情形的退化：若 <span class="arithmatex">\(R\to 0\)</span>，增益趋于无穷，任何执行器都会饱和；若 <span class="arithmatex">\(Q\to 0\)</span>，闭环趋于不控制，系统只靠自身动态缓慢衰减。这两个极限都不是可用的控制器，只是理解权重作用方向的参照。</p>
-<h2 id="lqr_1">LQR 依赖一个可以信任的线性模型</h2>
+<h2 id="lqr_1">线性二次型调节器（LQR）的线性模型条件</h2>
 <p>LQR 的推导全部建立在 <span class="arithmatex">\(x_{k+1}=Ax_k+Bu_k\)</span> 之上，而真实系统几乎总是非线性 <span class="arithmatex">\(\dot x=f(x,u)\)</span>。标准做法是选工作点 <span class="arithmatex">\((x^{\star},u^{\star})\)</span> 做一阶线性化：</p>
 <div class="arithmatex">\[A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.\]</div>
 <p>只有当偏差 <span class="arithmatex">\(\delta x=x-x^{\star}\)</span> 足够小，线性模型才可信。无人机悬停、小车小角度平衡、机械臂在某个位形附近都属于这一类；一旦偏离工作点很远（大姿态角、强耦合、进入非线性区），<span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 失配，LQR 的"最优"保证随之失效。常用补救是<strong>增益调度</strong>：在多个工作点分别解 <span class="arithmatex">\(K\)</span>，运行时按当前状态插值。</p>
@@ -4619,7 +4619,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </tr>
 </tbody>
 </table>
-<h2 id="lqr-pidmpc">LQR 与 PID、MPC 的关系</h2>
+<h2 id="lqr-pidmpc">线性二次型调节器（LQR）与比例－积分－微分控制（PID）、模型预测控制（MPC）的关系</h2>
 <p>三者不是替代关系，而是覆盖不同模型复杂度与约束需求的工具谱。PID 只看误差形状、不需要状态空间模型，单回路简单；LQR 需要线性模型，但天然处理多输入多输出耦合与状态权重；MPC 把有限时域预测与显式不等式约束纳入在线优化。</p>
 <p>一个常见误区是把 LQR 当成"更高级的 PID"。它们的信息来源不同：PID 只看输出误差 <span class="arithmatex">\(e=r-y\)</span>，LQR 看完整状态向量 <span class="arithmatex">\(x\)</span>，因此 LQR 能把耦合通道一起协调；但 LQR 也给不出"速度不得超过 2 m/s"这种硬保证，那需要 MPC 把约束显式写进优化。反过来，PID 在完全不知道模型的情况下仍能调出一个能用的回路，而 LQR 一旦 <span class="arithmatex">\(A,B\)</span> 写错，输出的增益可能直接让系统发散。选择哪一条，取决于你手上是"有可信模型"还是"只有试错空间"。</p>
 <table>
@@ -4718,7 +4718,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </tr>
 </tbody>
 </table>
-<h2 id="riccati">Riccati 方程与反馈增益</h2>
+<h2 id="riccati-equation">黎卡提方程（Riccati Equation）与反馈增益</h2>
 <p>前面说"<span class="arithmatex">\(K\)</span> 由 Riccati 方程求得"，这里把方程写清楚。连续时间下，<span class="arithmatex">\(P\)</span> 满足代数 Riccati 方程（ARE）：</p>
 <div class="arithmatex">\[A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.\]</div>
 <p>离散时间下对应离散代数 Riccati 方程（DARE）：</p>
@@ -4765,7 +4765,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </tr>
 </tbody>
 </table>
-<h2 id="bryson">Bryson 规则与权重初值</h2>
+<h2 id="brysons-rule">布赖森规则（Bryson's Rule）与权重初值</h2>
 <p>面对全新系统，最头疼的是不知道 <span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 从哪起步。<strong>Bryson 规则</strong>给出了一个有物理依据的初值：用每个变量的允许最大幅值做归一化，</p>
 <div class="arithmatex">\[Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).\]</div>
 <p>它的直觉是：让每个状态到达自身最大允许偏差、每个输入达到自身最大幅值时，在代价里贡献相同的量（都等于 1）。这样不同量纲的变量被拉到同一尺度，<span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 的相对大小才有可比性。</p>
@@ -4803,7 +4803,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </tbody>
 </table>
 <p>Bryson 规则只保证"量纲合理、不荒谬"，不保证"性能最优"。它是起点而非终点：若响应太慢就升 <span class="arithmatex">\(Q\)</span> 或降 <span class="arithmatex">\(R\)</span>，若执行器饱和就升 <span class="arithmatex">\(R\)</span>。此外，如果某个变量根本没有物理上界（例如自由积分状态或偏置项），就无法直接套用该规则，需要人为设定一个合理的参考幅值；否则 <span class="arithmatex">\(1/x_{\max}^2\)</span> 会出现除零或无穷大权重，让其他状态在代价里变得无足轻重。</p>
-<h2 id="lqr_2">积分作用与 LQR 的结合</h2>
+<h2 id="lqr_2">积分作用与线性二次型调节器（LQR）的结合</h2>
 <p>纯 LQR 是状态反馈，对<strong>常值扰动</strong>或<strong>模型增益误差</strong>会留下稳态误差：只要模型低估了负载，位置就永远差一点点。想要"无静差"，就把输出误差的积分扩进状态向量，得到 LQI（LQR with Integral action）。设跟踪误差 <span class="arithmatex">\(e_k=r_k-y_k=r_k-Cx_k\)</span>，定义积分状态</p>
 <div class="arithmatex">\[z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).\]</div>
 <p>把 <span class="arithmatex">\(z\)</span> 接到原状态后面，构造增广系统</p>

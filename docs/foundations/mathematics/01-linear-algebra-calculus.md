@@ -254,7 +254,7 @@ $$
 
 ---
 
-## 七、梯度、Jacobian 与 Hessian { #gradient-jacobian-hessian }
+## 七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian） { #gradient-jacobian-hessian }
 
 ### 7.1 偏导数与梯度
 
@@ -267,7 +267,7 @@ $$
 
 梯度的几何含义很具体：它是函数增长最快的方向。沿 $\delta$ 的方向导数在 $\delta$ 与 $\nabla f$ 同向时取最大值 $\|\nabla f\|_2$，垂直时为零。所以 $\|\nabla f\|$ 本身就是"当前有多陡"的指标，趋近最优解时它趋于零——这就是很多优化器拿 $\|\nabla f\|\le\varepsilon$ 当收敛判据的原因。
 
-### 7.2 输入输出都是向量：Jacobian
+### 7.2 向量输入与向量输出：雅可比矩阵（Jacobian）
 
 设 $y=f(x)$，$x\in\mathbb R^n$，$y\in\mathbb R^m$。此时"变化率"是一个 $m\times n$ 的矩阵，叫 **Jacobian**：
 
@@ -278,7 +278,7 @@ $$
 **维度检查是最快的自检手段**：$J\delta$ 必须是 $m$ 维，所以 $J$ 是 $m\times n$、$\delta$ 是 $n$ 维，乘积是 $m\times n$ 乘 $n\times1$ 得 $m\times1$。先写维度、再填内容，能省掉大量返工。
 
 
-### 7.3 Hessian 与二阶变化
+### 7.3 海森矩阵（Hessian）与二阶变化
 
 标量函数 $f(x)$ 的梯度 $\nabla f$ 仍然随 $x$ 改变。再对梯度求一次导数，得到 **Hessian 矩阵**：
 
@@ -315,7 +315,7 @@ $$
 
 ---
 
-## 八、Chain Rule
+## 八、链式法则（Chain Rule）
 
 先看一件你早就会的事。换汇：$1$ 欧元 = $1.08$ 美元，$1$ 美元 = $7.2$ 人民币。那 $100$ 欧元等于多少人民币？你会算 $100\times1.08\times7.2$，而**不是** $100\times(1.08+7.2)$。为什么乘？因为第二段汇率是"相对于第一段结果"的变化率——它作用在上一步的输出上。
 

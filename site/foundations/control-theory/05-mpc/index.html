@@ -1455,7 +1455,7 @@
   <a href="#mpc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的有限时域预测
+        模型预测控制（MPC）的有限时域预测
       
     </span>
   </a>
@@ -1474,10 +1474,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc-constraints" class="md-nav__link">
+  <a href="#mpc_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC Constraints
+        模型预测控制（MPC）的约束
       
     </span>
   </a>
@@ -1507,10 +1507,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc_1" class="md-nav__link">
+  <a href="#mpc_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的实时计算约束
+        模型预测控制（MPC）的实时计算约束
       
     </span>
   </a>
@@ -1529,10 +1529,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc-qp" class="md-nav__link">
+  <a href="#mpcqp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二次型 MPC 与 QP 形式
+        二次型模型预测控制（MPC）与二次规划（QP）形式
       
     </span>
   </a>
@@ -1551,10 +1551,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc_2" class="md-nav__link">
+  <a href="#mpc_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的适用范围
+        模型预测控制（MPC）的适用范围
       
     </span>
   </a>
@@ -4236,7 +4236,7 @@
   <a href="#mpc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的有限时域预测
+        模型预测控制（MPC）的有限时域预测
       
     </span>
   </a>
@@ -4255,10 +4255,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc-constraints" class="md-nav__link">
+  <a href="#mpc_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC Constraints
+        模型预测控制（MPC）的约束
       
     </span>
   </a>
@@ -4288,10 +4288,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc_1" class="md-nav__link">
+  <a href="#mpc_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的实时计算约束
+        模型预测控制（MPC）的实时计算约束
       
     </span>
   </a>
@@ -4310,10 +4310,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc-qp" class="md-nav__link">
+  <a href="#mpcqp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二次型 MPC 与 QP 形式
+        二次型模型预测控制（MPC）与二次规划（QP）形式
       
     </span>
   </a>
@@ -4332,10 +4332,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpc_2" class="md-nav__link">
+  <a href="#mpc_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPC 的适用范围
+        模型预测控制（MPC）的适用范围
       
     </span>
   </a>
@@ -4443,7 +4443,7 @@
 <br />
 <figcaption>MPC 可以理解为"带约束、有限时域、每步重新求解"的最优控制。</figcaption>
 </figure>
-<h2 id="mpc">MPC 的有限时域预测</h2>
+<h2 id="mpc">模型预测控制（MPC）的有限时域预测</h2>
 <p>比例控制通常直接根据当前误差给控制量；LQR 虽然在设计增益 <span class="arithmatex">\(K\)</span> 时已经考虑了长期代价，但在线运行时仍只计算 <span class="arithmatex">\(u=-Kx\)</span>，不会显式生成“未来第 1、2、……、<span class="arithmatex">\(N\)</span> 步”的轨迹，也无法逐步检查速度、转角、道路边界等硬约束。MPC 的新增能力正是把这段未来轨迹显式展开：它把未来 <span class="arithmatex">\(N\)</span> 步一起考虑，最小化整段预测轨迹的累计代价</p>
 <div class="arithmatex">\[J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).\]</div>
 <p>其中 <span class="arithmatex">\(N\)</span> 是预测时域（步数），<span class="arithmatex">\(\ell\)</span> 是每步代价（通常为二次型），<span class="arithmatex">\(\ell_f\)</span> 是加在末端状态上的终端代价。关键差异在于：如果现在急转会带来后续约束违反或高代价，优化器会提前选择更缓和的动作，而不是等越界后再补救。</p>
@@ -4572,7 +4572,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="mpc-constraints">MPC Constraints</h2>
+<h2 id="mpc_1">模型预测控制（MPC）的约束</h2>
 <p>典型 MPC 问题写成</p>
 <div class="arithmatex">\[\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)\]</div>
 <p>并满足</p>
@@ -4684,7 +4684,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="mpc_1">MPC 的实时计算约束</h2>
+<h2 id="mpc_2">模型预测控制（MPC）的实时计算约束</h2>
 <p>MPC 最大的工程约束是时间预算。控制周期为 50 ms，就意味着优化最好稳定地在这个预算内完成；偶尔求出更优但经常超时的控制器，实际效果可能不如一个稍保守但确定能按时运行的方案。</p>
 <p>计算量主要随优化变量维数 <span class="arithmatex">\(mN\)</span> 增长，二次型 MPC 每步解一个 <span class="arithmatex">\(mN\)</span> 维的 QP。例如 <span class="arithmatex">\(m=2,\ N=20\)</span> 时 <span class="arithmatex">\(U\)</span> 是 40 维、约束上百条，用稀疏内点法或 active-set 法通常能在几毫秒内解完，远小于 50 ms 预算；但若把 <span class="arithmatex">\(N\)</span> 提到 100，<span class="arithmatex">\(U\)</span> 变成 200 维，求解时间可能随维数立方上升，直接吃满预算。工程上用 warm start（用上一步的解作为初值）、稀疏结构化 QP、以及缩减控制时域来把时间压回预算内。</p>
 <p>入门阶段掌握线性 MPC 就足够。非线性 MPC、鲁棒 MPC 等只是同一框架在更复杂模型和不确定性下的扩展，不需要为了理解主线先全部学习。非线性的代价是每步要迭代求解（SQP 或实时迭代），把原本的"一次 QP"变成"多次 QP"，对算力的要求往往高出一个数量级。</p>
@@ -4766,7 +4766,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="mpc-qp">二次型 MPC 与 QP 形式</h2>
+<h2 id="mpcqp">二次型模型预测控制（MPC）与二次规划（QP）形式</h2>
 <p>到这里我们已经有两样东西：一是所有未来状态都能写成控制序列 <span class="arithmatex">\(U\)</span> 的函数，二是速度、转角等限制也能写成关于 <span class="arithmatex">\(U\)</span> 的不等式。剩下的问题只是：<strong>在所有满足约束的 <span class="arithmatex">\(U\)</span> 中，哪一个代价最小？</strong> 这就是一个优化问题。</p>
 <p>如果代价是变量的二次函数，而约束都是线性等式或不等式，这类问题就叫 <strong>Quadratic Programming（QP，二次规划）</strong>。它不是新的控制理论，只是 MPC 每个周期调用的数学求解器类型。线性模型 + 二次代价 + 线性约束恰好会落到 QP，因此可以使用成熟的数值算法快速求解。</p>
 <p>取每步代价 <span class="arithmatex">\(\ell(x,u)=x^{\top}Qx+u^{\top}Ru\)</span>、终端代价 <span class="arithmatex">\(\ell_f(x)=x^{\top}Q_f x\)</span>，并令</p>
@@ -4858,7 +4858,7 @@
 </tbody>
 </table>
 <p>工程上，终端代价几乎总是要加的，因为它既提升稳定性、又能让较短的 <span class="arithmatex">\(N\)</span> 达到较长时域的效果；终端集则可以视算力与保守程度取舍。</p>
-<h2 id="mpc_2">MPC 的适用范围</h2>
+<h2 id="mpc_3">模型预测控制（MPC）的适用范围</h2>
 <p>MPC 不是"更高级所以更好"，而是一个有明确适用边界的工具。判断标准可归纳为四条：约束是否强硬且必须满足、模型是否足够准、算力是否够、控制频率是否够低。四条都满足时 MPC 优势显著；任一条严重不满足时，PID 或 LQR 往往更划算。</p>
 <p>一个实用的判断流程：先问"系统是否有必须满足的不等式约束"。若没有，LQR 或 PID 足以达到近似最优，且实现与调试都更简单；若有硬约束但控制频率极高（1 kHz 以上）或处理器只有微控制器级别，则应考虑显式 MPC（离线预计算可行解表）或退回带抗饱和的 LQR；只有当约束强、频率低、算力足、模型准同时成立时，在线 MPC 才是性价比最高的选择。</p>
 <table>

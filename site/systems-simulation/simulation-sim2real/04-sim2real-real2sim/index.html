@@ -3583,7 +3583,7 @@
   <a href="#sim2real" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sim2Real 的分阶段验证
+        仿真到现实（Sim2Real）的分阶段验证
       
     </span>
   </a>
@@ -3605,7 +3605,7 @@
   <a href="#real2sim" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Real2Sim 用真实数据反过来修正模拟器
+        现实到仿真（Real2Sim）的数据校正
       
     </span>
   </a>
@@ -4258,7 +4258,7 @@
   <a href="#sim2real" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sim2Real 的分阶段验证
+        仿真到现实（Sim2Real）的分阶段验证
       
     </span>
   </a>
@@ -4280,7 +4280,7 @@
   <a href="#real2sim" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Real2Sim 用真实数据反过来修正模拟器
+        现实到仿真（Real2Sim）的数据校正
       
     </span>
   </a>
@@ -4601,7 +4601,7 @@
 </table>
 <p>这张表把“差距”变成可排序的清单：先修高优先级项，再看剩余预算是否够用。若最高优先级项未被修复，其他项的改进都会被它掩盖。</p>
 <p>需要注意敏感度本身也随工况变化：低速时延迟不敏感，高速时成为主导；静止时摩擦偏差不可见，制动时才暴露。因此预算表应至少按“低速 / 高速”两档分别评估。</p>
-<h2 id="sim2real">Sim2Real 的分阶段验证</h2>
+<h2 id="sim2real">仿真到现实（Sim2Real）的分阶段验证</h2>
 <p>先在低速度、宽安全区验证基本动作，再扩大速度和场景复杂度。直接从仿真跳到高风险实机条件，很难区分算法错误、接口错误和模型偏差，逐级测试同时能为后续 Real2Sim 收集更干净的数据。</p>
 <p>分阶段的原则是<strong>每一阶段只引入一类新风险</strong>，这样失败可以归因。若某一阶段同时引入新接口、新环境和新硬件，任何失败都会变成一次全面排查。</p>
 <table>
@@ -4741,7 +4741,7 @@
 </tbody>
 </table>
 <p>硬件在环的另一个价值是暴露<strong>时间语义</strong>：控制器以为自己在 100 Hz 上运行，而实际执行周期可能是 100 Hz 上下抖动 ±20%。这类抖动在纯仿真中不存在，却足以让依赖固定周期的积分器产生累积误差。</p>
-<h2 id="real2sim">Real2Sim 用真实数据反过来修正模拟器</h2>
+<h2 id="real2sim">现实到仿真（Real2Sim）的数据校正</h2>
 <p>可以根据真实轨迹估计摩擦和执行器延迟，根据传感器日志估计噪声、bias 和丢包模式，根据相机数据更新纹理与光照范围。</p>
 <p>Real2Sim 不要求把每个物理参数都精确辨识出来，只需要让仿真在<strong>任务相关观测和行为</strong>上更接近实机。参数辨识的数学形式是最小化仿真与实测残差：</p>
 <div class="arithmatex">\[\hat{\phi} = \arg\min_{\phi} \sum_{k} \left\| y^{\mathrm{real}}_k - y^{\mathrm{sim}}_k(\phi) \right\|^2\]</div>

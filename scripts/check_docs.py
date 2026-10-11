@@ -190,14 +190,18 @@ for p in DOCS.rglob('*.md'):
                 f'{h1_text!r} != {nav_pages[target]!r}'
             )
 
-    if p.is_relative_to(DOCS / 'foundations') or p.is_relative_to(DOCS / 'yau-contest'):
-        direct_heading_pattern = re.compile(
-            r'^(#{2,4})\s+.*(?:为什么|怎么|如何|什么是|到底|何时|是否|能否|忘了|'
-            r'先看|先把|翻车|小结|自检|跑一遍|三句话|[？?]).*$',
-            flags=re.M,
-        )
-        for match in direct_heading_pattern.finditer(clean):
-            errors.append(f'Question/casual-style heading: {rel} -> {match.group(0)}')
+    for match in re.finditer(r'^(#{2,6})\s+(.+?)\s*$', clean, flags=re.M):
+        heading_text = re.sub(r'\s*\{[^}]*\}\s*$', '', match.group(2)).strip()
+        if not re.search(r'[\u4e00-\u9fff]', heading_text):
+            errors.append(f'Subordinate heading must use Chinese: {rel} -> {match.group(0)}')
+
+    direct_heading_pattern = re.compile(
+        r'^(#{2,6})\s+.*(?:为什么|怎么|如何|什么是|到底|何时|是否|能否|忘了|'
+        r'先看|先把|翻车|小结|自检|跑一遍|三句话|[？?]).*$',
+        flags=re.M,
+    )
+    for match in direct_heading_pattern.finditer(clean):
+        errors.append(f'Question/casual-style heading: {rel} -> {match.group(0)}')
 
     if p.is_relative_to(DOCS / 'yau-contest'):
         if re.search(r'^#{2,4}\s+.*\$', clean, flags=re.M):

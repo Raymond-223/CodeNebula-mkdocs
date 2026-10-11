@@ -3142,10 +3142,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lamport" class="md-nav__link">
+  <a href="#lamport-clock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Lamport 时钟与向量时钟
+        兰波特时钟（Lamport Clock）与向量时钟
       
     </span>
   </a>
@@ -4332,10 +4332,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lamport" class="md-nav__link">
+  <a href="#lamport-clock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Lamport 时钟与向量时钟
+        兰波特时钟（Lamport Clock）与向量时钟
       
     </span>
   </a>
@@ -4806,7 +4806,7 @@
 <li>窗口、过期与丢弃策略必须显式声明依据哪一类时间，不能含糊。</li>
 </ul>
 <p><strong>只要这两类时间被混为一谈，系统就会在负载变化时出现“在线能跑、离线复现不了”的经典问题。</strong></p>
-<h2 id="lamport">Lamport 时钟与向量时钟</h2>
+<h2 id="lamport-clock">兰波特时钟（Lamport Clock）与向量时钟</h2>
 <p>逻辑时钟的目标是在没有全局时钟的前提下，给事件赋予一组合乎因果的编号。Lamport 时钟用单一整数实现，规则非常简洁：</p>
 <ol>
 <li>进程在执行任一事件前，把本地计数器加一：<span class="arithmatex">\(L_{i} \leftarrow L_{i} + 1\)</span>。</li>

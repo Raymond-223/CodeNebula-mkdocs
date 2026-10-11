@@ -9,7 +9,7 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 “最小充分”的含义是：只保留后续反复依赖、能够解释真实系统、或者删掉后会造成认知断层的内容。因此读的时候会遇到刻意的取舍——算法只保留能代表一类思想的方法，图片只用于解释几何关系、数据流与系统边界，代码只用于把公式落到实现。
 
-## Independent Contest Track
+## 独立竞赛专题
 
 **[Yau Contest — Computational and Applied Mathematics](yau-contest/index.md)** 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 **Stage 1: Matrix Theory & Iteration**，包含七章教材式内容，从最基础的数学证明语言讲到SVD、谱半径、幂法、压缩映射和Newton收敛。
 

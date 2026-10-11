@@ -3895,7 +3895,7 @@
   <a href="#watchdog" class="md-nav__link">
     <span class="md-ellipsis">
       
-        watchdog 处理的是系统是否还活着
+        看门狗（Watchdog）与运行状态监测
       
     </span>
   </a>
@@ -4291,7 +4291,7 @@
   <a href="#watchdog" class="md-nav__link">
     <span class="md-ellipsis">
       
-        watchdog 处理的是系统是否还活着
+        看门狗（Watchdog）与运行状态监测
       
     </span>
   </a>
@@ -4755,7 +4755,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="watchdog">watchdog 处理的是系统是否还活着</h2>
+<h2 id="watchdog">看门狗（Watchdog）与运行状态监测</h2>
 <p>如果控制节点超过 500 ms 没有心跳，继续使用最后一条速度命令非常危险。watchdog 可以直接触发停车或备用控制。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">watchdog</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">last_update</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;STOP&quot;</span> <span class="k">if</span> <span class="n">now</span> <span class="o">-</span> <span class="n">last_update</span> <span class="o">&gt;</span> <span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;OK&quot;</span>

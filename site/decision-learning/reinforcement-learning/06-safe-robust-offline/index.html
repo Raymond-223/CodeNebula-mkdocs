@@ -1895,7 +1895,7 @@
   <a href="#offline-rl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Offline RL 与数据分布
+        离线强化学习（Offline RL）与数据分布
       
     </span>
   </a>
@@ -1917,7 +1917,7 @@
   <a href="#cmdp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CMDP 与约束优化形式
+        约束马尔可夫决策过程（CMDP）与约束优化
       
     </span>
   </a>
@@ -1961,7 +1961,7 @@
   <a href="#offline-rl_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Offline RL 的分布外风险
+        离线强化学习（Offline RL）的分布外风险
       
     </span>
   </a>
@@ -1983,7 +1983,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        为什么离线评估很难
+        离线评估的困难
       
     </span>
   </a>
@@ -4258,7 +4258,7 @@
   <a href="#offline-rl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Offline RL 与数据分布
+        离线强化学习（Offline RL）与数据分布
       
     </span>
   </a>
@@ -4280,7 +4280,7 @@
   <a href="#cmdp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CMDP 与约束优化形式
+        约束马尔可夫决策过程（CMDP）与约束优化
       
     </span>
   </a>
@@ -4324,7 +4324,7 @@
   <a href="#offline-rl_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Offline RL 的分布外风险
+        离线强化学习（Offline RL）的分布外风险
       
     </span>
   </a>
@@ -4346,7 +4346,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        为什么离线评估很难
+        离线评估的困难
       
     </span>
   </a>
@@ -4502,7 +4502,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="offline-rl">Offline RL 与数据分布</h2>
+<h2 id="offline-rl">离线强化学习（Offline RL）与数据分布</h2>
 <p>Offline RL 的输入只有一个固定的 <span class="arithmatex">\((D)\)</span>，<span class="arithmatex">\(D=\{(s_t,a_t,r_t,s'_{t})\}_{t=1}^{N}\)</span>，由未知的行为策略 <span class="arithmatex">\(\pi_\beta\)</span> 生成。定义行为策略的折扣占用度量</p>
 <div class="arithmatex">\[d^{\pi_\beta}(s,a) = (1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\, \mathbb P\big(s_t=s, a_t=a \mid \pi_\beta\big).\]</div>
 <p>Offline RL 想解的目标是在<strong>分布约束</strong>下的回报最大化：</p>
@@ -4599,7 +4599,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="cmdp">CMDP 与约束优化形式</h2>
+<h2 id="cmdp">约束马尔可夫决策过程（CMDP）与约束优化</h2>
 <p>这是 Safe RL 的标准形式化。在 MDP 上增加成本函数 <span class="arithmatex">\(c:\mathcal S\times\mathcal A\to[0,c_{\max}]\)</span> 与预算 <span class="arithmatex">\(d\)</span>，得到约束 MDP（CMDP），其联合目标写成</p>
 <div class="arithmatex">\[\max_\pi\; J(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} r(s_t,a_t)\right] \quad \text{s.t.}\quad J_C(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} c(s_t,a_t)\right] \le d .\]</div>
 <p>注意 <span class="arithmatex">\(d\)</span> 是<strong>折扣累计成本</strong>的预算，不是瞬时每步的约束。若 <span class="arithmatex">\(\gamma=0.99\)</span>，<span class="arithmatex">\(d=1\)</span> 大约允许平均每步成本 <span class="arithmatex">\(1-\gamma = 0.01\)</span>，即百万步量级的交互中容许一次单位成本事件——这个换算经常被写错，导致约束实际宽松 100 倍。</p>
@@ -4777,7 +4777,7 @@
 <p>三者叠加时约束会相乘式收紧，这一点必须显式记账。以"离线 + 鲁棒 + 安全"为例，要同时满足在 <span class="arithmatex">\(D\)</span> 支撑集内、对所有 <span class="arithmatex">\(P\in\mathcal P\)</span>、且 <span class="arithmatex">\(J_C\le d\)</span>，可行策略集是三个集合的交：</p>
 <div class="arithmatex">\[\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{\text{offline}} \;\cap\; \underbrace{\{\pi: \forall P\in\mathcal P,\; J_{P}(\pi)\ge J_{\min}\}}_{\text{robust}} \;\cap\; \underbrace{\{\pi: J_C(\pi)\le d\}}_{\text{safe}} .\]</div>
 <p>交集很容易是空集——数据覆盖不足、又要对所有扰动成立、还要满足硬约束，可能根本不存在这样的策略。此时诊断结论不是"算法不够好"，而是<strong>问题设定本身不可行</strong>，正确动作是放宽 <span class="arithmatex">\(d\)</span>、扩大数据集或收缩 <span class="arithmatex">\(\mathcal P\)</span>。经验估计量级：每增加一个"对所有 <span class="arithmatex">\(P\in\mathcal P\)</span> 成立"的要求，达到同样置信度所需的样本量近似乘以 <span class="arithmatex">\(\rho^{-2}\)</span> 量级的因子，<span class="arithmatex">\(\rho\)</span> 越小增速越陡。</p>
-<h2 id="offline-rl_1">Offline RL 的分布外风险</h2>
+<h2 id="offline-rl_1">离线强化学习（Offline RL）的分布外风险</h2>
 <p>把上一节的机制落到可操作的判据。"分布外动作"指的是目标策略给出显著概率、而 <span class="arithmatex">\(\pi_\beta\)</span> 几乎不给概率的动作集合：</p>
 <div class="arithmatex">\[\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) &gt; \delta,\; \hat\pi_\beta(a\mid s) &lt; \epsilon \big\}.\]</div>
 <p>只要 <span class="arithmatex">\(\mathcal A_{\text{OOD}}\neq\varnothing\)</span>，就一定存在 Q 值无数据支持的移动。</p>
@@ -4870,7 +4870,7 @@
 </tbody>
 </table>
 <p>一个具体例子可以一次区分三者：用六个月历史日志训练仓储 AGV 是 Offline；地面摩擦系数、载重分布会随季节和批次变化是 Robust；车体绝不能进入人员工作区是 Safe。三条改造路径互不替代：扩大数据集不解决约束，加约束不解决摩擦漂移，域随机化也不解决"数据里根本没有那种动作"。</p>
-<h2 id="_7">为什么离线评估很难</h2>
+<h2 id="_7">离线评估的困难</h2>
 <p>离线 RL 最容易被低估的环节是评估。<strong>策略改进需要验证，而验证需要环境交互——这个前提在离线设定下恰好被剥夺。</strong> <span class="arithmatex">\(J(\pi)\)</span> 的真值不存在于任何数据中，它是关于反事实轨迹的期望。</p>
 <p>最直接的想法是重要性采样（IS）。用数据集轨迹 <span class="arithmatex">\(i\)</span> 的回报 <span class="arithmatex">\(G_i\)</span> 做加权：</p>
 <div class="arithmatex">\[\hat J_{\text{IS}}(\pi) = \frac{1}{N}\sum_{i=1}^{N} \left(\prod_{t=0}^{T-1}\frac{\pi(a_{t}^{i}\mid s_{t}^{i})}{\pi_\beta(a_{t}^{i}\mid s_{t}^{i})}\right) G_i .\]</div>

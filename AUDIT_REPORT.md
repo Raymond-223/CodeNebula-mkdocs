@@ -37,8 +37,8 @@
 ## Heading Normalization
 
 - 顶部导航和页面 H1 使用英文；
-- Yau Contest 的 H2/H3 全部为英文知识点名称；
-- Foundations 中的问句式、对话式和“复习资料式”标题改为知识点名称；
+- 全站 H2/H3 使用中文知识点名称，重要英文术语仅作为括号内标准名称保留；
+- 问句式、对话式和“复习资料式”标题改为知识点名称；
 - 公式不再出现在 Yau Contest 的 H2/H3 中，降低目录与锚点渲染风险；
 - 为 `Gradient, Jacobian and Hessian` 与 `Lie Group boxplus` 设置稳定显式锚点，并修复 Robotics 中的旧链接。
 
@@ -63,7 +63,7 @@
 
 - 页面 H1 必须为英文；
 - 非通用导航标签应与页面 H1 一致；
-- Foundations 与 Yau Contest 不允许问句式或对话式 H2/H3；
+- 全站不允许问句式或对话式 H2/H3，并要求二级及以下标题包含中文；
 - Yau Contest 的小标题不允许嵌入行内公式；
 - Yau 理论章节必须达到最低讲解深度；
 - 检测 Unicode replacement character，防止编码损坏；

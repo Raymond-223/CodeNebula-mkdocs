@@ -3026,22 +3026,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tcp-udp" class="md-nav__link">
+  <a href="#tcpudp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TCP 和 UDP 提供的是不同传输语义
+        传输控制协议（TCP）与用户数据报协议（UDP）的传输语义
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="TCP 和 UDP 提供的是不同传输语义">
+    <nav class="md-nav" aria-label="传输控制协议（TCP）与用户数据报协议（UDP）的传输语义">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tcpudp" class="md-nav__link">
+  <a href="#tcpudp_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TCP/UDP 的最小接口差异
+        传输控制协议与用户数据报协议（TCP/UDP）的接口差异
       
     </span>
   </a>
@@ -3057,7 +3057,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        应用层仍然必须定义什么是一条消息
+        应用层消息边界
       
     </span>
   </a>
@@ -3065,10 +3065,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#requestresponse-publishsubscribe" class="md-nav__link">
+  <a href="#-requestresponse-publishsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request/Response 与 Publish/Subscribe
+        请求－响应（Request/Response）与发布－订阅（Publish/Subscribe）
       
     </span>
   </a>
@@ -4239,22 +4239,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tcp-udp" class="md-nav__link">
+  <a href="#tcpudp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TCP 和 UDP 提供的是不同传输语义
+        传输控制协议（TCP）与用户数据报协议（UDP）的传输语义
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="TCP 和 UDP 提供的是不同传输语义">
+    <nav class="md-nav" aria-label="传输控制协议（TCP）与用户数据报协议（UDP）的传输语义">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tcpudp" class="md-nav__link">
+  <a href="#tcpudp_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        TCP/UDP 的最小接口差异
+        传输控制协议与用户数据报协议（TCP/UDP）的接口差异
       
     </span>
   </a>
@@ -4270,7 +4270,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        应用层仍然必须定义什么是一条消息
+        应用层消息边界
       
     </span>
   </a>
@@ -4278,10 +4278,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#requestresponse-publishsubscribe" class="md-nav__link">
+  <a href="#-requestresponse-publishsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request/Response 与 Publish/Subscribe
+        请求－响应（Request/Response）与发布－订阅（Publish/Subscribe）
       
     </span>
   </a>
@@ -4455,14 +4455,14 @@
 <br />
 <figcaption>请求响应适合一次性交互，发布订阅适合持续状态流和事件广播。</figcaption>
 </figure>
-<h2 id="tcp-udp">TCP 和 UDP 提供的是不同传输语义</h2>
+<h2 id="tcpudp">传输控制协议（TCP）与用户数据报协议（UDP）的传输语义</h2>
 <p>TCP 提供可靠、有序的<strong>字节流</strong>。它会重传丢失数据，但不替应用定义消息边界：连续两次 <code>send()</code> 在接收端可能被一次 <code>recv()</code> 读到，也可能被拆开。</p>
 <p>UDP 保留数据报边界、延迟更直接，但可能丢包、乱序或重复。它适合对最新数据更敏感、允许偶尔丢失旧包的场景，例如部分高频状态流。</p>
 <p>因此协议选择本质是<strong>可靠性、时延和数据语义</strong>之间的权衡。</p>
 <p>“可靠”这个词比它听起来更窄。TCP 保证的是：只要连接还活着，字节最终会按序到达。它不保证数据在你需要的时候到达，也不保证对端进程真的处理了它。一个有 30 秒重传退避的 TCP 连接，可能在你以为早已超时之后，才把一段陈旧指令送达——此时“可靠”反而变成了危险。</p>
 <p>还有一种常见误解，是认为 TCP 在“慢”和“快”之间只是速度差别。实际上丢包对 TCP 的影响是非线性的：丢包会触发拥塞窗口收缩，吞吐骤降，且多个流共享同一瓶颈链路时会产生<strong>队头阻塞</strong>（head-of-line blocking）——一个流卡住会拖慢同一连接上排在后面的所有消息。延迟分布因此不是对称的，尾部延迟（p99）往往比中位数高一到两个数量级，而控制系统感受到的正是尾部。</p>
 <p>UDP 的问题恰好相反：它把顺序和完整性全部交还给应用。你要么接受偶尔的缺失，要么自己实现序号、确认和重传。<strong>选择 UDP 通常意味着你已经确认了“旧数据比缺失数据更糟”</strong>——例如一个 100 Hz 的位姿流，第 47 帧没到没关系，但第 46 帧拖到第 60 帧之后才到就是纯粹的负价值。</p>
-<h3 id="tcpudp">TCP/UDP 的最小接口差异</h3>
+<h3 id="tcpudp_1">传输控制协议与用户数据报协议（TCP/UDP）的接口差异</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 
 <span class="n">tcp</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -4476,7 +4476,7 @@
 <p>还有一个常被忽略的细节：<strong>消息边界与应用语义并不总是对齐的。</strong> 假如发送方把一条消息拆成三个 <code>send()</code> 调用，接收方可能读到 1.5 条消息；反之若发送方连发一千条小消息，接收方可能一次读到几十条。这就是“粘包与半包”问题的来源。长度前缀把切分责任从“字节何时到达”转移到“协议约定的字段”，从而让消息边界与传输分片彻底解耦。</p>
 <p>延迟敏感的场景还常遇到 TCP 的两个默认行为需要调整：Nagle 算法会把小包攒起来一起发，从而牺牲延迟换带宽效率；延迟确认（delayed ACK）最多等待约 40 ms 才回复。二者叠加，可能在一条几乎没有负载的链路上产生几十毫秒的无谓延迟。<strong>对控制回路而言，这个量级足以让整条时间预算失效</strong>，所以实时系统常显式关闭它们，并接受随之而来的小包开销。</p>
 <p>UDP 侧则要关心 MTU。典型以太网 MTU 为 1500 字节，扣除 IP 与 UDP 头后可用载荷约 1472 字节。超过这个值的数据报会被 IP 层分片，而分片的致命之处在于：<strong>只要其中任意一片丢失，整个数据报就不可用，但丢包率是按片计的</strong>。一个 8 KB 的消息被分成 6 片，在 1% 片丢包率下整包失败率接近 6%。因此高可靠场景通常把应用层消息限制在 MTU 之内，或自行在应用层分片并做整包重传。</p>
-<h2 id="_1">应用层仍然必须定义什么是一条消息</h2>
+<h2 id="_1">应用层消息边界</h2>
 <p>无论 TCP 还是 UDP，系统都需要定义序列化格式、字段、版本和错误行为。一个任务消息至少要说明任务 ID、发送者、时间戳和状态，而不能只发送一个模糊字符串。</p>
 <p>JSON 便于调试，Protobuf/IDL 更适合严格接口和高效传输。格式本身不是重点，<strong>双方对字段语义有共同契约</strong>才是重点。</p>
 <p>这里有一个容易被忽略的区分：<strong>帧（frame）</strong> 是传输层的切分单位，<strong>消息（message）</strong> 是语义单位，两者不必一一对应。长度前缀方案让接收方先读 4 字节长度、再读载荷，从而把字节流重新切回消息。这个看似琐碎的约定，是把“可靠字节流”提升为“可靠消息流”的唯一途径。</p>
@@ -4526,7 +4526,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="requestresponse-publishsubscribe">Request/Response 与 Publish/Subscribe</h2>
+<h2 id="-requestresponse-publishsubscribe">请求－响应（Request/Response）与发布－订阅（Publish/Subscribe）</h2>
 <p>查询参数、请求一次规划结果通常适合 request/response：调用方明确等待一个结果。</p>
 <p>里程计、传感器和状态事件则更适合 publish/subscribe：发布者只负责把数据发到 Topic，不需要知道有多少订阅者。这样可以降低模块耦合。</p>
 <div class="highlight"><pre><span></span><code><span class="n">subscribers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;robot.pose&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">localizer</span><span class="p">,</span> <span class="n">recorder</span><span class="p">]}</span>

@@ -2826,7 +2826,7 @@
   <a href="#iou" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IoU 与空间重合
+        交并比（IoU）与空间重合
       
     </span>
   </a>
@@ -4280,7 +4280,7 @@
   <a href="#iou" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IoU 与空间重合
+        交并比（IoU）与空间重合
       
     </span>
   </a>
@@ -4607,7 +4607,7 @@ L=L_{cls}+\lambda L_{loc},
 </tbody>
 </table>
 <p><strong>掩码的代价集中在边界上：</strong> 内部像素分类几乎不会出错，误差主要发生在目标轮廓 ±2 px 的带状区域内，而这一小部分像素却决定了 Dice 和 mIoU 的绝大部分波动。</p>
-<h2 id="iou">IoU 与空间重合</h2>
+<h2 id="iou">交并比（IoU）与空间重合</h2>
 <p>对预测区域 <span class="arithmatex">\(B_p\)</span> 和真实区域 <span class="arithmatex">\(B_g\)</span>，常用</p>
 <div class="arithmatex">\[
 \operatorname{IoU}(B_p,B_g)=\frac{|B_p\cap B_g|}{|B_p\cup B_g|}.

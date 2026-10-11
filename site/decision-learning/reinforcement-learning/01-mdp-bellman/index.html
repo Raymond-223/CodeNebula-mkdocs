@@ -1755,7 +1755,7 @@
   <a href="#mdp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MDP 用五个对象描述连续决策
+        马尔可夫决策过程（MDP）的五元组
       
     </span>
   </a>
@@ -1785,10 +1785,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman" class="md-nav__link">
+  <a href="#bellman-recursion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 递推依据
+        贝尔曼递推（Bellman Recursion）
       
     </span>
   </a>
@@ -1796,10 +1796,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_1" class="md-nav__link">
+  <a href="#bellman-optimality-relation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 最优性关系
+        贝尔曼最优性关系（Bellman Optimality Relation）
       
     </span>
   </a>
@@ -1851,10 +1851,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_2" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 关系与学习更新
+        贝尔曼关系与学习更新
       
     </span>
   </a>
@@ -1862,10 +1862,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_3" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 关系的适用边界
+        贝尔曼关系的适用边界
       
     </span>
   </a>
@@ -4269,7 +4269,7 @@
   <a href="#mdp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MDP 用五个对象描述连续决策
+        马尔可夫决策过程（MDP）的五元组
       
     </span>
   </a>
@@ -4299,10 +4299,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman" class="md-nav__link">
+  <a href="#bellman-recursion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 递推依据
+        贝尔曼递推（Bellman Recursion）
       
     </span>
   </a>
@@ -4310,10 +4310,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_1" class="md-nav__link">
+  <a href="#bellman-optimality-relation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 最优性关系
+        贝尔曼最优性关系（Bellman Optimality Relation）
       
     </span>
   </a>
@@ -4365,10 +4365,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_2" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 关系与学习更新
+        贝尔曼关系与学习更新
       
     </span>
   </a>
@@ -4376,10 +4376,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bellman_3" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bellman 关系的适用边界
+        贝尔曼关系的适用边界
       
     </span>
   </a>
@@ -4537,7 +4537,7 @@
 </table>
 <p>一个常见的错误是"用大量特征把状态撑大"，这不会自动带来 Markov 性，反而会稀释样本、放大维度灾难。正确做法是问：<strong>这些新增量是否真的改变了下一个奖励或下一个状态的分布？</strong></p>
 <p>因此遇到一个 RL 问题，第一件事不是选 PPO 还是 DQN，而是先问：<strong>我给智能体的状态，是否足以预测动作的后果？</strong></p>
-<h2 id="mdp">MDP 用五个对象描述连续决策</h2>
+<h2 id="mdp">马尔可夫决策过程（MDP）的五元组</h2>
 <p>一个 MDP 通常写作</p>
 <div class="arithmatex">\[\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).\]</div>
 <p>其中：</p>
@@ -4676,7 +4676,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="bellman">Bellman 递推依据</h2>
+<h2 id="bellman-recursion">贝尔曼递推（Bellman Recursion）</h2>
 <p>回报本身可以拆成</p>
 <div class="arithmatex">\[G_t=r_{t+1}+\gamma G_{t+1}.\]</div>
 <p>这一步只是重新分组，没有任何近似。对它取条件期望，就得到 Bellman 期望方程：</p>
@@ -4691,7 +4691,7 @@
 <p>则 <span class="arithmatex">\(V^\pi\)</span> 是不动点 <span class="arithmatex">\(T^\pi V^\pi=V^\pi\)</span>。并且对任意两个值函数</p>
 <div class="arithmatex">\[\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,\]</div>
 <p>即 <span class="arithmatex">\(T^\pi\)</span> 是以 <span class="arithmatex">\(\gamma\)</span> 为模的<strong>压缩映射</strong>。收敛速度完全被 <span class="arithmatex">\(\gamma\)</span> 决定：<span class="arithmatex">\(\gamma=0.9\)</span> 时每次迭代误差至少缩小 <span class="arithmatex">\(10\%\)</span>，<span class="arithmatex">\(\gamma=0.999\)</span> 时每步只缩小 <span class="arithmatex">\(0.1\%\)</span>。</p>
-<h2 id="bellman_1">Bellman 最优性关系</h2>
+<h2 id="bellman-optimality-relation">贝尔曼最优性关系（Bellman Optimality Relation）</h2>
 <p>最优动作价值函数定义为</p>
 <div class="arithmatex">\[Q^*(s,a)=\max_\pi Q^\pi(s,a).\]</div>
 <p>对应的 Bellman 最优方程为</p>
@@ -4956,7 +4956,7 @@
 <li><strong>信用分配</strong>：<span class="arithmatex">\(A^\pi&lt;0\)</span> 时该动作沿 <span class="arithmatex">\(-\nabla_\theta\ln\pi_\theta(a\mid s)\)</span> 方向被压低概率，<span class="arithmatex">\(A^\pi&gt;0\)</span> 时被抬高，正值幅度直接告诉优化器"值得加强多少"。</li>
 </ol>
 <p>具体到数值：在上节 <span class="arithmatex">\(\gamma=0.99\)</span> 的两状态例子里，若 <span class="arithmatex">\(\pi\)</span> 在 <span class="arithmatex">\(A\)</span> 处以 <span class="arithmatex">\(0.5\)</span> 概率选 <code>go</code>，则 <span class="arithmatex">\(V^\pi(A)=0.5\times299+0.5\times100=199.5\)</span>，于是 <span class="arithmatex">\(A^\pi(A,\text{go})=99.5\)</span>、<span class="arithmatex">\(A^\pi(A,\text{stay})=-99.5\)</span>，加权和恰为零。若改用一步 TD 优势估计 <span class="arithmatex">\(\hat A_t=\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t)\)</span>，则只需一次转移即可估计，代价是引入自举偏差；多步与 GAE 就是在这两端之间连续调节。</p>
-<h2 id="bellman_2">Bellman 关系与学习更新</h2>
+<h2 id="_7">贝尔曼关系与学习更新</h2>
 <p>如果 <span class="arithmatex">\(P,R\)</span> 已知，可以直接迭代 Bellman 方程；如果模型未知，就必须从采样数据估计价值。</p>
 <table>
 <thead>
@@ -4998,7 +4998,7 @@
 <div class="arithmatex">\[\underbrace{V^\pi(s)=\mathbb E_\pi[r+\gamma V^\pi(s')]}_{\text{评估已知策略}}\quad\underbrace{V^*(s)=\max_a\mathbb E[r+\gamma V^*(s')]}_{\text{最优，需要}\ \max}\quad\underbrace{V(s)\leftarrow V(s)+\alpha\left[r+\gamma V(s')-V(s)\right]}_{\text{采样的随机近似}}\]</div>
 <p>第三式是把前两式的期望关系换成单样本的随机近似。它成立的直觉是：每次采样的 TD 误差期望正是 <span class="arithmatex">\((TV)(s)-V(s)\)</span>，因此只要学习率满足 <span class="arithmatex">\(\sum_t\alpha_t=\infty\)</span> 且 <span class="arithmatex">\(\sum_t\alpha_t^2&lt;\infty\)</span>，估计就会朝不动点漂移。<strong>这也是为什么"用了 Q-Learning"本身不保证收敛</strong>——还需要持续访问所有状态—动作对、学习率满足上述条件、MDP 保持平稳。</p>
 <p>后面的价值学习和策略学习，其实都在回答同一个问题：<strong>Bellman 关系已经告诉我们"正确答案应该满足什么"，怎样只靠数据把这个关系学出来？</strong></p>
-<h2 id="bellman_3">Bellman 关系的适用边界</h2>
+<h2 id="_8">贝尔曼关系的适用边界</h2>
 <p>Bellman 分解依赖状态足以概括与未来有关的历史，并且回报可以按时间累加。若奖励存在强路径依赖，或观测不能表示真实状态，就需要扩展状态、引入历史或转向 POMDP。</p>
 <table>
 <thead>

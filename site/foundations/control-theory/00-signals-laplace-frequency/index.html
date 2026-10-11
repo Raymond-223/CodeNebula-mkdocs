@@ -1337,7 +1337,7 @@
   <a href="#laplace-transform" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、Laplace Transform
+        三、拉普拉斯变换（Laplace Transform）
       
     </span>
   </a>
@@ -1348,29 +1348,7 @@
   <a href="#transfer-function" class="md-nav__link">
     <span class="md-ellipsis">
       
-        四、Transfer Function
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#gs-gjomega" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        五、从 \(G(s)\) 到 \(G(j\omega)\)：频率响应
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bode-plot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        六、Bode Plot
+        四、传递函数（Transfer Function）
       
     </span>
   </a>
@@ -1381,7 +1359,18 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、闭环、开环和稳定裕度
+        五、频率响应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bode-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、波特图（Bode Plot）
       
     </span>
   </a>
@@ -1392,7 +1381,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、传递函数与状态空间
+        七、闭环、开环和稳定裕度
       
     </span>
   </a>
@@ -1401,6 +1390,17 @@
       
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、传递函数与状态空间
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         九、核心概念表
@@ -4247,7 +4247,7 @@
   <a href="#laplace-transform" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、Laplace Transform
+        三、拉普拉斯变换（Laplace Transform）
       
     </span>
   </a>
@@ -4258,29 +4258,7 @@
   <a href="#transfer-function" class="md-nav__link">
     <span class="md-ellipsis">
       
-        四、Transfer Function
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#gs-gjomega" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        五、从 \(G(s)\) 到 \(G(j\omega)\)：频率响应
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bode-plot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        六、Bode Plot
+        四、传递函数（Transfer Function）
       
     </span>
   </a>
@@ -4291,7 +4269,18 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        七、闭环、开环和稳定裕度
+        五、频率响应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bode-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、波特图（Bode Plot）
       
     </span>
   </a>
@@ -4302,7 +4291,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        八、传递函数与状态空间
+        七、闭环、开环和稳定裕度
       
     </span>
   </a>
@@ -4311,6 +4300,17 @@
       
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、传递函数与状态空间
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         九、核心概念表
@@ -4438,7 +4438,7 @@ A\cos(\omega t+\phi)=\Re\{Ae^{j(\omega t+\phi)}\}.
 |a+jb|=\sqrt{a^2+b^2},\qquad \angle(a+jb)=\operatorname{atan2}(b,a).
 \]</div>
 <p>后面的 <span class="arithmatex">\(G(j\omega)\)</span> 就是在问：频率为 <span class="arithmatex">\(\omega\)</span> 的正弦输入经过系统后，幅值和相位分别怎么变。</p>
-<h2 id="laplace-transform">三、Laplace Transform</h2>
+<h2 id="laplace-transform">三、拉普拉斯变换（Laplace Transform）</h2>
 <p>考虑最简单的一阶系统：</p>
 <div class="arithmatex">\[
 \tau \dot y(t)+y(t)=K u(t).
@@ -4452,7 +4452,7 @@ A\cos(\omega t+\phi)=\Re\{Ae^{j(\omega t+\phi)}\}.
 (\tau s+1)Y(s)=KU(s).
 \]</div>
 <p>这里 <span class="arithmatex">\(s=\sigma+j\omega\)</span> 是复变量，<span class="arithmatex">\(Y(s),U(s)\)</span> 分别是输出和输入的 Laplace 变换。</p>
-<h2 id="transfer-function">四、Transfer Function</h2>
+<h2 id="transfer-function">四、传递函数（Transfer Function）</h2>
 <p>把输出除以输入：</p>
 <div class="arithmatex">\[
 G(s)=\frac{Y(s)}{U(s)}=\frac{K}{\tau s+1}.
@@ -4469,7 +4469,7 @@ G(s)=\frac{s+2}{(s+1)(s+5)}.
 <li><span class="arithmatex">\(\Re(p)=0\)</span>：持续振荡或临界情况。</li>
 </ul>
 <p>所以“看极点在复平面哪里”就是稳定性分析的核心入口。</p>
-<h2 id="gs-gjomega">五、从 <span class="arithmatex">\(G(s)\)</span> 到 <span class="arithmatex">\(G(j\omega)\)</span>：频率响应</h2>
+<h2 id="_3">五、频率响应</h2>
 <p>把 <span class="arithmatex">\(s\)</span> 取成纯虚数 <span class="arithmatex">\(j\omega\)</span>：</p>
 <div class="arithmatex">\[
 G(j\omega).
@@ -4489,7 +4489,7 @@ G(s)=\frac{1}{1+\tau s}
 \angle G(j\omega)=-\arctan(\tau\omega).
 \]</div>
 <p>频率越高，幅值越小、相位滞后越大。这就是“系统跟不上太快变化”的数学表达。</p>
-<h2 id="bode-plot">六、Bode Plot</h2>
+<h2 id="bode-plot">六、波特图（Bode Plot）</h2>
 <p>Bode 图只是把上一节两条函数分别画出来：</p>
 <ol>
 <li><strong>幅频图</strong>：横轴是对数频率，纵轴常写成分贝
@@ -4497,7 +4497,7 @@ G(s)=\frac{1}{1+\tau s}
 <li><strong>相频图</strong>：横轴仍是频率，纵轴是 <span class="arithmatex">\(\angle G(j\omega)\)</span>（度）。</li>
 </ol>
 <p>为什么用对数？因为控制系统常跨好几个数量级的频率，而且乘法关系取对数后变成加法，多个极点/零点的影响可以直接叠加。</p>
-<h2 id="_3">七、闭环、开环和稳定裕度</h2>
+<h2 id="_4">七、闭环、开环和稳定裕度</h2>
 <p>最常见的负反馈结构里，控制器 <span class="arithmatex">\(C(s)\)</span> 与对象 <span class="arithmatex">\(P(s)\)</span> 的乘积</p>
 <div class="arithmatex">\[
 L(s)=C(s)P(s)
@@ -4517,7 +4517,7 @@ T(s)=\frac{L(s)}{1+L(s)}.
 <li><strong>增益裕度</strong>：在相位达到 <span class="arithmatex">\(-180^\circ\)</span> 的频率处，增益距离 1 还差多少。</li>
 </ul>
 <p>它们不是新的稳定性理论，而是把“离不稳定边界多远”量化出来。</p>
-<h2 id="_4">八、传递函数与状态空间</h2>
+<h2 id="_5">八、传递函数与状态空间</h2>
 <p>传递函数与状态空间不是两套互不相干的理论。对</p>
 <div class="arithmatex">\[
 \dot x=Ax+Bu,\qquad y=Cx+Du,
@@ -4540,7 +4540,7 @@ G(s)=C(sI-A)^{-1}B+D.
 <li>状态空间更适合多变量、现代控制、估计与最优控制；</li>
 <li>二者描述的是同一个线性系统，只是观察角度不同。</li>
 </ul>
-<h2 id="_5">九、核心概念表</h2>
+<h2 id="_6">九、核心概念表</h2>
 <table>
 <thead>
 <tr>

@@ -1094,7 +1094,7 @@
   <a href="#13-so3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 \(SO(3)\) 的群结构
+        1.3 三维特殊正交群（SO(3)）的群结构
       
     </span>
   </a>
@@ -1110,19 +1110,19 @@
   <a href="#se3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二、从旋转到刚体位姿：\(SE(3)\)
+        二、从旋转到三维特殊欧氏群（SE(3)）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="二、从旋转到刚体位姿：\(SE(3)\)">
+    <nav class="md-nav" aria-label="二、从旋转到三维特殊欧氏群（SE(3)）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#21-se3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 \(SE(3)\) 刚体变换
+        2.1 三维特殊欧氏群（SE(3)）的刚体变换
       
     </span>
   </a>
@@ -1133,7 +1133,7 @@
   <a href="#22-tf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 TF 变换链的复合与求逆
+        2.2 坐标变换（TF）链的复合与求逆
       
     </span>
   </a>
@@ -1160,12 +1160,12 @@
   <a href="#slam" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、SLAM 的局部增量
+        三、同步定位与建图（SLAM）的局部增量
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="三、SLAM 的局部增量">
+    <nav class="md-nav" aria-label="三、同步定位与建图（SLAM）的局部增量">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4327,7 +4327,7 @@
   <a href="#13-so3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 \(SO(3)\) 的群结构
+        1.3 三维特殊正交群（SO(3)）的群结构
       
     </span>
   </a>
@@ -4343,19 +4343,19 @@
   <a href="#se3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二、从旋转到刚体位姿：\(SE(3)\)
+        二、从旋转到三维特殊欧氏群（SE(3)）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="二、从旋转到刚体位姿：\(SE(3)\)">
+    <nav class="md-nav" aria-label="二、从旋转到三维特殊欧氏群（SE(3)）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#21-se3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 \(SE(3)\) 刚体变换
+        2.1 三维特殊欧氏群（SE(3)）的刚体变换
       
     </span>
   </a>
@@ -4366,7 +4366,7 @@
   <a href="#22-tf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 TF 变换链的复合与求逆
+        2.2 坐标变换（TF）链的复合与求逆
       
     </span>
   </a>
@@ -4393,12 +4393,12 @@
   <a href="#slam" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、SLAM 的局部增量
+        三、同步定位与建图（SLAM）的局部增量
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="三、SLAM 的局部增量">
+    <nav class="md-nav" aria-label="三、同步定位与建图（SLAM）的局部增量">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4607,7 +4607,7 @@ R^\top R=I.
 9-6=3.
 \]</div>
 <p>这就是“旋转矩阵有 9 个数，但只描述 3 个自由度”的来源。后面机器人章节会再比较欧拉角和四元数：它们只是<strong>同一个三维旋转的不同参数化方式</strong>，不是三套不同的几何。</p>
-<h3 id="13-so3">1.3 <span class="arithmatex">\(SO(3)\)</span> 的群结构</h3>
+<h3 id="13-so3">1.3 三维特殊正交群（SO(3)）的群结构</h3>
 <p>入门阶段不需要抽象代数，只要检查四件事：</p>
 <ol>
 <li>两个旋转连续执行仍然是旋转：<span class="arithmatex">\(R_1R_2\in SO(3)\)</span>；</li>
@@ -4617,8 +4617,8 @@ R^\top R=I.
 </ol>
 <p>满足这些规则的集合叫<strong>群（group）</strong>。所以 <span class="arithmatex">\(SO(3)\)</span> 的“群”只是在说：旋转可以连续组合、可以撤销、组合后仍然合法。</p>
 <p>注意矩阵乘法通常不交换：<span class="arithmatex">\(R_xR_y\neq R_yR_x\)</span>。三维里“先绕 <span class="arithmatex">\(x\)</span> 轴转，再绕 <span class="arithmatex">\(y\)</span> 轴转”和反过来，最终朝向一般不同。这就是后面欧拉角顺序、TF 变换链顺序必须写清的根源。</p>
-<h2 id="se3">二、从旋转到刚体位姿：<span class="arithmatex">\(SE(3)\)</span></h2>
-<h3 id="21-se3">2.1 <span class="arithmatex">\(SE(3)\)</span> 刚体变换</h3>
+<h2 id="se3">二、从旋转到三维特殊欧氏群（SE(3)）</h2>
+<h3 id="21-se3">2.1 三维特殊欧氏群（SE(3)）的刚体变换</h3>
 <p>机器人位姿不仅有朝向，还有位置。若一个点在局部坐标系中的坐标为 <span class="arithmatex">\(p\)</span>，先旋转再平移得到</p>
 <div class="arithmatex">\[
 p'=Rp+t,
@@ -4647,7 +4647,7 @@ R&amp;t\\
 T_{world\leftarrow base}\in SE(3)
 \]</div>
 <p>就把它读成：<strong>这个 <span class="arithmatex">\(4\times4\)</span> 矩阵把 base 坐标系里的点变换到 world 坐标系，它内部同时包含旋转和平移。</strong></p>
-<h3 id="22-tf">2.2 TF 变换链的复合与求逆</h3>
+<h3 id="22-tf">2.2 坐标变换（TF）链的复合与求逆</h3>
 <p>若</p>
 <div class="arithmatex">\[
 T_{A\leftarrow B}
@@ -4696,7 +4696,7 @@ p'=Rp+t=(1,3,0)^\top.
 \begin{bmatrix}1\\3\\0\\1\end{bmatrix}.
 \]</div>
 <p>如果你能手算出这个例子，后面机器人坐标变换已经有了最小前置。</p>
-<h2 id="slam">三、SLAM 的局部增量</h2>
+<h2 id="slam">三、同步定位与建图（SLAM）的局部增量</h2>
 <h3 id="lie-group-boxplus">3.1 流形、李群与 <span class="arithmatex">\(\boxplus\)</span></h3>
 <p>还有一个容易突然跳出来的词：<strong>流形（manifold）</strong>。它只是在提醒你，旋转矩阵虽然写在 <span class="arithmatex">\(\mathbb R^9\)</span> 里，却不能在 9 个元素上随便加减，因为加完通常不再满足 <span class="arithmatex">\(R^\top R=I\)</span>。</p>
 <p>例如两个合法旋转 <span class="arithmatex">\(R_1,R_2\)</span>，一般不能把“平均朝向”直接写成 <span class="arithmatex">\((R_1+R_2)/2\)</span>；这个矩阵通常已经不是合法旋转。也就是说，<span class="arithmatex">\(SO(3)\)</span> 像一个嵌在普通欧氏空间中的弯曲集合。</p>

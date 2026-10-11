@@ -2659,10 +2659,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a" class="md-nav__link">
+  <a href="#a-a-search" class="md-nav__link">
     <span class="md-ellipsis">
       
-        A* 搜索流程
+        A 搜索算法（A Search）的流程
       
     </span>
   </a>
@@ -4299,10 +4299,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a" class="md-nav__link">
+  <a href="#a-a-search" class="md-nav__link">
     <span class="md-ellipsis">
       
-        A* 搜索流程
+        A 搜索算法（A Search）的流程
       
     </span>
   </a>
@@ -4807,7 +4807,7 @@
 </table>
 <p>离散点数的换算很直接：以 7 自由度机械臂、30 个时间采样点为例，若每个采样点的位置、速度、加速度都是决策变量，决策变量数约为 <span class="arithmatex">\(30\times7\times3=630\)</span>；若再加入 jerk 与障碍对偶变量，规模轻松上千。<strong>采样点从 30 增到 100，求解时间通常增长 3–10 倍</strong>，这是为什么实机上的在线轨迹优化必须限制视界长度与采样密度。</p>
 <p>一个值得记住的判据：<strong>优化器报 infeasible 时，先不要把权重到处乱调</strong>。正确顺序是（1）把起点位姿送进碰撞检测，确认起点合法；（2）逐个把硬约束放宽为软约束，看哪一个解除后能解出解；（3）确认时间视界不是过短（视界短于制动距离时，停车约束本身就不可行）。</p>
-<h2 id="a">A* 搜索流程</h2>
+<h2 id="a-a-search">A<em> 搜索算法（A</em> Search）的流程</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">heapq</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">astar</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>

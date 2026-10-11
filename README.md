@@ -10,7 +10,7 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 - 当前交付 **Stage 1: Matrix Theory & Iteration**：一篇总览、六篇理论讲解和一篇完整例题集。
 - 面向需要从定义重新建立知识链的读者：定理、符号与先修微积分都在专题内重讲，**不依赖 Foundations 文件内容**。
 - 采用“定义—条件—完整证明—反例—手算例题—练习”结构，明确区分必要条件、充分条件和充要条件。
-- Foundations 的二、三级标题已同步改为知识点名称；导航与页面 H1 使用英文，中文正文保留英文标准术语。
+- 全站二级及以下标题均使用中文知识点名称；导航与页面 H1 使用英文，重要术语采用“中文（English）”格式。
 
 ## Current scale
 
@@ -74,4 +74,4 @@ docs/
 └── yau-contest/  # standalone Stage 1 mathematical handbook
 ```
 
-`python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、知识点式标题、本地链接、公式分隔、Yau 章节深度、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。
+`python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、中文知识点式小标题、本地链接、公式分隔、Yau 章节深度、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。

@@ -2331,10 +2331,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#actorcriticq" class="md-nav__link">
+  <a href="#actorcritic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        先把 Actor、Critic、Q 值讲清楚
+        演员（Actor）、评论家（Critic）与动作价值
       
     </span>
   </a>
@@ -2423,7 +2423,7 @@
   <a href="#vdn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        VDN：直接相加
+        价值分解网络（VDN）
       
     </span>
   </a>
@@ -2434,7 +2434,7 @@
   <a href="#qmix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        QMIX：单调混合
+        单调混合网络（QMIX）
       
     </span>
   </a>
@@ -2472,7 +2472,7 @@
   <a href="#marl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MARL 训练检查项
+        多智能体强化学习（MARL）的训练检查项
       
     </span>
   </a>
@@ -4283,10 +4283,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#actorcriticq" class="md-nav__link">
+  <a href="#actorcritic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        先把 Actor、Critic、Q 值讲清楚
+        演员（Actor）、评论家（Critic）与动作价值
       
     </span>
   </a>
@@ -4375,7 +4375,7 @@
   <a href="#vdn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        VDN：直接相加
+        价值分解网络（VDN）
       
     </span>
   </a>
@@ -4386,7 +4386,7 @@
   <a href="#qmix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        QMIX：单调混合
+        单调混合网络（QMIX）
       
     </span>
   </a>
@@ -4424,7 +4424,7 @@
   <a href="#marl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MARL 训练检查项
+        多智能体强化学习（MARL）的训练检查项
       
     </span>
   </a>
@@ -4539,7 +4539,7 @@
 <p>从这个信息差出发，再看非平稳、信用分配和价值分解，VDN/QMIX/MAPPO 的设计动机就会自然出现，而不是变成一串算法名字。</p>
 </blockquote>
 <p><img alt="CTDE" src="../../../assets/diagrams/ctde.svg" /></p>
-<h2 id="actorcriticq">先把 Actor、Critic、Q 值讲清楚</h2>
+<h2 id="actorcritic">演员（Actor）、评论家（Critic）与动作价值</h2>
 <p>本章会频繁出现几个强化学习词，但理解 CTDE 不需要先完整学完所有算法。先把它们压缩成一个最小闭环：</p>
 <table>
 <thead>
@@ -4839,12 +4839,12 @@ w_i=\frac{Q(s,\mathbf a)-\sum_{a_i'}\pi_i(a_i')Q(s,(\mathbf a_{-i},a_i'))}{A^{\t
 <p>一句话判据：<strong>主体数少、奖励稠密 → 直接用团队回报；动作离散且小 → 反事实基线；纯合作且能接受单调性 → 值分解；任务结构明确可写局部奖励 → 差分塑形。</strong></p>
 <h2 id="_7">值分解：让团队价值可以支持分散决策</h2>
 <p>合作 MARL 的一个代表思路是把团队价值写成个体价值的组合，从而让 <span class="arithmatex">\(Q_{tot}\)</span> 的贪心解可以分解成个体贪心解。</p>
-<h3 id="vdn">VDN：直接相加</h3>
+<h3 id="vdn">价值分解网络（VDN）</h3>
 <div class="arithmatex">\[
 Q_{tot}=\sum_i Q_i(\tau_i,a_i).
 \]</div>
 <p>这种假设简单：个体贪心 <span class="arithmatex">\(a_i^*=\arg\max_{a_i}Q_i\)</span> 天然构成团队贪心，因为导数恒为 <span class="arithmatex">\(\partial Q_{tot}/\partial Q_i=1\)</span>。但它无法表达复杂的非线性协同，例如“两人都到位才开门”这类价值函数在 <span class="arithmatex">\(Q_{tot}\)</span> 曲面上是阶跃的，加法无法表示。</p>
-<h3 id="qmix">QMIX：单调混合</h3>
+<h3 id="qmix">单调混合网络（QMIX）</h3>
 <p>QMIX 使用一个 mixing network 组合个体价值，并限制</p>
 <div class="arithmatex">\[
 \frac{\partial Q_{tot}}{\partial Q_i}\ge 0.
@@ -4987,7 +4987,7 @@ a_i\sim\pi_\theta\big(\cdot\mid \tau_i,\,e_i\big),
 </tr>
 </tbody>
 </table>
-<h2 id="marl">MARL 训练检查项</h2>
+<h2 id="marl">多智能体强化学习（MARL）的训练检查项</h2>
 <ol>
 <li><strong>执行信息是否泄漏</strong>：Actor 有没有偷偷使用部署时不存在的全局信息；做法是把 <span class="arithmatex">\(\tau_i\)</span> 的构造代码单独拿出来，逐字段核对部署数据流。</li>
 <li><strong>奖励是否可归因</strong>：团队奖励是否稀疏到几乎无法学习；做法是统计“获得非零团队奖励的步数占比”，若低于 1% 且主体数 <span class="arithmatex">\(&gt;4\)</span>，必须先做奖励设计。</li>
