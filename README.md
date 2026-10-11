@@ -34,6 +34,7 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 - **Robotics & Perception** — Robotics, Perception
 - **Systems & Simulation** — Distributed Systems, Software Engineering, Simulation & Sim2Real
 - **Safety & Human Factors** — Robustness & Safety, Human–AI Interaction
+- **Yau Contest**（独立专题，位于五个知识域之外） — Stage 1: Matrix Theory & Iteration
 
 ## Content rules
 

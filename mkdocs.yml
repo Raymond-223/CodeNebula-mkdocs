@@ -149,8 +149,8 @@ markdown_extensions:
 - pymdownx.arithmatex:
     generic: true
 extra_css:
-- stylesheets/extra.css
-- css/custom.css
+- stylesheets/extra.css?v=20261011b
+- css/custom.css?v=20261011b
 extra_javascript:
 - javascripts/mathjax.js
 - vendor/mathjax/es5/tex-mml-chtml.js
