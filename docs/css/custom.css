@@ -174,7 +174,11 @@
    ====================================================== */
 
 
-  .md-typeset blockquote {
+  .md-typeset blockquote,
+
+  .md-typeset .admonition,
+
+  .md-typeset details {
 
     position: relative;
 
@@ -200,7 +204,11 @@
 
 /* 外层渐变边框 */
 
-.md-typeset blockquote::before {
+.md-typeset blockquote::before,
+
+.md-typeset .admonition::before,
+
+.md-typeset details::before {
 
     content: "";
 
@@ -253,7 +261,9 @@
 
 /* 清除默认伪元素 */
 
-.md-typeset blockquote::after {
+.md-typeset blockquote::after,
+
+.md-typeset .admonition::after {
 
     display:none !important;
 
