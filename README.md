@@ -7,26 +7,32 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 ## Standalone contest track
 
 - 顶部导航新增 **Yau Contest**（`docs/yau-contest/`），完全位于 `Foundations` 之外。
-- 当前交付 **Stage 1: Matrix Theory & Iteration**：一篇总览、六篇理论讲解和一篇完整例题集。
+- 当前交付 **Stage 1: Matrix Theory & Iteration**：一篇总览、七篇理论讲解和一篇完整例题集（共 9 页）。
 - 面向需要从定义重新建立知识链的读者：定理、符号与先修微积分都在专题内重讲，**不依赖 Foundations 文件内容**。
 - 采用“定义—条件—完整证明—反例—手算例题—练习”结构，明确区分必要条件、充分条件和充要条件；证明放在默认关闭的 `proof` 折叠栏中。
 - 全站二级及以下标题均使用中文知识点名称；导航与页面 H1 使用英文，重要术语采用“中文（English）”格式。
 
 ## Current scale
 
-- **12 Sections**，分成 5 个知识域
-- **63 core chapters**
-- **86 Markdown pages**（含 Home、12 个 Section 首页与独立丘赛专题）
-- **60 local SVG teaching diagrams**
+- **13 Sections**，分成 5 个知识域
+- **65 chapters**（不含各 Section 首页）
+- **88 Markdown pages**（含 Home、13 个 Section 首页与独立丘赛专题）
+- **65 local SVG teaching diagrams**
 - **60 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
 - 顶部和左侧导航使用英文；正文使用中文并保留标准英文术语
+
+## Offline math rendering
+
+- **MathJax 3 本地内置**（`docs/vendor/mathjax/`）：公式渲染不依赖 CDN，离线 / 内网环境同样可用。
+- 公式由 `pymdownx.arithmatex` 生成、`docs/javascripts/mathjax.js` 配置渲染；大公式在正文内横向滚动，不会遮挡侧栏。
+- 站点视觉由两份样式共同提供：`docs/stylesheets/extra.css`（Material 稳定覆盖、排版与图片/表格/公式可读性）与 `docs/css/custom.css`（Nebula 渐变视觉：顶栏、标题、引用块与折叠证明框）。
 
 ## Curriculum
 
 - **Foundations** — Mathematics, Control Theory
-- **Decision & Learning** — Reinforcement Learning, Game Theory, Multi-Agent Systems
+- **Decision & Learning** — Machine Learning Foundations, Reinforcement Learning, Game Theory, Multi-Agent Systems
 - **Robotics & Perception** — Robotics, Perception
-- **Systems & Simulation** — Distributed Systems & Networking, Software Engineering, Simulation & Sim2Real
+- **Systems & Simulation** — Distributed Systems, Software Engineering, Simulation & Sim2Real
 - **Safety & Human Factors** — Robustness & Safety, Human–AI Interaction
 
 ## Content rules
@@ -49,15 +55,23 @@ python scripts/check_docs.py
 mkdocs serve
 ```
 
+依赖包含 `mkdocs-material`（建站）与 `numpy`（供 `scripts/check_docs.py` 的数值回归检查实跑示例代码）。
+
 ## Repository layout
 
 ```text
 docs/
-├── assets/diagrams/
+├── index.md                  # Home
+├── assets/diagrams/          # 本地 SVG 教学图
+├── css/custom.css            # Nebula 渐变视觉
+├── stylesheets/extra.css     # Material 稳定覆盖
+├── javascripts/mathjax.js    # 公式渲染配置
+├── vendor/mathjax/           # 本地内置 MathJax 3
 ├── foundations/
 │   ├── mathematics/
 │   └── control-theory/
 ├── decision-learning/
+│   ├── machine-learning/
 │   ├── reinforcement-learning/
 │   ├── game-theory/
 │   └── multi-agent-systems/
@@ -69,9 +83,9 @@ docs/
 │   ├── software-engineering/
 │   └── simulation-sim2real/
 ├── safety-human-factors/
-    ├── robustness-safety/
+│   ├── robustness-safety/
 │   └── human-ai-interaction/
-└── yau-contest/  # standalone Stage 1 mathematical handbook
+└── yau-contest/              # 独立丘赛专题（Stage 1）
 ```
 
-`python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、中文知识点式小标题、本地链接、公式分隔、Yau 章节深度、每条定理是否带折叠证明、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。
+`python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、中文知识点式小标题、本地链接、公式分隔、Yau 章节深度、每条定理是否带折叠证明、数值回归、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 仍负责在完整环境中执行 `mkdocs build --strict`。

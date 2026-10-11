@@ -170,103 +170,66 @@
 }
 
 /* ======================================================
-   5. 引用块 & Admonition
+   5. 引用块 & Admonition / 折叠块
    ====================================================== */
 
-
-  .md-typeset blockquote,
-
-  .md-typeset .admonition,
-
-  .md-typeset details {
-
-    position: relative;
-
-    margin: 1.5em 0;
-
-    padding: 1em 1.2em;
-
-
-    border: none !important;
-
-    border-radius: 16px;
-
-
-    background:
-        linear-gradient(
-            var(--md-default-bg-color),
-            var(--md-default-bg-color)
-        );
-
-
+/* 引用块：渐变描边（inset 伪元素 + mask 描边） */
+.md-typeset blockquote {
+  position: relative;
+  margin: 1.5em 0;
+  padding: 1em 1.2em;
+  border: none !important;
+  border-radius: 16px;
+  background: linear-gradient(var(--md-default-bg-color), var(--md-default-bg-color));
 }
 
-
-/* 外层渐变边框 */
-
-.md-typeset blockquote::before,
-
-.md-typeset .admonition::before,
-
-.md-typeset details::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-
-    border-radius: inherit;
-
-
-    padding: 3px;
-
-
-    background:
-        linear-gradient(
-            120deg,
-            #8b5cf6,
-            #6366f1,
-            #06b6d4,
-            #ec4899
-        );
-
-
-    background-size: 300% 300%;
-
-
-    animation:
-        nebula-flow 8s ease infinite;
-
-
-    -webkit-mask:
-
-        linear-gradient(#fff 0 0)
-        content-box,
-
-        linear-gradient(#fff 0 0);
-
-
-    -webkit-mask-composite:
-        xor;
-
-
-    mask-composite:
-        exclude;
-
-
+.md-typeset blockquote::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(120deg, #8b5cf6, #6366f1, #06b6d4, #ec4899);
+  background-size: 300% 300%;
+  animation: nebula-flow 8s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
+.md-typeset blockquote::after {
+  display: none !important;
+}
 
-/* 清除默认伪元素 */
+/* Admonition 与 ??? 折叠块（proof / tip …）：同一套渐变描边。
+   用「真实 border + 双层背景」实现：边框是 2px 实边框，天然与内容对齐；
+   不覆盖主题的 padding（0 .6rem），summary 的负 margin(-.6rem) 才能正好贴到边框内沿。 */
+.md-typeset .admonition,
+.md-typeset details {
+  position: relative;
+  border: 2px solid transparent !important;
+  border-radius: 14px;
+  background:
+    linear-gradient(var(--md-default-bg-color), var(--md-default-bg-color)) padding-box,
+    linear-gradient(120deg, #8b5cf6, #6366f1, #06b6d4, #ec4899) border-box;
+  background-size: auto, 300% 300%;
+  animation: nebula-flow 8s ease infinite;
+  box-shadow: none;
+}
 
-.md-typeset blockquote::after,
+.md-typeset .admonition > .admonition-title,
+.md-typeset details > summary {
+  background-color: transparent;
+  border-radius: 12px 12px 0 0;
+}
 
-.md-typeset .admonition::after {
+.md-typeset details[open] > summary {
+  border-bottom: 1px solid var(--nebula-border, rgba(99, 102, 241, 0.28));
+}
 
-    display:none !important;
-
+.md-typeset details:not([open]) > summary {
+  border-radius: 12px;
 }
 
 /* ======================================================
