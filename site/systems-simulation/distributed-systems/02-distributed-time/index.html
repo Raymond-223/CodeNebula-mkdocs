@@ -4523,9 +4523,7 @@
 <h2 id="_1">消息延迟使现在在不同节点上不一样</h2>
 <p>节点 A 已经更新任务状态，不代表节点 B 立刻知道。B 在消息到达前继续使用旧状态并不是程序逻辑错误，而是分布式系统的正常现象。</p>
 <p>因此系统不能假设“我写完以后，所有人同时看到新值”。</p>
-<p>可以把这个现象写成一个简单的可达性条件。若 A 在本地时刻 <span class="arithmatex">\(t_1\)</span> 写入，B 在本地时刻 <span class="arithmatex">\(t_2\)</span> 读取，则只有当消息传播延迟 <span class="arithmatex">\(\delta\)</span> 满足</p>
-<div class="arithmatex">\[t_2 - t_1 &gt; \delta\]</div>
-<p>时，B 的读取才可能看到这次写入。<span class="arithmatex">\(\delta\)</span> 不是常数，它随拥塞、路由与负载变化，也没有可靠上界——<strong>这正是“异步”二字的准确含义</strong>。</p>
+<p>不能直接用 A 的本地时刻 <span class="arithmatex">\(t_1\)</span> 与 B 的本地时刻 <span class="arithmatex">\(t_2\)</span> 相减：两台机器的时钟原点和偏移不同。正确的可达性陈述使用真实时间或因果事件。若写请求在真实时刻 <span class="arithmatex">\(T_w\)</span> 从 A 发出，传播与处理延迟为 <span class="arithmatex">\(\delta_{AB}\)</span>，则只有发生在 <span class="arithmatex">\(T_w+\delta_{AB}\)</span> 之后、并从已应用该写入的副本读取，才可能看到它。在纯异步模型中 <span class="arithmatex">\(\delta_{AB}\)</span> 没有已知有限上界；若使用物理时间戳判断先后，还必须另给时钟偏移上界。</p>
 <p>这一点决定了许多设计取向。如果你的正确性论证里出现了“消息会在 X 毫秒内到达”，那么这段论证只在特定硬件、特定负载下成立，换一个网络就会失效。工程上更稳妥的做法是把传播延迟当作未知量，只依赖“可能很慢，但不会违反因果”这一条弱假设。</p>
 <p>“现在”因此是节点相对的：A 的现在是 A 已处理的最后一条消息所定义的，B 的现在同理。<strong>两个节点对“当前状态”的看法，其差异上界就是你愿意等待的时间。</strong></p>
 <p>延迟并不只有一个来源，把它拆开会更容易定位问题：</p>
@@ -4877,6 +4875,11 @@
 <p>向量时钟通过为每个进程维护一个计数器数组来补上这个缺口。进程 <span class="arithmatex">\(i\)</span> 的向量记作 <span class="arithmatex">\(V_i\)</span>，第 <span class="arithmatex">\(j\)</span> 个分量表示 <span class="arithmatex">\(i\)</span> 所知道的、来自 <span class="arithmatex">\(j\)</span> 的事件数。规则是：本地事件时 <span class="arithmatex">\(V_i[i] \leftarrow V_i[i]+1\)</span>；发送时附带整个 <span class="arithmatex">\(V_i\)</span>；接收时先逐分量取最大，再把自身分量加一：</p>
 <div class="arithmatex">\[V_i[j] \leftarrow \max\big(V_i[j], V_m[j]\big), \qquad V_i[i] \leftarrow V_i[i] + 1.\]</div>
 <p>比较两个向量可以得到三种关系：若所有分量都不大于且至少有一个严格更小，则 <span class="arithmatex">\(V_a\)</span> 因果先于 <span class="arithmatex">\(V_b\)</span>；若反之则在后；若既存在 <span class="arithmatex">\(V_a[j] &gt; V_b[j]\)</span> 又存在 <span class="arithmatex">\(V_a[k] &lt; V_b[k]\)</span>，则两者<strong>并发</strong>，必须由应用层决定合并还是报冲突。这正是下一章冲突检测的数学基础。</p>
+<details class="proof">
+<summary>向量时钟刻画因果顺序</summary>
+<p>先证 <span class="arithmatex">\(a\to b\Rightarrow V(a)&lt;V(b)\)</span>。同一进程的后继事件会把自身分量加一，向量其余分量不减；发送—接收边上，接收方先逐分量取最大再增加自身分量，因此发送向量严格小于接收向量；传递链由逐分量序的传递性得到结论。</p>
+<p>再证反向。若 <span class="arithmatex">\(V(a)&lt;V(b)\)</span>，设 <span class="arithmatex">\(a\)</span> 发生在进程 <span class="arithmatex">\(i\)</span>，则 <span class="arithmatex">\(V(a)[i]\)</span> 是进程 <span class="arithmatex">\(i\)</span> 在事件 <span class="arithmatex">\(a\)</span> 时的本地计数。事件 <span class="arithmatex">\(b\)</span> 的向量中第 <span class="arithmatex">\(i\)</span> 分量至少达到这个数，说明这份知识只能沿同一进程后继或消息链传播到 <span class="arithmatex">\(b\)</span>；向量规则没有其他增加第 <span class="arithmatex">\(i\)</span> 分量的方式。因此存在从 <span class="arithmatex">\(a\)</span> 到 <span class="arithmatex">\(b\)</span> 的因果链，即 <span class="arithmatex">\(a\to b\)</span>。该结论假设进程集合固定、消息携带完整向量且事件更新严格遵循上述规则。</p>
+</details>
 <table>
 <thead>
 <tr>

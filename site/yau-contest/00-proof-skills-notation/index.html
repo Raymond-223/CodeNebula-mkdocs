@@ -4852,7 +4852,7 @@ A=\begin{pmatrix}1&amp;1\\0&amp;2\end{pmatrix}.
 <p>因此“对 <span class="arithmatex">\(k\)</span> 成立”推出“对 <span class="arithmatex">\(k+1\)</span> 成立”。由数学归纳法，等式对所有正整数成立。</p>
 </details>
 <h2 id="_9">绝对值与范数</h2>
-<p>绝对值满足三角不等式 <span class="arithmatex">\(|a+b|\le |a|+|b|\)</span>。欧几里得范数（Euclidean norm）为</p>
+<p>本手册把绝对值三角不等式等高中结论作为已知。欧几里得范数（Euclidean norm）定义为</p>
 <div class="arithmatex">\[
 \|x\|_2=\sqrt{x_1^2+\cdots+x_n^2}.
 \]</div>
@@ -4873,6 +4873,21 @@ A=\begin{pmatrix}1&amp;1\\0&amp;2\end{pmatrix}.
 \]</div>
 <p>等号成立当且仅当某个 <span class="arithmatex">\(t\)</span> 使 <span class="arithmatex">\(x-ty=0\)</span>，也就是 <span class="arithmatex">\(x,y\)</span> 线性相关。</p>
 </details>
+<p><strong>欧几里得范数的三角不等式。</strong> 对任意 <span class="arithmatex">\(x,y\in\mathbb R^n\)</span>，</p>
+<div class="arithmatex">\[\|x+y\|_2\le\|x\|_2+\|y\|_2.\]</div>
+<details class="proof">
+<summary>证明</summary>
+<p>两边都非负。展开左边平方并使用柯西－施瓦茨不等式：</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\|x+y\|_2^2
+&amp;=\|x\|_2^2+2x^Ty+\|y\|_2^2\\
+&amp;\le\|x\|_2^2+2\|x\|_2\|y\|_2+\|y\|_2^2\\
+&amp;=(\|x\|_2+\|y\|_2)^2.
+\end{aligned}
+\]</div>
+<p>对非负数取平方根保持不等号方向，得到结论。这一步说明：标量绝对值的三角不等式不能直接替代向量范数的三角不等式，后者依赖内积与柯西－施瓦茨不等式。</p>
+</details>
 <h2 id="_10">数列与极限</h2>
 <p>数列 <span class="arithmatex">\((x_k)\)</span> 收敛到 <span class="arithmatex">\(L\)</span> 的精确定义是</p>
 <div class="arithmatex">\[
@@ -4890,8 +4905,24 @@ A=\begin{pmatrix}1&amp;1\\0&amp;2\end{pmatrix}.
 \ \forall m,n\ge N,
 \quad |x_m-x_n|&lt;\varepsilon.
 \]</div>
-<p>实数空间 <span class="arithmatex">\(\mathbb R\)</span> 是完备的（complete）：每个柯西数列（Cauchy sequence）都收敛到某个实数。等价地，每个非空有上界的实数集合都有最小上界。后面的巴拿赫不动点定理（Banach fixed-point theorem）正是用完备性把“迭代项彼此靠近”转化成“存在极限”。</p>
+<p>若集合 <span class="arithmatex">\(E\subset\mathbb R\)</span> 满足存在 <span class="arithmatex">\(M\)</span> 使每个 <span class="arithmatex">\(x\in E\)</span> 都有 <span class="arithmatex">\(x\le M\)</span>，就称 <span class="arithmatex">\(E\)</span> 有上界，<span class="arithmatex">\(M\)</span> 是一个上界。所有上界中最小的一个叫上确界（supremum），记为 <span class="arithmatex">\(\sup E\)</span>。下界和下确界（infimum）反向定义。</p>
+<p>实数空间 <span class="arithmatex">\(\mathbb R\)</span> 是完备的（complete）：每个柯西数列（Cauchy sequence）都收敛到某个实数。等价地，每个非空有上界的实数集合都有上确界。后面的巴拿赫不动点定理（Banach fixed-point theorem）正是用完备性把“迭代项彼此靠近”转化成“存在极限”。</p>
 <p>本手册把实数完备性及上述两个标准表述的等价性作为实数系统的基础公理，而不是从有理数的代数公理中推出。若从有理数构造实数，可以用戴德金分割或柯西列等价类证明完备性；那属于实分析的基础构造，不在后续数值算法中重复使用。</p>
+<p><strong>单调有界收敛定理。</strong> 单调递增且有上界的实数数列收敛；单调递减且有下界的情形同理。</p>
+<details class="proof">
+<summary>证明</summary>
+<p>设 <span class="arithmatex">\(x_n\)</span> 单调递增且集合 <span class="arithmatex">\(E=\{x_n:n\in\mathbb N\}\)</span> 有上界。由完备性，<span class="arithmatex">\(L=\sup E\)</span> 存在。给定 <span class="arithmatex">\(\varepsilon&gt;0\)</span>，<span class="arithmatex">\(L-\varepsilon\)</span> 不可能仍是 <span class="arithmatex">\(E\)</span> 的上界，所以存在 <span class="arithmatex">\(N\)</span> 使 <span class="arithmatex">\(x_N&gt;L-\varepsilon\)</span>。当 <span class="arithmatex">\(n\ge N\)</span> 时，由单调性</p>
+<div class="arithmatex">\[L-\varepsilon&lt;x_N\le x_n\le L.\]</div>
+<p>因而 <span class="arithmatex">\(|x_n-L|&lt;\varepsilon\)</span>，即 <span class="arithmatex">\(x_n\to L\)</span>。递减情形对 <span class="arithmatex">\(-x_n\)</span> 应用同一结论。</p>
+</details>
+<p><strong>Bolzano–Weierstrass 定理。</strong> 每个有界实数数列都有收敛子列。</p>
+<details class="proof">
+<summary>证明</summary>
+<p>设全部数列项位于闭区间 <span class="arithmatex">\([a,b]\)</span>。把区间二等分，至少有一半包含无穷多个数列项；保留这样的半区间并继续二分，得到闭区间套</p>
+<div class="arithmatex">\[I_1\supset I_2\supset\cdots,
+\qquad |I_k|=2^{-k}(b-a).\]</div>
+<p>设 <span class="arithmatex">\(I_k=[a_k,b_k]\)</span>。<span class="arithmatex">\(a_k\)</span> 单调递增且有上界，故收敛；<span class="arithmatex">\(b_k\)</span> 单调递减且有下界，也收敛。又因 <span class="arithmatex">\(b_k-a_k\to0\)</span>，两者极限相同，记为 <span class="arithmatex">\(x^*\)</span>。依次从 <span class="arithmatex">\(I_k\)</span> 中选取下标严格递增的数列项 <span class="arithmatex">\(x_{n_k}\)</span>，则 <span class="arithmatex">\(|x_{n_k}-x^*|\le|I_k|\to0\)</span>，所以该子列收敛到 <span class="arithmatex">\(x^*\)</span>。</p>
+</details>
 <h2 id="_12">连续性与介值定理</h2>
 <p>函数 <span class="arithmatex">\(f\)</span> 在 <span class="arithmatex">\(a\)</span> 连续，表示 <span class="arithmatex">\(\lim_{x\to a}f(x)=f(a)\)</span>。其 <span class="arithmatex">\(\varepsilon\)</span>–<span class="arithmatex">\(\delta\)</span> 形式为</p>
 <div class="arithmatex">\[

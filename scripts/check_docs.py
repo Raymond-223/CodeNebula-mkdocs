@@ -285,7 +285,9 @@ for p in DOCS.rglob('*.md'):
         line_count = len(raw.splitlines())
         if line_count < 40:
             errors.append(f'Chapter is too short to explain the topic clearly ({line_count} lines): {rel}')
-        max_lines = 800 if p.is_relative_to(DOCS / 'yau-contest') else 700
+        # Yau proof chapters keep theorem statements and their collapsible,
+        # prerequisite-complete proofs on the same page.
+        max_lines = 1000 if p.is_relative_to(DOCS / 'yau-contest') else 700
         if line_count > max_lines:
             errors.append(f'Chapter is becoming encyclopedic ({line_count} lines): {rel}')
 

@@ -4547,11 +4547,11 @@
 </tr>
 </tbody>
 </table>
-<p>两个具体的数值感受：若 <span class="arithmatex">\(\alpha=0.1\)</span>，一次更新只移动 <span class="arithmatex">\(10\%\)</span> 到目标；在 <span class="arithmatex">\(\gamma=0.99\)</span> 的任务里，若 <span class="arithmatex">\(V(s_{t+1})\)</span> 恰好偏高 <span class="arithmatex">\(5\)</span>，则 <span class="arithmatex">\(\delta_t\)</span> 偏大约 <span class="arithmatex">\(0.99\times5=4.95\)</span>，一次更新就把 <span class="arithmatex">\(V(s_t)\)</span> 抬高约 <span class="arithmatex">\(0.495\)</span>。<strong>误差通过自举被前向传播，这就是 TD 偏差的来源，也是它需要目标网络的原因。</strong></p>
+<p>两个具体的数值感受：若 <span class="arithmatex">\(\alpha=0.1\)</span>，一次更新只移动 <span class="arithmatex">\(10\%\)</span> 到目标；在 <span class="arithmatex">\(\gamma=0.99\)</span> 的任务里，若 <span class="arithmatex">\(V(s_{t+1})\)</span> 恰好偏高 <span class="arithmatex">\(5\)</span>，则 <span class="arithmatex">\(\delta_t\)</span> 偏大约 <span class="arithmatex">\(0.99\times5=4.95\)</span>，一次更新就把 <span class="arithmatex">\(V(s_t)\)</span> 抬高约 <span class="arithmatex">\(0.495\)</span>。误差会通过自举向前传播。表格 TD 在经典随机逼近条件下并不需要目标网络；目标网络主要用于神经网络函数逼近下，减慢目标随参数共同移动的速度。</p>
 <h2 id="_1">时间差分与蒙特卡洛的偏差—方差权衡</h2>
 <p>这两种目标的差别只有一个：期望在哪里被截断。</p>
 <div class="arithmatex">\[\text{MC：}G_t=\sum_{k=0}^{T-t-1}\gamma^{k}r_{t+k+1}\qquad\text{vs}\qquad\text{TD(0)：}y_t=r_{t+1}+\gamma V(s_{t+1}).\]</div>
-<p>MC 用整条轨迹的真实奖励，完全不用 <span class="arithmatex">\(V\)</span>，所以对 <span class="arithmatex">\(V^\pi(s_t)\)</span> 是无偏估计；代价是 <span class="arithmatex">\(G_t\)</span> 为 <span class="arithmatex">\(T-t\)</span> 个随机奖励的加权和，方差随视界增长。TD 用一个估计值代替了剩下的全部随机性，方差被压到大约单步水平，但只要 <span class="arithmatex">\(V\)</span> 有偏差，目标就带着偏差。</p>
+<p>MC 用整条轨迹的实际奖励，完全不用 <span class="arithmatex">\(V\)</span>；在回合按目标策略生成且回报可积时，它对 <span class="arithmatex">\(V^\pi(s_t)\)</span> 无偏。<span class="arithmatex">\(G_t\)</span> 是多个相关随机奖励的加权和，其方差包含所有协方差交叉项。TD 用自举估计替代未来回报，常能降低采样方差，但下一状态随机性和价值估计误差仍在，方差不保证低于 MC；只要自举值有偏，目标也会带偏。</p>
 <table>
 <thead>
 <tr>
@@ -4578,8 +4578,8 @@
 </tr>
 <tr>
 <td>方差</td>
-<td>高，约 <span class="arithmatex">\(O(T-t)\)</span> 量级</td>
-<td>低，约单步奖励方差</td>
+<td>依奖励方差与跨时刻协方差而定</td>
+<td>依奖励、转移和自举值而定；常较低但无普遍排序</td>
 </tr>
 <tr>
 <td>能否在线/增量更新</td>
@@ -4588,8 +4588,8 @@
 </tr>
 <tr>
 <td>持续型任务（无终止）</td>
-<td>无法使用</td>
-<td>可直接使用</td>
+<td>不能等待自然终止；可用截断回报或再生周期，但会改变估计条件</td>
+<td>可在线自举</td>
 </tr>
 <tr>
 <td>达到同一误差所需样本</td>
@@ -4608,7 +4608,7 @@
 </tr>
 </tbody>
 </table>
-<p>一个常用的定量直觉：设单步奖励方差为 <span class="arithmatex">\(\sigma^2\)</span>、折扣 <span class="arithmatex">\(\gamma\)</span>，MC 目标方差约为 <span class="arithmatex">\(\sigma^2\frac{1-\gamma^{2(T-t)}}{1-\gamma^2}\)</span>，当 <span class="arithmatex">\(\gamma=0.99\)</span>、视界 <span class="arithmatex">\(100\)</span> 步时约为 <span class="arithmatex">\(50\sigma^2\)</span>；TD(0) 的方差约为 <span class="arithmatex">\(\sigma^2\)</span> 量级。反过来，若 <span class="arithmatex">\(V\)</span> 的相对误差为 <span class="arithmatex">\(\eta\)</span>，TD 目标偏差量级约为 <span class="arithmatex">\(\gamma\eta V\)</span>，在 <span class="arithmatex">\(\gamma=0.99\)</span> 时几乎原样传给下一步。</p>
+<p>只有在各时刻奖励不相关且方差都为 <span class="arithmatex">\(\sigma^2\)</span> 时，MC 目标方差才化为 <span class="arithmatex">\(\sigma^2\frac{1-\gamma^{2(T-t)}}{1-\gamma^2}\)</span>；一般还要加 <span class="arithmatex">\(2\sum_{i&lt;j}\gamma^{i+j}\operatorname{Cov}(r_{t+i+1},r_{t+j+1})\)</span>。TD(0) 也包含下一状态及自举值的随机性，不能无条件近似成单步奖励方差。若 <span class="arithmatex">\(V\)</span> 的误差为 <span class="arithmatex">\(e(s)\)</span>，单步目标引入的误差是 <span class="arithmatex">\(\gamma e(s_{t+1})\)</span>，其均值和方差要按下一状态分布计算。</p>
 <p>使用建议很明确：<strong>回合短且奖励稀疏 → MC 或大 <span class="arithmatex">\(n\)</span>；回合长、需要在线 → 小 <span class="arithmatex">\(n\)</span>；不确定时用 <span class="arithmatex">\(n\)</span> 或 <span class="arithmatex">\(\lambda\)</span> 作可调开关，一般 <span class="arithmatex">\(n\)</span> 取 3～20 或 <span class="arithmatex">\(\lambda\)</span> 取 0.9～0.99 能兼顾两者。</strong> 失败模式也有特征：MC 表现为"学习曲线方差大、同一策略两次评估差很多"；TD 表现为"曲线平滑但收敛值明显偏离真实回报，且在覆盖不足的状态区域偏差最大"。</p>
 <h2 id="q-q-learning">Q 学习（Q-Learning）更新</h2>
 <p>Q-Learning 用最优下一动作构造 TD 目标：</p>
@@ -4642,8 +4642,8 @@
 </tr>
 <tr>
 <td>能否用回放缓冲训练</td>
-<td>可以</td>
-<td>不可以（需当前策略数据）</td>
+<td>可以，天然允许旧行为策略数据</td>
+<td>可存入下一动作后回放，但旧数据不再严格对应当前策略，通常需校正或短缓冲</td>
 </tr>
 <tr>
 <td>Cliff-Walking 上的行为</td>
@@ -4676,14 +4676,14 @@
 <tr>
 <td><span class="arithmatex">\(\varepsilon\)</span>-greedy 常数 <span class="arithmatex">\(\varepsilon\)</span></td>
 <td>以固定概率随机</td>
-<td>简单、稳定</td>
-<td>永不停止随机，<span class="arithmatex">\(\varepsilon=0.1\)</span> 时约 <span class="arithmatex">\(10\%\)</span> 决策被浪费</td>
+<td>简单，并可持续覆盖动作</td>
+<td>执行策略不会收敛到纯贪心策略，但表格 Q-Learning 的价值估计仍可能收敛</td>
 </tr>
 <tr>
 <td>衰减 <span class="arithmatex">\(\varepsilon\)</span></td>
-<td><span class="arithmatex">\(\varepsilon_t=\varepsilon_0/(1+t/T)\)</span></td>
-<td>满足 GLIE 条件，可收敛到最优</td>
-<td>衰减过快过早锁定、过慢收敛太迟</td>
+<td>例如 <span class="arithmatex">\(\varepsilon_t=\varepsilon_0/(1+t/T)\)</span></td>
+<td>在访问性等附加条件下可满足 GLIE</td>
+<td>衰减过快过早锁定、过慢则长期保留探索损失</td>
 </tr>
 <tr>
 <td>乐观初始化</td>
@@ -4711,7 +4711,7 @@
 </tr>
 </tbody>
 </table>
-<p>一个容易忽略的量化事实：在动作数 <span class="arithmatex">\(m=10\)</span> 的集合里，<span class="arithmatex">\(\varepsilon=0.1\)</span> 意味着约 <span class="arithmatex">\(1\%\)</span> 的决策是"随机恰好选中了贪心动作"，另外约 <span class="arithmatex">\(9\%\)</span> 是纯浪费。若单个样本采集成本高（真机），更合理的是按信息增益决策，而不是固定比例随机。</p>
+<p>在动作数 <span class="arithmatex">\(m=10\)</span> 且随机分支均匀选动作时，<span class="arithmatex">\(\varepsilon=0.1\)</span> 意味着约 <span class="arithmatex">\(1\%\)</span> 的决策在随机分支中仍选到一个唯一的贪心动作，约 <span class="arithmatex">\(9\%\)</span> 选到非贪心动作。后者不能一概称为“浪费”：它们提供覆盖未知动作所需的数据；只有在部署评估阶段或探索已经没有信息价值时，才主要表现为性能损失。</p>
 <table>
 <thead>
 <tr>
@@ -4729,10 +4729,10 @@
 <td>延长探索期、乐观初始化</td>
 </tr>
 <tr>
-<td>无法收敛</td>
 <td>Q 值持续抖动</td>
-<td><span class="arithmatex">\(\varepsilon\)</span> 固定且过大，目标始终跳变</td>
-<td>让 <span class="arithmatex">\(\varepsilon\to0\)</span>，或用平均化策略</td>
+<td>估计长期波动</td>
+<td>常数学习率、函数逼近不稳定、环境非平稳或采样噪声；固定 <span class="arithmatex">\(\varepsilon\)</span> 本身不使表格 Q-Learning 的 Bellman 目标“跳变”</td>
+<td>检查步长条件、覆盖率与逼近器稳定性</td>
 </tr>
 <tr>
 <td>局部探索</td>
@@ -4753,10 +4753,10 @@
 <p>因此把表格替换为参数化函数：</p>
 <div class="arithmatex">\[Q(s,a;\theta)\approx Q^*(s,a).\]</div>
 <p>神经网络的价值不只是"容量大"，而是能在相似输入之间形成<strong>泛化</strong>。</p>
-<figure>
+<p><figure markdown="span">
   <img alt="DQN 网络结构" src="../../../img/05-dqn-network.png" />
 <br />
-<figcaption>价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption>
+<figcaption>价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption></p>
 </figure>
 <p>泛化的代价是估计之间不再独立：更新一个状态动作对的 <span class="arithmatex">\(Q\)</span> 值会同时改变邻近状态的值。这在两种情况产生严重问题——<strong>状态动作对之间的耦合使自举目标不稳定</strong>（致命三要素：函数逼近 + 自举 + off-policy），以及在覆盖稀疏的区域，网络输出没有任何数据约束，只是外推。</p>
 <table>
@@ -4809,7 +4809,7 @@
 <div class="arithmatex">\[L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].\]</div>
 <p>注意梯度只对 <span class="arithmatex">\(\theta\)</span> 求，目标里的 <span class="arithmatex">\(\theta^-\)</span> 被视为常数：</p>
 <div class="arithmatex">\[\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_\theta Q(s,a;\theta)\right].\]</div>
-<p>这正是"半梯度（semi-gradient）"的含义——目标依赖 <span class="arithmatex">\(\theta^-\)</span> 而不是当前 <span class="arithmatex">\(\theta\)</span>，所以它并不是完整平方误差的梯度。半梯度让更新方向偏向"把预测拉向一个移动的靶子"，而不是同时调整靶子，这对稳定性至关重要。</p>
+<p>在一次目标网络同步间隔内，<span class="arithmatex">\(\theta^-\)</span> 固定，所以上式就是该“冻结目标平方损失”对 <span class="arithmatex">\(\theta\)</span> 的完整梯度。之所以仍常沿用<strong>半梯度（semi-gradient）</strong>一词，是因为从贝尔曼残差的角度看，我们主动忽略了自举目标对待学习价值函数参数的依赖；若目标直接由同一个 <span class="arithmatex">\(\theta\)</span> 产生，这一区别才最明显。停止目标分支的梯度，使更新只把当前预测拉向暂时固定的靶子。</p>
 <table>
 <thead>
 <tr>
@@ -4855,9 +4855,9 @@
 <p>一个重要事实：<strong>DQN 的收敛性没有严格保证。</strong> 函数逼近 + 自举 + off-policy 三者同现时，即使目标稳定，也可能出现价值函数发散。回放与目标网络是显著改善稳定性的工程手段，不是收敛性的证明。</p>
 <h2 id="_4">经验回放与目标网络</h2>
 <p>这两个结构解决的问题完全不同，却常被混为一谈。</p>
-<p><strong>经验回放</strong>解决"样本相关性与数据利用率"。在线交互得到的相邻样本高度相关，直接用它们做批量梯度下降，等价于在一个极窄的数据分布上反复更新，梯度期望被严重偏置。把转移 <span class="arithmatex">\((s_t,a_t,r_{t+1},s_{t+1})\)</span> 存入容量为 <span class="arithmatex">\(N\)</span> 的缓冲，再均匀随机抽样：</p>
+<p><strong>经验回放</strong>缓解“样本时间相关性”，并提高数据利用率。在线交互得到的相邻样本高度相关，连续取批会增大梯度估计的相关性和方差。把转移 <span class="arithmatex">\((s_t,a_t,r_{t+1},s_{t+1})\)</span> 存入容量为 <span class="arithmatex">\(N\)</span> 的缓冲，再均匀随机抽样：</p>
 <div class="arithmatex">\[L(\theta)=\frac{1}{\lvert B\rvert}\sum_{(s,a,r,s')\in B}\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2 .\]</div>
-<p>抽样得到的批内样本近似独立，梯度是期望的无偏估计，同时每条转移可被复用多次。</p>
+<p>在忽略有限总体抽样相关性的近似下，批内样本比连续轨迹更接近独立。均匀抽样的梯度对“当前缓冲区的经验风险”是无偏的，但对当前策略的在线状态分布一般不是无偏的，因为缓冲区混合了不同时刻的行为策略。每条转移可以复用多次，这既提高数据利用率，也会引入数据陈旧问题。</p>
 <p><strong>目标网络</strong>解决"目标随参数移动"。若用同一个 <span class="arithmatex">\(\theta\)</span> 生成预测与目标，那么把 <span class="arithmatex">\(Q(s,a;\theta)\)</span> 抬高的同时 <span class="arithmatex">\(y\)</span> 也被抬高，更新会追自己的尾巴，极易正反馈发散。用一份延迟参数产生目标，就把它变成短期内近似固定的回归问题。两种常见同步方式：每 <span class="arithmatex">\(C\)</span> 步硬拷贝 <span class="arithmatex">\(\theta^-\leftarrow\theta\)</span>（DQN 原版，<span class="arithmatex">\(C\)</span> 取数千），或软更新</p>
 <div class="arithmatex">\[\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\ \text{（每步）}.\]</div>
 <table>

@@ -2,6 +2,8 @@
 
 CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科全书。它是一套面向智能系统研究与工程实践的**最小充分知识地图**：先回答方法为什么成立，再说明算法如何组织，最后进入工程接口与真实系统。
 
+全站默认读者已经完整掌握高中阶段的实数与复数基本运算、代数恒等变形、方程与不等式、指数与对数、数列、平面解析几何、三角函数和一元导数计算。除此之外，不默认读者学过大学线性代数、概率论、多元微积分、优化、控制或计算机系统课程。“零基础”在本站指**从大学知识起点讲起**，不是重新讲授高中课程。
+
 <figure markdown="span">
   ![CodeNebula minimum sufficient knowledge map](assets/diagrams/knowledge-map.svg)
   <figcaption>课程按基础、决策学习、机器人感知、系统仿真、安全与人因五个领域组织。</figcaption>
@@ -17,17 +19,17 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 ## 课程结构
 
-课程不强制一条线读到底，但领域之间存在真实的**前置偏序**：Foundations 是无前置的根，Decision & Learning 与 Robotics & Perception 是两条并列分支，Systems & Simulation 需要至少一条分支作为载体，Safety & Human Factors 则贯穿真实部署。
+课程不强制一条线读到底，但领域之间存在真实的**前置偏序**。偏序（partial order）是一种满足自反性、反对称性和传递性的先后关系；这里把“章节自身以前已建立”省略，只记录不同领域之间的严格前置关系。Foundations 是大学知识的入口，Decision & Learning 与 Robotics & Perception 是两条并列分支，Systems & Simulation 需要至少一条分支作为载体，Safety & Human Factors 则贯穿真实部署。
 
 | 领域 | 包含 Section | 回答的问题 | 需要的前置 |
 |---|---|---|---|
-| Foundations | Mathematics, Control Theory | 系统如何表示、方法在什么条件下成立 | 无 |
+| Foundations | Mathematics, Control Theory | 系统如何表示、方法在什么条件下成立 | 高中数学 |
 | Decision & Learning | Reinforcement Learning, Game Theory, Multi-Agent Systems | 如何在交互中做序贯决策 | Foundations |
 | Robotics & Perception | Robotics, Perception | 如何感知世界并让本体动起来 | Foundations |
 | Systems & Simulation | Distributed Systems, Software Engineering, Simulation & Sim2Real | 如何让算法成为可运行、可观察、可恢复的系统 | 任意一个领域 |
 | Safety & Human Factors | Robustness & Safety, Human–AI Interaction | 条件变化、组件失效、与人协作时如何保持可接受行为 | Robotics & Perception 优先 |
 
-这一偏序可以写成一个依赖关系：若领域 $D_i$ 是 $D_j$ 的前置，记 $D_i \prec D_j$，则合法阅读顺序就是该偏序的一个线性扩展。
+这一偏序可以写成一个依赖关系：若领域 $D_i$ 必须先于 $D_j$，记 $D_i \prec D_j$。线性扩展（linear extension）是把所有领域排成一个不打破这些前置关系的总顺序；因此任何满足“若 $D_i\prec D_j$，则 $D_i$ 排在 $D_j$ 前面”的阅读次序，都是合法线性扩展。
 
 | 领域 | 核心章数 | 主要目标层次 | 是否可跳过 |
 |---|---:|---|---|

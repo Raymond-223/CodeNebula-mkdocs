@@ -4678,7 +4678,7 @@
 </table>
 <h2 id="_2">滚动时域让预测不断被真实测量纠正</h2>
 <p>MPC 并不会一次执行整段最优控制，它只执行第一个输入 <span class="arithmatex">\(u_0\)</span>，下一周期重新测量真实状态，再求一次新的优化问题。这就是 receding horizon（滚动时域）的核心。</p>
-<p>这个机制带来一个关键好处：<strong>闭环鲁棒性</strong>。如果模型不准，"开环执行整段最优序列"会越走越偏；而每拍重新用真实测量 <span class="arithmatex">\(x_0\)</span> 重新优化，相当于把预测误差在每个周期清零一次。因此 MPC 天然容忍一定程度的模型误差，代价是每周期都要重新求解。</p>
+<p>滚动重算能在每个周期用新状态修正后续计划，通常比开环执行整段序列更能抑制累计偏差；但它不会把模型误差“清零”，也不自动给出鲁棒性保证。严格鲁棒 MPC 还需显式扰动集合、约束收紧、管束或反馈政策等设计。代价是每周期都要重新求解。</p>
 <p>从数学上看，滚动时域把"开环最优控制问题"变成了一个"闭环反馈律"：控制律 <span class="arithmatex">\(u=\kappa(x_0)\)</span> 由优化问题的解的第一段隐式定义，虽然 <span class="arithmatex">\(\kappa\)</span> 没有闭式表达，但每一点都可求值。这也意味着 MPC 的性能依赖测量质量——如果状态估计有偏，错误会直接被当成真值塞进优化，反而不如对噪声不敏感的低增益 PID。</p>
 <table>
 <thead>
@@ -4840,7 +4840,7 @@
 <p>于是整个问题写成标准型</p>
 <div class="arithmatex">\[\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.\]</div>
 <p>这里的优化变量就是整段输入轨迹 <span class="arithmatex">\(U\in\mathbb{R}^{mN}\)</span>，维数是 MPC 计算量的直接来源。求解得到的 <span class="arithmatex">\(U^{\star}\)</span> 只取其第一段 <span class="arithmatex">\(u_0^{\star}\)</span> 施加到系统，其余丢弃、下一步重算。</p>
-<p>从结构上看，<span class="arithmatex">\(H\)</span> 正定（因 <span class="arithmatex">\(\bar R\)</span> 正定）保证 QP 有唯一解，<span class="arithmatex">\(\Gamma\)</span> 的块下三角结构让 <span class="arithmatex">\(H\)</span> 呈现带状稀疏，专用求解器可以利用这一点把每条约束的处理成本从 <span class="arithmatex">\(O(N^2)\)</span> 降到接近 <span class="arithmatex">\(O(N)\)</span>。这也是同样规模的 QP，通用求解器与专用 MPC 求解器速度可能差一个数量级的原因。</p>
+<p>从结构上看，<span class="arithmatex">\(\bar R\succ0\)</span> 使 <span class="arithmatex">\(H\succ0\)</span>，所以<strong>只要可行域非空</strong>，QP 的最优解唯一。需要区分两种建模形式：消去状态后的凝聚形式中，<span class="arithmatex">\(\Gamma\)</span> 虽为块下三角，<span class="arithmatex">\(H=\Gamma^\top\bar Q\Gamma+\bar R\)</span> 一般是稠密的；保留每一步状态和输入的稀疏形式，其等式约束与 KKT 系统才呈块带状。专用求解器利用的是后者的时域稀疏性，复杂度还取决于状态维数、约束和算法，不能无条件写成接近 <span class="arithmatex">\(O(N)\)</span>。</p>
 <table>
 <thead>
 <tr>
@@ -4879,7 +4879,10 @@
 </table>
 <h2 id="_5">稳定性与终端代价</h2>
 <p>一个反直觉的事实：<strong>有限时域 + 无终端约束，并不保证闭环稳定</strong>。因为优化器只对 <span class="arithmatex">\(N\)</span> 步负责，聪明的解可能是"这几步代价很低，但把状态推到很糟的地方交给未来"——Lyapunov 意义下闭环可能振荡甚至发散。</p>
-<p>标准补救是加<strong>终端代价</strong>：令 <span class="arithmatex">\(\ell_f(x)=x^{\top}P x\)</span>，其中 <span class="arithmatex">\(P\)</span> 取无穷时域 LQR 的 Riccati 解（即离散 DARE 的解）。这样终端代价恰好等于"从末端状态出发、无约束条件下未来的累积代价"，于是有限时域代价成为真实无穷代价的上界，最小化它就等价于最小化一个真实的 Lyapunov 函数。更强的做法是再加<strong>终端集</strong> <span class="arithmatex">\(\mathcal{X}_f\)</span>（一个在最优反馈下正不变的集合），约束 <span class="arithmatex">\(x_N\in\mathcal{X}_f\)</span>，从理论上保证递归可行性。</p>
+<p>终端代价常取 <span class="arithmatex">\(\ell_f(x)=x^{\top}Px\)</span>，其中 <span class="arithmatex">\(P\)</span> 是无约束无限时域 LQR 的 DARE 解。它只在终端状态之后能够合法地继续使用 LQR 时，才等于那段无约束未来代价；存在状态或输入约束时，LQR 延拓可能不可行，所以单加这一项不能自动得到无穷时域上界、递归可行性或闭环稳定性。</p>
+<p>标准充分条件还要同时给出终端控制律 <span class="arithmatex">\(\kappa_f\)</span> 和终端集 <span class="arithmatex">\(\mathcal X_f\)</span>：对每个 <span class="arithmatex">\(x\in\mathcal X_f\)</span>，<span class="arithmatex">\(\kappa_f(x)\)</span> 满足输入约束，后继状态仍在 <span class="arithmatex">\(\mathcal X_f\)</span>，并有</p>
+<div class="arithmatex">\[V_f(f(x,\kappa_f(x)))-V_f(x)\le-\ell(x,\kappa_f(x)).\]</div>
+<p>再加初始优化问题可行，才可把上一时刻的最优序列左移并在末端补上 <span class="arithmatex">\(\kappa_f\)</span>，构造下一时刻的可行候选，从而证明递归可行；同一下降不等式再用于证明名义无扰动闭环的 Lyapunov 下降。</p>
 <p>递归可行性还有一个附带要求：优化问题在每步都要<strong>有解</strong>。若上一步的解在本步被证明仍可行，迭代就不会中途失效；终端集与终端代价正是用来提供这个"可行性自保持"性质的工具。缺少它们时，即使当前步有解，下一步也可能突然不可行。</p>
 <table>
 <thead>
@@ -4898,16 +4901,16 @@
 <td>无</td>
 </tr>
 <tr>
-<td>终端代价 <span class="arithmatex">\(x^{\top}Px\)</span></td>
-<td>通常可证</td>
-<td>中等</td>
+<td>仅终端代价 <span class="arithmatex">\(x^{\top}Px\)</span></td>
+<td>一般不保证</td>
+<td>依模型与时域</td>
 <td>需解一次 DARE</td>
 </tr>
 <tr>
-<td>终端代价 + 终端集</td>
-<td>可证</td>
+<td>终端代价 + 终端控制律 + 正不变终端集 + 下降条件</td>
+<td>在名义模型和初始可行等条件下可证</td>
 <td>强</td>
-<td>增加末行约束，可能更易不可行</td>
+<td>增加终端约束，可能更保守</td>
 </tr>
 <tr>
 <td>足够长时域</td>
@@ -4917,7 +4920,7 @@
 </tr>
 </tbody>
 </table>
-<p>工程上，终端代价几乎总是要加的，因为它既提升稳定性、又能让较短的 <span class="arithmatex">\(N\)</span> 达到较长时域的效果；终端集则可以视算力与保守程度取舍。</p>
+<p>工程上终端代价常用于改善短时域近似，但它是设计组件，不是单独的稳定证书。若不使用终端集与终端控制律，应通过其他 MPC 稳定性定理或闭环验证说明依据。</p>
 <h2 id="mpc_3">模型预测控制（MPC）的适用范围</h2>
 <p>MPC 不是"更高级所以更好"，而是一个有明确适用边界的工具。判断标准可归纳为四条：约束是否强硬且必须满足、模型是否足够准、算力是否够、控制频率是否够低。四条都满足时 MPC 优势显著；任一条严重不满足时，PID 或 LQR 往往更划算。</p>
 <p>一个实用的判断流程：先问"系统是否有必须满足的不等式约束"。若没有，LQR 或 PID 足以达到近似最优，且实现与调试都更简单；若有硬约束但控制频率极高（1 kHz 以上）或处理器只有微控制器级别，则应考虑显式 MPC（离线预计算可行解表）或退回带抗饱和的 LQR；只有当约束强、频率低、算力足、模型准同时成立时，在线 MPC 才是性价比最高的选择。</p>

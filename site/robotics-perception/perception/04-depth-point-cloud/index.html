@@ -4859,7 +4859,7 @@ p_w=R^{w}_{b}\,R^{b}_{c}\,p_c+R^{w}_{b}\,t^{b}_{c}+t^{w}_{b}.
 <div class="arithmatex">\[
 \Sigma=\frac{1}{k}\sum_{i=1}^{k}(p_i-\bar p)(p_i-\bar p)^{\top},
 \]</div>
-<p>其特征值 <span class="arithmatex">\(\lambda_1\ge\lambda_2\ge\lambda_3\)</span> 描述局部形状：<span class="arithmatex">\(\lambda_1\gg\lambda_2\approx\lambda_3\)</span> 是平面（法向为最小特征值对应的方向），<span class="arithmatex">\(\lambda_1\approx\lambda_2\gg\lambda_3\)</span> 是边缘，三者相近则是角点或体素化后的散点。<strong>法向的可靠性几乎完全由邻域尺寸决定</strong>：太小则对噪声敏感，太大则把曲面和棱边平均掉。</p>
+<p>其特征值 <span class="arithmatex">\(\lambda_1\ge\lambda_2\ge\lambda_3\)</span> 描述局部形状：<span class="arithmatex">\(\lambda_1\gg\lambda_2\approx\lambda_3\)</span> 表示点主要沿一个方向分布，是线状或边缘结构；<span class="arithmatex">\(\lambda_1\approx\lambda_2\gg\lambda_3\)</span> 表示点主要落在一个平面内，法向为最小特征值对应的特征向量；三者相近表示局部近似各向同性，可能是角点、噪声团或体素化散点。法向可靠性同时受邻域尺寸、点密度、噪声、遮挡和曲率影响：邻域太小对噪声敏感，太大又会把曲面和棱边平均掉。</p>
 <p><strong>FPFH（Fast Point Feature Histogram）</strong> 在法向基础上统计邻域内点对的法向夹角分布，得到一个 33 维的描述子，对刚体变换不变、对噪声相对稳健，是粗配准阶段的常用选择。它的计算依赖每个点的邻域搜索，因此对点数非常敏感，通常要与下采样配合使用。</p>
 <table>
 <thead>

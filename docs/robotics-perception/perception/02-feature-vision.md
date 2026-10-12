@@ -82,7 +82,7 @@ repeatability 可以被粗略测量：把同一场景在两种视角下的关键
 
 实际系统会利用单应矩阵、基础矩阵或相机运动模型检查几何一致性。RANSAC 的作用就是在含有离群点的候选匹配中反复抽样，寻找得到多数数据支持的模型。**注意几何验证是唯一能排除“描述子偶然相似”这一系统性错误的环节；仅靠距离阈值永远无法区分真实重复结构与巧合。**
 
-候选策略的取舍可以量化：若粗略估计内点比例为 $w$，采用交叉检查后通常能从 0.5 提升到 0.6 以上，而按前面的抽样公式，$w$ 从 0.5 升到 0.6 可以把所需迭代次数从约 218 次降到约 86 次。**先在候选阶段去掉一半容易排除的误匹配，比在 RANSAC 之后调阈值更划算。**
+候选策略的取舍可以用实测内点比例 $w$ 量化。对本页按 8 点样本计算的基础矩阵估计，$p=0.999$ 时若 $w$ 从 0.5 提升到 0.6，理论抽样次数从约 1765 次降到约 408 次。交叉检查是否能达到这种提升必须由当前数据验证，不能预设固定增幅。
 
 几何验证的顺序同样有讲究：先估模型、再统计内点比例，最后才决定是否采用该帧结果，并把它送入位姿或建图环节。**把验证放在链路的末端，意味着失败的帧只会被丢弃，而不会把错误位姿传给下游**——这是感知模块最容易守住、也最容易被违反的一条边界。
 
@@ -229,10 +229,17 @@ repeatability 可以被粗略测量：把同一场景在两种视角下的关键
 
 ## 对极几何与误匹配剔除
 
-对极几何给出误匹配剔除的理论基础。设同一三维点在两幅图像中的归一化坐标分别为 $\mathbf x$ 与 $\mathbf x'$，则必然满足
+对极几何给出误匹配剔除的理论基础。必须先区分两种坐标：若 $\mathbf x,\mathbf x'$ 是已经除去内参的归一化齐次坐标，则满足本质矩阵（essential matrix）约束
 
 $$
-\mathbf x'^\top F\mathbf x=0,\qquad F=K'^{-\top}[t]_\times RK^{-1}.
+\mathbf x'^\top E\mathbf x=0,\qquad E=[t]_\times R.
+$$
+
+若 $\mathbf p,\mathbf p'$ 是像素齐次坐标，$\mathbf x=K^{-1}\mathbf p$、$\mathbf x'=K'^{-1}\mathbf p'$，代入上式才得到基础矩阵（fundamental matrix）约束
+
+$$
+\mathbf p'^\top F\mathbf p=0,
+\qquad F=K'^{-\top}[t]_\times RK^{-1}.
 $$
 
 这个约束的几何含义是：第二幅图中的对应点必须落在第一幅图对应点的对极线上，因此它对匹配有明确的过滤能力。当内参已知时可直接用本质矩阵 $E=[t]_\times R$，自由度从 7 降到 5，所需点对数也更少。
@@ -241,17 +248,29 @@ $$
 import cv2
 import numpy as np
 
+gray1 = cv2.imread("image1.png", cv2.IMREAD_GRAYSCALE)
+gray2 = cv2.imread("image2.png", cv2.IMREAD_GRAYSCALE)
+if gray1 is None or gray2 is None:
+    raise FileNotFoundError("请把 image1.png 与 image2.png 放在当前目录")
+
 orb = cv2.ORB_create(nfeatures=1500)
 kp1, des1 = orb.detectAndCompute(gray1, None)
 kp2, des2 = orb.detectAndCompute(gray2, None)
+if des1 is None or des2 is None:
+    raise RuntimeError("至少一幅图没有检测到 ORB 描述子")
 
 matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
 pairs = matcher.knnMatch(des1, des2, k=2)
-good = [m for m, n in pairs if m.distance < 0.75 * n.distance]
+good = [pair[0] for pair in pairs
+        if len(pair) == 2 and pair[0].distance < 0.75 * pair[1].distance]
+if len(good) < 8:
+    raise RuntimeError(f"基础矩阵至少需要 8 对匹配，当前只有 {len(good)} 对")
 
 pts1 = np.float32([kp1[m.queryIdx].pt for m in good])
 pts2 = np.float32([kp2[m.trainIdx].pt for m in good])
 F, mask = cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC, 1.5, 0.999)
+if F is None or mask is None:
+    raise RuntimeError("RANSAC 未能估计基础矩阵")
 inliers = int(mask.sum()) if mask is not None else 0
 ```
 
@@ -261,15 +280,15 @@ $$
 N=\frac{\log(1-p)}{\log\left(1-w^{s}\right)},
 $$
 
-其中 $w$ 是内点比例，$s$ 是最小样本数，$p$ 是期望成功概率。取 $p=0.999$、$s=5$ 时，$w=0.8$ 只需约 18 次迭代，$w=0.5$ 需要约 218 次，而 $w=0.3$ 需要约 2839 次。**这解释了为什么内点比例从 0.5 掉到 0.3 时，同一套参数会突然“失效”——不是算法变了，而是所需抽样次数增加了一个数量级。**
+其中 $w$ 是内点比例，$s$ 是最小样本数，$p$ 是期望成功概率。本页代码用未标定点估计基础矩阵 $F$，下面按 8 点样本 $s=8$ 计算。取 $p=0.999$ 时，$w=0.8$ 约需 38 次，$w=0.6$ 约需 408 次，$w=0.5$ 约需 1765 次，而 $w=0.3$ 约需 105282 次。五点算法针对已知内参后的本质矩阵 $E$，不能与这里的 `findFundamentalMat` 混用。
 
-| 内点比例 $w$ | 所需迭代次数（$p=0.999$，$s=5$） | 判读 |
+| 内点比例 $w$ | 所需迭代次数（$p=0.999$，$s=8$） | 判读 |
 | --- | --- | --- |
-| 0.8 | 约 18 | 收敛快，结果可信 |
-| 0.6 | 约 86 | 稳定 |
-| 0.5 | 约 218 | 可用，需设上限 |
-| 0.3 | 约 2839 | 成本高，建议换策略 |
-| 小于 0.2 | 超过 10000 | 匹配基本不可用 |
+| 0.8 | 约 38 | 抽样代价较低；仍需检查几何退化 |
+| 0.6 | 约 408 | 需要较多迭代 |
+| 0.5 | 约 1765 | 成本明显上升 |
+| 0.3 | 约 105282 | 通常应先改善匹配 |
+| 小于 0.2 | 超过 270 万 | 直接 RANSAC 很不实际 |
 
 ## 描述子距离与比值测试
 

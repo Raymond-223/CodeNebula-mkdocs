@@ -4750,7 +4750,18 @@
 <div class="arithmatex">\[(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V(s')\right],\]</div>
 <p>则 <span class="arithmatex">\(V^\pi\)</span> 是不动点 <span class="arithmatex">\(T^\pi V^\pi=V^\pi\)</span>。并且对任意两个值函数</p>
 <div class="arithmatex">\[\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,\]</div>
-<p>即 <span class="arithmatex">\(T^\pi\)</span> 是以 <span class="arithmatex">\(\gamma\)</span> 为模的<strong>压缩映射</strong>。收敛速度完全被 <span class="arithmatex">\(\gamma\)</span> 决定：<span class="arithmatex">\(\gamma=0.9\)</span> 时每次迭代误差至少缩小 <span class="arithmatex">\(10\%\)</span>，<span class="arithmatex">\(\gamma=0.999\)</span> 时每步只缩小 <span class="arithmatex">\(0.1\%\)</span>。</p>
+<p>即 <span class="arithmatex">\(T^\pi\)</span> 是以 <span class="arithmatex">\(\gamma\)</span> 为模的<strong>压缩映射</strong>。收敛速度完全被 <span class="arithmatex">\(\gamma\)</span> 决定：<span class="arithmatex">\(\gamma=0.9\)</span> 时误差上界每次至多乘 <span class="arithmatex">\(0.9\)</span>，<span class="arithmatex">\(\gamma=0.999\)</span> 时至多乘 <span class="arithmatex">\(0.999\)</span>。</p>
+<details class="proof">
+<summary>Bellman 算子的压缩性</summary>
+<p>对任意有界函数 <span class="arithmatex">\(V,W\)</span> 和任意状态 <span class="arithmatex">\(s\)</span>，
+$<span class="arithmatex">\(\begin{aligned}
+|(T^\pi V)(s)-(T^\pi W)(s)|
+&amp;=\gamma\left|\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)(V(s')-W(s'))\right|\\
+&amp;\le\gamma\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)\|V-W\|_\infty\\
+&amp;=\gamma\|V-W\|_\infty.
+\end{aligned}\)</span>$
+再对 <span class="arithmatex">\(s\)</span> 取最大值得 <span class="arithmatex">\(\|T^\pi V-T^\pi W\|_\infty\le\gamma\|V-W\|_\infty\)</span>。有界函数配无穷范数是完备空间，因此 Banach 压缩映射定理给出唯一不动点，并保证反复应用 <span class="arithmatex">\(T^\pi\)</span> 收敛。</p>
+</details>
 <h2 id="bellman-optimality-relation">贝尔曼最优性关系（Bellman Optimality Relation）</h2>
 <p>最优动作价值函数定义为</p>
 <div class="arithmatex">\[Q^*(s,a)=\max_\pi Q^\pi(s,a).\]</div>
@@ -4803,8 +4814,8 @@
 <div class="arithmatex">\[V^*(B)=3+0.9V^*(B)\ \Longrightarrow\ V^*(B)=\frac{3}{1-0.9}=30.\]</div>
 <p>于是 <span class="arithmatex">\(A\)</span> 选择 <code>go</code> 的价值为</p>
 <div class="arithmatex">\[Q^*(A,\text{go})=2+0.9\times30=29,\]</div>
-<p>而一直留在 <span class="arithmatex">\(A\)</span> 的价值只有</p>
-<div class="arithmatex">\[Q^*(A,\text{stay})=1+0.9+0.9^2+\cdots=\frac{1}{1-0.9}=10.\]</div>
+<p>若第一步在 <span class="arithmatex">\(A\)</span> 选择 <code>stay</code>，之后允许改用最优策略，则</p>
+<div class="arithmatex">\[Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.\]</div>
 <p>所以虽然 <code>stay</code> 立刻有正奖励，长期看仍应先去 <span class="arithmatex">\(B\)</span>。这就是强化学习和普通"即时打分"最大的不同。</p>
 <table>
 <thead>
@@ -4821,33 +4832,33 @@
 <td><span class="arithmatex">\(0.5\)</span></td>
 <td><span class="arithmatex">\(6.0\)</span></td>
 <td><span class="arithmatex">\(5.0\)</span></td>
-<td><span class="arithmatex">\(2.0\)</span></td>
+<td><span class="arithmatex">\(3.5\)</span></td>
 <td><code>go</code></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(0.9\)</span></td>
 <td><span class="arithmatex">\(30.0\)</span></td>
 <td><span class="arithmatex">\(29.0\)</span></td>
-<td><span class="arithmatex">\(10.0\)</span></td>
+<td><span class="arithmatex">\(27.1\)</span></td>
 <td><code>go</code></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(0.99\)</span></td>
 <td><span class="arithmatex">\(300.0\)</span></td>
 <td><span class="arithmatex">\(299.0\)</span></td>
-<td><span class="arithmatex">\(100.0\)</span></td>
+<td><span class="arithmatex">\(297.01\)</span></td>
 <td><code>go</code></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(0.999\)</span></td>
 <td><span class="arithmatex">\(3000.0\)</span></td>
 <td><span class="arithmatex">\(2999.0\)</span></td>
-<td><span class="arithmatex">\(1000.0\)</span></td>
+<td><span class="arithmatex">\(2997.001\)</span></td>
 <td><code>go</code></td>
 </tr>
 </tbody>
 </table>
-<p>一个反向例子更值得记住：若把 <span class="arithmatex">\(B\)</span> 的 <code>stay</code> 奖励从 3 降到 <span class="arithmatex">\(0.5\)</span>，则 <span class="arithmatex">\(V^*(B)=0.5/0.1=5\)</span>，<span class="arithmatex">\(Q^*(A,\text{go})=2+0.9\times5=6.5&lt;10=Q^*(A,\text{stay})\)</span>，最优动作变成 <code>stay</code>。<strong>即时奖励大 10 倍的 <code>stay</code> 只在 <span class="arithmatex">\(B\)</span> 的长期收益足够大时才该被放弃</strong>，这个阈值由 <span class="arithmatex">\(\gamma\)</span> 与停留奖励共同决定，手算一遍比记住任何结论都可靠。</p>
+<p>一个反向例子更值得记住：若把 <span class="arithmatex">\(B\)</span> 的 <code>stay</code> 奖励从 3 降到 <span class="arithmatex">\(0.5\)</span>，则“永远 stay 于 A”的策略价值是 10，而先 <code>go</code> 的价值为 <span class="arithmatex">\(2+0.9\times5=6.5\)</span>，所以 <span class="arithmatex">\(V^*(A)=10\)</span>。此时 <span class="arithmatex">\(Q^*(A,\text{stay})=1+0.9V^*(A)=10\)</span>，最优动作变成 <code>stay</code>。这个例子也说明 <span class="arithmatex">\(Q^*(s,a)\)</span> 的定义是“第一步固定为 <span class="arithmatex">\(a\)</span>，以后采用最优策略”，不能把它和“以后永远重复 <span class="arithmatex">\(a\)</span>”的策略价值混为一谈。</p>
 <h2 id="_5">折扣因子与有效时域</h2>
 <p>从 <span class="arithmatex">\(G_t\)</span> 的定义看，第 <span class="arithmatex">\(k\)</span> 步奖励的权重是 <span class="arithmatex">\(\gamma^{k}\)</span>，因此 <span class="arithmatex">\(\gamma\)</span> 直接决定"哪些步还算数"。两个常用的量化指标是：折扣回报的<strong>等效时域</strong> <span class="arithmatex">\(\frac{1}{1-\gamma}\)</span>（因为 <span class="arithmatex">\(\sum_{k=0}^{\infty}\gamma^{k}=\frac{1}{1-\gamma}\)</span>），以及<strong>半衰期</strong> <span class="arithmatex">\(H=\frac{\ln 0.5}{\ln\gamma}\)</span>（使权重降到 <span class="arithmatex">\(0.5\)</span> 的步数，解 <span class="arithmatex">\(\gamma^{H}=0.5\)</span>）。</p>
 <table>
@@ -4914,7 +4925,17 @@
 <p>由压缩映射性质，<span class="arithmatex">\(\|V_k-V^*\|_\infty\le\gamma^{k}\|V_0-V^*\|_\infty\)</span>，误差按 <span class="arithmatex">\(\gamma\)</span> 几何衰减。</p>
 <p><strong>策略迭代</strong>交替进行策略评估与策略改进：</p>
 <div class="arithmatex">\[\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}\pi_{k+1}(s)\in\arg\max_a Q^{\pi_k}(s,a).\]</div>
-<p>由策略改进定理，<span class="arithmatex">\(\pi_{k+1}\)</span> 不差于 <span class="arithmatex">\(\pi_k\)</span>；有限 MDP 中动作有限，意味着价值严格改进的次数有限，因此策略迭代在有限步内收敛到 <span class="arithmatex">\(\pi^*\)</span>（实际中往往十几步内）。</p>
+<p>由策略改进定理，<span class="arithmatex">\(\pi_{k+1}\)</span> 不差于 <span class="arithmatex">\(\pi_k\)</span>。对确定性平稳策略作固定的平局选择时，有限 MDP 只有有限多个策略；若策略改变并带来严格改进，就不能回到旧策略，因而有限步终止。实际步数依问题而定，不能统一声称“往往十几步”。</p>
+<details class="proof">
+<summary>策略改进定理</summary>
+<p>设新策略在每个状态选择旧动作价值最大的动作，即
+$<span class="arithmatex">\(Q^\pi(s,\pi'(s))\ge Q^\pi(s,\pi(s))=V^\pi(s).\)</span>$
+于是
+$<span class="arithmatex">\(V^\pi(s)\le r(s,\pi'(s))+\gamma\sum_{s'}P(s'\mid s,\pi'(s))V^\pi(s')=(T^{\pi'}V^\pi)(s).\)</span>$
+Bellman 算子保持逐点不等式，反复作用得到
+$<span class="arithmatex">\(V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots.\)</span>$
+由压缩性，右端收敛到 <span class="arithmatex">\(V^{\pi'}\)</span>，所以 <span class="arithmatex">\(V^{\pi'}\ge V^\pi\)</span>。若某个从相关状态可达的选择严格改善，则相应价值严格提高。</p>
+</details>
 <table>
 <thead>
 <tr>
@@ -5005,7 +5026,7 @@
 <tr>
 <td><span class="arithmatex">\(A^*(s,a)\)</span></td>
 <td><span class="arithmatex">\(Q^*-V^*\)</span></td>
-<td>相对最优，非负且最优动作处为 0</td>
+<td>相对最优，非正且最优动作处为 0</td>
 <td>判断"某动作为何不够好"</td>
 </tr>
 </tbody>

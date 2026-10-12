@@ -4839,7 +4839,7 @@
 </tr>
 <tr>
 <td>CTDE</td>
-<td>训练期 <span class="arithmatex">\(\mathcal O(1)\)</span> critic、执行期 <span class="arithmatex">\(\mathcal O(m)\)</span></td>
+<td>训练期使用一个或若干集中式 critic；其输入与计算通常随主体数增长，执行期每个 actor 只处理本地输入</td>
 <td>训练可集中</td>
 <td>部署时观测受限</td>
 </tr>
@@ -4949,8 +4949,8 @@
 </tr>
 </tbody>
 </table>
-<p>信息共享的收益可以用一个可计算的条件粗略描述：共享带来的回报增益，必须超过"消息占用资源 + 延迟导致决策过期"的损失。设消息延迟 <span class="arithmatex">\(\tau\)</span>、决策周期 <span class="arithmatex">\(\Delta t\)</span>，若 <span class="arithmatex">\(\tau &gt; \Delta t\)</span>，消息到达时决策窗口已关闭，此时共享不仅无用，还会因为等待而加剧不同步——<strong>这正是"传得越多不一定越好"的机制解释。</strong></p>
-<p>Dec-POMDP 的复杂度是 NEXP-complete，即使 <span class="arithmatex">\(n=2\)</span> 也是如此；因此实践中不会去精确求解，而是退化为三类近似：集中训练分散执行（CTDE）、显式通信协议学习、以及把协调规则写死成启发式或市场机制。</p>
+<p>信息共享的收益可以用一个可计算的条件粗略描述：共享带来的回报增益，必须超过“消息占用资源 + 延迟造成的信息陈旧”所带来的损失。设消息延迟为 <span class="arithmatex">\(\tau\)</span>、决策周期为 <span class="arithmatex">\(\Delta t\)</span>。当 <span class="arithmatex">\(\tau&gt;\Delta t\)</span> 时，消息确实赶不上产生它的那个控制周期，但不能据此断言消息一定无用：带时间戳的状态仍可用于后续决策，也可先通过运动模型外推到当前时刻。真正需要判断的是陈旧信息经过预测后还能否改变当前动作，以及等待消息是否会阻塞控制回路。实时安全控制通常不等待迟到消息，而把它作为异步输入供下一周期使用。</p>
+<p>对<strong>有限时域</strong>、时域长度用一元编码表示的 Dec-POMDP，精确决策问题是 NEXP-complete，即使只有两个主体也成立；无限时域版本还可能出现不可判定性。因此实践中通常不精确求解一般形式，而采用三类近似：集中训练分散执行（CTDE）、显式通信协议学习、以及把协调规则写成启发式或市场机制。复杂度结论依赖问题版本，不能脱离“有限时域”等条件单独使用。</p>
 <table>
 <thead>
 <tr>
@@ -4992,7 +4992,7 @@
 <p>它把 <span class="arithmatex">\(n\)</span> 个主体的动作揉成一个整体价值，梯度信号无法区分谁的关键动作带来了收益。三台机器人共同搬运，任务成功只给一个总奖励，就要面对这样的问题：是谁完成了关键动作，谁只是恰好在场？</p>
 <p>可用的做法包括差分奖励（difference reward）：</p>
 <div class="arithmatex">\[D_i = G(\mathbf a) - G(\mathbf a_{-i}),\]</div>
-<p>即"有我在"与"没我在"的收益差，它天然把"恰好在场"的贡献压到 0；还有反事实基线、按角色加权、以及分成任务级与个体级的奖励塑形。<strong>判断指标很直接：如果替换某个 Agent 的策略为随机策略，团队回报几乎不变，说明它对回报没有实质贡献，也说明信用分配信号当前是模糊的。</strong></p>
+<p>即“采用主体 <span class="arithmatex">\(i\)</span> 的实际动作”与“采用预先规定的反事实基准动作”之间的团队收益差。这里的 <span class="arithmatex">\(G(\mathbf a_{-i})\)</span> 必须明确补上主体 <span class="arithmatex">\(i\)</span> 的默认动作或边缘化规则，不能把“没有该主体”当成天然定义。它能削弱“恰好在场”的影响，但结论取决于反事实基准。替换测试也只能作为诊断：若把某个 Agent 换成随机策略后团队回报几乎不变，可能是该主体当前作用很小，也可能是队友补偿、随机策略恰好适用、评测场景没有覆盖其关键职责，不能据此单独证明它没有贡献或信用分配一定失败。</p>
 <h3 id="33">3.3 联合空间增长</h3>
 <p>如果每个主体有 <span class="arithmatex">\(m\)</span> 个动作，联合动作组合数量就是</p>
 <div class="arithmatex">\[\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|,\]</div>

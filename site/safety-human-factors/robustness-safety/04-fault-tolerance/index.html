@@ -4795,19 +4795,22 @@
 </tr>
 <tr>
 <td>与 IMU 积分一致</td>
-<td>该编码器大概率正确</td>
-<td>另一路一定错</td>
+<td>在 IMU 模型可信且误差独立时，该编码器更受支持</td>
+<td>不能仅凭一致性断言另一路一定错误</td>
 </tr>
 <tr>
 <td>三路中两路一致</td>
-<td>多数派大概率正确</td>
-<td>多数派同时错的概率为零</td>
+<td>在独立且单路错误率低于 <span class="arithmatex">\(1/2\)</span> 时，多数派通常更可靠</td>
+<td>共因失效或相关错误可让多数派同时出错</td>
 </tr>
 </tbody>
 </table>
 <p>隔离的本质是<strong>用独立信息源打破平局</strong>。如果所有信息源共享同一个前提（同一电源、同一时间源、同一坐标系转换），它们会一起出错，多数派表决也会同时失效——这就是共同失效模式。</p>
 <p>隔离能力可以量化。设单路传感器正确率 <span class="arithmatex">\(p\)</span>、共因失效概率 <span class="arithmatex">\(q\)</span>，则 <span class="arithmatex">\(N\)</span> 路多数派的错误率近似为</p>
-<div class="arithmatex">\[P_\text{maj} \approx q + \binom{N}{\lceil N/2\rceil} p^{\lceil N/2\rceil}(1-p)^{\lceil N/2\rceil}\ \text{（$q$ 独立于各路时）}.\]</div>
+<p>令 <span class="arithmatex">\(e=1-p\)</span> 为单路错误概率，假设除共因事件外各路错误相互独立，且 <span class="arithmatex">\(N\)</span> 为奇数。条件于未发生共因失效，多数派失败概率为</p>
+<div class="arithmatex">\[P_{\mathrm{ind}}=\sum_{k=(N+1)/2}^{N}\binom Nk e^k(1-e)^{N-k}.\]</div>
+<p>若共因失效以概率 <span class="arithmatex">\(q\)</span> 发生且发生时系统必错，则全概率公式给出</p>
+<div class="arithmatex">\[P_\text{maj}=q+(1-q)P_{\mathrm{ind}}.\]</div>
 <p>关键在 <span class="arithmatex">\(q\)</span> 这一项：<strong>当 <span class="arithmatex">\(q&gt;0\)</span> 时，无论 <span class="arithmatex">\(N\)</span> 加到多大，多数派都无法优于 <span class="arithmatex">\(q\)</span></strong>。这解释了为什么异构冗余比简单加一路同型传感器更重要——它降低的是 <span class="arithmatex">\(q\)</span>，而不是括号内的独立项。</p>
 <table>
 <thead>
@@ -5129,8 +5132,9 @@
 <h2 id="_9">冗余与多数派表决的代价</h2>
 <p>冗余的容错能力可以用多数派表决量化：<span class="arithmatex">\(N\)</span> 个副本中允许 <span class="arithmatex">\(f\)</span> 个同时出错而仍能得出正确结果，要求</p>
 <div class="arithmatex">\[N \ge 2f+1 .\]</div>
-<p>若故障可能伪装成正确输出（拜占庭模型），多数派不足以保证一致性，需要更强的界</p>
-<div class="arithmatex">\[N \ge 3f+1 .\]</div>
+<p>若节点可发送任意且相互矛盾的信息（拜占庭模型），副本数界依赖同步性、认证和协议。经典<strong>部分同步、未认证消息、状态机复制</strong>中的确定性拜占庭容错通常要求</p>
+<div class="arithmatex">\[N \ge 3f+1.\]</div>
+<p>这不是普通传感器多数表决的通用公式，也不能脱离通信模型直接推出“一轮完成”；拜占庭共识通常需要多轮消息交换与法定人数证书。</p>
 <table>
 <thead>
 <tr>
@@ -5200,8 +5204,8 @@
 </tr>
 </tbody>
 </table>
-<p>两个结论值得记住：<strong>偶数副本没有额外收益</strong>（4 副本与 3 副本可容忍的故障数相同）；表决延迟通常由最慢副本决定，因此加大冗余会同时抬高响应时间。</p>
-<p>表决延迟可以估算。若各副本延迟独立同分布，均值 <span class="arithmatex">\(\mu\)</span>、标准差 <span class="arithmatex">\(\sigma\)</span>，则 <span class="arithmatex">\(N\)</span> 取中位数需要等待其中一个中位序的副本完成。<span class="arithmatex">\(N=3\)</span>、<span class="arithmatex">\(\mu=10\)</span> ms、<span class="arithmatex">\(\sigma=2\)</span> ms 时，取第二小的期望延迟约为 <span class="arithmatex">\(\mu + 0.85\sigma \approx 11.7\)</span> ms，再加上汇总开销 0.5 ms，总表决延迟约 12 ms。相对单副本，这是<strong>用 20% 的延迟换取单点故障容忍</strong>——这个交换是否值得，取决于系统在 2.4 ms 额外延迟里会走多远，也就是上面安全余量公式里的 <span class="arithmatex">\(v\Delta\tau\)</span> 项。</p>
+<p>在简单多数表决且只考虑崩溃/错误输出计数时，4 副本与 3 副本可容忍的故障数相同，但第四个副本仍可能改善可用性、诊断或尾延迟，不能笼统说“没有额外收益”。等待多数派时，延迟由第 <span class="arithmatex">\(q\)</span> 个完成的副本决定，而不是所有副本中的最慢者。</p>
+<p>表决延迟由副本延迟分布的次序统计量决定，只有均值与标准差不足以确定其期望。若三个副本延迟独立且服从关于 <span class="arithmatex">\(\mu\)</span> 对称的同一连续分布，则第二小值就是样本中位数，其期望为 <span class="arithmatex">\(\mu\)</span>。例如正态延迟 <span class="arithmatex">\(N(10,2^2)\)</span> 的第二小值期望为 10 ms；再加 0.5 ms 汇总开销，总延迟期望约 10.5 ms。若分布偏斜、相关或存在超时长尾，必须从完整分布或测量样本估计，不能使用固定的 <span class="arithmatex">\(\mu+0.85\sigma\)</span> 公式。</p>
 <h2 id="_10">故障演练应该成为测试的一部分</h2>
 <p>可以主动断开传感器、延迟网络、杀死节点或篡改输入，观察系统是否进入预期安全状态。只有故障路径真正被运行过，容错设计才不只是架构图上的假设。</p>
 <p>演练应覆盖三类目标：<strong>检测是否在预期时间内触发、隔离是否正确、降级后系统是否仍可安全运行或安全停止</strong>。三者缺一，故障路径都不算验证过。</p>

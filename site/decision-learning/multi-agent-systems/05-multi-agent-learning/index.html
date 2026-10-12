@@ -4833,22 +4833,22 @@ Q(s,(\mathbf a_{-i},a_i')).
 <div class="arithmatex">\[
 \nabla_\theta J\approx \mathbb E\Big[\nabla_\theta\log\pi_i(a_i\mid\tau_i)\,A_i(s,\mathbf a)\Big],
 \]</div>
-<p>它的期望仍无偏（因为基线项对 <span class="arithmatex">\(a_i\)</span> 的期望为零），但方差显著低于直接用 <span class="arithmatex">\(G_t\)</span>。主体越多、团队奖励越稀疏，这个方差收益越大。</p>
+<p>若 Critic 等于真实动作价值，且基线不依赖当前采样动作 <span class="arithmatex">\(a_i\)</span>，减去基线不改变理想策略梯度的期望。实际 Critic 有估计误差，方差是否下降取决于基线与梯度项的相关性和估计质量；主体更多或奖励更稀疏时它可能更有帮助，但不存在无条件的方差降低保证。</p>
 <h2 id="_6">信用分配与反事实基线</h2>
 <p>COMA（Counterfactual Multi-Agent）是上述思想最经典的落地：一个集中式 Critic 输出 <span class="arithmatex">\(Q(s,\mathbf a)\)</span>，然后在求 <span class="arithmatex">\(A_i\)</span> 时对 <span class="arithmatex">\(a_i\)</span> 做枚举边际化。它的核心代价是<strong>每个主体都要在动作空间上做一次完整枚举</strong>，复杂度 <span class="arithmatex">\(O(n\cdot |A|)\)</span> 次 Critic 前向；动作空间离散且小时完全可行，连续动作则必须改用采样近似。</p>
-<p>从团队奖励到个体优势的分解，可以统一写成下面三步：</p>
-<div class="arithmatex">\[
-\underbrace{G_t^{\text{team}}}_{\text{团队回报}}
-\;\longrightarrow\;
-\underbrace{A^{\text{team}}(s,\mathbf a)=Q_{tot}(s,\mathbf a)-V_{tot}(s)}_{\text{团队优势}}
-\;\longrightarrow\;
-\underbrace{A_i(s,\mathbf a)=A^{\text{team}}(s,\mathbf a)\cdot w_i(s,\mathbf a)}_{\text{个体优势}},
-\]</div>
-<p>其中 <span class="arithmatex">\(w_i\)</span> 是贡献权重，<span class="arithmatex">\(w_i\in[0,1]\)</span> 且 <span class="arithmatex">\(\sum_i w_i=1\)</span>。反事实基线相当于令</p>
-<div class="arithmatex">\[
-w_i=\frac{Q(s,\mathbf a)-\sum_{a_i'}\pi_i(a_i')Q(s,(\mathbf a_{-i},a_i'))}{A^{\text{team}}+\epsilon},
-\]</div>
-<p>即用“替换我自己的动作造成的价值差”占“团队优势”的比例来分配功劳。这一步的意义在于：它是<strong>唯一一个不引入额外网络就得到个体级信号的机制</strong>，缺点是依赖 Critic 精度，Critic 一偏，权重就偏。</p>
+<p>COMA 不把团队优势按非负权重拆给各主体。它直接使用上式的反事实优势 <span class="arithmatex">\(A_i\)</span>；这个量可以为正、为零或为负，各主体的 <span class="arithmatex">\(A_i\)</span> 之和也不必等于某个团队优势。第二项保持其他主体动作不变，只把主体 <span class="arithmatex">\(i\)</span> 的动作按其策略边际化，因此回答“当前动作比该主体在同一情境下的平均动作好多少”。它是信用分配方法之一；差分奖励、局部奖励和显式反事实模拟也能产生个体信号。</p>
+<details class="proof">
+<summary>动作无关基线不改变理想策略梯度</summary>
+<p>固定 <span class="arithmatex">\(s\)</span> 与其他主体动作 <span class="arithmatex">\(\mathbf a_{-i}\)</span>，令 <span class="arithmatex">\(b_i(s,\mathbf a_{-i})\)</span> 不依赖 <span class="arithmatex">\(a_i\)</span>。则
+$<span class="arithmatex">\(\begin{aligned}
+&amp;\mathbb E_{a_i\sim\pi_i}\left[\nabla_\theta\log\pi_i(a_i\mid\tau_i)b_i\right]\\
+&amp;=b_i\sum_{a_i}\pi_i(a_i\mid\tau_i)
+  \frac{\nabla_\theta\pi_i(a_i\mid\tau_i)}{\pi_i(a_i\mid\tau_i)}\\
+&amp;=b_i\nabla_\theta\sum_{a_i}\pi_i(a_i\mid\tau_i)
+  =b_i\nabla_\theta1=0.
+\end{aligned}\)</span>$
+因此减去该基线不改变精确期望梯度。若基线依赖当前动作，或实现中让共享参数的基线梯度流入 actor，这个证明不再直接适用。</p>
+</details>
 <p>四种主流信用分配方法的代价与效果对比：</p>
 <table>
 <thead>
@@ -4865,18 +4865,18 @@ w_i=\frac{Q(s,\mathbf a)-\sum_{a_i'}\pi_i(a_i')Q(s,(\mathbf a_{-i},a_i'))}{A^{\t
 <tr>
 <td>全局团队奖励直传</td>
 <td><span class="arithmatex">\(G_t^{\text{team}}\)</span></td>
-<td>最低（<span class="arithmatex">\(O(1)\)</span>）</td>
-<td>无偏但方差极大</td>
-<td>主体数 <span class="arithmatex">\(\le 3\)</span></td>
-<td>主体多时几乎无梯度信号</td>
+<td>每个样本计算低</td>
+<td>在正确的 on-policy 估计下可无偏，但常有高方差</td>
+<td>小规模、奖励稠密</td>
+<td>主体多时信用信号稀释</td>
 </tr>
 <tr>
 <td>反事实基线（COMA）</td>
 <td><span class="arithmatex">\(Q(s,\mathbf a)\)</span> 边际化</td>
 <td><span class="arithmatex">\(O(n\cdot\lvert A\rvert)\)</span> 次前向</td>
-<td>低方差、依赖 Critic 精度</td>
+<td>理想动作无关 baseline 不改期望；实际方差是否下降取决于 Critic 与 baseline 质量</td>
 <td>离散小动作空间</td>
-<td>动作空间大时不可算</td>
+<td>动作空间大时不可算，Critic 偏差会传入优势</td>
 </tr>
 <tr>
 <td>值分解（VDN/QMIX）</td>
@@ -4888,11 +4888,11 @@ w_i=\frac{Q(s,\mathbf a)-\sum_{a_i'}\pi_i(a_i')Q(s,(\mathbf a_{-i},a_i'))}{A^{\t
 </tr>
 <tr>
 <td>差分奖励塑形</td>
-<td>手写局部 reward</td>
-<td>低</td>
-<td>无偏但需人工设计</td>
+<td>显式反事实或局部 reward</td>
+<td>低至高，取决于反事实计算</td>
+<td>是否保持原目标的最优策略取决于具体构造，不能笼统称为无偏</td>
 <td>任务结构清晰</td>
-<td>塑形不当改变最优策略</td>
+<td>反事实不当或塑形不当会改变最优策略</td>
 </tr>
 </tbody>
 </table>
@@ -4910,6 +4910,12 @@ Q_{tot}=\sum_i Q_i(\tau_i,a_i).
 \frac{\partial Q_{tot}}{\partial Q_i}\ge 0.
 \]</div>
 <p>这样如果每个主体各自选择让 <span class="arithmatex">\(Q_i\)</span> 最大的动作，就能与联合价值的贪心选择保持一致。</p>
+<details class="proof">
+<summary>QMIX 单调条件允许分散贪心</summary>
+<p>固定全局状态，并令 <span class="arithmatex">\(a_i^*\in\arg\max_{a_i}Q_i(a_i)\)</span>。对任意联合动作 <span class="arithmatex">\(\mathbf a\)</span>，逐个把 <span class="arithmatex">\(a_i\)</span> 换成 <span class="arithmatex">\(a_i^*\)</span>。每次替换都不会减小对应的 <span class="arithmatex">\(Q_i\)</span>，其他 <span class="arithmatex">\(Q_j\)</span> 不变；由于混合函数对每个输入单调不减，<span class="arithmatex">\(Q_{tot}\)</span> 也不会下降。全部替换后得到
+$<span class="arithmatex">\(Q_{tot}(a_1^*,\ldots,a_n^*)\ge Q_{tot}(\mathbf a).\)</span>$
+因而个体贪心组合属于联合价值的贪心解。若单调条件不成立，或 <span class="arithmatex">\(Q_i\)</span> 还依赖执行时不可用的信息，这个结论就不能使用。</p>
+</details>
 <p>需要注意：单调性是一种<strong>结构假设</strong>，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。文献中那类必须“牺牲自己换团队最优”的任务（例如一名主体主动承担高代价拦截）会违反单调性，此时 QMIX 结构上就无法精确表达最优 <span class="arithmatex">\(Q_{tot}\)</span>。</p>
 <table>
 <thead>
@@ -4994,7 +5000,7 @@ L^{\text{CLIP}}(\theta)=\mathbb E\Big[\min\big(\rho_t(\theta)\hat A_t,\ \text{cl
 \hat A_t=\sum_l \gamma^l\lambda^l\delta_{t+l}.
 \]</div>
 <p>因此 GAE 不是新的决策模块，只是一个让 Advantage 更平滑的估计办法；MAPPO 与单智能体 PPO 的关键结构差别仍然是 <strong>Critic 的信息范围变成了全局，而 Actor 的输入保持局部</strong>。</p>
-<p>MAPPO 在实践中有效的原因可以归纳为三点量化事实：使用 <span class="arithmatex">\(s\)</span> 而非 <span class="arithmatex">\(o_i\)</span> 作为 Critic 输入通常把优势估计方差降低一个量级；权值共享使样本效率提升约 <span class="arithmatex">\(n\)</span> 倍；<span class="arithmatex">\(\epsilon=0.2\)</span>、GAE <span class="arithmatex">\(\lambda=0.95\)</span> 这两个默认值对协作任务的敏感性远低于单智能体。因此学习 MAPPO 时最重要的是先掌握 PPO 和 CTDE，而不是背实现细节。</p>
+<p>MAPPO 在许多协作基准上有效，常见原因是集中式 Critic 能利用训练期全局信息，而同构主体的参数共享能合并数据。但“方差降低一个量级”或“样本效率提高 <span class="arithmatex">\(n\)</span> 倍”都不是普遍定理：收益取决于全局状态是否有额外信息、主体是否同构、数据相关性和网络容量。<span class="arithmatex">\(\epsilon=0.2\)</span>、GAE <span class="arithmatex">\(\lambda=0.95\)</span> 也只是常见起点，仍应通过 KL、裁剪比例和消融实验校准。学习 MAPPO 时应先掌握 PPO 与 CTDE 的信息约束，再理解这些工程选择。</p>
 <h2 id="_8">参数共享什么时候有用</h2>
 <p>如果多个主体结构相同、动作语义相同，可以共享 Actor 参数：</p>
 <div class="arithmatex">\[
@@ -5104,7 +5110,7 @@ a_i\sim\pi_\theta\big(\cdot\mid \tau_i,\,e_i\big),
 </ul>
 <p>其他 MARL 算法可以在遇到具体限制时再扩展，不需要在第一次学习时形成算法名单。</p>
 <h2 id="_9">评估不能只看团队总回报</h2>
-<p>团队回报上升可能掩盖个别 Agent 长期闲置、角色塌缩或对特定队友过拟合。一个可用的事实判据是：若第 <span class="arithmatex">\(i\)</span> 个主体被替换成一个随机策略后，团队回报下降不足 5%，说明它的实际贡献接近于零，此时“高回报”来自其余主体。</p>
+<p>团队回报上升可能掩盖个别 Agent 长期闲置、角色塌缩或对特定队友过拟合。把第 <span class="arithmatex">\(i\)</span> 个主体替换成随机策略后测量回报变化，是一种<strong>消融诊断</strong>，不是因果贡献的充分证明。下降很小可能意味着该主体作用小，也可能意味着其他主体会补偿、随机策略在测试分布上已经够用，或测试集没有覆盖它负责的关键情形。阈值也应由回报噪声和业务容忍度确定，不能把 5% 当作普遍定理。更可靠的做法是同时报告置信区间，并在冻结队友、覆盖不同任务条件的情况下重复替换实验。</p>
 <p>评估 MARL 时至少应同时报告下面几类量：</p>
 <table>
 <thead>
@@ -5124,9 +5130,9 @@ a_i\sim\pi_\theta\big(\cdot\mid \tau_i,\,e_i\big),
 </tr>
 <tr>
 <td>个体贡献</td>
-<td>反事实替换后的回报落差</td>
-<td>每个主体 <span class="arithmatex">\(\ge 5\%\)</span></td>
-<td>存在主体落差 <span class="arithmatex">\(\approx 0\)</span></td>
+<td>反事实替换后的回报落差及其置信区间</td>
+<td>显著大于评测噪声，阈值由任务定义</td>
+<td>多种场景下均无法检出落差</td>
 </tr>
 <tr>
 <td>策略多样性</td>

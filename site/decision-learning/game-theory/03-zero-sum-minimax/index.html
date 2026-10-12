@@ -4491,7 +4491,7 @@ u_1(i,j) = A_{ij}, \qquad u_2(i,j) = -A_{ij}.
 <div class="arithmatex">\[
 \max_i \min_j A_{ij} \;\le\; \min_j \max_i A_{ij}.
 \]</div>
-<p>左边是玩家 1 的 maximin（先假设对手针对自己，再选最好的动作），右边是玩家 2 的 minimax。两者之差被称为对偶间隙。若间隙为 0，收益矩阵存在纯策略鞍点，双方各自固定一个动作即可；若间隙为正，任何纯策略都会被对手利用，必须引入混合策略。</p>
+<p>左边是玩家 1 的纯策略 maximin，右边是玩家 2 的纯策略 minimax。两者之差在这里称为<strong>纯策略保证值间隙</strong>，不要与一对原—对偶可行解的线性规划对偶间隙混淆。若间隙为 0，收益矩阵存在纯策略鞍点；若间隙为正，则不存在纯策略鞍点，若要得到双方一致的博弈值就必须允许混合策略。</p>
 <table>
 <thead>
 <tr>
@@ -4518,10 +4518,10 @@ u_1(i,j) = A_{ij}, \qquad u_2(i,j) = -A_{ij}.
 <td>定价竞争、团队协作、谈判</td>
 </tr>
 <tr>
-<td>合作型</td>
-<td>共同收益</td>
+<td>完全共同利益</td>
+<td>两方收益函数相同</td>
 <td>1</td>
-<td>是（帕累托最优集）</td>
+<td>一般有最优收益值，但最优联合策略可能不唯一</td>
 <td>联合搬运、共享奖励团队</td>
 </tr>
 </tbody>
@@ -4620,7 +4620,7 @@ v^{\star} = \max_{x \in \Delta_m} \min_{y \in \Delta_n} \; x^{\top} A y,
 x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot 0 = 0,
 \]</div>
 <p>因为矩阵全部元素之和恰好为 <span class="arithmatex">\(0\)</span>。更关键的是：如果玩家 1 保持均匀，无论玩家 2 选哪一个纯动作，玩家 1 的期望收益都恰好是 <span class="arithmatex">\(0\)</span>；反之亦然。也就是说，均匀混合让对手找不到任何能获得正收益的确定性偏离，这就是 Nash 均衡在零和里的具体形态。</p>
-<p>这解释了混合策略的真正作用：<strong>不是为了提高对某个特定对手的收益，而是让自己的行为不可被确定性利用。</strong> 只有当随机化的概率无法被对手事先预测时它才有效；如果对手能推断出你的随机种子或分布，随机化就退化成可被利用的纯策略。同时要意识到随机化的机会成本：若对手其实固定出石头，均匀策略收益为 <span class="arithmatex">\(0\)</span>，而固定出布每轮可以拿到 <span class="arithmatex">\(+1\)</span>，牺牲的正是这 <span class="arithmatex">\(1\)</span> 个单位的稳定收益。</p>
+<p>这解释了混合策略的真正作用：<strong>不是隐藏概率分布，而是隐藏本轮实现的动作。</strong> 均衡分布可以完全公开，对手仍无法通过单方面改变策略获得更高期望收益。只有当对手能在自己行动前预测本轮随机结果，例如知道可复现的随机种子及当前状态，混合策略才退化成可利用的确定动作。</p>
 <h2 id="_3">有限两人零和博弈具有清晰的博弈值</h2>
 <p>当允许混合策略后，von Neumann minimax 定理保证</p>
 <div class="arithmatex">\[
@@ -4658,7 +4658,18 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <div class="arithmatex">\[
 \sum_{j=1}^{n} A_{ij} y_j \le w, \qquad \forall i \in \{1,\dots,m\}, \qquad \sum_{j=1}^{n} y_j = 1, \qquad y_j \ge 0.
 \]</div>
-<p>两边的最优值必然相等（强对偶定理），即 <span class="arithmatex">\(v^{\star} = w^{\star}\)</span>。这既给出了 minimax 定理的一个构造性证明，也给出了实际求解算法：任何线性规划求解器都能算出零和博弈的值与双方的最优混合策略。</p>
+<p>两边都是可行且有有限最优值的线性规划。线性规划强对偶定理因此给出 <span class="arithmatex">\(v^{\star} = w^{\star}\)</span>。这给出了 minimax 定理的构造性证明，也给出了实际求解方法。</p>
+<details class="proof">
+<summary>有限零和博弈的 Minimax 定理</summary>
+<p>对任意混合策略 <span class="arithmatex">\(x,y\)</span>，总有
+$<span class="arithmatex">\(\min_{\tilde y}x^TA\tilde y\le x^TAy\le\max_{\tilde x}\tilde x^TAy.\)</span>$
+对左边取 <span class="arithmatex">\(x\)</span> 的最大值、右边取 <span class="arithmatex">\(y\)</span> 的最小值，得到弱不等式
+$<span class="arithmatex">\(\max_x\min_yx^TAy\le\min_y\max_xx^TAy.\)</span>$</p>
+<p>对固定 <span class="arithmatex">\(x\)</span>，<span class="arithmatex">\(x^TAy\)</span> 关于 <span class="arithmatex">\(y\)</span> 线性，所以它在单纯形上的最小值等于各纯列收益的最小值；因此玩家 1 的 maximin 正是上面的原线性规划。类似地，玩家 2 的 minimax 正是其对偶线性规划。由线性规划强对偶，二者最优值相等，故
+$<span class="arithmatex">\(\max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
+=\min_{y\in\Delta_n}\max_{x\in\Delta_m}x^TAy.\)</span>$</p>
+<p>本证明只使用了有限维线性规划强对偶；该定理及其证明见 <a href="../../../foundations/mathematics/07-optimization-under-uncertainty/">凸优化</a> 的“线性规划强对偶”。</p>
+</details>
 <table>
 <thead>
 <tr>
@@ -4719,16 +4730,16 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <td>用线性规划或支撑枚举求解</td>
 </tr>
 <tr>
-<td>概率被预测</td>
+<td>本轮动作可被提前预测</td>
 <td>随机化后仍被稳定克制</td>
-<td>随机种子或分布可推断</td>
-<td>加密随机源或提高分布熵</td>
+<td>随机种子泄露或生成器状态可推断</td>
+<td>使用不可预测随机源；公开均衡分布本身不是问题</td>
 </tr>
 <tr>
-<td>收益尺度错乱</td>
-<td>值随收益缩放而非平移</td>
-<td>零和对平移敏感、对缩放不敏感</td>
-<td>归一化收益到固定区间</td>
+<td>收益仿射变换解释错误</td>
+<td>把变换后的数值仍称为原博弈值</td>
+<td>若 <span class="arithmatex">\(A'=aA+b\mathbf1\mathbf1^T\)</span> 且 <span class="arithmatex">\(a&gt;0\)</span>，则最优策略不变、博弈值变为 <span class="arithmatex">\(av+b\)</span></td>
+<td>记录归一化参数并把价值换回原单位</td>
 </tr>
 </tbody>
 </table>
@@ -4737,7 +4748,7 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <div class="arithmatex">\[
 \max_{x} \min_{y} \; x^{\top} A y \;\le\; \min_{y} \max_{x} \; x^{\top} A y.
 \]</div>
-<p>对任意的 <span class="arithmatex">\(x\)</span> 都有 <span class="arithmatex">\(\min_y x^{\top} A y \le x^{\top} A y\)</span>，因此取 <span class="arithmatex">\(x = x^{\star}\)</span> 得到的值 <span class="arithmatex">\(v = \min_y x^{\star\top} A y\)</span> 是一个对<strong>所有</strong> <span class="arithmatex">\(y\)</span> 都成立的保证：<span class="arithmatex">\(x^{\star\top} A y \ge v\)</span>，<span class="arithmatex">\(\forall y\)</span>。在零和博弈中该不等式取等号，所以下界 <span class="arithmatex">\(v\)</span> 恰好也是对手能做到的最小上界，双方不存在「多拿一点」的空间。在 <span class="arithmatex">\(2 \times 2\)</span> 例子里，这个下界就是 <span class="arithmatex">\(v = 2\)</span>，即无论对手怎么混合，玩家 1 每局平均至少拿到 <span class="arithmatex">\(2\)</span>。</p>
+<p>对任意的 <span class="arithmatex">\(x\)</span> 都有 <span class="arithmatex">\(\min_y x^{\top} A y \le x^{\top} A y\)</span>，因此取 <span class="arithmatex">\(x=x^*\)</span> 得到的值 <span class="arithmatex">\(v=\min_y x^{*\top}Ay\)</span> 是一个对<strong>所有</strong> <span class="arithmatex">\(y\)</span> 都成立的保证：<span class="arithmatex">\(x^{*\top}Ay\ge v\)</span>。这里不是对所有 <span class="arithmatex">\(y\)</span> 都取等号；只有对手选择使该值达到最小的最优响应（特别是均衡策略 <span class="arithmatex">\(y^*\)</span>）时才有 <span class="arithmatex">\(x^{*\top}Ay^*=v\)</span>。Minimax 定理说玩家 2 也能把任意 <span class="arithmatex">\(x\)</span> 的收益压到不超过 <span class="arithmatex">\(v\)</span>。在 <span class="arithmatex">\(2\times2\)</span> 例子里，无论对手怎么混合，玩家 1 平均收益至少为 <span class="arithmatex">\(2\)</span>；对手用最优混合时恰等于 <span class="arithmatex">\(2\)</span>。</p>
 <table>
 <thead>
 <tr>
@@ -4851,9 +4862,9 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <td>最坏情况损失，作为鲁棒性度量</td>
 </tr>
 <tr>
-<td>对偶间隙</td>
-<td>纯策略被利用的量</td>
-<td>单步攻击与最强攻击之间的差距</td>
+<td>内外层优化间隙</td>
+<td>纯策略保证值间隙</td>
+<td>当前攻击与近似最强攻击之间的损失差</td>
 </tr>
 <tr>
 <td>过拟合信号</td>
@@ -4868,7 +4879,7 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <p>三个可直接落地的检查项：</p>
 <ul>
 <li>用线性规划求出 <span class="arithmatex">\(x^{\star}\)</span> 和 <span class="arithmatex">\(v\)</span>，然后在仿真里遍历所有纯策略对手 <span class="arithmatex">\(y = e_j\)</span>，确认 <span class="arithmatex">\(\min_j x^{\star\top} A e_j = v\)</span>，误差应小于收益尺度的 <span class="arithmatex">\(1\%\)</span>。</li>
-<li>检查支撑集：任何满足 <span class="arithmatex">\(x_i &gt; 0\)</span> 的动作，其对所有对手列的期望收益都必须等于 <span class="arithmatex">\(v\)</span>，否则说明求解未收敛或模型建模有误。</li>
+<li>检查支撑集：任何满足 <span class="arithmatex">\(x_i&gt;0\)</span> 的行动，对<strong>对手的最优混合策略 <span class="arithmatex">\(y^*\)</span></strong> 的期望收益必须等于 <span class="arithmatex">\(v\)</span>。它对某个非最优纯列的收益可以高于 <span class="arithmatex">\(v\)</span>，不要求对所有列都相等。</li>
 <li>检查对偶间隙：若实测 maximin 与 minimax 相差超过收益尺度的 <span class="arithmatex">\(1\%\)</span>，通常是求解精度不足，或者收益矩阵被错误建模成了非零和。</li>
 </ul>
 <p>最后一个容易混淆的点是「胜率」和「价值」的区别。固定出布对阵固定出石头的胜率是 <span class="arithmatex">\(100\%\)</span>，但它对应的价值（对最坏响应）是 <span class="arithmatex">\(-1\)</span>：一旦对手改用剪刀，这个策略立刻变成最差。这也是为什么在对抗环境中，策略评估必须附带一个最坏情况对手，而不能只报平均表现。</p>

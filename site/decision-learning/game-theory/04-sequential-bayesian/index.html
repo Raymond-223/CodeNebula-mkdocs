@@ -4749,7 +4749,7 @@ s_i : \mathcal{H}_i \to \mathcal{A}_i, \qquad \mathcal{H}_i = \{h : \text{轮到
 <div class="arithmatex">\[
 s_i(\theta_i) \in \arg\max_{a_i} \; \mathbb{E}_{\theta_{-i} \sim \mu(\cdot \mid h)} \Big[ \, u_i\big(a_i,\, s_{-i}(\theta_{-i}),\, \theta_i\big) \, \Big], \qquad \forall \theta_i \in \Theta_i .
 \]</div>
-<p>这说明 BNE 同时约束两件事：<strong>策略在每一种类型上都最优</strong>，且<strong>信念与策略相容</strong>（均衡路径之外的 off-path 信念也必须指定，否则均衡不唯一）。三类信息结构经常被混用，下面这张表把它们分开：</p>
+<p>静态贝叶斯博弈中的 BNE 要求每种类型的策略在给定先验和他人策略时最优；它本身不要求为动态博弈的离轨信息集指定信念。只有完美贝叶斯均衡或序贯均衡等动态精炼概念，才同时要求策略序贯理性，并为信息集指定与策略一致的信念。三类解概念必须分开：</p>
 <p>均衡路径之外的信念为何必须指定？因为当某条路径在均衡中不会被走到时，Bayes 规则无法由观测数据确定后验（分母为零）。序贯均衡的处理方式是对每个信息集强制指定一条信念，并要求它与策略在极限意义上相容，只有这样才能判断该信息集上的动作是否最优。</p>
 <table>
 <thead>

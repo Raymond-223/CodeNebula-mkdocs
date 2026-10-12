@@ -16,11 +16,11 @@ J(\theta)=\mathbb E_{\tau\sim p_\theta}[G_0],
 G_t=\sum_{l=0}^{T-t-1}\gamma^{l}r_{t+l+1}.
 $$
 
-目标对参数的导数只作用在策略项上，因为 $\rho$ 与 $T$ 都不含 $\theta$：
+目标对参数的导数只作用在策略项上，因为这里假设初始分布 $\rho$ 与环境转移 $T$ 都不含 $\theta$。还需假设策略可微、相关期望有限，并且其支持集不会随 $\theta$ 以产生边界项的方式突变，才能交换求导与积分并使用下面的对数导数技巧：
 
 $$
 \nabla_\theta J(\theta)
-=\mathbb E_{\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t\right].
+=\mathbb E_{\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\gamma^t\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t\right].
 $$
 
 直观理解很简单：如果一次动作带来较高长期回报，就提高它在类似状态下的概率；如果表现差，就降低它的概率。$\nabla_\theta\log\pi_\theta$ 的形式带来一个关键好处——不需要环境转移模型的导数，只需要能从策略和环境采样，因此它是 model-free 的。
@@ -30,7 +30,7 @@ $$
 | 目标形式 | 数学表达 | 适用场景 | 主要问题 |
 | --- | --- | --- | --- |
 | 回合总回报 | $\mathbb E[G_0]$ | 有终止的自然回合 | 回合长度不同，方差随 $T$ 增长 |
-| 折扣回报 | $\mathbb E[\sum_t\gamma^t r_{t+1}]$ | 持续型任务，$0<\gamma<1$ | $\gamma$ 引入偏差，奖励尺度被压缩 |
+| 折扣回报 | $\mathbb E[\sum_t\gamma^t r_{t+1}]$ | 持续型任务，$0<\gamma<1$ | 改变了任务目标并压低远期奖励；不是对同一目标的“估计偏差” |
 | 平均奖励 | $\lim_{T\to\infty}\frac{1}{T}\mathbb E[\sum_t r_{t+1}]$ | 无终止的稳态任务 | 需估计稳态分布，实现更复杂 |
 
 失败模式方面，最常见的是把折扣因子与步长混为一谈：$\gamma$ 接近 1 时回报的方差随有效时域 $1/(1-\gamma)$ 增长，若不相应缩小步长 $\alpha$，更新会在少数高回报轨迹上剧烈摆动。
@@ -50,8 +50,21 @@ $$
 由此得到一个只依赖单条轨迹、不需要值函数、也不需要环境模型的估计量，即 REINFORCE 的单样本形式：
 
 $$
-\nabla_\theta J(\theta)\approx\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t .
+\nabla_\theta J(\theta)\approx\sum_{t=0}^{T-1}\gamma^t\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t .
 $$
+
+??? proof "从轨迹概率推导策略梯度"
+    设有限轨迹 $\tau=(s_0,a_0,\ldots,s_T)$ 的概率为
+    $$p_\theta(\tau)=p(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t).$$
+    环境初始分布与转移核不依赖 $\theta$，故
+    $$\nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t).$$
+    对 $J(\theta)=\mathbb E_\tau[G_0]$ 使用对数导数恒等式，得到
+    $$\nabla J=\mathbb E_\tau\left[G_0\sum_t\nabla\log\pi_\theta(a_t\mid s_t)\right].$$
+    对固定时刻 $t$，$G_0$ 中 $t$ 以前的奖励只依赖此前历史。条件于 $s_t$ 与此前历史，对当前动作的 score 取期望为零，所以这些过去奖励与第 $t$ 个 score 的期望乘积为零。只保留从 $t$ 开始的奖励：
+    $$\sum_{k=t}^{T-1}\gamma^k r_{k+1}=\gamma^tG_t.$$
+    因而
+    $$\nabla J=\mathbb E\left[\sum_{t=0}^{T-1}\gamma^t\nabla\log\pi_\theta(a_t\mid s_t)G_t\right].$$
+    若改用未归一化的折扣状态占用分布，也可把 $\gamma^t$ 吸收到采样分布中；两种记号不能混用。
 
 它的无偏性来自 score function 的三条性质：
 
@@ -76,10 +89,10 @@ $A^\pi(s,a)$ 称为 advantage，表示“这个动作相比当前状态下的平
 方差下降的幅度可以定量地看。单个样本的加权项为 $g_t=\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,(G_t-b(s_t))$，若近似认为 score 与回报弱相关，则方差主要由 $\mathrm{Var}[G_t-b(s_t)]$ 决定。因此最优 baseline 大致满足
 
 $$
-b^*(s)\approx\frac{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\,G\mid s]}{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\mid s]},
+b^*(s)=\frac{\mathbb E[\|\nabla_\theta\log\pi_\theta(a\mid s)\|_2^2\,G\mid s]}{\mathbb E[\|\nabla_\theta\log\pi_\theta(a\mid s)\|_2^2\mid s]},
 $$
 
-在实践中通常用 $b(s)=V^\pi(s)$ 作为近似，此时权重恰好退化为 advantage。
+其中分母非零时公式成立；若 score 在该状态恒为零，baseline 对梯度没有影响。实践中通常用 $b(s)=V^\pi(s)$ 作为近似。只有当 $G$ 换成条件期望 $Q^\pi(s,a)$ 时，$Q^\pi-V^\pi$ 才严格等于 advantage；单条轨迹上使用的是它的含噪样本估计。
 
 | Baseline 选择 | 偏差 | 方差 | 实现代价 |
 | --- | --- | --- | --- |
@@ -88,7 +101,7 @@ $$
 | $b=V^\pi(s)$ | 无偏 | 明显下降，权重变成 advantage | 需要训练 Critic |
 | $b=V^\pi(s)$ 且再做 advantage 归一化 | 可能引入小偏差 | 进一步下降 | 需要批量统计 |
 
-失效模式：若 Critic 早期严重不准，$G_t-V_\phi(s_t)$ 会出现数值很大但符号错误的权重；更新方向仍然无偏（因为与动作无关的项期望为零），但方差可能不降反升。更隐蔽的问题是把 baseline 与动作采样耦合起来（例如用同批数据内该动作的平均回报做 baseline），这会引入真实偏差，而不只是噪声。
+失效模式：若只是从 Monte Carlo 回报中减去一个与当前动作无关、且在求 Actor 梯度时停止梯度的近似 $V_\phi(s)$，Critic 不准不会改变期望梯度，却可能让方差不降反升。但一般 Actor–Critic 直接用自举 TD 误差或近似优势；函数逼近误差、截断轨迹和不兼容的 Critic 都可能使 Actor 的梯度估计有偏，不能笼统声称“仍然无偏”。把 baseline 与当前动作耦合且不作校正，也会引入偏差。
 
 ## 演员－评论家架构（Actor–Critic）
 
@@ -204,13 +217,7 @@ $$
 
 因此它的作用不是增加一个新的学习目标，而是**给 PPO/Actor–Critic 提供更平滑的 advantage 估计**。它同时决定了两端的量级：
 
-$$
-\mathrm{Bias}\ \text{受}\ (\gamma\lambda)^{H}\ \text{衰减控制},
-\qquad
-\mathrm{Var}\ \text{约随}\ \frac{1-\gamma\lambda}{1-\gamma}\ \text{增长},
-$$
-
-其中 $H$ 是 Critic 误差经自举传入的步数。两个方向相反，因此 $\lambda$ 是纯粹的交易旋钮，而不是“越大越好”。
+随着 $\lambda$ 增大，估计器通常使用更长的真实奖励序列、减少对 Critic 自举值的依赖，因此常见趋势是自举偏差下降而采样方差上升。但不存在只由 $(\gamma,\lambda)$ 决定的通用方差比例；奖励相关性、轨迹长度、Critic 误差和截断方式都会改变结果。因此 $\lambda$ 是需要用验证数据校准的折中参数，而不是“越大越好”。
 
 | 估计器 | 偏差来源 | 方差来源 | 样本需求 |
 | --- | --- | --- | --- |

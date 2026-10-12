@@ -4592,7 +4592,7 @@ G = p_e\,C_e\,r - c_h\,\tau,
 <div class="arithmatex">\[
 H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 \]</div>
-<p>二分类且 <span class="arithmatex">\(p_1=p_2=0.5\)</span> 时 <span class="arithmatex">\(H=\ln 2\approx 0.693\)</span>；四类均匀分布时 <span class="arithmatex">\(H=\ln 4\approx 1.386\)</span>。常用触发阈值取 <span class="arithmatex">\(H&gt;0.7\)</span> 或最大类概率低于 0.6，二者分别是“分布接近均匀”和“没有明显赢家”的判据。</p>
+<p>二分类且 <span class="arithmatex">\(p_1=p_2=0.5\)</span> 时 <span class="arithmatex">\(H=\ln 2\approx0.693\)</span>；四类均匀分布时 <span class="arithmatex">\(H=\ln4\approx1.386\)</span>。原始熵的范围随类别数 <span class="arithmatex">\(K\)</span> 改变，跨任务比较时应使用归一化熵 <span class="arithmatex">\(H/\ln K\in[0,1]\)</span>。例如把“归一化熵大于 0.7”作为待校准的初始阈值；它不是通用安全常数，必须用验证集上的错误检出率和审核容量共同选择。</p>
 <p>风险加权则把后果算进来：审核优先级 <span class="arithmatex">\(L(x)=P_{\text{err}}(x)\,C(x)\)</span>，其中 <span class="arithmatex">\(C(x)\)</span> 是该样本出错后的代价。在全自主导航中，靠近人或车辆的位置 <span class="arithmatex">\(C(x)\)</span> 显著更高，即使 <span class="arithmatex">\(P_{\text{err}}\)</span> 相同也应优先复核；相关控制与安全约束见 <a href="../../../robotics-perception/robotics/05-navigation-control/">Navigation &amp; Control</a>。</p>
 <table>
 <thead>
@@ -4649,9 +4649,9 @@ H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 </tr>
 <tr>
 <td>高熵</td>
-<td><span class="arithmatex">\(H&gt;0.7\)</span></td>
-<td>类别数不同时不可比</td>
-<td>归一化熵</td>
+<td>例如 <span class="arithmatex">\(H/\ln K&gt;0.7\)</span></td>
+<td>阈值依校准数据与容量而定</td>
+<td>同时报告检出率与审核量</td>
 </tr>
 <tr>
 <td>分布外</td>
@@ -4669,9 +4669,11 @@ H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 </table>
 <p>这也是 active learning 和人工审核系统背后的共同思想：<strong>让有限的人力覆盖最有信息价值的样本</strong>，而不是均匀地覆盖所有样本。</p>
 <h2 id="_3">人力预算的量化</h2>
-<p>把人放进闭环必须回答“人处理得过来吗”。设告警到达率为 <span class="arithmatex">\(\lambda\)</span>、单条平均理解时间为 <span class="arithmatex">\(\tau\)</span>，则人的利用率与队列长度为</p>
+<p>把人放进闭环必须回答“人处理得过来吗”。下面只用作一个可计算基线：假设告警按 Poisson 过程到达、处理时间相互独立且服从指数分布、只有一名审核者、先到先服务，并且系统已经达到稳态。这是 M/M/1 队列，不是任意人工审批队列。设告警到达率为 <span class="arithmatex">\(\lambda\)</span>、平均处理时间为 <span class="arithmatex">\(\tau\)</span>，服务率为 <span class="arithmatex">\(\mu=1/\tau\)</span>，利用率为 <span class="arithmatex">\(\rho=\lambda/\mu=\lambda\tau\)</span>。当 <span class="arithmatex">\(\rho&lt;1\)</span> 时，系统内任务数与仅等待任务数分别为</p>
 <div class="arithmatex">\[
-\rho = \lambda \tau, \qquad \mathbb{E}[L] = \frac{\rho}{1-\rho}\quad(\rho&lt;1).
+\mathbb E[L]=\frac{\rho}{1-\rho},
+\qquad
+\mathbb E[L_q]=\frac{\rho^2}{1-\rho}.
 \]</div>
 <table>
 <thead>
@@ -4679,7 +4681,7 @@ H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 <th>到达率 <span class="arithmatex">\(\lambda\)</span></th>
 <th>理解时间 <span class="arithmatex">\(\tau\)</span></th>
 <th>利用率 <span class="arithmatex">\(\rho\)</span></th>
-<th>平均排队数</th>
+<th>系统内平均任务数 <span class="arithmatex">\(E[L]\)</span></th>
 <th>是否可行</th>
 </tr>
 </thead>
@@ -4714,8 +4716,10 @@ H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 </tr>
 </tbody>
 </table>
-<p>关键结论是<strong>利用率接近 1 时队列会非线性爆炸</strong>（<span class="arithmatex">\(\rho=0.67\)</span> 时平均已排队 2 条，<span class="arithmatex">\(\rho=0.9\)</span> 时排队 9 条）。因此设计阈值时通常把 <span class="arithmatex">\(\rho\)</span> 控制在 0.5–0.6 以内，剩下的余量用于应对突发。</p>
-<p>由 <span class="arithmatex">\(0.5\sim0.6\)</span> 的目标利用率可以直接反推触发阈值的上限：<span class="arithmatex">\(\lambda_{\max}=\frac{1-\rho_{\text{tgt}}}{\tau}\)</span>。取 <span class="arithmatex">\(\tau=20\)</span> s、<span class="arithmatex">\(\rho_{\text{tgt}}=0.6\)</span>，得 <span class="arithmatex">\(\lambda_{\max}\approx 0.02\)</span> /s，即每分钟约 1.2 条告警。<strong>这个数应该写进告警设计文档，作为阈值参数的上界，而不是等系统上线后由现场感受决定。</strong></p>
+<p>在这个 M/M/1 模型内，利用率接近 1 时系统内任务数非线性增长（<span class="arithmatex">\(\rho=0.67\)</span> 时 <span class="arithmatex">\(E[L]\approx2.03\)</span>，<span class="arithmatex">\(\rho=0.9\)</span> 时 <span class="arithmatex">\(E[L]=9\)</span>）。真正“仅在排队”的数量分别是 <span class="arithmatex">\(E[L_q]\approx1.36\)</span> 和 <span class="arithmatex">\(8.1\)</span>。实际审核的到达和处理分布若不是上述模型，必须改用相应排队模型或实测分位数。</p>
+<p>由目标利用率可反推到达率上限：</p>
+<div class="arithmatex">\[\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau}.\]</div>
+<p>取 <span class="arithmatex">\(\tau=20\)</span> s、<span class="arithmatex">\(\rho_{\text{tgt}}=0.6\)</span>，得 <span class="arithmatex">\(\lambda_{\max}=0.03\)</span> /s，即每分钟 1.8 条告警。它只是 M/M/1 基线；设计文档还应报告突发到达、长尾处理时间、优先级和人员切换造成的偏离。</p>
 <table>
 <thead>
 <tr>
@@ -5127,7 +5131,9 @@ E = f\,N\,D .
 </tbody>
 </table>
 <p>三个最关键的指标是：<strong>告警采纳率</strong>（是否有大量机械批准）、<strong>平均理解时间</strong>（界面信息是否足够）、<strong>漏处理率</strong>（是否有请求无人响应）。三者任一恶化，说明 HITL 正在变成形式化流程。</p>
-<p>这些指标需要与人力预算联动。若 <span class="arithmatex">\(\rho\)</span> 已经在 0.6 以上，而管理层继续上调审核比例，最先变化的必然是平均理解时间，随后是漏处理率。因此<strong>审核比例不应被当作可以随意拉高的安全参数</strong>：它的上限由 <span class="arithmatex">\(\lambda_{\max}=\frac{1-\rho_{\text{tgt}}}{\tau}\)</span> 决定，而不是由责任分配意愿决定。</p>
+<p>这些指标需要与人力预算联动。若 <span class="arithmatex">\(\rho\)</span> 已经在 0.6 以上，而管理层继续上调审核比例，排队与漏处理风险会迅速增加。因此<strong>审核比例不应被当作可以随意拉高的安全参数</strong>：若目标利用率为 <span class="arithmatex">\(\rho_{\text{tgt}}&lt;1\)</span>，由 <span class="arithmatex">\(\rho=\lambda\tau\)</span> 得到到达率上限
+$<span class="arithmatex">\(\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau},\)</span>$
+而不是由责任分配意愿决定。</p>
 <p>注意力预算可以直接算：以 8 小时班次计，扣除交接、休息与设备操作，真正可用于审核的时间通常不超过 5–6 小时；按 <span class="arithmatex">\(\tau=20\)</span> s 计算，理论上限约每小时 180 条，但持续状态下可靠的速率通常只有三分之一到一半，因为注意力需要恢复间隔。</p>
 <table>
 <thead>
@@ -5143,25 +5149,25 @@ E = f\,N\,D .
 <td>2 h</td>
 <td>20 s</td>
 <td>360 条</td>
-<td>0.05 /min</td>
+<td>3 /min（在这 2 h 内）</td>
 </tr>
 <tr>
 <td>4 h</td>
 <td>20 s</td>
 <td>720 条</td>
-<td>0.1 /min</td>
+<td>3 /min（在这 4 h 内）</td>
 </tr>
 <tr>
 <td>6 h</td>
 <td>20 s</td>
 <td>1080 条</td>
-<td>0.15 /min</td>
+<td>3 /min（在这 6 h 内）</td>
 </tr>
 <tr>
 <td>6 h</td>
 <td>60 s</td>
 <td>360 条</td>
-<td>0.05 /min</td>
+<td>1 /min（在这 6 h 内）</td>
 </tr>
 </tbody>
 </table>

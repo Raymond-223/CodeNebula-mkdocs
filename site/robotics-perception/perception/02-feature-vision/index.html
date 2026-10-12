@@ -4686,7 +4686,7 @@ D(x,y,\sigma)=L(x,y,k\sigma)-L(x,y,\sigma)
 </tbody>
 </table>
 <p>实际系统会利用单应矩阵、基础矩阵或相机运动模型检查几何一致性。RANSAC 的作用就是在含有离群点的候选匹配中反复抽样，寻找得到多数数据支持的模型。<strong>注意几何验证是唯一能排除“描述子偶然相似”这一系统性错误的环节；仅靠距离阈值永远无法区分真实重复结构与巧合。</strong></p>
-<p>候选策略的取舍可以量化：若粗略估计内点比例为 <span class="arithmatex">\(w\)</span>，采用交叉检查后通常能从 0.5 提升到 0.6 以上，而按前面的抽样公式，<span class="arithmatex">\(w\)</span> 从 0.5 升到 0.6 可以把所需迭代次数从约 218 次降到约 86 次。<strong>先在候选阶段去掉一半容易排除的误匹配，比在 RANSAC 之后调阈值更划算。</strong></p>
+<p>候选策略的取舍可以用实测内点比例 <span class="arithmatex">\(w\)</span> 量化。对本页按 8 点样本计算的基础矩阵估计，<span class="arithmatex">\(p=0.999\)</span> 时若 <span class="arithmatex">\(w\)</span> 从 0.5 提升到 0.6，理论抽样次数从约 1765 次降到约 408 次。交叉检查是否能达到这种提升必须由当前数据验证，不能预设固定增幅。</p>
 <p>几何验证的顺序同样有讲究：先估模型、再统计内点比例，最后才决定是否采用该帧结果，并把它送入位姿或建图环节。<strong>把验证放在链路的末端，意味着失败的帧只会被丢弃，而不会把错误位姿传给下游</strong>——这是感知模块最容易守住、也最容易被违反的一条边界。</p>
 <h2 id="_4">特征匹配最终服务的是几何关系</h2>
 <p>如果两幅图来自同一平面或相机纯旋转，单应矩阵可以描述对应；一般三维场景则会受到 epipolar geometry 约束。入门阶段不必完整推导所有矩阵，但要知道：<strong>匹配不是终点，匹配只是估计相机或物体几何关系的观测。</strong></p>
@@ -4988,65 +4988,82 @@ D(x,y,\sigma)=L(x,y,k\sigma)-L(x,y,\sigma)
 <p>切换接口本身也需要设计：两条分支必须输出相同格式的关键点与描述子容器，并声明各自的距离度量——汉明距离与欧氏距离的数值范围完全不同，<strong>若接口里只写“距离”而不写度量类型，混用会静默地把比值测试的含义改掉。</strong></p>
 <p>最后，学习式特征在训练分布外的退化往往比经典特征更突然。经典特征在弱纹理上是“慢慢变少”，可以用数量门限提前预警；学习式方法则可能在完全无关的域（例如夜间或红外图上）直接给出高置信度的错误匹配。<strong>因此引入学习式特征时，跨域验证的必要性高于同域指标提升。</strong></p>
 <h2 id="_10">对极几何与误匹配剔除</h2>
-<p>对极几何给出误匹配剔除的理论基础。设同一三维点在两幅图像中的归一化坐标分别为 <span class="arithmatex">\(\mathbf x\)</span> 与 <span class="arithmatex">\(\mathbf x'\)</span>，则必然满足</p>
+<p>对极几何给出误匹配剔除的理论基础。必须先区分两种坐标：若 <span class="arithmatex">\(\mathbf x,\mathbf x'\)</span> 是已经除去内参的归一化齐次坐标，则满足本质矩阵（essential matrix）约束</p>
 <div class="arithmatex">\[
-\mathbf x'^\top F\mathbf x=0,\qquad F=K'^{-\top}[t]_\times RK^{-1}.
+\mathbf x'^\top E\mathbf x=0,\qquad E=[t]_\times R.
+\]</div>
+<p>若 <span class="arithmatex">\(\mathbf p,\mathbf p'\)</span> 是像素齐次坐标，<span class="arithmatex">\(\mathbf x=K^{-1}\mathbf p\)</span>、<span class="arithmatex">\(\mathbf x'=K'^{-1}\mathbf p'\)</span>，代入上式才得到基础矩阵（fundamental matrix）约束</p>
+<div class="arithmatex">\[
+\mathbf p'^\top F\mathbf p=0,
+\qquad F=K'^{-\top}[t]_\times RK^{-1}.
 \]</div>
 <p>这个约束的几何含义是：第二幅图中的对应点必须落在第一幅图对应点的对极线上，因此它对匹配有明确的过滤能力。当内参已知时可直接用本质矩阵 <span class="arithmatex">\(E=[t]_\times R\)</span>，自由度从 7 降到 5，所需点对数也更少。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="n">gray1</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;image1.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="n">gray2</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;image2.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">gray1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">gray2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;请把 image1.png 与 image2.png 放在当前目录&quot;</span><span class="p">)</span>
+
 <span class="n">orb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">ORB_create</span><span class="p">(</span><span class="n">nfeatures</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
 <span class="n">kp1</span><span class="p">,</span> <span class="n">des1</span> <span class="o">=</span> <span class="n">orb</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 <span class="n">kp2</span><span class="p">,</span> <span class="n">des2</span> <span class="o">=</span> <span class="n">orb</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray2</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">des1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">des2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;至少一幅图没有检测到 ORB 描述子&quot;</span><span class="p">)</span>
 
 <span class="n">matcher</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BFMatcher</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">NORM_HAMMING</span><span class="p">,</span> <span class="n">crossCheck</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">pairs</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">knnMatch</span><span class="p">(</span><span class="n">des1</span><span class="p">,</span> <span class="n">des2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">good</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="n">n</span><span class="o">.</span><span class="n">distance</span><span class="p">]</span>
+<span class="n">good</span> <span class="o">=</span> <span class="p">[</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">pairs</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">distance</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">good</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;基础矩阵至少需要 8 对匹配，当前只有 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">good</span><span class="p">)</span><span class="si">}</span><span class="s2"> 对&quot;</span><span class="p">)</span>
 
 <span class="n">pts1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">kp1</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">queryIdx</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">good</span><span class="p">])</span>
 <span class="n">pts2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">kp2</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">trainIdx</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">good</span><span class="p">])</span>
 <span class="n">F</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findFundamentalMat</span><span class="p">(</span><span class="n">pts1</span><span class="p">,</span> <span class="n">pts2</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FM_RANSAC</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">F</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;RANSAC 未能估计基础矩阵&quot;</span><span class="p">)</span>
 <span class="n">inliers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
 </code></pre></div>
 <p>RANSAC 的流程是：随机抽取最小样本集求解模型、统计满足 Sampson 距离阈值的内点、在达到设定迭代次数或内点比例足够高时停止并输出最大内点集。为保证至少一次抽到全内点样本，迭代次数需要</p>
 <div class="arithmatex">\[
 N=\frac{\log(1-p)}{\log\left(1-w^{s}\right)},
 \]</div>
-<p>其中 <span class="arithmatex">\(w\)</span> 是内点比例，<span class="arithmatex">\(s\)</span> 是最小样本数，<span class="arithmatex">\(p\)</span> 是期望成功概率。取 <span class="arithmatex">\(p=0.999\)</span>、<span class="arithmatex">\(s=5\)</span> 时，<span class="arithmatex">\(w=0.8\)</span> 只需约 18 次迭代，<span class="arithmatex">\(w=0.5\)</span> 需要约 218 次，而 <span class="arithmatex">\(w=0.3\)</span> 需要约 2839 次。<strong>这解释了为什么内点比例从 0.5 掉到 0.3 时，同一套参数会突然“失效”——不是算法变了，而是所需抽样次数增加了一个数量级。</strong></p>
+<p>其中 <span class="arithmatex">\(w\)</span> 是内点比例，<span class="arithmatex">\(s\)</span> 是最小样本数，<span class="arithmatex">\(p\)</span> 是期望成功概率。本页代码用未标定点估计基础矩阵 <span class="arithmatex">\(F\)</span>，下面按 8 点样本 <span class="arithmatex">\(s=8\)</span> 计算。取 <span class="arithmatex">\(p=0.999\)</span> 时，<span class="arithmatex">\(w=0.8\)</span> 约需 38 次，<span class="arithmatex">\(w=0.6\)</span> 约需 408 次，<span class="arithmatex">\(w=0.5\)</span> 约需 1765 次，而 <span class="arithmatex">\(w=0.3\)</span> 约需 105282 次。五点算法针对已知内参后的本质矩阵 <span class="arithmatex">\(E\)</span>，不能与这里的 <code>findFundamentalMat</code> 混用。</p>
 <table>
 <thead>
 <tr>
 <th>内点比例 <span class="arithmatex">\(w\)</span></th>
-<th>所需迭代次数（<span class="arithmatex">\(p=0.999\)</span>，<span class="arithmatex">\(s=5\)</span>）</th>
+<th>所需迭代次数（<span class="arithmatex">\(p=0.999\)</span>，<span class="arithmatex">\(s=8\)</span>）</th>
 <th>判读</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0.8</td>
-<td>约 18</td>
-<td>收敛快，结果可信</td>
+<td>约 38</td>
+<td>抽样代价较低；仍需检查几何退化</td>
 </tr>
 <tr>
 <td>0.6</td>
-<td>约 86</td>
-<td>稳定</td>
+<td>约 408</td>
+<td>需要较多迭代</td>
 </tr>
 <tr>
 <td>0.5</td>
-<td>约 218</td>
-<td>可用，需设上限</td>
+<td>约 1765</td>
+<td>成本明显上升</td>
 </tr>
 <tr>
 <td>0.3</td>
-<td>约 2839</td>
-<td>成本高，建议换策略</td>
+<td>约 105282</td>
+<td>通常应先改善匹配</td>
 </tr>
 <tr>
 <td>小于 0.2</td>
-<td>超过 10000</td>
-<td>匹配基本不可用</td>
+<td>超过 270 万</td>
+<td>直接 RANSAC 很不实际</td>
 </tr>
 </tbody>
 </table>

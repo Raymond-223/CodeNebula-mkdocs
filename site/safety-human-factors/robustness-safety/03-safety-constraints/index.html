@@ -4640,6 +4640,14 @@
 <p>其中 <span class="arithmatex">\(h\)</span> 是连续可微的标量函数，<span class="arithmatex">\(h(x)&gt;0\)</span> 表示严格安全，<span class="arithmatex">\(h(x)=0\)</span> 是边界。控制屏障函数（Control Barrier Function, CBF）路线要求控制输入满足</p>
 <div class="arithmatex">\[\dot h(x,u) + \gamma h(x) \ge 0,\]</div>
 <p>它的含义是：只要当前 <span class="arithmatex">\(h(x)&gt;0\)</span>，该条件保证 <span class="arithmatex">\(h\)</span> 在未来不会变成负值，也就不会越过边界。<span class="arithmatex">\(\gamma&gt;0\)</span> 越大，返回安全内部的趋势越强；若忽略 <span class="arithmatex">\(\gamma\)</span> 项，约束退化为“<span class="arithmatex">\(\dot h\ge 0\)</span>”，即禁止任何指向边界的运动，在远离边界时过于保守。</p>
+<details class="proof">
+<summary>线性 CBF 条件给出前向不变性</summary>
+<p>假设闭环解存在且绝对连续，并且沿该解几乎处处满足 <span class="arithmatex">\(\dot h(t)+\gamma h(t)\ge0\)</span>。乘以正数 <span class="arithmatex">\(e^{\gamma t}\)</span> 得
+$<span class="arithmatex">\(\frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.\)</span>$
+因此 <span class="arithmatex">\(e^{\gamma t}h(t)\ge h(0)\)</span>，即
+$<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
+若初始状态满足 <span class="arithmatex">\(h(0)\ge0\)</span>，则所有后续时刻都有 <span class="arithmatex">\(h(t)\ge0\)</span>，安全集前向不变。这个证明依赖闭环解存在、<span class="arithmatex">\(h\)</span> 沿轨迹可微（或绝对连续）以及约束连续执行；采样控制、模型误差和执行器饱和需要另加裕量。</p>
+</details>
 <p>把 <span class="arithmatex">\(\dot h\)</span> 展开：<span class="arithmatex">\(\dot h = \nabla h(x)^\top f(x) + \nabla h(x)^\top g(x)u\)</span>，于是 CBF 条件对 <span class="arithmatex">\(u\)</span> 是仿射的，可以在每个控制周期用一个小型二次规划求解：</p>
 <div class="arithmatex">\[\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .\]</div>
 <table>

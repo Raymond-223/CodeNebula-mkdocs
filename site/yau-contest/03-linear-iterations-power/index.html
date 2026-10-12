@@ -4889,6 +4889,9 @@ B^n=0.
 \]</div>
 <details class="proof">
 <summary>凯莱－哈密顿定理的证明</summary>
+<p>删除矩阵第 <span class="arithmatex">\(i\)</span> 行、第 <span class="arithmatex">\(j\)</span> 列所得子矩阵的行列式称为余子式 <span class="arithmatex">\(M_{ij}\)</span>，代数余子式为 <span class="arithmatex">\(C_{ij}=(-1)^{i+j}M_{ij}\)</span>。矩阵 <span class="arithmatex">\(M\)</span> 的伴随矩阵定义为 <span class="arithmatex">\(\operatorname{adj}(M)=(C_{ji})\)</span>，也就是代数余子式矩阵的转置。按任一行展开行列式可得</p>
+<div class="arithmatex">\[M\operatorname{adj}(M)=\det(M)I.\]</div>
+<p>对角元正是按对应行的 Laplace 展开；非对角元等于把一行替换成另一行后对重复行矩阵作展开，因此为零。这补出了下面使用的伴随矩阵恒等式。</p>
 <p>对一般 <span class="arithmatex">\(n\times n\)</span> 矩阵 <span class="arithmatex">\(B\)</span>，写特征多项式</p>
 <div class="arithmatex">\[
 p_B(t)=\det(tI-B)=c_0+c_1t+\cdots+c_nt^n,
@@ -4920,7 +4923,7 @@ c_0I+c_1B+\cdots+c_nB^n=0.
 <p>所以误差至多经过 <span class="arithmatex">\(n\)</span> 步精确归零。注意 <span class="arithmatex">\(\rho(B)=0\)</span> 不意味着 <span class="arithmatex">\(B=0\)</span>，只意味着 <span class="arithmatex">\(B\)</span> 是 nilpotent。</p>
 <h2 id="power-method">幂法（Power Method）</h2>
 <p>幂法用于求模最大的特征值及其特征向量。</p>
-<p><strong>定理。</strong> 设 <span class="arithmatex">\(A\)</span> 可对角化，有特征向量基 <span class="arithmatex">\(v_1,\ldots,v_n\)</span>，并且</p>
+<p><strong>定理。</strong> 设实矩阵 <span class="arithmatex">\(A\)</span> 在 <span class="arithmatex">\(\mathbb R\)</span> 上可对角化，有实特征向量基 <span class="arithmatex">\(v_1,\ldots,v_n\)</span>，并且</p>
 <div class="arithmatex">\[
 |\lambda_1|&gt;|\lambda_2|\ge\cdots\ge|\lambda_n|.
 \]</div>
@@ -4929,7 +4932,10 @@ c_0I+c_1B+\cdots+c_nB^n=0.
 x_0=\sum_{i=1}^nc_iv_i,
 \qquad c_1\ne0,
 \]</div>
-<p>则 <span class="arithmatex">\(A^kx_0\)</span> 归一化后的方向趋向 <span class="arithmatex">\(v_1\)</span> 所张成的一维子空间，方向误差为 <span class="arithmatex">\(O(|\lambda_2/\lambda_1|^k)\)</span>。</p>
+<p>则 <span class="arithmatex">\(A^kx_0\)</span> 归一化后的方向趋向 <span class="arithmatex">\(v_1\)</span> 所张成的一维子空间。把方向误差定义为到该子空间的欧几里得距离</p>
+<div class="arithmatex">\[e_k=\left\|(I-P_1)\frac{A^kx_0}{\|A^kx_0\|_2}\right\|_2,
+\qquad P_1=\frac{v_1v_1^T}{v_1^Tv_1},\]</div>
+<p>则 <span class="arithmatex">\(e_k=O(|\lambda_2/\lambda_1|^k)\)</span>。</p>
 <details class="proof">
 <summary>证明</summary>
 <p>按特征向量基展开，并使用 <span class="arithmatex">\(A^kv_i=\lambda_i^kv_i\)</span>，得到</p>
@@ -4942,7 +4948,13 @@ c_1v_1+
 \left(\frac{\lambda_i}{\lambda_1}\right)^k v_i
 \right).
 \]</div>
-<p>括号内余项的范数至多为某个常数乘 <span class="arithmatex">\(|\lambda_2/\lambda_1|^k\)</span>，所以它趋于 <span class="arithmatex">\(c_1v_1\ne0\)</span>。归一化映射在非零向量附近连续，因此归一化后的方向趋向 <span class="arithmatex">\(v_1\)</span> 所张成的一维子空间，并具有所述误差阶。</p>
+<p>记括号内为 <span class="arithmatex">\(c_1v_1+r_k\)</span>，则存在 <span class="arithmatex">\(C\)</span> 使 <span class="arithmatex">\(\|r_k\|_2\le Cq^k\)</span>，其中 <span class="arithmatex">\(q=|\lambda_2/\lambda_1|&lt;1\)</span>。充分大的 <span class="arithmatex">\(k\)</span> 有 <span class="arithmatex">\(\|c_1v_1+r_k\|_2\ge|c_1|\|v_1\|_2/2\)</span>。又因 <span class="arithmatex">\((I-P_1)c_1v_1=0\)</span>，</p>
+<div class="arithmatex">\[
+e_k
+=\frac{\|(I-P_1)r_k\|_2}{\|c_1v_1+r_k\|_2}
+\le\frac{2\|I-P_1\|_2C}{|c_1|\|v_1\|_2}q^k.
+\]</div>
+<p>这一步不仅证明收敛，还给出了 <span class="arithmatex">\(O(q^k)\)</span> 的常数上界。</p>
 <p>这里“方向趋向”允许相差一个符号：若主特征值 <span class="arithmatex">\(\lambda_1&lt;0\)</span>，归一化向量可能在 <span class="arithmatex">\(v_1\)</span> 与 <span class="arithmatex">\(-v_1\)</span> 之间交替，但它所张成的一维特征子空间仍然收敛。</p>
 </details>
 <p>实际算法为</p>

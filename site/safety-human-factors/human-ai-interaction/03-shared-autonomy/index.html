@@ -4633,6 +4633,7 @@
 u=\alpha u_h+(1-\alpha)u_a,
 \]</div>
 <p>其中 <span class="arithmatex">\(u\)</span> 是送给执行器的最终指令。<span class="arithmatex">\(\alpha=1\)</span> 表示完全由人控制，<span class="arithmatex">\(\alpha=0\)</span> 表示完全由自动系统控制，中间值表示两者线性混合。 有效增益可以直接读出：若自动建议为零（<span class="arithmatex">\(u_a=0\)</span>），操作者要让输出达到满幅 <span class="arithmatex">\(u=1\)</span>，需要给出 <span class="arithmatex">\(u_h=1/\alpha\)</span>。取 <span class="arithmatex">\(\alpha=0.3\)</span>，操作者需要 3.3 倍的输入幅度才能达到全速，主观感受就是“控制变沉”。这个现象不是 bug，而是线性融合的必然结果，必须在设计中显式承认。</p>
+<p>线性混合保持可行性还要求允许控制集合是凸集：若 <span class="arithmatex">\(u_h,u_a\in\mathcal U\)</span> 且 <span class="arithmatex">\(\mathcal U\)</span> 凸，则 <span class="arithmatex">\(\alpha u_h+(1-\alpha)u_a\in\mathcal U\)</span>。非凸安全集合中，即使两个端点都安全，它们之间的线段也可能穿过禁区；因此融合结果仍必须经过独立安全检查或联合优化。</p>
 <table>
 <thead>
 <tr>
@@ -4980,7 +4981,8 @@ c=\frac{1}{N}\sum_{k=1}^{N}\mathbf{1}\big[u_h(k)\,u(k)&gt;0\big],
 </tr>
 </tbody>
 </table>
-<p>第三行的频率差异很重要：安全约束的检查频率必须与被约束动态一样快，否则约束总会晚一步。若融合环运行在 50 Hz 而安全环只在 10 Hz，那么一次 60 ms 的指令变化就可能完全绕过检查。 投影算子还有一个实用性质：多条约束可以依次投影，结果必落在各约束的交集内。但当约束之间互相冲突时（例如“必须保持最小距离”与“必须在限速内到达目标”无法同时满足），系统必须有预设的优先级与放弃条件，否则保护层会在冲突时陷入反复切换。</p>
+<p>第三行的频率差异很重要：安全约束的检查周期必须由被约束动态的时间尺度和最坏时延共同确定。若融合环运行在 50 Hz 而安全环只在 10 Hz，一次 60 ms 的指令变化可能发生在两次检查之间。</p>
+<p>多条约束不能靠“一次依次投影”保证同时满足：投影到后一个集合后，结果可能再次离开前一个集合。若各约束定义闭凸集合，可以直接求到交集的联合投影；交替投影只能在相应条件下经过多次迭代收敛。若交集为空，系统必须有明确的优先级、松弛变量和安全回退规则。</p>
 <table>
 <thead>
 <tr>

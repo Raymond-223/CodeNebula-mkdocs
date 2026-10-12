@@ -30,7 +30,9 @@ $$
 
 在 $\mathbb R^n$ 中，$d(x,y)=\|x-y\|_2$ 是常用距离。
 
-度量空间（metric space）$(X,d)$ 称为完备的（complete），如果每个柯西数列（Cauchy sequence）都收敛到 $X$ 中的点。开区间 $(0,1)$ 不完备，因为
+在一般度量空间中，$x_k\to x$ 的含义是：对每个 $\varepsilon>0$，存在 $N$，使 $k\ge N$ 时 $d(x_k,x)<\varepsilon$。数列是柯西数列，表示：对每个 $\varepsilon>0$，存在 $N$，使 $m,n\ge N$ 时 $d(x_m,x_n)<\varepsilon$。
+
+度量空间（metric space）$(X,d)$ 称为完备的（complete），如果每个柯西数列都收敛到 $X$ 中的点。开区间 $(0,1)$ 不完备，因为
 
 $$
 x_k=\frac1{k+1},\qquad k\ge1,
@@ -39,6 +41,14 @@ $$
 的每一项都属于 $(0,1)$，它是柯西数列，但极限 $0$ 不在该区间。
 
 **命题。** 欧几里得空间 $\mathbb R^n$ 完备；完备度量空间的每个闭子集在继承距离下仍然完备。
+
+这里采用闭集的序列定义：$F\subset X$ 是闭集，当且仅当 $F$ 中每个收敛数列的极限仍属于 $F$。在度量空间中，这与“补集是开集”的定义等价。
+
+??? proof "闭集两种定义等价"
+
+    若 $F^c$ 开而 $x_k\in F$ 收敛到 $x\notin F$，则存在 $r>0$ 使开球 $B(x,r)\subset F^c$。收敛性却保证充分大的 $k$ 有 $x_k\in B(x,r)$，矛盾。
+
+    反过来，若 $F$ 包含其中收敛数列的极限，而 $F^c$ 不是开集，则存在 $x\in F^c$，使每个 $B(x,1/k)$ 都含有某个 $x_k\in F$。这样 $x_k\to x$，却有 $x\notin F$，同样矛盾。
 
 ??? proof "证明"
 
@@ -164,7 +174,7 @@ $$
     |d(x_m,x_n)-d(x^*,x_n)|\le d(x_m,x^*)\to0.
     $$
 
-    因而令 $m\to\infty$，便得
+    上式是度量版反三角不等式；它由三角不等式分别写成 $d(x_m,x_n)\le d(x_m,x^*)+d(x^*,x_n)$ 和交换 $x_m,x^*$ 后合并得到。因而令 $m\to\infty$，便得
 
     $$
     d(x_n,x^*)\le\frac{q^n}{1-q}d(x_1,x_0).
@@ -263,7 +273,7 @@ $$
 
 ## 向量压缩映射
 
-**定理。** 设 $D\subset\mathbb R^n$ 非空、闭且凸，$g:D\to D$ 连续可微（continuously differentiable）。若欧几里得诱导范数下
+**定理。** 设 $D\subset\mathbb R^n$ 非空、闭且凸，$g$ 定义在包含 $D$ 的开集上并连续可微，且 $g(D)\subset D$。若欧几里得诱导范数下
 
 $$
 \sup_{x\in D}\|J_g(x)\|_2\le q<1,

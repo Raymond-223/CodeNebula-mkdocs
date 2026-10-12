@@ -5087,18 +5087,18 @@ f'(x)\approx\frac{f(x+h)-f(x-h)}{2h}
 <p>总误差是两项之和：</p>
 <ul>
 <li><strong>截断误差</strong>：泰勒展开砍掉的那些项，前向差分约 <span class="arithmatex">\(\dfrac{M_2}{2}h\)</span>，随 <span class="arithmatex">\(h\)</span> <strong>变小而变小</strong>；</li>
-<li><strong>舍入误差</strong>：<span class="arithmatex">\(f(x+h)\)</span> 和 <span class="arithmatex">\(f(x)\)</span> 各自带 <span class="arithmatex">\(u\)</span> 量级的相对误差，相减之后再除以 <span class="arithmatex">\(h\)</span>，所以这一项大约是 <span class="arithmatex">\(\dfrac{u}{h}\)</span>，随 <span class="arithmatex">\(h\)</span> <strong>变小而变大</strong>。</li>
+<li><strong>舍入误差</strong>：若两次函数求值的绝对误差由 <span class="arithmatex">\(c,uF\)</span> 控制，其中 <span class="arithmatex">\(F\)</span> 是函数值的代表尺度，则相减后再除以 <span class="arithmatex">\(h\)</span> 的误差量级为 <span class="arithmatex">\(c,uF/h\)</span>。它依赖函数尺度和求值算法，不能普遍简写成无量纲的 <span class="arithmatex">\(u/h\)</span>。</li>
 </ul>
 <p>一个随 <span class="arithmatex">\(h\)</span> 涨、一个随 <span class="arithmatex">\(h\)</span> 降，<strong>因此中间一定有一个最优点</strong>。以前向差分为例：</p>
 <div class="arithmatex">\[
-E(h)\approx\frac{u}{h}+\frac{M_2}{2}h
+E(h)\approx\frac{c,uF}{h}+\frac{M_2}{2}h
 \;\Longrightarrow\;
 E'(h)=-\frac{u}{h^2}+\frac{M_2}{2}=0
 \;\Longrightarrow\;
-h^\star=\sqrt{\frac{2u}{M_2}},\quad E(h^\star)\approx\sqrt{2uM_2}.
+h^\star=\sqrt{\frac{2c,uF}{M_2}}.
 \]</div>
-<p>取 <span class="arithmatex">\(u=1.11\times10^{-16}\)</span>、<span class="arithmatex">\(M_2=1\)</span>，得 <span class="arithmatex">\(h^\star\approx1.5\times10^{-8}\)</span>，此时相对误差也约 <span class="arithmatex">\(10^{-8}\)</span>。这就是"前向差分只能给你 8 位有效数字"的来历——<strong>你有 16 位浮点，却只能用上 8 位。</strong></p>
-<p>中心差分同理，两头一起降噪但截断是二次的：<span class="arithmatex">\(h^\star\approx(6u/M_2)^{1/3}\approx5\times10^{-6}\)</span>，最优误差约 <span class="arithmatex">\(u^{2/3}\approx2\times10^{-11}\)</span>。</p>
+<p>只有在 <span class="arithmatex">\(c,F,M_2\)</span> 和 <span class="arithmatex">\(|f'(x)|\)</span> 都为单位量级时，才得到 <span class="arithmatex">\(h^\star\asymp\sqrt u\)</span>，并可能出现约 8 位有效数字。这是尺度化示例，不是任意函数的固定上限。</p>
+<p>中心差分的截断项为 <span class="arithmatex">\(M_3h^2/6\)</span>。若舍入项仍写成 <span class="arithmatex">\(c,uF/h\)</span>，令导数为零得到 <span class="arithmatex">\((h^\star)^3=3c,uF/M_3\)</span>，即 <span class="arithmatex">\(h^\star=(3c,uF/M_3)^{1/3}\)</span>。只有各尺度约为 1 时才是 <span class="arithmatex">\(u^{1/3}\)</span> 量级；若要谈相对误差，还必须除以 <span class="arithmatex">\(|f'(x)|\)</span>。</p>
 <table>
 <thead>
 <tr>
@@ -5113,23 +5113,23 @@ h^\star=\sqrt{\frac{2u}{M_2}},\quad E(h^\star)\approx\sqrt{2uM_2}.
 <tr>
 <td>前向差分</td>
 <td><span class="arithmatex">\(O(h)\)</span></td>
-<td><span class="arithmatex">\(\dfrac{u}{h}+\dfrac{M_2}{2}h\)</span></td>
-<td><span class="arithmatex">\(\approx1.5\times10^{-8}\)</span></td>
-<td><span class="arithmatex">\(\approx10^{-8}\)</span>（实测 <span class="arithmatex">\(3\times10^{-9}\)</span>）</td>
+<td><span class="arithmatex">\(\dfrac{c uF}{h}+\dfrac{M_2}{2}h\)</span></td>
+<td><span class="arithmatex">\(\sqrt{2cuF/M_2}\)</span></td>
+<td>依 $</td>
 </tr>
 <tr>
 <td>中心差分</td>
 <td><span class="arithmatex">\(O(h^2)\)</span></td>
-<td><span class="arithmatex">\(\dfrac{u}{h}+\dfrac{M_3}{6}h^2\)</span></td>
-<td><span class="arithmatex">\(\approx5\times10^{-6}\)</span></td>
-<td><span class="arithmatex">\(\approx10^{-11}\)</span>（实测 <span class="arithmatex">\(3\times10^{-11}\)</span>）</td>
+<td><span class="arithmatex">\(\dfrac{c uF}{h}+\dfrac{M_3}{6}h^2\)</span></td>
+<td><span class="arithmatex">\((3cuF/M_3)^{1/3}\)</span></td>
+<td>依 $</td>
 </tr>
 <tr>
 <td>复数步长法</td>
 <td><span class="arithmatex">\(O(h^2)\)</span>，无相减抵消</td>
-<td>无抵消项</td>
-<td>可取到极小</td>
-<td><span class="arithmatex">\(\approx u\)</span>（接近机器精度）</td>
+<td>仍有函数求值舍入</td>
+<td>可比差分小很多</td>
+<td>只适用于解析函数且实现支持复数运算</td>
 </tr>
 </tbody>
 </table>
@@ -5144,7 +5144,7 @@ x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 \]</div>
 <p>单步局部截断误差 <span class="arithmatex">\(O(\Delta t^2)\)</span>，<span class="arithmatex">\(N\)</span> 步累积的全局误差 <span class="arithmatex">\(O(\Delta t)\)</span>。</p>
 <h3 id="_11">推一遍：稳定步长是从哪来的</h3>
-<p>取最简单的标量系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>，并且 <span class="arithmatex">\(\lambda&lt;0\)</span>（真实解单调衰减到 0）。任何数值格式都能写成 <span class="arithmatex">\(x_{k+1}=R\,x_k\)</span> 的形式，<span class="arithmatex">\(R\)</span> 叫<strong>放大因子</strong>。误差要不要被放大，只看 <span class="arithmatex">\(|R|\)</span>：</p>
+<p>取数值稳定性分析中的标准<strong>线性测试方程</strong> <span class="arithmatex">\(\dot x=\lambda x\)</span>，并且先令 <span class="arithmatex">\(\lambda&lt;0\)</span>（真实解单调衰减到 0）。把某个<strong>一步法</strong>应用到这个测试方程时，通常可以写成 <span class="arithmatex">\(x_{k+1}=R(z)x_k\)</span>，其中 <span class="arithmatex">\(z=\lambda\Delta t\)</span>，函数 <span class="arithmatex">\(R\)</span> 叫<strong>稳定函数</strong>或放大因子。这不是说任意非线性方程、任意多步法都能化成同一个标量递推；它只是用来刻画该格式对不同 <span class="arithmatex">\(z\)</span> 的绝对稳定区域。对测试方程，渐近衰减要求 <span class="arithmatex">\(|R(z)|&lt;1\)</span>；<span class="arithmatex">\(|R(z)|=1\)</span> 只表示幅值不增，未必收敛到 0。</p>
 <ul>
 <li><strong>显式 Euler</strong>：<span class="arithmatex">\(R=1+\lambda\Delta t\)</span>。要求 <span class="arithmatex">\(|1+\lambda\Delta t|\le1\)</span>，解得</li>
 </ul>
@@ -5175,19 +5175,19 @@ x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 <tr>
 <td>隐式 Euler</td>
 <td><span class="arithmatex">\(x_{k+1}=\dfrac{x_k}{1-\lambda\Delta t}\)</span></td>
-<td>对任意 <span class="arithmatex">\(\Delta t\)</span> 稳定</td>
+<td>对负实 <span class="arithmatex">\(\lambda\)</span> 的任意 <span class="arithmatex">\(\Delta t&gt;0\)</span> 均衰减；更一般地为 A-稳定</td>
 <td>1</td>
 </tr>
 <tr>
 <td>梯形法</td>
 <td><span class="arithmatex">\(x_{k+1}=\dfrac{1+\lambda\Delta t/2}{1-\lambda\Delta t/2}x_k\)</span></td>
-<td>A-稳定</td>
-<td>2</td>
+<td>A-稳定；负实轴上任意步长满足 (</td>
+<td>R</td>
 </tr>
 <tr>
 <td>显式 RK4</td>
 <td>多级组合</td>
-<td>(\Delta t\lesssim2.8/</td>
+<td>当 <span class="arithmatex">\(\lambda&lt;0\)</span> 为实数时约需 (\Delta t</td>
 <td>\lambda</td>
 </tr>
 <tr>
@@ -5202,7 +5202,7 @@ x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 <p>隐式 Euler 能取很大的步长，但<strong>大步长下的解依然不准</strong>——稳定只保证"不发散"，不保证"对"。<span class="arithmatex">\(\Delta t=0.1\)</span> 时它给出的曲线是平滑的、单调下降的、看起来非常合理，但衰减速率可能差了好几倍。</p>
 <p>这就引出了工程上最危险的一种组合：<strong>稳定但错误</strong>。它的结果平滑无毛刺，特别容易被当成可用结果写进仿真报告。判断方法只有一个，而且很便宜——<strong>步长减半实验</strong>：</p>
 <blockquote>
-<p>把 <span class="arithmatex">\(\Delta t\)</span> 减半再算一遍。若结果变化远大于你估计的截断误差量级，说明误差由离散偏差主导，该换格式而不是继续减步长；若结果几乎不变，说明已经进入渐近收敛区，可以放心用。</p>
+<p>把 <span class="arithmatex">\(\Delta t\)</span> 依次减半并比较多个层级。差异按理论阶数缩小，是进入渐近区的证据；差异很大时，既可以继续减小步长，也可以换稳定域或阶数更合适的格式。结果接近仍不能排除共同模型误差、事件处理错误或误差抵消，因此还要与守恒量、解析解或独立实现交叉验证。</p>
 </blockquote>
 <p>两倍计算量，一次性排除一大类"看起来正常但不可信"的结果。</p>
 <h3 id="_13">有两种离散偏差必须分开看</h3>
@@ -5226,9 +5226,9 @@ x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 <td>同样步长下截断误差小得多</td>
 </tr>
 <tr>
-<td>长期定性行为</td>
+<td>长期哈密顿结构</td>
 <td>辛格式</td>
-<td>能量有界，不发散也不衰减</td>
+<td>在光滑哈密顿系统、合适步长等条件下通常具有较好的长期能量行为；不是任意系统的无条件有界保证</td>
 </tr>
 <tr>
 <td>刚性系统</td>
@@ -5237,7 +5237,7 @@ x_{k+1}=x_k+\Delta t\,f(x_k,u_k),
 </tr>
 </tbody>
 </table>
-<p>"刚性"（stiffness）可以这样判断：若状态里最大与最小时间尺度之比超过 <span class="arithmatex">\(10^{2}\)</span>，固定步长的显式方法要么被最快尺度锁死步长（计算量爆炸），要么不稳定。也可以直接做步长减半实验看是否发散。自适应步长的作用就是在误差估计大的区间自动缩小 <span class="arithmatex">\(\Delta t\)</span>、在平坦区间放大步长，把精度预算花在刀刃上。</p>
+<p>“刚性”不是由固定的 <span class="arithmatex">\(10^2\)</span> 比值定义的。它描述的是：在关心的时间区间和精度下，稳定性而非精度迫使显式方法采用远小于慢变化尺度的步长。时间尺度相差很大只是迹象，结论还依赖方程、积分格式和目标时间区间。自适应步长只能控制误差，显式格式若受稳定域限制，仍可能需要改用隐式方法。</p>
 <hr />
 <h2 id="_14">七、条件数：问题本身的放大倍数</h2>
 <p>到这一节为止，谈的都是"算的过程中引入了多少误差"。还有一个更根本的问题：<strong>问题本身对扰动有多敏感？</strong></p>
@@ -5324,7 +5324,12 @@ A(x+\delta x)=b+\delta b
 \;\Longrightarrow\;
 x_\lambda=(A^\top A+\lambda I)^{-1}A^\top b .
 \]</div>
-<p>条件数从 <span class="arithmatex">\(\sigma_1/\sigma_n\)</span> 变成 <span class="arithmatex">\(\big((\sigma_1^2+\lambda)/(\sigma_n^2+\lambda)\big)^{1/2}\)</span> 的量级，而且 <span class="arithmatex">\(A^\top A+\lambda I\)</span> <strong>一定对称正定</strong>。对称正定矩阵可以写成 <span class="arithmatex">\(A=LL^\top\)</span>，其中 <span class="arithmatex">\(L\)</span> 是下三角矩阵，这叫 <strong>Cholesky 分解</strong>；它比通用矩阵求逆更快、更稳定，因此这里可以用 Cholesky 求解。</p>
+<p>当 <span class="arithmatex">\(\lambda&gt;0\)</span> 时，<span class="arithmatex">\(A^\top A+\lambda I\)</span> 对称正定，其二范数条件数为</p>
+<div class="arithmatex">\[
+\kappa_2(A^\top A+\lambda I)
+=\frac{\sigma_1^2+\lambda}{\sigma_n^2+\lambda}.
+\]</div>
+<p>若把正则化问题写成增广最小二乘，增广算子的奇异值条件数才是上式的平方根；不能把两个对象的条件数混为一谈。对称正定矩阵可以写成 <span class="arithmatex">\(M=LL^\top\)</span>，其中 <span class="arithmatex">\(L\)</span> 是下三角矩阵，这叫 <strong>Cholesky 分解</strong>。这里用 <span class="arithmatex">\(M\)</span> 而不是 <span class="arithmatex">\(A\)</span>，避免和原最小二乘矩阵重名。</p>
 <p>代价是<strong>引入偏差</strong>：<span class="arithmatex">\(\lambda\)</span> 越大，解越平滑、越鲁棒，对数据拟合越差；<span class="arithmatex">\(\lambda\to0\)</span> 回到原问题（含病态），<span class="arithmatex">\(\lambda\to\infty\)</span> 时 <span class="arithmatex">\(x\to0\)</span>。选 <span class="arithmatex">\(\lambda\)</span> 常用 <strong>L 曲线法</strong>（以 <span class="arithmatex">\(\|x_\lambda\|\)</span> 对残差作图取拐点）或广义交叉验证。</p>
 <p>另一条路是<strong>截断 SVD</strong>：把小于阈值</p>
 <div class="arithmatex">\[

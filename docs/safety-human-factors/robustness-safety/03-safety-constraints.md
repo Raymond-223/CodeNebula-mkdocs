@@ -69,6 +69,13 @@ $$\dot h(x,u) + \gamma h(x) \ge 0,$$
 
 它的含义是：只要当前 $h(x)>0$，该条件保证 $h$ 在未来不会变成负值，也就不会越过边界。$\gamma>0$ 越大，返回安全内部的趋势越强；若忽略 $\gamma$ 项，约束退化为“$\dot h\ge 0$”，即禁止任何指向边界的运动，在远离边界时过于保守。
 
+??? proof "线性 CBF 条件给出前向不变性"
+    假设闭环解存在且绝对连续，并且沿该解几乎处处满足 $\dot h(t)+\gamma h(t)\ge0$。乘以正数 $e^{\gamma t}$ 得
+    $$\frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.$$
+    因此 $e^{\gamma t}h(t)\ge h(0)$，即
+    $$h(t)\ge e^{-\gamma t}h(0).$$
+    若初始状态满足 $h(0)\ge0$，则所有后续时刻都有 $h(t)\ge0$，安全集前向不变。这个证明依赖闭环解存在、$h$ 沿轨迹可微（或绝对连续）以及约束连续执行；采样控制、模型误差和执行器饱和需要另加裕量。
+
 把 $\dot h$ 展开：$\dot h = \nabla h(x)^\top f(x) + \nabla h(x)^\top g(x)u$，于是 CBF 条件对 $u$ 是仿射的，可以在每个控制周期用一个小型二次规划求解：
 
 $$\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .$$

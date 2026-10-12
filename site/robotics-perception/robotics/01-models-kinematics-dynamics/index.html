@@ -5061,7 +5061,7 @@ M(q)\ddot q+C(q,\dot q)\dot q+g(q)=\tau ,
 <td>4 / 3</td>
 <td>无</td>
 <td>一次四元数乘法（16 乘 + 12 加）</td>
-<td>需归一化，漂移小</td>
+<td>需归一化以控制单位范数误差</td>
 <td>IMU 姿态积分</td>
 </tr>
 </tbody>
@@ -5074,7 +5074,7 @@ y=\frac{R_{13}-R_{31}}{4w},\quad
 z=\frac{R_{21}-R_{12}}{4w}.
 \]</div>
 <p><strong>它自己就带着一个坑</strong>：<span class="arithmatex">\(w\to0\)</span>（旋转接近 <span class="arithmatex">\(180°\)</span>）时这个公式在除以近零的数，数值会炸开，必须改用"最大对角元"分支。所以没有一种表示在所有场景都安全——<strong>切换表示本身就要处理边界</strong>。</p>
-<p>选型判据也用误差说话：IMU 在 200 Hz 下，一阶欧拉积分姿态漂移典型 <span class="arithmatex">\(0.5°\text{–}2°/s\)</span>；四元数积分 + 归一化可降到 <span class="arithmatex">\(0.05°\text{–}0.2°/s\)</span>；旋转矩阵若不每步正交化则累积更快。<strong>姿态积分优先四元数，变换链优先齐次矩阵。</strong></p>
+<p>四元数归一化只能修正数值积分造成的单位范数偏离，不能消除陀螺零偏、噪声或时间同步误差造成的物理姿态漂移。旋转矩阵也可用保持正交性的积分方法；两种表示的误差取决于积分器与传感器模型，不能用一组固定漂移数字普遍排序。工程上常用单位四元数做姿态积分、齐次矩阵组织变换链，但仍必须估计 IMU 偏置并进行外部观测校正。</p>
 <h2 id="_7">七、雅可比矩阵与运动学奇异</h2>
 <h3 id="71">7.1 雅可比就是"关节速度到末端速度"的换算表</h3>
 <p>关节转一点，末端动一点，这个比例写成矩阵就是 <strong>Jacobian</strong>：</p>
@@ -5096,7 +5096,7 @@ J(q)=\begin{bmatrix}-l_1\sin q_1-l_2\sin(q_1+q_2) &amp; -l_2\sin(q_1+q_2)\\ l_1\
 <div class="arithmatex">\[
 \det J=0 \quad\Longleftrightarrow\quad q_2=0 \ \text{或}\ \pi .
 \]</div>
-<p><span class="arithmatex">\(q_2=0\)</span> 正是<strong>手臂完全伸直</strong>。再看逆解 <span class="arithmatex">\(\dot q=J^{-1}\dot x\)</span>：分母 <span class="arithmatex">\(\det J\to0\)</span> 时，同样的末端速度需要<strong>趋于无穷</strong>的关节速度。这就是"伸直那一瞬间卡住、抖动"的数学原因。</p>
+<p><span class="arithmatex">\(q_2=0\)</span> 正是<strong>手臂完全伸直</strong>。当最小奇异值趋于零时，只有要求的末端速度在相应退化方向上含非零分量，最小范数关节速度才会按该分量除以小奇异值而放大；完全位于仍可实现方向的速度不必趋于无穷。这就是某些运动方向在伸直附近出现速度尖峰的数学原因。</p>
 <p>奇异性的定量度量是<strong>可操作度</strong>：</p>
 <div class="arithmatex">\[
 w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
@@ -5105,7 +5105,7 @@ w(q)=\sqrt{\det\big(J(q)J^\top(q)\big)},
 <div class="arithmatex">\[
 \dot q=J^\top\big(JJ^\top+\lambda^2 I\big)^{-1}\dot x,
 \]</div>
-<p><span class="arithmatex">\(\lambda\)</span> 一般取 <span class="arithmatex">\(10^{-3}\text{–}10^{-1}\)</span>：太小压不住尖峰，太大引入跟踪误差。<strong>这就是"奇异附近用精度换稳定"的范式。</strong></p>
+<p><span class="arithmatex">\(\lambda\)</span> 的量纲和大小必须与 Jacobian 的奇异值尺度一致，不能给出跨机器人通用区间。它可由最小奇异值、允许关节速度与任务误差自适应选择：太小压不住尖峰，太大则引入跟踪误差。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">dls_step</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>

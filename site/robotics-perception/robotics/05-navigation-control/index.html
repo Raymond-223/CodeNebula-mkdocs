@@ -4660,41 +4660,8 @@
 <p>路径跟踪的核心指标是<strong>横向误差</strong> <span class="arithmatex">\(e\)</span>：机器人参考点到目标路径的垂直距离。它和控制量之间有明确的几何关系，Pure Pursuit 与 Stanley 是两条最常用的思路。</p>
 <p><strong>Pure Pursuit（纯追踪）</strong> 在路径上取一个离机器人前视距离 <span class="arithmatex">\(L_d\)</span> 的点作为目标点，把转向角对准它。设目标点在机器人坐标系下的方位角为 <span class="arithmatex">\(\alpha\)</span>，则所需曲率为</p>
 <div class="arithmatex">\[\kappa=\frac{2\sin\alpha}{L_d},\]</div>
-<p>对应前轮转角 <span class="arithmatex">\(\delta=\arctan(\kappa L)\)</span>，<span class="arithmatex">\(L\)</span> 为轴距。它的直观含义是：<strong>前视距离直接决定切角程度。</strong> 在半径为 <span class="arithmatex">\(R\)</span> 的圆弧路径上稳定跟踪时，稳态横向误差近似满足</p>
-<div class="arithmatex">\[e_{ss}\approx\frac{L_d^{2}}{2R}.\]</div>
-<p>代入 <span class="arithmatex">\(R=5\ \text{m}\)</span>：</p>
-<table>
-<thead>
-<tr>
-<th>前视距离 <span class="arithmatex">\(L_d\)</span></th>
-<th>近似稳态误差 <span class="arithmatex">\(e_{ss}\)</span></th>
-<th>行为表现</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.5 m</td>
-<td>0.025 m</td>
-<td>精度高，但易振荡、对噪声敏感</td>
-</tr>
-<tr>
-<td>1.0 m</td>
-<td>0.10 m</td>
-<td>常用折中</td>
-</tr>
-<tr>
-<td>2.0 m</td>
-<td>0.40 m</td>
-<td>转弯“抄近道”，窄道易撞内侧</td>
-</tr>
-<tr>
-<td>4.0 m</td>
-<td>1.60 m</td>
-<td>几乎沿弦切过去，跟踪失效</td>
-</tr>
-</tbody>
-</table>
-<p>由此得到两条实用规则：误差随 <span class="arithmatex">\(L_d\)</span> <strong>平方</strong>增长，所以宽容差时不要简单放大 <span class="arithmatex">\(L_d\)</span>；低速可以取小 <span class="arithmatex">\(L_d\)</span>，高速必须取大 <span class="arithmatex">\(L_d\)</span> 否则闭环增益过大导致蛇形。常见做法是自适应前视 <span class="arithmatex">\(L_d=k v+\Delta_0\)</span>，其中 <span class="arithmatex">\(v\)</span> 为线速度，<span class="arithmatex">\(k\)</span> 约 0.3–1.0 s，<span class="arithmatex">\(\Delta_0\)</span> 为最小前视。</p>
+<p>对应前轮转角 <span class="arithmatex">\(\delta=\arctan(\kappa L)\)</span>，<span class="arithmatex">\(L\)</span> 为轴距。它的直观含义是：<strong>前视距离直接决定切角程度。</strong> 但 Pure Pursuit 对圆轨迹的稳态误差不能脱离参考点定义、目标点选择规则、车辆运动学和离散更新方式写成统一的 <span class="arithmatex">\(L_d^2/(2R)\)</span>。理想连续运动学模型在某些选点约定下可以精确保持圆轨迹；工程实现中的“抄近道”则来自离散采样、路径点稀疏、速度与执行器约束等共同作用。</p>
+<p>因此 <span class="arithmatex">\(L_d\)</span> 应通过闭环仿真和实车曲率范围标定：过小通常使控制对噪声和离散路径更敏感，过大则响应迟钝并可能切弯。常见做法是自适应前视 <span class="arithmatex">\(L_d=kv+\Delta_0\)</span>，其中 <span class="arithmatex">\(k\)</span> 与 <span class="arithmatex">\(\Delta_0\)</span> 必须按车辆、速度和路径采样确定，而不是通用常数。</p>
 <p><strong>Stanley 控制器</strong> 用前轴中心到路径的横向误差 <span class="arithmatex">\(e\)</span> 和航向误差 <span class="arithmatex">\(\psi_e\)</span> 直接构造转角：</p>
 <div class="arithmatex">\[\delta=\psi_e+\arctan\!\left(\frac{k\,e}{v+\epsilon}\right),\]</div>
 <p><span class="arithmatex">\(k\)</span> 为横向增益，<span class="arithmatex">\(\epsilon\)</span> 防止低速时除零。它的横向误差近似按 <span class="arithmatex">\(\dot e=-k\,e\)</span> 收敛，即时间常数约 <span class="arithmatex">\(1/k\)</span>：<span class="arithmatex">\(k=2\)</span> 时约 0.5 s 收敛到初值的 37%。</p>
@@ -4729,8 +4696,8 @@
 </tr>
 <tr>
 <td>稳态误差</td>
-<td>圆弧上近似 <span class="arithmatex">\(L_d^2/(2R)\)</span></td>
-<td>理论上可收敛到 0</td>
+<td>依运动学、选点与离散实现而定</td>
+<td>依符号约定、增益、速度和执行器约束而定</td>
 </tr>
 <tr>
 <td>实现复杂度</td>

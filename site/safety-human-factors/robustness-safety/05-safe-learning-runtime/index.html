@@ -4739,12 +4739,12 @@
 <p>这张表给出一个反直觉的结论：<strong>检测能力对偏移大小是平方敏感的</strong>。要检出的偏移减半，窗口长度与延迟都要变成四倍。因此“既快又灵敏”在单通道上做不到，正确做法是引入独立信息源（第二传感器、运动模型预测）而不是继续加长窗口。</p>
 <p>窗口长度还决定了误报的节奏。若用不重叠的窗口、每 <span class="arithmatex">\(W\)</span> 个采样做一次判定，<span class="arithmatex">\(3\sigma\)</span> 判据的单次误报率约 <span class="arithmatex">\(2.7\times10^{-3}\)</span>，在 100 Hz、<span class="arithmatex">\(W=36\)</span> 下平均误报间隔</p>
 <div class="arithmatex">\[\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.\]</div>
-<p>两分多钟一次误报对长时间任务仍然太频繁，因此实际系统通常把窗口阈值提到 <span class="arithmatex">\(4\sigma\)</span> 到 <span class="arithmatex">\(5\sigma\)</span>，或者要求<strong>两种不同类型的证据同时越界</strong>才触发降级——后者能把误报率相乘，效果远好于单纯提高单通道阈值。</p>
+<p>两分多钟一次误报对长时间任务仍可能太频繁，因此可提高阈值，或要求多类证据联合触发。只有检测事件相互独立时，联合误报率才等于各自误报率之积；共享传感器、环境或模型时通常相关，必须用联合数据估计。</p>
 <h2 id="_4">安全过滤器可以修改不安全动作</h2>
 <p>策略输出 <span class="arithmatex">\(u_{nom}\)</span> 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。这种结构让学习算法不必独自承担“永远不犯错”的责任。</p>
 <p>形式上可以在每个控制周期求解</p>
 <div class="arithmatex">\[u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,\]</div>
-<p>即在安全集合内取<strong>离策略建议最近的</strong>动作。这个写法的好处是行为可解释：如果 <span class="arithmatex">\(u^*=u_{nom}\)</span>，说明策略本身安全；如果偏离很大，偏差本身就是“策略正在提危险建议”的证据，可以直接用于监控与再训练。</p>
+<p>即在安全集合内取<strong>离策略建议最近的</strong>动作。要保证最小值存在，<span class="arithmatex">\(\mathcal U_{\text{safe}}\)</span> 至少应非空且闭；要保证欧几里得投影唯一，常再要求它是凸集。若集合非凸，可能有多个同样近的动作，必须规定决胜规则。若 <span class="arithmatex">\(u^*=u_{nom}\)</span>，只说明它满足过滤器当前编码的约束，不代表现实中绝对安全。</p>
 <p>差值 <span class="arithmatex">\(\lVert u^*-u_{nom}\rVert\)</span> 是一个非常有用的监控量，甚至可以定义一个干预率</p>
 <div class="arithmatex">\[\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert&gt;\varepsilon_0\}}{\#\{t\}} .\]</div>
 <table>
@@ -4757,28 +4757,23 @@
 </thead>
 <tbody>
 <tr>
-<td>小于 1%</td>
-<td>策略与过滤器基本一致</td>
-<td>保持，可用于放行更多动作</td>
+<td>低于本任务基线</td>
+<td>策略与过滤器多数时候一致</td>
+<td>仍需检查漏检与场景覆盖</td>
 </tr>
 <tr>
-<td>1%–5%</td>
-<td>策略偶尔冒险</td>
-<td>记录并纳入再训练数据</td>
+<td>明显高于验证基线</td>
+<td>策略、约束或场景分布发生冲突</td>
+<td>分场景检查触发原因并补充验证</td>
 </tr>
 <tr>
-<td>5%–20%</td>
-<td>策略与约束经常冲突</td>
-<td>检查指标定义，补训练</td>
-</tr>
-<tr>
-<td>大于 20%</td>
-<td>过滤层在代替主策略</td>
-<td>主策略不可用，应退回回退策略</td>
+<td>持续上升</td>
+<td>可能是策略退化、约束过严或分布漂移</td>
+<td>先区分原因，再决定重训、调约束或回退</td>
 </tr>
 </tbody>
 </table>
-<p>最后一行的判据很重要：<strong>当干预率持续高于 20%，系统实际由过滤器在控制</strong>，此时任务性能无法归因于学习策略，继续运行等于在用一个未经验证的控制器。</p>
+<p>干预率没有跨任务通用的 20% 分界。高干预可能来自主策略差，也可能来自过滤器过度保守或场景变难。阈值应由已标注验证场景中的任务性能、安全漏检率和干预原因共同校准。</p>
 <table>
 <thead>
 <tr>
@@ -5135,45 +5130,7 @@
 </tbody>
 </table>
 <p>恢复延迟本身就是风险：如果系统停留在降级状态过久，任务性能持续受损；如果过早恢复，又可能立刻再次降级。<strong>迟滞参数应当由“降级代价”与“误切换代价”的比较来决定</strong>，而不是取经验默认值。</p>
-<p>切换频率可以量化。设监控量在阈值附近做标准差为 <span class="arithmatex">\(\sigma_m\)</span> 的随机游走，迟滞带宽为 <span class="arithmatex">\(h\)</span>、保持时间为 <span class="arithmatex">\(T_\text{hold}\)</span>，则单位时间内跨越带宽并完成往返的平均次数近似</p>
-<div class="arithmatex">\[f_\text{sw} \approx \frac{1}{T_\text{hold}} \exp\!\left(-\frac{h}{\sigma_m}\right).\]</div>
-<table>
-<thead>
-<tr>
-<th>迟滞带宽 <span class="arithmatex">\(h\)</span></th>
-<th><span class="arithmatex">\(h/\sigma_m\)</span></th>
-<th><span class="arithmatex">\(f_\text{sw}\)</span>（<span class="arithmatex">\(T_\text{hold}=1\)</span> s）</th>
-<th>每小时切换次数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>0</td>
-<td>1 Hz 量级</td>
-<td>数千</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(1\sigma_m\)</span></td>
-<td>1</td>
-<td>约 0.37 Hz</td>
-<td>约 1300</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(2\sigma_m\)</span></td>
-<td>2</td>
-<td>约 0.14 Hz</td>
-<td>约 480</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(4\sigma_m\)</span></td>
-<td>4</td>
-<td>约 0.018 Hz</td>
-<td>约 66</td>
-</tr>
-</tbody>
-</table>
-<p>这个指数关系解释了为什么迟滞带宽的收益来得很快：<strong>带宽从 <span class="arithmatex">\(1\sigma_m\)</span> 增到 <span class="arithmatex">\(4\sigma_m\)</span>，切换频率下降约 20 倍，而恢复延迟只增加零点几秒。</strong> 相比之下单纯延长 <span class="arithmatex">\(T_\text{hold}\)</span> 只是线性收益，且会直接拖长恢复时间。</p>
+<p>切换频率必须由监控量的随机过程模型或实测轨迹估计。仅给出单点标准差 <span class="arithmatex">\(\sigma_m\)</span>、迟滞宽度 <span class="arithmatex">\(h\)</span> 与保持时间，不能推出通用首达或往返频率：结果还依赖采样周期、增量方差、自相关、漂移、边界和复位机制。实践中应在代表性正常与故障轨迹上扫描 <span class="arithmatex">\((h,T_\text{hold})\)</span>，报告单位时间切换次数、漏检率和恢复延迟的联合曲线。</p>
 <h2 id="_9">干预延迟与接管时间预算</h2>
 <p>如果回退动作是把控制权交给人，那么运行时安全的实际效果取决于<strong>人是否来得及接管</strong>。设系统发现异常的时刻为 <span class="arithmatex">\(t_0\)</span>，操作员完成接管需要</p>
 <div class="arithmatex">\[T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},\]</div>

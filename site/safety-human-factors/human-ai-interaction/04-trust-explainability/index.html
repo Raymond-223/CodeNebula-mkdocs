@@ -4688,8 +4688,8 @@ H(\mathcal{A}\mid e)=-\sum_{a\in\mathcal{A}}p(a\mid e)\log p(a\mid e),
 </tr>
 </tbody>
 </table>
-<p>按上述熵定义，三档的典型取值差距明显：无解释时操作者只在“放行/拦截/接管”三个动作间近乎均匀选择，<span class="arithmatex">\(H\approx\log 3\approx1.10\)</span> bit；局部解释把候选压缩到一到两个，<span class="arithmatex">\(H\approx0.4\)</span> bit；反事实解释直接给出唯一可行替代，<span class="arithmatex">\(H\to0\)</span>。这就是“反事实解释在实践中往往最有用”的量化理由：它直接给出<strong>可操作的替代选项</strong>。</p>
-<p>代价是系统需要能评估“如果换个决定会怎样”：给出反事实解释要求规划器在 <span class="arithmatex">\(K\)</span> 个候选目标上各跑一次可行性评估，计算量约为 <span class="arithmatex">\(K\)</span> 倍。工程上常用 <span class="arithmatex">\(K\in[3,10]\)</span> 并设置超时，超时后降级为局部解释，而不是让界面长时间空白——空白的解释等价于无解释，<span class="arithmatex">\(H\)</span> 会立刻回到 1.10 bit。</p>
+<p>若熵使用自然对数，三个动作均匀时 <span class="arithmatex">\(H=\ln3\approx1.10\)</span> nat；若使用以 2 为底的对数，则 <span class="arithmatex">\(H=\log_2 3\approx1.585\)</span> bit。熵只能描述操作者动作分布的分散程度，不能仅凭人为设定的几个数证明某类解释更好。比较解释方式时，应在同一任务上实测理解正确率、决策时间和安全结果，并统一对数底。</p>
+<p>代价是系统需要能评估“如果换个决定会怎样”：若对 <span class="arithmatex">\(K\)</span> 个候选分别运行一次同成本规划，计算量上界约为单次的 <span class="arithmatex">\(K\)</span> 倍；缓存、并行和提前停止会改变实际开销。应设置由任务时限决定的超时并定义降级显示，不能预设降级后的操作者熵必回到某个固定数值。</p>
 <table>
 <thead>
 <tr>

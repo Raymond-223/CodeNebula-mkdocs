@@ -4539,7 +4539,7 @@
 <h2 id="_1">应用层消息边界</h2>
 <p>无论 TCP 还是 UDP，系统都需要定义序列化格式、字段、版本和错误行为。一个任务消息至少要说明任务 ID、发送者、时间戳和状态，而不能只发送一个模糊字符串。</p>
 <p>JSON 便于调试，Protobuf/IDL 更适合严格接口和高效传输。格式本身不是重点，<strong>双方对字段语义有共同契约</strong>才是重点。</p>
-<p>这里有一个容易被忽略的区分：<strong>帧（frame）</strong> 是传输层的切分单位，<strong>消息（message）</strong> 是语义单位，两者不必一一对应。长度前缀方案让接收方先读 4 字节长度、再读载荷，从而把字节流重新切回消息。这个看似琐碎的约定，是把“可靠字节流”提升为“可靠消息流”的唯一途径。</p>
+<p>这里要区分协议层次：链路层有 frame（帧），IP 层有 packet（分组），TCP 传输层发送 segment（报文段），UDP 保留 datagram（数据报）边界，而应用层定义 message（消息）。TCP 只向应用提供字节流，不保留应用消息边界；长度前缀是恢复边界的一种常见方法，此外还有分隔符、固定长度和自描述编码，并非唯一方案。</p>
 <p>一个完整的消息契约至少要说清五件事：字段名的含义、单位（米还是毫米、弧度还是度）、坐标系（谁在谁下面）、时间戳的基准（采样时刻还是发送时刻）、以及字段缺失或非法时的行为。单位错误的代价在机器人项目中格外高——把米写成毫米，不会让系统崩溃，只会让机器人撞上去。</p>
 <p>更隐蔽的一类是<strong>语义漂移</strong>：字段名没变、类型没变、单位也没变，但含义变了。例如 <code>status</code> 原本表示“任务是否被接受”，后来被改成“任务是否完成”，两个版本的代码都能正常运行，只有把两边的日志放在一起看才会发现判断依据不同。这类问题的排查成本极高，唯一有效的防线是<strong>在契约里为字段写清楚语义，并在改动时改名</strong>。</p>
 <p>序列化格式的选择通常按以下标准判断：</p>
@@ -4749,15 +4749,17 @@
 <h2 id="_4">交付保证属于端到端协议</h2>
 <p>TCP 的可靠字节流并不等于业务操作只执行一次。连接断开时，客户端可能不知道请求是否已在服务端完成。端到端语义仍需依靠请求 ID、幂等处理和业务确认建立，不能只依赖传输层。</p>
 <p>这一层的经典结论是：<strong>可靠性必须由端到端协议自己负责</strong>。中间层（TCP、broker、网关）能提供的最好东西是“至少一次”或“至多一次”，而任何一个中间层都无法单独构造出“恰好一次”的业务效果，因为它无法知道最上层应用是否已经完成副作用。</p>
-<p>去重寄存器（dedup table）是把“至少一次”提升为业务级“恰好一次”的标准做法：</p>
+<p>仅有进程内去重表还不能把“至少一次”提升为业务效果恰好一次。去重记录与业务副作用必须在同一原子事务中提交，或由支持幂等条件写的存储系统共同保证。下面代码只演示接口形状，不是故障安全实现：</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">seen</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request_id</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">seen</span><span class="p">[</span><span class="n">request_id</span><span class="p">]</span>           <span class="c1"># 重放：返回上次结果，而不是重做</span>
+    <span class="c1"># 真实实现必须把 apply_once 与该记录放入同一数据库事务；</span>
+    <span class="c1"># 否则两行之间崩溃，重试仍会再次执行副作用。</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">apply_once</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="n">seen</span><span class="p">[</span><span class="n">request_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div>
-<p>代价是这张表必须足够大、足够持久：内存表在重启后失效，持久表则引入写放大与清理策略。<strong>“恰好一次”从来不是免费的，它总在某个地方退化成去重。</strong></p>
+<p>代价是去重状态必须持久、跨节点一致，并与副作用原子提交；内存表在重启后失效，分离的持久表仍有提交间隙。所谓业务级“恰好一次”是特定故障模型和状态保留窗口内的协议保证，不是单靠请求 ID 自动获得。</p>
 <p>这也解释了为什么很多系统在文档里写“恰好一次”，实际实现却是“至少一次 + 去重 + 幂等”。区分这两种说法很有必要，因为它决定了你在什么时候必须操心重复：如果接口自称恰好一次但内部靠去重，那么去重表的生命周期就是系统的真实边界，重启后的一段窗口内仍可能重复。</p>
 <p>把“至少一次”做成“业务上恰好一次”，通常靠下面几种手段中的一种或几种组合：</p>
 <ul>

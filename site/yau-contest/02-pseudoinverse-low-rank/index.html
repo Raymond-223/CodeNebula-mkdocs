@@ -4599,6 +4599,13 @@ AA^+A
 \]</div>
 <p>同理 <span class="arithmatex">\(A^+AA^+=A^+\)</span>。而 <span class="arithmatex">\(U_rU_r^T\)</span> 与 <span class="arithmatex">\(V_rV_r^T\)</span> 都是对称矩阵，所以另外两个彭若斯方程也成立。</p>
 </details>
+<details class="proof">
+<summary>满足四个方程的矩阵唯一</summary>
+<p>设 <span class="arithmatex">\(X\)</span> 是任意满足四式的矩阵，令 <span class="arithmatex">\(Y=V^TXU\)</span>，并按秩 <span class="arithmatex">\(r\)</span> 分块。把 <span class="arithmatex">\(A=U\Sigma V^T\)</span> 代入四式，相当于让 <span class="arithmatex">\(Y\)</span> 与</p>
+<div class="arithmatex">\[\Sigma=\begin{pmatrix}D&amp;0\\0&amp;0\end{pmatrix},
+\qquad D=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)\]</div>
+<p>满足同样四式。由 <span class="arithmatex">\(\Sigma Y\Sigma=\Sigma\)</span> 得 <span class="arithmatex">\(DY_{11}D=D\)</span>，所以 <span class="arithmatex">\(Y_{11}=D^{-1}\)</span>。由 <span class="arithmatex">\(\Sigma Y\)</span> 对称，右上块 <span class="arithmatex">\(DY_{12}\)</span> 必为零，故 <span class="arithmatex">\(Y_{12}=0\)</span>；由 <span class="arithmatex">\(Y\Sigma\)</span> 对称，同理 <span class="arithmatex">\(Y_{21}=0\)</span>。最后 <span class="arithmatex">\(Y\Sigma Y=Y\)</span> 的右下块给出 <span class="arithmatex">\(Y_{22}=0\)</span>。因此 <span class="arithmatex">\(Y=\Sigma^+\)</span>，从而 <span class="arithmatex">\(X=V\Sigma^+U^T=A^+\)</span>。四个方程唯一刻画伪逆。</p>
+</details>
 <p>前者是到 <span class="arithmatex">\(\operatorname{Col}(A)\)</span> 的正交投影，后者是到 <span class="arithmatex">\(\operatorname{Col}(A^T)\)</span> 的正交投影。</p>
 <h3 id="_1">满秩公式</h3>
 <p><strong>命题。</strong> 若 <span class="arithmatex">\(A\)</span> 满列秩，则 <span class="arithmatex">\(A^+=(A^TA)^{-1}A^T\)</span>；若 <span class="arithmatex">\(A\)</span> 满行秩，则 <span class="arithmatex">\(A^+=A^T(AA^T)^{-1}\)</span>。</p>
@@ -4717,12 +4724,12 @@ A^+
 =\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}.
 \]</div>
 <p>当 <span class="arithmatex">\(A\)</span> 是可逆方阵时，这也等于 <span class="arithmatex">\(\|A\|_2\|A^{-1}\|_2\)</span>。</p>
-<p><strong>命题。</strong> 对可逆方阵的线性系统 <span class="arithmatex">\(Ax=b\)</span>，设 <span class="arithmatex">\(b\ne0\)</span>。若只有右端发生小扰动 <span class="arithmatex">\(\delta b\)</span>，则</p>
+<p><strong>命题。</strong> 对可逆方阵的线性系统 <span class="arithmatex">\(Ax=b\)</span>，设 <span class="arithmatex">\(b\ne0\)</span>。若矩阵 <span class="arithmatex">\(A\)</span> 不变、只有右端发生扰动 <span class="arithmatex">\(\delta b\)</span>，则下式专指二范数：</p>
 <div class="arithmatex">\[
-\frac{\|\delta x\|}{\|x\|}
+\frac{\|\delta x\|_2}{\|x\|_2}
 \le
-\kappa(A)
-\frac{\|\delta b\|}{\|b\|}.
+\kappa_2(A)
+\frac{\|\delta b\|_2}{\|b\|_2}.
 \]</div>
 <details class="proof">
 <summary>扰动界的证明</summary>
@@ -4739,22 +4746,22 @@ Ax=b,
 \]</div>
 <p>两式相减得到 <span class="arithmatex">\(A\delta x=\delta b\)</span>，所以</p>
 <div class="arithmatex">\[
-\|\delta x\|
-=\|A^{-1}\delta b\|
-\le\|A^{-1}\|\,\|\delta b\|.
+\|\delta x\|_2
+=\|A^{-1}\delta b\|_2
+\le\|A^{-1}\|_2\,\|\delta b\|_2.
 \]</div>
 <p>同时 <span class="arithmatex">\(b=Ax\)</span> 给出</p>
 <div class="arithmatex">\[
-\|b\|\le\|A\|\,\|x\|,
+\|b\|_2\le\|A\|_2\,\|x\|_2,
 \qquad
-\frac1{\|x\|}\le\frac{\|A\|}{\|b\|}.
+\frac1{\|x\|_2}\le\frac{\|A\|_2}{\|b\|_2}.
 \]</div>
 <p>将两个不等式相乘：</p>
 <div class="arithmatex">\[
-\frac{\|\delta x\|}{\|x\|}
-\le\|A^{-1}\|\,\|A\|
-\frac{\|\delta b\|}{\|b\|}
-=\kappa(A)\frac{\|\delta b\|}{\|b\|}.
+\frac{\|\delta x\|_2}{\|x\|_2}
+\le\|A^{-1}\|_2\,\|A\|_2
+\frac{\|\delta b\|_2}{\|b\|_2}
+=\kappa_2(A)\frac{\|\delta b\|_2}{\|b\|_2}.
 \]</div>
 </details>
 <p>条件数描述问题对输入扰动的敏感性，不等于某个算法的舍入误差。</p>

@@ -4493,9 +4493,9 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <div class="arithmatex">\[J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).\]</div>
 <p><span class="arithmatex">\(Q\in\mathbb{R}^{n\times n}\)</span> 用来罚状态偏差，<span class="arithmatex">\(R\in\mathbb{R}^{m\times m}\)</span> 用来罚输入幅值。所谓 <span class="arithmatex">\(Q\)</span>“半正定”，最小需要理解成对任意状态都有 <span class="arithmatex">\(x^{\top}Qx\ge 0\)</span>；<span class="arithmatex">\(R\)</span>“正定”则意味着只要输入不是零，就有 <span class="arithmatex">\(u^{\top}Ru&gt;0\)</span>。这样两项都只会增加代价，不会出现“偏得更远反而奖励更高”的怪情况。第一项要求系统尽快回到原点，第二项要求执行器别太费力，两者的相对大小决定最终策略。代价能收敛（<span class="arithmatex">\(J&lt;\infty\)</span>）的前提是闭环渐近稳定；若控制器让状态发散，长期平方误差通常会不断累积，这个候选控制显然不会是我们想要的结果。</p>
 <p>为什么偏偏选平方形式？直觉上，偏差从 1 增大到 2 时，平方代价会从 1 增大到 4，所以大偏差会被更重地惩罚；数学上，线性模型与二次代价组合后还能得到解析的线性反馈结构，求解和在线执行都很简单。至于为什么“未来总代价”仍能保持二次形式，下一节会从动态规划一步一步说明，这里不需要提前接受结论。</p>
-<p>一个标量直觉：若 <span class="arithmatex">\(Q=1\)</span>、<span class="arithmatex">\(R=1\)</span>，那么"偏差 1 个单位停留一个采样周期"与"施加 1 个单位输入持续一个采样周期"代价相等；把 <span class="arithmatex">\(R\)</span> 改成 100，控制器会把输入压到约 1/100 的量级，宁可慢慢收敛也不激进。若要表达"远期偏差不那么要紧"，可引入折扣因子 <span class="arithmatex">\(\gamma\in(0,1)\)</span>：</p>
+<p>一个标量直觉：若 <span class="arithmatex">\(Q=1\)</span>、<span class="arithmatex">\(R=1\)</span>，那么“偏差 1 个单位停留一个采样周期”与“施加 1 个单位输入持续一个采样周期”代价相等。把 <span class="arithmatex">\(R\)</span> 改成 100 会降低最优反馈增益，但通常不会恰好把输入除以 100，因为 Riccati 解也随 <span class="arithmatex">\(R\)</span> 改变。若要表达“远期偏差不那么要紧”，可引入折扣因子 <span class="arithmatex">\(\gamma\in(0,1)\)</span>：</p>
 <div class="arithmatex">\[J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),\]</div>
-<p>效果等价于给输入加了一个随时间增长的隐性成本，收敛更快但稳态精度略降。</p>
+<p>折扣同时降低远期状态代价和输入代价的权重。它可经变量缩放转化为另一个 LQR 问题，但不能一般地解释成“只给输入加随时间增长的成本”，也不能无条件推出收敛更快或稳态精度更低。</p>
 <p>在动手调权重之前，先确认 LQR 是否适用于你的问题。它的成立前提可以列成一张清单：</p>
 <ul>
 <li>系统在当前工作范围内可用线性时不变模型近似；</li>
@@ -4595,10 +4595,10 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <h2 id="q-r"><span class="arithmatex">\(Q\)</span> 与 <span class="arithmatex">\(R\)</span> 的权重作用</h2>
 <p><span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 不是数学装饰，它们编码的是"设计者最怕什么"。<span class="arithmatex">\(Q\)</span> 里某个状态的权重越大，控制器越愿意牺牲输入去压这个状态；<span class="arithmatex">\(R\)</span> 越大，控制器越舍不得动执行器。</p>
 <p>一个关键性质是<strong>缩放不变性</strong>：把 <span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 同时乘以正数 <span class="arithmatex">\(\alpha\)</span>，最优增益 <span class="arithmatex">\(K\)</span> 完全不变，因为 Bellman 方程两边同乘 <span class="arithmatex">\(\alpha\)</span> 不改变最优解。所以真正起作用的是比值 <span class="arithmatex">\(Q/R\)</span>，而不是各自的绝对值。因此反复微调绝对值毫无意义，应该直接思考权重之间的相对比例。</p>
-<p>举例：某状态权重 <span class="arithmatex">\(Q_{ii}\)</span> 从 1 提到 100（<span class="arithmatex">\(R\)</span> 不变），等价于把输入代价降到 1/100，控制器会明显更激进；反过来 <span class="arithmatex">\(R\)</span> 从 1 提到 100，位置回正的时间会显著变长。经验上 <span class="arithmatex">\(Q/R\)</span> 每提高约 10 倍，闭环带宽上升、上升时间缩短，但执行器饱和与噪声放大风险同步上升。</p>
+<p>把整个 <span class="arithmatex">\(Q\)</span> 与整个 <span class="arithmatex">\(R\)</span> 同乘同一正数不改变最优策略；但只改某个 <span class="arithmatex">\(Q_{ii}\)</span> 不等价于把整个 <span class="arithmatex">\(R\)</span> 除以同一倍数，它只改变一个状态方向的相对代价。增益、带宽与上升时间必须由具体 <span class="arithmatex">\(A,B,Q,R\)</span> 的 Riccati 解确定，不能用固定“十倍权重对应某个带宽倍数”的规则代替计算。</p>
 <p>对双积分器（状态为位置与速度，输入为加速度）可以给出精确的量化关系：</p>
 <div class="arithmatex">\[\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},\]</div>
-<p>其中 <span class="arithmatex">\(q_1\)</span> 是位置权重、<span class="arithmatex">\(q_2\)</span> 是速度权重、<span class="arithmatex">\(r\)</span> 是输入权重，<span class="arithmatex">\(\omega_n\)</span> 为闭环自然频率、<span class="arithmatex">\(\zeta\)</span> 为阻尼比。取 <span class="arithmatex">\(q_1=1,\ r=0.01,\ q_2=0\)</span>，得 <span class="arithmatex">\(q_1/r=100\)</span>、<span class="arithmatex">\(\omega_n=100^{1/4}\approx 3.16\)</span> rad/s、<span class="arithmatex">\(\zeta\approx 0.71\)</span>（近似临界阻尼，几乎无超调）。若把 <span class="arithmatex">\(q_1\)</span> 提高到 16，则 <span class="arithmatex">\(q_1/r=1600\)</span>、<span class="arithmatex">\(\omega_n\approx 6.3\)</span> rad/s，快速性翻倍。这条公式把"权重比"与"闭环带宽"直接对应起来，是调 <span class="arithmatex">\(Q/R\)</span> 时最有用的手感来源。</p>
+<p>其中 <span class="arithmatex">\(q_1\)</span> 是位置权重、<span class="arithmatex">\(q_2\)</span> 是速度权重、<span class="arithmatex">\(r\)</span> 是输入权重，<span class="arithmatex">\(\omega_n\)</span> 为闭环自然频率、<span class="arithmatex">\(\zeta\)</span> 为阻尼比。取 <span class="arithmatex">\(q_1=1,\ r=0.01,\ q_2=0\)</span>，得 <span class="arithmatex">\(\omega_n\approx3.16\)</span> rad/s、<span class="arithmatex">\(\zeta\approx0.71\)</span>。这不是临界阻尼（临界值为 1），而是约 4.3% 超调的常用折中。该精确关系只属于这里的双积分器模型，不能推广到任意 LQR 系统。</p>
 <table>
 <thead>
 <tr>
@@ -4793,7 +4793,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <li><span class="arithmatex">\(R\)</span> 正定：保证每步的 <span class="arithmatex">\((R+B^{\top}P_i B)^{-1}\)</span> 都可求逆。</li>
 </ul>
 <p>这三条也正是判断"这个系统能不能用 LQR 镇定"的形式化标准。</p>
-<p>"可稳"的意思是系统不可稳的模态都能被输入影响，"可检"的意思是任何不稳定的状态都不会在代价里被完全无视。如果某个发散模态既不受输入控制、又恰好对应 <span class="arithmatex">\(Q\)</span> 中权重为零的状态，那么 Riccati 迭代不会收敛，得到的"解"对应的闭环里那条模态仍在发散——这是设计权重时最隐蔽的坑：漏掉一个必要状态的权重，代价函数表面正常，闭环却可能不稳定。</p>
+<p>“可稳”的意思是系统所有不稳定模态都能被输入影响，“可检”的意思是任何不稳定模态都不会在代价里被完全忽略。如果某个发散模态不受输入控制，任何反馈都无法镇定它；若它又不被 <span class="arithmatex">\(Q\)</span> 检测，某些初始化下 Riccati 迭代甚至可能数值上停住，例如 <span class="arithmatex">\(Q=0,P_0=0\)</span> 时始终有 <span class="arithmatex">\(P_k=0\)</span>，但状态仍可发散。因此“Riccati 迭代收敛”不是系统可稳定的判据，必须直接检查可稳性与可检测性。</p>
 <p>关键在于<strong>递推式里完全没有状态 <span class="arithmatex">\(x\)</span></strong>：<span class="arithmatex">\(P\)</span> 和 <span class="arithmatex">\(K\)</span> 只依赖 <span class="arithmatex">\(A,B,Q,R\)</span> 四个常量矩阵，因此可以在设计阶段离线算好、烧进控制器，运行时不再解任何方程。这正是 LQR 能同时做到"最优"与"实时"的原因。反之，一旦想在运行中改变权重，就必须重新解一次 Riccati 方程，这是自适应 LQR 的主要成本来源。</p>
 <table>
 <thead>
@@ -4883,7 +4883,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <td>纯 LQR</td>
 <td>通常非零</td>
 <td><span class="arithmatex">\(n\)</span></td>
-<td>无静差、对增益误差敏感</td>
+<td>有静差、对增益误差敏感</td>
 </tr>
 <tr>
 <td>LQI</td>

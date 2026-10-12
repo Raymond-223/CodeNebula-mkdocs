@@ -4824,7 +4824,7 @@
 <li>电机绕组从 25 ℃ 升到 80 ℃，磁钢弱了，推力再掉一截。</li>
 </ul>
 <p>这三条还能靠重新标定补救。真正补不了的是第四条：<strong>同样 50% 油门，静止起步和已经在 10 m/s 巡航，接下来一秒发生的事完全不同。</strong> 静态模型里根本没有"现在多快"这一栏，所以它表达不了这件事——这不是精度不够，是<strong>结构</strong>不对。</p>
-<p>那什么时候能用静态近似？看系统的<strong>时间常数</strong> <span class="arithmatex">\(\tau\)</span>（time constant）：输入跳变后，系统走到新稳态 63% 所需的时间。若控制周期 <span class="arithmatex">\(\Delta t \ll \tau\)</span>（经验上 <span class="arithmatex">\(\Delta t&lt;0.1\tau\)</span>），一步之内系统来不及变化多少，静态近似够用；若 <span class="arithmatex">\(\Delta t\)</span> 和 <span class="arithmatex">\(\tau\)</span> 同量级，静态近似就会<strong>系统性低估</strong>响应速度，用它设计的控制器必然过冲。</p>
+<p>那什么时候能用静态近似？关键不是单独比较控制周期，而是比较系统时间常数 <span class="arithmatex">\(\tau\)</span> 与<strong>输入、任务或观测变化的时间尺度</strong> <span class="arithmatex">\(T_{\rm task}\)</span>。当 <span class="arithmatex">\(\tau\ll T_{\rm task}\)</span> 时，系统相对外部变化足够快，每次都近似到达稳态，静态映射才合理；当两者同量级时必须保留动态状态。<span class="arithmatex">\(\Delta t\ll\tau\)</span> 只说明采样足够快，恰恰会看见暂态过程，并不能证明静态模型有效。静态近似的偏差方向也由对象决定，不必然低估响应或造成过冲。</p>
 <p>一个数字：某电机 <span class="arithmatex">\(\tau=50\)</span> ms。</p>
 <table>
 <thead>
@@ -4971,7 +4971,7 @@ m\ddot p+c\dot p+kp=u ,
 0\\1/m
 \end{bmatrix}u .
 \]</div>
-<p>这一步的价值在于它的<strong>一般性</strong>：<span class="arithmatex">\(n\)</span> 阶常微分方程就配 <span class="arithmatex">\(n\)</span> 个状态，取输出及其前 <span class="arithmatex">\(n-1\)</span> 阶导数当状态，任何高阶方程都能压成同一个形状 <span class="arithmatex">\(\dot x=Ax+Bu\)</span>。后面要用的所有工具（极点、可控性、LQR）只认这个形状，不关心你原来是几阶。</p>
+<p>这一步的价值在于它的<strong>一般性</strong>：若一个显式 <span class="arithmatex">\(n\)</span> 阶常微分方程能解出最高阶导数，就可取输出及其前 <span class="arithmatex">\(n-1\)</span> 阶导数作状态，化为一阶系统。含代数约束、不可解出的最高阶项或非光滑关系时得到的可能是微分－代数方程（DAE），不能无条件写成 <span class="arithmatex">\(\dot x=Ax+Bu\)</span>。</p>
 <hr />
 <h2 id="a">六、<span class="arithmatex">\(A\)</span> 的特征值：系统的物理属性</h2>
 <p>把上一节那套 <span class="arithmatex">\(A\)</span> 代进去，先算特征值（eigenvalue），即满足 <span class="arithmatex">\(\det(A-\lambda I)=0\)</span> 的 <span class="arithmatex">\(\lambda\)</span>：</p>
@@ -5269,9 +5269,9 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),\qquad J=[A\ B].
 <td>线性控制器可设计</td>
 </tr>
 <tr>
-<td>临界</td>
-<td>落在虚轴上</td>
-<td>不衰减也不发散</td>
+<td>Lyapunov 稳定但不渐近</td>
+<td>虚轴特征值半单，且其余特征值实部为负</td>
+<td>虚轴模态有界但不衰减</td>
 <td>非线性项可能主导，需谨慎</td>
 </tr>
 <tr>
@@ -5281,9 +5281,15 @@ f(x^{*}+\delta x,u^{*}+\delta u)=J\,\delta+O(\|\delta\|^{2}),\qquad J=[A\ B].
 <td>必须先稳定化再谈性能</td>
 </tr>
 <tr>
-<td>非双曲</td>
-<td>虚轴上且有重根</td>
-<td>线性化不能判定</td>
+<td>虚轴 Jordan 块</td>
+<td>虚轴特征值存在非平凡 Jordan 块</td>
+<td>出现多项式增长，线性系统已不稳定</td>
+<td>不能称为“临界稳定”</td>
+</tr>
+<tr>
+<td>非双曲平衡点</td>
+<td>线性化含实部为零的特征值</td>
+<td>仅凭线性化未必能判定非线性系统</td>
 <td>需高阶展开或非线性分析</td>
 </tr>
 </tbody>
@@ -5322,7 +5328,7 @@ B=\begin{bmatrix}1\\1\end{bmatrix}.
 <p>举个数得出来的例子：<span class="arithmatex">\(A=\begin{bmatrix}-1&amp;0\\0&amp;-2\end{bmatrix}\)</span>、<span class="arithmatex">\(B=\begin{bmatrix}1\\0\end{bmatrix}\)</span>、<span class="arithmatex">\(C=\begin{bmatrix}1&amp;0\end{bmatrix}\)</span>。<span class="arithmatex">\(b_2=0\)</span> 说明模态 <span class="arithmatex">\(-2\)</span> 推不动，<span class="arithmatex">\(c_2=0\)</span> 说明它同时看不见，两个矩阵的秩都只有 1。</p>
 <p><strong>为什么这两条直接决定后面章节能不能用？</strong></p>
 <ul>
-<li>LQR 要求 <span class="arithmatex">\((A,B)\)</span> <strong>可稳（stabilizable）</strong>：不可控的那部分本身已经稳定。反过来，若某个<strong>不稳定</strong>模态不可控，代价泛函 <span class="arithmatex">\(J=\int(x^{T}Qx+u^{T}Ru)\,dt\)</span> 里那一项永远减不下去，<span class="arithmatex">\(J\)</span> 无界，Riccati 方程没有有意义的解。这不是算法不够好，是没有可行解。</li>
+<li>LQR 要求 <span class="arithmatex">\((A,B)\)</span> <strong>可稳（stabilizable）</strong>：不可控的模态必须稳定。若不可控不稳定模态又被 <span class="arithmatex">\(Q\)</span> 检测到，对某些初值其代价会发散，且任何反馈都无法镇定它。若 <span class="arithmatex">\(Q\)</span> 恰好完全不惩罚该模态，代价甚至可能有限而状态仍发散，所以还必须同时要求 <span class="arithmatex">\((Q^{1/2},A)\)</span> 可检测；不能只凭“Riccati 迭代是否收敛”判断物理稳定性。</li>
 <li>状态估计要求 <span class="arithmatex">\((A,C)\)</span> <strong>可检测（detectable）</strong>：不可观的部分本身稳定。否则一个不可观的不稳定模态谁也没见过，估计误差只能一直发散。</li>
 </ul>
 <table>

@@ -4768,7 +4768,7 @@
 </tbody>
 </table>
 <p>最常见的跳过是 <strong>S2 直接到 S4</strong>：控制周期抖动、通信延迟这些在仿真里不存在的问题，会与算法问题同时爆发，导致排查成本成倍上升。</p>
-<p>实时因子是 S2 最关键的量化指标：设单步仿真所需墙钟时间为 <span class="arithmatex">\(t_{\mathrm{wall}}\)</span>、仿真步长为 <span class="arithmatex">\(\Delta t_{\mathrm{sim}}\)</span>，则 <span class="arithmatex">\(\mathrm{RTF} = t_{\mathrm{wall}} / \Delta t_{\mathrm{sim}}\)</span>。要求 <span class="arithmatex">\(\mathrm{RTF} \le 1\)</span> 表示仿真能跟上实时；当 <span class="arithmatex">\(\mathrm{RTF}\)</span> 在 0.8–1.0 之间抖动时，硬件在环的时序会周期性打嗝。</p>
+<p>实时因子沿用前文统一定义：设单步仿真推进时间为 <span class="arithmatex">\(\Delta t_{\mathrm{sim}}\)</span>、所需墙钟时间为 <span class="arithmatex">\(t_{\mathrm{wall}}\)</span>，则 <span class="arithmatex">\(\mathrm{RTF}=\Delta t_{\mathrm{sim}}/t_{\mathrm{wall}}\)</span>。要求 <span class="arithmatex">\(\mathrm{RTF}\ge1\)</span> 才表示平均计算速度能跟上实时；接近 1 时仍需另外检查单步耗时的尾部分布与抖动，平均值达标并不保证每个截止时间都满足。</p>
 <table>
 <thead>
 <tr>
@@ -4779,24 +4779,24 @@
 </thead>
 <tbody>
 <tr>
-<td><span class="arithmatex">\(\le 0.5\)</span></td>
-<td>余量充足</td>
+<td><span class="arithmatex">\(&lt;1\)</span></td>
+<td>平均速度跟不上实时</td>
+<td>不可用于严格实时在环测试</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(1\)</span>–<span class="arithmatex">\(1.1\)</span></td>
+<td>平均达标但余量很小</td>
+<td>仅限短时验证并检查尾部耗时</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(1.1\)</span>–<span class="arithmatex">\(2\)</span></td>
+<td>有一定实时余量</td>
 <td>硬件在环、长时运行</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(0.5\)</span>–<span class="arithmatex">\(0.9\)</span></td>
-<td>可用但有抖动</td>
-<td>短时验证</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(0.9\)</span>–<span class="arithmatex">\(1.0\)</span></td>
-<td>临界</td>
-<td>仅限排查</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(&gt; 1.0\)</span></td>
-<td>跟不上实时</td>
-<td>不可用于在环测试</td>
+<td><span class="arithmatex">\(&gt;2\)</span></td>
+<td>计算明显快于实时</td>
+<td>可留出通信、记录与调度余量</td>
 </tr>
 </tbody>
 </table>

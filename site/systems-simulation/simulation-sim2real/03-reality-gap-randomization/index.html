@@ -4567,7 +4567,7 @@
 <p>目标不是让环境无限困难，而是让策略对<strong>真实系统会发生的变化</strong>不敏感。这一点常被误读，于是出现“把范围开到极大来保证鲁棒”的做法，结果策略学会了一个对所有世界都不出彩的保守行为。</p>
 <p>与域随机化相邻的还有两个思路，值得区分：</p>
 <ul>
-<li><strong>对抗式训练</strong>：把期望换成最坏情况，即优化 <span class="arithmatex">\(\min_\pi \max_\xi J(\pi, \xi)\)</span>。它更严格，但容易陷入极端参数或训练不稳定，实践中通常用固定扰动集做半对抗训练。</li>
+<li><strong>对抗式训练</strong>：若 <span class="arithmatex">\(J\)</span> 是回报，就最大化最坏回报 <span class="arithmatex">\(\max_\pi\min_\xi J(\pi,\xi)\)</span>；若 <span class="arithmatex">\(L=-J\)</span> 是损失，则等价写成 <span class="arithmatex">\(\min_\pi\max_\xi L(\pi,\xi)\)</span>。它更严格，但容易被极端参数主导或训练不稳定，实践中通常限制扰动集并逐步增加难度。</li>
 <li><strong>系统辨识 + 精确仿真</strong>：反过来把 <span class="arithmatex">\(p(\xi)\)</span> 收窄成一个点，靠精确建模取胜。它在被建模得很好的系统上效率最高，代价是泛化边界很窄。</li>
 </ul>
 <p>实际工程里三者经常混用：<strong>能标定的先标定，标定不了的用随机化覆盖，最难的部分用对抗训练兜底。</strong></p>

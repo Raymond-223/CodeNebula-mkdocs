@@ -4507,10 +4507,10 @@ J(\theta)=\mathbb E_{\tau\sim p_\theta}[G_0],
 \qquad
 G_t=\sum_{l=0}^{T-t-1}\gamma^{l}r_{t+l+1}.
 \]</div>
-<p>目标对参数的导数只作用在策略项上，因为 <span class="arithmatex">\(\rho\)</span> 与 <span class="arithmatex">\(T\)</span> 都不含 <span class="arithmatex">\(\theta\)</span>：</p>
+<p>目标对参数的导数只作用在策略项上，因为这里假设初始分布 <span class="arithmatex">\(\rho\)</span> 与环境转移 <span class="arithmatex">\(T\)</span> 都不含 <span class="arithmatex">\(\theta\)</span>。还需假设策略可微、相关期望有限，并且其支持集不会随 <span class="arithmatex">\(\theta\)</span> 以产生边界项的方式突变，才能交换求导与积分并使用下面的对数导数技巧：</p>
 <div class="arithmatex">\[
 \nabla_\theta J(\theta)
-=\mathbb E_{\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t\right].
+=\mathbb E_{\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\gamma^t\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t\right].
 \]</div>
 <p>直观理解很简单：如果一次动作带来较高长期回报，就提高它在类似状态下的概率；如果表现差，就降低它的概率。<span class="arithmatex">\(\nabla_\theta\log\pi_\theta\)</span> 的形式带来一个关键好处——不需要环境转移模型的导数，只需要能从策略和环境采样，因此它是 model-free 的。</p>
 <p>目标的写法会直接影响优化性质，三种常见形式并不等价：</p>
@@ -4534,7 +4534,7 @@ G_t=\sum_{l=0}^{T-t-1}\gamma^{l}r_{t+l+1}.
 <td>折扣回报</td>
 <td><span class="arithmatex">\(\mathbb E[\sum_t\gamma^t r_{t+1}]\)</span></td>
 <td>持续型任务，<span class="arithmatex">\(0&lt;\gamma&lt;1\)</span></td>
-<td><span class="arithmatex">\(\gamma\)</span> 引入偏差，奖励尺度被压缩</td>
+<td>改变了任务目标并压低远期奖励；不是对同一目标的“估计偏差”</td>
 </tr>
 <tr>
 <td>平均奖励</td>
@@ -4555,8 +4555,22 @@ G_t=\sum_{l=0}^{T-t-1}\gamma^{l}r_{t+l+1}.
 <p>把它代回期望，分母的 <span class="arithmatex">\(\pi_\theta\)</span> 恰好与采样概率相消，于是“对概率求导”变成了“对样本加权求平均”。这就是所谓的 score function 技巧，也叫 log-derivative trick。它把不可微的采样过程改写成可微的对数概率加权，从而允许随机策略使用梯度下降。</p>
 <p>由此得到一个只依赖单条轨迹、不需要值函数、也不需要环境模型的估计量，即 REINFORCE 的单样本形式：</p>
 <div class="arithmatex">\[
-\nabla_\theta J(\theta)\approx\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t .
+\nabla_\theta J(\theta)\approx\sum_{t=0}^{T-1}\gamma^t\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,G_t .
 \]</div>
+<details class="proof">
+<summary>从轨迹概率推导策略梯度</summary>
+<p>设有限轨迹 <span class="arithmatex">\(\tau=(s_0,a_0,\ldots,s_T)\)</span> 的概率为
+$<span class="arithmatex">\(p_\theta(\tau)=p(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t).\)</span>$
+环境初始分布与转移核不依赖 <span class="arithmatex">\(\theta\)</span>，故
+$<span class="arithmatex">\(\nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t).\)</span>$
+对 <span class="arithmatex">\(J(\theta)=\mathbb E_\tau[G_0]\)</span> 使用对数导数恒等式，得到
+$<span class="arithmatex">\(\nabla J=\mathbb E_\tau\left[G_0\sum_t\nabla\log\pi_\theta(a_t\mid s_t)\right].\)</span>$
+对固定时刻 <span class="arithmatex">\(t\)</span>，<span class="arithmatex">\(G_0\)</span> 中 <span class="arithmatex">\(t\)</span> 以前的奖励只依赖此前历史。条件于 <span class="arithmatex">\(s_t\)</span> 与此前历史，对当前动作的 score 取期望为零，所以这些过去奖励与第 <span class="arithmatex">\(t\)</span> 个 score 的期望乘积为零。只保留从 <span class="arithmatex">\(t\)</span> 开始的奖励：
+$<span class="arithmatex">\(\sum_{k=t}^{T-1}\gamma^k r_{k+1}=\gamma^tG_t.\)</span>$
+因而
+$<span class="arithmatex">\(\nabla J=\mathbb E\left[\sum_{t=0}^{T-1}\gamma^t\nabla\log\pi_\theta(a_t\mid s_t)G_t\right].\)</span>$
+若改用未归一化的折扣状态占用分布，也可把 <span class="arithmatex">\(\gamma^t\)</span> 吸收到采样分布中；两种记号不能混用。</p>
+</details>
 <p>它的无偏性来自 score function 的三条性质：</p>
 <table>
 <thead>
@@ -4593,9 +4607,9 @@ Q^\pi(s,a)-V^\pi(s)=A^\pi(s,a).
 <p><span class="arithmatex">\(A^\pi(s,a)\)</span> 称为 advantage，表示“这个动作相比当前状态下的平均水平好多少”。由于 score function 的期望为零，对任意 <span class="arithmatex">\(b(s)\)</span> 都有 <span class="arithmatex">\(\mathbb E[\nabla_\theta\log\pi_\theta\cdot b(s)]=0\)</span>，因此 baseline 不引入偏差，只改变方差。</p>
 <p>方差下降的幅度可以定量地看。单个样本的加权项为 <span class="arithmatex">\(g_t=\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,(G_t-b(s_t))\)</span>，若近似认为 score 与回报弱相关，则方差主要由 <span class="arithmatex">\(\mathrm{Var}[G_t-b(s_t)]\)</span> 决定。因此最优 baseline 大致满足</p>
 <div class="arithmatex">\[
-b^*(s)\approx\frac{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\,G\mid s]}{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\mid s]},
+b^*(s)=\frac{\mathbb E[\|\nabla_\theta\log\pi_\theta(a\mid s)\|_2^2\,G\mid s]}{\mathbb E[\|\nabla_\theta\log\pi_\theta(a\mid s)\|_2^2\mid s]},
 \]</div>
-<p>在实践中通常用 <span class="arithmatex">\(b(s)=V^\pi(s)\)</span> 作为近似，此时权重恰好退化为 advantage。</p>
+<p>其中分母非零时公式成立；若 score 在该状态恒为零，baseline 对梯度没有影响。实践中通常用 <span class="arithmatex">\(b(s)=V^\pi(s)\)</span> 作为近似。只有当 <span class="arithmatex">\(G\)</span> 换成条件期望 <span class="arithmatex">\(Q^\pi(s,a)\)</span> 时，<span class="arithmatex">\(Q^\pi-V^\pi\)</span> 才严格等于 advantage；单条轨迹上使用的是它的含噪样本估计。</p>
 <table>
 <thead>
 <tr>
@@ -4632,7 +4646,7 @@ b^*(s)\approx\frac{\mathbb E[(\nabla_\theta\log\pi_\theta)^2\,G\mid s]}{\mathbb 
 </tr>
 </tbody>
 </table>
-<p>失效模式：若 Critic 早期严重不准，<span class="arithmatex">\(G_t-V_\phi(s_t)\)</span> 会出现数值很大但符号错误的权重；更新方向仍然无偏（因为与动作无关的项期望为零），但方差可能不降反升。更隐蔽的问题是把 baseline 与动作采样耦合起来（例如用同批数据内该动作的平均回报做 baseline），这会引入真实偏差，而不只是噪声。</p>
+<p>失效模式：若只是从 Monte Carlo 回报中减去一个与当前动作无关、且在求 Actor 梯度时停止梯度的近似 <span class="arithmatex">\(V_\phi(s)\)</span>，Critic 不准不会改变期望梯度，却可能让方差不降反升。但一般 Actor–Critic 直接用自举 TD 误差或近似优势；函数逼近误差、截断轨迹和不兼容的 Critic 都可能使 Actor 的梯度估计有偏，不能笼统声称“仍然无偏”。把 baseline 与当前动作耦合且不作校正，也会引入偏差。</p>
 <h2 id="-actorcritic">演员－评论家架构（Actor–Critic）</h2>
 <p>Actor–Critic 把两件事拆开：</p>
 <ul>
@@ -4815,12 +4829,7 @@ D_{KL}(\pi_{old}\|\pi_\theta)\approx\frac{1}{2}\,\mathbb E_t[(\rho_t-1)^2],
 \delta_{t+l}=r_{t+l+1}+\gamma V_\phi(s_{t+l+1})-V_\phi(s_{t+l}).
 \]</div>
 <p>因此它的作用不是增加一个新的学习目标，而是<strong>给 PPO/Actor–Critic 提供更平滑的 advantage 估计</strong>。它同时决定了两端的量级：</p>
-<div class="arithmatex">\[
-\mathrm{Bias}\ \text{受}\ (\gamma\lambda)^{H}\ \text{衰减控制},
-\qquad
-\mathrm{Var}\ \text{约随}\ \frac{1-\gamma\lambda}{1-\gamma}\ \text{增长},
-\]</div>
-<p>其中 <span class="arithmatex">\(H\)</span> 是 Critic 误差经自举传入的步数。两个方向相反，因此 <span class="arithmatex">\(\lambda\)</span> 是纯粹的交易旋钮，而不是“越大越好”。</p>
+<p>随着 <span class="arithmatex">\(\lambda\)</span> 增大，估计器通常使用更长的真实奖励序列、减少对 Critic 自举值的依赖，因此常见趋势是自举偏差下降而采样方差上升。但不存在只由 <span class="arithmatex">\((\gamma,\lambda)\)</span> 决定的通用方差比例；奖励相关性、轨迹长度、Critic 误差和截断方式都会改变结果。因此 <span class="arithmatex">\(\lambda\)</span> 是需要用验证数据校准的折中参数，而不是“越大越好”。</p>
 <table>
 <thead>
 <tr>

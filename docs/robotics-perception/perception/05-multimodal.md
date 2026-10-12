@@ -90,6 +90,8 @@ $$
 
 ```python
 def align_pair(cam, lidar, max_gap=0.02):
+    if not lidar.samples:
+        return None
     """Pick the pair of samples closest in time within max_gap seconds."""
     best = None
     for c in cam.samples:

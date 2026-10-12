@@ -4640,7 +4640,7 @@
 </table>
 <p>因此把“响应更快”简单等同于“增益更大”是危险的：提高增益同时改变 <span class="arithmatex">\(\omega_n\)</span> 与 <span class="arithmatex">\(\zeta\)</span>，可能缩短上升时间却把系统推向高振荡区。<strong>性能指标之间是权衡关系，不是可以同时最优的目标列表。</strong></p>
 <h2 id="_5">增益裕度与相位裕度</h2>
-<p>时域指标适合验收，但设计阶段更需要知道“离不稳定还有多远”。对开环传递函数 <span class="arithmatex">\(L(s)\)</span>，闭环为 <span class="arithmatex">\(1/(1+L)\)</span>，不稳定的边界是 <span class="arithmatex">\(L=-1\)</span>。围绕这一点可以定义两个余量：</p>
+<p>时域指标适合验收，但设计阶段更需要知道“离不稳定还有多远”。对单位负反馈开环传递函数 <span class="arithmatex">\(L(s)\)</span>，参考输入到输出的互补灵敏度为 <span class="arithmatex">\(T=L/(1+L)\)</span>，参考输入到误差的灵敏度为 <span class="arithmatex">\(S=1/(1+L)\)</span>；二者分母相同，所以特征边界都与 <span class="arithmatex">\(1+L=0\)</span>、即 <span class="arithmatex">\(L=-1\)</span> 有关。围绕这一点可以定义两个余量：</p>
 <ul>
 <li><strong>增益穿越频率</strong> <span class="arithmatex">\(\omega_c\)</span>：<span class="arithmatex">\(\lvert L(j\omega)\rvert=1\)</span> 处的频率；</li>
 <li><strong>相位裕度 PM</strong>：在 <span class="arithmatex">\(\omega_c\)</span> 处，相位距离 <span class="arithmatex">\(-180^\circ\)</span> 还差多少；</li>

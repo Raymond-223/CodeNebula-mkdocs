@@ -4570,12 +4570,19 @@ x_{k+1}=g(x_k).
 <li><span class="arithmatex">\(d(x,z)\le d(x,y)+d(y,z)\)</span>。</li>
 </ol>
 <p>在 <span class="arithmatex">\(\mathbb R^n\)</span> 中，<span class="arithmatex">\(d(x,y)=\|x-y\|_2\)</span> 是常用距离。</p>
-<p>度量空间（metric space）<span class="arithmatex">\((X,d)\)</span> 称为完备的（complete），如果每个柯西数列（Cauchy sequence）都收敛到 <span class="arithmatex">\(X\)</span> 中的点。开区间 <span class="arithmatex">\((0,1)\)</span> 不完备，因为</p>
+<p>在一般度量空间中，<span class="arithmatex">\(x_k\to x\)</span> 的含义是：对每个 <span class="arithmatex">\(\varepsilon&gt;0\)</span>，存在 <span class="arithmatex">\(N\)</span>，使 <span class="arithmatex">\(k\ge N\)</span> 时 <span class="arithmatex">\(d(x_k,x)&lt;\varepsilon\)</span>。数列是柯西数列，表示：对每个 <span class="arithmatex">\(\varepsilon&gt;0\)</span>，存在 <span class="arithmatex">\(N\)</span>，使 <span class="arithmatex">\(m,n\ge N\)</span> 时 <span class="arithmatex">\(d(x_m,x_n)&lt;\varepsilon\)</span>。</p>
+<p>度量空间（metric space）<span class="arithmatex">\((X,d)\)</span> 称为完备的（complete），如果每个柯西数列都收敛到 <span class="arithmatex">\(X\)</span> 中的点。开区间 <span class="arithmatex">\((0,1)\)</span> 不完备，因为</p>
 <div class="arithmatex">\[
 x_k=\frac1{k+1},\qquad k\ge1,
 \]</div>
 <p>的每一项都属于 <span class="arithmatex">\((0,1)\)</span>，它是柯西数列，但极限 <span class="arithmatex">\(0\)</span> 不在该区间。</p>
 <p><strong>命题。</strong> 欧几里得空间 <span class="arithmatex">\(\mathbb R^n\)</span> 完备；完备度量空间的每个闭子集在继承距离下仍然完备。</p>
+<p>这里采用闭集的序列定义：<span class="arithmatex">\(F\subset X\)</span> 是闭集，当且仅当 <span class="arithmatex">\(F\)</span> 中每个收敛数列的极限仍属于 <span class="arithmatex">\(F\)</span>。在度量空间中，这与“补集是开集”的定义等价。</p>
+<details class="proof">
+<summary>闭集两种定义等价</summary>
+<p>若 <span class="arithmatex">\(F^c\)</span> 开而 <span class="arithmatex">\(x_k\in F\)</span> 收敛到 <span class="arithmatex">\(x\notin F\)</span>，则存在 <span class="arithmatex">\(r&gt;0\)</span> 使开球 <span class="arithmatex">\(B(x,r)\subset F^c\)</span>。收敛性却保证充分大的 <span class="arithmatex">\(k\)</span> 有 <span class="arithmatex">\(x_k\in B(x,r)\)</span>，矛盾。</p>
+<p>反过来，若 <span class="arithmatex">\(F\)</span> 包含其中收敛数列的极限，而 <span class="arithmatex">\(F^c\)</span> 不是开集，则存在 <span class="arithmatex">\(x\in F^c\)</span>，使每个 <span class="arithmatex">\(B(x,1/k)\)</span> 都含有某个 <span class="arithmatex">\(x_k\in F\)</span>。这样 <span class="arithmatex">\(x_k\to x\)</span>，却有 <span class="arithmatex">\(x\notin F\)</span>，同样矛盾。</p>
+</details>
 <details class="proof">
 <summary>证明</summary>
 <p>若 <span class="arithmatex">\((x_k)\)</span> 是 <span class="arithmatex">\(\mathbb R^n\)</span> 中的柯西数列，则每个坐标列都是实数柯西数列。由第零章采用的实数完备性，每个坐标都收敛。把各坐标极限组成 <span class="arithmatex">\(x\in\mathbb R^n\)</span>，有限个坐标误差同时趋于零，故 <span class="arithmatex">\(\|x_k-x\|_2\to0\)</span>。所以 <span class="arithmatex">\(\mathbb R^n\)</span> 完备。</p>
@@ -4670,7 +4677,7 @@ d(x_m,x_n)
 <div class="arithmatex">\[
 |d(x_m,x_n)-d(x^*,x_n)|\le d(x_m,x^*)\to0.
 \]</div>
-<p>因而令 <span class="arithmatex">\(m\to\infty\)</span>，便得</p>
+<p>上式是度量版反三角不等式；它由三角不等式分别写成 <span class="arithmatex">\(d(x_m,x_n)\le d(x_m,x^*)+d(x^*,x_n)\)</span> 和交换 <span class="arithmatex">\(x_m,x^*\)</span> 后合并得到。因而令 <span class="arithmatex">\(m\to\infty\)</span>，便得</p>
 <div class="arithmatex">\[
 d(x_n,x^*)\le\frac{q^n}{1-q}d(x_1,x_0).
 \]</div>
@@ -4737,7 +4744,7 @@ h(x)=g(x)-x.
 </details>
 <p>若 <span class="arithmatex">\(|g'(x^*)|&gt;1\)</span>，不动点通常是排斥的（repelling）。若 <span class="arithmatex">\(|g'(x^*)|=1\)</span>，一阶判据没有结论，必须检查更高阶项。</p>
 <h2 id="_7">向量压缩映射</h2>
-<p><strong>定理。</strong> 设 <span class="arithmatex">\(D\subset\mathbb R^n\)</span> 非空、闭且凸，<span class="arithmatex">\(g:D\to D\)</span> 连续可微（continuously differentiable）。若欧几里得诱导范数下</p>
+<p><strong>定理。</strong> 设 <span class="arithmatex">\(D\subset\mathbb R^n\)</span> 非空、闭且凸，<span class="arithmatex">\(g\)</span> 定义在包含 <span class="arithmatex">\(D\)</span> 的开集上并连续可微，且 <span class="arithmatex">\(g(D)\subset D\)</span>。若欧几里得诱导范数下</p>
 <div class="arithmatex">\[
 \sup_{x\in D}\|J_g(x)\|_2\le q&lt;1,
 \]</div>

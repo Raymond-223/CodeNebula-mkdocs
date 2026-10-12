@@ -4502,7 +4502,7 @@
 <p>如果摩擦系数、传感噪声或负载发生小变化，系统仍能保持可接受性能，就可以说它对这些变化较鲁棒。</p>
 <p>鲁棒性一定要相对于<strong>明确扰动范围</strong>来讨论。“对所有情况都鲁棒”不是有意义的工程结论。工程上通常写成“扰动集合 <span class="arithmatex">\(\Delta\)</span> 内的最差性能”，即</p>
 <div class="arithmatex">\[\min_{\delta\in\Delta} J(\theta,\delta),\]</div>
-<p>其中 <span class="arithmatex">\(\theta\)</span> 是设计参数、<span class="arithmatex">\(\delta\)</span> 是环境参数。这个写法有两个直接后果：扰动集合必须有界且可枚举来源，否则最差性能没有意义；性能下降要用同一个任务指标衡量，不能换成“看起来还行”。</p>
+<p>其中 <span class="arithmatex">\(\theta\)</span> 是设计参数、<span class="arithmatex">\(\delta\)</span> 是环境参数。扰动集不必在数学上有界：某些无界集合上的最差值仍有限且能取得；但集合必须有清楚的物理或统计含义，并保证内层优化良定义。只有当 <span class="arithmatex">\(J\)</span> 沿某个允许的无界扰动方向趋于 <span class="arithmatex">\(-\infty\)</span> 等情形时，最坏性能才会退化。性能下降还必须用同一个任务指标衡量。</p>
 <table>
 <thead>
 <tr>
@@ -4542,12 +4542,28 @@
 <h2 id="_2">风险关注失败后果，而不只是平均值</h2>
 <p>两个策略平均回报都为 100：一个几乎总在 95–105，另一个大多数时候很好，但极少数情况得到 -500。平均值相近，风险却完全不同。</p>
 <p>安全任务因此需要同时看尾部失败、最大损失、碰撞率等指标，而不是只报告 mean reward。用一个非对称损失函数可以把这件事写成</p>
-<div class="arithmatex">\[J_\text{risk} = \mathbb{E}[L(s,a)] = \underbrace{L_\text{mild}}_{\text{通常可接受}} + \underbrace{\lambda \sum_i p_i L_i}_{\text{罕见但不可接受}},\]</div>
+<div class="arithmatex">\[J_\text{weighted}=\underbrace{L_\text{mild}}_{\text{通常可接受}}+\underbrace{\lambda\sum_i p_iL_i}_{\text{人为加权的罕见损失}}.\]</div>
 <p>当 <span class="arithmatex">\(\lambda\)</span> 远大于 1 时，罕见事件在目标函数中被显著放大。但要注意：<strong>用一个很大的惩罚系数并不等于真的避免了它</strong>，它只是改变了优化偏好，并不改变策略在分布外行为失控的可能性。</p>
 <h2 id="varcvar">风险价值（VaR）与条件风险价值（CVaR）</h2>
 <p>只报平均值会把风险稀释掉。金融与安全领域常用的两个尾部度量可以直接搬到机器人系统上。设任务损失 <span class="arithmatex">\(L\)</span> 为随机变量，置信水平 <span class="arithmatex">\(\alpha\in(0,1)\)</span>：</p>
-<div class="arithmatex">\[\mathrm{VaR}_\alpha(L)=\inf\{\ell : \Pr(L\le \ell)\ge \alpha\}, \qquad \mathrm{CVaR}_\alpha(L)=\mathbb{E}\big[L \mid L\ge \mathrm{VaR}_\alpha(L)\big].\]</div>
-<p><span class="arithmatex">\(\mathrm{VaR}\)</span> 是分位点，<span class="arithmatex">\(\mathrm{CVaR}\)</span> 是“超过分位点之后的平均损失”。两者最关键的区别在于可优化性：</p>
+<div class="arithmatex">\[\mathrm{VaR}_\alpha(L)=\inf\{\ell : \Pr(L\le \ell)\ge \alpha\},\]</div>
+<div class="arithmatex">\[\mathrm{CVaR}_\alpha(L)=\min_{t\in\mathbb R}\left[t+\frac{1}{1-\alpha}\mathbb E(L-t)_+\right],\qquad (z)_+=\max(z,0).\]</div>
+<p><span class="arithmatex">\(\mathrm{VaR}\)</span> 是分位点。对连续且在分位点没有概率质量的分布，<span class="arithmatex">\(\mathrm{CVaR}\)</span> 可理解成最差 <span class="arithmatex">\(1-\alpha\)</span> 尾部的平均损失；有原子时必须只取分位点上的适量概率质量，上面的辅助变量公式仍然有效。凸性也不是指标名称自动带来的：只有当每个随机场景下的损失关于决策变量是凸函数时，期望和 CVaR 才保持凸。</p>
+<details class="proof">
+<summary>辅助变量公式为何得到尾部平均</summary>
+<p>记
+$<span class="arithmatex">\(\phi(t)=t+\frac{1}{1-\alpha}\mathbb E[(L-t)_+].\)</span>$
+若 <span class="arithmatex">\(L\)</span> 的分布连续，在可微点有
+$<span class="arithmatex">\(\phi'(t)=1-\frac{\mathbb P(L&gt;t)}{1-\alpha}.\)</span>$
+极小点满足 <span class="arithmatex">\(\mathbb P(L&gt;t)=1-\alpha\)</span>，所以 <span class="arithmatex">\(t=\operatorname{VaR}_\alpha(L)\)</span>。代回并记 <span class="arithmatex">\(q=t\)</span>：
+$<span class="arithmatex">\(\begin{aligned}
+\phi(q)
+&amp;=q+\frac{1}{1-\alpha}\mathbb E[(L-q)\mathbf1_{L&gt;q}]\\
+&amp;=\frac{1}{1-\alpha}\mathbb E[L\mathbf1_{L&gt;q}]
+ =\mathbb E[L\mid L&gt;q].
+\end{aligned}\)</span>$
+若分位点有概率原子，<span class="arithmatex">\(\phi\)</span> 在该点不可微，极小条件改用左右导数；公式会自动从分位点原子中取恰好需要的概率质量，所以仍比简单条件期望定义可靠。样本情形把期望替换成平均，并引入变量 <span class="arithmatex">\(t\)</span> 与逐样本松弛量，便得到可计算的凸优化形式。</p>
+</details>
 <table>
 <thead>
 <tr>
@@ -4562,7 +4578,7 @@
 <tr>
 <td>均值</td>
 <td>平均表现</td>
-<td>是</td>
+<td>损失逐场景凸时为凸</td>
 <td>高</td>
 <td>常规性能优化</td>
 </tr>
@@ -4583,7 +4599,7 @@
 <tr>
 <td><span class="arithmatex">\(\mathrm{CVaR}_\alpha\)</span></td>
 <td>最差 5% 的平均</td>
-<td>凸</td>
+<td>损失逐场景凸时为凸</td>
 <td>高</td>
 <td>安全约束、风险敏感优化</td>
 </tr>
@@ -4626,7 +4642,9 @@
 </tr>
 </tbody>
 </table>
-<p>当多个部件串联（任一失效即系统失效）时，失效率相加：<span class="arithmatex">\(\lambda_\text{sys}=\sum_i \lambda_i\)</span>。这说明<strong>系统可靠度由最不可靠的环节主导</strong>，堆叠更多部件只会降低而不是提高可靠性——除非引入冗余，这属于 <a href="../04-fault-tolerance/">Fault Detection &amp; Tolerance</a> 讨论的范围。</p>
+<p>若各部件失效时间相互独立、都服从常失效率的指数分布，且任一部件失效即系统失效，则
+$<span class="arithmatex">\(R_{\mathrm{sys}}(t)=\prod_i e^{-\lambda_i t}=e^{-(\sum_i\lambda_i)t},\)</span>$
+所以 <span class="arithmatex">\(\lambda_\text{sys}=\sum_i\lambda_i\)</span>。相关失效、共因失效或非常失效率模型不能直接套用该式。串联系统增加必需部件会降低可靠性；引入冗余则是不同的系统结构。</p>
 <h2 id="_4">风险指标必须和任务损失对应</h2>
 <p>机器人碰撞和晚到 5 秒不应被放在同一个简单平均分里。前者可能是不可接受安全事件，后者只是性能下降。</p>
 <p>因此评估时应把<strong>安全底线指标</strong>和<strong>性能优化指标</strong>分开：</p>
@@ -4709,7 +4727,8 @@
 <p>一个常见的陷阱是<strong>风险转移</strong>：通过提高速度缩短任务时间，安全性指标却因为制动距离变长而恶化。如果两者被折叠成一个加权分数，这种交换会被平均值完全掩盖。</p>
 <h2 id="_8">鲁棒优化与最坏情况</h2>
 <p>除了报告指标，还需要在设计阶段就把“怕什么”写进目标函数。三种常见表述对应三种不同的风险偏好：</p>
-<div class="arithmatex">\[\max_\theta \ \mathbb{E}_{\delta\sim\mathcal{D}}[J(\theta,\delta)], \qquad \max_\theta \ \min_{\delta\in\Delta} J(\theta,\delta), \qquad \max_\theta \ \mathrm{CVaR}_\alpha[J(\theta,\delta)].\]</div>
+<div class="arithmatex">\[\max_\theta \ \mathbb{E}_{\delta\sim\mathcal{D}}[J(\theta,\delta)], \qquad \max_\theta \ \min_{\delta\in\Delta} J(\theta,\delta), \qquad \min_\theta \ \mathrm{CVaR}_\alpha[L(\theta,\delta)].\]</div>
+<p>第三个目标用的是损失 <span class="arithmatex">\(L=-J\)</span> 的上尾 CVaR；等价地也可最大化收益的下尾平均，但必须明确采用下尾定义。直接最大化收益的上尾 CVaR 只奖励最好的一小部分结果，不能控制坏结果。</p>
 <table>
 <thead>
 <tr>

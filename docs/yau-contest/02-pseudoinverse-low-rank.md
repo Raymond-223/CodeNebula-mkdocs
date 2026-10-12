@@ -45,6 +45,15 @@ $$
 
     同理 $A^+AA^+=A^+$。而 $U_rU_r^T$ 与 $V_rV_r^T$ 都是对称矩阵，所以另外两个彭若斯方程也成立。
 
+??? proof "满足四个方程的矩阵唯一"
+
+    设 $X$ 是任意满足四式的矩阵，令 $Y=V^TXU$，并按秩 $r$ 分块。把 $A=U\Sigma V^T$ 代入四式，相当于让 $Y$ 与
+
+    $$\Sigma=\begin{pmatrix}D&0\\0&0\end{pmatrix},
+    \qquad D=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$$
+
+    满足同样四式。由 $\Sigma Y\Sigma=\Sigma$ 得 $DY_{11}D=D$，所以 $Y_{11}=D^{-1}$。由 $\Sigma Y$ 对称，右上块 $DY_{12}$ 必为零，故 $Y_{12}=0$；由 $Y\Sigma$ 对称，同理 $Y_{21}=0$。最后 $Y\Sigma Y=Y$ 的右下块给出 $Y_{22}=0$。因此 $Y=\Sigma^+$，从而 $X=V\Sigma^+U^T=A^+$。四个方程唯一刻画伪逆。
+
 前者是到 $\operatorname{Col}(A)$ 的正交投影，后者是到 $\operatorname{Col}(A^T)$ 的正交投影。
 
 ### 满秩公式
@@ -216,13 +225,13 @@ $$
 
 当 $A$ 是可逆方阵时，这也等于 $\|A\|_2\|A^{-1}\|_2$。
 
-**命题。** 对可逆方阵的线性系统 $Ax=b$，设 $b\ne0$。若只有右端发生小扰动 $\delta b$，则
+**命题。** 对可逆方阵的线性系统 $Ax=b$，设 $b\ne0$。若矩阵 $A$ 不变、只有右端发生扰动 $\delta b$，则下式专指二范数：
 
 $$
-\frac{\|\delta x\|}{\|x\|}
+\frac{\|\delta x\|_2}{\|x\|_2}
 \le
-\kappa(A)
-\frac{\|\delta b\|}{\|b\|}.
+\kappa_2(A)
+\frac{\|\delta b\|_2}{\|b\|_2}.
 $$
 
 ??? proof "扰动界的证明"
@@ -245,26 +254,26 @@ $$
     两式相减得到 $A\delta x=\delta b$，所以
 
     $$
-    \|\delta x\|
-    =\|A^{-1}\delta b\|
-    \le\|A^{-1}\|\,\|\delta b\|.
+    \|\delta x\|_2
+    =\|A^{-1}\delta b\|_2
+    \le\|A^{-1}\|_2\,\|\delta b\|_2.
     $$
 
     同时 $b=Ax$ 给出
 
     $$
-    \|b\|\le\|A\|\,\|x\|,
+    \|b\|_2\le\|A\|_2\,\|x\|_2,
     \qquad
-    \frac1{\|x\|}\le\frac{\|A\|}{\|b\|}.
+    \frac1{\|x\|_2}\le\frac{\|A\|_2}{\|b\|_2}.
     $$
 
     将两个不等式相乘：
 
     $$
-    \frac{\|\delta x\|}{\|x\|}
-    \le\|A^{-1}\|\,\|A\|
-    \frac{\|\delta b\|}{\|b\|}
-    =\kappa(A)\frac{\|\delta b\|}{\|b\|}.
+    \frac{\|\delta x\|_2}{\|x\|_2}
+    \le\|A^{-1}\|_2\,\|A\|_2
+    \frac{\|\delta b\|_2}{\|b\|_2}
+    =\kappa_2(A)\frac{\|\delta b\|_2}{\|b\|_2}.
     $$
 
 条件数描述问题对输入扰动的敏感性，不等于某个算法的舍入误差。

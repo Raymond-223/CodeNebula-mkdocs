@@ -4922,7 +4922,7 @@
 <p>这一章的四件事你在生活里都干过：把好几个数绑在一起看、量"差了多少"、按同一套规则同时改好几个数、以及"只挪一点点，结果会变多少"。读完你应该能自己推出三件事——为什么工程上几乎不"解方程"而是"求最近似解"、为什么残差必须垂直于模型的列空间、以及为什么"步长越小越准"一定会在某个地方反转。</p>
 </blockquote>
 <p><img alt="线性代数与微积分知识地图" src="../../../assets/diagrams/linear-algebra-calculus.svg" /></p>
-<p>后面的控制理论、机器人学、SLAM、优化和强化学习，用的是同一套骨架：用向量表示状态、用矩阵表示映射、用导数表示"在工作点附近近似成线性"。所以这一章不追求课程式的完备证明，只带着你把每个工具<strong>为什么被迫存在</strong>推一遍。读的时候随时问自己一句：眼前这个对象是标量、向量，还是一个映射？</p>
+<p>后面的控制理论、机器人学、SLAM、优化和强化学习，用的是同一套骨架：用向量表示状态、用矩阵表示映射、用导数表示“在工作点附近近似成线性”。本章按首次使用顺序建立定义、条件和证明；需要较长论证的内容统一放在默认折叠的 proof 栏中。读的时候随时判断：眼前对象是标量、向量，还是映射？</p>
 <hr />
 <h2 id="_1">一、向量及其几何意义</h2>
 <p>车载导航报位置时你不会说"横着是 3，另外竖着是 4"，你会说"我在 (3,4)"。因为这两个数<strong>必须一起看</strong>：单独说"3"没有任何意义，它可以是任何一条线上的任何一点。当你把几个数写成一个整体、并且只允许整组一起参与运算时，你就造出了一个<strong>向量</strong>（vector）。这里的"几个数"的个数，就叫<strong>维数</strong>（dimension）。</p>
@@ -4956,8 +4956,8 @@ x=\begin{bmatrix}p_x &amp; p_y &amp; v &amp; \theta\end{bmatrix}^\top .
 <tr>
 <td>先取绝对值再求和</td>
 <td><span class="arithmatex">\(L_1\)</span> 范数</td>
-<td><span class="arithmatex">\(\|x\|_1=\sum_i \|x_i\|\)</span></td>
-<td>只看总量，不在乎摊在几个方向上</td>
+<td>$|x|_1=\sum_i</td>
+<td>x_i</td>
 </tr>
 <tr>
 <td>先平方再求和再开方</td>
@@ -4968,8 +4968,8 @@ x=\begin{bmatrix}p_x &amp; p_y &amp; v &amp; \theta\end{bmatrix}^\top .
 <tr>
 <td>只看最大的那个分量</td>
 <td><span class="arithmatex">\(L_\infty\)</span> 范数</td>
-<td><span class="arithmatex">\(\|x\|_\infty=\max_i \|x_i\|\)</span></td>
-<td>只关心最坏分量，其余全不管</td>
+<td>$|x|_\infty=\max_i</td>
+<td>x_i</td>
 </tr>
 </tbody>
 </table>
@@ -5093,7 +5093,11 @@ A^\top r=1\cdot0.2143+2\cdot0.4286+3\cdot(-0.3571)\approx0 .
 <div class="arithmatex">\[
 P=UU^\top,\qquad P^2=UU^\top UU^\top=UU^\top=P,\qquad P(I-P)=0 .
 \]</div>
-<p><span class="arithmatex">\(P^2=P\)</span> 是"已经落在子空间里，再投影一次也不再改动"的代数表达；<span class="arithmatex">\(P(I-P)=0\)</span> 说明"子空间内部分"与"垂直部分"彼此正交，于是任意向量都能唯一分解成 <span class="arithmatex">\(b=Pb+(I-P)b\)</span>，两块满足勾股关系 <span class="arithmatex">\(\|b\|_2^2=\|Pb\|_2^2+\|(I-P)b\|_2^2\)</span>。</p>
+<p><span class="arithmatex">\(P^2=P\)</span> 是“已经落在子空间里，再投影一次也不再改动”的代数表达。仅有 <span class="arithmatex">\(P(I-P)=0\)</span> 只能说明两个算子复合为零，不能推出向量正交；还要使用 <span class="arithmatex">\(P^T=P\)</span>：</p>
+<div class="arithmatex">\[
+(Pb)^T(I-P)b=b^TP^T(I-P)b=b^TP(I-P)b=0.
+\]</div>
+<p>因此任意向量都能唯一分解成 <span class="arithmatex">\(b=Pb+(I-P)b\)</span>，两块满足勾股关系。</p>
 <p>三维手上过一遍：取 <span class="arithmatex">\(u_1=(1,0,0)^\top\)</span>、<span class="arithmatex">\(u_2=(0,1,0)^\top\)</span>（它们张成 <span class="arithmatex">\(xy\)</span> 平面），对 <span class="arithmatex">\(b=(1,2,3)^\top\)</span> 投影，</p>
 <div class="arithmatex">\[
 Pb=u_1(u_1^\top b)+u_2(u_2^\top b)=1\cdot u_1+2\cdot u_2=(1,2,0)^\top ,
@@ -5101,8 +5105,8 @@ Pb=u_1(u_1^\top b)+u_2(u_2^\top b)=1\cdot u_1+2\cdot u_2=(1,2,0)^\top ,
 <p>残差 <span class="arithmatex">\(r=(0,0,3)^\top\)</span>，长度 3，恰好等于 <span class="arithmatex">\(b\)</span> 到该平面的垂直距离。勾股也成立：<span class="arithmatex">\(1+4+9=14=5+9\)</span>。</p>
 <p>搬回估计问题里：列空间是"模型能解释的全部方向"，投影是这个方向上离数据最近的那一点，残差是模型<strong>永远解释不了</strong>的部分。由此得到两条能直接用的工程结论：</p>
 <ul>
-<li><strong>加更多观测量一定不会让最小二乘变差。</strong> 因为每加一个观测，列空间只会变大、永远不小；<span class="arithmatex">\(b\)</span> 到这个更大空间的垂直距离单调不增。这就是多传感器融合的几何理由。</li>
-<li><strong>正交分解保证"能量"守恒</strong>，拟合值与残差的平方和相加等于数据总平方和——这正是回归里 <span class="arithmatex">\(R^2\)</span> 的定义来源。</li>
+<li><strong>增加特征列与增加观测行必须区分。</strong> 对固定数据向量 <span class="arithmatex">\(b\)</span> 增加模型列，会扩大同一环境空间里的列空间，因此最优残差不会增加；追加观测则增加矩阵的行并改变残差维数，旧观测上的拟合可能改善或变差，而包含新观测的残差平方和不会因此自动下降。</li>
+<li><strong>正交分解给出平方范数分解。</strong> <span class="arithmatex">\(\|b\|_2^2=\|Pb\|_2^2+\|(I-P)b\|_2^2\)</span>。回归中的 <span class="arithmatex">\(R^2\)</span> 通常用围绕样本均值的总平方和；只有数据已中心化或模型包含截距时，才能直接把这条投影分解解释为标准 <span class="arithmatex">\(R^2\)</span> 分解。</li>
 </ul>
 <hr />
 <h2 id="_7">六、导数与变化率</h2>
@@ -5122,7 +5126,7 @@ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad f(x+h)\approx f(x)+f'(x)h .
 <li><strong>截断误差</strong>：泰勒展开说真实误差约 <span class="arithmatex">\(M_2h/2\)</span>，随 <span class="arithmatex">\(h\)</span> 线性变小；</li>
 <li><strong>舍入误差</strong>：<span class="arithmatex">\(f(x+h)-f(x)\)</span> 是两个接近的数相减，浮点表示的有效位会大量相消，相对误差约 <span class="arithmatex">\(u/h\)</span>（<span class="arithmatex">\(u\approx2\times10^{-16}\)</span> 是机器精度），随 <span class="arithmatex">\(h\)</span> 变小而<strong>变大</strong>。</li>
 </ol>
-<p>两者相加约等于 <span class="arithmatex">\(u/h+M_2h/2\)</span>，对 <span class="arithmatex">\(h\)</span> 求最小值得最优步长 <span class="arithmatex">\(h\approx\sqrt{u}\approx10^{-8}\)</span>，此时误差也只能到 <span class="arithmatex">\(10^{-8}\)</span> 量级；用中心差分 <span class="arithmatex">\((f(x+h)-f(x-h))/(2h)\)</span> 精度提到 <span class="arithmatex">\(h^2\)</span> 阶，最优 <span class="arithmatex">\(h\approx u^{1/3}\approx6\times10^{-6}\)</span>。而一旦 <span class="arithmatex">\(h\)</span> 取到 <span class="arithmatex">\(10^{-16}\)</span>，<span class="arithmatex">\(x+h\)</span> 在浮点下就等于 <span class="arithmatex">\(x\)</span>，分子变成精确的 0，<strong>导数被算成 0</strong>。第十一节的第二个实验会把这条曲线扫出来。</p>
+<p>若函数值尺度为 <span class="arithmatex">\(F\)</span>，误差模型更准确地写成 <span class="arithmatex">\(c_1uF/h+c_2M_2h\)</span>，其最优步长为 <span class="arithmatex">\(h\asymp\sqrt{uF/M_2}\)</span>；中心差分还依赖三阶导数尺度，得到立方根量级。<span class="arithmatex">\(\sqrt u\)</span> 与 <span class="arithmatex">\(u^{1/3}\)</span> 只是变量、函数和导数都在单位量级时的经验值，并非所有函数共用的固定步长。机器数间距还随 <span class="arithmatex">\(|x|\)</span> 改变，不能把“<span class="arithmatex">\(10^{-16}\)</span> 时一定有 <span class="arithmatex">\(x+h=x\)</span>”当成与 <span class="arithmatex">\(x\)</span> 无关的结论。</p>
 <p>这也是自动微分（automatic differentiation）优于手工差分的根本原因：它算的是解析的链式法则，根本不经过这一步相减。</p>
 <hr />
 <h2 id="gradient-jacobian-hessian">七、梯度、雅可比矩阵（Jacobian）与海森矩阵（Hessian）</h2>
@@ -5132,7 +5136,7 @@ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h},\qquad f(x+h)\approx f(x)+f'(x)h .
 \nabla f=\begin{bmatrix}\partial f/\partial x_1\\ \vdots\\ \partial f/\partial x_n\end{bmatrix},\qquad
 f(x+\delta)\approx f(x)+\nabla f^\top\delta .
 \]</div>
-<p>梯度的几何含义很具体：它是函数增长最快的方向。沿 <span class="arithmatex">\(\delta\)</span> 的方向导数在 <span class="arithmatex">\(\delta\)</span> 与 <span class="arithmatex">\(\nabla f\)</span> 同向时取最大值 <span class="arithmatex">\(\|\nabla f\|_2\)</span>，垂直时为零。所以 <span class="arithmatex">\(\|\nabla f\|\)</span> 本身就是"当前有多陡"的指标，趋近最优解时它趋于零——这就是很多优化器拿 <span class="arithmatex">\(\|\nabla f\|\le\varepsilon\)</span> 当收敛判据的原因。</p>
+<p>在<strong>欧几里得范数下且限制 <span class="arithmatex">\(\|\delta\|_2=1\)</span></strong>时，方向导数 <span class="arithmatex">\(\nabla f^T\delta\)</span> 由柯西－施瓦茨不等式在 <span class="arithmatex">\(\delta=\nabla f/\|\nabla f\|_2\)</span> 处取最大值；梯度为零时没有唯一最陡方向。换成其他范数，最陡方向由相应对偶范数决定。<span class="arithmatex">\(\|\nabla f\|\)</span> 小只是驻点判据，非凸问题中也可能是鞍点。</p>
 <h3 id="72-jacobian">7.2 向量输入与向量输出：雅可比矩阵（Jacobian）</h3>
 <p>设 <span class="arithmatex">\(y=f(x)\)</span>，<span class="arithmatex">\(x\in\mathbb R^n\)</span>，<span class="arithmatex">\(y\in\mathbb R^m\)</span>。此时"变化率"是一个 <span class="arithmatex">\(m\times n\)</span> 的矩阵，叫 <strong>Jacobian</strong>：</p>
 <div class="arithmatex">\[
@@ -5155,7 +5159,7 @@ x=\cos\theta_1+\cos(\theta_1+\theta_2),\qquad y=\sin\theta_1+\sin(\theta_1+\thet
 J=\begin{bmatrix}-1 &amp; -1\\ 1 &amp; 0\end{bmatrix}.
 \]</div>
 <p>现在验证它"能不能用"：让第一个关节多转 <span class="arithmatex">\(\Delta q=(0.01,\,0)\)</span> rad，Jacobian 预测末端位移 <span class="arithmatex">\(\Delta x\approx J\Delta q=(-0.01,\,+0.01)\)</span>。真切到 <span class="arithmatex">\((\theta_1,\theta_2)=(0.01,\ \pi/2)\)</span> 算一次：末端约在 <span class="arithmatex">\((0.98995,\ 1.00995)\)</span>，实际位移是 <span class="arithmatex">\((-0.01005,\ +0.00995)\)</span>。和预测差了不到 <span class="arithmatex">\(5\times10^{-5}\)</span>——这个偏差就是被砍掉的二阶项，约 <span class="arithmatex">\(h^2/2\)</span> 量级。<strong>线性近似只在工作点附近成立</strong>，位移一大就失控。</p>
-<p>再把 <span class="arithmatex">\(\theta_2\)</span> 调到 <span class="arithmatex">\(0^\circ\)</span>（手臂完全伸直）：两列变成 <span class="arithmatex">\((-1,-1)\)</span> 方向的倍数，<span class="arithmatex">\(J\)</span> 降秩。这时沿手臂径向的末端运动<strong>无法由任何关节速度生成</strong>——要维持它需要无穷大的关节速度。这就是<strong>奇异位形</strong>（singular configuration）。逆运动学在这类构型附近"关节速度爆炸"，根源就在这一步。</p>
+<p>再把 <span class="arithmatex">\(\theta_2\)</span> 调到 <span class="arithmatex">\(0^\circ\)</span>（手臂完全伸直），<span class="arithmatex">\(J\)</span> 降秩。在奇异点，沿手臂径向的期望瞬时速度不属于 <span class="arithmatex">\(J\)</span> 的列空间，因此方程 <span class="arithmatex">\(J\dot q=\dot x\)</span> 根本没有解，而不是存在一个“无穷大”的解；当位形趋近奇异点时，为实现某些仍可达方向，最小范数关节速度才可能无界增长。</p>
 <table>
 <thead>
 <tr>
@@ -5309,9 +5313,9 @@ A=\begin{bmatrix}2&amp;1\\ 1&amp;2\end{bmatrix},\qquad
 </table>
 <p>两个可以直接用的推论：</p>
 <ul>
-<li><strong>稳定性判据</strong>：连续系统 <span class="arithmatex">\(\dot x=Ax\)</span> 由 <span class="arithmatex">\(\operatorname{Re}\lambda&lt;0\)</span> 决定；离散化后特征值映射为 <span class="arithmatex">\(e^{\lambda\Delta t}\)</span>，判据变成长在单位圆内——<strong>稳定区域与采样周期强相关</strong>。</li>
-<li><strong>一个免费的自检</strong>：纯旋转矩阵满足 <span class="arithmatex">\(\lambda=e^{\pm i\theta}\)</span>，模长恒为 1（旋转既不放大也不衰减）。所以你一旦算出某个纯旋转矩阵的 <span class="arithmatex">\(|\lambda|\ne1\)</span>，一定是矩阵写错了，比如忘了归一化或混进了缩放。</li>
-<li><strong>对称矩阵</strong>特征值全为实数、特征向量可取成一组正交基。协方差矩阵正属于这类，所以它的"主方向"总是一组互相垂直的轴：PCA 能直接用特征值分解或 SVD 算出，主成分方差就等于对应特征值；而最小特征值对应的方向，正是数据里最不确定、最容易被噪声掩盖的方向。</li>
+<li><strong>稳定性判据</strong>：精确零阶保持离散化的状态矩阵是 <span class="arithmatex">\(e^{A\Delta t}\)</span>，其特征值为 <span class="arithmatex">\(e^{\lambda\Delta t}\)</span>；Euler、Runge–Kutta 等数值积分使用各自的稳定函数，不能一概写成指数映射。</li>
+<li><strong>一个免费的自检</strong>：二维纯旋转的特征值为 <span class="arithmatex">\(e^{\pm i\theta}\)</span>；三维旋转还必有沿旋转轴的特征值 1。实正交旋转矩阵的所有复特征值模都为 1，所以若算出模不为 1，矩阵便混入了缩放或数值误差。</li>
+<li><strong>对称矩阵</strong>特征值全为实数、特征向量可取成一组正交基。协方差矩阵的最大特征值方向方差最大，通常称为最不确定方向；最小特征值方向方差最小。若讨论的是信息矩阵，大小关系才反过来。</li>
 </ul>
 <hr />
 <h2 id="_9">十、条件数与数值敏感性</h2>
@@ -5359,7 +5363,7 @@ A=\begin{bmatrix}2&amp;1\\ 1&amp;2\end{bmatrix},\qquad
 </tr>
 </tbody>
 </table>
-<p>顺带说清一件事：真正需要的是<strong>线性方程组的解</strong>，不是<strong>逆矩阵</strong>本身。求逆本身是 <span class="arithmatex">\(O(n^3)\)</span> 且常数比 LU 分解大 2–3 倍，误差还要被放大两次（近似 <span class="arithmatex">\(\kappa^2\)</span> 量级）；而分解求解可以复用分解结果应付多个右端项。只有三类场合才值得真的算逆：需要矩阵的迹或显式协方差做解析推导、矩阵极小（<span class="arithmatex">\(n\le4\)</span>）且要反复用在多个右端项上、以及教学调试时想看清结构。</p>
+<p>顺带说清一件事：真正需要的是<strong>线性方程组的解</strong>，不是逆矩阵本身。显式求逆和分解求解通常同为 <span class="arithmatex">\(O(n^3)\)</span>，但运算常数、舍入传播和后续使用方式依算法与矩阵结构而异；不存在“求逆必然把误差再放大一次成为 <span class="arithmatex">\(\kappa^2\)</span>”的通用定理。多个右端项应复用 LU、QR 或 Cholesky 分解；只有确实需要逆矩阵元素时才显式求逆。</p>
 <hr />
 <h2 id="_10">十一、数值实验</h2>
 <h3 id="111">11.1 最小二乘与条件数</h3>
@@ -5477,7 +5481,7 @@ cond(M^T M) = 1.0001e+10
 </code></pre></div>
 <p>读这张表：<span class="arithmatex">\(h\)</span> 从 <span class="arithmatex">\(10^{-1}\)</span> 缩到 <span class="arithmatex">\(10^{-8}\)</span>，前向差分误差从 <span class="arithmatex">\(4.29\times10^{-2}\)</span> 一路降到 <span class="arithmatex">\(2.97\times10^{-9}\)</span>——<strong>这就是"步长越小越准"成立的那半段</strong>。但过了 <span class="arithmatex">\(10^{-8}\)</span> 它就掉头上升，到 <span class="arithmatex">\(h=10^{-16}\)</span> 时误差变成 <span class="arithmatex">\(5.40\times10^{-1}\)</span>，比 <span class="arithmatex">\(h=10^{-1}\)</span> 时还大十倍。原因不是数学坏了，而是 <span class="arithmatex">\(x+h\)</span> 在浮点下已经等于 <span class="arithmatex">\(x\)</span>，分子相减得到精确的 0，<span class="arithmatex">\(0/h\)</span> 就是 0，于是导数估算成的 0 与真值差了整个 <span class="arithmatex">\(\cos(1)=0.5403\)</span>。</p>
 <p>两条曲线的形状差别也值得记：中心差分的最优区间更靠左（<span class="arithmatex">\(h\approx10^{-5}\)</span> 附近，误差低到 <span class="arithmatex">\(1.1\times10^{-11}\)</span>），最低点比前向差分低了将近两个数量级——这正是第六节说的 <span class="arithmatex">\(h^2\)</span> 阶精度换来的。终端曲线里两条都呈"U 形"（左端因舍入翘起、右端因截断翘起），只是中心差分那条整体更低更宽。</p>
-<p><strong>所以数值求导的正确做法不是"把 <span class="arithmatex">\(h\)</span> 调到最小"，而是"调到 <span class="arithmatex">\(10^{-5}\)</span> 附近就停手"。</strong></p>
+<p><strong>所以数值求导不能把 <span class="arithmatex">\(h\)</span> 调到最小。</strong> 本例中中心差分的较好区间碰巧在 <span class="arithmatex">\(10^{-5}\)</span> 附近；一般最优步长取决于变量尺度、函数值误差和高阶导数，必须用步长扫描或误差模型决定。</p>
 <hr />
 <h2 id="_11">十二、常见错误与核心结论</h2>
 <p>前面每一节的"代价"都能在工程里换成一条排查线索：</p>
@@ -5535,7 +5539,7 @@ cond(M^T M) = 1.0001e+10
 <p>最后用三句话回答"为什么必须有它们"：</p>
 <ul>
 <li><strong>为什么必须有向量和矩阵</strong>：系统的状态天然是一组必须同时知道的量；把它们整组交给映射，才能用一次乘法表达"同一套规则作用在所有分量上"。</li>
-<li><strong>为什么必须转成最小二乘</strong>：带噪观测多于未知量时<strong>不存在精确解</strong>，唯一有依据的出路是让残差向量最短，而 <span class="arithmatex">\(L_2\)</span> 的平方形式恰好让求导变成线性的。</li>
+<li><strong>为什么常转成最小二乘</strong>：观测多于未知量并不自动排除精确解；但含噪超定方程通常不相容，此时最小二乘用最短残差定义近似解，而 <span class="arithmatex">\(L_2\)</span> 平方形式使一阶条件变成线性方程。</li>
 <li><strong>为什么必须关心条件数和线性化范围</strong>：数学上成立的结论只在"矩阵不太病态、位移不太大"时数值上可用。<span class="arithmatex">\(\kappa(A)\)</span> 决定"解还剩几位可信"，Jacobian 的工作点决定"这套线性模型还能用多远"。</li>
 </ul>
 <p>把全章串起来是一条链：向量描述状态 → 矩阵描述线性映射 → 特征值描述模态与稳定性 → 求导得到局部线性模型 → Jacobian 处理多变量与复合 → 条件数决定这些运算在数值上是否有意义。后面所有章节（EKF、牛顿法、LQR、MPC）都只是在这条链上叠加物理或统计解释，数学骨架不变。</p>

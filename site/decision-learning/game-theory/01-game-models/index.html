@@ -4717,15 +4717,21 @@ U(\mathbf a)=\sum_i w_i\,u_i(\mathbf a)\quad\text{仅在基数效用且玩家间
 <tbody>
 <tr>
 <td>完美信息</td>
-<td>不知道历史动作</td>
-<td>信息集 <span class="arithmatex">\(\mathcal H_i\)</span>（同一信息集内不可区分）</td>
-<td>观察历史</td>
+<td>不遗漏此前发生的动作；每个决策节点都知道完整历史</td>
+<td>单点信息集</td>
+<td>无需对历史作信念更新</td>
+</tr>
+<tr>
+<td>不完美信息</td>
+<td>不能区分某些历史</td>
+<td>多节点信息集 <span class="arithmatex">\(\mathcal H_i\)</span></td>
+<td>根据信息集形成信念</td>
 </tr>
 <tr>
 <td>完全信息</td>
-<td>不知道收益/结构</td>
-<td>类型参数 <span class="arithmatex">\(u_i(\cdot;\theta)\)</span></td>
-<td>无需更新（假设已知）</td>
+<td>玩家知道博弈结构、类型与收益</td>
+<td>公开的收益函数 <span class="arithmatex">\(u_i\)</span></td>
+<td>无需对类型作更新</td>
 </tr>
 <tr>
 <td>不完全信息</td>

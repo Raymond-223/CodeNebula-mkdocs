@@ -2130,7 +2130,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        拓展：存在性定理在说什么（了解即可）
+        混合策略均衡的存在性
       
     </span>
   </a>
@@ -4358,7 +4358,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        拓展：存在性定理在说什么（了解即可）
+        混合策略均衡的存在性
       
     </span>
   </a>
@@ -4574,7 +4574,7 @@ BR_i(a_{-i})=\arg\max_{a_i}u_i(a_i,a_{-i}).
 </tr>
 </tbody>
 </table>
-<p><span class="arithmatex">\(BR_i\)</span> 是多值映射（对应关系），这一点在混合策略下变得关键：如果 <span class="arithmatex">\(a_i\)</span> 和 <span class="arithmatex">\(a_i'\)</span> 收益相同，两者都在 <span class="arithmatex">\(BR_i\)</span> 中；<span class="arithmatex">\(\lvert BR_i\rvert\ge 2\)</span> 时均衡通常不止一个。如果对方选择不同策略，你的最佳响应也可能改变 —— 博弈论没有脱离对手行为的“永远最优动作”。</p>
+<p><span class="arithmatex">\(BR_i\)</span> 是多值映射（对应关系），这一点在混合策略下变得关键：如果 <span class="arithmatex">\(a_i\)</span> 和 <span class="arithmatex">\(a_i'\)</span> 收益相同，两者都在 <span class="arithmatex">\(BR_i\)</span> 中。最佳响应多值只说明玩家在<strong>这个给定的对手策略下</strong>有多个同样好的选择，既不保证这些选择能与其他玩家的最佳响应相交，也不推出均衡有多个。如果对方选择不同策略，你的最佳响应也可能改变——博弈论没有脱离对手行为的“永远最优动作”。</p>
 <p>如果动作不是几个离散选项，而是连续数值（例如报价可以取任意实数），就不能逐格比较。此时若收益曲线关于自己的动作 <span class="arithmatex">\(a_i\)</span> 是“单峰向下弯”的，也就是数学上所说的<strong>凹函数</strong>，可以先用导数寻找峰顶：</p>
 <div class="arithmatex">\[
 \frac{\partial u_i(a_i,a_{-i})}{\partial a_i}=0
@@ -4651,8 +4651,8 @@ f(x^*)=x^*,
 \]</div>
 <p>例如只有 A、B 两个动作时，一个混合策略可以写成 <span class="arithmatex">\((p,1-p)\)</span>。当 <span class="arithmatex">\(p\)</span> 从 0 连续变化到 1 时，我们不再只有两个孤立的纯动作点，而得到它们之间的一整条概率线段。动作更多时，这个空间会变成三角形、四面体等更高维的概率多面体。</p>
 <p>这正是存在性证明需要的关键变化：<strong>把离散选择扩展成连续的概率空间</strong>。随后才能使用不动点定理证明“最佳响应关系至少会在某处和自己相交”。</p>
-<h3 id="_3">拓展：存在性定理在说什么（了解即可）</h3>
-<p>下面三个名字的作用只是回答“均衡为什么存在”，不是本章求均衡的计算步骤。零基础阶段记住结论即可，不需要证明。</p>
+<h3 id="_3">混合策略均衡的存在性</h3>
+<p>有限博弈未必有纯策略均衡，但一定有混合策略 Nash 均衡。这里把证明所需的对象和依赖写清楚；它不是求 <span class="arithmatex">\(2\times2\)</span> 均衡的计算步骤。</p>
 <table>
 <thead>
 <tr>
@@ -4663,23 +4663,31 @@ f(x^*)=x^*,
 </thead>
 <tbody>
 <tr>
-<td>Nash + Kakutani</td>
-<td>有限博弈；把策略扩成混合概率后，策略空间没有“断裂”，最佳响应关系也不会突然跳坏</td>
+<td>Kakutani 不动点定理</td>
+<td>非空紧凸集上的对应非空、凸值、上半连续</td>
+<td>存在 <span class="arithmatex">\(x\in F(x)\)</span></td>
+</tr>
+<tr>
+<td>Nash 存在性定理</td>
+<td>玩家与纯动作集合有限，允许混合策略</td>
 <td>至少存在一个混合策略 Nash 均衡</td>
-</tr>
-<tr>
-<td>Brouwer</td>
-<td>一个连续函数把一个封闭、有限、没有凹洞的区域映回自己</td>
-<td>至少存在 <span class="arithmatex">\(x=f(x)\)</span></td>
-</tr>
-<tr>
-<td>Glicksberg</td>
-<td>动作可以是连续的，只要策略空间和收益满足相应连续性/凸性条件</td>
-<td>可把有限博弈的存在性结论推广到更一般情形</td>
 </tr>
 </tbody>
 </table>
-<p>这里常见的“紧”“凸”“上半连续”都是为了排除某些会让不动点消失的病态情况：<strong>紧</strong>可以先理解成范围封闭且不会无限跑远，<strong>凸</strong>可以理解成两种策略之间的概率混合仍然属于允许集合，<strong>上半连续</strong>可以粗略理解成输入轻微变化时，最佳响应集合不会凭空跳到完全无关的位置。它们是证明条件，不是求 2×2 均衡时必须操作的步骤。</p>
+<p>在有限维欧几里得空间中，<strong>紧</strong>等价于闭且有界；<strong>凸</strong>表示集合内任意两点之间的线段仍在集合内。对应 <span class="arithmatex">\(F\)</span> 的<strong>上半连续</strong>可用闭图刻画：若 <span class="arithmatex">\(x_k\to x\)</span>、<span class="arithmatex">\(y_k\to y\)</span> 且 <span class="arithmatex">\(y_k\in F(x_k)\)</span>，则 <span class="arithmatex">\(y\in F(x)\)</span>。下面把 Kakutani 定理作为本章使用的拓扑基础，并验证最佳响应确实满足它的全部条件。</p>
+<details class="proof">
+<summary>有限博弈存在混合策略 Nash 均衡</summary>
+<p>设联合混合策略空间为 <span class="arithmatex">\(\Sigma=\prod_i\Delta(\mathcal A_i)\)</span>。每个单纯形非空、紧、凸，有限个单纯形的笛卡尔积仍非空、紧、凸。</p>
+<p>对固定的 <span class="arithmatex">\(\sigma_{-i}\)</span>，玩家 <span class="arithmatex">\(i\)</span> 的期望收益关于自己的混合策略 <span class="arithmatex">\(\sigma_i\)</span> 是线性的。连续函数在紧集上能取得最大值，所以 <span class="arithmatex">\(BR_i(\sigma_{-i})\)</span> 非空。若 <span class="arithmatex">\(x_i,y_i\)</span> 都是最佳响应，则任意 <span class="arithmatex">\(\theta\in[0,1]\)</span> 满足
+$<span class="arithmatex">\(u_i(\theta x_i+(1-\theta)y_i,\sigma_{-i})=\theta u_i(x_i,\sigma_{-i})+(1-\theta)u_i(y_i,\sigma_{-i}),\)</span>$
+右边仍等于最大收益，因此最佳响应集合是凸的。</p>
+<p>再证闭图。若 <span class="arithmatex">\(\sigma^k\to\sigma\)</span>、<span class="arithmatex">\(\tau_i^k\to\tau_i\)</span> 且 <span class="arithmatex">\(\tau_i^k\in BR_i(\sigma_{-i}^k)\)</span>，则对任意 <span class="arithmatex">\(a_i\in\Delta(\mathcal A_i)\)</span> 都有
+$<span class="arithmatex">\(u_i(\tau_i^k,\sigma_{-i}^k)\ge u_i(a_i,\sigma_{-i}^k).\)</span>$
+有限博弈的期望收益是各概率的多项式，因而连续。令 <span class="arithmatex">\(k\to\infty\)</span> 得
+$<span class="arithmatex">\(u_i(\tau_i,\sigma_{-i})\ge u_i(a_i,\sigma_{-i}),\)</span>$
+所以 <span class="arithmatex">\(\tau_i\in BR_i(\sigma_{-i})\)</span>。因此联合最佳响应对应 <span class="arithmatex">\(BR(\sigma)=\prod_iBR_i(\sigma_{-i})\)</span> 非空、凸值并有闭图；在紧值情形下这等价于上半连续。</p>
+<p>Kakutani 不动点定理于是给出某个 <span class="arithmatex">\(\sigma^*\in\Sigma\)</span> 使 <span class="arithmatex">\(\sigma^*\in BR(\sigma^*)\)</span>。按 Nash 均衡的定义，这个 <span class="arithmatex">\(\sigma^*\)</span> 就是混合策略 Nash 均衡。</p>
+</details>
 <p>还要区分<strong>存在</strong>和<strong>怎么找到</strong>。不动点定理只保证某个均衡存在，并不保证“每轮都改成当前最佳响应”就一定能走到那里。例如在石头剪刀布中，若双方采用确定性的纯最佳响应更新，动作可以一直循环。因此后面的 fictitious play、遗憾最小化等算法研究的是“如何通过动态过程逼近均衡”，这是另一个问题。</p>
 <h2 id="_4">纯策略均衡的矩阵检查</h2>
 <p>假设两台机器人选择任务 A/B，若两者选不同任务团队效率最高，但每台车都更喜欢离自己近的目标。可以在每个格子上分别标出行玩家和列玩家的最佳响应；两个标记同时出现的位置就是纯策略 Nash 候选。</p>
@@ -4827,8 +4835,8 @@ u_r(T,L)&gt;u_r(B,L)\ \text{且}\ u_r(T,R)&gt;u_r(B,R)\ \Longrightarrow\ T\ \tex
 <tbody>
 <tr>
 <td>Pareto 最优</td>
-<td>不存在使所有人都不变差的改进</td>
-<td>逐格比较</td>
+<td>不存在使所有人都不变差且至少一人严格变好的改进</td>
+<td>逐个比较联合策略的收益向量</td>
 <td>Nash 与 Pareto 最优无包含关系</td>
 </tr>
 <tr>
@@ -4920,7 +4928,7 @@ u_r(T,L)&gt;u_r(B,L)\ \text{且}\ u_r(T,R)&gt;u_r(B,R)\ \Longrightarrow\ T\ \tex
 </tbody>
 </table>
 <p>结论：<strong>收益占优的均衡不是风险占优的均衡。</strong> 如果你相信对手会抓兔，最稳妥的选择也是抓兔；只有在你相信对手会猎鹿时，猎鹿才成立。这就是协调问题的本质 —— 每个人都需预期别人也选择高效均衡。</p>
-<p><strong>焦点解（focal point）。</strong> 当均衡无法由收益唯一确定时，玩家会借助与收益无关的显著特征做选择：默认位置、命名、历史惯例、上次成功的动作。在多机器人系统里，这对应「使用约定的默认分工」；焦点解在理论上不是均衡的精炼，但在工程上是可用的选择机制（见 <a href="../../multi-agent-systems/02-coordination/">../multi-agent-systems/02-coordination.md</a>）。注意混合均衡的期望收益 <span class="arithmatex">\(3\)</span> 恰等于 <span class="arithmatex">\((Hare,Hare)\)</span> 的收益：<strong>当混合均衡与某个纯策略均衡效率相同时，它的唯一优势是不被对手预测。</strong></p>
+<p><strong>焦点解（focal point）。</strong> 当均衡无法由收益唯一确定时，玩家会借助显著特征做选择：默认位置、命名、历史惯例、上次成功的动作。在多机器人系统里，这对应“使用约定的默认分工”；焦点解在理论上不是均衡的精炼，但在工程上是可用的选择机制（见 <a href="../../multi-agent-systems/02-coordination/">多智能体协调</a>）。本例混合均衡的期望收益 <span class="arithmatex">\(3\)</span> 恰等于 <span class="arithmatex">\((Hare,Hare)\)</span> 的收益，但这不赋予它一般性的“唯一优势”；混合均衡只是双方无差异条件产生的第三个均衡，实际协调通常更偏好某个纯策略均衡。</p>
 <h2 id="_8">均衡检查的三个层次</h2>
 <p>检查候选均衡时先确认每个玩家的可选策略，再固定其他玩家策略计算单边偏离收益，最后判断所有玩家是否同时没有获利偏离。若只看到策略长期稳定便称其为 Nash 均衡，可能把惯性、协调失败或学习尚未收敛误认为均衡。</p>
 <table>

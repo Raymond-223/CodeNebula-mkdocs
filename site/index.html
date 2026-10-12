@@ -4378,6 +4378,7 @@
 
 <h1 id="codenebula">CodeNebula</h1>
 <p>CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科全书。它是一套面向智能系统研究与工程实践的<strong>最小充分知识地图</strong>：先回答方法为什么成立，再说明算法如何组织，最后进入工程接口与真实系统。</p>
+<p>全站默认读者已经完整掌握高中阶段的实数与复数基本运算、代数恒等变形、方程与不等式、指数与对数、数列、平面解析几何、三角函数和一元导数计算。除此之外，不默认读者学过大学线性代数、概率论、多元微积分、优化、控制或计算机系统课程。“零基础”在本站指<strong>从大学知识起点讲起</strong>，不是重新讲授高中课程。</p>
 <figure>
   <img alt="CodeNebula minimum sufficient knowledge map" src="assets/diagrams/knowledge-map.svg" />
 <br />
@@ -4388,7 +4389,7 @@
 <p><strong><a href="yau-contest/">Yau Contest — Computational and Applied Mathematics</a></strong> 是新增的独立丘赛专题。它不放在 Foundations 中、不修改原数学知识树，也不要求读者已经记得计算型数学专业课：竞赛需要的定义、推导、证明及配套练习都在专题内重讲。现已完成 <strong>Stage 1: Matrix Theory &amp; Iteration</strong>，包含八章教材式内容，从最基础的数学证明语言讲到 SVD、谱半径、幂法、压缩映射和 Newton 收敛。</p>
 <p>这个专题是针对<strong>投入时间有限、希望知识也服务AI科研</strong>的读者的选择性备赛线，不以试卷全部题目全做出来为目标。</p>
 <h2 id="_2">课程结构</h2>
-<p>课程不强制一条线读到底，但领域之间存在真实的<strong>前置偏序</strong>：Foundations 是无前置的根，Decision &amp; Learning 与 Robotics &amp; Perception 是两条并列分支，Systems &amp; Simulation 需要至少一条分支作为载体，Safety &amp; Human Factors 则贯穿真实部署。</p>
+<p>课程不强制一条线读到底，但领域之间存在真实的<strong>前置偏序</strong>。偏序（partial order）是一种满足自反性、反对称性和传递性的先后关系；这里把“章节自身以前已建立”省略，只记录不同领域之间的严格前置关系。Foundations 是大学知识的入口，Decision &amp; Learning 与 Robotics &amp; Perception 是两条并列分支，Systems &amp; Simulation 需要至少一条分支作为载体，Safety &amp; Human Factors 则贯穿真实部署。</p>
 <table>
 <thead>
 <tr>
@@ -4403,7 +4404,7 @@
 <td>Foundations</td>
 <td>Mathematics, Control Theory</td>
 <td>系统如何表示、方法在什么条件下成立</td>
-<td>无</td>
+<td>高中数学</td>
 </tr>
 <tr>
 <td>Decision &amp; Learning</td>
@@ -4431,7 +4432,7 @@
 </tr>
 </tbody>
 </table>
-<p>这一偏序可以写成一个依赖关系：若领域 <span class="arithmatex">\(D_i\)</span> 是 <span class="arithmatex">\(D_j\)</span> 的前置，记 <span class="arithmatex">\(D_i \prec D_j\)</span>，则合法阅读顺序就是该偏序的一个线性扩展。</p>
+<p>这一偏序可以写成一个依赖关系：若领域 <span class="arithmatex">\(D_i\)</span> 必须先于 <span class="arithmatex">\(D_j\)</span>，记 <span class="arithmatex">\(D_i \prec D_j\)</span>。线性扩展（linear extension）是把所有领域排成一个不打破这些前置关系的总顺序；因此任何满足“若 <span class="arithmatex">\(D_i\prec D_j\)</span>，则 <span class="arithmatex">\(D_i\)</span> 排在 <span class="arithmatex">\(D_j\)</span> 前面”的阅读次序，都是合法线性扩展。</p>
 <table>
 <thead>
 <tr>

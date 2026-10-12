@@ -4885,44 +4885,52 @@ u = K_p e + K_i \int_0^t e(\tau)\,d\tau
 <p>积分项<strong>唯一保持不变的条件</strong>是 <span class="arithmatex">\(e = 0\)</span>。</p>
 </blockquote>
 <p>因为只要 <span class="arithmatex">\(e \neq 0\)</span>，积分就还在累加、输出就还在变，系统就还没稳定。反过来，当系统真的稳下来（各量不再变化）时，积分必须停止累加，而它停止的唯一可能就是误差归零。</p>
-<p>这就是上面坡道例子里缺的那一块：现在稳态可以靠累计项提供那个"不为零的输出"，而误差本身可以是 0。用控制论的话说，P 控制让 0 型对象仍是 0 型，存在有界稳态误差；加入 I 后系统变成 1 型，对阶跃输入稳态误差为零。但注意"化为 1 型"只对<strong>阶跃</strong>有效：</p>
+<p>这就是上面坡道例子里缺的那一块：现在稳态可以靠累计项提供那个“不为零的输出”，而误差本身可以是 0。下面只讨论单位负反馈、闭环稳定、相关静态误差常数有限且不存在抵消原点极点的情形。系统型别是开环传递函数在原点的净极点数；控制器再加入一个积分环节，会使型别增加 1。</p>
 <table>
 <thead>
 <tr>
-<th>对象类型</th>
-<th>只用 P 时（阶跃输入）</th>
-<th>加了 I 后（阶跃输入）</th>
-<th>遇到斜坡输入</th>
+<th>P 控制时的对象型别</th>
+<th>P + 阶跃</th>
+<th>P + 斜坡</th>
+<th>加 I 后的型别</th>
+<th>PI + 阶跃</th>
+<th>PI + 斜坡</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0 型（无积分）</td>
-<td>有界，<span class="arithmatex">\(1/(1+KK_p)\)</span></td>
+<td>0 型</td>
+<td>有限非零</td>
+<td>发散</td>
+<td>1 型</td>
 <td>0</td>
-<td>仍有有界常数误差</td>
+<td>有限非零，常写为 <span class="arithmatex">\(1/K_v\)</span></td>
 </tr>
 <tr>
-<td>1 型（一个积分）</td>
+<td>1 型</td>
+<td>0</td>
+<td>有限非零，常写为 <span class="arithmatex">\(1/K_v\)</span></td>
+<td>2 型</td>
 <td>0</td>
 <td>0</td>
-<td>有界，<span class="arithmatex">\(1/K_v\)</span></td>
 </tr>
 <tr>
-<td>2 型（两个积分）</td>
+<td>2 型</td>
 <td>0</td>
+<td>0</td>
+<td>3 型</td>
 <td>0</td>
 <td>0</td>
 </tr>
 </tbody>
 </table>
-<p>换句话说，一个积分只能"吃掉一类"输入带来的偏差。你的实际目标是哪种输入，决定了需要几个积分——这也是为什么位置环常带一个积分、而速度前馈要好得多。</p>
+<p>换句话说，在上述稳定性与型别条件下，多一个积分会把可零误差跟踪的多项式输入阶数提高一级。积分也会改变闭环稳定裕度，不能只为消除误差而无限增加。</p>
 <h3 id="integral-windup">积分饱和（Integral Windup）</h3>
 <p>积分是"记账"，账会记多。具体看一个场面：</p>
 <p><span class="arithmatex">\(K_i = 2\)</span>，误差恒为 <span class="arithmatex">\(e = 5\)</span>，而执行器早就满输出、卡在那里 2 秒。这 2 秒里积分项自顾自地涨到 <span class="arithmatex">\(K_i e t = 20\)</span>。等系统终于接近目标、误差回到 0 时，这笔 20 的"欠账"还挂在输出上，继续把系统往前推——于是冲过头，再花约 2 秒被反向误差慢慢抵掉，期间一直超调。</p>
 <p><strong>超调可能不是 <span class="arithmatex">\(K_d\)</span> 太小，而是这笔账没还。</strong>（第九节的第二个实验会实测这一点：同一个 PI，只把执行器限幅收紧，超调就从 16% 涨到 38%，而补上 D 也救不回来。）三种常见还账方式：</p>
 <ul>
-<li><strong>条件积分</strong>：只在输出没饱和（或饱和方向与误差方向一致）时继续积分，形式上是 <span class="arithmatex">\(I_k = I_{k-1} + e_k \Delta t \cdot \mathbf{1}[\text{not saturated}]\)</span>。最简单，但饱和边界的抖动要处理。</li>
+<li><strong>条件积分</strong>：输出未饱和时正常积分；已经饱和时，只有误差产生的积分变化会把未限幅输出拉回可实现区间，才继续积分。若误差会把输出推向更深饱和，就冻结积分器。仅写 <span class="arithmatex">\(\mathbf 1[\text{not saturated}]\)</span> 是最保守的简化实现，还需处理饱和边界抖动。</li>
 <li><strong>反算（back-calculation）</strong>：给积分器加一个反馈修正项 <span class="arithmatex">\(I_k = I_{k-1} + e_k \Delta t + \frac{\Delta t}{T_t}(u_{\text{sat}} - u_{\text{unsat}})\)</span>，<span class="arithmatex">\(T_t\)</span> 取 <span class="arithmatex">\(T_i/2 \sim T_i\)</span>。平滑可控，代价是多一个参数。</li>
 <li><strong>限幅后重算</strong>：先算无约束输出，限幅，再按限幅值反推允许的积分值。保证最硬，实现稍麻烦。</li>
 </ul>
@@ -4935,9 +4943,7 @@ u = K_p e + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}
 \]</div>
 <h3 id="_5">微分作用与阻尼</h3>
 <p>误差正在快速减小，说明系统正以较大速度冲向目标——如果不拦，它必然冲过头。<span class="arithmatex">\(K_d\)</span> 根据这个"速度"提前施加反向作用，效果等同于给系统加阻尼。对二阶闭环可以算得很清楚：</p>
-<div class="arithmatex">\[
-\zeta' = \zeta + \frac{K_d \omega_n}{2}
-\]</div>
+<p>只有在把特定二阶对象和 PD 闭环化到标准形式后，才能把 <span class="arithmatex">\(K_d\)</span> 映射为阻尼系数；一般不存在 <span class="arithmatex">\(\zeta'=\zeta+K_d\omega_n/2\)</span> 这样的通用公式。正确做法是先写闭环特征多项式，再与 <span class="arithmatex">\(s^2+2\zeta\omega_ns+\omega_n^2\)</span> 逐项比较。</p>
 <p>阻尼比变大 → 超调变小。所以 D 项买的是"不冲过头"，<strong>不是"更快"</strong>。如果系统本身就慢，加 D 只会更慢。</p>
 <h3 id="_6">微分项的噪声放大</h3>
 <p><span class="arithmatex">\(de/dt\)</span> 是差分运算，而传感器噪声本质上是高频抖动。噪声的"变化率"极大，一乘 <span class="arithmatex">\(K_d\)</span> 就被放大成真实的控制动作。</p>

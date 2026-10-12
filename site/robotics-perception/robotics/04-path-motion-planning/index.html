@@ -4601,6 +4601,12 @@
 <li><strong>可采纳性（admissible）</strong>：对所有节点 <span class="arithmatex">\(h(n)\le h^{*}(n)\)</span>，即永不高估。在非负边权和正确重复节点处理下，可采纳启发使 A<em> 返回最优解。<span class="arithmatex">\(h\equiv 0\)</span> 时 A</em> 退化成 Dijkstra。</li>
 <li><strong>一致性（consistent / monotone）</strong>：<span class="arithmatex">\(h(n)\le c(n,n')+h(n')\)</span>。一致性是可采纳的充分条件，且保证每个节点最多被扩展一次；不一致但可采纳的启发函数仍最优，但可能重复扩展节点。</li>
 </ul>
+<details class="proof">
+<summary>A* 在可采纳启发下的最优性</summary>
+<p>设最优路径代价为 <span class="arithmatex">\(C^*\)</span>，目标节点第一次从开放列表弹出时的代价为 <span class="arithmatex">\(C\)</span>。在目标弹出以前，任一尚未完全展开的最优路径上总有一个前沿节点 <span class="arithmatex">\(n\)</span>。因为到该节点的当前最佳代价不超过最优路径前缀代价 <span class="arithmatex">\(g^*(n)\)</span>，且 <span class="arithmatex">\(h\)</span> 可采纳，
+$<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
+目标节点的启发为零，所以它的优先级是 <span class="arithmatex">\(f(goal)=C\)</span>。A* 总弹出最小优先级节点，因此 <span class="arithmatex">\(C\le C^*\)</span>；另一方面任何完整路径代价都不小于最优值，故 <span class="arithmatex">\(C\ge C^*\)</span>，于是 <span class="arithmatex">\(C=C^*\)</span>。若不一致启发导致某节点找到更小 <span class="arithmatex">\(g\)</span>，实现必须允许重新打开该节点，才能维持“当前最佳代价”的前提。</p>
+</details>
 <p>常用启发函数的紧致程度：</p>
 <table>
 <thead>

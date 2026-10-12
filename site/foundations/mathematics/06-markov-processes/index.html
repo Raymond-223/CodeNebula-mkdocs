@@ -5085,19 +5085,29 @@ P^{k+m}=P^kP^m,\qquad (P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}.
 <hr />
 <h2 id="stationarity-and-convergence">七、平稳性与收敛性（Stationarity and Convergence）</h2>
 <p>一个几乎所有人第一遍都会搞错的问题：时间久了之后，系统会不会<strong>停</strong>在某个状态上？</p>
-<p>不会。状态一直在跳，稳定的是<strong>频率</strong>，不是位置。这里必须把两个量分开：</p>
+<p>不一定。吸收态或有自环的链可以停在同一状态；一般链则会继续随机跳转。我们关心的是分布或长期访问频率是否稳定。这里必须把两个量分开：</p>
 <div class="arithmatex">\[
 \pi_j=\lim_{t\to\infty}P(S_t=j),\qquad \frac{1}{T}\sum_{t=1}^{T}\mathbf{1}\{S_t=j\}\to\pi_j .
 \]</div>
-<p>前者是"空间平均"：很多条轨迹在同一时刻的分布；后者是"时间平均"：一条很长的轨迹里停在 <span class="arithmatex">\(j\)</span> 的时间比例。<strong>遍历定理</strong>保证两者相等——这是 Markov 链里最有用的一条等式，没有它，跑一条长轨迹就推不出概率结论。</p>
+<p>前者是“空间平均”：很多条轨迹在同一时刻的分布；后者是“时间平均”：一条很长的轨迹里停在 <span class="arithmatex">\(j\)</span> 的时间比例。两者并非总相等。对有限、不可约、正常返的链，时间平均依概率 1 收敛到唯一平稳分布；若还要求时刻分布从任意初值收敛到它，则需非周期性。可约链和周期链给出反例。</p>
 <p>回到晴雨链：两条轨迹可能一条连着下三天雨、一条连着三天晴，看起来完全不一样。但把长度拉到 1000 天，各自停在雨天的<strong>比例</strong>都会逼近同一个数。这个数就是<strong>平稳分布</strong>（stationary distribution），满足</p>
 <div class="arithmatex">\[
 \pi=\pi P,\qquad \sum_j\pi_j=1,\quad \pi_j\ge0 .
 \]</div>
 <p>含义是：当前分布已经是 <span class="arithmatex">\(\pi\)</span> 时，再走任意多步还是 <span class="arithmatex">\(\pi\)</span>。手解晴雨链：设 <span class="arithmatex">\(\pi=(\pi_1,\pi_2)\)</span>，方程给出 <span class="arithmatex">\(0.8\pi_1+0.3\pi_2=\pi_1\)</span>，配上 <span class="arithmatex">\(\pi_1+\pi_2=1\)</span>，解得 <span class="arithmatex">\(\pi=(0.60,0.40)\)</span>。验算回去：<span class="arithmatex">\(0.8\times0.60+0.3\times0.40=0.48+0.12=0.60\)</span>，对上了。</p>
 <h3 id="71">7.1 平稳分布的存在性与唯一性</h3>
-<p>不用查定理，从"每行和为 1"就能看出存在性：每行和为 1 意味着 <span class="arithmatex">\(P\mathbf{1}=\mathbf{1}\)</span>，即 <span class="arithmatex">\(\mathbf{1}\)</span> 是特征值 1 对应的<strong>右</strong>特征向量；而随机矩阵的行和条件同时保证特征值 1 也对应一个<strong>左</strong>特征向量，把它归一化就是 <span class="arithmatex">\(\pi\)</span>。所以随机矩阵总有平稳分布，问题只剩"唯不唯一"。</p>
-<p>是否唯一、以及从任意初值能否收敛到它，由<strong>模第二大的特征值</strong> <span class="arithmatex">\(|\lambda_2|\)</span> 决定：</p>
+<p>有限状态随机矩阵总有至少一个平稳分布，但不能只从“存在左特征向量”推出它非负。下面给出不借用 Perron–Frobenius 定理的证明。</p>
+<details class="proof">
+<summary>有限 Markov 链存在平稳分布</summary>
+<p>任取初始分布 <span class="arithmatex">\(\mu\)</span>，定义前 <span class="arithmatex">\(N\)</span> 个时刻分布的 Cesàro 平均</p>
+<div class="arithmatex">\[\bar\mu_N=\frac1N\sum_{k=0}^{N-1}\mu P^k.\]</div>
+<p>每个 <span class="arithmatex">\(\bar\mu_N\)</span> 都在概率单纯形</p>
+<div class="arithmatex">\[\Delta=\{x\in\mathbb R^n:x_i\ge0,\ \sum_i x_i=1\}\]</div>
+<p>中。<span class="arithmatex">\(\Delta\)</span> 是有界闭集，因此任意序列 <span class="arithmatex">\(\{\bar\mu_N\}\)</span> 都有收敛子列；设该子列收敛到 <span class="arithmatex">\(\pi\in\Delta\)</span>。另一方面，</p>
+<div class="arithmatex">\[\bar\mu_NP-\bar\mu_N=\frac{\mu P^N-\mu}{N}.\]</div>
+<p>右端每个分量绝对值至多 <span class="arithmatex">\(1/N\)</span>，所以沿该子列趋于零。矩阵乘法关于各分量连续，取极限得到 <span class="arithmatex">\(\pi P=\pi\)</span>。因为 <span class="arithmatex">\(\pi\in\Delta\)</span>，它的分量非负且和为 1，所以确为平稳分布。</p>
+</details>
+<p>存在、唯一和收敛是三个不同问题。有限不可约链有唯一平稳分布；再加非周期，才从任意初始分布收敛。特征值只在这些结构条件成立后用于量化速度，而且非正规或不可对角化矩阵还会带来条件数和多项式因子：</p>
 <table>
 <thead>
 <tr>
@@ -5108,9 +5118,9 @@ P^{k+m}=P^kP^m,\qquad (P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}.
 </thead>
 <tbody>
 <tr>
-<td>严格小于 1</td>
+<td>除简单特征值 1 外均严格小于 1</td>
 <td>从任意初始分布收敛到唯一 <span class="arithmatex">\(\pi\)</span></td>
-<td>不可约且非周期</td>
+<td>有限、不可约且非周期</td>
 </tr>
 <tr>
 <td>等于 1，且是负实数</td>
@@ -5118,16 +5128,16 @@ P^{k+m}=P^kP^m,\qquad (P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}.
 <td>周期链，例如确定型两状态交替</td>
 </tr>
 <tr>
-<td>有多个特征值模为 1</td>
-<td>收敛到多个平稳分布之一</td>
-<td>可约链，存在多个不相通的闭合类</td>
+<td>特征值 1 有多个独立平稳方向</td>
+<td>极限若存在，可依初值成为多个闭类平稳分布的混合</td>
+<td>可约链，存在多个闭合类</td>
 </tr>
 </tbody>
 </table>
 <p><strong>周期链</strong>的定义是所有可能返回步数的最大公约数大于 1。最简单的例子是"晴必转雨、雨必转晴"，转移矩阵两行分别是 <span class="arithmatex">\((0,1)\)</span> 和 <span class="arithmatex">\((1,0)\)</span>，此时分布永远在两点之间跳：</p>
 <p><img alt="周期链在两点间振荡，而非周期链逐步收敛到平稳分布" src="../../../assets/diagrams/markov-convergence.svg" /></p>
-<p>但只要给任一状态加上极小的自环——比如把"晴转晴"从 0 改成 0.001——<span class="arithmatex">\(|\lambda_2|\)</span> 就从 1 变成 0.998，链变成非周期、开始收敛（第十节的代码会实测这一条）。这也解释了为什么现实系统几乎总在收敛：现实中总有停留和噪声，严格周期几乎不可能维持。</p>
-<p>收敛<strong>多快</strong>由特征值间隙 <span class="arithmatex">\(1-|\lambda_2|\)</span> 决定。在总变差距离意义下，混合时间（mixing time，走到与 <span class="arithmatex">\(\pi\)</span> 的距离小于 <span class="arithmatex">\(\varepsilon\)</span> 所需的步数）满足</p>
+<p>若给<strong>两个状态都</strong>加上 0.001 的自环，矩阵变成 <span class="arithmatex">\(\left(\begin{smallmatrix}0.001&amp;0.999\\0.999&amp;0.001\end{smallmatrix}\right)\)</span>，第二特征值为 <span class="arithmatex">\(-0.998\)</span>。若只给“晴”状态加自环并相应把“晴转雨”改为 0.999，则第二特征值是 <span class="arithmatex">\(-0.999\)</span>。在不可约链中，任一状态存在正概率自环足以使全链非周期；但对可约链不能据此声称所有闭类都会收敛。</p>
+<p>对有限、不可约、非周期且可逆的链，谱隙能控制混合速度；严格界还包含初始分布与 <span class="arithmatex">\(\pi_{\min}\)</span> 等常数。下面的式子只能作为忽略常数后的量级直觉，不是任意随机矩阵的通用上界：</p>
 <div class="arithmatex">\[
 t_{\mathrm{mix}}(\varepsilon)\lesssim\frac{\log(1/\varepsilon)}{1-|\lambda_2|}.
 \]</div>
@@ -5389,7 +5399,7 @@ f=(I-Q)^{-1}r .
 <div class="arithmatex">\[
 t=(I-Q)^{-1}\mathbf{1} .
 \]</div>
-<p><span class="arithmatex">\(I-Q\)</span> 可逆的充要条件是<strong>从每个瞬态出发都有正概率最终被吸收</strong>。若存在一个既能被吸收、又能在内部无限游走的闭合类，<span class="arithmatex">\(I-Q\)</span> 奇异，期望时间发散——对应的现实情形就是"这台设备有可能永远不坏"。</p>
+<p><span class="arithmatex">\(I-Q\)</span> 可逆的充要条件是：从每个暂态出发最终以概率 <span class="arithmatex">\(1\)</span> 被吸收；在有限状态情形，这又等价于 <span class="arithmatex">\(Q^k\to0\)</span> 和 <span class="arithmatex">\(\rho(Q)&lt;1\)</span>。仅有“正概率被吸收”不够：若仍有正概率进入暂态块中的闭合类并永不离开，<span class="arithmatex">\(Q\)</span> 会保留特征值 <span class="arithmatex">\(1\)</span>，此时 <span class="arithmatex">\(I-Q\)</span> 奇异且期望吸收时间发散。</p>
 <h3 id="111">11.1 手算一个可靠性例子</h3>
 <p>先看最简单的：正常态每步故障概率 0.01，故障是吸收态。只有一个瞬态，<span class="arithmatex">\(Q=[0.99]\)</span>，于是 <span class="arithmatex">\(t=(1-0.99)^{-1}=100\)</span> 步。这个数不用矩阵也知道：每步 1% 的概率，期望就是等 100 步。</p>
 <p>现在把"缓慢劣化"显式建出来：加一个退化态，正常转退化 0.02，退化转故障 0.1，退化转正常 0.05（所以退化每步停在自己这儿的概率是 <span class="arithmatex">\(1-0.1-0.05=0.85\)</span>）。瞬态子矩阵是</p>

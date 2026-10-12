@@ -231,6 +231,16 @@ $$
 
 称为奇异值（singular values）。
 
+正特征值的个数等于 $\operatorname{rank}(A)$，需要下面的等式而不是默认。
+
+??? proof "$\operatorname{rank}(A^TA)=\operatorname{rank}(A)$"
+
+    对任意 $x$，$Ax=0$ 显然推出 $A^TAx=0$。反过来，若 $A^TAx=0$，则
+
+    $$0=x^TA^TAx=\|Ax\|_2^2,$$
+
+    所以 $Ax=0$。因此 $\ker(A^TA)=\ker(A)$。两者定义域都是 $\mathbb R^n$，由秩－零化度定理，它们秩相同。对称半正定矩阵 $A^TA$ 的秩等于其非零特征值个数，而非零特征值都为正。
+
 ??? proof "证明：从谱定理构造奇异值分解"
 
     $A^TA$ 是实对称半正定矩阵，因此存在正交矩阵 $V$ 使
@@ -248,7 +258,7 @@ $$
     u_i=\frac{Av_i}{\sigma_i}.
     $$
 
-    则
+    记 Kronecker delta 为 $\delta_{ij}$：$i=j$ 时为 1，否则为 0。则
 
     $$
     u_i^Tu_j
@@ -260,7 +270,7 @@ $$
     所以这些 $u_i$ 标准正交。再把它们补成 $\mathbb R^m$ 的标准正交基，即得到 $U$。同时
 
     $$
-    Av_i=\sigma_i u_i,
+    Av_i=\sigma_i u_i\qquad(1\le i\le r),
     \qquad
     A^Tu_i=\sigma_i v_i
     $$
@@ -276,7 +286,7 @@ $$
     =0,
     $$
 
-    所以 $Av_i=0$。因此 $V$ 中所有列——包括零奇异值对应的列——都满足 $Av_i=\sigma_i u_i$ 的矩阵形式，这才完整得到 $AV=U\Sigma$，即 $A=U\Sigma V^T$。
+    所以 $Av_i=0$。这里必须按矩阵形状读下标：若 $p=\min(m,n)$，则只有 $1\le i\le p$ 时 $u_i$ 与 $\sigma_i$ 同时存在；当宽矩阵满足 $n>m$ 时，额外的 $v_i$（$m<i\le n$）只满足 $Av_i=0$，不能写成不存在的 $u_i$。逐列比较后，前 $p$ 列满足 $Av_i=\sigma_i u_i$，宽矩阵多出的列满足 $Av_i=0$，合起来恰是 $AV=U\Sigma$，即 $A=U\Sigma V^T$。
 
 ### 紧致奇异值分解（Compact SVD）
 

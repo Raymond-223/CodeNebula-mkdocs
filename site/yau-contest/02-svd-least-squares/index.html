@@ -4642,6 +4642,13 @@ A=U\Sigma V^T.
 \qquad r=\operatorname{rank}(A),
 \]</div>
 <p>称为奇异值（singular values）。</p>
+<p>正特征值的个数等于 <span class="arithmatex">\(\operatorname{rank}(A)\)</span>，需要下面的等式而不是默认。</p>
+<details class="proof">
+<summary><span class="arithmatex">\(\operatorname{rank}(A^TA)=\operatorname{rank}(A)\)</span></summary>
+<p>对任意 <span class="arithmatex">\(x\)</span>，<span class="arithmatex">\(Ax=0\)</span> 显然推出 <span class="arithmatex">\(A^TAx=0\)</span>。反过来，若 <span class="arithmatex">\(A^TAx=0\)</span>，则</p>
+<div class="arithmatex">\[0=x^TA^TAx=\|Ax\|_2^2,\]</div>
+<p>所以 <span class="arithmatex">\(Ax=0\)</span>。因此 <span class="arithmatex">\(\ker(A^TA)=\ker(A)\)</span>。两者定义域都是 <span class="arithmatex">\(\mathbb R^n\)</span>，由秩－零化度定理，它们秩相同。对称半正定矩阵 <span class="arithmatex">\(A^TA\)</span> 的秩等于其非零特征值个数，而非零特征值都为正。</p>
+</details>
 <details class="proof">
 <summary>证明：从谱定理构造奇异值分解</summary>
 <p><span class="arithmatex">\(A^TA\)</span> 是实对称半正定矩阵，因此存在正交矩阵 <span class="arithmatex">\(V\)</span> 使</p>
@@ -4655,7 +4662,7 @@ A^TA=V\Lambda V^T,
 <div class="arithmatex">\[
 u_i=\frac{Av_i}{\sigma_i}.
 \]</div>
-<p>则</p>
+<p>记 Kronecker delta 为 <span class="arithmatex">\(\delta_{ij}\)</span>：<span class="arithmatex">\(i=j\)</span> 时为 1，否则为 0。则</p>
 <div class="arithmatex">\[
 u_i^Tu_j
 =\frac{v_i^TA^TAv_j}{\sigma_i\sigma_j}
@@ -4664,7 +4671,7 @@ u_i^Tu_j
 \]</div>
 <p>所以这些 <span class="arithmatex">\(u_i\)</span> 标准正交。再把它们补成 <span class="arithmatex">\(\mathbb R^m\)</span> 的标准正交基，即得到 <span class="arithmatex">\(U\)</span>。同时</p>
 <div class="arithmatex">\[
-Av_i=\sigma_i u_i,
+Av_i=\sigma_i u_i\qquad(1\le i\le r),
 \qquad
 A^Tu_i=\sigma_i v_i
 \]</div>
@@ -4676,7 +4683,7 @@ A^Tu_i=\sigma_i v_i
 =\lambda_i\|v_i\|_2^2
 =0,
 \]</div>
-<p>所以 <span class="arithmatex">\(Av_i=0\)</span>。因此 <span class="arithmatex">\(V\)</span> 中所有列——包括零奇异值对应的列——都满足 <span class="arithmatex">\(Av_i=\sigma_i u_i\)</span> 的矩阵形式，这才完整得到 <span class="arithmatex">\(AV=U\Sigma\)</span>，即 <span class="arithmatex">\(A=U\Sigma V^T\)</span>。</p>
+<p>所以 <span class="arithmatex">\(Av_i=0\)</span>。这里必须按矩阵形状读下标：若 <span class="arithmatex">\(p=\min(m,n)\)</span>，则只有 <span class="arithmatex">\(1\le i\le p\)</span> 时 <span class="arithmatex">\(u_i\)</span> 与 <span class="arithmatex">\(\sigma_i\)</span> 同时存在；当宽矩阵满足 <span class="arithmatex">\(n&gt;m\)</span> 时，额外的 <span class="arithmatex">\(v_i\)</span>（<span class="arithmatex">\(m&lt;i\le n\)</span>）只满足 <span class="arithmatex">\(Av_i=0\)</span>，不能写成不存在的 <span class="arithmatex">\(u_i\)</span>。逐列比较后，前 <span class="arithmatex">\(p\)</span> 列满足 <span class="arithmatex">\(Av_i=\sigma_i u_i\)</span>，宽矩阵多出的列满足 <span class="arithmatex">\(Av_i=0\)</span>，合起来恰是 <span class="arithmatex">\(AV=U\Sigma\)</span>，即 <span class="arithmatex">\(A=U\Sigma V^T\)</span>。</p>
 </details>
 <h3 id="compact-svd">紧致奇异值分解（Compact SVD）</h3>
 <p>只保留正奇异值对应的向量，得到紧致奇异值分解：</p>

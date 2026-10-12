@@ -4524,7 +4524,7 @@
 <p>这两个概念经常被合并成“不确定性”，但它们在数学上对应完全不同的结构。</p>
 <ul>
 <li><strong>Exploration</strong>：状态可见，但某些动作的回报 <span class="arithmatex">\(Q(s,a)\)</span> 尚未被充分估计，需要为获取信息而尝试。</li>
-<li><strong>Exploitation</strong>：使用当前认为最优的动作以最大化即时收益。</li>
+<li><strong>Exploitation</strong>：按当前估计选择长期价值最高的动作；它最大化的是当前模型下的期望回报，不一定是即时奖励。</li>
 <li><strong>POMDP</strong>：真实状态 <span class="arithmatex">\(s_t\)</span> 不可直接观测，只能看到观测 <span class="arithmatex">\(o_t\)</span>，二者由观测概率 <span class="arithmatex">\(Z(o\mid s,a)\)</span> 联系。</li>
 <li><strong>Belief / memory</strong>：用历史信息补偿当前观测的不足，通常写成后验 <span class="arithmatex">\(b_t(s)=P(s_t=s\mid \tau_t)\)</span>。</li>
 </ul>
@@ -4545,8 +4545,8 @@
 </tr>
 <tr>
 <td>随数据量增加</td>
-<td>收敛到真值</td>
-<td>单步信息缺失不可由更多样本消除</td>
+<td>在模型可实现、环境平稳且访问覆盖充分等条件下，估计误差可收缩</td>
+<td>单步信息缺失不可仅靠同一观测上的更多训练样本消除</td>
 </tr>
 <tr>
 <td>典型缓解手段</td>
@@ -4570,11 +4570,11 @@
 </tr>
 </tbody>
 </table>
-<p>判断两者谁占主导，可以用一个纯观测层面的指标：把同一个观测输入策略并统计输出动作的熵，</p>
+<p>动作熵只能描述策略在给定输入下有多随机，不能判断状态是否可辨认。完全可观测任务可能因多个动作等价而有高熵策略，POMDP 也可能采用确定性策略。状态混淆应通过历史信息的增益来检验，例如比较只用当前观测和加入历史后的预测损失或回报；探索不足则通过访问计数、置信区间或主动增加覆盖后的变化检验。动作熵</p>
 <div class="arithmatex">\[
 H\big[\pi(\cdot\mid o)\big],
 \]</div>
-<p>它衡量“仅凭当前观测能否唯一决定动作”。若该熵较高而访问覆盖熵 <span class="arithmatex">\(H_{\text{visit}}\)</span> 也高，说明状态确实不可辨，属于信息缺失；若覆盖熵低而动作熵也低，说明是探索不足。两类问题的修复顺序也不同：信息缺失必须先修状态表示或观测设计，探索不足才轮到调整探索强度。</p>
+<p>只衡量策略输出分布本身，不能单独推出可观测性。访问覆盖低可以提示探索不足，但也可能是任务约束或最优策略本来只访问少数区域，仍需对照实验。</p>
 <h2 id="_2">探索与利用</h2>
 <p>探索处理的是知识不足；部分可观测处理的是信息本身不完整。二者不能混为一谈。在已知模型且状态可见时，可以用一个标量衡量探索的代价，即遗憾（regret）：</p>
 <div class="arithmatex">\[
@@ -4629,20 +4629,19 @@ H\big[\pi(\cdot\mid o)\big],
 <h2 id="_3">探索策略及其遗憾量级</h2>
 <p>三种经典探索策略的差别，本质是“如何分配试验次数”。设动作数 <span class="arithmatex">\(|\mathcal A|=K\)</span>，最优与次优动作的期望差为间隔 <span class="arithmatex">\(\Delta_i=\mu^*-\mu_i\)</span>。</p>
 <p><span class="arithmatex">\(\varepsilon\)</span>-greedy 以概率 <span class="arithmatex">\(\varepsilon\)</span> 随机选动作、以 <span class="arithmatex">\(1-\varepsilon\)</span> 选当前最优。固定 <span class="arithmatex">\(\varepsilon\)</span> 时其遗憾是线性的：</p>
-<div class="arithmatex">\[
-\text{固定}\ \varepsilon:\quad \mathrm{Reg}(T)\approx \varepsilon\,\Delta_{\min}T=\Theta(T),
-\]</div>
-<p>只有当 <span class="arithmatex">\(\varepsilon_t\)</span> 按 <span class="arithmatex">\(t^{-1/3}\)</span> 衰减时，才能降到 <span class="arithmatex">\(\mathrm{Reg}(T)\approx T^{2/3}\)</span>。UCB 类方法按上置信界选动作，<span class="arithmatex">\(a_t=\arg\max_a\big(\hat\mu_a+\sqrt{2\log t/n_a}\big)\)</span>，其遗憾为</p>
+<p>若探索时在 <span class="arithmatex">\(K\)</span> 个动作中均匀抽样，而且利用阶段最终选对最优臂，则探索本身每步造成的期望遗憾为
+$$
+\frac{\varepsilon}{K}\sum_{i=1}^{K}\Delta_i,
+$$
+所以累计遗憾含一个线性于 <span class="arithmatex">\(T\)</span> 的项。它不是简单的 <span class="arithmatex">\(\varepsilon\Delta_{\min}T\)</span>；早期利用阶段选错动作还会增加额外遗憾。</p>
+<p>令 <span class="arithmatex">\(\varepsilon_t\)</span> 随时间下降，可以把探索造成的累计损失变为次线性；<span class="arithmatex">\(t^{-1/3}\)</span> 只是一个可得到 <span class="arithmatex">\(T^{2/3}\)</span> 量级权衡的例子，不是唯一调度。具体界还取决于是否强制每个臂获得足够样本以及奖励间隔。UCB 类方法按上置信界选动作，<span class="arithmatex">\(a_t=\arg\max_a\big(\hat\mu_a+\sqrt{2\log t/n_a}\big)\)</span>；在固定臂、独立同分布、有界或次高斯奖励等条件下，可得到对数型的间隔相关界，也可给出较松的无间隔界。</p>
 <div class="arithmatex">\[
 \mathrm{Reg}(T)\le\sum_{i:\Delta_i&gt;0}\frac{8\log T}{\Delta_i}+O(K),
 \qquad
 \text{无间隔上界}\ O\!\left(\sqrt{K\,T\log T}\right).
 \]</div>
-<p>Thompson sampling 从后验采样并选最大值，贝叶斯遗憾满足</p>
-<div class="arithmatex">\[
-\mathbb E[\mathrm{Reg}(T)]=O\!\left(\sqrt{K\,T\log T}\right),
-\]</div>
-<p>与 UCB 同阶，但依赖先验正确性。三者的工程特征差异很大：</p>
+<p>Thompson sampling 从后验采样并选最大值。在明确的先验、似然和固定奖励分布条件下可证明贝叶斯遗憾界；不能把某一界当作所有先验和环境下的通用结论。</p>
+<p>在某些标准随机老虎机模型与先验条件下，可以得到与常见 UCB 无间隔界同阶的 <span class="arithmatex">\(O(\sqrt{KT\log T})\)</span> 结果；这里不把它当作无条件公式。三者的工程特征差异很大：</p>
 <table>
 <thead>
 <tr>
@@ -4670,16 +4669,16 @@ H\big[\pi(\cdot\mid o)\big],
 </tr>
 <tr>
 <td>UCB1</td>
-<td>约 <span class="arithmatex">\(\sqrt{2\log t/n_a}\)</span></td>
-<td><span class="arithmatex">\(O(\sqrt{KT\log T})\)</span></td>
-<td>弱，只需有界奖励</td>
+<td>置信半径约 <span class="arithmatex">\(\sqrt{2\log t/n_a}\)</span></td>
+<td>条件满足时为次线性；常见无间隔界 <span class="arithmatex">\(O(\sqrt{KT\log T})\)</span></td>
+<td>不用先验，需独立固定奖励模型</td>
 <td>中，需维护计数</td>
 </tr>
 <tr>
 <td>Thompson sampling</td>
-<td>后验方差决定</td>
-<td><span class="arithmatex">\(O(\sqrt{KT\log T})\)</span></td>
-<td>强，需选共轭先验</td>
+<td>后验不确定性决定</td>
+<td>依先验、似然与问题类别而定</td>
+<td>需正确建模先验与似然</td>
 <td>中高，需后验采样</td>
 </tr>
 <tr>
@@ -4750,7 +4749,7 @@ b'(s')=\frac{O(o'\mid s',a)\sum_{s\in\mathcal S}T(s'\mid s,a)\,b(s)}{\sum_{s''}O
 <div class="arithmatex">\[
 b'(s')\propto O(o'\mid s',a)\sum_{s}T(s'\mid s,a)\,b(s).
 \]</div>
-<p>公式的三部分各有明确分工：<span class="arithmatex">\(T(s'\mid s,a)b(s)\)</span> 是“预测”步，把信念按动力学前推；<span class="arithmatex">\(O(o'\mid s',a)\)</span> 是“校正”步，用新观测对每个候选状态加权；分母是归一化，保证 <span class="arithmatex">\(\sum_{s'}b'(s')=1\)</span>。若某次观测在某状态下概率为 0，该状态会被直接置零，且之后永远无法恢复——这是硬零观测的典型陷阱，实践中需要在 <span class="arithmatex">\(O\)</span> 上加微小平滑。</p>
+<p>公式的三部分各有明确分工：<span class="arithmatex">\(T(s'\mid s,a)b(s)\)</span> 是“预测”步，把信念按动力学前推；<span class="arithmatex">\(O(o'\mid s',a)\)</span> 是“校正”步，用新观测对每个候选状态加权；分母是归一化，保证 <span class="arithmatex">\(\sum_{s'}b'(s')=1\)</span>。若某次观测在某状态下概率为 0，该状态在当前校正后会被置零；下一次预测时，只要存在从其他正概率状态转入它的非零转移概率，它仍可恢复。只有转移模型也无法把概率质量送回时，零值才会永久保持。没有物理依据地加平滑会改变模型，应先区分真实不可能观测与估计产生的假零。</p>
 <p>计算量是这条公式最现实的约束：预测步需要双重求和，乘法次数为 <span class="arithmatex">\(\Theta(|\mathcal S|^2)\)</span>；校正与归一化各为 <span class="arithmatex">\(\Theta(|\mathcal S|)\)</span>。因此单步更新代价完全由状态数主导：</p>
 <p>| 状态数 <span class="arithmatex">\(|\mathcal S|\)</span> | 预测步乘法次数（约） | 以每秒 <span class="arithmatex">\(10^9\)</span> 次运算估算的单步时间 | 1000 步总时间 |
 | --- | --- | --- | --- |

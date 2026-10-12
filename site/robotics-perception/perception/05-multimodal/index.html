@@ -4603,6 +4603,8 @@
 <p>这张表是选型与验收的直接依据：<strong>先说清任务容差，再决定花多少钱在同步上。</strong> 若传感器无法达到所需精度，则必须在算法层补偿——读取采集时刻的位姿做插值，而不是用处理时刻的位姿，细节见 <a href="../../../systems-simulation/distributed-systems/02-distributed-time/">分布式时间与时钟同步</a> 与 <a href="../../../systems-simulation/distributed-systems/05-middleware-ros2-dds/">ROS 2 与 DDS 中间件</a>。</p>
 <p>一个可控的近似对齐实现如下：</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">align_pair</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">lidar</span><span class="p">,</span> <span class="n">max_gap</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lidar</span><span class="o">.</span><span class="n">samples</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pick the pair of samples closest in time within max_gap seconds.&quot;&quot;&quot;</span>
     <span class="n">best</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cam</span><span class="o">.</span><span class="n">samples</span><span class="p">:</span>
