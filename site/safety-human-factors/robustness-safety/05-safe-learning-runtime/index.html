@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4529,7 +4529,9 @@
 <p>监控信号可以包括定位协方差、传感器更新时间、控制循环频率、动作是否越界以及模型置信度。系统不需要先知道主策略为什么出错，只要检测到关键安全前提已经失效，就应该降低自动化程度。</p>
 <p>这里的判断依据是<strong>前提条件</strong>而不是<strong>输出结果</strong>：定位协方差超界意味着下游所有几何推理都不可靠，即使此刻的动作看起来完全正常。等输出异常再反应，往往已经失去了干预时间。</p>
 <p>用依赖图看这件事会更清楚。策略输出依赖一串前提 <span class="arithmatex">\(P_1,\dots,P_k\)</span>（定位有效、点云新鲜、控制周期按时、模型在分布内），动作的安全性成立要求这些前提同时成立：</p>
-<div class="arithmatex">\[\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .\]</div>
+<div class="arithmatex">\[
+\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .
+\]</div>
 <p>监控的职责就是持续评估每个 <span class="arithmatex">\(P_i\)</span>。只要任一前提失效，结论就不再成立，无论输出当前看起来多么合理。</p>
 <table>
 <thead>
@@ -4656,7 +4658,9 @@
 </table>
 <p>阈值设计的常见错误是用<strong>离线平均值的百分比</strong>来定，例如“延迟超过平均延迟的两倍就告警”。这类阈值对分布偏移没有意义。更稳的做法是先从任务指标反推可容忍上限，再把阈值设在略低于该上限的位置，并为状态切换留出迟滞区间。</p>
 <p>反推过程可以写成一条明确的式子。设可容忍的位置误差上界为 <span class="arithmatex">\(\epsilon\)</span>、安全余量需要消耗 <span class="arithmatex">\(d_\text{need}\)</span>，则允许的定位标准差近似为</p>
-<div class="arithmatex">\[\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},\]</div>
+<div class="arithmatex">\[
+\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},
+\]</div>
 <p>其中 <span class="arithmatex">\(k\)</span> 是置信倍数（取 3 表示按 <span class="arithmatex">\(3\sigma\)</span> 计）。以 <span class="arithmatex">\(\epsilon=0.5\)</span> m、<span class="arithmatex">\(d_\text{need}=0.2\)</span> m、<span class="arithmatex">\(k=3\)</span> 为例，<span class="arithmatex">\(\sigma_x^\text{max}=0.1\)</span> m，正好对应上表那一行的数值。这样得到的阈值有来源、可解释：<strong>它直接表达了“当估计不确定性吃掉多少余量时必须干预”。</strong></p>
 <table>
 <thead>
@@ -4697,9 +4701,13 @@
 <h2 id="_3">监控信号的窗口长度与滤波延迟</h2>
 <p>瞬时阈值对突变反应快，但误报多；窗口统计更稳，但把检测延迟也拉长了。两者之间存在可计算的权衡。</p>
 <p>设监控残差的噪声标准差为 <span class="arithmatex">\(\sigma\)</span>、需要检出的真实偏移为 <span class="arithmatex">\(\Delta\)</span>。用长度 <span class="arithmatex">\(W\)</span> 的滑动均值 <span class="arithmatex">\(\bar r = \frac{1}{W}\sum_{i=1}^{W} r_i\)</span> 做判定时，噪声被压低到</p>
-<div class="arithmatex">\[\sigma_{\bar r} = \frac{\sigma}{\sqrt{W}} .\]</div>
+<div class="arithmatex">\[
+\sigma_{\bar r} = \frac{\sigma}{\sqrt{W}} .
+\]</div>
 <p>若把阈值设为该窗口统计量的 3 倍，则能可靠检出偏移 <span class="arithmatex">\(\Delta\)</span> 所需的窗口长度为</p>
-<div class="arithmatex">\[W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .\]</div>
+<div class="arithmatex">\[
+W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4738,15 +4746,21 @@
 </table>
 <p>这张表给出一个反直觉的结论：<strong>检测能力对偏移大小是平方敏感的</strong>。要检出的偏移减半，窗口长度与延迟都要变成四倍。因此“既快又灵敏”在单通道上做不到，正确做法是引入独立信息源（第二传感器、运动模型预测）而不是继续加长窗口。</p>
 <p>窗口长度还决定了误报的节奏。若用不重叠的窗口、每 <span class="arithmatex">\(W\)</span> 个采样做一次判定，<span class="arithmatex">\(3\sigma\)</span> 判据的单次误报率约 <span class="arithmatex">\(2.7\times10^{-3}\)</span>，在 100 Hz、<span class="arithmatex">\(W=36\)</span> 下平均误报间隔</p>
-<div class="arithmatex">\[\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.\]</div>
+<div class="arithmatex">\[
+\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.
+\]</div>
 <p>两分多钟一次误报对长时间任务仍可能太频繁，因此可提高阈值，或要求多类证据联合触发。只有检测事件相互独立时，联合误报率才等于各自误报率之积；共享传感器、环境或模型时通常相关，必须用联合数据估计。</p>
 <h2 id="_4">安全过滤器可以修改不安全动作</h2>
 <p>策略输出 <span class="arithmatex">\(u_{nom}\)</span> 后，过滤器可以检查速度、碰撞距离或动力学可行性。如果满足约束就放行，否则替换成最近的安全动作。这种结构让学习算法不必独自承担“永远不犯错”的责任。</p>
 <p>形式上可以在每个控制周期求解</p>
-<div class="arithmatex">\[u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,\]</div>
+<div class="arithmatex">\[
+u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,
+\]</div>
 <p>即在安全集合内取<strong>离策略建议最近的</strong>动作。要保证最小值存在，<span class="arithmatex">\(\mathcal U_{\text{safe}}\)</span> 至少应非空且闭；要保证欧几里得投影唯一，常再要求它是凸集。若集合非凸，可能有多个同样近的动作，必须规定决胜规则。若 <span class="arithmatex">\(u^*=u_{nom}\)</span>，只说明它满足过滤器当前编码的约束，不代表现实中绝对安全。</p>
 <p>差值 <span class="arithmatex">\(\lVert u^*-u_{nom}\rVert\)</span> 是一个非常有用的监控量，甚至可以定义一个干预率</p>
-<div class="arithmatex">\[\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert&gt;\varepsilon_0\}}{\#\{t\}} .\]</div>
+<div class="arithmatex">\[
+\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert&gt;\varepsilon_0\}}{\#\{t\}} .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4817,9 +4831,13 @@
 </code></pre></div>
 <p>timeout 不能凭经验随手给：它应大于正常周期抖动的上界（否则会误停），又小于“控制系统已失去意义”的时间尺度（否则停得太晚）。这两者之间的窗口有时很窄，此时应改进调度确定性而不是继续放宽阈值。</p>
 <p>把它写成区间：设控制周期的均值与标准差分别为 <span class="arithmatex">\(\mu_P\)</span> 与 <span class="arithmatex">\(\sigma_P\)</span>，并设系统在保持最后指令的情况下、从当前状态走出安全域所需的时间为 <span class="arithmatex">\(\tau_\text{crit}\)</span>，则</p>
-<div class="arithmatex">\[\mu_P + 4\sigma_P\ &lt;\ \text{timeout}\ &lt;\ \tau_\text{crit}.\]</div>
+<div class="arithmatex">\[
+\mu_P + 4\sigma_P\ &lt;\ \text{timeout}\ &lt;\ \tau_\text{crit}.
+\]</div>
 <p><span class="arithmatex">\(\tau_\text{crit}\)</span> 可以用安全余量反推：若当前速度为 <span class="arithmatex">\(v\)</span>、可用净空为 <span class="arithmatex">\(d\)</span>，则</p>
-<div class="arithmatex">\[\tau_\text{crit} \approx \frac{d}{v}.\]</div>
+<div class="arithmatex">\[
+\tau_\text{crit} \approx \frac{d}{v}.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4976,7 +4994,9 @@
 </tbody>
 </table>
 <p>第二点常被忽略：主策略输出 <span class="arithmatex">\(u_1\)</span>、回退输出 <span class="arithmatex">\(u_2\)</span> 时，直接硬切换等于给执行器一个阶跃输入。稳妥做法是<strong>限制指令变化率</strong>，在一小段过渡时间内插值或限幅：</p>
-<div class="arithmatex">\[u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\text{blend}},\]</div>
+<div class="arithmatex">\[
+u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\text{blend}},
+\]</div>
 <p>其中 <span class="arithmatex">\(T_\text{blend}\)</span> 是过渡时长。若 <span class="arithmatex">\(u_1\)</span> 与 <span class="arithmatex">\(u_2\)</span> 的差可达执行器量程的 50%，而机械允许的最大加速度对应 <span class="arithmatex">\(T_\text{blend}=0.2\)</span> s，那么过渡阶段的加速度约为 <span class="arithmatex">\(0.5\,u_\text{max}/0.2 = 2.5\,u_\text{max}\)</span>——超出量程。因此 <span class="arithmatex">\(T_\text{blend}\)</span> 必须由执行器能力反推，而不是取一个“看起来平滑”的经验值。</p>
 <table>
 <thead>
@@ -5015,7 +5035,9 @@
 </tbody>
 </table>
 <p>覆盖范围检查也有定量形式：回退控制器的吸引域 <span class="arithmatex">\(\mathcal{D}_\text{fb}\)</span> 必须覆盖所有可能触发切换的状态集合 <span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span>，即</p>
-<div class="arithmatex">\[\mathcal{S}_\text{trig} \subseteq \mathcal{D}_\text{fb}.\]</div>
+<div class="arithmatex">\[
+\mathcal{S}_\text{trig} \subseteq \mathcal{D}_\text{fb}.
+\]</div>
 <p><span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span> 在实践中几乎无法精确枚举，因此常用做法是<strong>先限制触发条件</strong>：让切换只在速度低于某个值、姿态偏差小于某个角度时发生。这样虽然牺牲了一部分恢复能力，但把 <span class="arithmatex">\(\mathcal{S}_\text{trig}\)</span> 收缩成可验证的小集合。</p>
 <h2 id="_7">运行时安全最终需要明确状态机</h2>
 <p>正常运行、警告、降级、紧急停止、人工接管和恢复自动控制之间应有清晰切换条件。这样才能避免故障时多个模块同时“抢着处理”或者没有任何模块负责。</p>
@@ -5063,7 +5085,9 @@
 </table>
 <p>状态机必须是<strong>唯一</strong>负责切换的组件。让多个模块各自判断“该不该停车”，会在边界情况下产生相互矛盾的指令。</p>
 <p>实现上有一条硬要求：状态转移表必须<strong>完备且确定</strong>。约定事件集合为 <span class="arithmatex">\(\mathcal{E}\)</span>、状态集合为 <span class="arithmatex">\(\mathcal{Q}\)</span>，则转移函数</p>
-<div class="arithmatex">\[\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}\]</div>
+<div class="arithmatex">\[
+\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}
+\]</div>
 <p>必须是全定义的（不允许出现“未定义行为”）。工程上这意味着对每个 <span class="arithmatex">\(\mathcal{Q}\times\mathcal{E}\)</span> 组合都要写出期望行为，哪怕只是“保持当前状态并记录”。漏掉组合的代价是：在故障叠加时系统行为取决于代码执行顺序，而这恰恰是最不可预测的情形。</p>
 <table>
 <thead>
@@ -5133,7 +5157,9 @@
 <p>切换频率必须由监控量的随机过程模型或实测轨迹估计。仅给出单点标准差 <span class="arithmatex">\(\sigma_m\)</span>、迟滞宽度 <span class="arithmatex">\(h\)</span> 与保持时间，不能推出通用首达或往返频率：结果还依赖采样周期、增量方差、自相关、漂移、边界和复位机制。实践中应在代表性正常与故障轨迹上扫描 <span class="arithmatex">\((h,T_\text{hold})\)</span>，报告单位时间切换次数、漏检率和恢复延迟的联合曲线。</p>
 <h2 id="_9">干预延迟与接管时间预算</h2>
 <p>如果回退动作是把控制权交给人，那么运行时安全的实际效果取决于<strong>人是否来得及接管</strong>。设系统发现异常的时刻为 <span class="arithmatex">\(t_0\)</span>，操作员完成接管需要</p>
-<div class="arithmatex">\[T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},\]</div>
+<div class="arithmatex">\[
+T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},
+\]</div>
 <p>其中 <span class="arithmatex">\(T_\text{percept}\)</span> 是操作员感知到告警并理解情境的时间、<span class="arithmatex">\(T_\text{decide}\)</span> 是判断采取何种操作的时间、<span class="arithmatex">\(T_\text{act}\)</span> 是执行动作的时间。这个总时间必须小于系统在无人干预下的可用时间 <span class="arithmatex">\(T_\text{avail}\)</span>，否则交接只是把失效形式从“自动失效”变成了“无人接管”。</p>
 <table>
 <thead>
@@ -5359,7 +5385,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

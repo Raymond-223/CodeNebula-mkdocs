@@ -13,7 +13,9 @@ $$
 
 这里 $\mathbb R^n$ 的标准基（standard basis）定义为
 
-$$e_1=(1,0,\ldots,0)^T,\quad e_2=(0,1,\ldots,0)^T,\quad\ldots,\quad e_n=(0,\ldots,0,1)^T.$$
+$$
+e_1=(1,0,\ldots,0)^T,\quad e_2=(0,1,\ldots,0)^T,\quad\ldots,\quad e_n=(0,\ldots,0,1)^T.
+$$
 
 矩阵的第 $i$ 列正是 $Ae_i$。若
 
@@ -172,7 +174,9 @@ $$
 
 对一般 $n$ 阶矩阵，行列式定义为
 
-$$\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)},$$
+$$
+\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)},
+$$
 
 其中 $S_n$ 是 $1,\ldots,n$ 的全部排列，$\operatorname{sgn}(\sigma)$ 表示排列的奇偶符号。
 
@@ -194,7 +198,9 @@ $$
 
 矩阵的秩（rank）正式定义为像空间也就是列空间的维数：
 
-$$\operatorname{rank}(A):=\dim\operatorname{Col}(A).$$
+$$
+\operatorname{rank}(A):=\dim\operatorname{Col}(A).
+$$
 
 **秩与主元定理。** $\operatorname{rank}(A)$ 等于任一行阶梯形中主元的个数；原矩阵中与主元位置对应的列构成列空间的一组基。
 
@@ -341,17 +347,23 @@ $$
 
     正定性与齐次性可由绝对值性质逐项得到。对 $\ell_1$ 范数，由高中绝对值三角不等式逐项相加：
 
-    $$\|x+y\|_1=\sum_i|x_i+y_i|\le\sum_i(|x_i|+|y_i|)=\|x\|_1+\|y\|_1.$$
+    $$
+    \|x+y\|_1=\sum_i|x_i+y_i|\le\sum_i(|x_i|+|y_i|)=\|x\|_1+\|y\|_1.
+    $$
 
     对 $\ell_\infty$ 范数，每个 $i$ 都有
 
-    $$|x_i+y_i|\le|x_i|+|y_i|\le\|x\|_\infty+\|y\|_\infty,$$
+    $$
+    |x_i+y_i|\le|x_i|+|y_i|\le\|x\|_\infty+\|y\|_\infty,
+    $$
 
     再对左边取最大值。$\ell_2$ 范数的三角不等式已在上一章由柯西－施瓦茨不等式证明。
 
 **反三角不等式。** 任意范数都满足
 
-$$|\|x\|-\|y\||\le\|x-y\|.$$
+$$
+|\|x\|-\|y\||\le\|x-y\|.
+$$
 
 ??? proof "证明"
 
@@ -389,7 +401,7 @@ $$
     N(x)
     \le\sum_{i=1}^n|x_i|N(e_i)
     \le\left(\sum_{i=1}^nx_i^2\right)^{1/2}
-       \left(\sum_{i=1}^nN(e_i)^2\right)^{1/2}.
+    \left(\sum_{i=1}^nN(e_i)^2\right)^{1/2}.
     $$
 
     记 $M=\bigl(\sum_iN(e_i)^2\bigr)^{1/2}$，则
@@ -426,13 +438,17 @@ $$
 
     $x=0$ 时同一不等式也成立。分别对两个范数取常数
 
-    $$m_a\|x\|_2\le\|x\|_a\le M_a\|x\|_2,
+    $$
+    m_a\|x\|_2\le\|x\|_a\le M_a\|x\|_2,
     \qquad
-    m_b\|x\|_2\le\|x\|_b\le M_b\|x\|_2.$$
+    m_b\|x\|_2\le\|x\|_b\le M_b\|x\|_2.
+    $$
 
     由 $\|x\|_2\ge\|x\|_a/M_a$ 和 $\|x\|_2\le\|x\|_a/m_a$ 得
 
-    $$\frac{m_b}{M_a}\|x\|_a\le\|x\|_b\le\frac{M_b}{m_a}\|x\|_a.$$
+    $$
+    \frac{m_b}{M_a}\|x\|_a\le\|x\|_b\le\frac{M_b}{m_a}\|x\|_a.
+    $$
 
     所以可明确取 $c=m_b/M_a$、$C=M_b/m_a$。
 
@@ -480,8 +496,10 @@ $$
 
     设线性无关向量为 $v_1,\ldots,v_k$。递归定义
 
-    $$u_1=v_1,\qquad
-    u_j=v_j-\sum_{i=1}^{j-1}\frac{v_j^Tu_i}{u_i^Tu_i}u_i.$$
+    $$
+    u_1=v_1,\qquad
+    u_j=v_j-\sum_{i=1}^{j-1}\frac{v_j^Tu_i}{u_i^Tu_i}u_i.
+    $$
 
     由构造，$u_j$ 与此前每个 $u_i$ 正交。若某个 $u_j=0$，则 $v_j$ 属于 $v_1,\ldots,v_{j-1}$ 的张成空间，与原向量组线性无关矛盾，所以每个 $u_j\ne0$。令 $q_j=u_j/\|u_j\|_2$，便得到标准正交组。
 
@@ -546,7 +564,9 @@ $Q$ 的列是标准正交特征向量，$\Lambda$ 的对角元是对应特征值
 
     因此 $Az\in q_1^\perp$，即该正交补空间在 $A$ 下不变。由正交补维数引理，它的维数为 $n-1$。先对该子空间的一组普通基使用前文的 Gram–Schmidt 引理，得到标准正交基 $w_2,\ldots,w_n$，令 $W=(w_2,\ldots,w_n)$。限制映射在这组基下的坐标矩阵定义为
 
-    $$B=W^TAW,\qquad B_{ij}=w_i^TAw_j.$$
+    $$
+    B=W^TAW,\qquad B_{ij}=w_i^TAw_j.
+    $$
 
     于是 $B^T=W^TA^TW=W^TAW=B$。这一步同时说明了抽象限制映射与坐标矩阵之间的关系。由归纳假设，$B$ 有一组标准正交特征向量；经 $W$ 映回原空间，得到 $q_1^\perp$ 中的标准正交特征向量 $q_2,\ldots,q_n$。
 

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4678,14 +4678,20 @@ f(x^*)=x^*,
 <details class="proof">
 <summary>有限博弈存在混合策略 Nash 均衡</summary>
 <p>设联合混合策略空间为 <span class="arithmatex">\(\Sigma=\prod_i\Delta(\mathcal A_i)\)</span>。每个单纯形非空、紧、凸，有限个单纯形的笛卡尔积仍非空、紧、凸。</p>
-<p>对固定的 <span class="arithmatex">\(\sigma_{-i}\)</span>，玩家 <span class="arithmatex">\(i\)</span> 的期望收益关于自己的混合策略 <span class="arithmatex">\(\sigma_i\)</span> 是线性的。连续函数在紧集上能取得最大值，所以 <span class="arithmatex">\(BR_i(\sigma_{-i})\)</span> 非空。若 <span class="arithmatex">\(x_i,y_i\)</span> 都是最佳响应，则任意 <span class="arithmatex">\(\theta\in[0,1]\)</span> 满足
-$<span class="arithmatex">\(u_i(\theta x_i+(1-\theta)y_i,\sigma_{-i})=\theta u_i(x_i,\sigma_{-i})+(1-\theta)u_i(y_i,\sigma_{-i}),\)</span>$
-右边仍等于最大收益，因此最佳响应集合是凸的。</p>
-<p>再证闭图。若 <span class="arithmatex">\(\sigma^k\to\sigma\)</span>、<span class="arithmatex">\(\tau_i^k\to\tau_i\)</span> 且 <span class="arithmatex">\(\tau_i^k\in BR_i(\sigma_{-i}^k)\)</span>，则对任意 <span class="arithmatex">\(a_i\in\Delta(\mathcal A_i)\)</span> 都有
-$<span class="arithmatex">\(u_i(\tau_i^k,\sigma_{-i}^k)\ge u_i(a_i,\sigma_{-i}^k).\)</span>$
-有限博弈的期望收益是各概率的多项式，因而连续。令 <span class="arithmatex">\(k\to\infty\)</span> 得
-$<span class="arithmatex">\(u_i(\tau_i,\sigma_{-i})\ge u_i(a_i,\sigma_{-i}),\)</span>$
-所以 <span class="arithmatex">\(\tau_i\in BR_i(\sigma_{-i})\)</span>。因此联合最佳响应对应 <span class="arithmatex">\(BR(\sigma)=\prod_iBR_i(\sigma_{-i})\)</span> 非空、凸值并有闭图；在紧值情形下这等价于上半连续。</p>
+<p>对固定的 <span class="arithmatex">\(\sigma_{-i}\)</span>，玩家 <span class="arithmatex">\(i\)</span> 的期望收益关于自己的混合策略 <span class="arithmatex">\(\sigma_i\)</span> 是线性的。连续函数在紧集上能取得最大值，所以 <span class="arithmatex">\(BR_i(\sigma_{-i})\)</span> 非空。若 <span class="arithmatex">\(x_i,y_i\)</span> 都是最佳响应，则任意 <span class="arithmatex">\(\theta\in[0,1]\)</span> 满足</p>
+<div class="arithmatex">\[
+u_i(\theta x_i+(1-\theta)y_i,\sigma_{-i})=\theta u_i(x_i,\sigma_{-i})+(1-\theta)u_i(y_i,\sigma_{-i}),
+\]</div>
+<p>右边仍等于最大收益，因此最佳响应集合是凸的。</p>
+<p>再证闭图。若 <span class="arithmatex">\(\sigma^k\to\sigma\)</span>、<span class="arithmatex">\(\tau_i^k\to\tau_i\)</span> 且 <span class="arithmatex">\(\tau_i^k\in BR_i(\sigma_{-i}^k)\)</span>，则对任意 <span class="arithmatex">\(a_i\in\Delta(\mathcal A_i)\)</span> 都有</p>
+<div class="arithmatex">\[
+u_i(\tau_i^k,\sigma_{-i}^k)\ge u_i(a_i,\sigma_{-i}^k).
+\]</div>
+<p>有限博弈的期望收益是各概率的多项式，因而连续。令 <span class="arithmatex">\(k\to\infty\)</span> 得</p>
+<div class="arithmatex">\[
+u_i(\tau_i,\sigma_{-i})\ge u_i(a_i,\sigma_{-i}),
+\]</div>
+<p>所以 <span class="arithmatex">\(\tau_i\in BR_i(\sigma_{-i})\)</span>。因此联合最佳响应对应 <span class="arithmatex">\(BR(\sigma)=\prod_iBR_i(\sigma_{-i})\)</span> 非空、凸值并有闭图；在紧值情形下这等价于上半连续。</p>
 <p>Kakutani 不动点定理于是给出某个 <span class="arithmatex">\(\sigma^*\in\Sigma\)</span> 使 <span class="arithmatex">\(\sigma^*\in BR(\sigma^*)\)</span>。按 Nash 均衡的定义，这个 <span class="arithmatex">\(\sigma^*\)</span> 就是混合策略 Nash 均衡。</p>
 </details>
 <p>还要区分<strong>存在</strong>和<strong>怎么找到</strong>。不动点定理只保证某个均衡存在，并不保证“每轮都改成当前最佳响应”就一定能走到那里。例如在石头剪刀布中，若双方采用确定性的纯最佳响应更新，动作可以一直循环。因此后面的 fictitious play、遗憾最小化等算法研究的是“如何通过动态过程逼近均衡”，这是另一个问题。</p>
@@ -5062,7 +5068,7 @@ u_r(T,L)&gt;u_r(B,L)\ \text{且}\ u_r(T,R)&gt;u_r(B,R)\ \Longrightarrow\ T\ \tex
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

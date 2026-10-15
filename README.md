@@ -19,7 +19,7 @@ CodeNebula 是一套面向 **AI、Robotics 与 Autonomous Systems** 的紧凑型
 
 此外还有 **Machine Learning Foundations**（2 篇入门正文）。以上合计 **14 个 Section、73 篇正文**。
 
-Yau Contest 与其余板块共用同一套写作与校验规范：定义—条件—完整证明—反例—手算例题—练习，定理与命题的证明统一收进默认关闭的 `proof` 折叠栏，并明确区分必要条件、充分条件与充要条件；导航与页面 H1 使用英文，正文使用中文并保留标准英文术语。它与其余板块的区别只在内容取向——竞赛需要的定义、推导与配套练习会在专题内重新完整给出，供需要一条选择性备赛线的读者使用；站点其余部分仍是一张面向智能系统的最小充分知识地图。
+Yau Contest 与其余板块共用同一套写作与校验规范：定义—条件—完整证明—反例—手算例题—练习，定理与命题的证明统一收进默认关闭的 `proof` 折叠栏，并明确区分必要条件、充分条件与充要条件；导航与页面 H1 通常使用英文；按本次要求，真题页导航和 H1 使用「丘赛真题」。正文使用中文并保留标准英文术语。它与其余板块的区别只在内容取向——竞赛需要的定义、推导与配套练习会在专题内重新完整给出，供需要一条选择性备赛线的读者使用；站点其余部分仍是一张面向智能系统的最小充分知识地图。
 
 ## Current scale
 
@@ -28,7 +28,7 @@ Yau Contest 与其余板块共用同一套写作与校验规范：定义—条�
 - **88 Markdown pages**（含 Home 与 14 个 Section 首页）
 - **65 local SVG teaching diagrams**
 - **60 short Python examples**，另有少量 Bash / YAML / Dockerfile 示例
-- 顶部和左侧导航使用英文；正文使用中文并保留标准英文术语
+- 顶部和左侧导航以英文为主，「丘赛真题」使用中文；正文使用中文并保留标准英文术语
 
 ## Content rules
 
@@ -82,3 +82,22 @@ docs/
 ```
 
 `python scripts/check_docs.py` 会检查目录规模、英文导航与 H1、中文知识点式小标题、本地链接、公式分隔、章节深度、每条定理是否带折叠证明、SVG、Python 语法、文章长度、图片/代码密度、重复图片和代码长度。GitHub Actions 在完整环境中执行 `mkdocs build --strict`。
+
+
+## 2026-10-14 revision
+
+- Worked Problems 已改为「丘赛真题」，逐卷筛选官方应用与计算数学题，保留 195 组 Stage 1 可独立完成的题目或小问；页面只放题干和默认关闭的答案，逐卷审核记录见 SOURCE_SELECTION.md，来源与校验哈希见 SOURCE_PAPERS.json。原网页路径保留，已有链接仍可使用。
+- 五张示意图重画，统一缩小箭头头部，修复优化曲线中三个标签的重叠。
+- 修正 display math 的分隔与空行、图注 Markdown、样式加载顺序和 MathJax 站内导航的异步渲染。
+- 输出包含源码与重新构建的 site/；本地请通过 HTTP 服务预览，直接双击 HTML 不能完整验证站内导航和搜索。
+
+数学回归检查（额外安装开发依赖后执行）：
+
+```bash
+pip install -r requirements-dev.txt
+python scripts/test_yau_real_problems.py
+python scripts/check_docs.py
+mkdocs build --strict
+```
+
+重新生成本次重画的数学与反馈 SVG：`python scripts/redraw_teaching_diagrams.py`。

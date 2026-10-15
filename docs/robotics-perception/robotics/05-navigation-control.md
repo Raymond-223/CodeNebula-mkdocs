@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![机器人导航把定位、地图、规划和控制闭合成一个持续循环。](../../assets/diagrams/robot-stack.svg)
-  <figcaption>导航系统需要把状态估计、全局规划、局部控制和底盘执行连成闭环。</figcaption>
+  <figcaption markdown="span">导航系统需要把状态估计、全局规划、局部控制和底盘执行连成闭环。</figcaption>
 </figure>
 
 ## 导航首先依赖可信的机器人状态
@@ -15,7 +15,9 @@
 
 这一点可以用误差放大来量化。假设定位给出的位姿与真实位姿的偏差为 $\delta p$，控制器跟踪目标路径的中心线。若路径附近障碍的安全间隙只有 $d_{\text{gap}}$，那么当
 
-$$\lVert\delta p\rVert\ge d_{\text{gap}}$$
+$$
+\lVert\delta p\rVert\ge d_{\text{gap}}
+$$
 
 系统就已经失去安全保证，无论后面算法多好。例如走廊宽 1.2 m、机器人宽 0.6 m，两侧各剩 0.3 m 余量；定位偏差一旦超过 0.3 m，机器人就可能擦墙。
 
@@ -91,7 +93,9 @@ while robot_enabled:
 
 **Pure Pursuit（纯追踪）** 在路径上取一个离机器人前视距离 $L_d$ 的点作为目标点，把转向角对准它。设目标点在机器人坐标系下的方位角为 $\alpha$，则所需曲率为
 
-$$\kappa=\frac{2\sin\alpha}{L_d},$$
+$$
+\kappa=\frac{2\sin\alpha}{L_d},
+$$
 
 对应前轮转角 $\delta=\arctan(\kappa L)$，$L$ 为轴距。它的直观含义是：**前视距离直接决定切角程度。** 但 Pure Pursuit 对圆轨迹的稳态误差不能脱离参考点定义、目标点选择规则、车辆运动学和离散更新方式写成统一的 $L_d^2/(2R)$。理想连续运动学模型在某些选点约定下可以精确保持圆轨迹；工程实现中的“抄近道”则来自离散采样、路径点稀疏、速度与执行器约束等共同作用。
 
@@ -99,7 +103,9 @@ $$\kappa=\frac{2\sin\alpha}{L_d},$$
 
 **Stanley 控制器** 用前轴中心到路径的横向误差 $e$ 和航向误差 $\psi_e$ 直接构造转角：
 
-$$\delta=\psi_e+\arctan\!\left(\frac{k\,e}{v+\epsilon}\right),$$
+$$
+\delta=\psi_e+\arctan\!\left(\frac{k\,e}{v+\epsilon}\right),
+$$
 
 $k$ 为横向增益，$\epsilon$ 防止低速时除零。它的横向误差近似按 $\dot e=-k\,e$ 收敛，即时间常数约 $1/k$：$k=2$ 时约 0.5 s 收敛到初值的 37%。
 

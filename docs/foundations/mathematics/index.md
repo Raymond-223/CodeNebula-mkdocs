@@ -6,9 +6,8 @@
 
 <figure markdown="span">
   ![mathematics overview](../../assets/diagrams/math-map.svg)
-  <figcaption>Mathematics 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Mathematics 的核心概念关系。</figcaption>
 </figure>
-
 
 ## 学习范围
 

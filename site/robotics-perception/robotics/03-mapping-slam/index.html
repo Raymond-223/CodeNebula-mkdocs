@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4484,9 +4484,13 @@
 <h2 id="_1">里程计误差累积</h2>
 <p>假设每一步位姿增量都只有很小误差，连续累积几百、几千步后，位置和角度误差仍会越来越大。尤其角度误差会改变后续平移方向，使轨迹逐渐偏离真实路径。</p>
 <p>这个累积不是线性增长。设第 <span class="arithmatex">\(k\)</span> 步的角度误差为 <span class="arithmatex">\(\delta\theta_k\)</span>，此后剩余行程长度为 <span class="arithmatex">\(L_k\)</span>，则它造成的末端位置误差近似为</p>
-<div class="arithmatex">\[\delta p \approx \sum_k L_k\,\delta\theta_k,\]</div>
+<div class="arithmatex">\[
+\delta p \approx \sum_k L_k\,\delta\theta_k,
+\]</div>
 <p>也就是说，<strong>越早出现的角度误差，被放大的行程越长</strong>。位置误差本身以随机游走方式累积（约与步数的平方根同阶），而角度误差通过上述机制带来与距离同阶甚至更强的漂移。若把每步的平移噪声方差记为 <span class="arithmatex">\(\sigma_x^2\)</span>、角度噪声方差记为 <span class="arithmatex">\(\sigma_\theta^2\)</span>，则末端位置误差的方差近似为</p>
-<div class="arithmatex">\[\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).\]</div>
+<div class="arithmatex">\[
+\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).
+\]</div>
 <p>第二项里的 <span class="arithmatex">\(L_k^2\)</span> 是关键：<strong>角度噪声的权重随剩余距离平方增长</strong>，所以同样的角度精度，在长距离任务里比在短距离任务里贵得多。这也解释了一个常见现象：短距离内里程计看起来完全够用，走完一个长回路后地图却整体扭曲。</p>
 <p>不同里程计来源的误差量级可以用“相对行程的百分比”粗略对照：</p>
 <table>
@@ -4565,9 +4569,13 @@
 <li><strong>数据关联</strong>：决定当前观测“属于”哪个已有结构或地图区域。</li>
 </ul>
 <p>扫描匹配的几何形式可以直接写出来。这里的旋转约束不是新知识：<span class="arithmatex">\(R\in SO(3)\)</span> 表示 <span class="arithmatex">\(R\)</span> 必须始终是合法三维旋转矩阵，定义见 <a href="../../../foundations/mathematics/02-rotations-rigid-transforms/">数学前置：旋转与刚体变换</a>。设当前帧点集为 <span class="arithmatex">\(\{q_j\}\)</span>，目标帧或局部地图点集为 <span class="arithmatex">\(\{p_j\}\)</span>，待求的相对变换为 <span class="arithmatex">\((R, t)\)</span>，则点到点 ICP 求解的是</p>
-<div class="arithmatex">\[\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,\]</div>
+<div class="arithmatex">\[
+\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,
+\]</div>
 <p>其中 <span class="arithmatex">\(c(j)\)</span> 是 <span class="arithmatex">\(q_j\)</span> 在目标点云中的最近点索引。点到点形式简单，但在平面结构上收敛慢；引入目标点法向 <span class="arithmatex">\(n_j\)</span> 后得到点到面残差</p>
-<div class="arithmatex">\[\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \right)^2,\]</div>
+<div class="arithmatex">\[
+\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \right)^2,
+\]</div>
 <p>它只约束法向方向，因此在墙面、地面这类平面上收敛更快，但对法向估计的噪声更敏感。最近点搜索是这里的成本瓶颈：暴力搜索是 <span class="arithmatex">\(O(NM)\)</span>，用 KD-tree 或体素哈希可以降到约 <span class="arithmatex">\(O(N \log M)\)</span> 甚至 <span class="arithmatex">\(O(N)\)</span>，这也是前端能否跑到 10–100 Hz 的决定因素。</p>
 <table>
 <thead>
@@ -4639,14 +4647,18 @@
 <h2 id="_3">后端：把整条轨迹写成优化问题</h2>
 <p>后端可以把机器人不同时刻的位姿作为节点，把里程计、扫描匹配和闭环关系作为约束。若两个时刻实际上处于同一地点，闭环约束会告诉优化器：这两个位姿应该重合或接近。</p>
 <p>写成最小二乘形式，位姿图优化求解的是</p>
-<div class="arithmatex">\[X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},\]</div>
+<div class="arithmatex">\[
+X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},
+\]</div>
 <p>其中 <span class="arithmatex">\(z_{ij}\)</span> 是观测到的相对约束，<span class="arithmatex">\(e_{ij}\)</span> 是它与当前估计之间的残差，<span class="arithmatex">\(\Sigma_{ij}\)</span> 是该约束的不确定度（信息矩阵）。这个形式包含两个重要含义：</p>
 <ul>
 <li><strong>权重由不确定度决定</strong>：不可靠的约束权重低，闭环这类长期约束权重高，因此能主导全局形状；</li>
 <li><strong>误差在全轨迹重新分配</strong>：优化的结果不是简单修改当前位置，而是把误差在整条轨迹中重新分配，使所有约束尽可能一致。</li>
 </ul>
 <p>实际求解用的是 Gauss-Newton 或 Levenberg-Marquardt 迭代。把全部残差堆成向量 <span class="arithmatex">\(e(X)\)</span>、把雅可比记为 <span class="arithmatex">\(J = \partial e / \partial X\)</span>，则每次迭代要求解的线性系统是</p>
-<div class="arithmatex">\[\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,\]</div>
+<div class="arithmatex">\[
+\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,
+\]</div>
 <p>其中 <span class="arithmatex">\(\boxplus\)</span> 不是普通的“矩阵加法”。位姿 <span class="arithmatex">\(X\in SE(3)\)</span> 必须始终保持旋转部分满足 <span class="arithmatex">\(R^\top R=I\)</span>，所以优化器先在当前位置附近求一个普通六维小增量 <span class="arithmatex">\(\Delta\xi\in\mathbb R^6\)</span>（3 个平移 + 3 个小旋转），再通过指数映射把它送回 <span class="arithmatex">\(SE(3)\)</span>。这个“局部增量 → 合法位姿”的动作就简写成 <span class="arithmatex">\(X\boxplus\Delta\xi\)</span>；前置解释见 <a href="../../../foundations/mathematics/02-rotations-rigid-transforms/#lie-group-boxplus">流形、李群与 <span class="arithmatex">\(\boxplus\)</span></a>。这个系统的结构决定了复杂度：位姿图的 <span class="arithmatex">\(J\)</span> 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，<span class="arithmatex">\(n\)</span> 个位姿的求解成本大致是 <span class="arithmatex">\(O(n)\)</span> 到 <span class="arithmatex">\(O(n^{1.5})\)</span>；而如果当成稠密矩阵处理，成本是 <span class="arithmatex">\(O(n^3)\)</span>，<span class="arithmatex">\(n=1000\)</span> 时就已不可接受。</p>
 <table>
 <thead>
@@ -4719,7 +4731,9 @@
 <p>机器人走一圈回到旧地点时，正确闭环可以显著修正漂移；错误闭环则会把两个不同地点强行拉到一起，导致地图整体变形。</p>
 <p>因此闭环检测通常需要比普通帧间匹配更谨慎的验证，例如几何一致性、点云匹配得分或多帧确认。<strong>错误闭环往往比没有闭环更糟。</strong></p>
 <p>闭环检测本质上是一个二分类问题，两类错误代价完全不对称。若把候选分为真正例 <span class="arithmatex">\(TP\)</span>、假正例 <span class="arithmatex">\(FP\)</span>、假负例 <span class="arithmatex">\(FN\)</span>，精确率 <span class="arithmatex">\(P = TP/(TP+FP)\)</span>、召回率 <span class="arithmatex">\(R = TP/(TP+FN)\)</span>，综合指标为</p>
-<div class="arithmatex">\[F_1 = \frac{2PR}{P+R}.\]</div>
+<div class="arithmatex">\[
+F_1 = \frac{2PR}{P+R}.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4806,9 +4820,13 @@
 <h2 id="_5">稳健核与误闭环抑制</h2>
 <p>最小二乘对离群值极不稳健，原因在代价函数本身：二次代价中残差以平方进入目标，因此<strong>一条量级差 10 倍的错误约束，其影响会放大 100 倍</strong>，足以压过几十条正确的里程计约束，让整段轨迹被拉向错误位置。</p>
 <p>解决办法是在残差上改用稳健核。设残差尺度参数为 <span class="arithmatex">\(\delta\)</span>，Huber 权重为</p>
-<div class="arithmatex">\[w(r)=\min\left(1,\ \frac{\delta}{|r|}\right), \qquad \rho(r)=\int_0^{|r|} w(s)\,\mathrm{d}s,\]</div>
+<div class="arithmatex">\[
+w(r)=\min\left(1,\ \frac{\delta}{|r|}\right), \qquad \rho(r)=\int_0^{|r|} w(s)\,\mathrm{d}s,
+\]</div>
 <p>其效果是：残差小于 <span class="arithmatex">\(\delta\)</span> 时保持二次行为（不损失正常数据的效率），超过 <span class="arithmatex">\(\delta\)</span> 后退化为线性增长，从而限制单条约束的最大影响。权重写进目标函数后，优化问题变为</p>
-<div class="arithmatex">\[\min_X \sum_{(i,j)\in\mathcal{E}} \rho\!\left( \left\lVert e_{ij} \right\rVert_{\Sigma_{ij}} \right),\]</div>
+<div class="arithmatex">\[
+\min_X \sum_{(i,j)\in\mathcal{E}} \rho\!\left( \left\lVert e_{ij} \right\rVert_{\Sigma_{ij}} \right),
+\]</div>
 <p>等价于把每条约束的信息矩阵按 <span class="arithmatex">\(w\)</span> 缩放，再迭代求解——这也意味着稳健核不改变问题的结构，只改变权重。</p>
 <table>
 <thead>
@@ -4873,7 +4891,9 @@
 <h2 id="_6">地图表示由任务决定</h2>
 <p>二维导航常用 occupancy grid；三维避障可能使用体素、点云或局部高度图；视觉系统还可能维护稀疏 landmark。地图不是越精细越好，分辨率越高意味着存储、匹配和更新成本也越高。</p>
 <p>这一点可以算清楚。设地图覆盖面积为 <span class="arithmatex">\(L \times L\)</span>（m）、分辨率为 <span class="arithmatex">\(r\)</span>（m/格）、每格存储 <span class="arithmatex">\(b\)</span> 字节，则内存为</p>
-<div class="arithmatex">\[M = \frac{L^2}{r^2} \cdot b.\]</div>
+<div class="arithmatex">\[
+M = \frac{L^2}{r^2} \cdot b.
+\]</div>
 <p>代入 <span class="arithmatex">\(L = 100\)</span> m、<span class="arithmatex">\(b = 1\)</span> B：分辨率 0.05 m 时需要约 <span class="arithmatex">\(4 \times 10^6\)</span> 个格，即 4 MB；分辨率减半到 0.025 m，格数与内存涨到 4 倍（16 MB）。而匹配与更新的成本同样随格数增长，因此<strong>分辨率每提升一倍，整条流水线的成本大约翻两番</strong>。</p>
 <table>
 <thead>
@@ -4957,7 +4977,9 @@
 <h2 id="_7">可观测性限制地图质量</h2>
 <p>某些运动和环境无法提供足够约束，例如长直走廊缺少横向特征、纯旋转难以恢复平移尺度。此时优化器无法凭空创造信息。</p>
 <p>这一点可以用信息矩阵说明。设约束残差对状态的雅可比为 <span class="arithmatex">\(J\)</span>、噪声协方差为 <span class="arithmatex">\(\Sigma\)</span>，则信息矩阵为 <span class="arithmatex">\(\mathcal{I} = J^\top \Sigma^{-1} J\)</span>，状态估计的不确定度由它的逆给出。当某个方向缺少约束时</p>
-<div class="arithmatex">\[\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}} \to \infty,\]</div>
+<div class="arithmatex">\[
+\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}} \to \infty,
+\]</div>
 <p>也就是说：<strong>该方向上的估计误差可以任意大，而优化器仍然报告“收敛”</strong>。工程上更常用的诊断量是条件数 <span class="arithmatex">\(\kappa = \lambda_{\max} / \lambda_{\min}\)</span>：<span class="arithmatex">\(\kappa\)</span> 在健康场景通常是 <span class="arithmatex">\(10^2\)</span> 量级，退化时会升到 <span class="arithmatex">\(10^5\)</span> 以上，此时即使残差很小，解得出的位姿在该方向上也是不可信的。</p>
 <table>
 <thead>
@@ -5029,7 +5051,9 @@
 <p>识别退化场景并融合其他传感器，通常比继续调迭代次数更有效。传感器融合的价值主要体现在<strong>不同传感器在不同场景下退化方向不同</strong>：视觉在弱纹理下退化，LiDAR 在无结构环境下退化，IMU 在长时间下退化，它们失效的条件并不重合。</p>
 <h2 id="_8">计算预算与实时性</h2>
 <p>SLAM 的每次迭代都要与传感器频率竞争。设传感器周期为 <span class="arithmatex">\(T_{\text{s}}\)</span>，前端每帧耗时 <span class="arithmatex">\(t_{\text{front}}\)</span>（含数据关联），后端每次优化耗时 <span class="arithmatex">\(t_{\text{back}}\)</span>、执行频率为 <span class="arithmatex">\(f_{\text{back}}\)</span>，则常规帧必须满足</p>
-<div class="arithmatex">\[t_{\text{front}} + \frac{t_{\text{back}}}{f_{\text{back}} \cdot T_{\text{s}}} \le T_{\text{s}} \cdot \eta, \qquad \eta \approx 0.5,\]</div>
+<div class="arithmatex">\[
+t_{\text{front}} + \frac{t_{\text{back}}}{f_{\text{back}} \cdot T_{\text{s}}} \le T_{\text{s}} \cdot \eta, \qquad \eta \approx 0.5,
+\]</div>
 <p>其中 <span class="arithmatex">\(\eta\)</span> 是留给这一级流水线的时间占比（其余留给其它模块）。若 <span class="arithmatex">\(T_{\text{s}} = 100\)</span> ms、<span class="arithmatex">\(\eta = 0.5\)</span>、<span class="arithmatex">\(f_{\text{back}} = 1\)</span> Hz，则后端每次最多只能用 50 ms，前端还有约 45 ms 可用。</p>
 <table>
 <thead>
@@ -5256,7 +5280,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

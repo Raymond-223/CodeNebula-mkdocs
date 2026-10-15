@@ -10,7 +10,9 @@
 
 在线 RL 的隐含前提是“交互风险可以被承受并统计”。设每次交互发生危险事件的概率为 $p_{\text{fail}}$，一旦发生造成损失 $c_{\text{fail}}$，并暂时假设各次风险相同，则进行 $N$ 次交互的**期望损失**为 $Np_{\text{fail}}c_{\text{fail}}$。若期望风险预算为 $B$，只能推出
 
-$$N \le \frac{B}{p_{\text{fail}}c_{\text{fail}}}.$$
+$$
+N \le \frac{B}{p_{\text{fail}}c_{\text{fail}}}.
+$$
 
 这个式子不是逐次安全保证：即使期望损失不超预算，第一次交互仍可能出事。若危险事件不可接受，必须施加“每一步都满足约束”的硬安全条件，而不能把事故成本平均掉。样本复杂度也依赖算法、MDP 类别、视界与置信度，不能脱离这些条件断言一个统一次数；真正的矛盾是“学习需要覆盖足够多的状态—动作，而真实系统可承受的危险交互很少”。
 
@@ -28,15 +30,21 @@ $$N \le \frac{B}{p_{\text{fail}}c_{\text{fail}}}.$$
 
 Offline RL 的输入只有一个固定的 $(D)$，$D=\{(s_t,a_t,r_t,s'_{t})\}_{t=1}^{N}$，由未知的行为策略 $\pi_\beta$ 生成。定义行为策略的折扣占用度量
 
-$$d^{\pi_\beta}(s,a) = (1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\, \mathbb P\big(s_t=s, a_t=a \mid \pi_\beta\big).$$
+$$
+d^{\pi_\beta}(s,a) = (1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\, \mathbb P\big(s_t=s, a_t=a \mid \pi_\beta\big).
+$$
 
 Offline RL 想解的目标是在**分布约束**下的回报最大化：
 
-$$\max_\pi\; J(\pi)\quad \text{s.t.}\quad D_{\mathrm{TV}}\big(d^{\pi} \,\|\, d^{\pi_\beta}\big)\le \epsilon .$$
+$$
+\max_\pi\; J(\pi)\quad \text{s.t.}\quad D_{\mathrm{TV}}\big(d^{\pi} \,\|\, d^{\pi_\beta}\big)\le \epsilon .
+$$
 
 另一类常用但**并不等价**的约束是限制占用度量的密度比。例如要求在 $d^{\pi_\beta}(s,a)>0$ 处
 
-$$\frac{d^\pi(s,a)}{d^{\pi_\beta}(s,a)}\le M.$$
+$$
+\frac{d^\pi(s,a)}{d^{\pi_\beta}(s,a)}\le M.
+$$
 
 策略比 $\pi(a\mid s)/\pi_\beta(a\mid s)$ 只比较同一状态下的动作概率，遗漏了目标策略改变后产生的状态分布漂移；因此它不能替代占用度量比。$M=1$ 与两个占用度量都归一化合起来才迫使二者相等；$M$ 变大只是放宽这一约束，并不自动提供分布外可验证性。
 
@@ -54,7 +62,9 @@ $$\frac{d^\pi(s,a)}{d^{\pi_\beta}(s,a)}\le M.$$
 
 鲁棒 RL 承认"训练时的动力学不是唯一可能的动力学"。设转移分布属于一个不确定集 $\mathcal P$，鲁棒目标是
 
-$$\max_\pi \; \min_{P\in\mathcal P}\; \mathbb E_{\tau\sim(\pi,P)}\left[\sum_{t=0}^{T}\gamma^{t} r(s_t,a_t)\right].$$
+$$
+\max_\pi \; \min_{P\in\mathcal P}\; \mathbb E_{\tau\sim(\pi,P)}\left[\sum_{t=0}^{T}\gamma^{t} r(s_t,a_t)\right].
+$$
 
 内层 $\min$ 把环境当成对手，让策略在网络攻击或工况漂移下也成立。$\mathcal P$ 的三种常见构造：
 
@@ -76,27 +86,37 @@ $$\max_\pi \; \min_{P\in\mathcal P}\; \mathbb E_{\tau\sim(\pi,P)}\left[\sum_{t=0
 
 这是 Safe RL 的标准形式化。在 MDP 上增加成本函数 $c:\mathcal S\times\mathcal A\to[0,c_{\max}]$ 与预算 $d$，得到约束 MDP（CMDP），其联合目标写成
 
-$$\max_\pi\; J(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} r(s_t,a_t)\right] \quad \text{s.t.}\quad J_C(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} c(s_t,a_t)\right] \le d .$$
+$$
+\max_\pi\; J(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} r(s_t,a_t)\right] \quad \text{s.t.}\quad J_C(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} c(s_t,a_t)\right] \le d .
+$$
 
 注意 $d$ 是**折扣累计成本**的预算，不是瞬时每步的约束。若过程已进入稳态，且每步平均成本为 $\bar c$，则
 
-$$J_C=\sum_{t=0}^{\infty}\gamma^t\bar c=\frac{\bar c}{1-\gamma}.$$
+$$
+J_C=\sum_{t=0}^{\infty}\gamma^t\bar c=\frac{\bar c}{1-\gamma}.
+$$
 
 所以 $\gamma=0.99,d=1$ 对应 $\bar c\le(1-\gamma)d=0.01$。若一次事故的成本为 1、其他时刻成本为 0，这相当于长期平均约每 100 步至多一次事故，而不是“百万步一次”。该换算还依赖稳态平均的解释；它不是逐时刻硬安全保证。
 
 直接带约束的梯度更新很别扭，标准做法是拉格朗日松弛。引入对偶变量 $\lambda\ge 0$：
 
-$$\mathcal L(\pi,\lambda) = J(\pi) - \lambda\big(J_C(\pi) - d\big),$$
+$$
+\mathcal L(\pi,\lambda) = J(\pi) - \lambda\big(J_C(\pi) - d\big),
+$$
 
 定义对偶函数 $g(\lambda)=\max_\pi \mathcal L(\pi,\lambda)$。对任意 $\lambda\ge0$ 和任意可行策略，都有 $\mathcal L(\pi,\lambda)\ge J(\pi)$，故弱对偶给出
 
-$$J^{\star} \le \inf_{\lambda\ge0} g(\lambda).$$
+$$
+J^{\star} \le \inf_{\lambda\ge0} g(\lambda).
+$$
 
 只有在满足强对偶所需条件时才能把不等号写成等号。例如有限折扣 CMDP 改用占用度量作变量后是线性规划；若原问题可行，线性规划强对偶可用。直接用神经网络参数化策略时问题一般非凸，不能无条件声称强对偶。
 
 对偶变量的更新规则是次梯度的投影形式：
 
-$$\lambda_{k+1} = \max\!\big(0,\; \lambda_k + \eta_\lambda\big(J_C(\pi_k) - d\big)\big).$$
+$$
+\lambda_{k+1} = \max\!\big(0,\; \lambda_k + \eta_\lambda\big(J_C(\pi_k) - d\big)\big).
+$$
 
 这就是"保守程度自动调节"的全部机制：把 $J_C(\pi_k) > d$ 解释为"成本超支"，于是 $\lambda$ 上升，等价奖励变为 $r - \lambda c$，成本项的权重被放大，策略被推向低风险动作；反之 $J_C(\pi_k) < d$ 时 $\lambda$ 下降直至 0，约束失去作用，退化成普通 RL。$\eta_\lambda$ 决定调节速度：太大则 $\lambda$ 在 0 与高值之间震荡、策略来回摇摆；太小则超支状态会持续很久。
 
@@ -115,21 +135,29 @@ Offline RL 最核心的技术危险是**分布外动作的 Q 值被系统性高�
 
 设 $\hat Q$ 是估计器。TD 目标里的 $\max$ 算子作用在一个带噪声的函数上：
 
-$$\mathbb E\Big[\max_{a'}\hat Q(s',a')\Big] \;\ge\; \max_{a'}\mathbb E\big[\hat Q(s',a')\big].$$
+$$
+\mathbb E\Big[\max_{a'}\hat Q(s',a')\Big] \;\ge\; \max_{a'}\mathbb E\big[\hat Q(s',a')\big].
+$$
 
 这是 Jensen 不等式 + 凸函数的直接结果：**即使 $\hat Q$ 在每个点上都无偏，取 max 也会得到正偏差。**在线 RL 中这个偏差会被后续真实采样纠正——选了高估的动作，环境马上返回一个更低的真实回报；离线时这个纠正通道被彻底切断，$D$ 中根本没有对应的 $s'$ 与后续数据，高估就被存储在值函数里并沿 Bellman 备份向回传播：
 
-$$\hat Q(s,a) \leftarrow r + \gamma \max_{a'}\hat Q(s',a').$$
+$$
+\hat Q(s,a) \leftarrow r + \gamma \max_{a'}\hat Q(s',a').
+$$
 
 单步误差 $\varepsilon$ 在折扣累积后放大 $\sum_{t}\gamma^{t} = \frac{1}{1-\gamma}$ 倍：$\gamma=0.99$ 时放大约 100 倍，$\gamma=0.999$ 时约 1000 倍。**这就是离线回报估计动辄虚高一个数量级的来源。**
 
 抑制手段统称悲观原则（pessimism）：在无数据支持的 $(s,a)$ 上主动压低价值，
 
-$$\hat Q_{\text{pes}}(s,a) = \hat Q(s,a) - \beta\, u(s,a),$$
+$$
+\hat Q_{\text{pes}}(s,a) = \hat Q(s,a) - \beta\, u(s,a),
+$$
 
 $u(s,a)\ge0$ 是不确定性度量，常用集成网络方差、密度比倒数 $1/\hat\pi_\beta(a\mid s)$，或 ensemble 成员分歧。CQL 的等价实现把惩罚直接嵌进目标：
 
-$$\min_Q\; \alpha\;\mathbb E_{s\sim D}\left[\log\sum_{a}\exp Q(s,a) - \mathbb E_{a\sim\hat\pi_\beta}\big[Q(s,a)\big]\right] + \mathcal L_{\text{TD}}(Q).$$
+$$
+\min_Q\; \alpha\;\mathbb E_{s\sim D}\left[\log\sum_{a}\exp Q(s,a) - \mathbb E_{a\sim\hat\pi_\beta}\big[Q(s,a)\big]\right] + \mathcal L_{\text{TD}}(Q).
+$$
 
 括号内第一项把所有动作的 Q 值往上推，第二项把数据中真实出现过的动作往上推——两者相减，净效果是**把未见动作相对已见动作压低**。
 
@@ -160,11 +188,15 @@ $$
 
 运行时层使用控制屏障函数（CBF）。给定安全集 $\{s: h(s)\ge 0\}$，只要存在控制量使
 
-$$\dot h(s) + \alpha\, h(s) \ge 0,\qquad \alpha>0,$$
+$$
+\dot h(s) + \alpha\, h(s) \ge 0,\qquad \alpha>0,
+$$
 
 就能保证 $h$ 不会穿零（前向不变性）。把它做成动作过滤器：RL 给出 $a_{\text{rl}}$，安全层投影到可行集
 
-$$a_{\text{safe}} = \arg\min_{a\in\mathcal A_{\text{safe}}(s)} \|a - a_{\text{rl}}\|.$$
+$$
+a_{\text{safe}} = \arg\min_{a\in\mathcal A_{\text{safe}}(s)} \|a - a_{\text{rl}}\|.
+$$
 
 | 约束形式 | 语义 | 何时不足 |
 |---|---|---|
@@ -188,7 +220,9 @@ $$a_{\text{safe}} = \arg\min_{a\in\mathcal A_{\text{safe}}(s)} \|a - a_{\text{rl
 
 三者叠加时约束会相乘式收紧，这一点必须显式记账。以"离线 + 鲁棒 + 安全"为例，要同时满足在 $D$ 支撑集内、对所有 $P\in\mathcal P$、且 $J_C\le d$，可行策略集是三个集合的交：
 
-$$\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{\text{offline}} \;\cap\; \underbrace{\{\pi: \forall P\in\mathcal P,\; J_{P}(\pi)\ge J_{\min}\}}_{\text{robust}} \;\cap\; \underbrace{\{\pi: J_C(\pi)\le d\}}_{\text{safe}} .$$
+$$
+\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{\text{offline}} \;\cap\; \underbrace{\{\pi: \forall P\in\mathcal P,\; J_{P}(\pi)\ge J_{\min}\}}_{\text{robust}} \;\cap\; \underbrace{\{\pi: J_C(\pi)\le d\}}_{\text{safe}} .
+$$
 
 交集很容易是空集——数据覆盖不足、又要对所有扰动成立、还要满足硬约束，可能根本不存在这样的策略。此时诊断结论不是“算法不够好”，而是**问题设定本身不可行**，正确动作是重新检查预算、数据覆盖与不确定集。样本复杂度取决于模型类容量、不确定集结构、误差容许度和置信度；没有附加假设时不存在统一的 $\rho^{-2}$ 乘法规律。
 
@@ -196,7 +230,9 @@ $$\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{
 
 把上一节的机制落到可操作的判据。"分布外动作"指的是目标策略给出显著概率、而 $\pi_\beta$ 几乎不给概率的动作集合：
 
-$$\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) > \delta,\; \hat\pi_\beta(a\mid s) < \epsilon \big\}.$$
+$$
+\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) > \delta,\; \hat\pi_\beta(a\mid s) < \epsilon \big\}.
+$$
 
 若 $\mathcal A_{\text{OOD}}\neq\varnothing$，说明目标策略把显著概率放到了行为数据很少支持的动作上；此处的 Q 值通常只能依赖函数外推。是否“完全无数据”还要看有限样本计数、连续空间邻域以及函数类假设，不能由两个阈值直接推出。
 
@@ -233,11 +269,15 @@ $$\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) > \delta,\; \hat\pi_\beta(
 
 最直接的想法是重要性采样（IS）。用数据集轨迹 $i$ 的回报 $G_i$ 做加权：
 
-$$\hat J_{\text{IS}}(\pi) = \frac{1}{N}\sum_{i=1}^{N} \left(\prod_{t=0}^{T-1}\frac{\pi(a_{t}^{i}\mid s_{t}^{i})}{\pi_\beta(a_{t}^{i}\mid s_{t}^{i})}\right) G_i .$$
+$$
+\hat J_{\text{IS}}(\pi) = \frac{1}{N}\sum_{i=1}^{N} \left(\prod_{t=0}^{T-1}\frac{\pi(a_{t}^{i}\mid s_{t}^{i})}{\pi_\beta(a_{t}^{i}\mid s_{t}^{i})}\right) G_i .
+$$
 
 方差可能随轨迹长度指数增长。设单步权重 $w=\pi(a\mid s)/\pi_\beta(a\mid s)$，在行为策略分布下
 
-$$\mathbb E_{\pi_\beta}[w^2]=\exp\!\left(D_2(\pi\|\pi_\beta)\right),$$
+$$
+\mathbb E_{\pi_\beta}[w^2]=\exp\!\left(D_2(\pi\|\pi_\beta)\right),
+$$
 
 其中 $D_2$ 是二阶 Rényi 散度，不是 $2D_{\mathrm{KL}}$。若再假设各步权重独立同分布，轨迹权重二阶矩才会成为这个量的 $T$ 次方；真实 MDP 中各步相关，不能直接写成等号。
 

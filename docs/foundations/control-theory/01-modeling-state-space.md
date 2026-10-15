@@ -31,7 +31,7 @@
 
 <figure markdown="span">
   ![状态、输入和输出构成动态系统的基本关系。](../../assets/diagrams/control-map.svg)
-  <figcaption>控制理论从“状态如何随输入演化”开始，再讨论反馈和控制器。</figcaption>
+  <figcaption markdown="span">控制理论从“状态如何随输入演化”开始，再讨论反馈和控制器。</figcaption>
 </figure>
 
 ---

@@ -174,8 +174,8 @@ R=
 1&0&0\\
 0&0&1
 \end{bmatrix},\qquad
- t=\begin{bmatrix}1\\2\\0\end{bmatrix},\qquad
- p=\begin{bmatrix}1\\0\\0\end{bmatrix}.
+t=\begin{bmatrix}1\\2\\0\end{bmatrix},\qquad
+p=\begin{bmatrix}1\\0\\0\end{bmatrix}.
 $$
 
 先旋转得到 $Rp=(0,1,0)^\top$，再平移得到
@@ -255,7 +255,6 @@ $\boxplus$ 就是“先在局部六维空间里加一个小增量，再映射回
 | $\mathfrak{se}(3)$ | 三维位姿的局部小增量空间 | 6 | 位姿图优化、Bundle Adjustment |
 
 读到后面时只做两步判断：**这是旋转还是刚体位姿？这是全局合法状态还是局部小增量？** 前者决定用 $SO/SE$，后者决定是否会看到李代数、$\operatorname{Exp}$ 或 $\boxplus$。
-
 
 ## 五、后续应用
 

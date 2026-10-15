@@ -53,7 +53,7 @@ $$
 
 <figure markdown="span">
   ![优化是在目标函数和可行域之间寻找最优点。](../../assets/diagrams/optimization-constraints.svg)
-  <figcaption>目标函数决定"好坏"，约束决定"哪些解允许被选择"。</figcaption>
+  <figcaption markdown="span">目标函数决定"好坏"，约束决定"哪些解允许被选择"。</figcaption>
 </figure>
 
 | 组成 | 数学对象 | 建模时必须先回答什么 |
@@ -180,7 +180,9 @@ $$
 
     设凸可行集 $C$ 上的凸函数 $f$ 在 $x^*$ 处局部最优。若存在 $y\in C$ 使 $f(y)<f(x^*)$，由凸集定义，对任意 $t\in(0,1)$，$x_t=(1-t)x^*+ty\in C$。由凸性，
 
-    $$f(x_t)\le(1-t)f(x^*)+tf(y)<f(x^*).$$
+    $$
+    f(x_t)\le(1-t)f(x^*)+tf(y)<f(x^*).
+    $$
 
     当 $t\to0$ 时，$x_t\to x^*$，所以在 $x^*$ 的任意小邻域中都存在更小的可行函数值，与局部最优矛盾。因此不存在这样的 $y$，$x^*$ 是全局最优。
 

@@ -156,3 +156,36 @@ body, input { font-family: Inter, "Noto Sans SC", "Microsoft YaHei", system-ui, 
 @media (min-width: 60em) {
   .md-typeset figure img { max-height: min(62vh, 720px); }
 }
+
+/* Final overrides load after the decorative theme. */
+.md-header__title, .md-header__topic {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #fff;
+}
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4 {
+  background: none;
+  color: var(--md-default-fg-color);
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+}
+.md-typeset pre { overflow: auto; }
+.md-typeset pre::before { content: none; }
+.md-typeset pre > code { padding: 0; background: none; }
+.md-typeset .arithmatex { min-width: 0; }
+.md-typeset div.arithmatex { max-width: 100%; overflow-x: auto; }
+.md-typeset mjx-container[jax="CHTML"][display="true"] {
+  padding-top: .65rem;
+  padding-bottom: .65rem;
+}
+.md-typeset figure { overflow-x: auto; }
+.md-typeset figure img[src$=".svg"] { max-height: none; }
+@media (max-width: 44.9844em) {
+  .md-typeset figure img[src$=".svg"] {
+    min-width: 620px;
+    max-width: none;
+    width: 620px;
+  }
+  .md-typeset figcaption { text-align: left; }
+}

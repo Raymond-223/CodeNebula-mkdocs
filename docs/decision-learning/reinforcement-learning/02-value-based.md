@@ -8,27 +8,39 @@
 
 如果直接用完整回报 $G_t$ 更新 $V(s_t)$，必须等未来真正发生：
 
-$$G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots .$$
+$$
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots .
+$$
 
 TD 的做法是只走一步，就用当前估计构造目标：
 
-$$y_t=r_{t+1}+\gamma V(s_{t+1}).$$
+$$
+y_t=r_{t+1}+\gamma V(s_{t+1}).
+$$
 
 TD 误差为
 
-$$\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),$$
+$$
+\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),
+$$
 
 然后更新
 
-$$V(s_t)\leftarrow V(s_t)+\alpha\delta_t.$$
+$$
+V(s_t)\leftarrow V(s_t)+\alpha\delta_t.
+$$
 
 它一半来自真实采样，一半来自自己的估计，因此称为 **bootstrapping（自举）**。优点是可以在线更新，代价是目标本身也在变化。更一般地，可以走 $n$ 步再自举：
 
-$$y_t^{(n)}=\sum_{k=0}^{n-1}\gamma^{k}r_{t+k+1}+\gamma^{n}V(s_{t+n}),$$
+$$
+y_t^{(n)}=\sum_{k=0}^{n-1}\gamma^{k}r_{t+k+1}+\gamma^{n}V(s_{t+n}),
+$$
 
 $n=1$ 即标准 TD，$n\to\infty$（走到回合结束）即 Monte Carlo。把不同 $n$ 的估计按几何权重 $\lambda$ 平均，就得到 TD($\lambda$) 的 $\lambda$-return
 
-$$G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}y_t^{(n)} .$$
+$$
+G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}y_t^{(n)} .
+$$
 
 | 量 | 定义位置 | 含义 | 单位 |
 |---|---|---|---|
@@ -43,7 +55,9 @@ $$G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}y_t^{(n)} .$$
 
 这两种目标的差别只有一个：期望在哪里被截断。
 
-$$\text{MC：}G_t=\sum_{k=0}^{T-t-1}\gamma^{k}r_{t+k+1}\qquad\text{vs}\qquad\text{TD(0)：}y_t=r_{t+1}+\gamma V(s_{t+1}).$$
+$$
+\text{MC：}G_t=\sum_{k=0}^{T-t-1}\gamma^{k}r_{t+k+1}\qquad\text{vs}\qquad\text{TD(0)：}y_t=r_{t+1}+\gamma V(s_{t+1}).
+$$
 
 MC 用整条轨迹的实际奖励，完全不用 $V$；在回合按目标策略生成且回报可积时，它对 $V^\pi(s_t)$ 无偏。$G_t$ 是多个相关随机奖励的加权和，其方差包含所有协方差交叉项。TD 用自举估计替代未来回报，常能降低采样方差，但下一状态随机性和价值估计误差仍在，方差不保证低于 MC；只要自举值有偏，目标也会带偏。
 
@@ -67,21 +81,29 @@ MC 用整条轨迹的实际奖励，完全不用 $V$；在回合按目标策略�
 
 Q-Learning 用最优下一动作构造 TD 目标：
 
-$$y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a'),$$
+$$
+y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a'),
+$$
 
 更新为
 
-$$Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha\left[y_t-Q(s_t,a_t)\right].$$
+$$
+Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha\left[y_t-Q(s_t,a_t)\right].
+$$
 
 把更新拆开看更清楚：
 
-$$\underbrace{Q(s_t,a_t)}_{\text{当前估计}}\leftarrow\underbrace{Q(s_t,a_t)}_{\text{当前估计}}+\alpha\underbrace{\left(\overbrace{r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')}^{\text{目标值}}-Q(s_t,a_t)\right)}_{\text{更新方向：TD error}} .$$
+$$
+\underbrace{Q(s_t,a_t)}_{\text{当前估计}}\leftarrow\underbrace{Q(s_t,a_t)}_{\text{当前估计}}+\alpha\underbrace{\left(\overbrace{r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')}^{\text{目标值}}-Q(s_t,a_t)\right)}_{\text{更新方向：TD error}} .
+$$
 
 当前估计回答"现在认为这个动作值多少"，目标值混合了即时奖励与下一状态的最优估计，二者之差决定应该上调还是下调。
 
 这里最容易混淆的是：**执行时可以探索，学习目标仍然使用下一状态的最大 Q 值**。这就是它被称为 off-policy 的原因之一——被更新的动作 $a_t$ 可以来自任何行为策略（如 $\varepsilon$-greedy），而目标始终假设下一步按贪心行动。对比之下，SARSA 把目标写成本步实际选择的下一动作：
 
-$$y_t^{\text{SARSA}}=r_{t+1}+\gamma Q(s_{t+1},a_{t+1}),$$
+$$
+y_t^{\text{SARSA}}=r_{t+1}+\gamma Q(s_{t+1},a_{t+1}),
+$$
 
 它是 on-policy 的，因此会学到"在探索噪声下安全"的策略，而 Q-Learning 学到的是"若之后不再乱探"的最优策略。
 
@@ -99,7 +121,9 @@ $$y_t^{\text{SARSA}}=r_{t+1}+\gamma Q(s_{t+1},a_{t+1}),$$
 
 最常见的入门方法是 $\varepsilon$-greedy：
 
-$$a_t\sim\begin{cases}\text{在动作集合中随机选择}, & \text{概率 }\varepsilon,\\ \arg\max_a Q(s_t,a), & \text{概率 }1-\varepsilon.\end{cases}$$
+$$
+a_t\sim\begin{cases}\text{在动作集合中随机选择}, & \text{概率 }\varepsilon,\\ \arg\max_a Q(s_t,a), & \text{概率 }1-\varepsilon.\end{cases}
+$$
 
 探索解决"没有数据"的问题，价值更新解决"如何利用数据"的问题。两者不要混在一起理解。
 
@@ -129,13 +153,15 @@ $$a_t\sim\begin{cases}\text{在动作集合中随机选择}, & \text{概率 }\va
 
 因此把表格替换为参数化函数：
 
-$$Q(s,a;\theta)\approx Q^*(s,a).$$
+$$
+Q(s,a;\theta)\approx Q^*(s,a).
+$$
 
 神经网络的价值不只是"容量大"，而是能在相似输入之间形成**泛化**。
 
 <figure markdown="span">
   ![DQN 网络结构](../../img/05-dqn-network.png)
-  <figcaption>价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption>
+  <figcaption markdown="span">价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption>
 </figure>
 
 泛化的代价是估计之间不再独立：更新一个状态动作对的 $Q$ 值会同时改变邻近状态的值。这在两种情况产生严重问题——**状态动作对之间的耦合使自举目标不稳定**（致命三要素：函数逼近 + 自举 + off-policy），以及在覆盖稀疏的区域，网络输出没有任何数据约束，只是外推。
@@ -154,15 +180,21 @@ $$Q(s,a;\theta)\approx Q^*(s,a).$$
 
 DQN 的目标没有变，只是 Q 值由网络输出：
 
-$$y=r+\gamma\max_{a'}Q(s',a';\theta^-),$$
+$$
+y=r+\gamma\max_{a'}Q(s',a';\theta^-),
+$$
 
 在线网络参数是 $\theta$，目标网络参数是 $\theta^-$。训练损失可以写成
 
-$$L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].$$
+$$
+L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].
+$$
 
 注意梯度只对 $\theta$ 求，目标里的 $\theta^-$ 被视为常数：
 
-$$\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_\theta Q(s,a;\theta)\right].$$
+$$
+\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_\theta Q(s,a;\theta)\right].
+$$
 
 在一次目标网络同步间隔内，$\theta^-$ 固定，所以上式就是该“冻结目标平方损失”对 $\theta$ 的完整梯度。之所以仍常沿用**半梯度（semi-gradient）**一词，是因为从贝尔曼残差的角度看，我们主动忽略了自举目标对待学习价值函数参数的依赖；若目标直接由同一个 $\theta$ 产生，这一区别才最明显。停止目标分支的梯度，使更新只把当前预测拉向暂时固定的靶子。
 
@@ -182,13 +214,17 @@ $$\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_
 
 **经验回放**缓解“样本时间相关性”，并提高数据利用率。在线交互得到的相邻样本高度相关，连续取批会增大梯度估计的相关性和方差。把转移 $(s_t,a_t,r_{t+1},s_{t+1})$ 存入容量为 $N$ 的缓冲，再均匀随机抽样：
 
-$$L(\theta)=\frac{1}{\lvert B\rvert}\sum_{(s,a,r,s')\in B}\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2 .$$
+$$
+L(\theta)=\frac{1}{\lvert B\rvert}\sum_{(s,a,r,s')\in B}\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2 .
+$$
 
 在忽略有限总体抽样相关性的近似下，批内样本比连续轨迹更接近独立。均匀抽样的梯度对“当前缓冲区的经验风险”是无偏的，但对当前策略的在线状态分布一般不是无偏的，因为缓冲区混合了不同时刻的行为策略。每条转移可以复用多次，这既提高数据利用率，也会引入数据陈旧问题。
 
 **目标网络**解决"目标随参数移动"。若用同一个 $\theta$ 生成预测与目标，那么把 $Q(s,a;\theta)$ 抬高的同时 $y$ 也被抬高，更新会追自己的尾巴，极易正反馈发散。用一份延迟参数产生目标，就把它变成短期内近似固定的回归问题。两种常见同步方式：每 $C$ 步硬拷贝 $\theta^-\leftarrow\theta$（DQN 原版，$C$ 取数千），或软更新
 
-$$\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\ \text{（每步）}.$$
+$$
+\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\ \text{（每步）}.
+$$
 
 | 问题 | 现象 | 由谁解决 | 机制 | 副作用 |
 |---|---|---|---|---|
@@ -228,7 +264,9 @@ $$\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\
 
 一个精确的结论是：设真实值 $Q$ 与估计 $\hat Q_i=Q_i+\epsilon_i$，其中 $\epsilon_i$ 零均值、同方差 $\sigma^2$ 且相互独立，对 $m$ 个动作取最大值，则
 
-$$\mathbb E\left[\max_i \hat Q_i\right]\ \ge\ \max_i Q_i .$$
+$$
+\mathbb E\left[\max_i \hat Q_i\right]\ \ge\ \max_i Q_i .
+$$
 
 偏差在真实值接近相等时最严重，量级随 $\sigma$ 与动作数 $m$ 增大：$m=2$ 时约 $0.56\sigma$，$m=10$ 时约 $1.54\sigma$，$m=100$ 时约 $2.5\sigma$。**动作越多，$\max$ 的过估计越重**，这解释了为什么在动作空间较大时 Q-Learning 常常整体上偏乐观。
 
@@ -245,7 +283,9 @@ $$\mathbb E\left[\max_i \hat Q_i\right]\ \ge\ \max_i Q_i .$$
 
 Double DQN 的改法只有一步：把"选动作"和"评价动作"分开用两个网络完成。
 
-$$y^{\text{DQN}}=r+\gamma\max_{a'}Q(s',a';\theta^-)\quad\Longrightarrow\quad y^{\text{Double}}=r+\gamma Q\left(s',\arg\max_{a'}Q(s',a';\theta);\theta^-\right).$$
+$$
+y^{\text{DQN}}=r+\gamma\max_{a'}Q(s',a';\theta^-)\quad\Longrightarrow\quad y^{\text{Double}}=r+\gamma Q\left(s',\arg\max_{a'}Q(s',a';\theta);\theta^-\right).
+$$
 
 关键在于用**在线网络 $\theta$ 选动作**、用**目标网络 $\theta^-$ 评价该动作**。两个网络的估计误差若互不相关，"选错的那个高估"在评价时就不会被同样的误差再次抬高，偏差显著减小。
 

@@ -54,7 +54,7 @@
 
 <figure markdown="span">
   ![数值计算把连续问题离散化，再通过有限精度算法得到近似结果。](../../assets/diagrams/numerical-computation.svg)
-  <figcaption>核心不是追求绝对精确，而是知道误差来自哪里、是否在可接受范围。</figcaption>
+  <figcaption markdown="span">核心不是追求绝对精确，而是知道误差来自哪里、是否在可接受范围。</figcaption>
 </figure>
 
 误差至少有四个来源，它们的**处理方法完全不同**，混在一起谈就永远谈不清：

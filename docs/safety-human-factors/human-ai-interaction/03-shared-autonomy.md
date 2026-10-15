@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![共享自主把人类输入和自主系统建议按状态动态融合。](../../assets/diagrams/shared-autonomy.svg)
-  <figcaption>控制权应该随风险、置信度和任务阶段变化，而不是固定平均。</figcaption>
+  <figcaption markdown="span">控制权应该随风险、置信度和任务阶段变化，而不是固定平均。</figcaption>
 </figure>
 
 ## 人和自动系统通常控制不同层级

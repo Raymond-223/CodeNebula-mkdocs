@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![向量分解为列空间内的正交投影与垂直残差。](../assets/diagrams/yau-orthogonal-projection.svg)
-  <figcaption>正交投影把 $b$ 分成 $Pb$ 与垂直残差 $b-Pb$；最佳逼近证明就是这两个分量的勾股分解。</figcaption>
+  <figcaption markdown="span">正交投影把 $b$ 分成 $Pb$ 与垂直残差 $b-Pb$；最佳逼近证明就是这两个分量的勾股分解。</figcaption>
 </figure>
 
 向量 $u,v\in\mathbb R^m$ 正交，记为 $u\perp v$，当且仅当 $u^Tv=0$。若 $u$ 是单位向量，则 $b$ 在 $u$ 方向的正交投影为
@@ -90,7 +90,7 @@ $$
     \|b-y\|_2^2
     &=\|(b-Pb)+(Pb-y)\|_2^2\\
     &=\|b-Pb\|_2^2+\|Pb-y\|_2^2
-      +2(b-Pb)^T(Pb-y)\\
+    +2(b-Pb)^T(Pb-y)\\
     &=\|b-Pb\|_2^2+\|Pb-y\|_2^2\\
     &\ge\|b-Pb\|_2^2.
     \end{aligned}
@@ -191,8 +191,8 @@ $$
 ## 奇异值分解（Singular Value Decomposition）
 
 <figure markdown="span">
-  ![奇异值分解将线性变换拆成旋转、轴向伸缩和再次旋转。](../assets/diagrams/yau-svd-geometry.svg)
-  <figcaption>$V^T$ 先选择正交输入方向，$\Sigma$ 沿坐标轴伸缩，$U$ 再把结果旋转到输出空间。</figcaption>
+  ![奇异值分解将线性变换拆成正交变换、轴向伸缩和再次正交变换。](../assets/diagrams/yau-svd-geometry.svg)
+  <figcaption markdown="span">$V^T$ 先选择正交输入方向，$\Sigma$ 沿坐标轴伸缩，$U$ 再把结果正交变换到输出空间。正交变换也可包含反射。</figcaption>
 </figure>
 
 **标准正交基扩充引理。** 欧几里得空间中的任意标准正交向量组，都能扩充为整个空间的一组标准正交基。
@@ -237,7 +237,9 @@ $$
 
     对任意 $x$，$Ax=0$ 显然推出 $A^TAx=0$。反过来，若 $A^TAx=0$，则
 
-    $$0=x^TA^TAx=\|Ax\|_2^2,$$
+    $$
+    0=x^TA^TAx=\|Ax\|_2^2,
+    $$
 
     所以 $Ax=0$。因此 $\ker(A^TA)=\ker(A)$。两者定义域都是 $\mathbb R^n$，由秩－零化度定理，它们秩相同。对称半正定矩阵 $A^TA$ 的秩等于其非零特征值个数，而非零特征值都为正。
 

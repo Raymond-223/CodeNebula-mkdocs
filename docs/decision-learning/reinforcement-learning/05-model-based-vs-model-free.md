@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。](../../assets/diagrams/model-based-vs-free.svg)
-  <figcaption>是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。</figcaption>
+  <figcaption markdown="span">是否显式使用环境模型决定了规划能力、样本效率与模型偏差之间的权衡。</figcaption>
 </figure>
 
 ## 两条路线的根本区别

@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![simulation-sim2real overview](../../assets/diagrams/sim2real-map.svg)
-  <figcaption>Simulation Sim2Real 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Simulation Sim2Real 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题

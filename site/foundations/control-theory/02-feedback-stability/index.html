@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4502,15 +4502,23 @@
 <p>开环并非总是错误选择。当任务足够短、扰动可忽略、且反馈传感器不可得或成本过高时，开环仍然是合理方案：固定工位上的分拣动作、标定良好的步进电机走固定步数、一次性开火的执行机构都属于这一类。判断标准是<strong>误差在任务周期内是否仍低于容许上限</strong>。</p>
 <h2 id="_2">负反馈的纠偏机制</h2>
 <p>闭环则测量输出 <span class="arithmatex">\(y(t)\)</span>，与目标 <span class="arithmatex">\(r(t)\)</span> 比较得到误差</p>
-<div class="arithmatex">\[e(t)=r(t)-y(t),\]</div>
+<div class="arithmatex">\[
+e(t)=r(t)-y(t),
+\]</div>
 <p>再令控制器根据 <span class="arithmatex">\(e(t)\)</span> 产生新的输入 <span class="arithmatex">\(u(t)\)</span>。只要测量和执行链仍然有效，扰动造成的偏差就能被后续控制动作纠正。</p>
 <p>最简单的比例反馈为</p>
-<div class="arithmatex">\[u=K_p e = K_p (r-y).\]</div>
+<div class="arithmatex">\[
+u=K_p e = K_p (r-y).
+\]</div>
 <p>若输出低于目标，误差为正，控制器增加输入；输出高于目标时则反向修正。这就是负反馈。它的价值不在某个具体公式，而在于让控制动作依赖<strong>实际状态</strong>，而不是只依赖事先模型。</p>
 <p>用一个一阶系统可以看清反馈到底改变了什么。设对象为</p>
-<div class="arithmatex">\[\dot x = -a x + b u, \qquad a&gt;0,\]</div>
+<div class="arithmatex">\[
+\dot x = -a x + b u, \qquad a&gt;0,
+\]</div>
 <p>施加比例反馈 <span class="arithmatex">\(u=K_p(r-x)\)</span> 后，闭环变成</p>
-<div class="arithmatex">\[\dot x = -(a+bK_p)x + bK_p r .\]</div>
+<div class="arithmatex">\[
+\dot x = -(a+bK_p)x + bK_p r .
+\]</div>
 <p>同一个系统的时间常数从 <span class="arithmatex">\(1/a\)</span> 变成 <span class="arithmatex">\(1/(a+bK_p)\)</span>：增益把“系统自己的响应速度”替换成了“由我们设计的响应速度”。更重要的是，闭环对参数变化的敏感度被压低为原来的 <span class="arithmatex">\(1/(1+bK_p/a)\)</span> 量级——对象参数漂移 <span class="arithmatex">\(10\%\)</span>，闭环输出的漂移可能只有百分之几。这就是反馈最本质的收益：<strong>用测量换取对模型的低依赖</strong>。</p>
 <p>但反馈不是免费的：</p>
 <table>
@@ -4559,7 +4567,9 @@
 <li><strong>指数稳定</strong>：收敛速度有下界，工程上最常用，因为它能把“多久回到范围内”写成明确的时间常数。</li>
 </ul>
 <p>对线性连续系统</p>
-<div class="arithmatex">\[\dot x=Ax,\]</div>
+<div class="arithmatex">\[
+\dot x=Ax,
+\]</div>
 <p>若 <span class="arithmatex">\(A\)</span> 的所有特征值实部都小于零，状态会随时间衰减；离散系统 <span class="arithmatex">\(x_{k+1}=Ax_k\)</span> 则要求特征值位于单位圆内。</p>
 <table>
 <thead>
@@ -4603,9 +4613,13 @@
 <li><strong>稳态误差</strong>：最后是否仍有长期偏差。</li>
 </ul>
 <p>这些指标可以借助二阶标准型定量把握。对</p>
-<div class="arithmatex">\[G(s)=\frac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2},\]</div>
+<div class="arithmatex">\[
+G(s)=\frac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2},
+\]</div>
 <p>阻尼比 <span class="arithmatex">\(\zeta\)</span> 单独决定了超调量</p>
-<div class="arithmatex">\[M_p=\exp\!\left(\frac{-\pi\zeta}{\sqrt{1-\zeta^2}}\right),\]</div>
+<div class="arithmatex">\[
+M_p=\exp\!\left(\frac{-\pi\zeta}{\sqrt{1-\zeta^2}}\right),
+\]</div>
 <p>而稳定时间近似为 <span class="arithmatex">\(t_s\approx 4/(\zeta\omega_n)\)</span>。于是设计过程变成一个双变量问题：<span class="arithmatex">\(\omega_n\)</span> 决定<strong>多快</strong>，<span class="arithmatex">\(\zeta\)</span> 决定<strong>多稳</strong>。</p>
 <table>
 <thead>
@@ -4823,7 +4837,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

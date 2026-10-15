@@ -10,7 +10,9 @@
 
 鲁棒性一定要相对于**明确扰动范围**来讨论。“对所有情况都鲁棒”不是有意义的工程结论。工程上通常写成“扰动集合 $\Delta$ 内的最差性能”，即
 
-$$\min_{\delta\in\Delta} J(\theta,\delta),$$
+$$
+\min_{\delta\in\Delta} J(\theta,\delta),
+$$
 
 其中 $\theta$ 是设计参数、$\delta$ 是环境参数。扰动集不必在数学上有界：某些无界集合上的最差值仍有限且能取得；但集合必须有清楚的物理或统计含义，并保证内层优化良定义。只有当 $J$ 沿某个允许的无界扰动方向趋于 $-\infty$ 等情形时，最坏性能才会退化。性能下降还必须用同一个任务指标衡量。
 
@@ -27,7 +29,9 @@ $$\min_{\delta\in\Delta} J(\theta,\delta),$$
 
 安全任务因此需要同时看尾部失败、最大损失、碰撞率等指标，而不是只报告 mean reward。用一个非对称损失函数可以把这件事写成
 
-$$J_\text{weighted}=\underbrace{L_\text{mild}}_{\text{通常可接受}}+\underbrace{\lambda\sum_i p_iL_i}_{\text{人为加权的罕见损失}}.$$
+$$
+J_\text{weighted}=\underbrace{L_\text{mild}}_{\text{通常可接受}}+\underbrace{\lambda\sum_i p_iL_i}_{\text{人为加权的罕见损失}}.
+$$
 
 当 $\lambda$ 远大于 1 时，罕见事件在目标函数中被显著放大。但要注意：**用一个很大的惩罚系数并不等于真的避免了它**，它只是改变了优化偏好，并不改变策略在分布外行为失控的可能性。
 
@@ -35,24 +39,40 @@ $$J_\text{weighted}=\underbrace{L_\text{mild}}_{\text{通常可接受}}+\underbr
 
 只报平均值会把风险稀释掉。金融与安全领域常用的两个尾部度量可以直接搬到机器人系统上。设任务损失 $L$ 为随机变量，置信水平 $\alpha\in(0,1)$：
 
-$$\mathrm{VaR}_\alpha(L)=\inf\{\ell : \Pr(L\le \ell)\ge \alpha\},$$
+$$
+\mathrm{VaR}_\alpha(L)=\inf\{\ell : \Pr(L\le \ell)\ge \alpha\},
+$$
 
-$$\mathrm{CVaR}_\alpha(L)=\min_{t\in\mathbb R}\left[t+\frac{1}{1-\alpha}\mathbb E(L-t)_+\right],\qquad (z)_+=\max(z,0).$$
+$$
+\mathrm{CVaR}_\alpha(L)=\min_{t\in\mathbb R}\left[t+\frac{1}{1-\alpha}\mathbb E(L-t)_+\right],\qquad (z)_+=\max(z,0).
+$$
 
 $\mathrm{VaR}$ 是分位点。对连续且在分位点没有概率质量的分布，$\mathrm{CVaR}$ 可理解成最差 $1-\alpha$ 尾部的平均损失；有原子时必须只取分位点上的适量概率质量，上面的辅助变量公式仍然有效。凸性也不是指标名称自动带来的：只有当每个随机场景下的损失关于决策变量是凸函数时，期望和 CVaR 才保持凸。
 
 ??? proof "辅助变量公式为何得到尾部平均"
     记
-    $$\phi(t)=t+\frac{1}{1-\alpha}\mathbb E[(L-t)_+].$$
+
+    $$
+    \phi(t)=t+\frac{1}{1-\alpha}\mathbb E[(L-t)_+].
+    $$
+
     若 $L$ 的分布连续，在可微点有
-    $$\phi'(t)=1-\frac{\mathbb P(L>t)}{1-\alpha}.$$
+
+    $$
+    \phi'(t)=1-\frac{\mathbb P(L>t)}{1-\alpha}.
+    $$
+
     极小点满足 $\mathbb P(L>t)=1-\alpha$，所以 $t=\operatorname{VaR}_\alpha(L)$。代回并记 $q=t$：
-    $$\begin{aligned}
+
+    $$
+    \begin{aligned}
     \phi(q)
     &=q+\frac{1}{1-\alpha}\mathbb E[(L-q)\mathbf1_{L>q}]\\
     &=\frac{1}{1-\alpha}\mathbb E[L\mathbf1_{L>q}]
-     =\mathbb E[L\mid L>q].
-    \end{aligned}$$
+    =\mathbb E[L\mid L>q].
+    \end{aligned}
+    $$
+
     若分位点有概率原子，$\phi$ 在该点不可微，极小条件改用左右导数；公式会自动从分位点原子中取恰好需要的概率质量，所以仍比简单条件期望定义可靠。样本情形把期望替换成平均，并引入变量 $t$ 与逐样本松弛量，便得到可计算的凸优化形式。
 
 | 指标 | 含义 | 是否凸 | 优化友好度 | 典型用途 |
@@ -72,7 +92,9 @@ $\mathrm{VaR}$ 是分位点。对连续且在分位点没有概率质量的分�
 
 可靠性评估关心失效频率、平均无故障时间和恢复能力。基本的量化工具是失效率与可靠度。设失效率为常数 $\lambda$（单位 $\mathrm{h^{-1}}$），则可靠度函数与平均无故障时间为
 
-$$R(t)=e^{-\lambda t}, \qquad \mathrm{MTBF}=\frac{1}{\lambda}.$$
+$$
+R(t)=e^{-\lambda t}, \qquad \mathrm{MTBF}=\frac{1}{\lambda}.
+$$
 
 | 单部件失效率 $\lambda$ | $\mathrm{MTBF}$ | 连续运行 8 h 的可靠度 $R(8)$ |
 |---|---|---|
@@ -82,7 +104,11 @@ $$R(t)=e^{-\lambda t}, \qquad \mathrm{MTBF}=\frac{1}{\lambda}.$$
 | $1\ \mathrm{h^{-1}}$ | 1 h | 0.03% |
 
 若各部件失效时间相互独立、都服从常失效率的指数分布，且任一部件失效即系统失效，则
-$$R_{\mathrm{sys}}(t)=\prod_i e^{-\lambda_i t}=e^{-(\sum_i\lambda_i)t},$$
+
+$$
+R_{\mathrm{sys}}(t)=\prod_i e^{-\lambda_i t}=e^{-(\sum_i\lambda_i)t},
+$$
+
 所以 $\lambda_\text{sys}=\sum_i\lambda_i$。相关失效、共因失效或非常失效率模型不能直接套用该式。串联系统增加必需部件会降低可靠性；引入冗余则是不同的系统结构。
 
 ## 风险指标必须和任务损失对应
@@ -129,7 +155,9 @@ $$R_{\mathrm{sys}}(t)=\prod_i e^{-\lambda_i t}=e^{-(\sum_i\lambda_i)t},$$
 
 除了报告指标，还需要在设计阶段就把“怕什么”写进目标函数。三种常见表述对应三种不同的风险偏好：
 
-$$\max_\theta \ \mathbb{E}_{\delta\sim\mathcal{D}}[J(\theta,\delta)], \qquad \max_\theta \ \min_{\delta\in\Delta} J(\theta,\delta), \qquad \min_\theta \ \mathrm{CVaR}_\alpha[L(\theta,\delta)].$$
+$$
+\max_\theta \ \mathbb{E}_{\delta\sim\mathcal{D}}[J(\theta,\delta)], \qquad \max_\theta \ \min_{\delta\in\Delta} J(\theta,\delta), \qquad \min_\theta \ \mathrm{CVaR}_\alpha[L(\theta,\delta)].
+$$
 
 第三个目标用的是损失 $L=-J$ 的上尾 CVaR；等价地也可最大化收益的下尾平均，但必须明确采用下尾定义。直接最大化收益的上尾 CVaR 只奖励最好的一小部分结果，不能控制坏结果。
 

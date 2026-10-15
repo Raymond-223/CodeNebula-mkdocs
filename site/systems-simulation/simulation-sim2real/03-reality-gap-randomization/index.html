@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4562,7 +4562,9 @@
 <p>要发现它，常用的方法是在仿真里做<strong>轻微扰动测试</strong>：把训练时固定的参数（仿真步长、控制频率、求解器迭代次数、随机种子）稍微改一改，看回报是否骤降。如果只把控制频率从 200 Hz 改成 190 Hz 就崩，说明策略依赖了一个真实系统根本不保证的量。</p>
 <h2 id="_2">域随机化让训练覆盖一组可能的世界</h2>
 <p>域随机化（domain randomization）的思路很直接：训练时不再用一个固定世界，而是从一个参数分布里采样世界，策略必须在这一组世界上都工作。形式化地，给定物理参数向量 <span class="arithmatex">\(\xi\)</span>（质量、摩擦、延迟等）与任务回报 <span class="arithmatex">\(J(\pi, \xi)\)</span>，我们优化的是期望性能：</p>
-<div class="arithmatex">\[ \max_{\pi}\; \mathbb{E}_{\xi \sim p(\xi)}\left[\, J(\pi, \xi) \,\right] \]</div>
+<div class="arithmatex">\[
+\max_{\pi}\; \mathbb{E}_{\xi \sim p(\xi)}\left[\, J(\pi, \xi) \,\right]
+\]</div>
 <p>这里 <span class="arithmatex">\(p(\xi)\)</span> 是训练分布，它的支撑集就是“我们愿意让策略适应的那组世界”。</p>
 <p>目标不是让环境无限困难，而是让策略对<strong>真实系统会发生的变化</strong>不敏感。这一点常被误读，于是出现“把范围开到极大来保证鲁棒”的做法，结果策略学会了一个对所有世界都不出彩的保守行为。</p>
 <p>与域随机化相邻的还有两个思路，值得区分：</p>
@@ -4614,7 +4616,9 @@
 <p>最有效的方法通常是先做简单实机实验，找出哪些参数真正影响闭环行为，再重点随机化，而不是一次性把所有参数都打开。</p>
 <h2 id="_4">域随机化与系统校准</h2>
 <p>如果模拟器中的轮距写错一倍，不应该指望“随机化足够大”来掩盖。这里要区分两种误差：</p>
-<div class="arithmatex">\[ \theta_{\text{true}} = \hat{\theta} + b + \epsilon,\qquad \mathbb{E}[b] \ne 0,\quad \mathbb{E}[\epsilon] = 0 \]</div>
+<div class="arithmatex">\[
+\theta_{\text{true}} = \hat{\theta} + b + \epsilon,\qquad \mathbb{E}[b] \ne 0,\quad \mathbb{E}[\epsilon] = 0
+\]</div>
 <p>其中 <span class="arithmatex">\(b\)</span> 是系统性偏差（标定错误、参数写错、坐标系反了），<span class="arithmatex">\(\epsilon\)</span> 是随机波动（公差、磨损、环境变化）。</p>
 <p><strong>校准消除 <span class="arithmatex">\(b\)</span>，随机化覆盖 <span class="arithmatex">\(\epsilon\)</span>。</strong> 这两者不能互相替代：随机化对称地扩大区间，无法消除一个恒定的偏移，只会让区间中心仍然偏离真值；反过来，把一个真实的随机波动用一个固定值吃掉，会让策略失去对真随机性的适应能力。</p>
 <p>因此一个合理的顺序是：能测量的固定参数先校准 → 残余标定误差用较窄区间覆盖 → 只在真正有变化的地方使用随机化。</p>
@@ -4667,9 +4671,13 @@
 <p>这种 sensitivity analysis 能让域随机化更有针对性，也让后面的 Real2Sim 有明确的优先级：<strong>先修最敏感的那一项，收益最大。</strong></p>
 <h2 id="_6">敏感度分析与参数取舍</h2>
 <p>为了不只依赖肉眼曲线，可以把敏感度写成可比较的量。最常用的是归一化一阶敏感度：</p>
-<div class="arithmatex">\[ S_i = \frac{\partial J}{\partial \theta_i}\,\frac{\theta_i}{J} \]</div>
+<div class="arithmatex">\[
+S_i = \frac{\partial J}{\partial \theta_i}\,\frac{\theta_i}{J}
+\]</div>
 <p>它的含义是“参数 <span class="arithmatex">\(\theta_i\)</span> 相对变化 1% 时，任务指标 <span class="arithmatex">\(J\)</span> 相对变化百分之几”。实际计算时用中心差分近似：</p>
-<div class="arithmatex">\[ \hat{S}_i \approx \frac{J(\theta_i + \Delta_i) - J(\theta_i - \Delta_i)}{2\,\Delta_i}\cdot\frac{\theta_i}{J} \]</div>
+<div class="arithmatex">\[
+\hat{S}_i \approx \frac{J(\theta_i + \Delta_i) - J(\theta_i - \Delta_i)}{2\,\Delta_i}\cdot\frac{\theta_i}{J}
+\]</div>
 <p>这个量的好处是<strong>量纲无关</strong>：摩擦系数、延迟毫秒数、质量千克数可以放进同一张表里排序。工程上通常只做这一步就够用；如果需要更严格的解释，可以进一步分析二阶项或参数之间的交互作用。</p>
 <p>得到排序之后，取舍规则可以写得很具体：</p>
 <ul>
@@ -4784,7 +4792,9 @@
 </tbody>
 </table>
 <p><strong>尺度参数为什么常用对数均匀？</strong> 因为摩擦、质量、增益这类量的影响通常与相对变化成正比：摩擦从 0.1 变成 0.2（翻倍）带来的行为改变，与从 0.8 变成 1.6（同样翻倍）大致同量级，而绝对变化 0.1 与 0.8 完全不同。对数均匀保证每个数量级被等概率覆盖：</p>
-<div class="arithmatex">\[ x \sim \exp\!\big(\mathcal{U}(\ln a,\, \ln b)\big) \quad\Longleftrightarrow\quad \ln x \sim \mathcal{U}(\ln a,\, \ln b) \]</div>
+<div class="arithmatex">\[
+x \sim \exp\!\big(\mathcal{U}(\ln a,\, \ln b)\big) \quad\Longleftrightarrow\quad \ln x \sim \mathcal{U}(\ln a,\, \ln b)
+\]</div>
 <p>它的另一个好处是<strong>尺度不变</strong>：把参数整体乘以常数后采样形状不变，因此不会因为换了单位（毫米换米）而意外改变训练难度。</p>
 <p>一个常见的实操形式，是把每个参数的分布、范围与来源一起写进配置：</p>
 <div class="highlight"><pre><span></span><code><span class="nt">randomization</span><span class="p">:</span>
@@ -4949,7 +4959,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

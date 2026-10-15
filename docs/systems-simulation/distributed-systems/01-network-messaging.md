@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![发布订阅把发送者和接收者通过主题解耦。](../../assets/diagrams/pubsub.svg)
-  <figcaption>请求响应适合一次性交互，发布订阅适合持续状态流和事件广播。</figcaption>
+  <figcaption markdown="span">请求响应适合一次性交互，发布订阅适合持续状态流和事件广播。</figcaption>
 </figure>
 
 ## 传输控制协议（TCP）与用户数据报协议（UDP）的传输语义
@@ -115,7 +115,9 @@ Pub/Sub 还引入了两个额外变量：一是**订阅者数量未知**，一�
 
 可以把新鲜度形式化为接收时刻与采样时刻之差：
 
-$$D_{\text{eff}} = t_{\text{recv}} - t_{\text{sample}}$$
+$$
+D_{\text{eff}} = t_{\text{recv}} - t_{\text{sample}}
+$$
 
 当 $D_{\text{eff}}$ 超过该数据的有效寿命 $\tau$ 时，这条数据对决策的价值已经归零，无论它多么“可靠”。由此得到一个反直觉但重要的结论：**在实时链路里，延迟与丢包是可以互相折算的**——一条迟到 500 ms 的消息，等价于一条丢失的消息。
 

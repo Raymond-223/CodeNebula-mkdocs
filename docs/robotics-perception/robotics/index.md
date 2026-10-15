@@ -4,7 +4,7 @@
 
 <figure markdown="span">
   ![robotics overview](../../assets/diagrams/robotics-map.svg)
-  <figcaption>Robotics 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Robotics 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题
@@ -60,7 +60,9 @@
 
 **Geometry / frames（几何与坐标系）** 是整个栈的语言。这里不再第一次引入群符号：数学前置已经定义了 [旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md)。只回忆：$SO(2)$ 是二维旋转，$SE(2)$ 是“二维旋转 + 二维平移”；三维对应 $SO(3)$ 与 $SE(3)$。所有位姿都写成某个坐标系下的变换，二维情形是
 
-$$T=\begin{bmatrix}R(\theta)&t\\ 0&1\end{bmatrix}\in SE(2),$$
+$$
+T=\begin{bmatrix}R(\theta)&t\\ 0&1\end{bmatrix}\in SE(2),
+$$
 
 其中 $R(\theta)$ 是 $2\times2$ 旋转矩阵，$t\in\mathbb{R}^2$。链条 `map → odom → base_link → sensor` 上任何一环错了，后面所有计算都在错误的前提下进行。
 
@@ -76,11 +78,15 @@ $$T=\begin{bmatrix}R(\theta)&t\\ 0&1\end{bmatrix}\in SE(2),$$
 
 把这六个节点串成闭环，核心的递推关系可以写成两步：预测
 
-$$\hat x_{k+1}^{-}=f(\hat x_k,u_k),$$
+$$
+\hat x_{k+1}^{-}=f(\hat x_k,u_k),
+$$
 
 与更新
 
-$$\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),$$
+$$
+\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),
+$$
 
 其中 $K_{k+1}$ 是滤波增益，$z_{k+1}-h(\hat x^{-})$ 是**新息（innovation）**，即“观测与预期之差”。这个式子把整节的内容压缩成一句话：**机器人靠“预测—比较—修正”活着，Planning 决定 $u$，Control 保证 $u$ 被真实执行，Sensing/Estimation 提供 $z$ 与 $\hat x$。**
 

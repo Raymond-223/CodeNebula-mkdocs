@@ -60,7 +60,7 @@ $$
 
 <figure markdown="span">
   ![压缩映射把任意两点之间的距离至少缩小到原来的 q 倍。](../assets/diagrams/yau-contraction.svg)
-  <figcaption>压缩性比较的是任意两点经过映射前后的距离，而不只是某个点附近的一次导数。</figcaption>
+  <figcaption markdown="span">压缩性比较的是任意两点经过映射前后的距离，而不只是某个点附近的一次导数。</figcaption>
 </figure>
 
 $g:X\to X$ 是自映射（self-map），表示迭代不会离开 $X$。若存在 $q\in[0,1)$ 使对所有 $x,y\in X$，
@@ -237,7 +237,6 @@ $$
 
     定义
 
-
     $$
     h(x)=g(x)-x.
     $$
@@ -311,8 +310,8 @@ $$
     &=\phi(1)-\phi(0)\\
     &=\phi'(\xi)\\
     &\le \|u\|_2\,
-       \|J_g(y+\xi(x-y))\|_2\,
-       \|x-y\|_2\\
+    \|J_g(y+\xi(x-y))\|_2\,
+    \|x-y\|_2\\
     &\le q\|x-y\|_2.
     \end{aligned}
     $$

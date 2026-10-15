@@ -205,15 +205,21 @@ $$
 
     任取初始分布 $\mu$，定义前 $N$ 个时刻分布的 Cesàro 平均
 
-    $$\bar\mu_N=\frac1N\sum_{k=0}^{N-1}\mu P^k.$$
+    $$
+    \bar\mu_N=\frac1N\sum_{k=0}^{N-1}\mu P^k.
+    $$
 
     每个 $\bar\mu_N$ 都在概率单纯形
 
-    $$\Delta=\{x\in\mathbb R^n:x_i\ge0,\ \sum_i x_i=1\}$$
+    $$
+    \Delta=\{x\in\mathbb R^n:x_i\ge0,\ \sum_i x_i=1\}
+    $$
 
     中。$\Delta$ 是有界闭集，因此任意序列 $\{\bar\mu_N\}$ 都有收敛子列；设该子列收敛到 $\pi\in\Delta$。另一方面，
 
-    $$\bar\mu_NP-\bar\mu_N=\frac{\mu P^N-\mu}{N}.$$
+    $$
+    \bar\mu_NP-\bar\mu_N=\frac{\mu P^N-\mu}{N}.
+    $$
 
     右端每个分量绝对值至多 $1/N$，所以沿该子列趋于零。矩阵乘法关于各分量连续，取极限得到 $\pi P=\pi$。因为 $\pi\in\Delta$，它的分量非负且和为 1，所以确为平稳分布。
 

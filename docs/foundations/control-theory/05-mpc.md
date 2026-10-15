@@ -6,14 +6,16 @@
 
 <figure markdown="span">
   ![LQR 与 MPC 都基于模型，但 MPC 会显式预测未来并处理约束。](../../assets/diagrams/lqr-vs-mpc.svg)
-  <figcaption>MPC 可以理解为"带约束、有限时域、每步重新求解"的最优控制。</figcaption>
+  <figcaption markdown="span">MPC 可以理解为"带约束、有限时域、每步重新求解"的最优控制。</figcaption>
 </figure>
 
 ## 模型预测控制（MPC）的有限时域预测
 
 比例控制通常直接根据当前误差给控制量；LQR 虽然在设计增益 $K$ 时已经考虑了长期代价，但在线运行时仍只计算 $u=-Kx$，不会显式生成“未来第 1、2、……、$N$ 步”的轨迹，也无法逐步检查速度、转角、道路边界等硬约束。MPC 的新增能力正是把这段未来轨迹显式展开：它把未来 $N$ 步一起考虑，最小化整段预测轨迹的累计代价
 
-$$J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).$$
+$$
+J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).
+$$
 
 其中 $N$ 是预测时域（步数），$\ell$ 是每步代价（通常为二次型），$\ell_f$ 是加在末端状态上的终端代价。关键差异在于：如果现在急转会带来后续约束违反或高代价，优化器会提前选择更缓和的动作，而不是等越界后再补救。
 
@@ -31,21 +33,29 @@ $$J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).$$
 
 MPC 的“预测”不是猜，而是拿当前状态和候选控制量代入动力学模型往前算。这里仍使用最基本的离散状态空间模型
 
-$$x_{k+1}=A x_k+B u_k.$$
+$$
+x_{k+1}=A x_k+B u_k.
+$$
 
 如果你没有读前面的 LQR，可以只记住：$x_k$ 是当前状态向量，例如“位置、速度、航向”；$u_k$ 是控制输入，例如“加速度、转向角”；$A$ 描述系统自身如何从这一拍演化到下一拍，$B$ 描述控制输入会怎样改变下一拍。**MPC 与 LQR 共用的是这个预测模型，区别在于 MPC 会把未来多步的输入都当作待选择变量，并显式检查约束。**
 
 给定当前测量状态 $x_0$ 和一组候选控制序列 $u_0,\ldots,u_{N-1}$，就可以逐步得到
 
-$$x_1,x_2,\ldots,x_N.$$
+$$
+x_1,x_2,\ldots,x_N.
+$$
 
 把整段状态堆成列向量 $X=[x_1;x_2;\dots;x_N]\in\mathbb{R}^{nN}$、整段输入堆成 $U=[u_0;u_1;\dots;u_{N-1}]\in\mathbb{R}^{mN}$，则预测可写成一次线性映射
 
-$$X=\Phi\,x_0+\Gamma\,U,$$
+$$
+X=\Phi\,x_0+\Gamma\,U,
+$$
 
 其中
 
-$$\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\begin{bmatrix}B&0&\cdots&0\\ AB&B&\cdots&0\\ \vdots&\vdots&\ddots&\vdots\\ A^{N-1}B&A^{N-2}B&\cdots&B\end{bmatrix}.$$
+$$
+\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\begin{bmatrix}B&0&\cdots&0\\ AB&B&\cdots&0\\ \vdots&\vdots&\ddots&\vdots\\ A^{N-1}B&A^{N-2}B&\cdots&B\end{bmatrix}.
+$$
 
 注意 $\Gamma$ 是分块下三角：$u_j$ 只影响 $x_{j+1}$ 及其之后的状态，这个"因果"结构后面会让 QP 的 $H$ 保持稀疏、加快求解。因此一段控制序列的好坏可以通过整段预测轨迹来评价，而不是只看下一步。
 
@@ -70,11 +80,15 @@ $$\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\beg
 
 典型 MPC 问题写成
 
-$$\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)$$
+$$
+\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)
+$$
 
 并满足
 
-$$x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal{X},\qquad u_k\in\mathcal{U}.$$
+$$
+x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal{X},\qquad u_k\in\mathcal{U}.
+$$
 
 $\mathcal{X}$ 与 $\mathcal{U}$ 是允许的状态集与输入集，通常就是逐个分量的区间（box 约束）：$x_{\min}\le x_k\le x_{\max}$、$u_{\min}\le u_k\le u_{\max}$。速度上限、转角限制、加速度约束、道路边界都可以直接放进这两个集合，且是**逐时刻**约束，不只是末端约束。相比"违反后再在奖励里罚"的软做法，这种表达更明确：优化器要么给出满足约束的解，要么报告问题不可行。
 
@@ -162,23 +176,33 @@ MPC 最大的工程约束是时间预算。控制周期为 50 ms，就意味着�
 
 取每步代价 $\ell(x,u)=x^{\top}Qx+u^{\top}Ru$、终端代价 $\ell_f(x)=x^{\top}Q_f x$，并令
 
-$$\bar Q=\operatorname{diag}(Q,\dots,Q,Q_f),\qquad \bar R=\operatorname{diag}(R,\dots,R).$$
+$$
+\bar Q=\operatorname{diag}(Q,\dots,Q,Q_f),\qquad \bar R=\operatorname{diag}(R,\dots,R).
+$$
 
 把 $X=\Phi x_0+\Gamma U$ 代入代价，$x_0$ 视为常量：
 
-$$J(U)=\tfrac12 U^{\top}H U+f^{\top}U+\text{const},$$
+$$
+J(U)=\tfrac12 U^{\top}H U+f^{\top}U+\text{const},
+$$
 
 其中
 
-$$H=2\left(\Gamma^{\top}\bar Q\,\Gamma+\bar R\right),\qquad f=2\,\Gamma^{\top}\bar Q\,\Phi\,x_0.$$
+$$
+H=2\left(\Gamma^{\top}\bar Q\,\Gamma+\bar R\right),\qquad f=2\,\Gamma^{\top}\bar Q\,\Phi\,x_0.
+$$
 
 $H$ 只依赖模型与权重、与 $x_0$ 无关，可以离线预先算好；$f$ 每步随测量状态 $x_0$ 更新，是唯一需要在线重算的系数。约束部分，输入盒约束直接写成 $U$ 的上下界；状态约束 $x_{\min}\le X\le x_{\max}$ 经预测映射转为 $\Gamma$ 上的不等式
 
-$$x_{\min}-\Phi x_0\le\Gamma U\le x_{\max}-\Phi x_0.$$
+$$
+x_{\min}-\Phi x_0\le\Gamma U\le x_{\max}-\Phi x_0.
+$$
 
 于是整个问题写成标准型
 
-$$\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.$$
+$$
+\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.
+$$
 
 这里的优化变量就是整段输入轨迹 $U\in\mathbb{R}^{mN}$，维数是 MPC 计算量的直接来源。求解得到的 $U^{\star}$ 只取其第一段 $u_0^{\star}$ 施加到系统，其余丢弃、下一步重算。
 
@@ -199,7 +223,9 @@ $$\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.$$
 
 标准充分条件还要同时给出终端控制律 $\kappa_f$ 和终端集 $\mathcal X_f$：对每个 $x\in\mathcal X_f$，$\kappa_f(x)$ 满足输入约束，后继状态仍在 $\mathcal X_f$，并有
 
-$$V_f(f(x,\kappa_f(x)))-V_f(x)\le-\ell(x,\kappa_f(x)).$$
+$$
+V_f(f(x,\kappa_f(x)))-V_f(x)\le-\ell(x,\kappa_f(x)).
+$$
 
 再加初始优化问题可行，才可把上一时刻的最优序列左移并在末端补上 $\kappa_f$，构造下一时刻的可行候选，从而证明递归可行；同一下降不等式再用于证明名义无扰动闭环的 Lyapunov 下降。
 

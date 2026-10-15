@@ -6,7 +6,7 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 <figure markdown="span">
   ![CodeNebula minimum sufficient knowledge map](assets/diagrams/knowledge-map.svg)
-  <figcaption>课程按基础、决策学习、机器人感知、系统仿真、安全与人因五个领域组织。</figcaption>
+  <figcaption markdown="span">课程按基础、决策学习、机器人感知、系统仿真、安全与人因五个领域组织。</figcaption>
 </figure>
 
 “最小充分”的含义是：只保留后续反复依赖、能够解释真实系统、或者删掉后会造成认知断层的内容。因此读的时候会遇到刻意的取舍——算法只保留能代表一类思想的方法，图片只用于解释几何关系、数据流与系统边界，代码只用于把公式落到实现。
@@ -41,7 +41,9 @@ CodeNebula 不是 AI 编程入门站，也不试图成为包罗万象的百科�
 
 五个领域的核心课程规模为
 
-$$|P_{\text{core}}| = \sum_{D} n_D = 63\ \text{章}.$$
+$$
+|P_{\text{core}}| = \sum_{D} n_D = 63\ \text{章}.
+$$
 
 其中 $n_D$ 是领域 $D$ 的核心章节数。除此之外，站点还有 2 篇独立的 Machine Learning 入门正文，以及 8 篇 Yau Contest 专题正文；它们不重复计入上述 63 篇核心章节。若只想建立某一方向的可用能力，通常需要其中约 30 篇核心章节，再按具体依赖补充相应专题。
 
@@ -121,7 +123,9 @@ $$|P_{\text{core}}| = \sum_{D} n_D = 63\ \text{章}.$$
 
 路径规模可以直接相加得到：
 
-$$|P| = \sum_{S \in P} n_S,$$
+$$
+|P| = \sum_{S \in P} n_S,
+$$
 
 因此当时间有限时，减少页数的正确方式是替换掉“当前方向用不到”的整条分支，而不是把每一章都读一半。
 
@@ -151,7 +155,9 @@ $$|P| = \sum_{S \in P} n_S,$$
 
 若把一章的阅读成本记为小节数 $m$ 与公式密度 $d$ 的函数，则可粗略写成
 
-$$T_{\text{read}} \approx m\,(a + b\,d),$$
+$$
+T_{\text{read}} \approx m\,(a + b\,d),
+$$
 
 它解释了为什么公式密集的章节即使小节少也需要更多时间——理解的前提是逐项确认适用条件，而不是扫过符号。
 

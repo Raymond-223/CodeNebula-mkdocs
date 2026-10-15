@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4505,7 +4505,9 @@
 </figure>
 <h2 id="_1">迁移前先列出误差预算</h2>
 <p>先把“误差预算”定义清楚：设第 <span class="arithmatex">\(i\)</span> 项差异的幅度为 <span class="arithmatex">\(\epsilon_i\)</span>，任务指标对它的敏感度为 <span class="arithmatex">\(c_i = \partial J / \partial \epsilon_i\)</span>，则总的任务指标误差可近似写成</p>
-<div class="arithmatex">\[\Delta J \approx \sum_i c_i \epsilon_i\]</div>
+<div class="arithmatex">\[
+\Delta J \approx \sum_i c_i \epsilon_i
+\]</div>
 <p>这条线性近似说明两件事：<strong>差异大的项不一定重要，敏感度高的项才重要</strong>；并且预算必须逐项列出，因为总量会掩盖主导项。迁移前先把可能影响结果的差异列成表：轮径误差多少、控制延迟多少、相机曝光差异多大、摩擦范围是多少、传感器噪声是否一致。</p>
 <table>
 <thead>
@@ -4804,7 +4806,9 @@
 <h2 id="real2sim">现实到仿真（Real2Sim）的数据校正</h2>
 <p>可以根据真实轨迹估计摩擦和执行器延迟，根据传感器日志估计噪声、bias 和丢包模式，根据相机数据更新纹理与光照范围。</p>
 <p>Real2Sim 不要求把每个物理参数都精确辨识出来，只需要让仿真在<strong>任务相关观测和行为</strong>上更接近实机。参数辨识的数学形式是最小化仿真与实测残差：</p>
-<div class="arithmatex">\[\hat{\phi} = \arg\min_{\phi} \sum_{k} \left\| y^{\mathrm{real}}_k - y^{\mathrm{sim}}_k(\phi) \right\|^2\]</div>
+<div class="arithmatex">\[
+\hat{\phi} = \arg\min_{\phi} \sum_{k} \left\| y^{\mathrm{real}}_k - y^{\mathrm{sim}}_k(\phi) \right\|^2
+\]</div>
 <p>其中 <span class="arithmatex">\(\phi\)</span> 是待辨识参数向量、<span class="arithmatex">\(y^{\mathrm{real}}_k\)</span> 与 <span class="arithmatex">\(y^{\mathrm{sim}}_k\)</span> 分别是第 <span class="arithmatex">\(k\)</span> 步的实机与仿真观测。注意这个目标函数是可辨识性受限的：<strong>如果某参数对观测的影响小于噪声，最小化过程就无法确定它</strong>，这也是很多参数标不出稳定值的原因。</p>
 <table>
 <thead>
@@ -5203,7 +5207,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

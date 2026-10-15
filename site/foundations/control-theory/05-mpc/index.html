@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4505,7 +4505,9 @@
 </figure>
 <h2 id="mpc">模型预测控制（MPC）的有限时域预测</h2>
 <p>比例控制通常直接根据当前误差给控制量；LQR 虽然在设计增益 <span class="arithmatex">\(K\)</span> 时已经考虑了长期代价，但在线运行时仍只计算 <span class="arithmatex">\(u=-Kx\)</span>，不会显式生成“未来第 1、2、……、<span class="arithmatex">\(N\)</span> 步”的轨迹，也无法逐步检查速度、转角、道路边界等硬约束。MPC 的新增能力正是把这段未来轨迹显式展开：它把未来 <span class="arithmatex">\(N\)</span> 步一起考虑，最小化整段预测轨迹的累计代价</p>
-<div class="arithmatex">\[J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).\]</div>
+<div class="arithmatex">\[
+J=\sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N).
+\]</div>
 <p>其中 <span class="arithmatex">\(N\)</span> 是预测时域（步数），<span class="arithmatex">\(\ell\)</span> 是每步代价（通常为二次型），<span class="arithmatex">\(\ell_f\)</span> 是加在末端状态上的终端代价。关键差异在于：如果现在急转会带来后续约束违反或高代价，优化器会提前选择更缓和的动作，而不是等越界后再补救。</p>
 <p>为什么用"有限"时域而不是像 LQR 那样无穷？因为无穷时域下带约束的优化几乎是不可解的在线问题，而截断到 <span class="arithmatex">\(N\)</span> 步后，问题变成有限维、可实时求解的凸优化。代价是视野被截断，需要终端项来补上"被砍掉的那一段"的近似，详见后文稳定性小节。</p>
 <p>这使 MPC 特别适合车辆、无人机和过程控制等"动作后果延迟显现"的系统。设控制周期 <span class="arithmatex">\(\Delta t\)</span> 与预测步数 <span class="arithmatex">\(N\)</span>，则预测覆盖的总时长为 <span class="arithmatex">\(T_p=N\cdot\Delta t\)</span>：例如 <span class="arithmatex">\(\Delta t=50\)</span> ms、<span class="arithmatex">\(N=20\)</span>，控制器每一步都向前看整整 1 秒。</p>
@@ -4545,14 +4547,22 @@
 </table>
 <h2 id="_1">预测过程来自系统模型</h2>
 <p>MPC 的“预测”不是猜，而是拿当前状态和候选控制量代入动力学模型往前算。这里仍使用最基本的离散状态空间模型</p>
-<div class="arithmatex">\[x_{k+1}=A x_k+B u_k.\]</div>
+<div class="arithmatex">\[
+x_{k+1}=A x_k+B u_k.
+\]</div>
 <p>如果你没有读前面的 LQR，可以只记住：<span class="arithmatex">\(x_k\)</span> 是当前状态向量，例如“位置、速度、航向”；<span class="arithmatex">\(u_k\)</span> 是控制输入，例如“加速度、转向角”；<span class="arithmatex">\(A\)</span> 描述系统自身如何从这一拍演化到下一拍，<span class="arithmatex">\(B\)</span> 描述控制输入会怎样改变下一拍。<strong>MPC 与 LQR 共用的是这个预测模型，区别在于 MPC 会把未来多步的输入都当作待选择变量，并显式检查约束。</strong></p>
 <p>给定当前测量状态 <span class="arithmatex">\(x_0\)</span> 和一组候选控制序列 <span class="arithmatex">\(u_0,\ldots,u_{N-1}\)</span>，就可以逐步得到</p>
-<div class="arithmatex">\[x_1,x_2,\ldots,x_N.\]</div>
+<div class="arithmatex">\[
+x_1,x_2,\ldots,x_N.
+\]</div>
 <p>把整段状态堆成列向量 <span class="arithmatex">\(X=[x_1;x_2;\dots;x_N]\in\mathbb{R}^{nN}\)</span>、整段输入堆成 <span class="arithmatex">\(U=[u_0;u_1;\dots;u_{N-1}]\in\mathbb{R}^{mN}\)</span>，则预测可写成一次线性映射</p>
-<div class="arithmatex">\[X=\Phi\,x_0+\Gamma\,U,\]</div>
+<div class="arithmatex">\[
+X=\Phi\,x_0+\Gamma\,U,
+\]</div>
 <p>其中</p>
-<div class="arithmatex">\[\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\begin{bmatrix}B&amp;0&amp;\cdots&amp;0\\ AB&amp;B&amp;\cdots&amp;0\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\ A^{N-1}B&amp;A^{N-2}B&amp;\cdots&amp;B\end{bmatrix}.\]</div>
+<div class="arithmatex">\[
+\Phi=\begin{bmatrix}A\\ A^{2}\\ \vdots\\ A^{N}\end{bmatrix},\qquad \Gamma=\begin{bmatrix}B&amp;0&amp;\cdots&amp;0\\ AB&amp;B&amp;\cdots&amp;0\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\ A^{N-1}B&amp;A^{N-2}B&amp;\cdots&amp;B\end{bmatrix}.
+\]</div>
 <p>注意 <span class="arithmatex">\(\Gamma\)</span> 是分块下三角：<span class="arithmatex">\(u_j\)</span> 只影响 <span class="arithmatex">\(x_{j+1}\)</span> 及其之后的状态，这个"因果"结构后面会让 QP 的 <span class="arithmatex">\(H\)</span> 保持稀疏、加快求解。因此一段控制序列的好坏可以通过整段预测轨迹来评价，而不是只看下一步。</p>
 <p>维度感很重要：<span class="arithmatex">\(n=4\)</span>（位置、速度、航向、航向角速度）、<span class="arithmatex">\(m=2\)</span>（油门、转向）、<span class="arithmatex">\(N=20\)</span> 时，<span class="arithmatex">\(U\)</span> 是 40 维、<span class="arithmatex">\(X\)</span> 是 80 维，<span class="arithmatex">\(\Gamma\)</span> 是 <span class="arithmatex">\(80\times 40\)</span> 的稠密块。<span class="arithmatex">\(N\)</span> 每翻倍，<span class="arithmatex">\(U\)</span> 与 <span class="arithmatex">\(X\)</span> 的维数也翻倍，而 <span class="arithmatex">\(\Gamma\)</span> 的元素数按四倍增长，这解释了为什么预测时域不能随便拉长。</p>
 <table>
@@ -4634,9 +4644,13 @@
 </table>
 <h2 id="mpc_1">模型预测控制（MPC）的约束</h2>
 <p>典型 MPC 问题写成</p>
-<div class="arithmatex">\[\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)\]</div>
+<div class="arithmatex">\[
+\min_{u_{0:N-1}}\ \sum_{k=0}^{N-1}\ell(x_k,u_k)+\ell_f(x_N)
+\]</div>
 <p>并满足</p>
-<div class="arithmatex">\[x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal{X},\qquad u_k\in\mathcal{U}.\]</div>
+<div class="arithmatex">\[
+x_{k+1}=f(x_k,u_k),\qquad x_k\in\mathcal{X},\qquad u_k\in\mathcal{U}.
+\]</div>
 <p><span class="arithmatex">\(\mathcal{X}\)</span> 与 <span class="arithmatex">\(\mathcal{U}\)</span> 是允许的状态集与输入集，通常就是逐个分量的区间（box 约束）：<span class="arithmatex">\(x_{\min}\le x_k\le x_{\max}\)</span>、<span class="arithmatex">\(u_{\min}\le u_k\le u_{\max}\)</span>。速度上限、转角限制、加速度约束、道路边界都可以直接放进这两个集合，且是<strong>逐时刻</strong>约束，不只是末端约束。相比"违反后再在奖励里罚"的软做法，这种表达更明确：优化器要么给出满足约束的解，要么报告问题不可行。</p>
 <p>约束之所以能同时处理，是因为它们全部归结为对同一个变量 <span class="arithmatex">\(U\)</span> 的线性不等式：输入约束本来就在 <span class="arithmatex">\(U\)</span> 上，状态约束经预测映射 <span class="arithmatex">\(X=\Phi x_0+\Gamma U\)</span> 也变成 <span class="arithmatex">\(U\)</span> 上的约束。这种"把所有要求统一到一个变量上"的能力，正是 MPC 相对 LQR 的核心增量。LQR 想表达同样的边界，只能靠事后饱和，而饱和会破坏最优性、甚至引发极限环。</p>
 <p>一个量化例子：若最大速度 <span class="arithmatex">\(x_{\max,2}=2\)</span> m/s、单步周期 <span class="arithmatex">\(\Delta t=50\)</span> ms，则每步允许的速度变化只有 <span class="arithmatex">\(0.1\)</span> m/s 量级，优化器会把这个"物理可达性"直接当成线性不等式，而不是在仿真里事后发现超速。</p>
@@ -4830,15 +4844,25 @@
 <p>到这里我们已经有两样东西：一是所有未来状态都能写成控制序列 <span class="arithmatex">\(U\)</span> 的函数，二是速度、转角等限制也能写成关于 <span class="arithmatex">\(U\)</span> 的不等式。剩下的问题只是：<strong>在所有满足约束的 <span class="arithmatex">\(U\)</span> 中，哪一个代价最小？</strong> 这就是一个优化问题。</p>
 <p>如果代价是变量的二次函数，而约束都是线性等式或不等式，这类问题就叫 <strong>Quadratic Programming（QP，二次规划）</strong>。它不是新的控制理论，只是 MPC 每个周期调用的数学求解器类型。线性模型 + 二次代价 + 线性约束恰好会落到 QP，因此可以使用成熟的数值算法快速求解。</p>
 <p>取每步代价 <span class="arithmatex">\(\ell(x,u)=x^{\top}Qx+u^{\top}Ru\)</span>、终端代价 <span class="arithmatex">\(\ell_f(x)=x^{\top}Q_f x\)</span>，并令</p>
-<div class="arithmatex">\[\bar Q=\operatorname{diag}(Q,\dots,Q,Q_f),\qquad \bar R=\operatorname{diag}(R,\dots,R).\]</div>
+<div class="arithmatex">\[
+\bar Q=\operatorname{diag}(Q,\dots,Q,Q_f),\qquad \bar R=\operatorname{diag}(R,\dots,R).
+\]</div>
 <p>把 <span class="arithmatex">\(X=\Phi x_0+\Gamma U\)</span> 代入代价，<span class="arithmatex">\(x_0\)</span> 视为常量：</p>
-<div class="arithmatex">\[J(U)=\tfrac12 U^{\top}H U+f^{\top}U+\text{const},\]</div>
+<div class="arithmatex">\[
+J(U)=\tfrac12 U^{\top}H U+f^{\top}U+\text{const},
+\]</div>
 <p>其中</p>
-<div class="arithmatex">\[H=2\left(\Gamma^{\top}\bar Q\,\Gamma+\bar R\right),\qquad f=2\,\Gamma^{\top}\bar Q\,\Phi\,x_0.\]</div>
+<div class="arithmatex">\[
+H=2\left(\Gamma^{\top}\bar Q\,\Gamma+\bar R\right),\qquad f=2\,\Gamma^{\top}\bar Q\,\Phi\,x_0.
+\]</div>
 <p><span class="arithmatex">\(H\)</span> 只依赖模型与权重、与 <span class="arithmatex">\(x_0\)</span> 无关，可以离线预先算好；<span class="arithmatex">\(f\)</span> 每步随测量状态 <span class="arithmatex">\(x_0\)</span> 更新，是唯一需要在线重算的系数。约束部分，输入盒约束直接写成 <span class="arithmatex">\(U\)</span> 的上下界；状态约束 <span class="arithmatex">\(x_{\min}\le X\le x_{\max}\)</span> 经预测映射转为 <span class="arithmatex">\(\Gamma\)</span> 上的不等式</p>
-<div class="arithmatex">\[x_{\min}-\Phi x_0\le\Gamma U\le x_{\max}-\Phi x_0.\]</div>
+<div class="arithmatex">\[
+x_{\min}-\Phi x_0\le\Gamma U\le x_{\max}-\Phi x_0.
+\]</div>
 <p>于是整个问题写成标准型</p>
-<div class="arithmatex">\[\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.\]</div>
+<div class="arithmatex">\[
+\min_{U}\ \tfrac12 U^{\top}H U+f^{\top}U\quad\text{s.t.}\quad A_c U\le b_c.
+\]</div>
 <p>这里的优化变量就是整段输入轨迹 <span class="arithmatex">\(U\in\mathbb{R}^{mN}\)</span>，维数是 MPC 计算量的直接来源。求解得到的 <span class="arithmatex">\(U^{\star}\)</span> 只取其第一段 <span class="arithmatex">\(u_0^{\star}\)</span> 施加到系统，其余丢弃、下一步重算。</p>
 <p>从结构上看，<span class="arithmatex">\(\bar R\succ0\)</span> 使 <span class="arithmatex">\(H\succ0\)</span>，所以<strong>只要可行域非空</strong>，QP 的最优解唯一。需要区分两种建模形式：消去状态后的凝聚形式中，<span class="arithmatex">\(\Gamma\)</span> 虽为块下三角，<span class="arithmatex">\(H=\Gamma^\top\bar Q\Gamma+\bar R\)</span> 一般是稠密的；保留每一步状态和输入的稀疏形式，其等式约束与 KKT 系统才呈块带状。专用求解器利用的是后者的时域稀疏性，复杂度还取决于状态维数、约束和算法，不能无条件写成接近 <span class="arithmatex">\(O(N)\)</span>。</p>
 <table>
@@ -4881,7 +4905,9 @@
 <p>一个反直觉的事实：<strong>有限时域 + 无终端约束，并不保证闭环稳定</strong>。因为优化器只对 <span class="arithmatex">\(N\)</span> 步负责，聪明的解可能是"这几步代价很低，但把状态推到很糟的地方交给未来"——Lyapunov 意义下闭环可能振荡甚至发散。</p>
 <p>终端代价常取 <span class="arithmatex">\(\ell_f(x)=x^{\top}Px\)</span>，其中 <span class="arithmatex">\(P\)</span> 是无约束无限时域 LQR 的 DARE 解。它只在终端状态之后能够合法地继续使用 LQR 时，才等于那段无约束未来代价；存在状态或输入约束时，LQR 延拓可能不可行，所以单加这一项不能自动得到无穷时域上界、递归可行性或闭环稳定性。</p>
 <p>标准充分条件还要同时给出终端控制律 <span class="arithmatex">\(\kappa_f\)</span> 和终端集 <span class="arithmatex">\(\mathcal X_f\)</span>：对每个 <span class="arithmatex">\(x\in\mathcal X_f\)</span>，<span class="arithmatex">\(\kappa_f(x)\)</span> 满足输入约束，后继状态仍在 <span class="arithmatex">\(\mathcal X_f\)</span>，并有</p>
-<div class="arithmatex">\[V_f(f(x,\kappa_f(x)))-V_f(x)\le-\ell(x,\kappa_f(x)).\]</div>
+<div class="arithmatex">\[
+V_f(f(x,\kappa_f(x)))-V_f(x)\le-\ell(x,\kappa_f(x)).
+\]</div>
 <p>再加初始优化问题可行，才可把上一时刻的最优序列左移并在末端补上 <span class="arithmatex">\(\kappa_f\)</span>，构造下一时刻的可行候选，从而证明递归可行；同一下降不等式再用于证明名义无扰动闭环的 Lyapunov 下降。</p>
 <p>递归可行性还有一个附带要求：优化问题在每步都要<strong>有解</strong>。若上一步的解在本步被证明仍可行，迭代就不会中途失效；终端集与终端代价正是用来提供这个"可行性自保持"性质的工具。缺少它们时，即使当前步有解，下一步也可能突然不可行。</p>
 <table>
@@ -5061,7 +5087,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

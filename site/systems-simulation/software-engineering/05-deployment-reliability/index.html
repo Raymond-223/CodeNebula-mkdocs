@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4694,12 +4694,18 @@
 </table>
 <p>三者的典型用法是“从指标发现异常 → 用追踪定位到慢的环节 → 用日志看清那一次请求的具体原因”。跳过第一步直接翻日志，通常会因为数据量太大而失败；只有指标没有链路，则只能看到“整体变慢了”却不知慢在哪里。</p>
 <p>有了指标之后，就可以把可靠性量化成<strong>服务等级目标（SLO）</strong>。如果 SLO 定义为“核心接口 99.9% 的请求在 200 ms 内成功返回”，那么允许的失败比例就是错误预算：</p>
-<div class="arithmatex">\[\text{错误预算} = 1 - \text{SLO}\]</div>
+<div class="arithmatex">\[
+\text{错误预算} = 1 - \text{SLO}
+\]</div>
 <p>对于一个月按 30 天计的时间窗口，允许的不可用时长约为：</p>
-<div class="arithmatex">\[T_{\text{allowed}} = (1 - \text{SLO}) \times T_{\text{window}}\]</div>
+<div class="arithmatex">\[
+T_{\text{allowed}} = (1 - \text{SLO}) \times T_{\text{window}}
+\]</div>
 <p>只有当 SLI 是“按时间计算的可用性”时，99.9% 的 30 天窗口才等价于约 43.2 分钟不可用，99% 才等价于约 7.2 小时。若 SLI 是成功请求比例，错误预算的分母是请求数；若 SLI 是延迟达标比例，预算是不达标请求数，都不能换算成停机分钟。错误预算必须和 SLI 的统计单位、窗口完全一致。</p>
 <p>为了让告警更及时，通常还会用到燃尽速率（burn rate），即实际错误率相对于允许错误率的倍数：</p>
-<div class="arithmatex">\[\text{burn rate} = \frac{\text{实际错误率}}{1 - \text{SLO}}\]</div>
+<div class="arithmatex">\[
+\text{burn rate} = \frac{\text{实际错误率}}{1 - \text{SLO}}
+\]</div>
 <p>燃尽速率大于 1 表示正在以超过预算的速度消耗可靠性。实践中常用的做法是双阈值告警：短窗口内高燃尽速率（例如 1 小时内 14 倍）触发紧急告警，长窗口低燃尽速率（例如 6 小时内 6 倍）触发工单。这样既能快速响应真实故障，又不会被短暂抖动频繁打扰。</p>
 <p>错误预算还有一个隐含好处：它让“要不要加班修复”这类争论变成数据判断。没有预算概念时，稳定性讨论往往变成情绪对抗；有了预算，团队可以直接看剩余额度来安排优先级。</p>
 <h2 id="_5">故障处理首先要设计安全退化</h2>
@@ -4855,7 +4861,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

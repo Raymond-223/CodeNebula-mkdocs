@@ -6,14 +6,16 @@
 
 <figure markdown="span">
   ![MDP 把状态、动作、奖励与下一状态连接成闭环。](../../assets/diagrams/mdp-loop.svg)
-  <figcaption>MDP 的基本循环：观察状态、选择动作、获得奖励并进入下一状态。</figcaption>
+  <figcaption markdown="span">MDP 的基本循环：观察状态、选择动作、获得奖励并进入下一状态。</figcaption>
 </figure>
 
 ## 状态的充分性
 
 如果未来只需要由当前状态和当前动作决定，就满足 Markov 性：
 
-$$P(S_{t+1}=s'\mid S_t=s,A_t=a,\text{history})=P(S_{t+1}=s'\mid S_t=s,A_t=a).$$
+$$
+P(S_{t+1}=s'\mid S_t=s,A_t=a,\text{history})=P(S_{t+1}=s'\mid S_t=s,A_t=a).
+$$
 
 这并不表示真实世界"没有历史"，而是要求**状态已经包含决策所需的历史信息**。注意这是一个关于"给定状态后历史是否还有用"的条件独立性陈述，不是关于环境物理机制的陈述。
 
@@ -37,7 +39,9 @@ $$P(S_{t+1}=s'\mid S_t=s,A_t=a,\text{history})=P(S_{t+1}=s'\mid S_t=s,A_t=a).$$
 
 一个 MDP 通常写作
 
-$$\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).$$
+$$
+\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).
+$$
 
 其中：
 
@@ -57,7 +61,9 @@ $$\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).$$
 
 策略 $\pi(a\mid s)$ 决定在状态 $s$ 下如何选择动作。连续交互形成轨迹
 
-$$\tau=(s_0,a_0,r_1,s_1,a_1,r_2,\ldots).$$
+$$
+\tau=(s_0,a_0,r_1,s_1,a_1,r_2,\ldots).
+$$
 
 这条轨迹就是强化学习最基本的数据来源。需要强调：轨迹的分布同时由环境 $P$ 和策略 $\pi$ 决定，所以改策略就等于改数据分布——这是后面所有"非平稳"困难的根源。
 
@@ -65,14 +71,18 @@ $$\tau=(s_0,a_0,r_1,s_1,a_1,r_2,\ldots).$$
 
 即时奖励 $r_{t+1}$ 只能告诉我们这一步发生了什么。真正要最大化的是从当前时刻开始的累计回报：
 
-$$G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1}.$$
+$$
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1}.
+$$
 
 折扣因子有两个直观作用：
 
 1. 让越远的奖励权重越小；
 2. 在持续型任务中，在常见有界奖励条件下使无限和保持有限。若 $|r|\le R_{\max}$，则由几何级数得
 
-$$|G_t|\le \frac{R_{\max}}{1-\gamma}.$$
+$$
+|G_t|\le \frac{R_{\max}}{1-\gamma}.
+$$
 
 这个界在工程上很有用：$\gamma=0.99$、$R_{\max}=1$ 时回报绝对值不超过 $100$；$\gamma=0.999$ 时上限升高到 $1000$。它与 $\gamma=0.99$ 的差别不只是"更耐心"，还意味着单步 TD 目标的尺度差了十倍。
 
@@ -91,11 +101,15 @@ $\gamma$ 不是"耐心程度"的唯一解释。很多工程问题里，它也影
 
 给定策略 $\pi$，状态价值函数定义为
 
-$$V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s].$$
+$$
+V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s].
+$$
 
 动作价值函数则把第一步动作也固定下来：
 
-$$Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a].$$
+$$
+Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a].
+$$
 
 两者的区别很重要：
 
@@ -104,11 +118,15 @@ $$Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a].$$
 
 它们之间有两组必须记住的关系。第一组是"对动作取期望"：
 
-$$V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a).$$
+$$
+V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a).
+$$
 
 第二组是"先奖励、再跳一步"：
 
-$$Q^\pi(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].$$
+$$
+Q^\pi(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].
+$$
 
 所以如果已经知道 $Q^\pi$，就能比较同一个状态下不同动作的长期效果。代价是：$Q$ 比 $V$ 多一维动作，在连续动作空间里这个维度代价很致命。
 
@@ -123,11 +141,15 @@ $$Q^\pi(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].$$
 
 回报本身可以拆成
 
-$$G_t=r_{t+1}+\gamma G_{t+1}.$$
+$$
+G_t=r_{t+1}+\gamma G_{t+1}.
+$$
 
 这一步只是重新分组，没有任何近似。对它取条件期望，就得到 Bellman 期望方程：
 
-$$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].$$
+$$
+V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].
+$$
 
 它表达的不是一种新假设，而是同一个长期回报的递归写法：
 
@@ -137,39 +159,53 @@ $$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(
 
 这一步非常关键，因为"无限长未来"现在被压缩成了"一步 + 一个同类型子问题"。动态规划、TD、Q-Learning 等方法都建立在这个递归结构上。用算子语言写作
 
-$$(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V(s')\right],$$
+$$
+(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V(s')\right],
+$$
 
 则 $V^\pi$ 是不动点 $T^\pi V^\pi=V^\pi$。并且对任意两个值函数
 
-$$\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,$$
+$$
+\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,
+$$
 
 即 $T^\pi$ 是以 $\gamma$ 为模的**压缩映射**。收敛速度完全被 $\gamma$ 决定：$\gamma=0.9$ 时误差上界每次至多乘 $0.9$，$\gamma=0.999$ 时至多乘 $0.999$。
 
 ??? proof "Bellman 算子的压缩性"
     对任意有界函数 $V,W$ 和任意状态 $s$，
-    $$\begin{aligned}
+
+    $$
+    \begin{aligned}
     |(T^\pi V)(s)-(T^\pi W)(s)|
     &=\gamma\left|\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)(V(s')-W(s'))\right|\\
     &\le\gamma\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)\|V-W\|_\infty\\
     &=\gamma\|V-W\|_\infty.
-    \end{aligned}$$
+    \end{aligned}
+    $$
+
     再对 $s$ 取最大值得 $\|T^\pi V-T^\pi W\|_\infty\le\gamma\|V-W\|_\infty$。有界函数配无穷范数是完备空间，因此 Banach 压缩映射定理给出唯一不动点，并保证反复应用 $T^\pi$ 收敛。
 
 ## 贝尔曼最优性关系（Bellman Optimality Relation）
 
 最优动作价值函数定义为
 
-$$Q^*(s,a)=\max_\pi Q^\pi(s,a).$$
+$$
+Q^*(s,a)=\max_\pi Q^\pi(s,a).
+$$
 
 对应的 Bellman 最优方程为
 
-$$Q^*(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')\right].$$
+$$
+Q^*(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')\right].
+$$
 
 与期望方程的差别只有一处：$\sum_a\pi(a\mid s)$ 被 $\max_{a'}$ 取代。但这一处差别导致算子 $T^*$ 不再是线性的，Bellman 最优方程因此是**非线性**方程；好在 $T^*$ 仍是压缩映射且不动点唯一，所以存在且只存在一个 $Q^*$。
 
 只要 $Q^*$ 已知，在每个状态选择
 
-$$\pi^*(s)\in\arg\max_a Q^*(s,a)$$
+$$
+\pi^*(s)\in\arg\max_a Q^*(s,a)
+$$
 
 就可以得到一个最优策略。这里"贪心"之所以成立，是因为 $Q^*$ 已经把**之后所有步骤的最优未来**计算进去了，而不是因为短视动作本身总是正确。
 
@@ -192,15 +228,21 @@ $$\pi^*(s)\in\arg\max_a Q^*(s,a)$$
 
 若在 $B$ 持续 `stay`，则
 
-$$V^*(B)=3+0.9V^*(B)\ \Longrightarrow\ V^*(B)=\frac{3}{1-0.9}=30.$$
+$$
+V^*(B)=3+0.9V^*(B)\ \Longrightarrow\ V^*(B)=\frac{3}{1-0.9}=30.
+$$
 
 于是 $A$ 选择 `go` 的价值为
 
-$$Q^*(A,\text{go})=2+0.9\times30=29,$$
+$$
+Q^*(A,\text{go})=2+0.9\times30=29,
+$$
 
 若第一步在 $A$ 选择 `stay`，之后允许改用最优策略，则
 
-$$Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.$$
+$$
+Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.
+$$
 
 所以虽然 `stay` 立刻有正奖励，长期看仍应先去 $B$。这就是强化学习和普通"即时打分"最大的不同。
 
@@ -236,23 +278,39 @@ $$Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.$$
 
 **值迭代**反复应用 $T^*$：
 
-$$V_{k+1}(s)=\max_a\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V_k(s')\right].$$
+$$
+V_{k+1}(s)=\max_a\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V_k(s')\right].
+$$
 
 由压缩映射性质，$\|V_k-V^*\|_\infty\le\gamma^{k}\|V_0-V^*\|_\infty$，误差按 $\gamma$ 几何衰减。
 
 **策略迭代**交替进行策略评估与策略改进：
 
-$$\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}\pi_{k+1}(s)\in\arg\max_a Q^{\pi_k}(s,a).$$
+$$
+\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}\pi_{k+1}(s)\in\arg\max_a Q^{\pi_k}(s,a).
+$$
 
 由策略改进定理，$\pi_{k+1}$ 不差于 $\pi_k$。对确定性平稳策略作固定的平局选择时，有限 MDP 只有有限多个策略；若策略改变并带来严格改进，就不能回到旧策略，因而有限步终止。实际步数依问题而定，不能统一声称“往往十几步”。
 
 ??? proof "策略改进定理"
     设新策略在每个状态选择旧动作价值最大的动作，即
-    $$Q^\pi(s,\pi'(s))\ge Q^\pi(s,\pi(s))=V^\pi(s).$$
+
+    $$
+    Q^\pi(s,\pi'(s))\ge Q^\pi(s,\pi(s))=V^\pi(s).
+    $$
+
     于是
-    $$V^\pi(s)\le r(s,\pi'(s))+\gamma\sum_{s'}P(s'\mid s,\pi'(s))V^\pi(s')=(T^{\pi'}V^\pi)(s).$$
+
+    $$
+    V^\pi(s)\le r(s,\pi'(s))+\gamma\sum_{s'}P(s'\mid s,\pi'(s))V^\pi(s')=(T^{\pi'}V^\pi)(s).
+    $$
+
     Bellman 算子保持逐点不等式，反复作用得到
-    $$V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots.$$
+
+    $$
+    V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots.
+    $$
+
     由压缩性，右端收敛到 $V^{\pi'}$，所以 $V^{\pi'}\ge V^\pi$。若某个从相关状态可达的选择严格改善，则相应价值严格提高。
 
 | 维度 | 值迭代 | 策略迭代 |
@@ -277,11 +335,15 @@ $$\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}
 
 定义优势函数
 
-$$A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s,a).$$
+$$
+A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s,a).
+$$
 
 它回答的不是"这个动作值多少"，而是**比当前策略的平均水平好多少**。由 $V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a)$ 直接得
 
-$$\sum_a\pi(a\mid s)A^\pi(s,a)=0,$$
+$$
+\sum_a\pi(a\mid s)A^\pi(s,a)=0,
+$$
 
 即在策略 $\pi$ 下，各动作的优势按被选中概率加权平均为零。这是很有用的自检：估计出的 $A$ 在同一状态下加权和若不接近零，说明 $Q$ 或 $V$ 的估计彼此不一致。
 
@@ -312,7 +374,9 @@ $$\sum_a\pi(a\mid s)A^\pi(s,a)=0,$$
 
 同一条 Bellman 关系在三处出现，形式几乎一样但含义不同：
 
-$$\underbrace{V^\pi(s)=\mathbb E_\pi[r+\gamma V^\pi(s')]}_{\text{评估已知策略}}\quad\underbrace{V^*(s)=\max_a\mathbb E[r+\gamma V^*(s')]}_{\text{最优，需要}\ \max}\quad\underbrace{V(s)\leftarrow V(s)+\alpha\left[r+\gamma V(s')-V(s)\right]}_{\text{采样的随机近似}}$$
+$$
+\underbrace{V^\pi(s)=\mathbb E_\pi[r+\gamma V^\pi(s')]}_{\text{评估已知策略}}\quad\underbrace{V^*(s)=\max_a\mathbb E[r+\gamma V^*(s')]}_{\text{最优，需要}\ \max}\quad\underbrace{V(s)\leftarrow V(s)+\alpha\left[r+\gamma V(s')-V(s)\right]}_{\text{采样的随机近似}}
+$$
 
 第三式是把前两式的期望关系换成单样本的随机近似。它成立的直觉是：每次采样的 TD 误差期望正是 $(TV)(s)-V(s)$，因此只要学习率满足 $\sum_t\alpha_t=\infty$ 且 $\sum_t\alpha_t^2<\infty$，估计就会朝不动点漂移。**这也是为什么"用了 Q-Learning"本身不保证收敛**——还需要持续访问所有状态—动作对、学习率满足上述条件、MDP 保持平稳。
 

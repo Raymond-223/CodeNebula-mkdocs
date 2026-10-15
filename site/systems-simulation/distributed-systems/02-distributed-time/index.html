@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4537,7 +4537,9 @@
 <h2 id="_2">墙上时钟不能直接证明因果顺序</h2>
 <p>机器时钟可能有偏差，也可能被 NTP 调整。A 的日志写着 10:00:00.100，B 的日志写着 10:00:00.080，不足以证明 B 的事件更早发生。</p>
 <p>Lamport clock 解决的是另一个问题：如果事件 <span class="arithmatex">\(A\)</span> 确实因果先于 <span class="arithmatex">\(B\)</span>，则逻辑时间满足</p>
-<div class="arithmatex">\[L(A)&lt;L(B).\]</div>
+<div class="arithmatex">\[
+L(A)&lt;L(B).
+\]</div>
 <p>它不告诉我们真实相差多少毫秒，只提供一致的因果排序线索。</p>
 <p>需要强调方向：这个命题是单向的。<strong>逻辑时间小并不意味着因果在先</strong>，可能只是两个并发事件的编号恰好一大一小。把“<span class="arithmatex">\(L(A)&lt;L(B)\)</span>”读成“A 一定先发生在 B 之前”，是把必要条件和充分条件搞混，这会在冲突判定中直接导致错误合并。</p>
 <p>墙上时钟的问题则更朴素：它可能被向前或向后调整。NTP 做一次大步修正，会让日志出现时间倒流；夏令时切换或手工校时同理。因此<strong>任何基于墙上时钟差值的超时、TTL 或排序判据都可能在某些时刻突然失效</strong>，而且失效方式往往难以复现——它依赖一次外部校时事件。</p>
@@ -4873,7 +4875,9 @@
 </ol>
 <p>这样构造出的整数满足“因果在先则编号更小”，但如前所述反向不成立。也就是说，<strong>Lamport 时钟能保证有序部分不乱序，却无法区分“真有先后”与“只是并发”</strong>，两个并发事件可能拿到 5 和 7，也可能拿到 7 和 5。</p>
 <p>向量时钟通过为每个进程维护一个计数器数组来补上这个缺口。进程 <span class="arithmatex">\(i\)</span> 的向量记作 <span class="arithmatex">\(V_i\)</span>，第 <span class="arithmatex">\(j\)</span> 个分量表示 <span class="arithmatex">\(i\)</span> 所知道的、来自 <span class="arithmatex">\(j\)</span> 的事件数。规则是：本地事件时 <span class="arithmatex">\(V_i[i] \leftarrow V_i[i]+1\)</span>；发送时附带整个 <span class="arithmatex">\(V_i\)</span>；接收时先逐分量取最大，再把自身分量加一：</p>
-<div class="arithmatex">\[V_i[j] \leftarrow \max\big(V_i[j], V_m[j]\big), \qquad V_i[i] \leftarrow V_i[i] + 1.\]</div>
+<div class="arithmatex">\[
+V_i[j] \leftarrow \max\big(V_i[j], V_m[j]\big), \qquad V_i[i] \leftarrow V_i[i] + 1.
+\]</div>
 <p>比较两个向量可以得到三种关系：若所有分量都不大于且至少有一个严格更小，则 <span class="arithmatex">\(V_a\)</span> 因果先于 <span class="arithmatex">\(V_b\)</span>；若反之则在后；若既存在 <span class="arithmatex">\(V_a[j] &gt; V_b[j]\)</span> 又存在 <span class="arithmatex">\(V_a[k] &lt; V_b[k]\)</span>，则两者<strong>并发</strong>，必须由应用层决定合并还是报冲突。这正是下一章冲突检测的数学基础。</p>
 <details class="proof">
 <summary>向量时钟刻画因果顺序</summary>
@@ -5008,7 +5012,9 @@
 </table>
 <h2 id="_10">时间不确定区间与保守处理</h2>
 <p>由于同步误差不可消除，任何时间戳都应当被理解为<strong>一个区间</strong>而不是一个点。若节点 <span class="arithmatex">\(i\)</span> 的时钟误差上界为 <span class="arithmatex">\(\epsilon_i\)</span>，则其标注时刻 <span class="arithmatex">\(t\)</span> 对应的真实时刻落在</p>
-<div class="arithmatex">\[[t - \epsilon_i,\; t + \epsilon_i]\]</div>
+<div class="arithmatex">\[
+[t - \epsilon_i,\; t + \epsilon_i]
+\]</div>
 <p>之内。所有基于时间的判断（“这两帧是否属于同一时刻”“这条数据是否已经过期”）本质上都是在做区间相交测试，而不是点比较。</p>
 <table>
 <thead>
@@ -5119,7 +5125,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

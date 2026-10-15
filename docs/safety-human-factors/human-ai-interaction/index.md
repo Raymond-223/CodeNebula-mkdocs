@@ -4,7 +4,7 @@
 
 <figure markdown="span">
   ![人机交互从自动化分工、人机反馈、共享控制，到信任校准与安全接管形成一条主线。](../../assets/diagrams/hai-map.svg)
-  <figcaption>五个主题围绕同一条主线：控制权归谁、如何被理解、怎样安全交还。</figcaption>
+  <figcaption markdown="span">五个主题围绕同一条主线：控制权归谁、如何被理解、怎样安全交还。</figcaption>
 </figure>
 
 五章不是五个独立话题，而是同一条主线上的五个环节。概念地图里的节点恰好标记了这条主线：**Automation（role split）→ Human input（approval / feedback）→ Shared control（blend authority）→ Trust（calibration）→ Takeover（safe handoff）**。前半部分决定“谁负责什么”，中间决定“人的输入如何进入闭环”，最后决定“出问题时如何把控制权安全地交还”。
@@ -25,7 +25,9 @@
 
 从量化角度看，人机环节的失败成本并不只由事故概率决定，还由人是否能在关键时刻介入决定：
 
-$$C_{\text{fail}} = p_{\text{fail}} \cdot L \cdot (1 - p_{\text{human}}),$$
+$$
+C_{\text{fail}} = p_{\text{fail}} \cdot L \cdot (1 - p_{\text{human}}),
+$$
 
 其中 $p_{\text{fail}}$ 是系统自身出错概率，$L$ 是单次后果量级，$p_{\text{human}}$ 是人能够成功拦截的概率。改善人机设计本质上就是在把 $p_{\text{human}}$ 从接近零提升到可观的水平。
 
@@ -53,7 +55,9 @@ $$C_{\text{fail}} = p_{\text{fail}} \cdot L \cdot (1 - p_{\text{human}}),$$
 
 可以用一句话概括依赖方向的传递关系：
 
-$$\text{责任矩阵} \rightarrow \text{介入点} \rightarrow \text{融合规则} \rightarrow \text{解释策略} \rightarrow \text{恢复协议}.$$
+$$
+\text{责任矩阵} \rightarrow \text{介入点} \rightarrow \text{融合规则} \rightarrow \text{解释策略} \rightarrow \text{恢复协议}.
+$$
 
 | 前置环节 | 缺失时的表现 | 直接受害者 |
 |---|---|---|
@@ -81,7 +85,9 @@ $$\text{责任矩阵} \rightarrow \text{介入点} \rightarrow \text{融合规�
 
 链上每一个环节都可以用一个标量描述其“强度”，最典型的是共享控制中的融合权重：
 
-$$a_{\text{cmd}} = \alpha\, a_h + (1-\alpha)\, a_m, \qquad \alpha \in [0,1].$$
+$$
+a_{\text{cmd}} = \alpha\, a_h + (1-\alpha)\, a_m, \qquad \alpha \in [0,1].
+$$
 
 当 $\alpha$ 的设计与责任矩阵不一致时（例如系统仍保留否决权，但 $\alpha$ 表明人已完全接管），链上就会出现断裂，表现为“看起来能控制、实际控制无效”。
 
@@ -99,23 +105,31 @@ $$a_{\text{cmd}} = \alpha\, a_h + (1-\alpha)\, a_m, \qquad \alpha \in [0,1].$$
 
 共享控制的权重调度应满足有界变化率，否则会出现前后不一致的操控感：
 
-$$\left| \frac{d\alpha}{dt} \right| \le \alpha_{\max}', \qquad \alpha(t) \in [0,1].$$
+$$
+\left| \frac{d\alpha}{dt} \right| \le \alpha_{\max}', \qquad \alpha(t) \in [0,1].
+$$
 
 人力是否可持续，取决于请求到达率 $\lambda$ 与平均处理时间 $\tau$ 的乘积：
 
-$$\rho = \lambda \tau, \qquad \rho < 1 \ \text{为基本可行}, \quad \rho \le 0.6 \ \text{为可持续}.$$
+$$
+\rho = \lambda \tau, \qquad \rho < 1 \ \text{为基本可行}, \quad \rho \le 0.6 \ \text{为可持续}.
+$$
 
 当 $\rho \to 1$ 时队列发散，人开始机械确认；这正是“确认按钮形同虚设”的定量解释。
 
 信任是否校准则可写成预测与真实能力之间的偏差：
 
-$$e_{\text{trust}} = \mathbb{E}\left[\,\hat{p}_{\text{succ}} - p_{\text{succ}}\,\right],$$
+$$
+e_{\text{trust}} = \mathbb{E}\left[\,\hat{p}_{\text{succ}} - p_{\text{succ}}\,\right],
+$$
 
 其中 $\hat{p}_{\text{succ}}$ 是人对系统成功率的判断，$p_{\text{succ}}$ 是真实成功率。$e_{\text{trust}} > 0$ 表示过度信任，$e_{\text{trust}} < 0$ 表示过度怀疑。
 
 接管能否安全，则取决于时间裕量：
 
-$$M = T_{\text{safe}} - T_{\text{rec}}, \qquad \text{验收要求}\ M > 0.$$
+$$
+M = T_{\text{safe}} - T_{\text{rec}}, \qquad \text{验收要求}\ M > 0.
+$$
 
 | 量 | 符号 | 含义 | 目标方向 |
 |---|---|---|---|
@@ -144,7 +158,9 @@ $$M = T_{\text{safe}} - T_{\text{rec}}, \qquad \text{验收要求}\ M > 0.$$
 
 可以用一个简单的接口一致性条件来检查：
 
-$$t_{\text{comm}} + t_{\text{ui}} < T_{\text{warn}},$$
+$$
+t_{\text{comm}} + t_{\text{ui}} < T_{\text{warn}},
+$$
 
 即通信与界面呈现带来的额外时延必须小于可用告警窗口，否则再正确的策略也无法在时间上成立。
 

@@ -25,11 +25,15 @@
 
 连续系统满足
 
-$$\dot x=f(x,u).$$
+$$
+\dot x=f(x,u).
+$$
 
 计算机只能用有限步长 $\Delta t$ 推进。最简单的显式欧拉法为
 
-$$x_{k+1}=x_k+\Delta t\,f(x_k,u_k).$$
+$$
+x_{k+1}=x_k+\Delta t\,f(x_k,u_k).
+$$
 
 ```python
 def euler_step(position, velocity, acceleration, dt):
@@ -55,11 +59,15 @@ def euler_step(position, velocity, acceleration, dt):
 
 显式欧拉简单但在刚性系统上非常脆弱。工程上更常用的是半隐式（symplectic Euler）积分：先更新速度，再用新速度更新位置。
 
-$$v_{k+1}=v_k+\Delta t\,a(x_k),\qquad x_{k+1}=x_k+\Delta t\,v_{k+1}.$$
+$$
+v_{k+1}=v_k+\Delta t\,a(x_k),\qquad x_{k+1}=x_k+\Delta t\,v_{k+1}.
+$$
 
 半隐式对哈密顿系统具有良好的能量行为，长期积分下能量在有界范围内振荡而不单调漂移，这就是多数物理引擎默认采用它的原因。高阶方法如四阶 Runge–Kutta 通过多次求导估计降低截断误差：
 
-$$x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).$$
+$$
+x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).
+$$
 
 其中 $k_1=f(t_k,x_k)$，$k_2=f(t_k+\Delta t/2,\;x_k+\Delta t\,k_1/2)$，依次类推。精度更高，代价是每步四次函数求值，并且在接触这种不连续事件附近，高阶方法的光滑假设会失效——事件本身就把解“折断”了。
 
@@ -73,11 +81,15 @@ $$x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).$$
 
 对线性系统 $\dot x=\lambda x$，显式欧拉的稳定条件可量化为
 
-$$\Delta t<\frac{2}{|\lambda_{\max}|}.$$
+$$
+\Delta t<\frac{2}{|\lambda_{\max}|}.
+$$
 
 对振荡子 $\lambda=\pm j\omega$，能量每步按
 
-$$E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)$$
+$$
+E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)
+$$
 
 增长，所以显式 Euler 会产生虚假能量。半隐式 Euler 则是辛方法：当 $0<\omega\Delta t<2$ 时轨道保持有界，但原始机械能通常在一个有界区间内振荡，并不是每步乘 $\left(1+\Delta t^2\omega^2\right)^{-1}$，也不能简单称为耗散。步长判断必须同时检查所用积分器的稳定域与允许的相位/幅值误差。
 
@@ -118,7 +130,9 @@ $$E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)$$
 
 第三类是**互补约束（LCP/凸优化）模型**：把接触写成互补条件
 
-$$0\le\lambda\ \perp\ \phi(q)\ge 0,$$
+$$
+0\le\lambda\ \perp\ \phi(q)\ge 0,
+$$
 
 即“不是分离就是零力”。它不引入虚构弹簧，接触力在约束层面被精确求解，因此更接近刚体物理，也是抓取与操纵类研究偏好的方式；代价是每一步都要解一个约束问题，且当接触数多、摩擦锥复杂时求解成本较高。
 
@@ -189,7 +203,9 @@ MuJoCo 通常直接操作模型与数据对象，Gazebo 常通过插件或 ROS2 
 
 实时因子（real-time factor, RTF）定义为
 
-$$\mathrm{RTF}=\frac{\text{仿真推进的时间}}{\text{墙钟消耗的时间}}.$$
+$$
+\mathrm{RTF}=\frac{\text{仿真推进的时间}}{\text{墙钟消耗的时间}}.
+$$
 
 当 RTF 小于 1 时，仿真比现实慢，适合做精确分析；RTF 大于 1 时，仿真比现实快，这是强化学习训练的常态需求。注意 RTF 与“物理保真度”没有固定关系：一个 RTF 很高的仿真可能只是因为模型极简，而不是因为它高效。
 

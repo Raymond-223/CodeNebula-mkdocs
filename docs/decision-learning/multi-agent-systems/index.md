@@ -4,14 +4,16 @@
 
 <figure markdown="span">
   ![multi-agent-systems overview](../../assets/diagrams/mas-map.svg)
-  <figcaption>Multi Agent Systems 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Multi Agent Systems 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题
 
 单智能体 RL 的世界里，环境动力学 $P(s'\mid s,a)$ 是稳定的：策略变了，世界不会跟着变。多智能体系统的第一层困难就是**这个前提被破坏**。设 $n$ 个 Agent，联合动作 $\mathbf a=(a_1,\dots,a_n)$，则 Agent $i$ 感受到的有效动力学是
 
-$$P\big(s'\mid s, a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s, \mathbf a\big)\prod_{j\neq i}\pi_j\big(a_j\mid o_j\big).$$
+$$
+P\big(s'\mid s, a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s, \mathbf a\big)\prod_{j\neq i}\pi_j\big(a_j\mid o_j\big).
+$$
 
 等号右侧含其他 Agent 的策略 $\pi_j$，它们全都在学习、都在变。于是从 Agent $i$ 的视角看，**"环境"是一个持续移动的目标**。这不是工程实现问题，而是问题结构本身的改变。
 

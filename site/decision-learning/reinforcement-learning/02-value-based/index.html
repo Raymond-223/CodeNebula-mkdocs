@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4500,17 +4500,29 @@
 </blockquote>
 <h2 id="td">时序差分学习（TD）与自举目标</h2>
 <p>如果直接用完整回报 <span class="arithmatex">\(G_t\)</span> 更新 <span class="arithmatex">\(V(s_t)\)</span>，必须等未来真正发生：</p>
-<div class="arithmatex">\[G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots .\]</div>
+<div class="arithmatex">\[
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots .
+\]</div>
 <p>TD 的做法是只走一步，就用当前估计构造目标：</p>
-<div class="arithmatex">\[y_t=r_{t+1}+\gamma V(s_{t+1}).\]</div>
+<div class="arithmatex">\[
+y_t=r_{t+1}+\gamma V(s_{t+1}).
+\]</div>
 <p>TD 误差为</p>
-<div class="arithmatex">\[\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),\]</div>
+<div class="arithmatex">\[
+\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),
+\]</div>
 <p>然后更新</p>
-<div class="arithmatex">\[V(s_t)\leftarrow V(s_t)+\alpha\delta_t.\]</div>
+<div class="arithmatex">\[
+V(s_t)\leftarrow V(s_t)+\alpha\delta_t.
+\]</div>
 <p>它一半来自真实采样，一半来自自己的估计，因此称为 <strong>bootstrapping（自举）</strong>。优点是可以在线更新，代价是目标本身也在变化。更一般地，可以走 <span class="arithmatex">\(n\)</span> 步再自举：</p>
-<div class="arithmatex">\[y_t^{(n)}=\sum_{k=0}^{n-1}\gamma^{k}r_{t+k+1}+\gamma^{n}V(s_{t+n}),\]</div>
+<div class="arithmatex">\[
+y_t^{(n)}=\sum_{k=0}^{n-1}\gamma^{k}r_{t+k+1}+\gamma^{n}V(s_{t+n}),
+\]</div>
 <p><span class="arithmatex">\(n=1\)</span> 即标准 TD，<span class="arithmatex">\(n\to\infty\)</span>（走到回合结束）即 Monte Carlo。把不同 <span class="arithmatex">\(n\)</span> 的估计按几何权重 <span class="arithmatex">\(\lambda\)</span> 平均，就得到 TD(<span class="arithmatex">\(\lambda\)</span>) 的 <span class="arithmatex">\(\lambda\)</span>-return</p>
-<div class="arithmatex">\[G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}y_t^{(n)} .\]</div>
+<div class="arithmatex">\[
+G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}y_t^{(n)} .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4550,7 +4562,9 @@
 <p>两个具体的数值感受：若 <span class="arithmatex">\(\alpha=0.1\)</span>，一次更新只移动 <span class="arithmatex">\(10\%\)</span> 到目标；在 <span class="arithmatex">\(\gamma=0.99\)</span> 的任务里，若 <span class="arithmatex">\(V(s_{t+1})\)</span> 恰好偏高 <span class="arithmatex">\(5\)</span>，则 <span class="arithmatex">\(\delta_t\)</span> 偏大约 <span class="arithmatex">\(0.99\times5=4.95\)</span>，一次更新就把 <span class="arithmatex">\(V(s_t)\)</span> 抬高约 <span class="arithmatex">\(0.495\)</span>。误差会通过自举向前传播。表格 TD 在经典随机逼近条件下并不需要目标网络；目标网络主要用于神经网络函数逼近下，减慢目标随参数共同移动的速度。</p>
 <h2 id="_1">时间差分与蒙特卡洛的偏差—方差权衡</h2>
 <p>这两种目标的差别只有一个：期望在哪里被截断。</p>
-<div class="arithmatex">\[\text{MC：}G_t=\sum_{k=0}^{T-t-1}\gamma^{k}r_{t+k+1}\qquad\text{vs}\qquad\text{TD(0)：}y_t=r_{t+1}+\gamma V(s_{t+1}).\]</div>
+<div class="arithmatex">\[
+\text{MC：}G_t=\sum_{k=0}^{T-t-1}\gamma^{k}r_{t+k+1}\qquad\text{vs}\qquad\text{TD(0)：}y_t=r_{t+1}+\gamma V(s_{t+1}).
+\]</div>
 <p>MC 用整条轨迹的实际奖励，完全不用 <span class="arithmatex">\(V\)</span>；在回合按目标策略生成且回报可积时，它对 <span class="arithmatex">\(V^\pi(s_t)\)</span> 无偏。<span class="arithmatex">\(G_t\)</span> 是多个相关随机奖励的加权和，其方差包含所有协方差交叉项。TD 用自举估计替代未来回报，常能降低采样方差，但下一状态随机性和价值估计误差仍在，方差不保证低于 MC；只要自举值有偏，目标也会带偏。</p>
 <table>
 <thead>
@@ -4612,14 +4626,22 @@
 <p>使用建议很明确：<strong>回合短且奖励稀疏 → MC 或大 <span class="arithmatex">\(n\)</span>；回合长、需要在线 → 小 <span class="arithmatex">\(n\)</span>；不确定时用 <span class="arithmatex">\(n\)</span> 或 <span class="arithmatex">\(\lambda\)</span> 作可调开关，一般 <span class="arithmatex">\(n\)</span> 取 3～20 或 <span class="arithmatex">\(\lambda\)</span> 取 0.9～0.99 能兼顾两者。</strong> 失败模式也有特征：MC 表现为"学习曲线方差大、同一策略两次评估差很多"；TD 表现为"曲线平滑但收敛值明显偏离真实回报，且在覆盖不足的状态区域偏差最大"。</p>
 <h2 id="q-q-learning">Q 学习（Q-Learning）更新</h2>
 <p>Q-Learning 用最优下一动作构造 TD 目标：</p>
-<div class="arithmatex">\[y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a'),\]</div>
+<div class="arithmatex">\[
+y_t=r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a'),
+\]</div>
 <p>更新为</p>
-<div class="arithmatex">\[Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha\left[y_t-Q(s_t,a_t)\right].\]</div>
+<div class="arithmatex">\[
+Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha\left[y_t-Q(s_t,a_t)\right].
+\]</div>
 <p>把更新拆开看更清楚：</p>
-<div class="arithmatex">\[\underbrace{Q(s_t,a_t)}_{\text{当前估计}}\leftarrow\underbrace{Q(s_t,a_t)}_{\text{当前估计}}+\alpha\underbrace{\left(\overbrace{r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')}^{\text{目标值}}-Q(s_t,a_t)\right)}_{\text{更新方向：TD error}} .\]</div>
+<div class="arithmatex">\[
+\underbrace{Q(s_t,a_t)}_{\text{当前估计}}\leftarrow\underbrace{Q(s_t,a_t)}_{\text{当前估计}}+\alpha\underbrace{\left(\overbrace{r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')}^{\text{目标值}}-Q(s_t,a_t)\right)}_{\text{更新方向：TD error}} .
+\]</div>
 <p>当前估计回答"现在认为这个动作值多少"，目标值混合了即时奖励与下一状态的最优估计，二者之差决定应该上调还是下调。</p>
 <p>这里最容易混淆的是：<strong>执行时可以探索，学习目标仍然使用下一状态的最大 Q 值</strong>。这就是它被称为 off-policy 的原因之一——被更新的动作 <span class="arithmatex">\(a_t\)</span> 可以来自任何行为策略（如 <span class="arithmatex">\(\varepsilon\)</span>-greedy），而目标始终假设下一步按贪心行动。对比之下，SARSA 把目标写成本步实际选择的下一动作：</p>
-<div class="arithmatex">\[y_t^{\text{SARSA}}=r_{t+1}+\gamma Q(s_{t+1},a_{t+1}),\]</div>
+<div class="arithmatex">\[
+y_t^{\text{SARSA}}=r_{t+1}+\gamma Q(s_{t+1},a_{t+1}),
+\]</div>
 <p>它是 on-policy 的，因此会学到"在探索噪声下安全"的策略，而 Q-Learning 学到的是"若之后不再乱探"的最优策略。</p>
 <table>
 <thead>
@@ -4660,7 +4682,9 @@
 <h2 id="_2">探索机制</h2>
 <p>如果每次都选择当前 <span class="arithmatex">\(Q\)</span> 最大的动作，早期一次错误估计可能让其他动作永远得不到尝试。</p>
 <p>最常见的入门方法是 <span class="arithmatex">\(\varepsilon\)</span>-greedy：</p>
-<div class="arithmatex">\[a_t\sim\begin{cases}\text{在动作集合中随机选择}, &amp; \text{概率 }\varepsilon,\\ \arg\max_a Q(s_t,a), &amp; \text{概率 }1-\varepsilon.\end{cases}\]</div>
+<div class="arithmatex">\[
+a_t\sim\begin{cases}\text{在动作集合中随机选择}, &amp; \text{概率 }\varepsilon,\\ \arg\max_a Q(s_t,a), &amp; \text{概率 }1-\varepsilon.\end{cases}
+\]</div>
 <p>探索解决"没有数据"的问题，价值更新解决"如何利用数据"的问题。两者不要混在一起理解。</p>
 <p>在经典有限表格设定下，Q-Learning 的收敛需要包括状态—动作对持续被访问、合适的学习率序列和稳定 MDP 等条件；"用了 Q-Learning"本身并不自动保证收敛。</p>
 <table>
@@ -4751,12 +4775,13 @@
 <h2 id="_3">表格方法的适用边界</h2>
 <p>假设状态由 20 个连续量组成，就不可能给每种状态都单独存一个 Q 表条目。更重要的是，彼此相近的状态本应共享经验。</p>
 <p>因此把表格替换为参数化函数：</p>
-<div class="arithmatex">\[Q(s,a;\theta)\approx Q^*(s,a).\]</div>
+<div class="arithmatex">\[
+Q(s,a;\theta)\approx Q^*(s,a).
+\]</div>
 <p>神经网络的价值不只是"容量大"，而是能在相似输入之间形成<strong>泛化</strong>。</p>
 <p><figure markdown="span">
   <img alt="DQN 网络结构" src="../../../img/05-dqn-network.png" />
-<br />
-<figcaption>价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption></p>
+  <figcaption markdown="span">价值函数用神经网络近似后，相似状态之间可以共享估计。</figcaption></p>
 </figure>
 <p>泛化的代价是估计之间不再独立：更新一个状态动作对的 <span class="arithmatex">\(Q\)</span> 值会同时改变邻近状态的值。这在两种情况产生严重问题——<strong>状态动作对之间的耦合使自举目标不稳定</strong>（致命三要素：函数逼近 + 自举 + off-policy），以及在覆盖稀疏的区域，网络输出没有任何数据约束，只是外推。</p>
 <table>
@@ -4804,11 +4829,17 @@
 <p>这里有一个经常被忽略的判断：<strong>动作维度决定用不用价值方法，状态维度决定用不用神经网络。</strong> 状态连续但动作离散，DQN 依然是最自然的选择；动作连续，即使状态只有 2 维，<span class="arithmatex">\(\arg\max_a Q(s,a;\theta)\)</span> 也会变成每步一次非凸优化。</p>
 <h2 id="q-dqnbellman-target">深度 Q 网络（DQN）的贝尔曼目标（Bellman Target）</h2>
 <p>DQN 的目标没有变，只是 Q 值由网络输出：</p>
-<div class="arithmatex">\[y=r+\gamma\max_{a'}Q(s',a';\theta^-),\]</div>
+<div class="arithmatex">\[
+y=r+\gamma\max_{a'}Q(s',a';\theta^-),
+\]</div>
 <p>在线网络参数是 <span class="arithmatex">\(\theta\)</span>，目标网络参数是 <span class="arithmatex">\(\theta^-\)</span>。训练损失可以写成</p>
-<div class="arithmatex">\[L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].\]</div>
+<div class="arithmatex">\[
+L(\theta)=\mathbb E\left[(y-Q(s,a;\theta))^2\right].
+\]</div>
 <p>注意梯度只对 <span class="arithmatex">\(\theta\)</span> 求，目标里的 <span class="arithmatex">\(\theta^-\)</span> 被视为常数：</p>
-<div class="arithmatex">\[\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_\theta Q(s,a;\theta)\right].\]</div>
+<div class="arithmatex">\[
+\nabla_\theta L(\theta)=-2\,\mathbb E\left[\left(y-Q(s,a;\theta)\right)\nabla_\theta Q(s,a;\theta)\right].
+\]</div>
 <p>在一次目标网络同步间隔内，<span class="arithmatex">\(\theta^-\)</span> 固定，所以上式就是该“冻结目标平方损失”对 <span class="arithmatex">\(\theta\)</span> 的完整梯度。之所以仍常沿用<strong>半梯度（semi-gradient）</strong>一词，是因为从贝尔曼残差的角度看，我们主动忽略了自举目标对待学习价值函数参数的依赖；若目标直接由同一个 <span class="arithmatex">\(\theta\)</span> 产生，这一区别才最明显。停止目标分支的梯度，使更新只把当前预测拉向暂时固定的靶子。</p>
 <table>
 <thead>
@@ -4856,10 +4887,14 @@
 <h2 id="_4">经验回放与目标网络</h2>
 <p>这两个结构解决的问题完全不同，却常被混为一谈。</p>
 <p><strong>经验回放</strong>缓解“样本时间相关性”，并提高数据利用率。在线交互得到的相邻样本高度相关，连续取批会增大梯度估计的相关性和方差。把转移 <span class="arithmatex">\((s_t,a_t,r_{t+1},s_{t+1})\)</span> 存入容量为 <span class="arithmatex">\(N\)</span> 的缓冲，再均匀随机抽样：</p>
-<div class="arithmatex">\[L(\theta)=\frac{1}{\lvert B\rvert}\sum_{(s,a,r,s')\in B}\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2 .\]</div>
+<div class="arithmatex">\[
+L(\theta)=\frac{1}{\lvert B\rvert}\sum_{(s,a,r,s')\in B}\left[r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\right]^2 .
+\]</div>
 <p>在忽略有限总体抽样相关性的近似下，批内样本比连续轨迹更接近独立。均匀抽样的梯度对“当前缓冲区的经验风险”是无偏的，但对当前策略的在线状态分布一般不是无偏的，因为缓冲区混合了不同时刻的行为策略。每条转移可以复用多次，这既提高数据利用率，也会引入数据陈旧问题。</p>
 <p><strong>目标网络</strong>解决"目标随参数移动"。若用同一个 <span class="arithmatex">\(\theta\)</span> 生成预测与目标，那么把 <span class="arithmatex">\(Q(s,a;\theta)\)</span> 抬高的同时 <span class="arithmatex">\(y\)</span> 也被抬高，更新会追自己的尾巴，极易正反馈发散。用一份延迟参数产生目标，就把它变成短期内近似固定的回归问题。两种常见同步方式：每 <span class="arithmatex">\(C\)</span> 步硬拷贝 <span class="arithmatex">\(\theta^-\leftarrow\theta\)</span>（DQN 原版，<span class="arithmatex">\(C\)</span> 取数千），或软更新</p>
-<div class="arithmatex">\[\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\ \text{（每步）}.\]</div>
+<div class="arithmatex">\[
+\theta^-\leftarrow\tau\theta+(1-\tau)\theta^-,\qquad \tau\approx0.001\sim0.01\ \text{（每步）}.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4963,7 +4998,9 @@
 <h2 id="_6">最大化偏差与过估计</h2>
 <p>当目标使用多个含噪价值估计的最大值时，取最大操作更容易选中偶然偏高的估计，从而产生系统性过估计。Double Q 思想把动作选择与动作评价部分分离，用来减弱这种偏差。它说明稳定训练不仅取决于损失函数，也取决于目标如何构造。</p>
 <p>一个精确的结论是：设真实值 <span class="arithmatex">\(Q\)</span> 与估计 <span class="arithmatex">\(\hat Q_i=Q_i+\epsilon_i\)</span>，其中 <span class="arithmatex">\(\epsilon_i\)</span> 零均值、同方差 <span class="arithmatex">\(\sigma^2\)</span> 且相互独立，对 <span class="arithmatex">\(m\)</span> 个动作取最大值，则</p>
-<div class="arithmatex">\[\mathbb E\left[\max_i \hat Q_i\right]\ \ge\ \max_i Q_i .\]</div>
+<div class="arithmatex">\[
+\mathbb E\left[\max_i \hat Q_i\right]\ \ge\ \max_i Q_i .
+\]</div>
 <p>偏差在真实值接近相等时最严重，量级随 <span class="arithmatex">\(\sigma\)</span> 与动作数 <span class="arithmatex">\(m\)</span> 增大：<span class="arithmatex">\(m=2\)</span> 时约 <span class="arithmatex">\(0.56\sigma\)</span>，<span class="arithmatex">\(m=10\)</span> 时约 <span class="arithmatex">\(1.54\sigma\)</span>，<span class="arithmatex">\(m=100\)</span> 时约 <span class="arithmatex">\(2.5\sigma\)</span>。<strong>动作越多，<span class="arithmatex">\(\max\)</span> 的过估计越重</strong>，这解释了为什么在动作空间较大时 Q-Learning 常常整体上偏乐观。</p>
 <table>
 <thead>
@@ -4999,7 +5036,9 @@
 <h2 id="double-dqn">过估计的机制与 Double DQN</h2>
 <p>过估计不是噪声偶然造成的，而是 <span class="arithmatex">\(\max\)</span> 这个非线性运算的结构性后果：<span class="arithmatex">\(Q\)</span> 估计若在某动作处偶然偏高，<span class="arithmatex">\(\max\)</span> 会优先选它，而这个"高"不会再被平均掉——数据只会把它写进目标，下一次更新进一步抬高它。更糟的是，偏高值还会通过自举向前传播。</p>
 <p>Double DQN 的改法只有一步：把"选动作"和"评价动作"分开用两个网络完成。</p>
-<div class="arithmatex">\[y^{\text{DQN}}=r+\gamma\max_{a'}Q(s',a';\theta^-)\quad\Longrightarrow\quad y^{\text{Double}}=r+\gamma Q\left(s',\arg\max_{a'}Q(s',a';\theta);\theta^-\right).\]</div>
+<div class="arithmatex">\[
+y^{\text{DQN}}=r+\gamma\max_{a'}Q(s',a';\theta^-)\quad\Longrightarrow\quad y^{\text{Double}}=r+\gamma Q\left(s',\arg\max_{a'}Q(s',a';\theta);\theta^-\right).
+\]</div>
 <p>关键在于用<strong>在线网络 <span class="arithmatex">\(\theta\)</span> 选动作</strong>、用<strong>目标网络 <span class="arithmatex">\(\theta^-\)</span> 评价该动作</strong>。两个网络的估计误差若互不相关，"选错的那个高估"在评价时就不会被同样的误差再次抬高，偏差显著减小。</p>
 <table>
 <thead>
@@ -5144,7 +5183,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

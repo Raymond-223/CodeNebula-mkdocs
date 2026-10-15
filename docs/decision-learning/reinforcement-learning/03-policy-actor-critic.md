@@ -55,15 +55,35 @@ $$
 
 ??? proof "从轨迹概率推导策略梯度"
     设有限轨迹 $\tau=(s_0,a_0,\ldots,s_T)$ 的概率为
-    $$p_\theta(\tau)=p(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t).$$
+
+    $$
+    p_\theta(\tau)=p(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t).
+    $$
+
     环境初始分布与转移核不依赖 $\theta$，故
-    $$\nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t).$$
+
+    $$
+    \nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t).
+    $$
+
     对 $J(\theta)=\mathbb E_\tau[G_0]$ 使用对数导数恒等式，得到
-    $$\nabla J=\mathbb E_\tau\left[G_0\sum_t\nabla\log\pi_\theta(a_t\mid s_t)\right].$$
+
+    $$
+    \nabla J=\mathbb E_\tau\left[G_0\sum_t\nabla\log\pi_\theta(a_t\mid s_t)\right].
+    $$
+
     对固定时刻 $t$，$G_0$ 中 $t$ 以前的奖励只依赖此前历史。条件于 $s_t$ 与此前历史，对当前动作的 score 取期望为零，所以这些过去奖励与第 $t$ 个 score 的期望乘积为零。只保留从 $t$ 开始的奖励：
-    $$\sum_{k=t}^{T-1}\gamma^k r_{k+1}=\gamma^tG_t.$$
+
+    $$
+    \sum_{k=t}^{T-1}\gamma^k r_{k+1}=\gamma^tG_t.
+    $$
+
     因而
-    $$\nabla J=\mathbb E\left[\sum_{t=0}^{T-1}\gamma^t\nabla\log\pi_\theta(a_t\mid s_t)G_t\right].$$
+
+    $$
+    \nabla J=\mathbb E\left[\sum_{t=0}^{T-1}\gamma^t\nabla\log\pi_\theta(a_t\mid s_t)G_t\right].
+    $$
+
     若改用未归一化的折扣状态占用分布，也可把 $\gamma^t$ 吸收到采样分布中；两种记号不能混用。
 
 它的无偏性来自 score function 的三条性质：
@@ -112,7 +132,7 @@ Actor–Critic 把两件事拆开：
 
 <figure markdown="span">
   ![Actor-Critic 架构](../../img/06-actor-critic.png)
-  <figcaption>Actor 负责选动作，Critic 负责评价当前策略。</figcaption>
+  <figcaption markdown="span">Actor 负责选动作，Critic 负责评价当前策略。</figcaption>
 </figure>
 
 最简单情况下，Critic 的 TD error
@@ -158,7 +178,7 @@ $$
 
 <figure markdown="span">
   ![PPO 裁剪目标函数](../../img/06-ppo-clip.png)
-  <figcaption>PPO 用裁剪把每次更新限制在旧策略附近，是信赖域的廉价近似。</figcaption>
+  <figcaption markdown="span">PPO 用裁剪把每次更新限制在旧策略附近，是信赖域的廉价近似。</figcaption>
 </figure>
 
 当某个更新已经把概率比推得很远时，继续沿“让代理目标更大”的方向推进不会继续得到同样收益，因此梯度会被抑制。注意 $\min$ 的截断方向依赖 $\hat A_t$ 的正负：当 $\hat A_t>0$ 时代理目标在上限 $1+\varepsilon$ 处被压平，当 $\hat A_t<0$ 时在下限 $1-\varepsilon$ 处被压平，两个方向都不能无限获利。

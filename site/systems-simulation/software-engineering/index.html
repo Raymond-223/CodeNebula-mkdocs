@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4572,7 +4572,9 @@
 </table>
 <h2 id="_5">工程实践的代价与收益</h2>
 <p>工程实践最容易被质疑的一点是“现在就做，是不是在浪费时间”。这个问题其实可以算，只是很少人把变量写出来。设某项实践的一次性投入为 <span class="arithmatex">\(C_0\)</span>（小时），它使每次后续变更节省的时间为 <span class="arithmatex">\(s\)</span>（小时/次），项目在可预见范围内还会发生 <span class="arithmatex">\(N\)</span> 次变更，则净收益为</p>
-<div class="arithmatex">\[B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s &gt; C_0.\]</div>
+<div class="arithmatex">\[
+B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s &gt; C_0.
+\]</div>
 <p>这里 <span class="arithmatex">\(N\)</span> 是最容易被低估的变量：研究项目常常以为“写完就结束了”，但真实情况是标定要重跑、参数要微调、论文返修要补实验，<span class="arithmatex">\(N\)</span> 往往在几十到几百的量级。<strong>只要 <span class="arithmatex">\(N\)</span> 够大，几乎任何把重复劳动自动化的实践都会回本。</strong></p>
 <table>
 <thead>
@@ -4633,7 +4635,9 @@
 </ul>
 <h2 id="_6">技术债与返工成本</h2>
 <p>技术债这个比喻之所以有用，是因为它自带两个变量：<strong>本金</strong>和<strong>利息</strong>。设本金为 <span class="arithmatex">\(V\)</span>（当前实现与“本该有的实现”之间的差距），每次变更因绕过这份差距而多付的成本比例为 <span class="arithmatex">\(r\)</span>，经过 <span class="arithmatex">\(t\)</span> 次变更后的总代价约为</p>
-<div class="arithmatex">\[C_{\text{future}} = V \cdot (1 + r)^{t}.\]</div>
+<div class="arithmatex">\[
+C_{\text{future}} = V \cdot (1 + r)^{t}.
+\]</div>
 <p>这个式子最重要的含义是<strong>债务按复利增长</strong>：<span class="arithmatex">\(r = 0.2\)</span>、<span class="arithmatex">\(t = 10\)</span> 时，<span class="arithmatex">\(1.2^{10} \approx 6.2\)</span>，也就是同样一块差距，十次变更之后要多付六倍的代价。因此技术债的处置原则不是“迟早还”，而是<strong>在利息超过本金之前还</strong>。</p>
 <table>
 <thead>
@@ -4678,7 +4682,9 @@
 </tbody>
 </table>
 <p>技术债里最贵的一类发生在<strong>接口上</strong>，因为它会向外传播。设一次接口变更涉及 <span class="arithmatex">\(k\)</span> 个调用方，单点修改成本为 <span class="arithmatex">\(c_e\)</span>，而由于契约不清晰导致的返工概率为 <span class="arithmatex">\(p_{\text{rework}}\)</span>，返工单次成本为 <span class="arithmatex">\(c_v\)</span>：</p>
-<div class="arithmatex">\[C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \qquad c_v \gg c_e.\]</div>
+<div class="arithmatex">\[
+C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \qquad c_v \gg c_e.
+\]</div>
 <p>因为 <span class="arithmatex">\(c_v \gg c_e\)</span>，降低总成本最有效的做法不是“写得更快”，而是<strong>降低 <span class="arithmatex">\(p_{\text{rework}}\)</span></strong>，也就是让契约稳定、让不兼容变更在早期就能被检测出来：</p>
 <table>
 <thead>
@@ -4753,7 +4759,9 @@
 </table>
 <p>这张表的关键判断是：<strong>成本不是消失了，而是被推迟了</strong>。一个人做原型时不写测试是合理的权衡；但同一个项目如果要交给别人继续做，那么“暂时不做”的那一格就会立刻变成必须做的事。基线的选择应当由“这段代码还要活多久、还有谁来碰”决定，而不是由个人偏好决定。</p>
 <p>“人多了就要加流程”也不是感觉，而是可以被计数的：若团队有 <span class="arithmatex">\(n\)</span> 个人，两两之间的沟通路径数为</p>
-<div class="arithmatex">\[C(n) = \frac{n(n-1)}{2},\]</div>
+<div class="arithmatex">\[
+C(n) = \frac{n(n-1)}{2},
+\]</div>
 <p><span class="arithmatex">\(n=3\)</span> 时是 3 条，<span class="arithmatex">\(n=8\)</span> 时是 28 条，<span class="arithmatex">\(n=20\)</span> 时是 190 条。<strong>沟通路径的增长速度远快于人数</strong>，这就是为什么小团队的默契做法到十人以上会失效，必须换成书面契约与自动化检查。</p>
 <table>
 <thead>
@@ -4886,7 +4894,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

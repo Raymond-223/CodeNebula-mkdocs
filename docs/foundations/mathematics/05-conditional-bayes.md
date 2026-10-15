@@ -16,7 +16,7 @@
 
 <figure markdown="span">
   ![Bayes 更新把先验与新观测结合成后验。](../../assets/diagrams/bayes-update.svg)
-  <figcaption>先验表示观测前的信念，似然描述观测与假设的匹配程度，后验是更新后的信念。</figcaption>
+  <figcaption markdown="span">先验表示观测前的信念，似然描述观测与假设的匹配程度，后验是更新后的信念。</figcaption>
 </figure>
 
 还有第四个判断，最容易被忽略：**方向。** 「下雨 → 地湿」很容易估，可你真正想知道的是「地湿 → 下雨」。这两句话不是一回事，把任何一个当成另一个，都会得出离谱的结论。

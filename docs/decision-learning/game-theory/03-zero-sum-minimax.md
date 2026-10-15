@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![零和博弈中的 maximin 与 minimax 在鞍点处相遇。](../../assets/diagrams/nash-minimax.svg)
-  <figcaption>在有限两人零和博弈中，混合策略允许双方达到共同的博弈值。</figcaption>
+  <figcaption markdown="span">在有限两人零和博弈中，混合策略允许双方达到共同的博弈值。</figcaption>
 </figure>
 
 ## 零和结构把两个目标变成一个目标
@@ -140,13 +140,23 @@ $$
 
 ??? proof "有限零和博弈的 Minimax 定理"
     对任意混合策略 $x,y$，总有
-    $$\min_{\tilde y}x^TA\tilde y\le x^TAy\le\max_{\tilde x}\tilde x^TAy.$$
+
+    $$
+    \min_{\tilde y}x^TA\tilde y\le x^TAy\le\max_{\tilde x}\tilde x^TAy.
+    $$
+
     对左边取 $x$ 的最大值、右边取 $y$ 的最小值，得到弱不等式
-    $$\max_x\min_yx^TAy\le\min_y\max_xx^TAy.$$
+
+    $$
+    \max_x\min_yx^TAy\le\min_y\max_xx^TAy.
+    $$
 
     对固定 $x$，$x^TAy$ 关于 $y$ 线性，所以它在单纯形上的最小值等于各纯列收益的最小值；因此玩家 1 的 maximin 正是上面的原线性规划。类似地，玩家 2 的 minimax 正是其对偶线性规划。由线性规划强对偶，二者最优值相等，故
-    $$\max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
-    =\min_{y\in\Delta_n}\max_{x\in\Delta_m}x^TAy.$$
+
+    $$
+    \max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
+    =\min_{y\in\Delta_n}\max_{x\in\Delta_m}x^TAy.
+    $$
 
     本证明只使用了有限维线性规划强对偶；该定理及其证明见 [凸优化](../../foundations/mathematics/07-optimization-under-uncertainty.md) 的“线性规划强对偶”。
 

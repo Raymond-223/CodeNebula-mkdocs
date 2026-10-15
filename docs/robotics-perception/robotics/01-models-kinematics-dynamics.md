@@ -31,7 +31,7 @@
 
 <figure markdown="span">
   ![机器人建模栈：坐标系 → 运动学 → 动力学。](../../assets/diagrams/robot-stack.svg)
-  <figcaption>模型栈自下而上分层：坐标系给出语言，运动学给出几何，动力学给出因果。</figcaption>
+  <figcaption markdown="span">模型栈自下而上分层：坐标系给出语言，运动学给出几何，动力学给出因果。</figcaption>
 </figure>
 
 ---

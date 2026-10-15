@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4839,15 +4839,17 @@ Q(s,(\mathbf a_{-i},a_i')).
 <p>COMA 不把团队优势按非负权重拆给各主体。它直接使用上式的反事实优势 <span class="arithmatex">\(A_i\)</span>；这个量可以为正、为零或为负，各主体的 <span class="arithmatex">\(A_i\)</span> 之和也不必等于某个团队优势。第二项保持其他主体动作不变，只把主体 <span class="arithmatex">\(i\)</span> 的动作按其策略边际化，因此回答“当前动作比该主体在同一情境下的平均动作好多少”。它是信用分配方法之一；差分奖励、局部奖励和显式反事实模拟也能产生个体信号。</p>
 <details class="proof">
 <summary>动作无关基线不改变理想策略梯度</summary>
-<p>固定 <span class="arithmatex">\(s\)</span> 与其他主体动作 <span class="arithmatex">\(\mathbf a_{-i}\)</span>，令 <span class="arithmatex">\(b_i(s,\mathbf a_{-i})\)</span> 不依赖 <span class="arithmatex">\(a_i\)</span>。则
-$<span class="arithmatex">\(\begin{aligned}
+<p>固定 <span class="arithmatex">\(s\)</span> 与其他主体动作 <span class="arithmatex">\(\mathbf a_{-i}\)</span>，令 <span class="arithmatex">\(b_i(s,\mathbf a_{-i})\)</span> 不依赖 <span class="arithmatex">\(a_i\)</span>。则</p>
+<div class="arithmatex">\[
+\begin{aligned}
 &amp;\mathbb E_{a_i\sim\pi_i}\left[\nabla_\theta\log\pi_i(a_i\mid\tau_i)b_i\right]\\
 &amp;=b_i\sum_{a_i}\pi_i(a_i\mid\tau_i)
-  \frac{\nabla_\theta\pi_i(a_i\mid\tau_i)}{\pi_i(a_i\mid\tau_i)}\\
+\frac{\nabla_\theta\pi_i(a_i\mid\tau_i)}{\pi_i(a_i\mid\tau_i)}\\
 &amp;=b_i\nabla_\theta\sum_{a_i}\pi_i(a_i\mid\tau_i)
-  =b_i\nabla_\theta1=0.
-\end{aligned}\)</span>$
-因此减去该基线不改变精确期望梯度。若基线依赖当前动作，或实现中让共享参数的基线梯度流入 actor，这个证明不再直接适用。</p>
+=b_i\nabla_\theta1=0.
+\end{aligned}
+\]</div>
+<p>因此减去该基线不改变精确期望梯度。若基线依赖当前动作，或实现中让共享参数的基线梯度流入 actor，这个证明不再直接适用。</p>
 </details>
 <p>四种主流信用分配方法的代价与效果对比：</p>
 <table>
@@ -4912,9 +4914,11 @@ Q_{tot}=\sum_i Q_i(\tau_i,a_i).
 <p>这样如果每个主体各自选择让 <span class="arithmatex">\(Q_i\)</span> 最大的动作，就能与联合价值的贪心选择保持一致。</p>
 <details class="proof">
 <summary>QMIX 单调条件允许分散贪心</summary>
-<p>固定全局状态，并令 <span class="arithmatex">\(a_i^*\in\arg\max_{a_i}Q_i(a_i)\)</span>。对任意联合动作 <span class="arithmatex">\(\mathbf a\)</span>，逐个把 <span class="arithmatex">\(a_i\)</span> 换成 <span class="arithmatex">\(a_i^*\)</span>。每次替换都不会减小对应的 <span class="arithmatex">\(Q_i\)</span>，其他 <span class="arithmatex">\(Q_j\)</span> 不变；由于混合函数对每个输入单调不减，<span class="arithmatex">\(Q_{tot}\)</span> 也不会下降。全部替换后得到
-$<span class="arithmatex">\(Q_{tot}(a_1^*,\ldots,a_n^*)\ge Q_{tot}(\mathbf a).\)</span>$
-因而个体贪心组合属于联合价值的贪心解。若单调条件不成立，或 <span class="arithmatex">\(Q_i\)</span> 还依赖执行时不可用的信息，这个结论就不能使用。</p>
+<p>固定全局状态，并令 <span class="arithmatex">\(a_i^*\in\arg\max_{a_i}Q_i(a_i)\)</span>。对任意联合动作 <span class="arithmatex">\(\mathbf a\)</span>，逐个把 <span class="arithmatex">\(a_i\)</span> 换成 <span class="arithmatex">\(a_i^*\)</span>。每次替换都不会减小对应的 <span class="arithmatex">\(Q_i\)</span>，其他 <span class="arithmatex">\(Q_j\)</span> 不变；由于混合函数对每个输入单调不减，<span class="arithmatex">\(Q_{tot}\)</span> 也不会下降。全部替换后得到</p>
+<div class="arithmatex">\[
+Q_{tot}(a_1^*,\ldots,a_n^*)\ge Q_{tot}(\mathbf a).
+\]</div>
+<p>因而个体贪心组合属于联合价值的贪心解。若单调条件不成立，或 <span class="arithmatex">\(Q_i\)</span> 还依赖执行时不可用的信息，这个结论就不能使用。</p>
 </details>
 <p>需要注意：单调性是一种<strong>结构假设</strong>，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。文献中那类必须“牺牲自己换团队最优”的任务（例如一名主体主动承担高代价拦截）会违反单调性，此时 QMIX 结构上就无法精确表达最优 <span class="arithmatex">\(Q_{tot}\)</span>。</p>
 <table>
@@ -5224,7 +5228,7 @@ a_i\sim\pi_\theta\big(\cdot\mid \tau_i,\,e_i\big),
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

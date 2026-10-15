@@ -159,7 +159,7 @@ $$
 $$
 \frac{\partial L}{\partial w}
 =\frac{\partial L}{\partial\hat y}
- \frac{\partial\hat y}{\partial w}
+\frac{\partial\hat y}{\partial w}
 =(-2)\times2=-4.
 $$
 

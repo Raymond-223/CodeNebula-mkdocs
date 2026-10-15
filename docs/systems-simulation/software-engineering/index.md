@@ -4,7 +4,7 @@
 
 <figure markdown="span">
   ![software-engineering overview](../../assets/diagrams/software-map.svg)
-  <figcaption>Software Engineering 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Software Engineering 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题
@@ -118,7 +118,9 @@
 
 工程实践最容易被质疑的一点是“现在就做，是不是在浪费时间”。这个问题其实可以算，只是很少人把变量写出来。设某项实践的一次性投入为 $C_0$（小时），它使每次后续变更节省的时间为 $s$（小时/次），项目在可预见范围内还会发生 $N$ 次变更，则净收益为
 
-$$B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s > C_0.$$
+$$
+B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot s > C_0.
+$$
 
 这里 $N$ 是最容易被低估的变量：研究项目常常以为“写完就结束了”，但真实情况是标定要重跑、参数要微调、论文返修要补实验，$N$ 往往在几十到几百的量级。**只要 $N$ 够大，几乎任何把重复劳动自动化的实践都会回本。**
 
@@ -147,7 +149,9 @@ $$B_{\text{total}} = N \cdot s - C_0, \qquad \text{采用该实践} \iff N \cdot
 
 技术债这个比喻之所以有用，是因为它自带两个变量：**本金**和**利息**。设本金为 $V$（当前实现与“本该有的实现”之间的差距），每次变更因绕过这份差距而多付的成本比例为 $r$，经过 $t$ 次变更后的总代价约为
 
-$$C_{\text{future}} = V \cdot (1 + r)^{t}.$$
+$$
+C_{\text{future}} = V \cdot (1 + r)^{t}.
+$$
 
 这个式子最重要的含义是**债务按复利增长**：$r = 0.2$、$t = 10$ 时，$1.2^{10} \approx 6.2$，也就是同样一块差距，十次变更之后要多付六倍的代价。因此技术债的处置原则不是“迟早还”，而是**在利息超过本金之前还**。
 
@@ -161,7 +165,9 @@ $$C_{\text{future}} = V \cdot (1 + r)^{t}.$$
 
 技术债里最贵的一类发生在**接口上**，因为它会向外传播。设一次接口变更涉及 $k$ 个调用方，单点修改成本为 $c_e$，而由于契约不清晰导致的返工概率为 $p_{\text{rework}}$，返工单次成本为 $c_v$：
 
-$$C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \qquad c_v \gg c_e.$$
+$$
+C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \qquad c_v \gg c_e.
+$$
 
 因为 $c_v \gg c_e$，降低总成本最有效的做法不是“写得更快”，而是**降低 $p_{\text{rework}}$**，也就是让契约稳定、让不兼容变更在早期就能被检测出来：
 
@@ -189,7 +195,9 @@ $$C_{\text{change}} \approx c_e \cdot k + c_v \cdot k \cdot p_{\text{rework}}, \
 
 “人多了就要加流程”也不是感觉，而是可以被计数的：若团队有 $n$ 个人，两两之间的沟通路径数为
 
-$$C(n) = \frac{n(n-1)}{2},$$
+$$
+C(n) = \frac{n(n-1)}{2},
+$$
 
 $n=3$ 时是 3 条，$n=8$ 时是 28 条，$n=20$ 时是 190 条。**沟通路径的增长速度远快于人数**，这就是为什么小团队的默契做法到十人以上会失效，必须换成书面契约与自动化检查。
 

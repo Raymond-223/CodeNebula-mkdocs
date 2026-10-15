@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4329,7 +4329,9 @@
 <ol>
 <li><strong>信用分配</strong>：奖励发生在 <span class="arithmatex">\(t+1\)</span>，但可能是 <span class="arithmatex">\(t-5\)</span> 时刻某个动作造成的，也可能是十几步之前埋下的伏笔。要最大化的是累计回报</li>
 </ol>
-<div class="arithmatex">\[G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2 r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1},\]</div>
+<div class="arithmatex">\[
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2 r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1},
+\]</div>
 <p>而不是任何单步奖励。</p>
 <ol>
 <li>
@@ -4438,7 +4440,9 @@
 <ul>
 <li><strong>MDP / Bellman</strong>（起点）：定义问题本身。五元组 <span class="arithmatex">\(\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma)\)</span> 加上 Bellman 递推</li>
 </ul>
-<div class="arithmatex">\[V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right],\]</div>
+<div class="arithmatex">\[
+V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right],
+\]</div>
 <p>这是全文唯一不需要"学"的东西，它是定义。</p>
 <ul>
 <li><strong>Value / Q, DQN</strong>：把 Bellman 关系变成学习目标。TD 误差 <span class="arithmatex">\(\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t)\)</span> 是这一支的引擎，DQN 只是把 Q 表换成带经验回放与目标网络的网络。</li>
@@ -4789,7 +4793,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

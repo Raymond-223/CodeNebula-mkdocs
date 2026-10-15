@@ -44,7 +44,9 @@ $$
 
 Lagrange 乘子 $\lambda_i$ 在这里有一个可解释的作用。把约束右端写成 $b_i$，最优值的灵敏度为
 
-$$\frac{\partial J^*}{\partial b_i} = -\lambda_i ,$$
+$$
+\frac{\partial J^*}{\partial b_i} = -\lambda_i ,
+$$
 
 即**约束放宽一单位，最优目标能改善多少**。乘子很大说明这条约束正在限制性能，值得投入资源去扩大余量；乘子接近零说明约束当前不起作用，可以暂不优化它。
 
@@ -61,24 +63,38 @@ $$\frac{\partial J^*}{\partial b_i} = -\lambda_i ,$$
 
 把约束写成集合，可以让“安全”这个词有明确外延。定义安全集合
 
-$$\mathcal{S} = \{x \mid h(x)\ge 0\},$$
+$$
+\mathcal{S} = \{x \mid h(x)\ge 0\},
+$$
 
 其中 $h$ 是连续可微的标量函数，$h(x)>0$ 表示严格安全，$h(x)=0$ 是边界。控制屏障函数（Control Barrier Function, CBF）路线要求控制输入满足
 
-$$\dot h(x,u) + \gamma h(x) \ge 0,$$
+$$
+\dot h(x,u) + \gamma h(x) \ge 0,
+$$
 
 它的含义是：只要当前 $h(x)>0$，该条件保证 $h$ 在未来不会变成负值，也就不会越过边界。$\gamma>0$ 越大，返回安全内部的趋势越强；若忽略 $\gamma$ 项，约束退化为“$\dot h\ge 0$”，即禁止任何指向边界的运动，在远离边界时过于保守。
 
 ??? proof "线性 CBF 条件给出前向不变性"
     假设闭环解存在且绝对连续，并且沿该解几乎处处满足 $\dot h(t)+\gamma h(t)\ge0$。乘以正数 $e^{\gamma t}$ 得
-    $$\frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.$$
+
+    $$
+    \frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.
+    $$
+
     因此 $e^{\gamma t}h(t)\ge h(0)$，即
-    $$h(t)\ge e^{-\gamma t}h(0).$$
+
+    $$
+    h(t)\ge e^{-\gamma t}h(0).
+    $$
+
     若初始状态满足 $h(0)\ge0$，则所有后续时刻都有 $h(t)\ge0$，安全集前向不变。这个证明依赖闭环解存在、$h$ 沿轨迹可微（或绝对连续）以及约束连续执行；采样控制、模型误差和执行器饱和需要另加裕量。
 
 把 $\dot h$ 展开：$\dot h = \nabla h(x)^\top f(x) + \nabla h(x)^\top g(x)u$，于是 CBF 条件对 $u$ 是仿射的，可以在每个控制周期用一个小型二次规划求解：
 
-$$\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .$$
+$$
+\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .
+$$
 
 | 约束层级 | 形式 | 保证的强度 | 主要依赖 |
 |---|---|---|---|
@@ -125,7 +141,9 @@ def limit_speed(v_cmd, v_max):
 
 把余量拆开写，才能知道每一项由谁负责。设感知与传输延迟为 $\tau_p$、通信与调度抖动为 $\tau_c$、执行器响应为 $\tau_a$，则总响应延迟
 
-$$\tau = \tau_p + \tau_c + \tau_a .$$
+$$
+\tau = \tau_p + \tau_c + \tau_a .
+$$
 
 | 延迟来源 | 典型量级 | 可控手段 | 抖动特性 |
 |---|---|---|---|
@@ -153,11 +171,15 @@ $$\tau = \tau_p + \tau_c + \tau_a .$$
 
 余量不能凭感觉给，它可以被算出来。设速度为 $v$、总响应延迟为 $\tau$、最大减速度为 $a$，则从“决定刹车”到停住的距离为
 
-$$d_\text{stop} = v\tau + \frac{v^2}{2a},$$
+$$
+d_\text{stop} = v\tau + \frac{v^2}{2a},
+$$
 
 再加上定位误差上界 $\epsilon$，最小安全余量为
 
-$$d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.$$
+$$
+d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.
+$$
 
 | 速度 $v$ | 延迟 $\tau$ | 减速度 $a$ | 反应距离 $v\tau$ | 制动距离 $v^2/(2a)$ | 合计（$\epsilon=0.1$ m） |
 |---|---|---|---|---|---|
@@ -170,7 +192,9 @@ $$d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.$$
 
 反推允许速度同样有用。给定可用净空 $d$，把 $d_\text{safe}=d$ 解成速度上限：
 
-$$v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .$$
+$$
+v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .
+$$
 
 以 $d=2$ m、$\epsilon=0.1$ m、$a=1.0$、$\tau=0.2$ 为例：$v_\text{max} = -0.2+\sqrt{0.04+3.8} \approx 1.76$。也就是说，2 m 的净空在 0.2 s 延迟下只允许约 1.8 m/s，超过这个速度减速已经来不及，只能靠更早规划或者更高减速度来补救。
 
@@ -216,7 +240,9 @@ $$v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .$$
 
 形式上，如果真实状态与估计满足 $\lVert x-\hat x\rVert\le \epsilon$，那么要求估计状态满足收紧后的约束
 
-$$h(\hat x)\;\ge\;\epsilon,$$
+$$
+h(\hat x)\;\ge\;\epsilon,
+$$
 
 才能推出真实状态仍在安全域内。这就是“**估计不确定性直接变成安全余量**”的具体含义，也是 [Uncertainty & Distribution Shift](01-uncertainty-shift.md) 与本章相接的地方。这类“把不确定性转成集合收缩”的做法，与 [Optimization, Constraints & Uncertainty](../../foundations/mathematics/07-optimization-under-uncertainty.md) 中的鲁棒优化是同一思路。
 

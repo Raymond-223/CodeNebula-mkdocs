@@ -97,7 +97,6 @@ $$
 
 ---
 
-
 ### 3.1 后面会反复用到的五个矩阵词
 
 为了避免后面突然冒出符号，这里先把最小词表补齐。
@@ -274,7 +273,6 @@ J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad J\in\mathbb R^{m\times n},\qquad
 $$
 
 **维度检查是最快的自检手段**：$J\delta$ 必须是 $m$ 维，所以 $J$ 是 $m\times n$、$\delta$ 是 $n$ 维，乘积是 $m\times n$ 乘 $n\times1$ 得 $m\times1$。先写维度、再填内容，能省掉大量返工。
-
 
 ### 7.3 海森矩阵（Hessian）与二阶变化
 

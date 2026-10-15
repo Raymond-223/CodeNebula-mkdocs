@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4718,7 +4718,9 @@ H(p) = -\sum_{i=1}^{K} p_i \ln p_i .
 </table>
 <p>在这个 M/M/1 模型内，利用率接近 1 时系统内任务数非线性增长（<span class="arithmatex">\(\rho=0.67\)</span> 时 <span class="arithmatex">\(E[L]\approx2.03\)</span>，<span class="arithmatex">\(\rho=0.9\)</span> 时 <span class="arithmatex">\(E[L]=9\)</span>）。真正“仅在排队”的数量分别是 <span class="arithmatex">\(E[L_q]\approx1.36\)</span> 和 <span class="arithmatex">\(8.1\)</span>。实际审核的到达和处理分布若不是上述模型，必须改用相应排队模型或实测分位数。</p>
 <p>由目标利用率可反推到达率上限：</p>
-<div class="arithmatex">\[\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau}.\]</div>
+<div class="arithmatex">\[
+\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau}.
+\]</div>
 <p>取 <span class="arithmatex">\(\tau=20\)</span> s、<span class="arithmatex">\(\rho_{\text{tgt}}=0.6\)</span>，得 <span class="arithmatex">\(\lambda_{\max}=0.03\)</span> /s，即每分钟 1.8 条告警。它只是 M/M/1 基线；设计文档还应报告突发到达、长尾处理时间、优先级和人员切换造成的偏离。</p>
 <table>
 <thead>
@@ -5131,9 +5133,11 @@ E = f\,N\,D .
 </tbody>
 </table>
 <p>三个最关键的指标是：<strong>告警采纳率</strong>（是否有大量机械批准）、<strong>平均理解时间</strong>（界面信息是否足够）、<strong>漏处理率</strong>（是否有请求无人响应）。三者任一恶化，说明 HITL 正在变成形式化流程。</p>
-<p>这些指标需要与人力预算联动。若 <span class="arithmatex">\(\rho\)</span> 已经在 0.6 以上，而管理层继续上调审核比例，排队与漏处理风险会迅速增加。因此<strong>审核比例不应被当作可以随意拉高的安全参数</strong>：若目标利用率为 <span class="arithmatex">\(\rho_{\text{tgt}}&lt;1\)</span>，由 <span class="arithmatex">\(\rho=\lambda\tau\)</span> 得到到达率上限
-$<span class="arithmatex">\(\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau},\)</span>$
-而不是由责任分配意愿决定。</p>
+<p>这些指标需要与人力预算联动。若 <span class="arithmatex">\(\rho\)</span> 已经在 0.6 以上，而管理层继续上调审核比例，排队与漏处理风险会迅速增加。因此<strong>审核比例不应被当作可以随意拉高的安全参数</strong>：若目标利用率为 <span class="arithmatex">\(\rho_{\text{tgt}}&lt;1\)</span>，由 <span class="arithmatex">\(\rho=\lambda\tau\)</span> 得到到达率上限</p>
+<div class="arithmatex">\[
+\lambda_{\max}=\frac{\rho_{\text{tgt}}}{\tau},
+\]</div>
+<p>而不是由责任分配意愿决定。</p>
 <p>注意力预算可以直接算：以 8 小时班次计，扣除交接、休息与设备操作，真正可用于审核的时间通常不超过 5–6 小时；按 <span class="arithmatex">\(\tau=20\)</span> s 计算，理论上限约每小时 180 条，但持续状态下可靠的速率通常只有三分之一到一半，因为注意力需要恢复间隔。</p>
 <table>
 <thead>
@@ -5335,7 +5339,7 @@ n_{\text{FTE}} = \frac{N\,\tau}{u}.
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

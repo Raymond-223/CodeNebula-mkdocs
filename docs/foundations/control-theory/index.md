@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![control-theory overview](../../assets/diagrams/control-map.svg)
-  <figcaption>Control Theory 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Control Theory 的核心概念关系。</figcaption>
 </figure>
 
 ## 学习范围

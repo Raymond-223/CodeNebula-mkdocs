@@ -8,7 +8,7 @@
 
 <figure markdown="span">
   ![DDS/ROS2 的 QoS 需要根据数据语义选择。](../../assets/diagrams/qos-choice.svg)
-  <figcaption>ROS2 的通信最终会落到底层 QoS：不同数据需要不同的传输语义。</figcaption>
+  <figcaption markdown="span">ROS2 的通信最终会落到底层 QoS：不同数据需要不同的传输语义。</figcaption>
 </figure>
 
 ## 一、先从一台不用 ROS 的机器人开始

@@ -44,7 +44,6 @@
 def clamp_speed(v, limit=1.0):
     return max(-limit, min(limit, v))
 
-
 def test_clamp_speed():
     assert clamp_speed(0.4) == 0.4
     assert clamp_speed(2.0) == 1.0
@@ -108,7 +107,6 @@ class FakeSensor:
             return {"range": 1.0}  # default reading once the queue is empty
         return self._samples.pop(0)
 
-
 def test_low_battery_triggers_return_to_base():
     robot = MissionPlanner(battery=FakeSensor([0.9, 0.2]))
     robot.step()  # healthy sample
@@ -130,11 +128,15 @@ def test_low_battery_triggers_return_to_base():
 
 用公式写出来，行覆盖率就是被执行的语句行数占可执行语句行数的比例：
 
-$$C_{\text{line}} = \frac{L_{\text{executed}}}{L_{\text{total}}}$$
+$$
+C_{\text{line}} = \frac{L_{\text{executed}}}{L_{\text{total}}}
+$$
 
 分支覆盖率为被走过的分支数占全部分支数的比例：
 
-$$C_{\text{branch}} = \frac{B_{\text{taken}}}{B_{\text{total}}}$$
+$$
+C_{\text{branch}} = \frac{B_{\text{taken}}}{B_{\text{total}}}
+$$
 
 条件覆盖要求每个原子条件都取过真和假，例如 `if a and b:` 需要分别让 a 为真/假、b 为真/假。注意分支覆盖并不蕴含条件覆盖，条件覆盖也不蕴含分支覆盖，它们看到的是不同的盲区。
 

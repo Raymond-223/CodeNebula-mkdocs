@@ -98,7 +98,7 @@ $$
 
 <figure markdown="span">
   ![多智能体通信应围绕必要状态、意图和事件组织，而不是广播所有原始信息。](../../assets/diagrams/mas-network.svg)
-  <figcaption>通信的核心问题是"谁需要知道什么，以及信息多久以后就失效"。</figcaption>
+  <figcaption markdown="span">通信的核心问题是"谁需要知道什么，以及信息多久以后就失效"。</figcaption>
 </figure>
 
 一条消息的信息含量，可以用接收方状态不确定性的下降量衡量。设接收方对某变量的先验熵为 $H(\text{prior})$、后验熵为 $H(\text{post})$，则信息增益

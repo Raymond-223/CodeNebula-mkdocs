@@ -5,7 +5,7 @@
 
 <figure markdown="span">
   ![reinforcement-learning overview](../../assets/diagrams/rl-map.svg)
-  <figcaption>Reinforcement Learning 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Reinforcement Learning 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题
@@ -14,7 +14,9 @@
 
 1. **信用分配**：奖励发生在 $t+1$，但可能是 $t-5$ 时刻某个动作造成的，也可能是十几步之前埋下的伏笔。要最大化的是累计回报
 
-$$G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2 r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1},$$
+$$
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2 r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1},
+$$
 
 而不是任何单步奖励。
 
@@ -53,7 +55,9 @@ $$G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2 r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{
 
 - **MDP / Bellman**（起点）：定义问题本身。五元组 $\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma)$ 加上 Bellman 递推
 
-$$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right],$$
+$$
+V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right],
+$$
 
   这是全文唯一不需要"学"的东西，它是定义。
 
@@ -89,7 +93,6 @@ $$V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(
 可以看到，**Bellman 方程把最优控制、动态规划、RL 放在同一张地图上，Nash 均衡把这张地图扩展到多智能体，而运行时保障负责把学到的策略接回真实系统。**
 
 使用这张表时有一点要留意：同一个数学对象在不同章节里承担的职责不同。例如 $V$ 在 01 里是 Bellman 算子作用的函数，在 02 里变成回归目标的一部分，在 03 里又被当作降低梯度方差的基线；$Q$ 在 [../game-theory/02-best-response-nash.md](../game-theory/02-best-response-nash.md) 中还额外带上了对手策略这一层依赖。先确认"当前这章把 $V$ 当作什么用"，再去看它的估计误差如何传播，读起来会顺很多。
-
 
 ## 从算法到实机的差距
 

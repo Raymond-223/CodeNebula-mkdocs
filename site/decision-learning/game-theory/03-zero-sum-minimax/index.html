@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4661,13 +4661,19 @@ x^{\top} A y = \frac{1}{9}\sum_{i=1}^{3}\sum_{j=1}^{3} A_{ij} = \frac{1}{9}\cdot
 <p>两边都是可行且有有限最优值的线性规划。线性规划强对偶定理因此给出 <span class="arithmatex">\(v^{\star} = w^{\star}\)</span>。这给出了 minimax 定理的构造性证明，也给出了实际求解方法。</p>
 <details class="proof">
 <summary>有限零和博弈的 Minimax 定理</summary>
-<p>对任意混合策略 <span class="arithmatex">\(x,y\)</span>，总有
-$<span class="arithmatex">\(\min_{\tilde y}x^TA\tilde y\le x^TAy\le\max_{\tilde x}\tilde x^TAy.\)</span>$
-对左边取 <span class="arithmatex">\(x\)</span> 的最大值、右边取 <span class="arithmatex">\(y\)</span> 的最小值，得到弱不等式
-$<span class="arithmatex">\(\max_x\min_yx^TAy\le\min_y\max_xx^TAy.\)</span>$</p>
-<p>对固定 <span class="arithmatex">\(x\)</span>，<span class="arithmatex">\(x^TAy\)</span> 关于 <span class="arithmatex">\(y\)</span> 线性，所以它在单纯形上的最小值等于各纯列收益的最小值；因此玩家 1 的 maximin 正是上面的原线性规划。类似地，玩家 2 的 minimax 正是其对偶线性规划。由线性规划强对偶，二者最优值相等，故
-$<span class="arithmatex">\(\max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
-=\min_{y\in\Delta_n}\max_{x\in\Delta_m}x^TAy.\)</span>$</p>
+<p>对任意混合策略 <span class="arithmatex">\(x,y\)</span>，总有</p>
+<div class="arithmatex">\[
+\min_{\tilde y}x^TA\tilde y\le x^TAy\le\max_{\tilde x}\tilde x^TAy.
+\]</div>
+<p>对左边取 <span class="arithmatex">\(x\)</span> 的最大值、右边取 <span class="arithmatex">\(y\)</span> 的最小值，得到弱不等式</p>
+<div class="arithmatex">\[
+\max_x\min_yx^TAy\le\min_y\max_xx^TAy.
+\]</div>
+<p>对固定 <span class="arithmatex">\(x\)</span>，<span class="arithmatex">\(x^TAy\)</span> 关于 <span class="arithmatex">\(y\)</span> 线性，所以它在单纯形上的最小值等于各纯列收益的最小值；因此玩家 1 的 maximin 正是上面的原线性规划。类似地，玩家 2 的 minimax 正是其对偶线性规划。由线性规划强对偶，二者最优值相等，故</p>
+<div class="arithmatex">\[
+\max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
+=\min_{y\in\Delta_n}\max_{x\in\Delta_m}x^TAy.
+\]</div>
 <p>本证明只使用了有限维线性规划强对偶；该定理及其证明见 <a href="../../../foundations/mathematics/07-optimization-under-uncertainty/">凸优化</a> 的“线性规划强对偶”。</p>
 </details>
 <table>
@@ -4946,7 +4952,7 @@ $<span class="arithmatex">\(\max_{x\in\Delta_m}\min_{y\in\Delta_n}x^TAy
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

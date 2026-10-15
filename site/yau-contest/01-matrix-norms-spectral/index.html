@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -1091,7 +1091,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4716,7 +4716,9 @@ A:\mathbb R^n\to\mathbb R^m,
 \qquad x\mapsto Ax.
 \]</div>
 <p>这里 <span class="arithmatex">\(\mathbb R^n\)</span> 的标准基（standard basis）定义为</p>
-<div class="arithmatex">\[e_1=(1,0,\ldots,0)^T,\quad e_2=(0,1,\ldots,0)^T,\quad\ldots,\quad e_n=(0,\ldots,0,1)^T.\]</div>
+<div class="arithmatex">\[
+e_1=(1,0,\ldots,0)^T,\quad e_2=(0,1,\ldots,0)^T,\quad\ldots,\quad e_n=(0,\ldots,0,1)^T.
+\]</div>
 <p>矩阵的第 <span class="arithmatex">\(i\)</span> 列正是 <span class="arithmatex">\(Ae_i\)</span>。若</p>
 <div class="arithmatex">\[
 A=\begin{pmatrix}1&amp;2\\3&amp;4\end{pmatrix},
@@ -4837,7 +4839,9 @@ A=\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix},
 \]</div>
 <p>若 <span class="arithmatex">\(\det(A)\ne0\)</span>，两行不会在消元后产生零行，方程 <span class="arithmatex">\(Ax=y\)</span> 对每个 <span class="arithmatex">\(y\)</span> 有唯一解；若 <span class="arithmatex">\(\det(A)=0\)</span>，则存在非零方向被 <span class="arithmatex">\(A\)</span> 压到零。后面的特征值计算会把 <span class="arithmatex">\(A-\lambda I\)</span> 的行列式设为零，本质上就是寻找这种非零零空间。</p>
 <p>对一般 <span class="arithmatex">\(n\)</span> 阶矩阵，行列式定义为</p>
-<div class="arithmatex">\[\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)},\]</div>
+<div class="arithmatex">\[
+\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)},
+\]</div>
 <p>其中 <span class="arithmatex">\(S_n\)</span> 是 <span class="arithmatex">\(1,\ldots,n\)</span> 的全部排列，<span class="arithmatex">\(\operatorname{sgn}(\sigma)\)</span> 表示排列的奇偶符号。</p>
 <details class="proof">
 <summary>行变换与三角矩阵的行列式性质</summary>
@@ -4852,7 +4856,9 @@ A=\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix},
 \operatorname{Col}(A)=\{Ax:x\in\mathbb R^n\}.
 \]</div>
 <p>矩阵的秩（rank）正式定义为像空间也就是列空间的维数：</p>
-<div class="arithmatex">\[\operatorname{rank}(A):=\dim\operatorname{Col}(A).\]</div>
+<div class="arithmatex">\[
+\operatorname{rank}(A):=\dim\operatorname{Col}(A).
+\]</div>
 <p><strong>秩与主元定理。</strong> <span class="arithmatex">\(\operatorname{rank}(A)\)</span> 等于任一行阶梯形中主元的个数；原矩阵中与主元位置对应的列构成列空间的一组基。</p>
 <details class="proof">
 <summary>证明</summary>
@@ -4956,13 +4962,19 @@ A=\begin{pmatrix}2&amp;1\\1&amp;2\end{pmatrix}.
 <details class="proof">
 <summary>三个公式确实定义范数</summary>
 <p>正定性与齐次性可由绝对值性质逐项得到。对 <span class="arithmatex">\(\ell_1\)</span> 范数，由高中绝对值三角不等式逐项相加：</p>
-<div class="arithmatex">\[\|x+y\|_1=\sum_i|x_i+y_i|\le\sum_i(|x_i|+|y_i|)=\|x\|_1+\|y\|_1.\]</div>
+<div class="arithmatex">\[
+\|x+y\|_1=\sum_i|x_i+y_i|\le\sum_i(|x_i|+|y_i|)=\|x\|_1+\|y\|_1.
+\]</div>
 <p>对 <span class="arithmatex">\(\ell_\infty\)</span> 范数，每个 <span class="arithmatex">\(i\)</span> 都有</p>
-<div class="arithmatex">\[|x_i+y_i|\le|x_i|+|y_i|\le\|x\|_\infty+\|y\|_\infty,\]</div>
+<div class="arithmatex">\[
+|x_i+y_i|\le|x_i|+|y_i|\le\|x\|_\infty+\|y\|_\infty,
+\]</div>
 <p>再对左边取最大值。<span class="arithmatex">\(\ell_2\)</span> 范数的三角不等式已在上一章由柯西－施瓦茨不等式证明。</p>
 </details>
 <p><strong>反三角不等式。</strong> 任意范数都满足</p>
-<div class="arithmatex">\[|\|x\|-\|y\||\le\|x-y\|.\]</div>
+<div class="arithmatex">\[
+|\|x\|-\|y\||\le\|x-y\|.
+\]</div>
 <details class="proof">
 <summary>证明</summary>
 <p>由 <span class="arithmatex">\(x=(x-y)+y\)</span> 和三角不等式，<span class="arithmatex">\(\|x\|\le\|x-y\|+\|y\|\)</span>，所以 <span class="arithmatex">\(\|x\|-\|y\|\le\|x-y\|\)</span>。交换 <span class="arithmatex">\(x,y\)</span> 得 <span class="arithmatex">\(\|y\|-\|x\|\le\|x-y\|\)</span>。两式合并就是绝对值形式。</p>
@@ -4991,7 +5003,7 @@ c\|x\|_a\le\|x\|_b\le C\|x\|_a.
 N(x)
 \le\sum_{i=1}^n|x_i|N(e_i)
 \le\left(\sum_{i=1}^nx_i^2\right)^{1/2}
-   \left(\sum_{i=1}^nN(e_i)^2\right)^{1/2}.
+\left(\sum_{i=1}^nN(e_i)^2\right)^{1/2}.
 \]</div>
 <p>记 <span class="arithmatex">\(M=\bigl(\sum_iN(e_i)^2\bigr)^{1/2}\)</span>，则</p>
 <div class="arithmatex">\[
@@ -5015,11 +5027,15 @@ N(x)=\|x\|_2N(u),
 m\|x\|_2\le N(x)\le M\|x\|_2.
 \]</div>
 <p><span class="arithmatex">\(x=0\)</span> 时同一不等式也成立。分别对两个范数取常数</p>
-<div class="arithmatex">\[m_a\|x\|_2\le\|x\|_a\le M_a\|x\|_2,
+<div class="arithmatex">\[
+m_a\|x\|_2\le\|x\|_a\le M_a\|x\|_2,
 \qquad
-m_b\|x\|_2\le\|x\|_b\le M_b\|x\|_2.\]</div>
+m_b\|x\|_2\le\|x\|_b\le M_b\|x\|_2.
+\]</div>
 <p>由 <span class="arithmatex">\(\|x\|_2\ge\|x\|_a/M_a\)</span> 和 <span class="arithmatex">\(\|x\|_2\le\|x\|_a/m_a\)</span> 得</p>
-<div class="arithmatex">\[\frac{m_b}{M_a}\|x\|_a\le\|x\|_b\le\frac{M_b}{m_a}\|x\|_a.\]</div>
+<div class="arithmatex">\[
+\frac{m_b}{M_a}\|x\|_a\le\|x\|_b\le\frac{M_b}{m_a}\|x\|_a.
+\]</div>
 <p>所以可明确取 <span class="arithmatex">\(c=m_b/M_a\)</span>、<span class="arithmatex">\(C=M_b/m_a\)</span>。</p>
 </details>
 <p>证明中“单位球面是紧集”正是有限维条件发挥作用的位置。有限维有界序列可以逐坐标抽取收敛子列；无限维空间的单位球通常不具备这种性质。</p>
@@ -5052,8 +5068,10 @@ c\|f\|_\infty\le\|f\|_1
 <details class="proof">
 <summary>格拉姆－施密特构造</summary>
 <p>设线性无关向量为 <span class="arithmatex">\(v_1,\ldots,v_k\)</span>。递归定义</p>
-<div class="arithmatex">\[u_1=v_1,\qquad
-u_j=v_j-\sum_{i=1}^{j-1}\frac{v_j^Tu_i}{u_i^Tu_i}u_i.\]</div>
+<div class="arithmatex">\[
+u_1=v_1,\qquad
+u_j=v_j-\sum_{i=1}^{j-1}\frac{v_j^Tu_i}{u_i^Tu_i}u_i.
+\]</div>
 <p>由构造，<span class="arithmatex">\(u_j\)</span> 与此前每个 <span class="arithmatex">\(u_i\)</span> 正交。若某个 <span class="arithmatex">\(u_j=0\)</span>，则 <span class="arithmatex">\(v_j\)</span> 属于 <span class="arithmatex">\(v_1,\ldots,v_{j-1}\)</span> 的张成空间，与原向量组线性无关矛盾，所以每个 <span class="arithmatex">\(u_j\ne0\)</span>。令 <span class="arithmatex">\(q_j=u_j/\|u_j\|_2\)</span>，便得到标准正交组。</p>
 <p>每一步都有 <span class="arithmatex">\(u_j\in\operatorname{span}(v_1,\ldots,v_j)\)</span>，反过来由定义可写出 <span class="arithmatex">\(v_j\)</span> 属于 <span class="arithmatex">\(u_1,\ldots,u_j\)</span> 的张成空间。因此对每个 <span class="arithmatex">\(j\)</span>，两组前 <span class="arithmatex">\(j\)</span> 个向量张成同一空间；取 <span class="arithmatex">\(j=k\)</span> 即得结论。</p>
 </details>
@@ -5097,7 +5115,9 @@ Aq_1=\lambda_1q_1.
 q_1^TAz=(Aq_1)^Tz=\lambda_1q_1^Tz=0.
 \]</div>
 <p>因此 <span class="arithmatex">\(Az\in q_1^\perp\)</span>，即该正交补空间在 <span class="arithmatex">\(A\)</span> 下不变。由正交补维数引理，它的维数为 <span class="arithmatex">\(n-1\)</span>。先对该子空间的一组普通基使用前文的 Gram–Schmidt 引理，得到标准正交基 <span class="arithmatex">\(w_2,\ldots,w_n\)</span>，令 <span class="arithmatex">\(W=(w_2,\ldots,w_n)\)</span>。限制映射在这组基下的坐标矩阵定义为</p>
-<div class="arithmatex">\[B=W^TAW,\qquad B_{ij}=w_i^TAw_j.\]</div>
+<div class="arithmatex">\[
+B=W^TAW,\qquad B_{ij}=w_i^TAw_j.
+\]</div>
 <p>于是 <span class="arithmatex">\(B^T=W^TA^TW=W^TAW=B\)</span>。这一步同时说明了抽象限制映射与坐标矩阵之间的关系。由归纳假设，<span class="arithmatex">\(B\)</span> 有一组标准正交特征向量；经 <span class="arithmatex">\(W\)</span> 映回原空间，得到 <span class="arithmatex">\(q_1^\perp\)</span> 中的标准正交特征向量 <span class="arithmatex">\(q_2,\ldots,q_n\)</span>。</p>
 <p>于是 <span class="arithmatex">\(q_1,\ldots,q_n\)</span> 是 <span class="arithmatex">\(\mathbb R^n\)</span> 的标准正交特征向量基。令 <span class="arithmatex">\(Q=(q_1,\ldots,q_n)\)</span>，并把相应特征值放入 <span class="arithmatex">\(\Lambda\)</span>，便有</p>
 <div class="arithmatex">\[
@@ -5414,7 +5434,7 @@ D_i=\left\{z\in\mathbb C:
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![域随机化通过训练时改变关键参数，让策略不要依赖单一精确仿真条件。](../../assets/diagrams/domain-rand.svg)
-  <figcaption>随机化应覆盖真实系统可能出现的合理变化，而不是无边界增加难度。</figcaption>
+  <figcaption markdown="span">随机化应覆盖真实系统可能出现的合理变化，而不是无边界增加难度。</figcaption>
 </figure>
 
 ## 现实差距（Reality Gap）的三类来源
@@ -46,7 +46,9 @@
 
 域随机化（domain randomization）的思路很直接：训练时不再用一个固定世界，而是从一个参数分布里采样世界，策略必须在这一组世界上都工作。形式化地，给定物理参数向量 $\xi$（质量、摩擦、延迟等）与任务回报 $J(\pi, \xi)$，我们优化的是期望性能：
 
-$$ \max_{\pi}\; \mathbb{E}_{\xi \sim p(\xi)}\left[\, J(\pi, \xi) \,\right] $$
+$$
+\max_{\pi}\; \mathbb{E}_{\xi \sim p(\xi)}\left[\, J(\pi, \xi) \,\right]
+$$
 
 这里 $p(\xi)$ 是训练分布，它的支撑集就是“我们愿意让策略适应的那组世界”。
 
@@ -80,7 +82,9 @@ $$ \max_{\pi}\; \mathbb{E}_{\xi \sim p(\xi)}\left[\, J(\pi, \xi) \,\right] $$
 
 如果模拟器中的轮距写错一倍，不应该指望“随机化足够大”来掩盖。这里要区分两种误差：
 
-$$ \theta_{\text{true}} = \hat{\theta} + b + \epsilon,\qquad \mathbb{E}[b] \ne 0,\quad \mathbb{E}[\epsilon] = 0 $$
+$$
+\theta_{\text{true}} = \hat{\theta} + b + \epsilon,\qquad \mathbb{E}[b] \ne 0,\quad \mathbb{E}[\epsilon] = 0
+$$
 
 其中 $b$ 是系统性偏差（标定错误、参数写错、坐标系反了），$\epsilon$ 是随机波动（公差、磨损、环境变化）。
 
@@ -115,11 +119,15 @@ $$ \theta_{\text{true}} = \hat{\theta} + b + \epsilon,\qquad \mathbb{E}[b] \ne 0
 
 为了不只依赖肉眼曲线，可以把敏感度写成可比较的量。最常用的是归一化一阶敏感度：
 
-$$ S_i = \frac{\partial J}{\partial \theta_i}\,\frac{\theta_i}{J} $$
+$$
+S_i = \frac{\partial J}{\partial \theta_i}\,\frac{\theta_i}{J}
+$$
 
 它的含义是“参数 $\theta_i$ 相对变化 1% 时，任务指标 $J$ 相对变化百分之几”。实际计算时用中心差分近似：
 
-$$ \hat{S}_i \approx \frac{J(\theta_i + \Delta_i) - J(\theta_i - \Delta_i)}{2\,\Delta_i}\cdot\frac{\theta_i}{J} $$
+$$
+\hat{S}_i \approx \frac{J(\theta_i + \Delta_i) - J(\theta_i - \Delta_i)}{2\,\Delta_i}\cdot\frac{\theta_i}{J}
+$$
 
 这个量的好处是**量纲无关**：摩擦系数、延迟毫秒数、质量千克数可以放进同一张表里排序。工程上通常只做这一步就够用；如果需要更严格的解释，可以进一步分析二阶项或参数之间的交互作用。
 
@@ -157,7 +165,9 @@ $$ \hat{S}_i \approx \frac{J(\theta_i + \Delta_i) - J(\theta_i - \Delta_i)}{2\,\
 
 **尺度参数为什么常用对数均匀？** 因为摩擦、质量、增益这类量的影响通常与相对变化成正比：摩擦从 0.1 变成 0.2（翻倍）带来的行为改变，与从 0.8 变成 1.6（同样翻倍）大致同量级，而绝对变化 0.1 与 0.8 完全不同。对数均匀保证每个数量级被等概率覆盖：
 
-$$ x \sim \exp\!\big(\mathcal{U}(\ln a,\, \ln b)\big) \quad\Longleftrightarrow\quad \ln x \sim \mathcal{U}(\ln a,\, \ln b) $$
+$$
+x \sim \exp\!\big(\mathcal{U}(\ln a,\, \ln b)\big) \quad\Longleftrightarrow\quad \ln x \sim \mathcal{U}(\ln a,\, \ln b)
+$$
 
 它的另一个好处是**尺度不变**：把参数整体乘以常数后采样形状不变，因此不会因为换了单位（毫米换米）而意外改变训练难度。
 

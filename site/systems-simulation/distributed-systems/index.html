@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4366,7 +4366,9 @@
 </tbody>
 </table>
 <p>第一个要建立的反直觉认识是：<strong>分布式系统的失败很少是全有全无的</strong>。设单次端到端通信的成功概率为 <span class="arithmatex">\(1-p\)</span>，一次业务流需要 <span class="arithmatex">\(n\)</span> 次通信才能完成，则整段业务的成功率约为</p>
-<div class="arithmatex">\[P_{\text{success}}(n) \approx (1-p)^{n}.\]</div>
+<div class="arithmatex">\[
+P_{\text{success}}(n) \approx (1-p)^{n}.
+\]</div>
 <p>例如 <span class="arithmatex">\(p=10^{-3}\)</span> 时单次通信看起来足够可靠，但 <span class="arithmatex">\(n=1000\)</span> 的业务流成功率只有约 0.37，也就是三次里失败接近两次。所以分布式系统的可靠性目标不能按“单次通信质量”来设，必须按“一段业务流的成功率”来设，这直接决定了哪里值得加冗余。</p>
 <p>消息在网络里也不会只有“到达”和“丢失”两种结局，下面六类失败模式都必须被显式处理：</p>
 <table>
@@ -4811,7 +4813,9 @@
 <p><strong>队列深度是这张表里最容易被忽视的一列</strong>：深度设得过大会把“实时数据”变成“历史回放”，订阅端看起来一直在满负荷处理，处理的却可能是几秒之前的旧帧。</p>
 <h2 id="_5">机器人系统的典型延迟预算</h2>
 <p>分布式设计最终要落到一个总延迟预算上。以 10 Hz 控制回路为例，周期 <span class="arithmatex">\(T_{\text{ctrl}} = 1/f_{\text{ctrl}} = 100\ \mathrm{ms}\)</span>，预算关系可以写成</p>
-<div class="arithmatex">\[d_{\text{total}} = \sum_{i=1}^{n} d_i, \qquad d_{\text{total}} + J_{\max} \le T_{\text{ctrl}},\]</div>
+<div class="arithmatex">\[
+d_{\text{total}} = \sum_{i=1}^{n} d_i, \qquad d_{\text{total}} + J_{\max} \le T_{\text{ctrl}},
+\]</div>
 <p>其中 <span class="arithmatex">\(d_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个环节的延迟，<span class="arithmatex">\(J_{\max}\)</span> 是最坏情况下的抖动。<strong>真正拖垮闭环的往往不是平均延迟而是抖动</strong>：平均 20 ms、抖动 ±40 ms 的链路，其效果接近平均 60 ms，因为个别周期会直接错过截止时间，而闭环性能由最坏周期决定。</p>
 <table>
 <thead>
@@ -5130,7 +5134,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

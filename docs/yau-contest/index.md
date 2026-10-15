@@ -51,7 +51,7 @@
 | [线性迭代与幂法](03-linear-iterations-power.md) | 定常迭代（stationary iteration）、谱半径判据、幂法 | 能从迭代式推出误差方程并证明充要条件 |
 | [不动点与压缩映射](04-fixed-points-contractions.md) | 完备度量空间、巴拿赫定理（Banach theorem）、误差界 | 能逐步证明存在性、唯一性、收敛性和迭代次数界 |
 | [牛顿法与收敛阶](05-newton-convergence.md) | 泰勒余项（Taylor remainder）、局部二次收敛、重根 | 能写出带邻域条件的局部收敛证明 |
-| [完整解答](06-stage-one-workbook.md) | 综合证明与计算 | 能独立完成完整解答，而不是只给出公式或提示 |
+| [丘赛真题](06-stage-one-workbook.md) | 官方应用与计算数学原卷中的 195 组题目或小问 | 按年份与赛别查阅题干及默认折叠的答案 |
 
 ## 定理阅读方法
 

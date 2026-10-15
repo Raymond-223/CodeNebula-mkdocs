@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![三维点经过相机坐标变换和投影后落到图像平面。](../../assets/diagrams/camera-pipeline.svg)
-  <figcaption>视觉几何的主线是：世界坐标 → 相机坐标 → 归一化平面 → 像素。</figcaption>
+  <figcaption markdown="span">视觉几何的主线是：世界坐标 → 相机坐标 → 归一化平面 → 像素。</figcaption>
 </figure>
 
 ## 数字图像首先是规则采样的数值阵列

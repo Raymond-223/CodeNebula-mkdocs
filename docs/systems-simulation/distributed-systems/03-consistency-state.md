@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![副本越多，状态同步就越需要明确顺序、延迟与冲突解决规则。](../../assets/diagrams/consistency-flow.svg)
-  <figcaption>一致性问题来自传播延迟和并发写入，而不仅仅是“数据有没有同步”。</figcaption>
+  <figcaption markdown="span">一致性问题来自传播延迟和并发写入，而不仅仅是“数据有没有同步”。</figcaption>
 </figure>
 
 ## 旧读与写冲突
@@ -188,7 +188,9 @@ def update_if_version(record, expected, new_owner):
 
 比较规则很简洁。记 $V_a \le V_b$ 当且仅当所有分量都不大于：
 
-$$V_a \le V_b \iff \forall k,\ V_a[k] \le V_b[k].$$
+$$
+V_a \le V_b \iff \forall k,\ V_a[k] \le V_b[k].
+$$
 
 由此得到三种判定：
 
@@ -196,7 +198,9 @@ $$V_a \le V_b \iff \forall k,\ V_a[k] \le V_b[k].$$
 - 若 $V_b \le V_a$ 且 $V_b \ne V_a$，则 $V_b$ 在先，情况与上者对称；
 - 若既存在 $V_a[j] > V_b[j]$ 又存在 $V_a[k] < V_b[k]$，即
 
-$$V_a \parallel V_b \iff \exists j,\ V_a[j] > V_b[j] \ \text{且}\ \exists k,\ V_a[k] < V_b[k],$$
+$$
+V_a \parallel V_b \iff \exists j,\ V_a[j] > V_b[j] \ \text{且}\ \exists k,\ V_a[k] < V_b[k],
+$$
 
 则两个版本**并发**，构成真正的冲突，需要合并或上报。
 
@@ -223,7 +227,9 @@ $$V_a \parallel V_b \iff \exists j,\ V_a[j] > V_b[j] \ \text{且}\ \exists k,\ V
 
 它依赖的是数学上的半格结构：每个副本的状态都是所有已见更新在合并操作 $\sqcup$ 下的结果，而 $\sqcup$ 满足交换律、结合律与幂等律。三条性质合起来意味着**副本本地以任意顺序、任意次数应用相同的一组更新，最终都会收敛到同一个值**——也就是
 
-$$s_1 \sqcup s_2 = s_2 \sqcup s_1, \qquad (s_1 \sqcup s_2) \sqcup s_3 = s_1 \sqcup (s_2 \sqcup s_3), \qquad s \sqcup s = s.$$
+$$
+s_1 \sqcup s_2 = s_2 \sqcup s_1, \qquad (s_1 \sqcup s_2) \sqcup s_3 = s_1 \sqcup (s_2 \sqcup s_3), \qquad s \sqcup s = s.
+$$
 
 幂等性尤其重要：它让“至少一次”的网络重传不再需要去重表，重复应用合并不改变结果。这正是 CRDT 在不可靠链路上好用的原因。
 

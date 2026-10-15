@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -975,7 +975,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4481,7 +4481,7 @@
 <figure>
   <img alt="向量分解为列空间内的正交投影与垂直残差。" src="../../assets/diagrams/yau-orthogonal-projection.svg" />
 <br />
-<figcaption>正交投影把 $b$ 分成 $Pb$ 与垂直残差 $b-Pb$；最佳逼近证明就是这两个分量的勾股分解。</figcaption>
+<figcaption>正交投影把 <span class="arithmatex">\(b\)</span> 分成 <span class="arithmatex">\(Pb\)</span> 与垂直残差 <span class="arithmatex">\(b-Pb\)</span>；最佳逼近证明就是这两个分量的勾股分解。</figcaption>
 </figure>
 <p>向量 <span class="arithmatex">\(u,v\in\mathbb R^m\)</span> 正交，记为 <span class="arithmatex">\(u\perp v\)</span>，当且仅当 <span class="arithmatex">\(u^Tv=0\)</span>。若 <span class="arithmatex">\(u\)</span> 是单位向量，则 <span class="arithmatex">\(b\)</span> 在 <span class="arithmatex">\(u\)</span> 方向的正交投影为</p>
 <div class="arithmatex">\[
@@ -4541,7 +4541,7 @@ b-y=(b-Pb)+(Pb-y).
 \|b-y\|_2^2
 &amp;=\|(b-Pb)+(Pb-y)\|_2^2\\
 &amp;=\|b-Pb\|_2^2+\|Pb-y\|_2^2
-  +2(b-Pb)^T(Pb-y)\\
++2(b-Pb)^T(Pb-y)\\
 &amp;=\|b-Pb\|_2^2+\|Pb-y\|_2^2\\
 &amp;\ge\|b-Pb\|_2^2.
 \end{aligned}
@@ -4612,9 +4612,9 @@ A^T(Ax_*-b)=0.
 </details>
 <h2 id="singular-value-decomposition">奇异值分解（Singular Value Decomposition）</h2>
 <figure>
-  <img alt="奇异值分解将线性变换拆成旋转、轴向伸缩和再次旋转。" src="../../assets/diagrams/yau-svd-geometry.svg" />
+  <img alt="奇异值分解将线性变换拆成正交变换、轴向伸缩和再次正交变换。" src="../../assets/diagrams/yau-svd-geometry.svg" />
 <br />
-<figcaption>$V^T$ 先选择正交输入方向，$\Sigma$ 沿坐标轴伸缩，$U$ 再把结果旋转到输出空间。</figcaption>
+<figcaption><span class="arithmatex">\(V^T\)</span> 先选择正交输入方向，<span class="arithmatex">\(\Sigma\)</span> 沿坐标轴伸缩，<span class="arithmatex">\(U\)</span> 再把结果正交变换到输出空间。正交变换也可包含反射。</figcaption>
 </figure>
 <p><strong>标准正交基扩充引理。</strong> 欧几里得空间中的任意标准正交向量组，都能扩充为整个空间的一组标准正交基。</p>
 <details class="proof">
@@ -4646,7 +4646,9 @@ A=U\Sigma V^T.
 <details class="proof">
 <summary><span class="arithmatex">\(\operatorname{rank}(A^TA)=\operatorname{rank}(A)\)</span></summary>
 <p>对任意 <span class="arithmatex">\(x\)</span>，<span class="arithmatex">\(Ax=0\)</span> 显然推出 <span class="arithmatex">\(A^TAx=0\)</span>。反过来，若 <span class="arithmatex">\(A^TAx=0\)</span>，则</p>
-<div class="arithmatex">\[0=x^TA^TAx=\|Ax\|_2^2,\]</div>
+<div class="arithmatex">\[
+0=x^TA^TAx=\|Ax\|_2^2,
+\]</div>
 <p>所以 <span class="arithmatex">\(Ax=0\)</span>。因此 <span class="arithmatex">\(\ker(A^TA)=\ker(A)\)</span>。两者定义域都是 <span class="arithmatex">\(\mathbb R^n\)</span>，由秩－零化度定理，它们秩相同。对称半正定矩阵 <span class="arithmatex">\(A^TA\)</span> 的秩等于其非零特征值个数，而非零特征值都为正。</p>
 </details>
 <details class="proof">
@@ -4809,7 +4811,7 @@ U=\begin{pmatrix}
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

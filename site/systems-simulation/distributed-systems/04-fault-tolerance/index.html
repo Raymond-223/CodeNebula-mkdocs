@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4606,9 +4606,13 @@
 </table>
 <p>绝大多数工程系统实际面对的是 crash-recovery 加 omission 的混合模型：节点会重启，链路会偶尔丢包。拜占庭故障在机器人系统里的现实形态往往不是恶意的，而是"传感器坏了但仍在报告"——这类故障用简单的心跳完全无法发现，必须依靠冗余传感器之间的交叉表决。</p>
 <p>检测的最基本手段是心跳。发送方以周期 <span class="arithmatex">\(h\)</span> 发出心跳，接收方维护一个计时器；若在窗口 <span class="arithmatex">\(T\)</span> 内没有收到任何心跳，就怀疑对方已经失效。设健康节点的心跳到达间隔近似服从均值为 <span class="arithmatex">\(h\)</span> 的指数分布，则"窗口内一次心跳都没到"的概率为</p>
-<div class="arithmatex">\[P_{\text{fp}} = e^{-T/h}\]</div>
+<div class="arithmatex">\[
+P_{\text{fp}} = e^{-T/h}
+\]</div>
 <p>这就是把一个健康节点误判为失效的概率。若要让它不超过给定上限 <span class="arithmatex">\(\epsilon\)</span>，超时阈值必须满足</p>
-<div class="arithmatex">\[T \ge h \ln\frac{1}{\epsilon}\]</div>
+<div class="arithmatex">\[
+T \ge h \ln\frac{1}{\epsilon}
+\]</div>
 <p>而真实故障的平均检测延迟约等于 <span class="arithmatex">\(T\)</span> 本身——必须等窗口耗尽才能判定。于是得到本节最重要的定量关系：<strong>阈值提高使误判率指数下降，却使检测延迟线性上升。</strong> 容错参数从来不是"调大一点更保险"，而是在这两条曲线之间显式取点。</p>
 <table>
 <thead>
@@ -4795,9 +4799,13 @@
 <p>还有一种危险组合是"重试 + 超时级联"。当 A 调用 B、B 调用 C 时，如果每一层都设置独立超时并按各自的重试次数放大，那么最下层的实际请求数量可能是最上层的几十倍。<strong>跨层调用链上，重试次数应当只在一层生效</strong>，否则故障期间的放大效应会随链路深度指数增长。</p>
 <h2 id="_5">指数退避与重试上限的定量设计</h2>
 <p>指数退避的序列很容易写出来，但真正需要设计的是它的三个参数：初始延迟 <span class="arithmatex">\(d_0\)</span>、增长上限 <span class="arithmatex">\(d_{\max}\)</span> 和最大尝试次数 <span class="arithmatex">\(r\)</span>。第 <span class="arithmatex">\(i\)</span> 次重试（从 0 开始计数）的等待时间为</p>
-<div class="arithmatex">\[d_i = \min\left(d_0 \cdot 2^i,\ d_{\max}\right)\]</div>
+<div class="arithmatex">\[
+d_i = \min\left(d_0 \cdot 2^i,\ d_{\max}\right)
+\]</div>
 <p>若不加抖动，总等待时间为各次间隔之和。在触及上限之前，它是一个几何级数：</p>
-<div class="arithmatex">\[\sum_{i=0}^{n-1} d_0 2^i = d_0\left(2^{n} - 1\right)\]</div>
+<div class="arithmatex">\[
+\sum_{i=0}^{n-1} d_0 2^i = d_0\left(2^{n} - 1\right)
+\]</div>
 <p>加上随机抖动后，等待时间变为区间内的均匀采样 <span class="arithmatex">\(d_i = U\left(0,\ \min(d_0 2^i, d_{\max})\right)\)</span>，虽然期望值约为无抖动的一半，但不同客户端之间的重试时刻被打散，峰值压力显著降低。<strong>抖动的作用不是缩短等待，而是把多个客户端的同时重试变成随机的分散重试。</strong></p>
 <table>
 <thead>
@@ -4908,7 +4916,9 @@
 <h2 id="_6">冗余的价值在于减少单点失效</h2>
 <p>备用节点、双传感器、多个网络链路都属于冗余。但如果它们共享同一电源、同一交换机、同一个机柜、同一份配置或同一个软件缺陷，故障仍然会同时发生。<strong>冗余只有在失效独立性成立时才产生可用性。</strong></p>
 <p>有效冗余要考虑共同失效模式（common mode failure），而不仅是组件数量。可用性的组合公式很容易让人误判：若两个副本各自独立地以 <span class="arithmatex">\(A\)</span> 的概率可用，则并联系统的可用性为</p>
-<div class="arithmatex">\[A_{\text{parallel}} = 1 - (1 - A)^2\]</div>
+<div class="arithmatex">\[
+A_{\text{parallel}} = 1 - (1 - A)^2
+\]</div>
 <p>把 <span class="arithmatex">\(A = 0.99\)</span> 代入，得到 <span class="arithmatex">\(0.9999\)</span>，看起来提升了一个数量级。但如果两个副本以概率 <span class="arithmatex">\(p_c\)</span> 共同失效（例如共用同一个上游服务、同一份错误配置），那么并联系统的可用性上界就只有 <span class="arithmatex">\(1 - p_c\)</span>——<strong>无论加多少副本都无法突破这个上界。</strong> 当 <span class="arithmatex">\(p_c = 1\%\)</span> 时，加副本几乎不带来任何提升。</p>
 <table>
 <thead>
@@ -4956,11 +4966,17 @@
 <p>对机器人系统而言，最有效的冗余往往不是"整机备份"，而是<strong>关键能力的分层冗余</strong>：控制器有独立的安全回路，感知有不同物理原理的传感器，通信有本地与云端两条路径。这种冗余比复制同一套软硬件更能抵抗共同失效。</p>
 <h2 id="_7">冗余与多数派表决的代价</h2>
 <p>当多个副本需要对某个值达成一致时，最常用的机制是多数派表决（quorum）。设副本数为 <span class="arithmatex">\(N\)</span>，多数派大小为</p>
-<div class="arithmatex">\[q = \left\lfloor \frac{N}{2}\right\rfloor + 1\]</div>
+<div class="arithmatex">\[
+q = \left\lfloor \frac{N}{2}\right\rfloor + 1
+\]</div>
 <p>可容忍的故障副本数为</p>
-<div class="arithmatex">\[f = \left\lfloor \frac{N - 1}{2}\right\rfloor\]</div>
+<div class="arithmatex">\[
+f = \left\lfloor \frac{N - 1}{2}\right\rfloor
+\]</div>
 <p>任意两个大小为 <span class="arithmatex">\(q\)</span> 的集合 <span class="arithmatex">\(Q_1,Q_2\subseteq\{1,\ldots,N\}\)</span> 满足</p>
-<div class="arithmatex">\[|Q_1\cap Q_2|=|Q_1|+|Q_2|-|Q_1\cup Q_2|\ge 2q-N.\]</div>
+<div class="arithmatex">\[
+|Q_1\cap Q_2|=|Q_1|+|Q_2|-|Q_1\cup Q_2|\ge 2q-N.
+\]</div>
 <p>因此 <span class="arithmatex">\(2q&gt;N\)</span> 保证两个法定人数至少相交一个副本。不过“相交”本身还不能推出读到最新值：相交副本必须保存可比较的版本，协议还要规定写入完成条件、读取选择规则以及必要的读修复。对仅会停止且正确副本给出一致结果的简单多数表决，要容忍 <span class="arithmatex">\(f\)</span> 个故障通常至少需要 <span class="arithmatex">\(N\ge2f+1\)</span>；拜占庭模型需要另外分析。</p>
 <table>
 <thead>
@@ -5154,7 +5170,9 @@
 </tbody>
 </table>
 <p>这四个量并不独立：可用性由 MTBF 与 MTTR 共同决定，其长期平均值为</p>
-<div class="arithmatex">\[A = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}}\]</div>
+<div class="arithmatex">\[
+A = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}}
+\]</div>
 <p>这个式子的工程含义很清楚：<strong>把 MTTR 减半与把 MTBF 翻倍，对可用性的贡献是同一个量级。</strong> 许多团队只关心"怎么让故障更少"，却忽略了"让恢复更快"往往是更便宜的一条路径——缩短检测时间、自动化切换、预先演练恢复流程，都不需要更换硬件。</p>
 <p>从目标反推设计也很直接。若 RPO 为 0，则任何已确认的状态变更都必须写入在声明故障模型下仍可恢复的持久记录；“至少一个副本”只有在该副本不会随同一故障一起丢失时才够。若 RTO 为 1 秒，切换通常不能依赖人工确认，需自动检测与接管。若 RPO 允许 5 分钟，每 5 分钟做一次<strong>一致且可恢复</strong>的快照只是一个候选方案；还要计入快照耗时、最后成功时间、损坏检测和外部副作用日志，不能由名义频率自动推出实际 RPO。</p>
 <table>
@@ -5253,7 +5271,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4505,7 +4505,9 @@
 </figure>
 <h2 id="_1">图搜索适合已经离散化的空间</h2>
 <p>栅格地图中，每个格子可以看作节点，相邻可通行格子之间形成边。Dijkstra 根据累计代价扩展节点；A* 在此基础上加入启发函数 <span class="arithmatex">\(h(n)\)</span>，优先搜索更可能靠近目标的方向：</p>
-<div class="arithmatex">\[f(n)=g(n)+h(n).\]</div>
+<div class="arithmatex">\[
+f(n)=g(n)+h(n).
+\]</div>
 <p>这里 <span class="arithmatex">\(g(n)\)</span> 是当前已找到的起点到节点 <span class="arithmatex">\(n\)</span> 的最小候选代价；节点按正确条件从队列弹出后，这个值才会被最终确认。<span class="arithmatex">\(h(n)\)</span> 是对 <span class="arithmatex">\(n\)</span> 到目标剩余代价的估计。在边权非负、启发函数不高估、并对不一致启发正确处理节点重新打开的前提下，A* 能保持最优性，同时通常比 Dijkstra 少扩展无关区域。</p>
 <p>离散化本身有两个容易忽略的参数：</p>
 <ul>
@@ -4603,9 +4605,11 @@
 </ul>
 <details class="proof">
 <summary>A* 在可采纳启发下的最优性</summary>
-<p>设最优路径代价为 <span class="arithmatex">\(C^*\)</span>，目标节点第一次从开放列表弹出时的代价为 <span class="arithmatex">\(C\)</span>。在目标弹出以前，任一尚未完全展开的最优路径上总有一个前沿节点 <span class="arithmatex">\(n\)</span>。因为到该节点的当前最佳代价不超过最优路径前缀代价 <span class="arithmatex">\(g^*(n)\)</span>，且 <span class="arithmatex">\(h\)</span> 可采纳，
-$<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
-目标节点的启发为零，所以它的优先级是 <span class="arithmatex">\(f(goal)=C\)</span>。A* 总弹出最小优先级节点，因此 <span class="arithmatex">\(C\le C^*\)</span>；另一方面任何完整路径代价都不小于最优值，故 <span class="arithmatex">\(C\ge C^*\)</span>，于是 <span class="arithmatex">\(C=C^*\)</span>。若不一致启发导致某节点找到更小 <span class="arithmatex">\(g\)</span>，实现必须允许重新打开该节点，才能维持“当前最佳代价”的前提。</p>
+<p>设最优路径代价为 <span class="arithmatex">\(C^*\)</span>，目标节点第一次从开放列表弹出时的代价为 <span class="arithmatex">\(C\)</span>。在目标弹出以前，任一尚未完全展开的最优路径上总有一个前沿节点 <span class="arithmatex">\(n\)</span>。因为到该节点的当前最佳代价不超过最优路径前缀代价 <span class="arithmatex">\(g^*(n)\)</span>，且 <span class="arithmatex">\(h\)</span> 可采纳，</p>
+<div class="arithmatex">\[
+f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.
+\]</div>
+<p>目标节点的启发为零，所以它的优先级是 <span class="arithmatex">\(f(goal)=C\)</span>。A* 总弹出最小优先级节点，因此 <span class="arithmatex">\(C\le C^*\)</span>；另一方面任何完整路径代价都不小于最优值，故 <span class="arithmatex">\(C\ge C^*\)</span>，于是 <span class="arithmatex">\(C=C^*\)</span>。若不一致启发导致某节点找到更小 <span class="arithmatex">\(g\)</span>，实现必须允许重新打开该节点，才能维持“当前最佳代价”的前提。</p>
 </details>
 <p>常用启发函数的紧致程度：</p>
 <table>
@@ -4646,14 +4650,18 @@ $<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
 </table>
 <p><strong>启发函数越紧，通常需要扩展的候选区域越小。</strong> 在均匀代价栅格上，可把 A* 的候选区域近似理解成一个以起点和终点为焦点的区域；启发越松，这个区域越宽。即使 <span class="arithmatex">\(h=h^*\)</span>，若存在多条等长路径，平局策略仍可能扩展多个满足 <span class="arithmatex">\(f=C^*\)</span> 的节点，不能绝对地说“只扩展一条路径”。当 <span class="arithmatex">\(h=0\)</span> 时算法退化成 Dijkstra；在目标从优先队列弹出前，它通常处理的是起点代价不超过最优目标距离 <span class="arithmatex">\(C^*\)</span> 的节点，而不是无条件扩展整个可达区域。</p>
 <p>加权 A* 引入次优上界：若 <span class="arithmatex">\(h\)</span> 可采纳，<span class="arithmatex">\(f=g+\varepsilon h\)</span> 搜索得到的解满足</p>
-<div class="arithmatex">\[C\le \varepsilon\cdot C^{*},\]</div>
+<div class="arithmatex">\[
+C\le \varepsilon\cdot C^{*},
+\]</div>
 <p>即最坏情况下路径代价是最优的 <span class="arithmatex">\(\varepsilon\)</span> 倍。<span class="arithmatex">\(\varepsilon=1.5\)</span> 时理论上允许最多 50% 的额外代价；实际差距取决于地图、启发函数和平局策略，不能脱离实验条件给出固定百分比。<strong>次优界是上界，不是期望值。</strong></p>
 <h2 id="_3">采样规划适合高维连续空间</h2>
 <p>机械臂有很多关节，自由空间难以完整离散化。RRT 一类方法通过随机采样逐步构造可达树，不需要先显式建立整个配置空间网格。</p>
 <p>其核心流程是：每次随机取一个配置 <span class="arithmatex">\(q_{\text{rand}}\)</span>，找到树中距离最近的节点 <span class="arithmatex">\(q_{\text{near}}\)</span>，沿连线朝 <span class="arithmatex">\(q_{\text{rand}}\)</span> 前进固定步长 <span class="arithmatex">\(\delta\)</span> 得到 <span class="arithmatex">\(q_{\text{new}}\)</span>，若这段线段无碰撞则加入树中。因此搜索树是<strong>边探索边生长</strong>的，而不是预先存在的。</p>
 <p>这一族方法不需要完整枚举高维配置空间，因此在网格法难以承受的高维问题中仍可能实用。若用平衡空间索引，单次最近邻查询平均可接近 <span class="arithmatex">\(O(\log n)\)</span>；这不是整个规划过程的碰撞检测复杂度。每次扩展通常至少要检查一条候选边，运行到 <span class="arithmatex">\(n\)</span> 次采样时碰撞检测调用量通常随尝试次数近似线性增长，而每次检测本身的代价还取决于机器人几何、边离散精度和障碍数量。RRT 不保证最优，且每次运行结果不同。</p>
 <p>“配置”在这里有严格含义：配置 <span class="arithmatex">\(q\)</span> 是完整描述机器人形态的广义坐标，<span class="arithmatex">\(d\)</span> 自由度机械臂的配置空间 <span class="arithmatex">\(\mathcal{C}\)</span> 是 <span class="arithmatex">\(d\)</span> 维流形，障碍区 <span class="arithmatex">\(\mathcal{C}_{\text{obs}}\)</span> 是那些会让机器人发生碰撞的配置集合。规划的目标是找到一条完全落在自由空间</p>
-<div class="arithmatex">\[\mathcal{C}_{\text{free}}=\mathcal{C}\setminus\mathcal{C}_{\text{obs}}\]</div>
+<div class="arithmatex">\[
+\mathcal{C}_{\text{free}}=\mathcal{C}\setminus\mathcal{C}_{\text{obs}}
+\]</div>
 <p>内的连续曲线。碰撞检测看的是<strong>整条边</strong> <span class="arithmatex">\(q(s)=(1-s)q_{\text{near}}+s\,q_{\text{new}},\ s\in[0,1]\)</span>，而不是两个端点——这是采样规划里最容易被实现错的地方，也是“路径穿墙”的典型来源。</p>
 <p>采样规划与图搜索的对照可以一句话记住：<strong>图搜索先有离散图再搜索；采样规划边探索边构图。</strong> 前者需要显式枚举状态，后者只需要一个能回答“这两个配置之间的运动是否碰撞”的碰撞检测函数。</p>
 <h2 id="_4">采样规划与概率完备性</h2>
@@ -4751,9 +4759,13 @@ $<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
 <h2 id="_5">路径与轨迹不完全相同</h2>
 <p>路径主要描述几何位置序列；轨迹还包含时间、速度和加速度。一个几何上不碰障碍的急转弯，车辆可能因为最小转弯半径而无法执行。</p>
 <p>正式地，路径是映射 <span class="arithmatex">\(\sigma:[0,1]\to\mathcal{C}_{\text{free}}\)</span>，<span class="arithmatex">\(\sigma(s)\)</span> 只依赖弧长参数 <span class="arithmatex">\(s\)</span>；轨迹是映射 <span class="arithmatex">\(x:[0,T]\to\mathcal{C}\)</span>，同时给出各时刻的速度与加速度，必须满足微分约束</p>
-<div class="arithmatex">\[\dot{x}=f(x,u),\qquad u\in\mathcal{U}(x).\]</div>
+<div class="arithmatex">\[
+\dot{x}=f(x,u),\qquad u\in\mathcal{U}(x).
+\]</div>
 <p>差别在数值上很直观：一段直角转弯的路径长度是 <span class="arithmatex">\(L\)</span>，若车辆最大侧向加速度为 <span class="arithmatex">\(a_{\max}\)</span>、速度恒为 <span class="arithmatex">\(v\)</span>，能通过的最小转弯半径是</p>
-<div class="arithmatex">\[R_{\min}=\frac{v^{2}}{a_{\max}}.\]</div>
+<div class="arithmatex">\[
+R_{\min}=\frac{v^{2}}{a_{\max}}.
+\]</div>
 <p><span class="arithmatex">\(v=3\ \text{m/s}\)</span>、<span class="arithmatex">\(a_{\max}=3\ \text{m/s}^2\)</span> 时 <span class="arithmatex">\(R_{\min}=3\ \text{m}\)</span>；路径若给出半径 1 m 的直角弯，则必须降速到 <span class="arithmatex">\(v=\sqrt{a_{\max}R}\approx1.73\ \text{m/s}\)</span> 才能执行。<strong>几何可行 ≠ 动态可行</strong>，这正是“路径”与“轨迹”分层的必要性。</p>
 <p>从路径到轨迹的这一步叫<strong>时间参数化（time parameterization）</strong>：给定路径 <span class="arithmatex">\(\sigma(s)\)</span>，求一个单调递增的时间映射 <span class="arithmatex">\(s(t)\)</span>，使速度与加速度落在限值内：</p>
 <div class="arithmatex">\[
@@ -4763,13 +4775,17 @@ $<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
 \]</div>
 <p>若 <span class="arithmatex">\(s\)</span> 是弧长参数，则 <span class="arithmatex">\(\|\sigma'(s)\|=1\)</span>，所以速度大小为 <span class="arithmatex">\(|\dot s|\)</span>；但物理加速度同时包含切向项 <span class="arithmatex">\(\sigma'(s)\ddot s\)</span> 与由路径曲率产生的法向项 <span class="arithmatex">\(\sigma''(s)\dot s^2\)</span>。因此约束应分别检查切向加速度、法向加速度或直接检查 <span class="arithmatex">\(\|\ddot x(t)\|\)</span>，不能把 <span class="arithmatex">\(\ddot s\)</span> 当作全部加速度。</p>
 <p>沿路径的几何曲率 <span class="arithmatex">\(\kappa(s)\)</span> 给出额外的向心约束</p>
-<div class="arithmatex">\[\dot s^{2}(t)\,\kappa(s(t))\le a_{\text{lat,max}},\]</div>
+<div class="arithmatex">\[
+\dot s^{2}(t)\,\kappa(s(t))\le a_{\text{lat,max}},
+\]</div>
 <p>即<strong>曲率越大，允许的速度上限越低</strong>：<span class="arithmatex">\(\kappa=1\ \text{m}^{-1}\)</span>、<span class="arithmatex">\(a_{\text{lat,max}}=4\ \text{m/s}^2\)</span> 时 <span class="arithmatex">\(v\le2\ \text{m/s}\)</span>。工程上常用的做法是先把限速曲线按曲率算出来，再对它做前后向扫描取最小，最后按最小时间律积分出 <span class="arithmatex">\(s(t)\)</span>。</p>
 <p>另一个实际约束是<strong>避障余量随时间变化</strong>：静态地图上安全的位置，在有动态障碍时可能不再安全。因此轨迹层通常只在有限预测视界内做完整参数化，超出视界仍可用路径或较粗预测表示；视界长度必须由传感器范围、预测误差、速度和制动距离共同确定，不能给出跨系统通用的秒数。</p>
 <p>因此真实规划通常要把机器人尺寸、最大速度、转向约束和安全距离加入可行性检查。</p>
 <h2 id="_6">轨迹优化与动力学可行性</h2>
 <p>轨迹优化把规划写成带约束的数值优化问题：在满足动力学与障碍约束的前提下最小化一个代价泛函。常见形式为</p>
-<div class="arithmatex">\[\min_{x(\cdot),u(\cdot)}\ J=\int_{0}^{T}\Big(w_{a}\lVert a(t)\rVert^{2}+w_{j}\lVert j(t)\rVert^{2}+w_{t}\Big)\,\mathrm{d}t,\]</div>
+<div class="arithmatex">\[
+\min_{x(\cdot),u(\cdot)}\ J=\int_{0}^{T}\Big(w_{a}\lVert a(t)\rVert^{2}+w_{j}\lVert j(t)\rVert^{2}+w_{t}\Big)\,\mathrm{d}t,
+\]</div>
 <p>其中 <span class="arithmatex">\(j(t)=\dot{a}(t)\)</span> 是 jerk（加加速度），<span class="arithmatex">\(w_a,w_j,w_t\)</span> 是权重。在离散时间上用 <span class="arithmatex">\(N\)</span> 个采样点近似，决策变量规模约 <span class="arithmatex">\(N\times\dim(x)\)</span>，用二次规划（QP）或非线性规划（NLP）求解。</p>
 <p>代价函数各项的物理意义与调参后果：</p>
 <table>
@@ -5032,7 +5048,7 @@ $<span class="arithmatex">\(f(n)=g(n)+h(n)\le g^*(n)+h^*(n)=C^*.\)</span>$
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

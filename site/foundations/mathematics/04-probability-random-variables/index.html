@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -5703,19 +5703,29 @@ P(X=x)=0\quad(\text{连续情形}).
 <p>一台测距仪恒定偏 <span class="arithmatex">\(+0.1\)</span> m，但重复性极好：均值误差是 <span class="arithmatex">\(0.1\)</span> m（bias，可以通过标定扣掉），方差却可能很小。<strong>修正 bias 不改方差，降低方差不改 bias</strong>，两者要用的手段完全不同；把它们混成一个"精度"，就会对着一台有系统偏移的设备反复调滤波参数。</p>
 <h3 id="64">6.4 不知道分布时的兜底</h3>
 <p>前几节的公式都要求知道分布。分布未知时仍有两个只依赖矩的上界。若 <span class="arithmatex">\(X\ge0\)</span> 且 <span class="arithmatex">\(a&gt;0\)</span>，<strong>马尔可夫不等式（Markov inequality）</strong>给出</p>
-<div class="arithmatex">\[\mathbb P(X\ge a)\le\frac{\mathbb E[X]}a.\]</div>
+<div class="arithmatex">\[
+\mathbb P(X\ge a)\le\frac{\mathbb E[X]}a.
+\]</div>
 <p>例如平均等待 <span class="arithmatex">\(2\)</span> 分钟，则“等待至少 <span class="arithmatex">\(10\)</span> 分钟”的概率至多是 <span class="arithmatex">\(0.2\)</span>。若 <span class="arithmatex">\(X\)</span> 有有限均值 <span class="arithmatex">\(\mu\)</span> 和非零有限方差 <span class="arithmatex">\(\sigma^2\)</span>，<strong>切比雪夫不等式（Chebyshev inequality）</strong>给出</p>
-<div class="arithmatex">\[\mathbb P(|X-\mu|\ge k\sigma)\le\frac1{k^2},\qquad k&gt;0.\]</div>
+<div class="arithmatex">\[
+\mathbb P(|X-\mu|\ge k\sigma)\le\frac1{k^2},\qquad k&gt;0.
+\]</div>
 <p><span class="arithmatex">\(k=2\)</span> 时上界为 <span class="arithmatex">\(25\%\)</span>，<span class="arithmatex">\(k=3\)</span> 时上界为约 <span class="arithmatex">\(11.1\%\)</span>。它说明不作分布假设时仍能控制尾部，但这个界很松；它本身不能证明“超过三倍标准差就一定是离群点”。对高斯分布，相应真实概率约为 <span class="arithmatex">\(4.55\%\)</span> 与 <span class="arithmatex">\(0.27\%\)</span>。</p>
 <details class="proof">
 <summary>马尔可夫不等式与切比雪夫不等式的证明</summary>
 <p>对任意结果，若 <span class="arithmatex">\(X\ge a\)</span>，则 <span class="arithmatex">\(X\ge a\)</span>；若 <span class="arithmatex">\(X&lt;a\)</span>，仍有 <span class="arithmatex">\(X\ge0\)</span>。用事件指示变量 <span class="arithmatex">\(\mathbf 1_{\{X\ge a\}}\)</span> 表示事件是否发生，就有逐点不等式</p>
-<div class="arithmatex">\[X\ge a\mathbf 1_{\{X\ge a\}}.\]</div>
+<div class="arithmatex">\[
+X\ge a\mathbf 1_{\{X\ge a\}}.
+\]</div>
 <p>两边取期望，并用 <span class="arithmatex">\(\mathbb E[\mathbf 1_A]=\mathbb P(A)\)</span>，得到</p>
-<div class="arithmatex">\[\mathbb E[X]\ge a\mathbb P(X\ge a),\]</div>
+<div class="arithmatex">\[
+\mathbb E[X]\ge a\mathbb P(X\ge a),
+\]</div>
 <p>除以正数 <span class="arithmatex">\(a\)</span> 即得马尔可夫不等式。</p>
 <p>对切比雪夫不等式，令非负随机变量 <span class="arithmatex">\(Y=(X-\mu)^2\)</span>，并取阈值 <span class="arithmatex">\(a=k^2\sigma^2&gt;0\)</span>。事件</p>
-<div class="arithmatex">\[|X-\mu|\ge k\sigma\]</div>
+<div class="arithmatex">\[
+|X-\mu|\ge k\sigma
+\]</div>
 <p>与事件 <span class="arithmatex">\(Y\ge k^2\sigma^2\)</span> 完全相同。把马尔可夫不等式用于 <span class="arithmatex">\(Y\)</span>：</p>
 <div class="arithmatex">\[
 \mathbb P(|X-\mu|\ge k\sigma)
@@ -5760,7 +5770,7 @@ H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q).
 <h3 id="74-mutual-information">7.4 互信息（Mutual Information）</h3>
 <div class="arithmatex">\[
 I(X;Y)=H(Y)-H(Y\mid X)
-      =D_{\mathrm{KL}}\big(p(x,y)\|p(x)p(y)\big).
+=D_{\mathrm{KL}}\big(p(x,y)\|p(x)p(y)\big).
 \]</div>
 <p>若 <span class="arithmatex">\(X,Y\)</span> 独立，则联合分布就是 <span class="arithmatex">\(p(x)p(y)\)</span>，互信息为 0；若 <span class="arithmatex">\(X\)</span> 能强烈帮助预测 <span class="arithmatex">\(Y\)</span>，互信息就大。</p>
 <p>所以后面看到“消息的信息增益”“观测与状态的互信息”“多模态特征是否提供额外信息”，本质上都在问：<strong>知道一个变量后，另一个变量的不确定性减少了多少。</strong></p>
@@ -5935,7 +5945,9 @@ N=\frac{1-p}{p\cdot0.1^{2}}=\frac{0.99}{0.01\times0.01}=9900\approx10^{4}.
 <li><strong>动作 B</strong>：确定赚 <span class="arithmatex">\(+0.1\)</span>。</li>
 </ul>
 <p>按期望准则选 A（<span class="arithmatex">\(0.199&gt;0.1\)</span>）。若把“最差 1% 收益的平均”作为下尾指标，A 的最差 1% 包含 0.1% 的 <span class="arithmatex">\(-800\)</span> 和 0.9% 的 <span class="arithmatex">\(+1\)</span>，平均为</p>
-<div class="arithmatex">\[\frac{0.001(-800)+0.009(1)}{0.01}=-79.1,\]</div>
+<div class="arithmatex">\[
+\frac{0.001(-800)+0.009(1)}{0.01}=-79.1,
+\]</div>
 <p>而不是 <span class="arithmatex">\(-800\)</span>。若改用损失 <span class="arithmatex">\(L=-Z\)</span>，则相应上尾 CVaR 为 <span class="arithmatex">\(79.1\)</span>。离散分布在分位点有概率质量，不能简单把 CVaR 写成对“超过 VaR”的全部样本作条件平均。结论仍然是：期望准则可能掩盖小概率高损失，因此底层仍需硬约束与安全监控。</p>
 <h3 id="104">10.4 评估协议必须和决策准则匹配</h3>
 <p>如果最终决策依赖 <span class="arithmatex">\(1\%\)</span> 分位数，用<strong>均值</strong>挑方案就没有意义：两个方案均值相同、尾部完全不同时，均值比较给出的结论可能和安全要求正好相反。可行做法是先定关心的风险指标（均值、方差、分位数还是 CVaR），再据此设计采样量与评估指标。同理，报"零事故"之前要先说明样本量能支持到什么置信水平——<strong>"零事故"常常只是样本不足的另一种说法。</strong></p>
@@ -6126,7 +6138,7 @@ N=990000  估计 phat=0.01007  相对误差=0.7%   理论值=1.0%
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

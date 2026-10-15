@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -45,9 +45,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -819,7 +819,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4525,13 +4525,19 @@
 </figure>
 <h2 id="_1">接管的状态迁移模型</h2>
 <p>接管不是二元事件，而是一个由离散状态与有向边构成的迁移系统。把系统在任一时刻的接管相关状态记为</p>
-<div class="arithmatex">\[\mathcal{S} = \{\mathrm{Auto},\ \mathrm{Requested},\ \mathrm{Handover},\ \mathrm{Human},\ \mathrm{Degraded},\ \mathrm{Recovered}\},\]</div>
+<div class="arithmatex">\[
+\mathcal{S} = \{\mathrm{Auto},\ \mathrm{Requested},\ \mathrm{Handover},\ \mathrm{Human},\ \mathrm{Degraded},\ \mathrm{Recovered}\},
+\]</div>
 <p>其中 <span class="arithmatex">\(\mathrm{Auto}\)</span> 表示自动控制完全有效，<span class="arithmatex">\(\mathrm{Requested}\)</span> 表示已告警但控制权仍在系统，<span class="arithmatex">\(\mathrm{Handover}\)</span> 表示模式正在切换，<span class="arithmatex">\(\mathrm{Human}\)</span> 表示人已接管，<span class="arithmatex">\(\mathrm{Degraded}\)</span> 表示安全层接管（减速或停车），<span class="arithmatex">\(\mathrm{Recovered}\)</span> 表示条件满足后交还自动。</p>
 <p>迁移系统里真正决定成败的量是每条边的<strong>驻留时间</strong>。若 <span class="arithmatex">\(\mathrm{Requested}\)</span> 状态的平均驻留时间 <span class="arithmatex">\(t_r\)</span> 小于人建立情景所需的 <span class="arithmatex">\(\tau_h\)</span>，则这次迁移在被执行之前就已经失败。稳态分布可由</p>
-<div class="arithmatex">\[\pi = \pi P, \qquad \sum_{s \in \mathcal{S}} \pi_s = 1\]</div>
+<div class="arithmatex">\[
+\pi = \pi P, \qquad \sum_{s \in \mathcal{S}} \pi_s = 1
+\]</div>
 <p>给出，其中 <span class="arithmatex">\(P\)</span> 是迁移概率矩阵。工程上不需要精确求解 <span class="arithmatex">\(\pi\)</span>，但必须检查是否存在不该出现的<strong>吸收态</strong>：若 <span class="arithmatex">\(\mathrm{Degraded}\)</span> 无法回到 <span class="arithmatex">\(\mathrm{Auto}\)</span>，系统会永久停在降级模式；若 <span class="arithmatex">\(\mathrm{Human}\)</span> 无法退出，人就被迫持续操控。</p>
 <p>进入不安全状态的平均时间可用首达时间估计：</p>
-<div class="arithmatex">\[\mathbb{E}[T_{\text{unsafe}}] = \sum_{k \ge 0} k \cdot \Pr\{\text{首次进入不安全状态在第 } k \text{ 步}\},\]</div>
+<div class="arithmatex">\[
+\mathbb{E}[T_{\text{unsafe}}] = \sum_{k \ge 0} k \cdot \Pr\{\text{首次进入不安全状态在第 } k \text{ 步}\},
+\]</div>
 <p>它比单步安全概率更能反映长期运行下的真实风险暴露。</p>
 <table>
 <thead>
@@ -4616,10 +4622,14 @@
 </table>
 <h2 id="_2">系统应该在完全失控以前发出接管请求</h2>
 <p>如果定位已经彻底丢失才请求人工接管，人可能来不及理解场景。更合理的是设置分级预警：能力下降但仍可控时就提示，真正越过安全阈值时自动进入减速或停车。设能力剩余度为</p>
-<div class="arithmatex">\[c(t) = 1 - \frac{\lVert e(t)\rVert}{\lVert e_{\max}\rVert}, \qquad e(t) = \hat{x}(t) - x_{\text{des}}(t),\]</div>
+<div class="arithmatex">\[
+c(t) = 1 - \frac{\lVert e(t)\rVert}{\lVert e_{\max}\rVert}, \qquad e(t) = \hat{x}(t) - x_{\text{des}}(t),
+\]</div>
 <p>其中 <span class="arithmatex">\(\hat{x}\)</span> 是状态估计，<span class="arithmatex">\(x_{\text{des}}\)</span> 是期望轨迹。当 <span class="arithmatex">\(c(t)\)</span> 低于第一阈值 <span class="arithmatex">\(c_1\)</span> 时进入提醒，低于第二阈值 <span class="arithmatex">\(c_2\)</span> 时进入降级。</p>
 <p>选择 <span class="arithmatex">\(c_1, c_2\)</span> 的原则不是“告警越早越好”，而是让告警提前量刚好覆盖理解时间 <span class="arithmatex">\(\tau_h\)</span>，否则会诱发告警疲劳。可用平均无害告警间隔刻画这一权衡：</p>
-<div class="arithmatex">\[\text{MTBFW} = \frac{T_{\text{operate}}}{N_{\text{false warn}}}.\]</div>
+<div class="arithmatex">\[
+\text{MTBFW} = \frac{T_{\text{operate}}}{N_{\text{false warn}}}.
+\]</div>
 <p>该值过低意味着人会把告警当作噪声并在真实请求时忽略它。</p>
 <table>
 <thead>
@@ -4692,7 +4702,9 @@
 </table>
 <h2 id="_3">预警阈值与接管时间预算</h2>
 <p>接管能否成功，取决于“从告警到人真正掌控”的时间是否小于“系统还能保持可控”的时间。设人的理解时间为 <span class="arithmatex">\(\tau_h\)</span>（含情景理解与动作反应）、自动降级所需时间为 <span class="arithmatex">\(\tau_m\)</span>，则可用告警窗口应满足</p>
-<div class="arithmatex">\[T_\text{warn} &gt; \tau_h \quad\text{且}\quad T_\text{safe} &gt; \tau_h + \tau_m ,\]</div>
+<div class="arithmatex">\[
+T_\text{warn} &gt; \tau_h \quad\text{且}\quad T_\text{safe} &gt; \tau_h + \tau_m ,
+\]</div>
 <p>其中 <span class="arithmatex">\(T_\text{safe}\)</span> 是从当前状态到不可逆后果的时间。</p>
 <table>
 <thead>
@@ -4767,7 +4779,9 @@
 <h2 id="_4">接管前必须把关键状态交给人</h2>
 <p>操作者需要知道当前速度、位置、障碍、任务目标、系统故障原因和自动控制最后准备做什么。没有上下文的“请立即接管”只是把风险从系统转移给人。</p>
 <p>人在接管瞬间实际要完成的是一个<strong>部分可观测决策</strong>：他要从界面给出的观测 <span class="arithmatex">\(o\)</span> 推断真实状态 <span class="arithmatex">\(x\)</span>，再选择动作。若信息集合 <span class="arithmatex">\(o\)</span> 不足以区分关键假设，最优策略也会出错，即</p>
-<div class="arithmatex">\[H(x \mid o) &gt; 0 \ \implies\ \pi^*(a \mid o) \ \text{可能偏离}\ \pi^*(a \mid x).\]</div>
+<div class="arithmatex">\[
+H(x \mid o) &gt; 0 \ \implies\ \pi^*(a \mid o) \ \text{可能偏离}\ \pi^*(a \mid x).
+\]</div>
 <p>因此提高交接质量等价于降低条件熵 <span class="arithmatex">\(H(x \mid o)\)</span>，而不是增加界面上信息的总量。</p>
 <table>
 <thead>
@@ -4812,7 +4826,9 @@
 这提示交接界面应当是可裁剪的，随场景类型只展示与当前决策强相关的量。</p>
 <h2 id="_5">交接状态清单与信息充分性</h2>
 <p>交接的核心是“在最短时间内让人建立正确情景”。可以把信息按必要性分层，并用一个加权的充分性分数检查它是否够用：</p>
-<div class="arithmatex">\[C = \sum_i w_i x_i, \qquad x_i \in [0,1], \quad C \ge C_{\min},\]</div>
+<div class="arithmatex">\[
+C = \sum_i w_i x_i, \qquad x_i \in [0,1], \quad C \ge C_{\min},
+\]</div>
 <p>其中 <span class="arithmatex">\(x_i\)</span> 表示第 <span class="arithmatex">\(i\)</span> 项信息在该类场景下是否被有效呈现，<span class="arithmatex">\(w_i\)</span> 按其缺失后果的严重程度取值。</p>
 <table>
 <thead>
@@ -4887,7 +4903,9 @@
 <h2 id="_6">控制权切换必须可确认</h2>
 <p>系统发出接管请求不等于人已经成功接管。界面应确认输入设备有效、控制模式已经切换、自动控制是否停止输出。否则可能出现人和机器同时控制，或双方都以为对方在控制。</p>
 <p>把控制权看作一组二元变量 <span class="arithmatex">\(u_k \in \{0,1\}\)</span>——<span class="arithmatex">\(u_k=1\)</span> 表示第 <span class="arithmatex">\(k\)</span> 个控制源的输入进入执行链——则任何时刻都必须满足<strong>唯一性</strong>：</p>
-<div class="arithmatex">\[\sum_{k} u_k(t) = 1, \qquad \frac{d}{dt}\Big(\sum_k u_k\Big) \approx 0.\]</div>
+<div class="arithmatex">\[
+\sum_{k} u_k(t) = 1, \qquad \frac{d}{dt}\Big(\sum_k u_k\Big) \approx 0.
+\]</div>
 <p>第二个条件排除了切换抖动：即便唯一性成立，高频来回切换也会让执行器收到互相矛盾的指令。</p>
 <table>
 <thead>
@@ -4922,12 +4940,16 @@
 </table>
 <p>最危险的是“未接管”与“已交还”这两端——它们都表现为<strong>人的输入无效但人不知道</strong>。因此模式状态必须是持续可见的，而不是只在切换瞬间提示。</p>
 <p>可用的实现手段是为切换引入迟滞与最小驻留时间：</p>
-<div class="arithmatex">\[t_{\text{dwell}} \ge t_{\min}, \qquad |u_1 - u_0| \ge h \ \text{才允许翻转},\]</div>
+<div class="arithmatex">\[
+t_{\text{dwell}} \ge t_{\min}, \qquad |u_1 - u_0| \ge h \ \text{才允许翻转},
+\]</div>
 <p>其中 <span class="arithmatex">\(h\)</span> 是迟滞带宽。这样既能避免抖动，又能让切换过程在日志中呈现为清晰的单次事件。</p>
 <h2 id="_7">安全降级应独立于人工响应速度</h2>
 <p>人可能没有及时操作，因此系统仍需要 fallback：减速、保持姿态、停车或进入安全区域。人工接管是重要恢复路径，但不应成为唯一安全机制。</p>
 <p>把人对告警的有效响应看作成功概率 <span class="arithmatex">\(p_h\)</span>，自动降级成功概率为 <span class="arithmatex">\(p_m\)</span>，则系统整体保持安全的概率为</p>
-<div class="arithmatex">\[P_{\text{safe}} = p_h + (1-p_h)\,p_m,\]</div>
+<div class="arithmatex">\[
+P_{\text{safe}} = p_h + (1-p_h)\,p_m,
+\]</div>
 <p>而非 <span class="arithmatex">\(p_h\)</span>。只要 <span class="arithmatex">\(p_m \to 1\)</span> 且两条路径近似独立，即使 <span class="arithmatex">\(p_h\)</span> 不高，系统仍然安全。这一点可以量化地说明为什么人机混合方案优于纯人工方案。</p>
 <table>
 <thead>
@@ -4989,7 +5011,9 @@
 <p>只要二者近似独立，<span class="arithmatex">\(P_{\text{safe}}\)</span> 就由兜底路径主导，这正是把降级动作放在人之外的原因。</p>
 <h2 id="_8">恢复自动模式也需要条件</h2>
 <p>故障短暂消失后不应立即抢回控制。恢复前至少应确认定位、感知、通信和执行器重新达到要求，并明确由谁触发切换。为避免传感器抖动引起模式反复，需要引入保持时间：</p>
-<div class="arithmatex">\[T_{\text{hold}} &gt; T_{\text{debounce}}, \qquad \lVert e(t) \rVert &lt; e_{\text{th}} \ \text{持续}\ T_{\text{hold}}.\]</div>
+<div class="arithmatex">\[
+T_{\text{hold}} &gt; T_{\text{debounce}}, \qquad \lVert e(t) \rVert &lt; e_{\text{th}} \ \text{持续}\ T_{\text{hold}}.
+\]</div>
 <p>只有误差在阈值内连续保持足够长，才允许发出恢复请求。</p>
 <table>
 <thead>
@@ -5054,7 +5078,9 @@
 <h2 id="_9">接管是一个有时序的协议</h2>
 <p>接管包含请求、理解、确认、控制权转移和稳定操控多个阶段。只测量人按下按钮的时间会低估真正的恢复时间。验证时应从首次告警计时，直到系统重新进入可控状态，并覆盖人没有及时响应的分支。</p>
 <p>总恢复时间可分解为各阶段之和：</p>
-<div class="arithmatex">\[T_{\text{rec}} = t_{\text{req}} + \tau_h + t_{\text{ack}} + t_{\text{shift}} + t_{\text{stab}},\]</div>
+<div class="arithmatex">\[
+T_{\text{rec}} = t_{\text{req}} + \tau_h + t_{\text{ack}} + t_{\text{shift}} + t_{\text{stab}},
+\]</div>
 <p>其中每一项都可能成为瓶颈，且它们不是独立可优化的——缩短 <span class="arithmatex">\(\tau_h\)</span> 往往需要更多前置信息，而这又会增加 <span class="arithmatex">\(t_{\text{req}}\)</span> 的显示延迟。</p>
 <table>
 <thead>
@@ -5169,7 +5195,9 @@
 </tbody>
 </table>
 <p>把前两项合起来可以给出一个可验收的成功概率估计：</p>
-<div class="arithmatex">\[\hat{p}_{\text{succ}} = \frac{1}{N}\sum_{n=1}^{N} \mathbb{1}\!\left[\,T_{\text{rec}}^{(n)} &lt; T_\text{safe}^{(n)}\,\right].\]</div>
+<div class="arithmatex">\[
+\hat{p}_{\text{succ}} = \frac{1}{N}\sum_{n=1}^{N} \mathbb{1}\!\left[\,T_{\text{rec}}^{(n)} &lt; T_\text{safe}^{(n)}\,\right].
+\]</div>
 <p>由于样本有限，该估计的置信下界同样重要，可用二项分布的 Wilson 区间给出 <span class="arithmatex">\(\hat{p}_{\text{succ}}\)</span> 的下界，再用它对照验收门限，而不是用点估计。</p>
 <p>演练必须覆盖“人没有及时响应”这一分支，因为它是所有安全论证里最容易被默认跳过的情形，而现实中却经常发生。</p>
 <table>
@@ -5206,7 +5234,9 @@
 <h2 id="_11">接管记录应该用于后续改进</h2>
 <p>每次接管都包含宝贵的“系统能力边界”信息。记录触发原因、接管前状态和人工操作，可以用于重新设计阈值、补充训练数据和验证恢复策略。</p>
 <p>如果把接管看作一次风险被避免的抽样事件，其发生率 <span class="arithmatex">\(\lambda_t\)</span> 本身就是度量：</p>
-<div class="arithmatex">\[\lambda_t = \frac{N_{\text{takeover}}}{T_{\text{operate}}}.\]</div>
+<div class="arithmatex">\[
+\lambda_t = \frac{N_{\text{takeover}}}{T_{\text{operate}}}.
+\]</div>
 <p>它可以直接用于检验阈值是否过松（<span class="arithmatex">\(\lambda_t\)</span> 偏高说明请求过早或过频）或过紧（长期 <span class="arithmatex">\(\lambda_t \to 0\)</span> 反而说明潜在问题未被暴露）。</p>
 <table>
 <thead>
@@ -5307,7 +5337,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

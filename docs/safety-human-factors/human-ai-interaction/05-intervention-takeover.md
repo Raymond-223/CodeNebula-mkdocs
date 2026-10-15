@@ -6,26 +6,32 @@
 
 <figure markdown="span">
   ![接管应被设计成检测、告警、交接、确认和恢复组成的状态过程。](../../assets/diagrams/takeover.svg)
-  <figcaption>人工接管必须给人足够状态信息和理解时间。</figcaption>
+  <figcaption markdown="span">人工接管必须给人足够状态信息和理解时间。</figcaption>
 </figure>
 
 ## 接管的状态迁移模型
 
 接管不是二元事件，而是一个由离散状态与有向边构成的迁移系统。把系统在任一时刻的接管相关状态记为
 
-$$\mathcal{S} = \{\mathrm{Auto},\ \mathrm{Requested},\ \mathrm{Handover},\ \mathrm{Human},\ \mathrm{Degraded},\ \mathrm{Recovered}\},$$
+$$
+\mathcal{S} = \{\mathrm{Auto},\ \mathrm{Requested},\ \mathrm{Handover},\ \mathrm{Human},\ \mathrm{Degraded},\ \mathrm{Recovered}\},
+$$
 
 其中 $\mathrm{Auto}$ 表示自动控制完全有效，$\mathrm{Requested}$ 表示已告警但控制权仍在系统，$\mathrm{Handover}$ 表示模式正在切换，$\mathrm{Human}$ 表示人已接管，$\mathrm{Degraded}$ 表示安全层接管（减速或停车），$\mathrm{Recovered}$ 表示条件满足后交还自动。
 
 迁移系统里真正决定成败的量是每条边的**驻留时间**。若 $\mathrm{Requested}$ 状态的平均驻留时间 $t_r$ 小于人建立情景所需的 $\tau_h$，则这次迁移在被执行之前就已经失败。稳态分布可由
 
-$$\pi = \pi P, \qquad \sum_{s \in \mathcal{S}} \pi_s = 1$$
+$$
+\pi = \pi P, \qquad \sum_{s \in \mathcal{S}} \pi_s = 1
+$$
 
 给出，其中 $P$ 是迁移概率矩阵。工程上不需要精确求解 $\pi$，但必须检查是否存在不该出现的**吸收态**：若 $\mathrm{Degraded}$ 无法回到 $\mathrm{Auto}$，系统会永久停在降级模式；若 $\mathrm{Human}$ 无法退出，人就被迫持续操控。
 
 进入不安全状态的平均时间可用首达时间估计：
 
-$$\mathbb{E}[T_{\text{unsafe}}] = \sum_{k \ge 0} k \cdot \Pr\{\text{首次进入不安全状态在第 } k \text{ 步}\},$$
+$$
+\mathbb{E}[T_{\text{unsafe}}] = \sum_{k \ge 0} k \cdot \Pr\{\text{首次进入不安全状态在第 } k \text{ 步}\},
+$$
 
 它比单步安全概率更能反映长期运行下的真实风险暴露。
 
@@ -53,13 +59,17 @@ $$\mathbb{E}[T_{\text{unsafe}}] = \sum_{k \ge 0} k \cdot \Pr\{\text{首次进入
 
 如果定位已经彻底丢失才请求人工接管，人可能来不及理解场景。更合理的是设置分级预警：能力下降但仍可控时就提示，真正越过安全阈值时自动进入减速或停车。设能力剩余度为
 
-$$c(t) = 1 - \frac{\lVert e(t)\rVert}{\lVert e_{\max}\rVert}, \qquad e(t) = \hat{x}(t) - x_{\text{des}}(t),$$
+$$
+c(t) = 1 - \frac{\lVert e(t)\rVert}{\lVert e_{\max}\rVert}, \qquad e(t) = \hat{x}(t) - x_{\text{des}}(t),
+$$
 
 其中 $\hat{x}$ 是状态估计，$x_{\text{des}}$ 是期望轨迹。当 $c(t)$ 低于第一阈值 $c_1$ 时进入提醒，低于第二阈值 $c_2$ 时进入降级。
 
 选择 $c_1, c_2$ 的原则不是“告警越早越好”，而是让告警提前量刚好覆盖理解时间 $\tau_h$，否则会诱发告警疲劳。可用平均无害告警间隔刻画这一权衡：
 
-$$\text{MTBFW} = \frac{T_{\text{operate}}}{N_{\text{false warn}}}.$$
+$$
+\text{MTBFW} = \frac{T_{\text{operate}}}{N_{\text{false warn}}}.
+$$
 
 该值过低意味着人会把告警当作噪声并在真实请求时忽略它。
 
@@ -83,7 +93,9 @@ $$\text{MTBFW} = \frac{T_{\text{operate}}}{N_{\text{false warn}}}.$$
 
 接管能否成功，取决于“从告警到人真正掌控”的时间是否小于“系统还能保持可控”的时间。设人的理解时间为 $\tau_h$（含情景理解与动作反应）、自动降级所需时间为 $\tau_m$，则可用告警窗口应满足
 
-$$T_\text{warn} > \tau_h \quad\text{且}\quad T_\text{safe} > \tau_h + \tau_m ,$$
+$$
+T_\text{warn} > \tau_h \quad\text{且}\quad T_\text{safe} > \tau_h + \tau_m ,
+$$
 
 其中 $T_\text{safe}$ 是从当前状态到不可逆后果的时间。
 
@@ -113,7 +125,9 @@ $$T_\text{warn} > \tau_h \quad\text{且}\quad T_\text{safe} > \tau_h + \tau_m ,$
 
 人在接管瞬间实际要完成的是一个**部分可观测决策**：他要从界面给出的观测 $o$ 推断真实状态 $x$，再选择动作。若信息集合 $o$ 不足以区分关键假设，最优策略也会出错，即
 
-$$H(x \mid o) > 0 \ \implies\ \pi^*(a \mid o) \ \text{可能偏离}\ \pi^*(a \mid x).$$
+$$
+H(x \mid o) > 0 \ \implies\ \pi^*(a \mid o) \ \text{可能偏离}\ \pi^*(a \mid x).
+$$
 
 因此提高交接质量等价于降低条件熵 $H(x \mid o)$，而不是增加界面上信息的总量。
 
@@ -136,7 +150,9 @@ $$H(x \mid o) > 0 \ \implies\ \pi^*(a \mid o) \ \text{可能偏离}\ \pi^*(a \mi
 
 交接的核心是“在最短时间内让人建立正确情景”。可以把信息按必要性分层，并用一个加权的充分性分数检查它是否够用：
 
-$$C = \sum_i w_i x_i, \qquad x_i \in [0,1], \quad C \ge C_{\min},$$
+$$
+C = \sum_i w_i x_i, \qquad x_i \in [0,1], \quad C \ge C_{\min},
+$$
 
 其中 $x_i$ 表示第 $i$ 项信息在该类场景下是否被有效呈现，$w_i$ 按其缺失后果的严重程度取值。
 
@@ -164,7 +180,9 @@ $$C = \sum_i w_i x_i, \qquad x_i \in [0,1], \quad C \ge C_{\min},$$
 
 把控制权看作一组二元变量 $u_k \in \{0,1\}$——$u_k=1$ 表示第 $k$ 个控制源的输入进入执行链——则任何时刻都必须满足**唯一性**：
 
-$$\sum_{k} u_k(t) = 1, \qquad \frac{d}{dt}\Big(\sum_k u_k\Big) \approx 0.$$
+$$
+\sum_{k} u_k(t) = 1, \qquad \frac{d}{dt}\Big(\sum_k u_k\Big) \approx 0.
+$$
 
 第二个条件排除了切换抖动：即便唯一性成立，高频来回切换也会让执行器收到互相矛盾的指令。
 
@@ -179,7 +197,9 @@ $$\sum_{k} u_k(t) = 1, \qquad \frac{d}{dt}\Big(\sum_k u_k\Big) \approx 0.$$
 
 可用的实现手段是为切换引入迟滞与最小驻留时间：
 
-$$t_{\text{dwell}} \ge t_{\min}, \qquad |u_1 - u_0| \ge h \ \text{才允许翻转},$$
+$$
+t_{\text{dwell}} \ge t_{\min}, \qquad |u_1 - u_0| \ge h \ \text{才允许翻转},
+$$
 
 其中 $h$ 是迟滞带宽。这样既能避免抖动，又能让切换过程在日志中呈现为清晰的单次事件。
 
@@ -189,7 +209,9 @@ $$t_{\text{dwell}} \ge t_{\min}, \qquad |u_1 - u_0| \ge h \ \text{才允许翻�
 
 把人对告警的有效响应看作成功概率 $p_h$，自动降级成功概率为 $p_m$，则系统整体保持安全的概率为
 
-$$P_{\text{safe}} = p_h + (1-p_h)\,p_m,$$
+$$
+P_{\text{safe}} = p_h + (1-p_h)\,p_m,
+$$
 
 而非 $p_h$。只要 $p_m \to 1$ 且两条路径近似独立，即使 $p_h$ 不高，系统仍然安全。这一点可以量化地说明为什么人机混合方案优于纯人工方案。
 
@@ -213,7 +235,9 @@ $$P_{\text{safe}} = p_h + (1-p_h)\,p_m,$$
 
 故障短暂消失后不应立即抢回控制。恢复前至少应确认定位、感知、通信和执行器重新达到要求，并明确由谁触发切换。为避免传感器抖动引起模式反复，需要引入保持时间：
 
-$$T_{\text{hold}} > T_{\text{debounce}}, \qquad \lVert e(t) \rVert < e_{\text{th}} \ \text{持续}\ T_{\text{hold}}.$$
+$$
+T_{\text{hold}} > T_{\text{debounce}}, \qquad \lVert e(t) \rVert < e_{\text{th}} \ \text{持续}\ T_{\text{hold}}.
+$$
 
 只有误差在阈值内连续保持足够长，才允许发出恢复请求。
 
@@ -241,7 +265,9 @@ $$T_{\text{hold}} > T_{\text{debounce}}, \qquad \lVert e(t) \rVert < e_{\text{th
 
 总恢复时间可分解为各阶段之和：
 
-$$T_{\text{rec}} = t_{\text{req}} + \tau_h + t_{\text{ack}} + t_{\text{shift}} + t_{\text{stab}},$$
+$$
+T_{\text{rec}} = t_{\text{req}} + \tau_h + t_{\text{ack}} + t_{\text{shift}} + t_{\text{stab}},
+$$
 
 其中每一项都可能成为瓶颈，且它们不是独立可优化的——缩短 $\tau_h$ 往往需要更多前置信息，而这又会增加 $t_{\text{req}}$ 的显示延迟。
 
@@ -276,7 +302,9 @@ $$T_{\text{rec}} = t_{\text{req}} + \tau_h + t_{\text{ack}} + t_{\text{shift}} +
 
 把前两项合起来可以给出一个可验收的成功概率估计：
 
-$$\hat{p}_{\text{succ}} = \frac{1}{N}\sum_{n=1}^{N} \mathbb{1}\!\left[\,T_{\text{rec}}^{(n)} < T_\text{safe}^{(n)}\,\right].$$
+$$
+\hat{p}_{\text{succ}} = \frac{1}{N}\sum_{n=1}^{N} \mathbb{1}\!\left[\,T_{\text{rec}}^{(n)} < T_\text{safe}^{(n)}\,\right].
+$$
 
 由于样本有限，该估计的置信下界同样重要，可用二项分布的 Wilson 区间给出 $\hat{p}_{\text{succ}}$ 的下界，再用它对照验收门限，而不是用点估计。
 
@@ -295,7 +323,9 @@ $$\hat{p}_{\text{succ}} = \frac{1}{N}\sum_{n=1}^{N} \mathbb{1}\!\left[\,T_{\text
 
 如果把接管看作一次风险被避免的抽样事件，其发生率 $\lambda_t$ 本身就是度量：
 
-$$\lambda_t = \frac{N_{\text{takeover}}}{T_{\text{operate}}}.$$
+$$
+\lambda_t = \frac{N_{\text{takeover}}}{T_{\text{operate}}}.
+$$
 
 它可以直接用于检验阈值是否过松（$\lambda_t$ 偏高说明请求过早或过频）或过紧（长期 $\lambda_t \to 0$ 反而说明潜在问题未被暴露）。
 

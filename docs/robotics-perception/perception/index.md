@@ -7,7 +7,7 @@
 
 <figure markdown="span">
   ![perception overview](../../assets/diagrams/perception-map.svg)
-  <figcaption>Perception 的核心概念关系。</figcaption>
+  <figcaption markdown="span">Perception 的核心概念关系。</figcaption>
 </figure>
 
 ## 本节要解决的问题

@@ -103,7 +103,6 @@ $$
 
     那么
 
-
     $$
     1+\cdots+k+(k+1)
     =\frac{k(k+1)}2+(k+1)
@@ -145,7 +144,9 @@ $$
 
 **欧几里得范数的三角不等式。** 对任意 $x,y\in\mathbb R^n$，
 
-$$\|x+y\|_2\le\|x\|_2+\|y\|_2.$$
+$$
+\|x+y\|_2\le\|x\|_2+\|y\|_2.
+$$
 
 ??? proof "证明"
 
@@ -198,7 +199,9 @@ $$
 
     设 $x_n$ 单调递增且集合 $E=\{x_n:n\in\mathbb N\}$ 有上界。由完备性，$L=\sup E$ 存在。给定 $\varepsilon>0$，$L-\varepsilon$ 不可能仍是 $E$ 的上界，所以存在 $N$ 使 $x_N>L-\varepsilon$。当 $n\ge N$ 时，由单调性
 
-    $$L-\varepsilon<x_N\le x_n\le L.$$
+    $$
+    L-\varepsilon<x_N\le x_n\le L.
+    $$
 
     因而 $|x_n-L|<\varepsilon$，即 $x_n\to L$。递减情形对 $-x_n$ 应用同一结论。
 
@@ -208,8 +211,10 @@ $$
 
     设全部数列项位于闭区间 $[a,b]$。把区间二等分，至少有一半包含无穷多个数列项；保留这样的半区间并继续二分，得到闭区间套
 
-    $$I_1\supset I_2\supset\cdots,
-    \qquad |I_k|=2^{-k}(b-a).$$
+    $$
+    I_1\supset I_2\supset\cdots,
+    \qquad |I_k|=2^{-k}(b-a).
+    $$
 
     设 $I_k=[a_k,b_k]$。$a_k$ 单调递增且有上界，故收敛；$b_k$ 单调递减且有下界，也收敛。又因 $b_k-a_k\to0$，两者极限相同，记为 $x^*$。依次从 $I_k$ 中选取下标严格递增的数列项 $x_{n_k}$，则 $|x_{n_k}-x^*|\le|I_k|\to0$，所以该子列收敛到 $x^*$。
 
@@ -399,7 +404,6 @@ $$
 
     设
 
-
     $$
     R=f(x+h)-f(x)-f'(x)h.
     $$
@@ -575,7 +579,6 @@ $$
 
 ??? proof "证明"
 
-
     $$
     e_{k+1}=\frac12e_k,
     \qquad
@@ -583,7 +586,6 @@ $$
     $$
 
     因为 $2^{-k}\to0$，故任意初值都收敛到 $2$。要保证 $|e_k|\le\varepsilon$，只需
-
 
     $$
     k\ge \frac{\log(|e_0|/\varepsilon)}{\log2}.

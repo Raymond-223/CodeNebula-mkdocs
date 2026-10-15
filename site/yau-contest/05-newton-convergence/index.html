@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -1007,7 +1007,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4545,7 +4545,7 @@
 <figure>
   <img alt="牛顿法用当前点切线与横轴的交点产生下一次迭代。" src="../../assets/diagrams/yau-newton-tangent.svg" />
 <br />
-<figcaption>牛顿步不是任意公式：它把 $f$ 在 $x_k$ 处线性化，并取这条切线的零点作为 $x_{k+1}$。</figcaption>
+<figcaption>牛顿步不是任意公式：它把 <span class="arithmatex">\(f\)</span> 在 <span class="arithmatex">\(x_k\)</span> 处线性化，并取这条切线的零点作为 <span class="arithmatex">\(x_{k+1}\)</span>。</figcaption>
 </figure>
 <p>目标是求 <span class="arithmatex">\(f(x)=0\)</span> 的根 <span class="arithmatex">\(\alpha\)</span>。当前近似为 <span class="arithmatex">\(x_k\)</span>。在 <span class="arithmatex">\(x_k\)</span> 附近使用一阶泰勒近似（Taylor approximation）：</p>
 <div class="arithmatex">\[
@@ -4929,20 +4929,26 @@ J_F(x_k)s_k=-F(x_k)
 \]</div>
 <p>根求解与优化形式相似，但对象不同。</p>
 <h3 id="_8">二元方程组计算</h3>
-<p>求解
-$<span class="arithmatex">\(F(x,y)=\begin{pmatrix}x^2+y^2-1\\x-y\end{pmatrix}=0,\)</span>$
-取初值 <span class="arithmatex">\((x_0,y_0)=(0.8,0.6)\)</span>。Jacobian 为
-$<span class="arithmatex">\(J_F(x,y)=\begin{pmatrix}2x&amp;2y\\1&amp;-1\end{pmatrix}.\)</span>$
-在初值处 <span class="arithmatex">\(F(x_0,y_0)=(0,0.2)^T\)</span>，Newton 步不是先求逆矩阵，而是解
-$$
-\begin{pmatrix}1.6&amp;1.2\1&amp;-1\end{pmatrix}
-\begin{pmatrix}\Delta x\\Delta y\end{pmatrix}
+<p>求解</p>
+<div class="arithmatex">\[
+F(x,y)=\begin{pmatrix}x^2+y^2-1\\x-y\end{pmatrix}=0,
+\]</div>
+<p>取初值 <span class="arithmatex">\((x_0,y_0)=(0.8,0.6)\)</span>。Jacobian 为</p>
+<div class="arithmatex">\[
+J_F(x,y)=\begin{pmatrix}2x&amp;2y\\1&amp;-1\end{pmatrix}.
+\]</div>
+<p>在初值处 <span class="arithmatex">\(F(x_0,y_0)=(0,0.2)^T\)</span>，Newton 步不是先求逆矩阵，而是解</p>
+<div class="arithmatex">\[
+\begin{pmatrix}1.6&amp;1.2\\1&amp;-1\end{pmatrix}
+\begin{pmatrix}\Delta x\\\Delta y\end{pmatrix}
 =
-\begin{pmatrix}0\-0.2\end{pmatrix}.
-$$
-第二式给出 <span class="arithmatex">\(\Delta x-\Delta y=-0.2\)</span>；代入第一式得 <span class="arithmatex">\(\Delta y=4/35\approx0.114286\)</span>、<span class="arithmatex">\(\Delta x=-3/35\approx-0.085714\)</span>。因此
-$<span class="arithmatex">\(x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286.\)</span>$
-此时第二个方程已经精确满足，而第一个残差为 <span class="arithmatex">\(2(5/7)^2-1=1/49\)</span>。下一步继续解新的 <span class="arithmatex">\(2\times2\)</span> 线性方程即可。实际程序使用带主元的线性求解器；显式计算 <span class="arithmatex">\(J_F^{-1}\)</span> 既多做运算，也通常放大舍入误差。</p>
+\begin{pmatrix}0\\-0.2\end{pmatrix}.
+\]</div>
+<p>第二式给出 <span class="arithmatex">\(\Delta x-\Delta y=-0.2\)</span>；代入第一式得 <span class="arithmatex">\(\Delta y=4/35\approx0.114286\)</span>、<span class="arithmatex">\(\Delta x=-3/35\approx-0.085714\)</span>。因此</p>
+<div class="arithmatex">\[
+x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286.
+\]</div>
+<p>此时第二个方程已经精确满足，而第一个残差为 <span class="arithmatex">\(2(5/7)^2-1=1/49\)</span>。下一步继续解新的 <span class="arithmatex">\(2\times2\)</span> 线性方程即可。实际程序使用带主元的线性求解器；显式计算 <span class="arithmatex">\(J_F^{-1}\)</span> 既多做运算，也通常放大舍入误差。</p>
 <h2 id="_9">练习</h2>
 <ol>
 <li>对 <span class="arithmatex">\(f(x)=x^2-3\)</span>、<span class="arithmatex">\(x_0=2\)</span> 计算两次牛顿迭代。</li>
@@ -4957,7 +4963,7 @@ $<span class="arithmatex">\(x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286
 </details>
 <p><strong>答案。</strong> 第 1 题 <span class="arithmatex">\(x_1=7/4\)</span>、<span class="arithmatex">\(x_2=97/56\)</span>。第 2 题 <span class="arithmatex">\(x_{k+1}=x_k/2\)</span>。第 4 题 <span class="arithmatex">\(e_{k+1}=3e_k/4\)</span>，修正方法使用系数 <span class="arithmatex">\(4\)</span>。</p>
 <p><strong>上一章：</strong> <a href="../04-fixed-points-contractions/">不动点与压缩映射</a><br />
-<strong>下一章：</strong> <a href="../06-stage-one-workbook/">完整解答</a></p>
+<strong>下一章：</strong> <a href="../06-stage-one-workbook/">丘赛真题</a></p>
 
 
 
@@ -5018,7 +5024,7 @@ $<span class="arithmatex">\(x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

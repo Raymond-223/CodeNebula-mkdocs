@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4523,7 +4523,9 @@
 <h2 id="_1">在线试错的风险边界</h2>
 <p>先统一符号：<span class="arithmatex">\(\pi\)</span> 是待学策略，<span class="arithmatex">\(\pi_\beta\)</span> 是产生数据的行为策略，<span class="arithmatex">\(J(\pi)\)</span> 是期望折扣回报，<span class="arithmatex">\(J_C(\pi)\)</span> 是期望折扣累计成本，<span class="arithmatex">\(d\)</span> 是成本预算，<span class="arithmatex">\(N\)</span> 是允许的交互步数。</p>
 <p>在线 RL 的隐含前提是“交互风险可以被承受并统计”。设每次交互发生危险事件的概率为 <span class="arithmatex">\(p_{\text{fail}}\)</span>，一旦发生造成损失 <span class="arithmatex">\(c_{\text{fail}}\)</span>，并暂时假设各次风险相同，则进行 <span class="arithmatex">\(N\)</span> 次交互的<strong>期望损失</strong>为 <span class="arithmatex">\(Np_{\text{fail}}c_{\text{fail}}\)</span>。若期望风险预算为 <span class="arithmatex">\(B\)</span>，只能推出</p>
-<div class="arithmatex">\[N \le \frac{B}{p_{\text{fail}}c_{\text{fail}}}.\]</div>
+<div class="arithmatex">\[
+N \le \frac{B}{p_{\text{fail}}c_{\text{fail}}}.
+\]</div>
 <p>这个式子不是逐次安全保证：即使期望损失不超预算，第一次交互仍可能出事。若危险事件不可接受，必须施加“每一步都满足约束”的硬安全条件，而不能把事故成本平均掉。样本复杂度也依赖算法、MDP 类别、视界与置信度，不能脱离这些条件断言一个统一次数；真正的矛盾是“学习需要覆盖足够多的状态—动作，而真实系统可承受的危险交互很少”。</p>
 <p>边界的形状取决于失败是否可逆。可逆失败（撞到软性障碍、电量耗尽后返回充电）可以计入 <span class="arithmatex">\(B\)</span>；不可逆失败（撞人、结构损伤）必须让 <span class="arithmatex">\(N_{\text{safe}}\)</span> 直接取 0，此时问题从"少试几次"变成"根本不许试"，也就是必须转成 Offline 或 Safe 的形式化。</p>
 <table>
@@ -4564,11 +4566,17 @@
 </table>
 <h2 id="offline-rl">离线强化学习（Offline RL）与数据分布</h2>
 <p>Offline RL 的输入只有一个固定的 <span class="arithmatex">\((D)\)</span>，<span class="arithmatex">\(D=\{(s_t,a_t,r_t,s'_{t})\}_{t=1}^{N}\)</span>，由未知的行为策略 <span class="arithmatex">\(\pi_\beta\)</span> 生成。定义行为策略的折扣占用度量</p>
-<div class="arithmatex">\[d^{\pi_\beta}(s,a) = (1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\, \mathbb P\big(s_t=s, a_t=a \mid \pi_\beta\big).\]</div>
+<div class="arithmatex">\[
+d^{\pi_\beta}(s,a) = (1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\, \mathbb P\big(s_t=s, a_t=a \mid \pi_\beta\big).
+\]</div>
 <p>Offline RL 想解的目标是在<strong>分布约束</strong>下的回报最大化：</p>
-<div class="arithmatex">\[\max_\pi\; J(\pi)\quad \text{s.t.}\quad D_{\mathrm{TV}}\big(d^{\pi} \,\|\, d^{\pi_\beta}\big)\le \epsilon .\]</div>
+<div class="arithmatex">\[
+\max_\pi\; J(\pi)\quad \text{s.t.}\quad D_{\mathrm{TV}}\big(d^{\pi} \,\|\, d^{\pi_\beta}\big)\le \epsilon .
+\]</div>
 <p>另一类常用但<strong>并不等价</strong>的约束是限制占用度量的密度比。例如要求在 <span class="arithmatex">\(d^{\pi_\beta}(s,a)&gt;0\)</span> 处</p>
-<div class="arithmatex">\[\frac{d^\pi(s,a)}{d^{\pi_\beta}(s,a)}\le M.\]</div>
+<div class="arithmatex">\[
+\frac{d^\pi(s,a)}{d^{\pi_\beta}(s,a)}\le M.
+\]</div>
 <p>策略比 <span class="arithmatex">\(\pi(a\mid s)/\pi_\beta(a\mid s)\)</span> 只比较同一状态下的动作概率，遗漏了目标策略改变后产生的状态分布漂移；因此它不能替代占用度量比。<span class="arithmatex">\(M=1\)</span> 与两个占用度量都归一化合起来才迫使二者相等；<span class="arithmatex">\(M\)</span> 变大只是放宽这一约束，并不自动提供分布外可验证性。</p>
 <p>约束的必要性来自覆盖的稀疏性。设 <span class="arithmatex">\(D\)</span> 有 <span class="arithmatex">\(N=10^6\)</span> 条转移，离散化后有 <span class="arithmatex">\(|\mathcal S|\times|\mathcal A| = 10^{8}\)</span> 个格子，则平均每格只有 <span class="arithmatex">\(10^{-2}\)</span> 条样本，绝大多数格子上是空的。<strong>任何在这些空格上取 <span class="arithmatex">\(\max\)</span> 的价值目标，都是在用零证据做决策。</strong></p>
 <table>
@@ -4609,7 +4617,9 @@
 </table>
 <h2 id="_2">鲁棒性与扰动</h2>
 <p>鲁棒 RL 承认"训练时的动力学不是唯一可能的动力学"。设转移分布属于一个不确定集 <span class="arithmatex">\(\mathcal P\)</span>，鲁棒目标是</p>
-<div class="arithmatex">\[\max_\pi \; \min_{P\in\mathcal P}\; \mathbb E_{\tau\sim(\pi,P)}\left[\sum_{t=0}^{T}\gamma^{t} r(s_t,a_t)\right].\]</div>
+<div class="arithmatex">\[
+\max_\pi \; \min_{P\in\mathcal P}\; \mathbb E_{\tau\sim(\pi,P)}\left[\sum_{t=0}^{T}\gamma^{t} r(s_t,a_t)\right].
+\]</div>
 <p>内层 <span class="arithmatex">\(\min\)</span> 把环境当成对手，让策略在网络攻击或工况漂移下也成立。<span class="arithmatex">\(\mathcal P\)</span> 的三种常见构造：</p>
 <ul>
 <li><strong>参数扰动</strong>：<span class="arithmatex">\(P_{\theta}\)</span> 且 <span class="arithmatex">\(\|\theta-\theta_0\|_2\le \rho\)</span>，<span class="arithmatex">\(\rho\)</span> 是半径，<span class="arithmatex">\(\rho=0\)</span> 退化为名义 MDP。</li>
@@ -4661,17 +4671,27 @@
 </table>
 <h2 id="cmdp">约束马尔可夫决策过程（CMDP）与约束优化</h2>
 <p>这是 Safe RL 的标准形式化。在 MDP 上增加成本函数 <span class="arithmatex">\(c:\mathcal S\times\mathcal A\to[0,c_{\max}]\)</span> 与预算 <span class="arithmatex">\(d\)</span>，得到约束 MDP（CMDP），其联合目标写成</p>
-<div class="arithmatex">\[\max_\pi\; J(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} r(s_t,a_t)\right] \quad \text{s.t.}\quad J_C(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} c(s_t,a_t)\right] \le d .\]</div>
+<div class="arithmatex">\[
+\max_\pi\; J(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} r(s_t,a_t)\right] \quad \text{s.t.}\quad J_C(\pi) = \mathbb E_{\tau\sim\pi}\!\left[\sum_{t}\gamma^{t} c(s_t,a_t)\right] \le d .
+\]</div>
 <p>注意 <span class="arithmatex">\(d\)</span> 是<strong>折扣累计成本</strong>的预算，不是瞬时每步的约束。若过程已进入稳态，且每步平均成本为 <span class="arithmatex">\(\bar c\)</span>，则</p>
-<div class="arithmatex">\[J_C=\sum_{t=0}^{\infty}\gamma^t\bar c=\frac{\bar c}{1-\gamma}.\]</div>
+<div class="arithmatex">\[
+J_C=\sum_{t=0}^{\infty}\gamma^t\bar c=\frac{\bar c}{1-\gamma}.
+\]</div>
 <p>所以 <span class="arithmatex">\(\gamma=0.99,d=1\)</span> 对应 <span class="arithmatex">\(\bar c\le(1-\gamma)d=0.01\)</span>。若一次事故的成本为 1、其他时刻成本为 0，这相当于长期平均约每 100 步至多一次事故，而不是“百万步一次”。该换算还依赖稳态平均的解释；它不是逐时刻硬安全保证。</p>
 <p>直接带约束的梯度更新很别扭，标准做法是拉格朗日松弛。引入对偶变量 <span class="arithmatex">\(\lambda\ge 0\)</span>：</p>
-<div class="arithmatex">\[\mathcal L(\pi,\lambda) = J(\pi) - \lambda\big(J_C(\pi) - d\big),\]</div>
+<div class="arithmatex">\[
+\mathcal L(\pi,\lambda) = J(\pi) - \lambda\big(J_C(\pi) - d\big),
+\]</div>
 <p>定义对偶函数 <span class="arithmatex">\(g(\lambda)=\max_\pi \mathcal L(\pi,\lambda)\)</span>。对任意 <span class="arithmatex">\(\lambda\ge0\)</span> 和任意可行策略，都有 <span class="arithmatex">\(\mathcal L(\pi,\lambda)\ge J(\pi)\)</span>，故弱对偶给出</p>
-<div class="arithmatex">\[J^{\star} \le \inf_{\lambda\ge0} g(\lambda).\]</div>
+<div class="arithmatex">\[
+J^{\star} \le \inf_{\lambda\ge0} g(\lambda).
+\]</div>
 <p>只有在满足强对偶所需条件时才能把不等号写成等号。例如有限折扣 CMDP 改用占用度量作变量后是线性规划；若原问题可行，线性规划强对偶可用。直接用神经网络参数化策略时问题一般非凸，不能无条件声称强对偶。</p>
 <p>对偶变量的更新规则是次梯度的投影形式：</p>
-<div class="arithmatex">\[\lambda_{k+1} = \max\!\big(0,\; \lambda_k + \eta_\lambda\big(J_C(\pi_k) - d\big)\big).\]</div>
+<div class="arithmatex">\[
+\lambda_{k+1} = \max\!\big(0,\; \lambda_k + \eta_\lambda\big(J_C(\pi_k) - d\big)\big).
+\]</div>
 <p>这就是"保守程度自动调节"的全部机制：把 <span class="arithmatex">\(J_C(\pi_k) &gt; d\)</span> 解释为"成本超支"，于是 <span class="arithmatex">\(\lambda\)</span> 上升，等价奖励变为 <span class="arithmatex">\(r - \lambda c\)</span>，成本项的权重被放大，策略被推向低风险动作；反之 <span class="arithmatex">\(J_C(\pi_k) &lt; d\)</span> 时 <span class="arithmatex">\(\lambda\)</span> 下降直至 0，约束失去作用，退化成普通 RL。<span class="arithmatex">\(\eta_\lambda\)</span> 决定调节速度：太大则 <span class="arithmatex">\(\lambda\)</span> 在 0 与高值之间震荡、策略来回摇摆；太小则超支状态会持续很久。</p>
 <table>
 <thead>
@@ -4713,14 +4733,22 @@
 <h2 id="_3">外推误差与保守性</h2>
 <p>Offline RL 最核心的技术危险是<strong>分布外动作的 Q 值被系统性高估</strong>，而这个高估不是简单的"网络过拟合噪点"，它有确定的数学来源。</p>
 <p>设 <span class="arithmatex">\(\hat Q\)</span> 是估计器。TD 目标里的 <span class="arithmatex">\(\max\)</span> 算子作用在一个带噪声的函数上：</p>
-<div class="arithmatex">\[\mathbb E\Big[\max_{a'}\hat Q(s',a')\Big] \;\ge\; \max_{a'}\mathbb E\big[\hat Q(s',a')\big].\]</div>
+<div class="arithmatex">\[
+\mathbb E\Big[\max_{a'}\hat Q(s',a')\Big] \;\ge\; \max_{a'}\mathbb E\big[\hat Q(s',a')\big].
+\]</div>
 <p>这是 Jensen 不等式 + 凸函数的直接结果：<strong>即使 <span class="arithmatex">\(\hat Q\)</span> 在每个点上都无偏，取 max 也会得到正偏差。</strong>在线 RL 中这个偏差会被后续真实采样纠正——选了高估的动作，环境马上返回一个更低的真实回报；离线时这个纠正通道被彻底切断，<span class="arithmatex">\(D\)</span> 中根本没有对应的 <span class="arithmatex">\(s'\)</span> 与后续数据，高估就被存储在值函数里并沿 Bellman 备份向回传播：</p>
-<div class="arithmatex">\[\hat Q(s,a) \leftarrow r + \gamma \max_{a'}\hat Q(s',a').\]</div>
+<div class="arithmatex">\[
+\hat Q(s,a) \leftarrow r + \gamma \max_{a'}\hat Q(s',a').
+\]</div>
 <p>单步误差 <span class="arithmatex">\(\varepsilon\)</span> 在折扣累积后放大 <span class="arithmatex">\(\sum_{t}\gamma^{t} = \frac{1}{1-\gamma}\)</span> 倍：<span class="arithmatex">\(\gamma=0.99\)</span> 时放大约 100 倍，<span class="arithmatex">\(\gamma=0.999\)</span> 时约 1000 倍。<strong>这就是离线回报估计动辄虚高一个数量级的来源。</strong></p>
 <p>抑制手段统称悲观原则（pessimism）：在无数据支持的 <span class="arithmatex">\((s,a)\)</span> 上主动压低价值，</p>
-<div class="arithmatex">\[\hat Q_{\text{pes}}(s,a) = \hat Q(s,a) - \beta\, u(s,a),\]</div>
+<div class="arithmatex">\[
+\hat Q_{\text{pes}}(s,a) = \hat Q(s,a) - \beta\, u(s,a),
+\]</div>
 <p><span class="arithmatex">\(u(s,a)\ge0\)</span> 是不确定性度量，常用集成网络方差、密度比倒数 <span class="arithmatex">\(1/\hat\pi_\beta(a\mid s)\)</span>，或 ensemble 成员分歧。CQL 的等价实现把惩罚直接嵌进目标：</p>
-<div class="arithmatex">\[\min_Q\; \alpha\;\mathbb E_{s\sim D}\left[\log\sum_{a}\exp Q(s,a) - \mathbb E_{a\sim\hat\pi_\beta}\big[Q(s,a)\big]\right] + \mathcal L_{\text{TD}}(Q).\]</div>
+<div class="arithmatex">\[
+\min_Q\; \alpha\;\mathbb E_{s\sim D}\left[\log\sum_{a}\exp Q(s,a) - \mathbb E_{a\sim\hat\pi_\beta}\big[Q(s,a)\big]\right] + \mathcal L_{\text{TD}}(Q).
+\]</div>
 <p>括号内第一项把所有动作的 Q 值往上推，第二项把数据中真实出现过的动作往上推——两者相减，净效果是<strong>把未见动作相对已见动作压低</strong>。</p>
 <table>
 <thead>
@@ -4770,9 +4798,13 @@
 \]</div>
 <p>在分布连续且 <span class="arithmatex">\(\mathbb P(Z=\operatorname{VaR}_\alpha(Z))=0\)</span> 时，它才可简写为 <span class="arithmatex">\(\mathbb E[Z\mid Z\ge\operatorname{VaR}_\alpha(Z)]\)</span>。<span class="arithmatex">\(\alpha=0.95\)</span> 表示平均最坏约 <span class="arithmatex">\(5\%\)</span> 的损失；<span class="arithmatex">\(\alpha\)</span> 越接近 1，约束越集中于极端尾部，对样本量的要求也越高。</p>
 <p>运行时层使用控制屏障函数（CBF）。给定安全集 <span class="arithmatex">\(\{s: h(s)\ge 0\}\)</span>，只要存在控制量使</p>
-<div class="arithmatex">\[\dot h(s) + \alpha\, h(s) \ge 0,\qquad \alpha&gt;0,\]</div>
+<div class="arithmatex">\[
+\dot h(s) + \alpha\, h(s) \ge 0,\qquad \alpha&gt;0,
+\]</div>
 <p>就能保证 <span class="arithmatex">\(h\)</span> 不会穿零（前向不变性）。把它做成动作过滤器：RL 给出 <span class="arithmatex">\(a_{\text{rl}}\)</span>，安全层投影到可行集</p>
-<div class="arithmatex">\[a_{\text{safe}} = \arg\min_{a\in\mathcal A_{\text{safe}}(s)} \|a - a_{\text{rl}}\|.\]</div>
+<div class="arithmatex">\[
+a_{\text{safe}} = \arg\min_{a\in\mathcal A_{\text{safe}}(s)} \|a - a_{\text{rl}}\|.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4843,11 +4875,15 @@
 </tbody>
 </table>
 <p>三者叠加时约束会相乘式收紧，这一点必须显式记账。以"离线 + 鲁棒 + 安全"为例，要同时满足在 <span class="arithmatex">\(D\)</span> 支撑集内、对所有 <span class="arithmatex">\(P\in\mathcal P\)</span>、且 <span class="arithmatex">\(J_C\le d\)</span>，可行策略集是三个集合的交：</p>
-<div class="arithmatex">\[\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{\text{offline}} \;\cap\; \underbrace{\{\pi: \forall P\in\mathcal P,\; J_{P}(\pi)\ge J_{\min}\}}_{\text{robust}} \;\cap\; \underbrace{\{\pi: J_C(\pi)\le d\}}_{\text{safe}} .\]</div>
+<div class="arithmatex">\[
+\Pi_{\text{feasible}} = \underbrace{\{\pi: d^{\pi}\preceq M d^{\pi_\beta}\}}_{\text{offline}} \;\cap\; \underbrace{\{\pi: \forall P\in\mathcal P,\; J_{P}(\pi)\ge J_{\min}\}}_{\text{robust}} \;\cap\; \underbrace{\{\pi: J_C(\pi)\le d\}}_{\text{safe}} .
+\]</div>
 <p>交集很容易是空集——数据覆盖不足、又要对所有扰动成立、还要满足硬约束，可能根本不存在这样的策略。此时诊断结论不是“算法不够好”，而是<strong>问题设定本身不可行</strong>，正确动作是重新检查预算、数据覆盖与不确定集。样本复杂度取决于模型类容量、不确定集结构、误差容许度和置信度；没有附加假设时不存在统一的 <span class="arithmatex">\(\rho^{-2}\)</span> 乘法规律。</p>
 <h2 id="offline-rl_1">离线强化学习（Offline RL）的分布外风险</h2>
 <p>把上一节的机制落到可操作的判据。"分布外动作"指的是目标策略给出显著概率、而 <span class="arithmatex">\(\pi_\beta\)</span> 几乎不给概率的动作集合：</p>
-<div class="arithmatex">\[\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) &gt; \delta,\; \hat\pi_\beta(a\mid s) &lt; \epsilon \big\}.\]</div>
+<div class="arithmatex">\[
+\mathcal A_{\text{OOD}}(s) = \big\{a : \pi(a\mid s) &gt; \delta,\; \hat\pi_\beta(a\mid s) &lt; \epsilon \big\}.
+\]</div>
 <p>若 <span class="arithmatex">\(\mathcal A_{\text{OOD}}\neq\varnothing\)</span>，说明目标策略把显著概率放到了行为数据很少支持的动作上；此处的 Q 值通常只能依赖函数外推。是否“完全无数据”还要看有限样本计数、连续空间邻域以及函数类假设，不能由两个阈值直接推出。</p>
 <p>高风险场景可以被分解。单步支持不足 <span class="arithmatex">\(\to\)</span> 该步 TD 误差不可控；Bellman 备份 <span class="arithmatex">\(\to\)</span> 误差向状态空间上游传播；目标里的 <span class="arithmatex">\(\max\)</span> <span class="arithmatex">\(\to\)</span> 主动挑选高估动作。三者叠加形成闭环，这也解释了为什么朴素 Q-learning 在离线数据上会得到"漂亮但假"的曲线。</p>
 <table>
@@ -4941,9 +4977,13 @@
 <h2 id="_7">离线评估的困难</h2>
 <p>离线 RL 最容易被低估的环节是评估。<strong>策略改进需要验证，而验证需要环境交互——这个前提在离线设定下恰好被剥夺。</strong> <span class="arithmatex">\(J(\pi)\)</span> 的真值不存在于任何数据中，它是关于反事实轨迹的期望。</p>
 <p>最直接的想法是重要性采样（IS）。用数据集轨迹 <span class="arithmatex">\(i\)</span> 的回报 <span class="arithmatex">\(G_i\)</span> 做加权：</p>
-<div class="arithmatex">\[\hat J_{\text{IS}}(\pi) = \frac{1}{N}\sum_{i=1}^{N} \left(\prod_{t=0}^{T-1}\frac{\pi(a_{t}^{i}\mid s_{t}^{i})}{\pi_\beta(a_{t}^{i}\mid s_{t}^{i})}\right) G_i .\]</div>
+<div class="arithmatex">\[
+\hat J_{\text{IS}}(\pi) = \frac{1}{N}\sum_{i=1}^{N} \left(\prod_{t=0}^{T-1}\frac{\pi(a_{t}^{i}\mid s_{t}^{i})}{\pi_\beta(a_{t}^{i}\mid s_{t}^{i})}\right) G_i .
+\]</div>
 <p>方差可能随轨迹长度指数增长。设单步权重 <span class="arithmatex">\(w=\pi(a\mid s)/\pi_\beta(a\mid s)\)</span>，在行为策略分布下</p>
-<div class="arithmatex">\[\mathbb E_{\pi_\beta}[w^2]=\exp\!\left(D_2(\pi\|\pi_\beta)\right),\]</div>
+<div class="arithmatex">\[
+\mathbb E_{\pi_\beta}[w^2]=\exp\!\left(D_2(\pi\|\pi_\beta)\right),
+\]</div>
 <p>其中 <span class="arithmatex">\(D_2\)</span> 是二阶 Rényi 散度，不是 <span class="arithmatex">\(2D_{\mathrm{KL}}\)</span>。若再假设各步权重独立同分布，轨迹权重二阶矩才会成为这个量的 <span class="arithmatex">\(T\)</span> 次方；真实 MDP 中各步相关，不能直接写成等号。</p>
 <p>取每步权重比恒为 2、<span class="arithmatex">\(T=50\)</span> 步，轨迹权重是 <span class="arithmatex">\(2^{50}\approx 10^{15}\)</span>——实际效应是权重可能被极少数轨迹垄断。对非负且不全为零的权重，<span class="arithmatex">\(\mathrm{ESS}=(\sum_iw_i)^2/\sum_iw_i^2\)</span> 位于 <span class="arithmatex">\([1,N]\)</span>；接近 1 表示几乎只剩一条有效轨迹。per-decision IS 可缓和乘积长度，WIS 归一化通常降低方差但引入有限样本偏差。</p>
 <table>
@@ -5097,7 +5137,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

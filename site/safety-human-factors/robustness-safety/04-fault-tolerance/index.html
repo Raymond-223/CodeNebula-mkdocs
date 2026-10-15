@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4565,7 +4565,9 @@
 </table>
 <p><strong>沉默失效在机器人系统中比崩溃更常见</strong>：编码器卡在某个读数、IMU 零偏缓慢漂移、相机画面冻结，都属于这一类比。它们不会触发超时，只能靠内部一致性和模型残差来发现。</p>
 <p>不同故障模型对检测时间的敏感度也不同。设故障在 <span class="arithmatex">\(t_0\)</span> 发生，检测在 <span class="arithmatex">\(t_0+T_d\)</span> 给出告警，从检测到系统进入安全状态还需 <span class="arithmatex">\(T_r\)</span>，则暴露时间</p>
-<div class="arithmatex">\[T_\text{exp} = T_d + T_r,\]</div>
+<div class="arithmatex">\[
+T_\text{exp} = T_d + T_r,
+\]</div>
 <p>在这段时间里系统使用的是错误数据。若错误的增长速度是 <span class="arithmatex">\(\dot e\)</span>，则累积误差上界为 <span class="arithmatex">\(\dot e \cdot T_\text{exp}\)</span>。这个量必须与安全余量比较，而不是与“任务是否完成”比较。</p>
 <table>
 <thead>
@@ -4607,7 +4609,9 @@
 <h2 id="_2">故障检测首先需要正常行为的参考</h2>
 <p>可以检查传感器是否超出物理范围、多个传感器是否互相矛盾、控制循环是否按时运行、模型残差是否突然增大。单个阈值适合简单故障；复杂系统常结合多个信号降低误报。</p>
 <p>检测的基本结构是比较残差与阈值：</p>
-<div class="arithmatex">\[r_k = z_k - \hat z_k, \qquad \text{触发条件：}\ \lVert r_k \rVert &gt; \eta,\]</div>
+<div class="arithmatex">\[
+r_k = z_k - \hat z_k, \qquad \text{触发条件：}\ \lVert r_k \rVert &gt; \eta,
+\]</div>
 <p>其中 <span class="arithmatex">\(z_k\)</span> 是第 <span class="arithmatex">\(k\)</span> 步的观测量，<span class="arithmatex">\(\hat z_k\)</span> 由运动学模型、卡尔曼滤波预测或历史统计给出。阈值 <span class="arithmatex">\(\eta\)</span> 的选择直接决定检测延迟与误报率的关系：</p>
 <table>
 <thead>
@@ -4640,7 +4644,9 @@
 </tbody>
 </table>
 <p>用残差的滑动统计量（均值、方差、卡方统计量）比瞬时阈值更稳，因为它能抑制单帧噪声引起的误报。若残差近似高斯，则平方和服从卡方分布：</p>
-<div class="arithmatex">\[\chi^2_k = r_k^\top \Sigma^{-1} r_k \sim \chi^2_m,\]</div>
+<div class="arithmatex">\[
+\chi^2_k = r_k^\top \Sigma^{-1} r_k \sim \chi^2_m,
+\]</div>
 <p>其中 <span class="arithmatex">\(m\)</span> 是残差维数、<span class="arithmatex">\(\Sigma\)</span> 是残差协方差。按 <span class="arithmatex">\(1-\alpha\)</span> 分位数设阈值，可以直接控制误报率 <span class="arithmatex">\(\alpha\)</span>，而不是靠调参碰运气。</p>
 <p>各种检测手段的适用面差别很大：</p>
 <table>
@@ -4694,7 +4700,9 @@
 <h2 id="_3">检测性能的定量指标：延迟、误报率与可用性</h2>
 <p>只看“报警了没有”会漏掉真正决定系统行为的东西。检测器的行为可以用三个数刻画：<strong>检测延迟 <span class="arithmatex">\(T_d\)</span>、误报率 <span class="arithmatex">\(P_{FA}\)</span>、以及平均误报间隔 MTFA</strong>。</p>
 <p>对双侧高斯残差，阈值 <span class="arithmatex">\(\eta\)</span> 与单侧尾部概率的关系是</p>
-<div class="arithmatex">\[P_{FA}(\eta) = 2\,Q(\eta/\sigma), \qquad Q(x)=\frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-t^2/2}\,dt .\]</div>
+<div class="arithmatex">\[
+P_{FA}(\eta) = 2\,Q(\eta/\sigma), \qquad Q(x)=\frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-t^2/2}\,dt .
+\]</div>
 <p>把它换成工程语言就是下面的表。注意最后一列：<strong>在 100 Hz 的监控频率下，3<span class="arithmatex">\(\sigma\)</span> 阈值平均每几秒就会误报一次</strong>，这足以让操作员很快开始忽略告警。</p>
 <table>
 <thead>
@@ -4739,7 +4747,9 @@
 </table>
 <p>检测延迟的估算很简单：若偏移按每采样 <span class="arithmatex">\(\delta\)</span> 增长，从偏移开始到越过阈值需要约 <span class="arithmatex">\(\eta/\delta\)</span> 个采样。把 <span class="arithmatex">\(\eta\)</span> 从 3<span class="arithmatex">\(\sigma\)</span> 提到 5<span class="arithmatex">\(\sigma\)</span>，延迟只增加约三分之二，误报间隔却提高四个数量级——这就是<strong>为什么提高阈值几乎总是正确的第一步</strong>，而真正的困难在于如何在不降低灵敏度的前提下提高阈值，答案是用更长的观测窗。</p>
 <p>累积和（CUSUM）检验正是为此设计的。定义统计量</p>
-<div class="arithmatex">\[S_k = \max\big(0,\ S_{k-1} + r_k - \nu\big),\]</div>
+<div class="arithmatex">\[
+S_k = \max\big(0,\ S_{k-1} + r_k - \nu\big),
+\]</div>
 <p>当 <span class="arithmatex">\(S_k &gt; \eta_c\)</span> 时报警。常用的取值是 <span class="arithmatex">\(\nu = \delta/2\)</span>、<span class="arithmatex">\(\eta_c\)</span> 由期望的 MTFA 反推。对持续的小偏移，CUSUM 的检测延迟可以比固定阈值低数倍到十倍，代价是它对<strong>单次脉冲型故障</strong>不敏感，因此实践中通常与瞬时阈值并行使用。</p>
 <table>
 <thead>
@@ -4808,9 +4818,13 @@
 <p>隔离的本质是<strong>用独立信息源打破平局</strong>。如果所有信息源共享同一个前提（同一电源、同一时间源、同一坐标系转换），它们会一起出错，多数派表决也会同时失效——这就是共同失效模式。</p>
 <p>隔离能力可以量化。设单路传感器正确率 <span class="arithmatex">\(p\)</span>、共因失效概率 <span class="arithmatex">\(q\)</span>，则 <span class="arithmatex">\(N\)</span> 路多数派的错误率近似为</p>
 <p>令 <span class="arithmatex">\(e=1-p\)</span> 为单路错误概率，假设除共因事件外各路错误相互独立，且 <span class="arithmatex">\(N\)</span> 为奇数。条件于未发生共因失效，多数派失败概率为</p>
-<div class="arithmatex">\[P_{\mathrm{ind}}=\sum_{k=(N+1)/2}^{N}\binom Nk e^k(1-e)^{N-k}.\]</div>
+<div class="arithmatex">\[
+P_{\mathrm{ind}}=\sum_{k=(N+1)/2}^{N}\binom Nk e^k(1-e)^{N-k}.
+\]</div>
 <p>若共因失效以概率 <span class="arithmatex">\(q\)</span> 发生且发生时系统必错，则全概率公式给出</p>
-<div class="arithmatex">\[P_\text{maj}=q+(1-q)P_{\mathrm{ind}}.\]</div>
+<div class="arithmatex">\[
+P_\text{maj}=q+(1-q)P_{\mathrm{ind}}.
+\]</div>
 <p>关键在 <span class="arithmatex">\(q\)</span> 这一项：<strong>当 <span class="arithmatex">\(q&gt;0\)</span> 时，无论 <span class="arithmatex">\(N\)</span> 加到多大，多数派都无法优于 <span class="arithmatex">\(q\)</span></strong>。这解释了为什么异构冗余比简单加一路同型传感器更重要——它降低的是 <span class="arithmatex">\(q\)</span>，而不是括号内的独立项。</p>
 <table>
 <thead>
@@ -4904,9 +4918,13 @@
 </table>
 <h2 id="_6">指数退避与重试上限的定量设计</h2>
 <p>连续失败时不要无限高频重试：这既浪费资源，也可能让本已拥塞的链路更不可用。常用做法是指数退避加上限，第 <span class="arithmatex">\(n\)</span> 次重试前等待</p>
-<div class="arithmatex">\[t_n = \min\big(t_0 \cdot 2^{\,n-1},\ t_\text{max}\big) + \mathcal{U}(0, j),\]</div>
+<div class="arithmatex">\[
+t_n = \min\big(t_0 \cdot 2^{\,n-1},\ t_\text{max}\big) + \mathcal{U}(0, j),
+\]</div>
 <p>其中 <span class="arithmatex">\(t_0\)</span> 是初始等待、<span class="arithmatex">\(t_\text{max}\)</span> 是等待上限、<span class="arithmatex">\(j\)</span> 是抖动幅度，用于避免多个节点同时重试造成同步冲击。总等待时间上界为</p>
-<div class="arithmatex">\[T_N = \sum_{n=1}^{N} t_n .\]</div>
+<div class="arithmatex">\[
+T_N = \sum_{n=1}^{N} t_n .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4940,12 +4958,16 @@
 </table>
 <p>以 <span class="arithmatex">\(t_0=0.1\)</span> s、<span class="arithmatex">\(t_\text{max}=2\)</span> s、<span class="arithmatex">\(N=6\)</span> 为例，忽略抖动时总等待约为 <span class="arithmatex">\(0.1+0.2+0.4+0.8+1.6+2.0=5.1\)</span> s。这个数字应和任务的时间预算对齐：<strong>若 5 s 已经超出安全窗口，重试就必须在更早的次一级失败时切换到降级路径</strong>，而不是继续等。</p>
 <p>抖动幅度的选择也有定量依据。设 <span class="arithmatex">\(M\)</span> 个节点同时开始重试、抖动在 <span class="arithmatex">\([0,j]\)</span> 上均匀分布，则首次重试的碰撞概率近似</p>
-<div class="arithmatex">\[P_\text{collide} \approx 1-\left(1-\frac{\epsilon}{j}\right)^{M-1},\]</div>
+<div class="arithmatex">\[
+P_\text{collide} \approx 1-\left(1-\frac{\epsilon}{j}\right)^{M-1},
+\]</div>
 <p>其中 <span class="arithmatex">\(\epsilon\)</span> 是可分辨的时间粒度（例如调度粒度 1 ms）。<span class="arithmatex">\(M=100\)</span>、<span class="arithmatex">\(\epsilon=1\)</span> ms 时，若 <span class="arithmatex">\(j=1\)</span> ms 则几乎必然碰撞；把 <span class="arithmatex">\(j\)</span> 提到 100 ms 才能把碰撞概率压到可接受水平。这解释了为什么抖动幅度是退避算法里最容易被低估的参数。</p>
 <h2 id="_7">恢复时间目标与降级深度的选择</h2>
 <p>容错设计最终要落到“多快恢复、恢复到什么程度”。这两个量为降级深度和恢复时间目标（RTO）提供了设计坐标。</p>
 <p>设正常模式的峰值风险暴露为 <span class="arithmatex">\(R_0\)</span>、系统在时刻 <span class="arithmatex">\(t\)</span> 的瞬时暴露为 <span class="arithmatex">\(R(t)\)</span>，那么从故障发生到恢复的累计暴露是</p>
-<div class="arithmatex">\[E = \int_{t_0}^{t_0+T} R(t)\,dt,\]</div>
+<div class="arithmatex">\[
+E = \int_{t_0}^{t_0+T} R(t)\,dt,
+\]</div>
 <p>其中 <span class="arithmatex">\(T\)</span> 是总的中断时间。<strong>降级深度的作用是压低 <span class="arithmatex">\(R(t)\)</span>，检测与恢复速度的作用是缩短 <span class="arithmatex">\(T\)</span></strong>，两者相乘构成总风险。这解释了为什么“降级到很保守”和“很快恢复”对最终安全的贡献是可互换的，尽管它们在工程上的代价完全不同。</p>
 <table>
 <thead>
@@ -5131,9 +5153,13 @@
 </table>
 <h2 id="_9">冗余与多数派表决的代价</h2>
 <p>冗余的容错能力可以用多数派表决量化：<span class="arithmatex">\(N\)</span> 个副本中允许 <span class="arithmatex">\(f\)</span> 个同时出错而仍能得出正确结果，要求</p>
-<div class="arithmatex">\[N \ge 2f+1 .\]</div>
+<div class="arithmatex">\[
+N \ge 2f+1 .
+\]</div>
 <p>若节点可发送任意且相互矛盾的信息（拜占庭模型），副本数界依赖同步性、认证和协议。经典<strong>部分同步、未认证消息、状态机复制</strong>中的确定性拜占庭容错通常要求</p>
-<div class="arithmatex">\[N \ge 3f+1.\]</div>
+<div class="arithmatex">\[
+N \ge 3f+1.
+\]</div>
 <p>这不是普通传感器多数表决的通用公式，也不能脱离通信模型直接推出“一轮完成”；拜占庭共识通常需要多轮消息交换与法定人数证书。</p>
 <table>
 <thead>
@@ -5355,7 +5381,9 @@
 </table>
 <p>实践中的经验是<strong>让两类错误的代价可比</strong>：如果误报只是多一次减速，而漏报会导致碰撞，阈值就应当偏严；反之，如果误报会让昂贵任务全部中止，阈值就应偏松并辅以多信号确认。</p>
 <p>把这条经验写成式子：设漏报一次损失 <span class="arithmatex">\(C_{MD}\)</span>、误报一次损失 <span class="arithmatex">\(C_{FA}\)</span>，在阈值处的最小期望代价解满足两类错误的似然比条件，直观上等价于</p>
-<div class="arithmatex">\[P_{FA}\cdot C_{FA} \approx P_{MD}\cdot C_{MD} .\]</div>
+<div class="arithmatex">\[
+P_{FA}\cdot C_{FA} \approx P_{MD}\cdot C_{MD} .
+\]</div>
 <p>也就是说，代价比 <span class="arithmatex">\(C_{MD}/C_{FA}\)</span> 直接决定阈值应当朝哪个方向偏。当后果差距在一百倍以上时，宁可让 MTFA 降到几分钟，也不能让漏报概率停在 1e-3 量级——把 <span class="arithmatex">\(C_{MD}/C_{FA}\)</span> 写出来，比争论“阈值取 3<span class="arithmatex">\(\sigma\)</span> 还是 4<span class="arithmatex">\(\sigma\)</span>”更有用。</p>
 <blockquote>
 <p><strong>下一步</strong>：检测与降级解决“组件出错之后怎么办”。当问题出在主策略本身而不是硬件时，见 <a href="../05-safe-learning-runtime/">Safe Learning &amp; Runtime Safety</a>；分布式链路上的超时、重试与副本一致性见 <a href="../../../systems-simulation/distributed-systems/04-fault-tolerance/">Fault Tolerance in Distributed Systems</a>，整体风险度量框架见 <a href="../02-robustness-risk/">Robustness, Risk &amp; Reliability</a>，部署阶段的健康检查与回滚见 <a href="../../../systems-simulation/software-engineering/05-deployment-reliability/">Deployment &amp; Reliability</a>。</p>
@@ -5420,7 +5448,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

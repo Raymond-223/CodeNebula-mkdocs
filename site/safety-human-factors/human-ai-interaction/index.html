@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4351,7 +4351,9 @@
 </table>
 <p>这张表可以直接当作评审清单：如果这五类问题中的任何一类在当前系统里没有明确答案，那么它还没有被设计过。</p>
 <p>从量化角度看，人机环节的失败成本并不只由事故概率决定，还由人是否能在关键时刻介入决定：</p>
-<div class="arithmatex">\[C_{\text{fail}} = p_{\text{fail}} \cdot L \cdot (1 - p_{\text{human}}),\]</div>
+<div class="arithmatex">\[
+C_{\text{fail}} = p_{\text{fail}} \cdot L \cdot (1 - p_{\text{human}}),
+\]</div>
 <p>其中 <span class="arithmatex">\(p_{\text{fail}}\)</span> 是系统自身出错概率，<span class="arithmatex">\(L\)</span> 是单次后果量级，<span class="arithmatex">\(p_{\text{human}}\)</span> 是人能够成功拦截的概率。改善人机设计本质上就是在把 <span class="arithmatex">\(p_{\text{human}}\)</span> 从接近零提升到可观的水平。</p>
 <table>
 <thead>
@@ -4435,7 +4437,9 @@
 </table>
 <p>顺序上有依赖：职责划分不清时讨论融合规则没有意义；信任未校准时，接管请求会被忽略或过度响应。</p>
 <p>可以用一句话概括依赖方向的传递关系：</p>
-<div class="arithmatex">\[\text{责任矩阵} \rightarrow \text{介入点} \rightarrow \text{融合规则} \rightarrow \text{解释策略} \rightarrow \text{恢复协议}.\]</div>
+<div class="arithmatex">\[
+\text{责任矩阵} \rightarrow \text{介入点} \rightarrow \text{融合规则} \rightarrow \text{解释策略} \rightarrow \text{恢复协议}.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4513,7 +4517,9 @@
 </table>
 <p>值得注意的是这张图是一条链而不是一个环：<strong>从职责划分出发，最终落到安全交还</strong>。这提示了设计顺序——先定责任，再定交互，最后定应急。</p>
 <p>链上每一个环节都可以用一个标量描述其“强度”，最典型的是共享控制中的融合权重：</p>
-<div class="arithmatex">\[a_{\text{cmd}} = \alpha\, a_h + (1-\alpha)\, a_m, \qquad \alpha \in [0,1].\]</div>
+<div class="arithmatex">\[
+a_{\text{cmd}} = \alpha\, a_h + (1-\alpha)\, a_m, \qquad \alpha \in [0,1].
+\]</div>
 <p>当 <span class="arithmatex">\(\alpha\)</span> 的设计与责任矩阵不一致时（例如系统仍保留否决权，但 <span class="arithmatex">\(\alpha\)</span> 表明人已完全接管），链上就会出现断裂，表现为“看起来能控制、实际控制无效”。</p>
 <table>
 <thead>
@@ -4554,15 +4560,23 @@
 <h2 id="_4">控制权、信任与恢复的量化关系</h2>
 <p>这一节的四类设计问题都可以写成显式的量，便于验收而不是靠主观判断。最常用的是共享控制权重、人力利用率、信任校准误差与接管裕量。</p>
 <p>共享控制的权重调度应满足有界变化率，否则会出现前后不一致的操控感：</p>
-<div class="arithmatex">\[\left| \frac{d\alpha}{dt} \right| \le \alpha_{\max}', \qquad \alpha(t) \in [0,1].\]</div>
+<div class="arithmatex">\[
+\left| \frac{d\alpha}{dt} \right| \le \alpha_{\max}', \qquad \alpha(t) \in [0,1].
+\]</div>
 <p>人力是否可持续，取决于请求到达率 <span class="arithmatex">\(\lambda\)</span> 与平均处理时间 <span class="arithmatex">\(\tau\)</span> 的乘积：</p>
-<div class="arithmatex">\[\rho = \lambda \tau, \qquad \rho &lt; 1 \ \text{为基本可行}, \quad \rho \le 0.6 \ \text{为可持续}.\]</div>
+<div class="arithmatex">\[
+\rho = \lambda \tau, \qquad \rho &lt; 1 \ \text{为基本可行}, \quad \rho \le 0.6 \ \text{为可持续}.
+\]</div>
 <p>当 <span class="arithmatex">\(\rho \to 1\)</span> 时队列发散，人开始机械确认；这正是“确认按钮形同虚设”的定量解释。</p>
 <p>信任是否校准则可写成预测与真实能力之间的偏差：</p>
-<div class="arithmatex">\[e_{\text{trust}} = \mathbb{E}\left[\,\hat{p}_{\text{succ}} - p_{\text{succ}}\,\right],\]</div>
+<div class="arithmatex">\[
+e_{\text{trust}} = \mathbb{E}\left[\,\hat{p}_{\text{succ}} - p_{\text{succ}}\,\right],
+\]</div>
 <p>其中 <span class="arithmatex">\(\hat{p}_{\text{succ}}\)</span> 是人对系统成功率的判断，<span class="arithmatex">\(p_{\text{succ}}\)</span> 是真实成功率。<span class="arithmatex">\(e_{\text{trust}} &gt; 0\)</span> 表示过度信任，<span class="arithmatex">\(e_{\text{trust}} &lt; 0\)</span> 表示过度怀疑。</p>
 <p>接管能否安全，则取决于时间裕量：</p>
-<div class="arithmatex">\[M = T_{\text{safe}} - T_{\text{rec}}, \qquad \text{验收要求}\ M &gt; 0.\]</div>
+<div class="arithmatex">\[
+M = T_{\text{safe}} - T_{\text{rec}}, \qquad \text{验收要求}\ M &gt; 0.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4651,7 +4665,9 @@
 </table>
 <p>接口错配最常见的形式是“语义不一致”：界面说“已接管”，而运行时状态机仍处于自动模式，或者通信延迟使告警到达时刻晚于安全窗口。</p>
 <p>可以用一个简单的接口一致性条件来检查：</p>
-<div class="arithmatex">\[t_{\text{comm}} + t_{\text{ui}} &lt; T_{\text{warn}},\]</div>
+<div class="arithmatex">\[
+t_{\text{comm}} + t_{\text{ui}} &lt; T_{\text{warn}},
+\]</div>
 <p>即通信与界面呈现带来的额外时延必须小于可用告警窗口，否则再正确的策略也无法在时间上成立。</p>
 <table>
 <thead>
@@ -4900,7 +4916,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

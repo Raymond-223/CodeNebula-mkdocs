@@ -22,25 +22,35 @@
 
 单智能体的状态转移写成
 
-$$P(s'\mid s,a).$$
+$$
+P(s'\mid s,a).
+$$
 
 有 $n$ 个主体时，最大的变化不是把同一个 MDP 简单复制 $n$ 份，而是一次环境转移同时受所有人的动作影响。动作于是从一个 $a$ 变成联合动作向量：
 
-$$\mathbf a=(a_1,\dots,a_n),\qquad a_i\in\mathcal A_i,$$
+$$
+\mathbf a=(a_1,\dots,a_n),\qquad a_i\in\mathcal A_i,
+$$
 
 转移随之变成
 
-$$P(s'\mid s,\mathbf a).$$
+$$
+P(s'\mid s,\mathbf a).
+$$
 
 奖励也不再唯一。每个主体可以有自己的奖励函数
 
-$$r_i=\mathcal R_i(s,\mathbf a,s'),$$
+$$
+r_i=\mathcal R_i(s,\mathbf a,s'),
+$$
 
 于是同一个状态下，主体 $i$ 的动作好不好，不只取决于 $a_i$，还取决于其他主体的 $\mathbf a_{-i}$（除 $i$ 之外的联合动作，属于 $\mathcal A_{-i}=\prod_{j\neq i}\mathcal A_j$）。**这就是多智能体问题的第一层本质：决策相互耦合。**
 
 耦合带来的直接后果是"最优"这个词失效。单智能体里可以定义 $V^{\star}(s)=\max_a Q^{\star}(s,a)$，多主体里必须改写为依赖他人策略的量：
 
-$$V_i^{\pi_i,\pi_{-i}}(s) = \mathbb E\!\left[\sum_{t=0}^{\infty}\gamma^{t} r_i(s_t,\mathbf a_t)\;\Big|\; s_0=s,\; a_{i,t}\sim\pi_i,\; a_{j,t}\sim\pi_j\right].$$
+$$
+V_i^{\pi_i,\pi_{-i}}(s) = \mathbb E\!\left[\sum_{t=0}^{\infty}\gamma^{t} r_i(s_t,\mathbf a_t)\;\Big|\; s_0=s,\; a_{i,t}\sim\pi_i,\; a_{j,t}\sim\pi_j\right].
+$$
 
 上标 $\pi_{-i}$ 是关键：**Agent $i$ 的价值函数本身是其他人策略的函数**，不是环境的属性。这解释了为什么多智能体系统里"一个策略到底好不好"必须连同"在什么对手/队友配置下"一起说。
 
@@ -57,11 +67,15 @@ $$V_i^{\pi_i,\pi_{-i}}(s) = \mathbb E\!\left[\sum_{t=0}^{\infty}\gamma^{t} r_i(s
 
 Markov Game（又称随机博弈）是 MDP 的多主体推广，写成 $(\mathcal S,\{\mathcal A_i\}_{i=1}^{n},P,\{\mathcal R_i\}_{i=1}^{n},\gamma)$。它的状态转移与奖励都作用在**联合动作**上：
 
-$$P:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\to\Delta(\mathcal S),\qquad \mathcal R_i:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\times\mathcal S\to\mathbb R.$$
+$$
+P:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\to\Delta(\mathcal S),\qquad \mathcal R_i:\mathcal S\times\mathcal A_1\times\cdots\times\mathcal A_n\times\mathcal S\to\mathbb R.
+$$
 
 联合动作集合的大小是各 Agent 动作数的乘积：
 
-$$\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|.$$
+$$
+\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|.
+$$
 
 在同构情形（每个 Agent 都有 $m=|\mathcal A_i|$ 个动作）下就是 $m^{n}$。这个数字的可怕之处在于它是**指数**，而不是线性。下表给出 $m=3$ 时的增长：
 
@@ -92,7 +106,9 @@ $$\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|.$$
 
 现实系统里一个 Agent 往往只能拿到局部观测 $o_i$，而不是完整状态 $s$。例如仓库机器人知道自己位置与附近障碍物，却不一定知道其他机器人的当前任务；无人机看到自己视角的画面，却看不到墙后的队友。观测由观测函数生成：
 
-$$o_i = \mathcal O_i(s, \mathbf a, \epsilon_i),$$
+$$
+o_i = \mathcal O_i(s, \mathbf a, \epsilon_i),
+$$
 
 $\epsilon_i$ 是传感噪声。$\mathcal O_i$ 的**输出维度与内容各不相同**：激光雷达给 360° 距离序列，摄像头给图像，调度接口给一条任务 ID。这意味着几个概念必须分开：
 
@@ -106,7 +122,9 @@ $\epsilon_i$ 是传感噪声。$\mathcal O_i$ 的**输出维度与内容各不�
 
 判断"观测够不够"有个实用判据：若当前 $o_i$ 不足以决定下一步最优动作，且这不是传感精度问题而是**信息结构问题**，就必须引入记忆或通信。形式化地，若
 
-$$I\big(a_i^{\star};\; s \mid o_i\big) > 0,$$
+$$
+I\big(a_i^{\star};\; s \mid o_i\big) > 0,
+$$
 
 即最优动作与状态之间在给定观测后仍有剩余互信息，说明 $o_i$ 不是充分统计量。此时把一个单智能体算法复制 $n$ 份，只会得到 $n$ 个各自犯错的主体。
 
@@ -118,7 +136,9 @@ $$I\big(a_i^{\star};\; s \mid o_i\big) > 0,$$
 
 从这里再增加多个 Agent 就很自然了：每个 Agent 都只看到自己的局部观测，而且大家还要联合完成同一个任务。把“多主体 + 局部观测 + 完全合作”形式化，就是 Dec-POMDP（去中心化部分可观测 Markov 决策过程）：
 
-$$\big\langle \mathcal S,\; \{\mathcal A_i\},\; P,\; r,\; \{\mathcal O_i\},\; \mathcal Z,\; \gamma \big\rangle,$$
+$$
+\big\langle \mathcal S,\; \{\mathcal A_i\},\; P,\; r,\; \{\mathcal O_i\},\; \mathcal Z,\; \gamma \big\rangle,
+$$
 
 其中 $\mathcal Z(s,\mathbf a,o)$ 给出观测联合分布，$r$ 是共享的团队奖励。这里的困难不在于某个 Agent 学不会，而在于**信息分布本身**：每个 Agent 只见到自己的 $h_i$，却要联合起来最大化同一个 $r$。
 
@@ -148,7 +168,9 @@ $$\big\langle \mathcal S,\; \{\mathcal A_i\},\; P,\; r,\; \{\mathcal O_i\},\; \m
 
 主体 $i$ 学习时，其他主体的策略 $\pi_j$ 也在变化。即使物理环境完全不变，从 $i$ 的角度看，同一个 $(s,a_i)$ 对应的结果分布仍在改变：
 
-$$P_t\big(s'\mid s,a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s,\mathbf a\big)\prod_{j\neq i}\pi_{j,t}\big(a_j\mid o_j\big).$$
+$$
+P_t\big(s'\mid s,a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s,\mathbf a\big)\prod_{j\neq i}\pi_{j,t}\big(a_j\mid o_j\big).
+$$
 
 下标 $t$ 表示时刻——**环境对 $i$ 而言每步都在漂移**。这直接破坏经验回放的有效性：三个月前存入缓冲区的 $(s,a_i)$ 与它当时观察到的回报，是在一个已经消失的"他人策略配置"下采集的。固定目标网络、降低学习率等技巧只能缓解速度，不能取消漂移。
 
@@ -156,13 +178,17 @@ $$P_t\big(s'\mid s,a_i\big) = \sum_{\mathbf a_{-i}} P\big(s'\mid s,\mathbf a\big
 
 完全合作时所有主体可能共享同一个团队奖励 $r$。但"奖励相同"不代表每个动作贡献相同。以一个 team reward 的形式写：
 
-$$Q_{\text{team}}^{\boldsymbol\pi}(s,\mathbf a) = \mathbb E\Big[\sum_t \gamma^{t} r(s_t,\mathbf a_t)\Big],$$
+$$
+Q_{\text{team}}^{\boldsymbol\pi}(s,\mathbf a) = \mathbb E\Big[\sum_t \gamma^{t} r(s_t,\mathbf a_t)\Big],
+$$
 
 它把 $n$ 个主体的动作揉成一个整体价值，梯度信号无法区分谁的关键动作带来了收益。三台机器人共同搬运，任务成功只给一个总奖励，就要面对这样的问题：是谁完成了关键动作，谁只是恰好在场？
 
 可用的做法包括差分奖励（difference reward）：
 
-$$D_i = G(\mathbf a) - G(\mathbf a_{-i}),$$
+$$
+D_i = G(\mathbf a) - G(\mathbf a_{-i}),
+$$
 
 即“采用主体 $i$ 的实际动作”与“采用预先规定的反事实基准动作”之间的团队收益差。这里的 $G(\mathbf a_{-i})$ 必须明确补上主体 $i$ 的默认动作或边缘化规则，不能把“没有该主体”当成天然定义。它能削弱“恰好在场”的影响，但结论取决于反事实基准。替换测试也只能作为诊断：若把某个 Agent 换成随机策略后团队回报几乎不变，可能是该主体当前作用很小，也可能是队友补偿、随机策略恰好适用、评测场景没有覆盖其关键职责，不能据此单独证明它没有贡献或信用分配一定失败。
 
@@ -170,7 +196,9 @@ $$D_i = G(\mathbf a) - G(\mathbf a_{-i}),$$
 
 如果每个主体有 $m$ 个动作，联合动作组合数量就是
 
-$$\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|,$$
+$$
+\big|\mathcal A_{\text{joint}}\big| = \prod_{i=1}^{n}\big|\mathcal A_i\big|,
+$$
 
 同构情形下约为 $m^{n}$（$m=3$ 时的具体数值见前文表格）。因此枚举全部联合动作会很快变得不可行，必须依靠分解、参数共享或集中—分散结构。
 
@@ -204,7 +232,9 @@ $d(o)$ 是观测中估计出的最近障碍距离，$d_{safe}$ 是安全阈值�
 
 慎思式 Agent 会维护内部世界模型，根据目标搜索动作序列，例如求解最短路径：
 
-$$\pi_{\text{plan}} = \arg\min_{\text{path}} \sum_{k} \|\text{pose}_{k+1}-\text{pose}_{k}\|.$$
+$$
+\pi_{\text{plan}} = \arg\min_{\text{path}} \sum_{k} \|\text{pose}_{k+1}-\text{pose}_{k}\|.
+$$
 
 它适合任务级规划（去哪、按什么顺序做），但计算更慢，而且**依赖模型质量**：地图有一处未更新的障碍，规划出的路径就可能完全不可行。重规划周期通常是秒级，无法应对突发动态障碍。
 
@@ -228,7 +258,9 @@ $$\pi_{\text{plan}} = \arg\min_{\text{path}} \sum_{k} \|\text{pose}_{k+1}-\text{
 
 把决策周期记为 $\Delta t$，感知与通信延迟记为 $\tau$，规划所需的前瞻步数记为 $H$。最基本的可行性条件是不等式
 
-$$\tau + T_{\text{compute}}(H) \le \Delta t,$$
+$$
+\tau + T_{\text{compute}}(H) \le \Delta t,
+$$
 
 即"感知 + 计算"必须在下一个决策时刻之前完成。若 $H$ 大（需要长前瞻）而 $\Delta t$ 小，Deliberative 结构在物理上就不可能实现，必须降级为 Reactive 或者把长前瞻放到低频层。
 

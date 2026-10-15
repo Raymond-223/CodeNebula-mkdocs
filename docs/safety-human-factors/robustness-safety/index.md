@@ -4,7 +4,7 @@
 
 <figure markdown="span">
   ![鲁棒性与安全从不确性、风险、约束、故障到运行时保护形成一条防线。](../../assets/diagrams/safety-map.svg)
-  <figcaption>五层防线从理解不确定性开始，最终落到运行时保护与覆盖。</figcaption>
+  <figcaption markdown="span">五层防线从理解不确定性开始，最终落到运行时保护与覆盖。</figcaption>
 </figure>
 
 概念地图给出的主线是：**Uncertainty（noise / shift）→ Risk（robustness）→ Constraints（safe set）→ Faults（detect & recover）→ Runtime（assure / override）**。这是一条从“认识问题”到“强制保护”的递进链：前半部分回答“什么会让系统变差”，后半部分回答“当它真的变差时，谁能够阻止后果”。
@@ -90,7 +90,9 @@
 
 先定义三个量：任务损失 $L$（越小越好）、扰动强度 $\epsilon$（偏离名义条件的程度）、约束函数 $g(x,u)$（$g > 0$ 表示越界）。风险度量的标准形式是条件风险价值：
 
-$$\mathrm{CVaR}_{\alpha}(L) = \min_{t} \left[ t + \frac{1}{1-\alpha}\,\mathbb{E}\left[(L-t)^{+}\right] \right]$$
+$$
+\mathrm{CVaR}_{\alpha}(L) = \min_{t} \left[ t + \frac{1}{1-\alpha}\,\mathbb{E}\left[(L-t)^{+}\right] \right]
+$$
 
 它回答的是“最差的 $1-\alpha$ 那一部分平均有多差”，而 $\mathbb{E}[L]$ 只回答“总体上怎么样”。两者可以给出完全相反的结论，这不是统计噪声，而是尾部形状本身的信息。
 
@@ -116,7 +118,9 @@ $$\mathrm{CVaR}_{\alpha}(L) = \min_{t} \left[ t + \frac{1}{1-\alpha}\,\mathbb{E}
 
 评测覆盖度不能靠“跑了多少次”衡量，而要看**场景维度 × 扰动强度的矩阵是否被填满**。定义场景集合 $\mathcal{S}$ 与扰动档位集合 $\mathcal{E}$，覆盖率写作
 
-$$\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) > 0\}\right|}{\left|\mathcal{S}\right| \cdot \left|\mathcal{E}\right|}$$
+$$
+\mathrm{Coverage} = \frac{\left|\{(s,e) : n(s,e) > 0\}\right|}{\left|\mathcal{S}\right| \cdot \left|\mathcal{E}\right|}
+$$
 
 其中 $n(s,e)$ 是在场景 $s$、扰动档位 $e$ 下的有效试验次数。覆盖率小于 1 时，未填格子对应的是**未知风险**，而不是“安全”。
 

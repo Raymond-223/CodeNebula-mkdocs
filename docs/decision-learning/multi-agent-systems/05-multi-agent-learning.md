@@ -168,13 +168,17 @@ COMA 不把团队优势按非负权重拆给各主体。它直接使用上式的
 
 ??? proof "动作无关基线不改变理想策略梯度"
     固定 $s$ 与其他主体动作 $\mathbf a_{-i}$，令 $b_i(s,\mathbf a_{-i})$ 不依赖 $a_i$。则
-    $$\begin{aligned}
+
+    $$
+    \begin{aligned}
     &\mathbb E_{a_i\sim\pi_i}\left[\nabla_\theta\log\pi_i(a_i\mid\tau_i)b_i\right]\\
     &=b_i\sum_{a_i}\pi_i(a_i\mid\tau_i)
-      \frac{\nabla_\theta\pi_i(a_i\mid\tau_i)}{\pi_i(a_i\mid\tau_i)}\\
+    \frac{\nabla_\theta\pi_i(a_i\mid\tau_i)}{\pi_i(a_i\mid\tau_i)}\\
     &=b_i\nabla_\theta\sum_{a_i}\pi_i(a_i\mid\tau_i)
-      =b_i\nabla_\theta1=0.
-    \end{aligned}$$
+    =b_i\nabla_\theta1=0.
+    \end{aligned}
+    $$
+
     因此减去该基线不改变精确期望梯度。若基线依赖当前动作，或实现中让共享参数的基线梯度流入 actor，这个证明不再直接适用。
 
 四种主流信用分配方法的代价与效果对比：
@@ -212,7 +216,11 @@ $$
 
 ??? proof "QMIX 单调条件允许分散贪心"
     固定全局状态，并令 $a_i^*\in\arg\max_{a_i}Q_i(a_i)$。对任意联合动作 $\mathbf a$，逐个把 $a_i$ 换成 $a_i^*$。每次替换都不会减小对应的 $Q_i$，其他 $Q_j$ 不变；由于混合函数对每个输入单调不减，$Q_{tot}$ 也不会下降。全部替换后得到
-    $$Q_{tot}(a_1^*,\ldots,a_n^*)\ge Q_{tot}(\mathbf a).$$
+
+    $$
+    Q_{tot}(a_1^*,\ldots,a_n^*)\ge Q_{tot}(\mathbf a).
+    $$
+
     因而个体贪心组合属于联合价值的贪心解。若单调条件不成立，或 $Q_i$ 还依赖执行时不可用的信息，这个结论就不能使用。
 
 需要注意：单调性是一种**结构假设**，不是所有合作任务都满足。QMIX 的意义在于用可分散执行换取一类可表达的联合价值，而不是“解决所有协作问题”。文献中那类必须“牺牲自己换团队最优”的任务（例如一名主体主动承担高代价拦截）会违反单调性，此时 QMIX 结构上就无法精确表达最优 $Q_{tot}$。

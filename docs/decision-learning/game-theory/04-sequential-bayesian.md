@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![博弈树把行动顺序和后续响应显式展开。](../../assets/diagrams/game-tree.svg)
-  <figcaption>顺序行动使后行动者能够根据已经发生的动作做响应。</figcaption>
+  <figcaption markdown="span">顺序行动使后行动者能够根据已经发生的动作做响应。</figcaption>
 </figure>
 
 ## 顺序行动要用博弈树描述历史

@@ -49,7 +49,7 @@ $$
 
 <figure markdown="span">
   ![单位圆内特征值保证矩阵幂最终衰减，但中间可能出现瞬态放大。](../assets/diagrams/yau-spectral-convergence.svg)
-  <figcaption>谱半径控制渐近行为；“最终趋于零”不等于“每一步在二范数下都缩小”。</figcaption>
+  <figcaption markdown="span">谱半径控制渐近行为；“最终趋于零”不等于“每一步在二范数下都缩小”。</figcaption>
 </figure>
 
 **定理。** 对方阵 $B$，以下命题等价：
@@ -302,8 +302,6 @@ $$
     q_*=\frac{\kappa_2(A)-1}{\kappa_2(A)+1}.
     $$
 
-
-
 条件数越大，$q_*$ 越接近 $1$，迭代越慢。
 
 ## 范数界与瞬态增长
@@ -334,7 +332,9 @@ $$
 
     删除矩阵第 $i$ 行、第 $j$ 列所得子矩阵的行列式称为余子式 $M_{ij}$，代数余子式为 $C_{ij}=(-1)^{i+j}M_{ij}$。矩阵 $M$ 的伴随矩阵定义为 $\operatorname{adj}(M)=(C_{ji})$，也就是代数余子式矩阵的转置。按任一行展开行列式可得
 
-    $$M\operatorname{adj}(M)=\det(M)I.$$
+    $$
+    M\operatorname{adj}(M)=\det(M)I.
+    $$
 
     对角元正是按对应行的 Laplace 展开；非对角元等于把一行替换成另一行后对重复行矩阵作展开，因此为零。这补出了下面使用的伴随矩阵恒等式。
 
@@ -399,8 +399,10 @@ $$
 
 则 $A^kx_0$ 归一化后的方向趋向 $v_1$ 所张成的一维子空间。把方向误差定义为到该子空间的欧几里得距离
 
-$$e_k=\left\|(I-P_1)\frac{A^kx_0}{\|A^kx_0\|_2}\right\|_2,
-\qquad P_1=\frac{v_1v_1^T}{v_1^Tv_1},$$
+$$
+e_k=\left\|(I-P_1)\frac{A^kx_0}{\|A^kx_0\|_2}\right\|_2,
+\qquad P_1=\frac{v_1v_1^T}{v_1^Tv_1},
+$$
 
 则 $e_k=O(|\lambda_2/\lambda_1|^k)$。
 
@@ -517,13 +519,13 @@ $$
 
     1. 写 $e_0=(a,b)^T$，则
 
-       $$
-       e_k=(0.8^ka,(-0.6)^kb)^T,
-       \qquad
-       \|e_k\|_2\le0.8^k\|e_0\|_2\to0.
-       $$
+        $$
+        e_k=(0.8^ka,(-0.6)^kb)^T,
+        \qquad
+        \|e_k\|_2\le0.8^k\|e_0\|_2\to0.
+        $$
 
-       因此任意初始误差都收敛。
+        因此任意初始误差都收敛。
 
     2. 直接相乘得 $B^2=0$，所以 $e_2=B^2e_0=0$；误差至多两步归零。
 
@@ -531,26 +533,26 @@ $$
 
     4. 设特征值为 $0<\lambda_{\min}\le\lambda_{\max}$。理查森误差矩阵为 $I-\omega A$，其谱半径是区间端点上
 
-       $$
-       \max\{|1-\omega\lambda_{\min}|,
-       |1-\omega\lambda_{\max}|\}.
-       $$
+        $$
+        \max\{|1-\omega\lambda_{\min}|,
+        |1-\omega\lambda_{\max}|\}.
+        $$
 
-       最优时两个端点等模且符号相反：
+        最优时两个端点等模且符号相反：
 
-       $$
-       1-\omega\lambda_{\min}
-       =-(1-\omega\lambda_{\max}).
-       $$
+        $$
+        1-\omega\lambda_{\min}
+        =-(1-\omega\lambda_{\max}).
+        $$
 
-       因而
+        因而
 
-       $$
-       \omega_*=\frac{2}{\lambda_{\min}+\lambda_{\max}},
-       \qquad
-       \rho_*=\frac{\lambda_{\max}-\lambda_{\min}}
-       {\lambda_{\max}+\lambda_{\min}}.
-       $$
+        $$
+        \omega_*=\frac{2}{\lambda_{\min}+\lambda_{\max}},
+        \qquad
+        \rho_*=\frac{\lambda_{\max}-\lambda_{\min}}
+        {\lambda_{\max}+\lambda_{\min}}.
+        $$
 
     5. 取 $B=\operatorname{diag}(2,1/2)$ 与 $e_0=(0,1)^T$，则 $e_k=(0,2^{-k})^T\to0$，但 $\rho(B)=2>1$。一个特殊初值没有激发不稳定特征方向，因此不能代表所有初值。
 

@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![博弈模型由参与者、可选策略、信息和收益共同决定。](../../assets/diagrams/game-map.svg)
-  <figcaption>先把参与者、行动、收益、时序和信息结构写清，才能讨论均衡。</figcaption>
+  <figcaption markdown="span">先把参与者、行动、收益、时序和信息结构写清，才能讨论均衡。</figcaption>
 </figure>
 
 ## 一个博弈至少要说明三件事

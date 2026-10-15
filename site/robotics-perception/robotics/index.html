@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4436,7 +4436,9 @@
 <h2 id="_3">概念地图</h2>
 <p>下图给出机器人栈的闭环结构，逐节点解释如下。</p>
 <p><strong>Geometry / frames（几何与坐标系）</strong> 是整个栈的语言。这里不再第一次引入群符号：数学前置已经定义了 <a href="../../foundations/mathematics/02-rotations-rigid-transforms/">旋转与刚体变换</a>。只回忆：<span class="arithmatex">\(SO(2)\)</span> 是二维旋转，<span class="arithmatex">\(SE(2)\)</span> 是“二维旋转 + 二维平移”；三维对应 <span class="arithmatex">\(SO(3)\)</span> 与 <span class="arithmatex">\(SE(3)\)</span>。所有位姿都写成某个坐标系下的变换，二维情形是</p>
-<div class="arithmatex">\[T=\begin{bmatrix}R(\theta)&amp;t\\ 0&amp;1\end{bmatrix}\in SE(2),\]</div>
+<div class="arithmatex">\[
+T=\begin{bmatrix}R(\theta)&amp;t\\ 0&amp;1\end{bmatrix}\in SE(2),
+\]</div>
 <p>其中 <span class="arithmatex">\(R(\theta)\)</span> 是 <span class="arithmatex">\(2\times2\)</span> 旋转矩阵，<span class="arithmatex">\(t\in\mathbb{R}^2\)</span>。链条 <code>map → odom → base_link → sensor</code> 上任何一环错了，后面所有计算都在错误的前提下进行。</p>
 <p><strong>Dynamics / motion（动力学与运动）</strong> 回答“给了控制输入，状态怎么演化”：<span class="arithmatex">\(\dot x=f(x,u)\)</span>。它把抽象的路径变成机器真正能执行的量，并给出速度、加速度、转弯半径等硬边界。</p>
 <p><strong>Sensing / measurements（传感与测量）</strong> 把物理世界变成带噪声的数字：<span class="arithmatex">\(z=h(x)+v\)</span>，<span class="arithmatex">\(v\sim\mathcal{N}(0,R)\)</span>。噪声协方差 <span class="arithmatex">\(R\)</span> 不是贬义，它是算法判断“该信多少”的依据。</p>
@@ -4444,9 +4446,13 @@
 <p><strong>Planning / path &amp; motion（规划）</strong> 在约束下搜索代价最小的运动方案：<span class="arithmatex">\(\min\ \text{cost}(\sigma)\)</span> s.t. 无碰撞且满足动力学。它处理的是“未来”，因此必须显式面对地图不完备和障碍会动这两件事。</p>
 <p><strong>Control / execution（控制与执行）</strong> 把路径变成闭环指令，让横向误差 <span class="arithmatex">\(e\)</span> 收敛。它处理的是“当下的偏差”，因此对延迟、噪声和饱和最敏感。</p>
 <p>把这六个节点串成闭环，核心的递推关系可以写成两步：预测</p>
-<div class="arithmatex">\[\hat x_{k+1}^{-}=f(\hat x_k,u_k),\]</div>
+<div class="arithmatex">\[
+\hat x_{k+1}^{-}=f(\hat x_k,u_k),
+\]</div>
 <p>与更新</p>
-<div class="arithmatex">\[\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),\]</div>
+<div class="arithmatex">\[
+\hat x_{k+1}=\hat x_{k+1}^{-}+K_{k+1}\big(z_{k+1}-h(\hat x_{k+1}^{-})\big),
+\]</div>
 <p>其中 <span class="arithmatex">\(K_{k+1}\)</span> 是滤波增益，<span class="arithmatex">\(z_{k+1}-h(\hat x^{-})\)</span> 是<strong>新息（innovation）</strong>，即“观测与预期之差”。这个式子把整节的内容压缩成一句话：<strong>机器人靠“预测—比较—修正”活着，Planning 决定 <span class="arithmatex">\(u\)</span>，Control 保证 <span class="arithmatex">\(u\)</span> 被真实执行，Sensing/Estimation 提供 <span class="arithmatex">\(z\)</span> 与 <span class="arithmatex">\(\hat x\)</span>。</strong></p>
 <p>各节点之间的关键耦合：</p>
 <table>
@@ -4740,7 +4746,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

@@ -121,13 +121,25 @@ $$
     设联合混合策略空间为 $\Sigma=\prod_i\Delta(\mathcal A_i)$。每个单纯形非空、紧、凸，有限个单纯形的笛卡尔积仍非空、紧、凸。
 
     对固定的 $\sigma_{-i}$，玩家 $i$ 的期望收益关于自己的混合策略 $\sigma_i$ 是线性的。连续函数在紧集上能取得最大值，所以 $BR_i(\sigma_{-i})$ 非空。若 $x_i,y_i$ 都是最佳响应，则任意 $\theta\in[0,1]$ 满足
-    $$u_i(\theta x_i+(1-\theta)y_i,\sigma_{-i})=\theta u_i(x_i,\sigma_{-i})+(1-\theta)u_i(y_i,\sigma_{-i}),$$
+
+    $$
+    u_i(\theta x_i+(1-\theta)y_i,\sigma_{-i})=\theta u_i(x_i,\sigma_{-i})+(1-\theta)u_i(y_i,\sigma_{-i}),
+    $$
+
     右边仍等于最大收益，因此最佳响应集合是凸的。
 
     再证闭图。若 $\sigma^k\to\sigma$、$\tau_i^k\to\tau_i$ 且 $\tau_i^k\in BR_i(\sigma_{-i}^k)$，则对任意 $a_i\in\Delta(\mathcal A_i)$ 都有
-    $$u_i(\tau_i^k,\sigma_{-i}^k)\ge u_i(a_i,\sigma_{-i}^k).$$
+
+    $$
+    u_i(\tau_i^k,\sigma_{-i}^k)\ge u_i(a_i,\sigma_{-i}^k).
+    $$
+
     有限博弈的期望收益是各概率的多项式，因而连续。令 $k\to\infty$ 得
-    $$u_i(\tau_i,\sigma_{-i})\ge u_i(a_i,\sigma_{-i}),$$
+
+    $$
+    u_i(\tau_i,\sigma_{-i})\ge u_i(a_i,\sigma_{-i}),
+    $$
+
     所以 $\tau_i\in BR_i(\sigma_{-i})$。因此联合最佳响应对应 $BR(\sigma)=\prod_iBR_i(\sigma_{-i})$ 非空、凸值并有闭图；在紧值情形下这等价于上半连续。
 
     Kakutani 不动点定理于是给出某个 $\sigma^*\in\Sigma$ 使 $\sigma^*\in BR(\sigma^*)$。按 Nash 均衡的定义，这个 $\sigma^*$ 就是混合策略 Nash 均衡。

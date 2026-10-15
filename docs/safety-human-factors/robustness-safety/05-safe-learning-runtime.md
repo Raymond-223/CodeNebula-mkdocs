@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![运行时安全层持续检查学习策略输出，并在越界时触发过滤或回退。](../../assets/diagrams/runtime-safety.svg)
-  <figcaption>主策略追求任务性能，独立安全层负责监控、限制和紧急回退。</figcaption>
+  <figcaption markdown="span">主策略追求任务性能，独立安全层负责监控、限制和紧急回退。</figcaption>
 </figure>
 
 ## 运行时监控关注的是当前还能不能信任主策略
@@ -17,7 +17,9 @@
 
 用依赖图看这件事会更清楚。策略输出依赖一串前提 $P_1,\dots,P_k$（定位有效、点云新鲜、控制周期按时、模型在分布内），动作的安全性成立要求这些前提同时成立：
 
-$$\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .$$
+$$
+\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .
+$$
 
 监控的职责就是持续评估每个 $P_i$。只要任一前提失效，结论就不再成立，无论输出当前看起来多么合理。
 
@@ -55,7 +57,9 @@ $$\text{safe}(u)\ \Longleftarrow\ \bigwedge_{i=1}^{k} P_i .$$
 
 反推过程可以写成一条明确的式子。设可容忍的位置误差上界为 $\epsilon$、安全余量需要消耗 $d_\text{need}$，则允许的定位标准差近似为
 
-$$\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},$$
+$$
+\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},
+$$
 
 其中 $k$ 是置信倍数（取 3 表示按 $3\sigma$ 计）。以 $\epsilon=0.5$ m、$d_\text{need}=0.2$ m、$k=3$ 为例，$\sigma_x^\text{max}=0.1$ m，正好对应上表那一行的数值。这样得到的阈值有来源、可解释：**它直接表达了“当估计不确定性吃掉多少余量时必须干预”。**
 
@@ -72,11 +76,15 @@ $$\sigma_x^\text{max} = \frac{\epsilon - d_\text{need}}{k},$$
 
 设监控残差的噪声标准差为 $\sigma$、需要检出的真实偏移为 $\Delta$。用长度 $W$ 的滑动均值 $\bar r = \frac{1}{W}\sum_{i=1}^{W} r_i$ 做判定时，噪声被压低到
 
-$$\sigma_{\bar r} = \frac{\sigma}{\sqrt{W}} .$$
+$$
+\sigma_{\bar r} = \frac{\sigma}{\sqrt{W}} .
+$$
 
 若把阈值设为该窗口统计量的 3 倍，则能可靠检出偏移 $\Delta$ 所需的窗口长度为
 
-$$W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .$$
+$$
+W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .
+$$
 
 | 需要检出的偏移 $\Delta$ | 所需窗口 $W$ | 100 Hz 下的检测延迟 | 备注 |
 |---|---|---|---|
@@ -89,7 +97,9 @@ $$W \approx \left(\frac{3\sigma}{\Delta}\right)^2 .$$
 
 窗口长度还决定了误报的节奏。若用不重叠的窗口、每 $W$ 个采样做一次判定，$3\sigma$ 判据的单次误报率约 $2.7\times10^{-3}$，在 100 Hz、$W=36$ 下平均误报间隔
 
-$$\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.$$
+$$
+\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^{-3}} \approx 133\ \text{s}.
+$$
 
 两分多钟一次误报对长时间任务仍可能太频繁，因此可提高阈值，或要求多类证据联合触发。只有检测事件相互独立时，联合误报率才等于各自误报率之积；共享传感器、环境或模型时通常相关，必须用联合数据估计。
 
@@ -99,13 +109,17 @@ $$\text{MTFA} \approx \frac{W}{f\cdot P_{FA}} = \frac{36}{100\times 2.7\times10^
 
 形式上可以在每个控制周期求解
 
-$$u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,$$
+$$
+u^* = \arg\min_{u\in\mathcal{U}_\text{safe}} \lVert u - u_{nom}\rVert^2 ,
+$$
 
 即在安全集合内取**离策略建议最近的**动作。要保证最小值存在，$\mathcal U_{\text{safe}}$ 至少应非空且闭；要保证欧几里得投影唯一，常再要求它是凸集。若集合非凸，可能有多个同样近的动作，必须规定决胜规则。若 $u^*=u_{nom}$，只说明它满足过滤器当前编码的约束，不代表现实中绝对安全。
 
 差值 $\lVert u^*-u_{nom}\rVert$ 是一个非常有用的监控量，甚至可以定义一个干预率
 
-$$\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert>\varepsilon_0\}}{\#\{t\}} .$$
+$$
+\rho_\text{int} = \frac{\#\{t:\ \lVert u^*(t)-u_{nom}(t)\rVert>\varepsilon_0\}}{\#\{t\}} .
+$$
 
 | 干预率 $\rho_\text{int}$ | 解释 | 建议动作 |
 |---|---|---|
@@ -135,11 +149,15 @@ timeout 不能凭经验随手给：它应大于正常周期抖动的上界（否
 
 把它写成区间：设控制周期的均值与标准差分别为 $\mu_P$ 与 $\sigma_P$，并设系统在保持最后指令的情况下、从当前状态走出安全域所需的时间为 $\tau_\text{crit}$，则
 
-$$\mu_P + 4\sigma_P\ <\ \text{timeout}\ <\ \tau_\text{crit}.$$
+$$
+\mu_P + 4\sigma_P\ <\ \text{timeout}\ <\ \tau_\text{crit}.
+$$
 
 $\tau_\text{crit}$ 可以用安全余量反推：若当前速度为 $v$、可用净空为 $d$，则
 
-$$\tau_\text{crit} \approx \frac{d}{v}.$$
+$$
+\tau_\text{crit} \approx \frac{d}{v}.
+$$
 
 | 场景 | 周期 $\mu_P$ | 抖动 $\sigma_P$ | 下限 $\mu_P+4\sigma_P$ | 净空与速度 | $\tau_\text{crit}$ | 可行窗口 |
 |---|---|---|---|---|---|---|
@@ -189,7 +207,9 @@ $$\tau_\text{crit} \approx \frac{d}{v}.$$
 
 第二点常被忽略：主策略输出 $u_1$、回退输出 $u_2$ 时，直接硬切换等于给执行器一个阶跃输入。稳妥做法是**限制指令变化率**，在一小段过渡时间内插值或限幅：
 
-$$u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\text{blend}},$$
+$$
+u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\text{blend}},
+$$
 
 其中 $T_\text{blend}$ 是过渡时长。若 $u_1$ 与 $u_2$ 的差可达执行器量程的 50%，而机械允许的最大加速度对应 $T_\text{blend}=0.2$ s，那么过渡阶段的加速度约为 $0.5\,u_\text{max}/0.2 = 2.5\,u_\text{max}$——超出量程。因此 $T_\text{blend}$ 必须由执行器能力反推，而不是取一个“看起来平滑”的经验值。
 
@@ -202,7 +222,9 @@ $$u(t) = (1-\alpha(t))\,u_1 + \alpha(t)\,u_2,\qquad \dot\alpha \le \frac{1}{T_\t
 
 覆盖范围检查也有定量形式：回退控制器的吸引域 $\mathcal{D}_\text{fb}$ 必须覆盖所有可能触发切换的状态集合 $\mathcal{S}_\text{trig}$，即
 
-$$\mathcal{S}_\text{trig} \subseteq \mathcal{D}_\text{fb}.$$
+$$
+\mathcal{S}_\text{trig} \subseteq \mathcal{D}_\text{fb}.
+$$
 
 $\mathcal{S}_\text{trig}$ 在实践中几乎无法精确枚举，因此常用做法是**先限制触发条件**：让切换只在速度低于某个值、姿态偏差小于某个角度时发生。这样虽然牺牲了一部分恢复能力，但把 $\mathcal{S}_\text{trig}$ 收缩成可验证的小集合。
 
@@ -222,7 +244,9 @@ $\mathcal{S}_\text{trig}$ 在实践中几乎无法精确枚举，因此常用做
 
 实现上有一条硬要求：状态转移表必须**完备且确定**。约定事件集合为 $\mathcal{E}$、状态集合为 $\mathcal{Q}$，则转移函数
 
-$$\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}$$
+$$
+\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}
+$$
 
 必须是全定义的（不允许出现“未定义行为”）。工程上这意味着对每个 $\mathcal{Q}\times\mathcal{E}$ 组合都要写出期望行为，哪怕只是“保持当前状态并记录”。漏掉组合的代价是：在故障叠加时系统行为取决于代码执行顺序，而这恰恰是最不可预测的情形。
 
@@ -253,7 +277,9 @@ $$\delta:\mathcal{Q}\times\mathcal{E}\to\mathcal{Q}$$
 
 如果回退动作是把控制权交给人，那么运行时安全的实际效果取决于**人是否来得及接管**。设系统发现异常的时刻为 $t_0$，操作员完成接管需要
 
-$$T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},$$
+$$
+T_\text{takeover} = T_\text{percept} + T_\text{decide} + T_\text{act},
+$$
 
 其中 $T_\text{percept}$ 是操作员感知到告警并理解情境的时间、$T_\text{decide}$ 是判断采取何种操作的时间、$T_\text{act}$ 是执行动作的时间。这个总时间必须小于系统在无人干预下的可用时间 $T_\text{avail}$，否则交接只是把失效形式从“自动失效”变成了“无人接管”。
 

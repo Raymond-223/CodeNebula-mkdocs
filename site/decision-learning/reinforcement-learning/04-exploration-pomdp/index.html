@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4629,11 +4629,11 @@ H\big[\pi(\cdot\mid o)\big],
 <h2 id="_3">探索策略及其遗憾量级</h2>
 <p>三种经典探索策略的差别，本质是“如何分配试验次数”。设动作数 <span class="arithmatex">\(|\mathcal A|=K\)</span>，最优与次优动作的期望差为间隔 <span class="arithmatex">\(\Delta_i=\mu^*-\mu_i\)</span>。</p>
 <p><span class="arithmatex">\(\varepsilon\)</span>-greedy 以概率 <span class="arithmatex">\(\varepsilon\)</span> 随机选动作、以 <span class="arithmatex">\(1-\varepsilon\)</span> 选当前最优。固定 <span class="arithmatex">\(\varepsilon\)</span> 时其遗憾是线性的：</p>
-<p>若探索时在 <span class="arithmatex">\(K\)</span> 个动作中均匀抽样，而且利用阶段最终选对最优臂，则探索本身每步造成的期望遗憾为
-$$
+<p>若探索时在 <span class="arithmatex">\(K\)</span> 个动作中均匀抽样，而且利用阶段最终选对最优臂，则探索本身每步造成的期望遗憾为</p>
+<div class="arithmatex">\[
 \frac{\varepsilon}{K}\sum_{i=1}^{K}\Delta_i,
-$$
-所以累计遗憾含一个线性于 <span class="arithmatex">\(T\)</span> 的项。它不是简单的 <span class="arithmatex">\(\varepsilon\Delta_{\min}T\)</span>；早期利用阶段选错动作还会增加额外遗憾。</p>
+\]</div>
+<p>所以累计遗憾含一个线性于 <span class="arithmatex">\(T\)</span> 的项。它不是简单的 <span class="arithmatex">\(\varepsilon\Delta_{\min}T\)</span>；早期利用阶段选错动作还会增加额外遗憾。</p>
 <p>令 <span class="arithmatex">\(\varepsilon_t\)</span> 随时间下降，可以把探索造成的累计损失变为次线性；<span class="arithmatex">\(t^{-1/3}\)</span> 只是一个可得到 <span class="arithmatex">\(T^{2/3}\)</span> 量级权衡的例子，不是唯一调度。具体界还取决于是否强制每个臂获得足够样本以及奖励间隔。UCB 类方法按上置信界选动作，<span class="arithmatex">\(a_t=\arg\max_a\big(\hat\mu_a+\sqrt{2\log t/n_a}\big)\)</span>；在固定臂、独立同分布、有界或次高斯奖励等条件下，可得到对数型的间隔相关界，也可给出较松的无间隔界。</p>
 <div class="arithmatex">\[
 \mathrm{Reg}(T)\le\sum_{i:\Delta_i&gt;0}\frac{8\log T}{\Delta_i}+O(K),
@@ -5036,7 +5036,7 @@ H_{\text{visit}}=-\sum_{i}p_i\log p_i,
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

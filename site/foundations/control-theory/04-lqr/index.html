@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4487,14 +4487,20 @@
 x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 \]</div>
 <p>其中 <span class="arithmatex">\(p\)</span> 是位置、<span class="arithmatex">\(v\)</span> 是速度、<span class="arithmatex">\(a\)</span> 是控制加速度。若采样周期固定，下一时刻的位置和速度都可以由当前 <span class="arithmatex">\(x_k\)</span> 与输入 <span class="arithmatex">\(u_k\)</span> 近似算出。把这种关系统一写成</p>
-<div class="arithmatex">\[x_{k+1}=A x_k + B u_k,\]</div>
+<div class="arithmatex">\[
+x_{k+1}=A x_k + B u_k,
+\]</div>
 <p>其中 <span class="arithmatex">\(A\)</span> 回答“<strong>不施加新控制时，当前状态自己会怎样演化</strong>”，<span class="arithmatex">\(B\)</span> 回答“<strong>输入会怎样改变下一时刻状态</strong>”。因此 <span class="arithmatex">\(x_k\in\mathbb{R}^{n}\)</span> 表示有 <span class="arithmatex">\(n\)</span> 个状态量，<span class="arithmatex">\(u_k\in\mathbb{R}^{m}\)</span> 表示有 <span class="arithmatex">\(m\)</span> 个控制输入；<span class="arithmatex">\(A\in\mathbb{R}^{n\times n}\)</span>、<span class="arithmatex">\(B\in\mathbb{R}^{n\times m}\)</span> 的维度只是为了保证矩阵乘法成立。</p>
 <p>LQR 接下来要解决的问题就是：在这个模型已经给定的前提下，每一步究竟该选多大的 <span class="arithmatex">\(u_k\)</span>？它先把“偏离目标”和“控制太猛”都换算成代价，再选择让长期总代价最小的控制。目标函数为</p>
-<div class="arithmatex">\[J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).\]</div>
+<div class="arithmatex">\[
+J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).
+\]</div>
 <p><span class="arithmatex">\(Q\in\mathbb{R}^{n\times n}\)</span> 用来罚状态偏差，<span class="arithmatex">\(R\in\mathbb{R}^{m\times m}\)</span> 用来罚输入幅值。所谓 <span class="arithmatex">\(Q\)</span>“半正定”，最小需要理解成对任意状态都有 <span class="arithmatex">\(x^{\top}Qx\ge 0\)</span>；<span class="arithmatex">\(R\)</span>“正定”则意味着只要输入不是零，就有 <span class="arithmatex">\(u^{\top}Ru&gt;0\)</span>。这样两项都只会增加代价，不会出现“偏得更远反而奖励更高”的怪情况。第一项要求系统尽快回到原点，第二项要求执行器别太费力，两者的相对大小决定最终策略。代价能收敛（<span class="arithmatex">\(J&lt;\infty\)</span>）的前提是闭环渐近稳定；若控制器让状态发散，长期平方误差通常会不断累积，这个候选控制显然不会是我们想要的结果。</p>
 <p>为什么偏偏选平方形式？直觉上，偏差从 1 增大到 2 时，平方代价会从 1 增大到 4，所以大偏差会被更重地惩罚；数学上，线性模型与二次代价组合后还能得到解析的线性反馈结构，求解和在线执行都很简单。至于为什么“未来总代价”仍能保持二次形式，下一节会从动态规划一步一步说明，这里不需要提前接受结论。</p>
 <p>一个标量直觉：若 <span class="arithmatex">\(Q=1\)</span>、<span class="arithmatex">\(R=1\)</span>，那么“偏差 1 个单位停留一个采样周期”与“施加 1 个单位输入持续一个采样周期”代价相等。把 <span class="arithmatex">\(R\)</span> 改成 100 会降低最优反馈增益，但通常不会恰好把输入除以 100，因为 Riccati 解也随 <span class="arithmatex">\(R\)</span> 改变。若要表达“远期偏差不那么要紧”，可引入折扣因子 <span class="arithmatex">\(\gamma\in(0,1)\)</span>：</p>
-<div class="arithmatex">\[J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),\]</div>
+<div class="arithmatex">\[
+J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),
+\]</div>
 <p>折扣同时降低远期状态代价和输入代价的权重。它可经变量缩放转化为另一个 LQR 问题，但不能一般地解释成“只给输入加随时间增长的成本”，也不能无条件推出收敛更快或稳态精度更低。</p>
 <p>在动手调权重之前，先确认 LQR 是否适用于你的问题。它的成立前提可以列成一张清单：</p>
 <ul>
@@ -4549,18 +4555,26 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </table>
 <h2 id="_1">最优控制的反馈形式</h2>
 <p>先解释“反馈”是什么。如果控制器每个周期都重新读取当前状态 <span class="arithmatex">\(x_k\)</span>，再根据这个状态计算控制量，就叫<strong>状态反馈</strong>。最简单的线性反馈写成</p>
-<div class="arithmatex">\[u_k=-K x_k,\qquad K\in\mathbb{R}^{m\times n}.\]</div>
+<div class="arithmatex">\[
+u_k=-K x_k,\qquad K\in\mathbb{R}^{m\times n}.
+\]</div>
 <p><span class="arithmatex">\(K\)</span> 可以理解成一组固定权重：位置偏了多少、速度偏了多少，各自应该对油门或转向产生多大影响。负号表示控制通常要把偏差往 0 的方向拉回去。LQR 最重要的结论就是：在前面的线性模型和二次代价假设下，最优控制恰好具有这种线性反馈形式。</p>
 <p>为什么能从“无穷多步的总代价”得到一个固定矩阵 <span class="arithmatex">\(K\)</span>？这里用到动态规划的核心思想：<strong>今天怎么选，不只要看今天这一笔代价，还要把从下一状态开始的最优未来代价一起算进去。</strong> 把“从状态 <span class="arithmatex">\(x\)</span> 出发，未来所有步骤按最优方式执行时还要付出的总代价”记成 <span class="arithmatex">\(V(x)\)</span>，就叫 cost-to-go（余下代价）。于是当前一步的最优选择满足</p>
 <blockquote>
 <p>当前最优总代价 = 当前这一小步的代价 + 到达下一状态后的最优余下代价。</p>
 </blockquote>
 <p>这句话写成公式就是 Bellman 最优性方程。由于系统是线性的、每步代价是二次型，可以设最优余下代价仍是二次型</p>
-<div class="arithmatex">\[V(x)=x^{\top}P x,\]</div>
+<div class="arithmatex">\[
+V(x)=x^{\top}P x,
+\]</div>
 <p>其中 <span class="arithmatex">\(P\)</span> 是待求矩阵。代回“一步代价 + 下一步余下代价”，得到</p>
-<div class="arithmatex">\[V(x)=\min_{u}\left[x^{\top}Q x+u^{\top}R u+V(Ax+Bu)\right].\]</div>
+<div class="arithmatex">\[
+V(x)=\min_{u}\left[x^{\top}Q x+u^{\top}R u+V(Ax+Bu)\right].
+\]</div>
 <p>把 <span class="arithmatex">\(V(Ax+Bu)\)</span> 展开并对 <span class="arithmatex">\(u\)</span> 求导置零，得到最优输入</p>
-<div class="arithmatex">\[u^{\star}=-\left(R+B^{\top}P B\right)^{-1}B^{\top}P A\,x,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.\]</div>
+<div class="arithmatex">\[
+u^{\star}=-\left(R+B^{\top}P B\right)^{-1}B^{\top}P A\,x,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.
+\]</div>
 <p>把 <span class="arithmatex">\(u^{\star}\)</span> 代回并令二次项系数相等，就得到关于 <span class="arithmatex">\(P\)</span> 的不动点方程（下一节细讲），离线迭代即可确定 <span class="arithmatex">\(P\)</span> 与常数矩阵 <span class="arithmatex">\(K\)</span>。在线阶段，控制器每周期只做一次 <span class="arithmatex">\(m\times n\)</span> 的矩阵—向量乘法，代价近乎可忽略。值得注意的是，这个解在无约束情形下是<strong>唯一</strong>的：只要 <span class="arithmatex">\(R\)</span> 正定，代价关于 <span class="arithmatex">\(u\)</span> 严格凸，最优输入不会出现多个局部极小。</p>
 <table>
 <thead>
@@ -4597,7 +4611,9 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <p>一个关键性质是<strong>缩放不变性</strong>：把 <span class="arithmatex">\(Q\)</span> 和 <span class="arithmatex">\(R\)</span> 同时乘以正数 <span class="arithmatex">\(\alpha\)</span>，最优增益 <span class="arithmatex">\(K\)</span> 完全不变，因为 Bellman 方程两边同乘 <span class="arithmatex">\(\alpha\)</span> 不改变最优解。所以真正起作用的是比值 <span class="arithmatex">\(Q/R\)</span>，而不是各自的绝对值。因此反复微调绝对值毫无意义，应该直接思考权重之间的相对比例。</p>
 <p>把整个 <span class="arithmatex">\(Q\)</span> 与整个 <span class="arithmatex">\(R\)</span> 同乘同一正数不改变最优策略；但只改某个 <span class="arithmatex">\(Q_{ii}\)</span> 不等价于把整个 <span class="arithmatex">\(R\)</span> 除以同一倍数，它只改变一个状态方向的相对代价。增益、带宽与上升时间必须由具体 <span class="arithmatex">\(A,B,Q,R\)</span> 的 Riccati 解确定，不能用固定“十倍权重对应某个带宽倍数”的规则代替计算。</p>
 <p>对双积分器（状态为位置与速度，输入为加速度）可以给出精确的量化关系：</p>
-<div class="arithmatex">\[\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},\]</div>
+<div class="arithmatex">\[
+\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},
+\]</div>
 <p>其中 <span class="arithmatex">\(q_1\)</span> 是位置权重、<span class="arithmatex">\(q_2\)</span> 是速度权重、<span class="arithmatex">\(r\)</span> 是输入权重，<span class="arithmatex">\(\omega_n\)</span> 为闭环自然频率、<span class="arithmatex">\(\zeta\)</span> 为阻尼比。取 <span class="arithmatex">\(q_1=1,\ r=0.01,\ q_2=0\)</span>，得 <span class="arithmatex">\(\omega_n\approx3.16\)</span> rad/s、<span class="arithmatex">\(\zeta\approx0.71\)</span>。这不是临界阻尼（临界值为 1），而是约 4.3% 超调的常用折中。该精确关系只属于这里的双积分器模型，不能推广到任意 LQR 系统。</p>
 <table>
 <thead>
@@ -4640,7 +4656,9 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <p>注意极端情形的退化：若 <span class="arithmatex">\(R\to 0\)</span>，增益趋于无穷，任何执行器都会饱和；若 <span class="arithmatex">\(Q\to 0\)</span>，闭环趋于不控制，系统只靠自身动态缓慢衰减。这两个极限都不是可用的控制器，只是理解权重作用方向的参照。</p>
 <h2 id="lqr_1">线性二次型调节器（LQR）的线性模型条件</h2>
 <p>LQR 的推导全部建立在 <span class="arithmatex">\(x_{k+1}=Ax_k+Bu_k\)</span> 之上，而真实系统几乎总是非线性 <span class="arithmatex">\(\dot x=f(x,u)\)</span>。标准做法是选工作点 <span class="arithmatex">\((x^{\star},u^{\star})\)</span> 做一阶线性化：</p>
-<div class="arithmatex">\[A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.\]</div>
+<div class="arithmatex">\[
+A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.
+\]</div>
 <p>只有当偏差 <span class="arithmatex">\(\delta x=x-x^{\star}\)</span> 足够小，线性模型才可信。无人机悬停、小车小角度平衡、机械臂在某个位形附近都属于这一类；一旦偏离工作点很远（大姿态角、强耦合、进入非线性区），<span class="arithmatex">\(A\)</span>、<span class="arithmatex">\(B\)</span> 失配，LQR 的"最优"保证随之失效。常用补救是<strong>增益调度</strong>：在多个工作点分别解 <span class="arithmatex">\(K\)</span>，运行时按当前状态插值。</p>
 <p>判断能否用 LQR，关键不是"系统是否线性"，而是"在任务需要覆盖的状态范围内，线性模型对真实动力学的预测误差是否可接受"。实操上可以在状态网格上逐点比较线性预测 <span class="arithmatex">\(Ax+Bu\)</span> 与非线性一步仿真 <span class="arithmatex">\(f(x,u)\)</span> 的偏差：若在全部工作范围内相对误差都小于约 5%，通常可以放心用单一线性模型；若某些区域误差达到 20% 以上，就需要分段线性化或改用非线性 MPC。</p>
 <table>
@@ -4780,11 +4798,17 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </table>
 <h2 id="riccati-equation">黎卡提方程（Riccati Equation）与反馈增益</h2>
 <p>前面说"<span class="arithmatex">\(K\)</span> 由 Riccati 方程求得"，这里把方程写清楚。连续时间下，<span class="arithmatex">\(P\)</span> 满足代数 Riccati 方程（ARE）：</p>
-<div class="arithmatex">\[A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.\]</div>
+<div class="arithmatex">\[
+A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.
+\]</div>
 <p>离散时间下对应离散代数 Riccati 方程（DARE）：</p>
-<div class="arithmatex">\[P=A^{\top}P A-A^{\top}P B\left(R+B^{\top}P B\right)^{-1}B^{\top}P A+Q,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.\]</div>
+<div class="arithmatex">\[
+P=A^{\top}P A-A^{\top}P B\left(R+B^{\top}P B\right)^{-1}B^{\top}P A+Q,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.
+\]</div>
 <p>两式都是关于 <span class="arithmatex">\(P\)</span> 的非线性代数方程，没有闭式解，但可以用不动点迭代数值求解：从 <span class="arithmatex">\(P_0=Q\)</span> 出发，反复代入</p>
-<div class="arithmatex">\[P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_i A+Q,\]</div>
+<div class="arithmatex">\[
+P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_i A+Q,
+\]</div>
 <p>在 <span class="arithmatex">\((A,B)\)</span> 可稳、<span class="arithmatex">\((A,Q^{1/2})\)</span> 可检的条件下，序列 <span class="arithmatex">\(\{P_i\}\)</span> 单调收敛到唯一的半正定解 <span class="arithmatex">\(P\)</span>。收敛速度与闭环谱半径相关，通常几十到几百次迭代即可到机器精度。</p>
 <p>递推能否收敛，取决于三个结构性条件：</p>
 <ul>
@@ -4827,10 +4851,14 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 </table>
 <h2 id="brysons-rule">布赖森规则（Bryson's Rule）与权重初值</h2>
 <p>面对全新系统，最头疼的是不知道 <span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 从哪起步。<strong>Bryson 规则</strong>给出了一个有物理依据的初值：用每个变量的允许最大幅值做归一化，</p>
-<div class="arithmatex">\[Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).\]</div>
+<div class="arithmatex">\[
+Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).
+\]</div>
 <p>它的直觉是：让每个状态到达自身最大允许偏差、每个输入达到自身最大幅值时，在代价里贡献相同的量（都等于 1）。这样不同量纲的变量被拉到同一尺度，<span class="arithmatex">\(Q\)</span>、<span class="arithmatex">\(R\)</span> 的相对大小才有可比性。</p>
 <p>一个具体例子：某小车位置允许最大偏差 <span class="arithmatex">\(x_{\max,1}=1.0\)</span> m，速度允许最大 <span class="arithmatex">\(x_{\max,2}=0.5\)</span> m/s，推力最大 <span class="arithmatex">\(u_{\max,1}=10\)</span> N。按 Bryson 规则，</p>
-<div class="arithmatex">\[Q=\operatorname{diag}\!\left(\frac{1}{1.0^{2}},\ \frac{1}{0.5^{2}}\right)=\operatorname{diag}(1.0,\ 4.0),\qquad R=\operatorname{diag}\!\left(\frac{1}{10^{2}}\right)=\operatorname{diag}(0.01).\]</div>
+<div class="arithmatex">\[
+Q=\operatorname{diag}\!\left(\frac{1}{1.0^{2}},\ \frac{1}{0.5^{2}}\right)=\operatorname{diag}(1.0,\ 4.0),\qquad R=\operatorname{diag}\!\left(\frac{1}{10^{2}}\right)=\operatorname{diag}(0.01).
+\]</div>
 <p>即位置权重 1.0、速度权重 4.0、输入权重 0.01。代入数值即可读出相对重视程度：速度权重是位置的 4 倍（因为速度量程更小、同等偏差更危险），输入却被看得很轻（10 N 相对任务需求很宽裕）。可见仅凭"位置 1 m / 速度 0.5 m/s / 推力 10 N"三条规格，就得到一个量纲自洽、能跑通的起点，后续只需在此基础上按响应微调。</p>
 <table>
 <thead>
@@ -4865,9 +4893,13 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
 <p>Bryson 规则只保证"量纲合理、不荒谬"，不保证"性能最优"。它是起点而非终点：若响应太慢就升 <span class="arithmatex">\(Q\)</span> 或降 <span class="arithmatex">\(R\)</span>，若执行器饱和就升 <span class="arithmatex">\(R\)</span>。此外，如果某个变量根本没有物理上界（例如自由积分状态或偏置项），就无法直接套用该规则，需要人为设定一个合理的参考幅值；否则 <span class="arithmatex">\(1/x_{\max}^2\)</span> 会出现除零或无穷大权重，让其他状态在代价里变得无足轻重。</p>
 <h2 id="lqr_2">积分作用与线性二次型调节器（LQR）的结合</h2>
 <p>纯 LQR 是状态反馈，对<strong>常值扰动</strong>或<strong>模型增益误差</strong>会留下稳态误差：只要模型低估了负载，位置就永远差一点点。想要"无静差"，就把输出误差的积分扩进状态向量，得到 LQI（LQR with Integral action）。设跟踪误差 <span class="arithmatex">\(e_k=r_k-y_k=r_k-Cx_k\)</span>，定义积分状态</p>
-<div class="arithmatex">\[z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).\]</div>
+<div class="arithmatex">\[
+z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).
+\]</div>
 <p>把 <span class="arithmatex">\(z\)</span> 接到原状态后面，构造增广系统</p>
-<div class="arithmatex">\[\begin{bmatrix}x_{k+1}\\ z_{k+1}\end{bmatrix}=\underbrace{\begin{bmatrix}A&amp;0\\ -C&amp;I\end{bmatrix}}_{\tilde A}\begin{bmatrix}x_k\\ z_k\end{bmatrix}+\underbrace{\begin{bmatrix}B\\ 0\end{bmatrix}}_{\tilde B}u_k+\begin{bmatrix}0\\ I\end{bmatrix}r_k,\]</div>
+<div class="arithmatex">\[
+\begin{bmatrix}x_{k+1}\\ z_{k+1}\end{bmatrix}=\underbrace{\begin{bmatrix}A&amp;0\\ -C&amp;I\end{bmatrix}}_{\tilde A}\begin{bmatrix}x_k\\ z_k\end{bmatrix}+\underbrace{\begin{bmatrix}B\\ 0\end{bmatrix}}_{\tilde B}u_k+\begin{bmatrix}0\\ I\end{bmatrix}r_k,
+\]</div>
 <p>再对增广状态 <span class="arithmatex">\([x;z]\)</span> 设计 LQR，得到 <span class="arithmatex">\(u_k=-K_x x_k+K_i z_k\)</span>，其中 <span class="arithmatex">\(K\)</span> 被划分为状态增益 <span class="arithmatex">\(K_x\)</span> 与积分增益 <span class="arithmatex">\(K_i\)</span>。积分状态让任何常值误差不断累积并推动输入，直到误差归零；但代价是积分器引入相位滞后、增大超调，还可能在执行器饱和时累积出巨大的 <span class="arithmatex">\(z\)</span>（积分饱和）。工程上通常给 <span class="arithmatex">\(z\)</span> 一个远小于 <span class="arithmatex">\(Q\)</span> 的权重，并配抗积分饱和（clamping / back-calculation）。</p>
 <table>
 <thead>
@@ -4963,7 +4995,7 @@ x_k=\begin{bmatrix}p_k\\v_k\end{bmatrix},\qquad u_k=a_k,
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

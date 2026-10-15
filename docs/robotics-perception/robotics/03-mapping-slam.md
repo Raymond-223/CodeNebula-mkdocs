@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![SLAM 由前端估计、地图约束和后端优化形成闭环。](../../assets/diagrams/slam-loop.svg)
-  <figcaption>前端不断产生相对运动，后端利用长期约束修正累积漂移。</figcaption>
+  <figcaption markdown="span">前端不断产生相对运动，后端利用长期约束修正累积漂移。</figcaption>
 </figure>
 
 ## 里程计误差累积
@@ -15,11 +15,15 @@
 
 这个累积不是线性增长。设第 $k$ 步的角度误差为 $\delta\theta_k$，此后剩余行程长度为 $L_k$，则它造成的末端位置误差近似为
 
-$$\delta p \approx \sum_k L_k\,\delta\theta_k,$$
+$$
+\delta p \approx \sum_k L_k\,\delta\theta_k,
+$$
 
 也就是说，**越早出现的角度误差，被放大的行程越长**。位置误差本身以随机游走方式累积（约与步数的平方根同阶），而角度误差通过上述机制带来与距离同阶甚至更强的漂移。若把每步的平移噪声方差记为 $\sigma_x^2$、角度噪声方差记为 $\sigma_\theta^2$，则末端位置误差的方差近似为
 
-$$\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).$$
+$$
+\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).
+$$
 
 第二项里的 $L_k^2$ 是关键：**角度噪声的权重随剩余距离平方增长**，所以同样的角度精度，在长距离任务里比在短距离任务里贵得多。这也解释了一个常见现象：短距离内里程计看起来完全够用，走完一个长回路后地图却整体扭曲。
 
@@ -52,11 +56,15 @@ $$\sigma_p^2 \approx \sum_k \left( \sigma_x^2 + L_k^2\,\sigma_\theta^2 \right).$
 
 扫描匹配的几何形式可以直接写出来。这里的旋转约束不是新知识：$R\in SO(3)$ 表示 $R$ 必须始终是合法三维旋转矩阵，定义见 [数学前置：旋转与刚体变换](../../foundations/mathematics/02-rotations-rigid-transforms.md)。设当前帧点集为 $\{q_j\}$，目标帧或局部地图点集为 $\{p_j\}$，待求的相对变换为 $(R, t)$，则点到点 ICP 求解的是
 
-$$\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,$$
+$$
+\min_{R \in SO(3),\, t} \sum_j \left\lVert p_{c(j)} - (R q_j + t) \right\rVert_2^2,
+$$
 
 其中 $c(j)$ 是 $q_j$ 在目标点云中的最近点索引。点到点形式简单，但在平面结构上收敛慢；引入目标点法向 $n_j$ 后得到点到面残差
 
-$$\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \right)^2,$$
+$$
+\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \right)^2,
+$$
 
 它只约束法向方向，因此在墙面、地面这类平面上收敛更快，但对法向估计的噪声更敏感。最近点搜索是这里的成本瓶颈：暴力搜索是 $O(NM)$，用 KD-tree 或体素哈希可以降到约 $O(N \log M)$ 甚至 $O(N)$，这也是前端能否跑到 10–100 Hz 的决定因素。
 
@@ -81,7 +89,9 @@ $$\min_{R,\, t} \sum_j \left( n_j^\top \left( R q_j + t - p_{c(j)} \right) \righ
 
 写成最小二乘形式，位姿图优化求解的是
 
-$$X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},$$
+$$
+X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}) \right\rVert^2_{\Sigma_{ij}},
+$$
 
 其中 $z_{ij}$ 是观测到的相对约束，$e_{ij}$ 是它与当前估计之间的残差，$\Sigma_{ij}$ 是该约束的不确定度（信息矩阵）。这个形式包含两个重要含义：
 
@@ -90,7 +100,9 @@ $$X^* = \arg\min_{X}\sum_{(i,j)\in\mathcal{E}} \left\lVert e_{ij}(x_i,x_j,z_{ij}
 
 实际求解用的是 Gauss-Newton 或 Levenberg-Marquardt 迭代。把全部残差堆成向量 $e(X)$、把雅可比记为 $J = \partial e / \partial X$，则每次迭代要求解的线性系统是
 
-$$\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,$$
+$$
+\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad X \leftarrow X \boxplus \Delta \xi,
+$$
 
 其中 $\boxplus$ 不是普通的“矩阵加法”。位姿 $X\in SE(3)$ 必须始终保持旋转部分满足 $R^\top R=I$，所以优化器先在当前位置附近求一个普通六维小增量 $\Delta\xi\in\mathbb R^6$（3 个平移 + 3 个小旋转），再通过指数映射把它送回 $SE(3)$。这个“局部增量 → 合法位姿”的动作就简写成 $X\boxplus\Delta\xi$；前置解释见 [流形、李群与 $\boxplus$](../../foundations/mathematics/02-rotations-rigid-transforms.md#lie-group-boxplus)。这个系统的结构决定了复杂度：位姿图的 $J$ 非常稀疏（每条边只涉及两个位姿），用 Cholesky 分解稀疏矩阵时，$n$ 个位姿的求解成本大致是 $O(n)$ 到 $O(n^{1.5})$；而如果当成稠密矩阵处理，成本是 $O(n^3)$，$n=1000$ 时就已不可接受。
 
@@ -117,7 +129,9 @@ $$\left( J^\top \Sigma^{-1} J \right) \Delta X = -\,J^\top \Sigma^{-1} e, \qquad
 
 闭环检测本质上是一个二分类问题，两类错误代价完全不对称。若把候选分为真正例 $TP$、假正例 $FP$、假负例 $FN$，精确率 $P = TP/(TP+FP)$、召回率 $R = TP/(TP+FN)$，综合指标为
 
-$$F_1 = \frac{2PR}{P+R}.$$
+$$
+F_1 = \frac{2PR}{P+R}.
+$$
 
 | 情况 | 后果 | 处理取向 |
 |---|---|---|
@@ -147,11 +161,15 @@ $$F_1 = \frac{2PR}{P+R}.$$
 
 解决办法是在残差上改用稳健核。设残差尺度参数为 $\delta$，Huber 权重为
 
-$$w(r)=\min\left(1,\ \frac{\delta}{|r|}\right), \qquad \rho(r)=\int_0^{|r|} w(s)\,\mathrm{d}s,$$
+$$
+w(r)=\min\left(1,\ \frac{\delta}{|r|}\right), \qquad \rho(r)=\int_0^{|r|} w(s)\,\mathrm{d}s,
+$$
 
 其效果是：残差小于 $\delta$ 时保持二次行为（不损失正常数据的效率），超过 $\delta$ 后退化为线性增长，从而限制单条约束的最大影响。权重写进目标函数后，优化问题变为
 
-$$\min_X \sum_{(i,j)\in\mathcal{E}} \rho\!\left( \left\lVert e_{ij} \right\rVert_{\Sigma_{ij}} \right),$$
+$$
+\min_X \sum_{(i,j)\in\mathcal{E}} \rho\!\left( \left\lVert e_{ij} \right\rVert_{\Sigma_{ij}} \right),
+$$
 
 等价于把每条约束的信息矩阵按 $w$ 缩放，再迭代求解——这也意味着稳健核不改变问题的结构，只改变权重。
 
@@ -190,7 +208,9 @@ accepted = accept_loop(w_huber * residual, info, 11.34)  # chi2(3, 0.99)
 
 这一点可以算清楚。设地图覆盖面积为 $L \times L$（m）、分辨率为 $r$（m/格）、每格存储 $b$ 字节，则内存为
 
-$$M = \frac{L^2}{r^2} \cdot b.$$
+$$
+M = \frac{L^2}{r^2} \cdot b.
+$$
 
 代入 $L = 100$ m、$b = 1$ B：分辨率 0.05 m 时需要约 $4 \times 10^6$ 个格，即 4 MB；分辨率减半到 0.025 m，格数与内存涨到 4 倍（16 MB）。而匹配与更新的成本同样随格数增长，因此**分辨率每提升一倍，整条流水线的成本大约翻两番**。
 
@@ -217,7 +237,9 @@ $$M = \frac{L^2}{r^2} \cdot b.$$
 
 这一点可以用信息矩阵说明。设约束残差对状态的雅可比为 $J$、噪声协方差为 $\Sigma$，则信息矩阵为 $\mathcal{I} = J^\top \Sigma^{-1} J$，状态估计的不确定度由它的逆给出。当某个方向缺少约束时
 
-$$\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}} \to \infty,$$
+$$
+\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}} \to \infty,
+$$
 
 也就是说：**该方向上的估计误差可以任意大，而优化器仍然报告“收敛”**。工程上更常用的诊断量是条件数 $\kappa = \lambda_{\max} / \lambda_{\min}$：$\kappa$ 在健康场景通常是 $10^2$ 量级，退化时会升到 $10^5$ 以上，此时即使残差很小，解得出的位姿在该方向上也是不可信的。
 
@@ -241,7 +263,9 @@ $$\lambda_{\min}(\mathcal{I}) \to 0 \quad \Rightarrow \quad \sigma_{\text{state}
 
 SLAM 的每次迭代都要与传感器频率竞争。设传感器周期为 $T_{\text{s}}$，前端每帧耗时 $t_{\text{front}}$（含数据关联），后端每次优化耗时 $t_{\text{back}}$、执行频率为 $f_{\text{back}}$，则常规帧必须满足
 
-$$t_{\text{front}} + \frac{t_{\text{back}}}{f_{\text{back}} \cdot T_{\text{s}}} \le T_{\text{s}} \cdot \eta, \qquad \eta \approx 0.5,$$
+$$
+t_{\text{front}} + \frac{t_{\text{back}}}{f_{\text{back}} \cdot T_{\text{s}}} \le T_{\text{s}} \cdot \eta, \qquad \eta \approx 0.5,
+$$
 
 其中 $\eta$ 是留给这一级流水线的时间占比（其余留给其它模块）。若 $T_{\text{s}} = 100$ ms、$\eta = 0.5$、$f_{\text{back}} = 1$ Hz，则后端每次最多只能用 50 ms，前端还有约 45 ms 可用。
 

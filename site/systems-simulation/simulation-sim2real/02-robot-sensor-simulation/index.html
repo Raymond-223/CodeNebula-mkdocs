@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4484,7 +4484,9 @@
 <h2 id="_1">机器人本体模型至少要包含可运动结构</h2>
 <p>移动机器人需要底盘尺寸、轮子位置、关节约束和执行器接口；机械臂需要连杆、关节和限位。碰撞几何可以比视觉模型更简单，只要能正确近似实际碰撞范围。仿真模型的目标是支撑算法，不是做 CAD 展示。</p>
 <p>先把变量定义清楚：<span class="arithmatex">\(r\)</span> 为轮半径、<span class="arithmatex">\(b\)</span> 为轮距、<span class="arithmatex">\(\omega_L,\omega_R\)</span> 为左右轮角速度、<span class="arithmatex">\(\theta\)</span> 为航向角、<span class="arithmatex">\((x,y)\)</span> 为底盘中心位置。差速底盘的运动学为</p>
-<div class="arithmatex">\[\dot{x} = \frac{r}{2}(\omega_R + \omega_L)\cos\theta,\qquad \dot{y} = \frac{r}{2}(\omega_R + \omega_L)\sin\theta,\qquad \dot{\theta} = \frac{r}{b}(\omega_R - \omega_L)\]</div>
+<div class="arithmatex">\[
+\dot{x} = \frac{r}{2}(\omega_R + \omega_L)\cos\theta,\qquad \dot{y} = \frac{r}{2}(\omega_R + \omega_L)\sin\theta,\qquad \dot{\theta} = \frac{r}{b}(\omega_R - \omega_L)
+\]</div>
 <p>这三个式子说明了本体模型的最低要求：<span class="arithmatex">\(r\)</span> 与 <span class="arithmatex">\(b\)</span> 必须存在，单位必须一致，且轮速接口要与实机同量纲。若 <span class="arithmatex">\(r\)</span> 有 <span class="arithmatex">\(1\%\)</span> 的标定误差，直行 <span class="arithmatex">\(100\)</span> m 会产生约 <span class="arithmatex">\(1\)</span> m 的里程计偏差，这个偏差与作用距离成正比，无法靠滤波消除。</p>
 <p>轮距误差的影响集中在转向：若 <span class="arithmatex">\(b\)</span> 低估 <span class="arithmatex">\(3\%\)</span>，原地旋转 <span class="arithmatex">\(5\)</span> 圈（<span class="arithmatex">\(10\pi\)</span> rad）后航向偏差约 <span class="arithmatex">\(\Delta\theta \approx 0.03 \times 10\pi \approx 0.94\)</span> rad，即约 <span class="arithmatex">\(54^\circ\)</span>。这类误差在短距离任务中不可见，在长距离或多次掉头任务中会直接导致建图错位。</p>
 <table>
@@ -4570,7 +4572,9 @@
 <h2 id="_2">理想传感器只能用于最早期验证</h2>
 <p>理想 LiDAR 每个测距都精确、IMU 没有偏置、相机没有曝光问题，这种环境适合先验证算法逻辑，但不能代表实机难度。真实传感器至少存在随机噪声、固定偏置、量化、采样频率和延迟。</p>
 <p>以 LiDAR 为例：设角分辨率为 <span class="arithmatex">\(\Delta\phi\)</span>、距离为 <span class="arithmatex">\(d\)</span>、单束测距噪声标准差为 <span class="arithmatex">\(\sigma\)</span>。相邻两束激光打在平面上的弧长间隔约为 <span class="arithmatex">\(s \approx d\,\Delta\phi\)</span>，由噪声导致的平面法向不确定度近似为</p>
-<div class="arithmatex">\[\eta \approx \arctan\!\left(\frac{\sigma}{s}\right)\]</div>
+<div class="arithmatex">\[
+\eta \approx \arctan\!\left(\frac{\sigma}{s}\right)
+\]</div>
 <p>取 <span class="arithmatex">\(d = 5\)</span> m、<span class="arithmatex">\(\Delta\phi = 0.5^\circ\)</span>，则 <span class="arithmatex">\(s \approx 0.044\)</span> m；若 <span class="arithmatex">\(\sigma = 0.02\)</span> m，则 <span class="arithmatex">\(\eta \approx \arctan(0.45) \approx 24^\circ\)</span>。也就是说，<strong>理想模型下“平面拟合精度极高”的结论，在实机噪声下会退化成二十几度的法向误差</strong>，而后者会直接影响可通行区域判断。</p>
 <table>
 <thead>
@@ -4620,7 +4624,9 @@
 <p>因此传感器仿真有一条经验顺序：先验证逻辑，再验证数值稳定性，再验证缺失与异常，最后才比较性能上限。跳过中间两步直接做性能对比，得到的结论通常无法迁移到实机。</p>
 <h2 id="_3">噪声、偏置和延迟是三种不同误差</h2>
 <p>白噪声每次随机变化；bias 会长期把测量推向一个方向；latency 则让数据到达时已经过时。三者对算法的影响不同，用测量模型可以写清区别，其中 <span class="arithmatex">\(z_k\)</span> 为第 <span class="arithmatex">\(k\)</span> 次测量、<span class="arithmatex">\(x_k\)</span> 为真值、<span class="arithmatex">\(b_k\)</span> 为偏置、<span class="arithmatex">\(n_k\)</span> 为零均值白噪声、<span class="arithmatex">\(w_k\)</span> 为偏置的随机游走增量、<span class="arithmatex">\(\tau\)</span> 为延迟：</p>
-<div class="arithmatex">\[z_k = x_{k} + b_k + n_k,\qquad b_{k+1} = b_k + w_k,\qquad z(t) = x(t-\tau) + n(t)\]</div>
+<div class="arithmatex">\[
+z_k = x_{k} + b_k + n_k,\qquad b_{k+1} = b_k + w_k,\qquad z(t) = x(t-\tau) + n(t)
+\]</div>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">simulate_imu</span><span class="p">(</span><span class="n">true_acc</span><span class="p">,</span> <span class="n">stamp</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
@@ -4681,7 +4687,9 @@
 <p>滤波可以减弱随机噪声，却不会自动修正未知固定 bias；延迟则会直接影响融合与控制的相位。让仿真接口同时输出测量值、时间戳和坐标系，下游模块才可能真正依赖正确的语义，而不是依赖“数据永远准时且对齐”这一隐含假设。</p>
 <h2 id="_4">传感器模型的误差分层</h2>
 <p>把误差按“叠加顺序”分层，可以让仿真逐步增加难度，也让失败时容易定位是哪一层的问题。记第 <span class="arithmatex">\(i\)</span> 层的噪声方差为 <span class="arithmatex">\(\sigma_i^2\)</span>、确定性偏差为 <span class="arithmatex">\(b_i\)</span>，则多源合成的总体误差满足</p>
-<div class="arithmatex">\[\sigma_{\mathrm{tot}}^2 = \sum_i \sigma_i^2+2\sum_{i&lt;j}\operatorname{Cov}(n_i,n_j),\qquad |b_{\mathrm{tot}}| \le \sum_i |b_i|.\]</div>
+<div class="arithmatex">\[
+\sigma_{\mathrm{tot}}^2 = \sum_i \sigma_i^2+2\sum_{i&lt;j}\operatorname{Cov}(n_i,n_j),\qquad |b_{\mathrm{tot}}| \le \sum_i |b_i|.
+\]</div>
 <p>当各噪声项两两不相关时，协方差交叉项为零，第一式才简化为“方差相加”。第二式是三角不等式给出的最坏情况上界；实际有符号偏置可能部分抵消。因此不能无条件断言偏置一定比噪声叠加得更快，但不会随重复平均自动消失的固定偏置，确实常在长时积分中成为主导误差。</p>
 <table>
 <thead>
@@ -4732,7 +4740,9 @@
 <p>最后，分层实验必须记录“哪一层被打开”这一元信息。若一份日志是在噪声层和失效层同时打开的情况下采集的，事后就无法判断某个跳变究竟来自哪一层，归因实验也就失效了。</p>
 <h2 id="lidar-imu-gnss">相机 / LiDAR / IMU / GNSS 的仿真实现</h2>
 <p>不同传感器的仿真原理和可信度差别很大。LiDAR 的核心运算是射线与几何求交：设射线起点 <span class="arithmatex">\(\mathbf{o}\)</span>、方向 <span class="arithmatex">\(\mathbf{d}\)</span>、平面上的点 <span class="arithmatex">\(\mathbf{p}_i\)</span> 与法向 <span class="arithmatex">\(\mathbf{n}_i\)</span>，则命中参数为</p>
-<div class="arithmatex">\[t_i = \frac{(\mathbf{p}_i - \mathbf{o}) \cdot \mathbf{n}_i}{\mathbf{d} \cdot \mathbf{n}_i},\qquad d = \min_{\mathbf{d} \cdot \mathbf{n}_i \neq 0,\; t_i &gt; 0} t_i\]</div>
+<div class="arithmatex">\[
+t_i = \frac{(\mathbf{p}_i - \mathbf{o}) \cdot \mathbf{n}_i}{\mathbf{d} \cdot \mathbf{n}_i},\qquad d = \min_{\mathbf{d} \cdot \mathbf{n}_i \neq 0,\; t_i &gt; 0} t_i
+\]</div>
 <p>这个式子说明 LiDAR 仿真天然是几何问题而非外观问题：几何一致时，测距分布就接近真实；而反射率、光束发散、运动畸变仍需额外建模。</p>
 <table>
 <thead>
@@ -4789,7 +4799,9 @@
 <p>相机与 LiDAR 的取舍可以概括为：相机带来语义但缺乏几何精度，LiDAR 带来几何但缺乏语义。仿真若只实现其中一种，下游的融合逻辑就只在单模态假设下被验证过，而实机往往两种模态同时存在且互相纠错。</p>
 <h2 id="_5">坐标系和时间戳应尽量复现实机语义</h2>
 <p>如果实机 <code>/scan</code> 使用 <code>laser_frame</code>，仿真也应保持同样的 frame 逻辑；如果实机 IMU 以 100 Hz 发布，仿真不应无意中以每个物理 step 无限频率输出。坐标变换与时间对齐的形式化写法是</p>
-<div class="arithmatex">\[\mathbf{p}_W = T_{WB}\, T_{BI}\, \mathbf{p}_{I},\qquad \tilde{z}(t) = z(t - \tau)\]</div>
+<div class="arithmatex">\[
+\mathbf{p}_W = T_{WB}\, T_{BI}\, \mathbf{p}_{I},\qquad \tilde{z}(t) = z(t - \tau)
+\]</div>
 <p>其中 <span class="arithmatex">\(T_{WB}\)</span> 是机体系到世界系的变换、<span class="arithmatex">\(T_{BI}\)</span> 是传感器系到机体系的变换、<span class="arithmatex">\(\tau\)</span> 是延迟。时间偏置 <span class="arithmatex">\(\tau\)</span> 造成的运动误差近似为 <span class="arithmatex">\(e \approx v\,\tau\)</span>：以 <span class="arithmatex">\(v = 1\)</span> m/s、<span class="arithmatex">\(\tau = 50\)</span> ms 计算，误差约 <span class="arithmatex">\(5\)</span> cm；若速度升到 <span class="arithmatex">\(2\)</span> m/s 且延迟达到 <span class="arithmatex">\(100\)</span> ms，误差直接变为 <span class="arithmatex">\(20\)</span> cm，已经超过许多定位精度要求。</p>
 <p>接口一致性比“仿真画面是否逼真”更直接影响代码迁移成本：</p>
 <table>
@@ -5064,7 +5076,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

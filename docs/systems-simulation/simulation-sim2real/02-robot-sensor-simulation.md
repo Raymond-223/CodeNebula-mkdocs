@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![传感器仿真不仅生成理想真值，还要加入采样、噪声、延迟和坐标语义。](../../assets/diagrams/sensor-simulation.svg)
-  <figcaption>传感器接口越接近实机，后续 Sim2Real 的软件改动越少。</figcaption>
+  <figcaption markdown="span">传感器接口越接近实机，后续 Sim2Real 的软件改动越少。</figcaption>
 </figure>
 
 ## 机器人本体模型至少要包含可运动结构
@@ -15,7 +15,9 @@
 
 先把变量定义清楚：$r$ 为轮半径、$b$ 为轮距、$\omega_L,\omega_R$ 为左右轮角速度、$\theta$ 为航向角、$(x,y)$ 为底盘中心位置。差速底盘的运动学为
 
-$$\dot{x} = \frac{r}{2}(\omega_R + \omega_L)\cos\theta,\qquad \dot{y} = \frac{r}{2}(\omega_R + \omega_L)\sin\theta,\qquad \dot{\theta} = \frac{r}{b}(\omega_R - \omega_L)$$
+$$
+\dot{x} = \frac{r}{2}(\omega_R + \omega_L)\cos\theta,\qquad \dot{y} = \frac{r}{2}(\omega_R + \omega_L)\sin\theta,\qquad \dot{\theta} = \frac{r}{b}(\omega_R - \omega_L)
+$$
 
 这三个式子说明了本体模型的最低要求：$r$ 与 $b$ 必须存在，单位必须一致，且轮速接口要与实机同量纲。若 $r$ 有 $1\%$ 的标定误差，直行 $100$ m 会产生约 $1$ m 的里程计偏差，这个偏差与作用距离成正比，无法靠滤波消除。
 
@@ -45,7 +47,9 @@ $$\dot{x} = \frac{r}{2}(\omega_R + \omega_L)\cos\theta,\qquad \dot{y} = \frac{r}
 
 以 LiDAR 为例：设角分辨率为 $\Delta\phi$、距离为 $d$、单束测距噪声标准差为 $\sigma$。相邻两束激光打在平面上的弧长间隔约为 $s \approx d\,\Delta\phi$，由噪声导致的平面法向不确定度近似为
 
-$$\eta \approx \arctan\!\left(\frac{\sigma}{s}\right)$$
+$$
+\eta \approx \arctan\!\left(\frac{\sigma}{s}\right)
+$$
 
 取 $d = 5$ m、$\Delta\phi = 0.5^\circ$，则 $s \approx 0.044$ m；若 $\sigma = 0.02$ m，则 $\eta \approx \arctan(0.45) \approx 24^\circ$。也就是说，**理想模型下“平面拟合精度极高”的结论，在实机噪声下会退化成二十几度的法向误差**，而后者会直接影响可通行区域判断。
 
@@ -69,7 +73,9 @@ $$\eta \approx \arctan\!\left(\frac{\sigma}{s}\right)$$
 
 白噪声每次随机变化；bias 会长期把测量推向一个方向；latency 则让数据到达时已经过时。三者对算法的影响不同，用测量模型可以写清区别，其中 $z_k$ 为第 $k$ 次测量、$x_k$ 为真值、$b_k$ 为偏置、$n_k$ 为零均值白噪声、$w_k$ 为偏置的随机游走增量、$\tau$ 为延迟：
 
-$$z_k = x_{k} + b_k + n_k,\qquad b_{k+1} = b_k + w_k,\qquad z(t) = x(t-\tau) + n(t)$$
+$$
+z_k = x_{k} + b_k + n_k,\qquad b_{k+1} = b_k + w_k,\qquad z(t) = x(t-\tau) + n(t)
+$$
 
 ```python
 import numpy as np
@@ -97,7 +103,9 @@ def simulate_imu(true_acc, stamp, bias=0.03, sigma=0.02):
 
 把误差按“叠加顺序”分层，可以让仿真逐步增加难度，也让失败时容易定位是哪一层的问题。记第 $i$ 层的噪声方差为 $\sigma_i^2$、确定性偏差为 $b_i$，则多源合成的总体误差满足
 
-$$\sigma_{\mathrm{tot}}^2 = \sum_i \sigma_i^2+2\sum_{i<j}\operatorname{Cov}(n_i,n_j),\qquad |b_{\mathrm{tot}}| \le \sum_i |b_i|.$$
+$$
+\sigma_{\mathrm{tot}}^2 = \sum_i \sigma_i^2+2\sum_{i<j}\operatorname{Cov}(n_i,n_j),\qquad |b_{\mathrm{tot}}| \le \sum_i |b_i|.
+$$
 
 当各噪声项两两不相关时，协方差交叉项为零，第一式才简化为“方差相加”。第二式是三角不等式给出的最坏情况上界；实际有符号偏置可能部分抵消。因此不能无条件断言偏置一定比噪声叠加得更快，但不会随重复平均自动消失的固定偏置，确实常在长时积分中成为主导误差。
 
@@ -123,7 +131,9 @@ $$\sigma_{\mathrm{tot}}^2 = \sum_i \sigma_i^2+2\sum_{i<j}\operatorname{Cov}(n_i,
 
 不同传感器的仿真原理和可信度差别很大。LiDAR 的核心运算是射线与几何求交：设射线起点 $\mathbf{o}$、方向 $\mathbf{d}$、平面上的点 $\mathbf{p}_i$ 与法向 $\mathbf{n}_i$，则命中参数为
 
-$$t_i = \frac{(\mathbf{p}_i - \mathbf{o}) \cdot \mathbf{n}_i}{\mathbf{d} \cdot \mathbf{n}_i},\qquad d = \min_{\mathbf{d} \cdot \mathbf{n}_i \neq 0,\; t_i > 0} t_i$$
+$$
+t_i = \frac{(\mathbf{p}_i - \mathbf{o}) \cdot \mathbf{n}_i}{\mathbf{d} \cdot \mathbf{n}_i},\qquad d = \min_{\mathbf{d} \cdot \mathbf{n}_i \neq 0,\; t_i > 0} t_i
+$$
 
 这个式子说明 LiDAR 仿真天然是几何问题而非外观问题：几何一致时，测距分布就接近真实；而反射率、光束发散、运动畸变仍需额外建模。
 
@@ -149,7 +159,9 @@ GNSS 的可信度最低但影响最大：一次多径可能造成 5–30 m 的�
 
 如果实机 `/scan` 使用 `laser_frame`，仿真也应保持同样的 frame 逻辑；如果实机 IMU 以 100 Hz 发布，仿真不应无意中以每个物理 step 无限频率输出。坐标变换与时间对齐的形式化写法是
 
-$$\mathbf{p}_W = T_{WB}\, T_{BI}\, \mathbf{p}_{I},\qquad \tilde{z}(t) = z(t - \tau)$$
+$$
+\mathbf{p}_W = T_{WB}\, T_{BI}\, \mathbf{p}_{I},\qquad \tilde{z}(t) = z(t - \tau)
+$$
 
 其中 $T_{WB}$ 是机体系到世界系的变换、$T_{BI}$ 是传感器系到机体系的变换、$\tau$ 是延迟。时间偏置 $\tau$ 造成的运动误差近似为 $e \approx v\,\tau$：以 $v = 1$ m/s、$\tau = 50$ ms 计算，误差约 $5$ cm；若速度升到 $2$ m/s 且延迟达到 $100$ ms，误差直接变为 $20$ cm，已经超过许多定位精度要求。
 

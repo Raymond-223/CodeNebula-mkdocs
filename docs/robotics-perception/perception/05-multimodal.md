@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![不同传感器只有在时间和坐标对齐后才适合融合。](../../assets/diagrams/time-alignment.svg)
-  <figcaption>相机、LiDAR、IMU 的数据频率和坐标系不同，融合前必须先完成同步与标定。</figcaption>
+  <figcaption markdown="span">相机、LiDAR、IMU 的数据频率和坐标系不同，融合前必须先完成同步与标定。</figcaption>
 </figure>
 
 ## 不同传感器的优势通常正好互补

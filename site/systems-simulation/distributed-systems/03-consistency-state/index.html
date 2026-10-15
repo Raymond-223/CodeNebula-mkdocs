@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4810,14 +4810,18 @@
 <h2 id="_7">版本向量与冲突检测</h2>
 <p>版本向量为每个参与者维护一个计数器分量，从而同时回答“有没有因果在先”和“是不是并发”。设对象 <span class="arithmatex">\(X\)</span> 的版本向量为 <span class="arithmatex">\(V_X\)</span>，其长度为参与者数量，第 <span class="arithmatex">\(k\)</span> 个分量记录该对象包含来自第 <span class="arithmatex">\(k\)</span> 个参与者的多少次更新。</p>
 <p>比较规则很简洁。记 <span class="arithmatex">\(V_a \le V_b\)</span> 当且仅当所有分量都不大于：</p>
-<div class="arithmatex">\[V_a \le V_b \iff \forall k,\ V_a[k] \le V_b[k].\]</div>
+<div class="arithmatex">\[
+V_a \le V_b \iff \forall k,\ V_a[k] \le V_b[k].
+\]</div>
 <p>由此得到三种判定：</p>
 <ul>
 <li>若 <span class="arithmatex">\(V_a \le V_b\)</span> 且 <span class="arithmatex">\(V_a \ne V_b\)</span>，则 <span class="arithmatex">\(V_a\)</span> <strong>因果先于</strong> <span class="arithmatex">\(V_b\)</span>，说明 <span class="arithmatex">\(V_b\)</span> 已经包含了 <span class="arithmatex">\(V_a\)</span> 的全部更新；</li>
 <li>若 <span class="arithmatex">\(V_b \le V_a\)</span> 且 <span class="arithmatex">\(V_b \ne V_a\)</span>，则 <span class="arithmatex">\(V_b\)</span> 在先，情况与上者对称；</li>
 <li>若既存在 <span class="arithmatex">\(V_a[j] &gt; V_b[j]\)</span> 又存在 <span class="arithmatex">\(V_a[k] &lt; V_b[k]\)</span>，即</li>
 </ul>
-<div class="arithmatex">\[V_a \parallel V_b \iff \exists j,\ V_a[j] &gt; V_b[j] \ \text{且}\ \exists k,\ V_a[k] &lt; V_b[k],\]</div>
+<div class="arithmatex">\[
+V_a \parallel V_b \iff \exists j,\ V_a[j] &gt; V_b[j] \ \text{且}\ \exists k,\ V_a[k] &lt; V_b[k],
+\]</div>
 <p>则两个版本<strong>并发</strong>，构成真正的冲突，需要合并或上报。</p>
 <p>举一个三节点的例子。设参与者为 A、B、C，向量分量顺序为 <span class="arithmatex">\((A, B, C)\)</span>，初始对象版本为 <span class="arithmatex">\((0,0,0)\)</span>。</p>
 <table>
@@ -4881,7 +4885,9 @@
 <h2 id="crdt">无冲突复制数据类型（CRDT）与自动收敛</h2>
 <p>比“检测冲突再解决”更进一步的想法是：<strong>让冲突在数据结构层面不可能需要解决</strong>。这就是 CRDT（Conflict-free Replicated Data Type，无冲突复制数据类型）的出发点是设计可交换、可结合、幂等的合并操作。</p>
 <p>它依赖的是数学上的半格结构：每个副本的状态都是所有已见更新在合并操作 <span class="arithmatex">\(\sqcup\)</span> 下的结果，而 <span class="arithmatex">\(\sqcup\)</span> 满足交换律、结合律与幂等律。三条性质合起来意味着<strong>副本本地以任意顺序、任意次数应用相同的一组更新，最终都会收敛到同一个值</strong>——也就是</p>
-<div class="arithmatex">\[s_1 \sqcup s_2 = s_2 \sqcup s_1, \qquad (s_1 \sqcup s_2) \sqcup s_3 = s_1 \sqcup (s_2 \sqcup s_3), \qquad s \sqcup s = s.\]</div>
+<div class="arithmatex">\[
+s_1 \sqcup s_2 = s_2 \sqcup s_1, \qquad (s_1 \sqcup s_2) \sqcup s_3 = s_1 \sqcup (s_2 \sqcup s_3), \qquad s \sqcup s = s.
+\]</div>
 <p>幂等性尤其重要：它让“至少一次”的网络重传不再需要去重表，重复应用合并不改变结果。这正是 CRDT 在不可靠链路上好用的原因。</p>
 <p>CRDT 分为两大类。<strong>状态型（state-based / CvRDT）</strong> 直接同步整份状态，接收方用 <span class="arithmatex">\(\sqcup\)</span> 合并；实现简单、天然容错，但需要状态可压缩或增量传输。<strong>操作型（operation-based / CmRDT）</strong> 只传播操作，要求操作在传递中满足因果顺序，网络负担小但对传输层要求更高。</p>
 <p>一个最小例子是基于计数的合并：只要每个副本保留“按来源分开计数”，逐分量取最大值就满足三条性质。</p>
@@ -5009,7 +5015,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

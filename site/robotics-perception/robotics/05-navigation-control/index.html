@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4540,7 +4540,9 @@
 <h2 id="_1">导航首先依赖可信的机器人状态</h2>
 <p>规划器需要知道当前位置和朝向。如果定位已经漂移 2 m，后续路径即使数学上完美，也会在真实世界走错位置。因此导航问题的第一输入不是目标，而是<strong>可靠的当前位姿</strong>。</p>
 <p>这一点可以用误差放大来量化。假设定位给出的位姿与真实位姿的偏差为 <span class="arithmatex">\(\delta p\)</span>，控制器跟踪目标路径的中心线。若路径附近障碍的安全间隙只有 <span class="arithmatex">\(d_{\text{gap}}\)</span>，那么当</p>
-<div class="arithmatex">\[\lVert\delta p\rVert\ge d_{\text{gap}}\]</div>
+<div class="arithmatex">\[
+\lVert\delta p\rVert\ge d_{\text{gap}}
+\]</div>
 <p>系统就已经失去安全保证，无论后面算法多好。例如走廊宽 1.2 m、机器人宽 0.6 m，两侧各剩 0.3 m 余量；定位偏差一旦超过 0.3 m，机器人就可能擦墙。</p>
 <p>状态估计的两个输出必须同时被使用：</p>
 <ul>
@@ -4659,11 +4661,15 @@
 <h2 id="_4">横向误差与路径跟踪控制</h2>
 <p>路径跟踪的核心指标是<strong>横向误差</strong> <span class="arithmatex">\(e\)</span>：机器人参考点到目标路径的垂直距离。它和控制量之间有明确的几何关系，Pure Pursuit 与 Stanley 是两条最常用的思路。</p>
 <p><strong>Pure Pursuit（纯追踪）</strong> 在路径上取一个离机器人前视距离 <span class="arithmatex">\(L_d\)</span> 的点作为目标点，把转向角对准它。设目标点在机器人坐标系下的方位角为 <span class="arithmatex">\(\alpha\)</span>，则所需曲率为</p>
-<div class="arithmatex">\[\kappa=\frac{2\sin\alpha}{L_d},\]</div>
+<div class="arithmatex">\[
+\kappa=\frac{2\sin\alpha}{L_d},
+\]</div>
 <p>对应前轮转角 <span class="arithmatex">\(\delta=\arctan(\kappa L)\)</span>，<span class="arithmatex">\(L\)</span> 为轴距。它的直观含义是：<strong>前视距离直接决定切角程度。</strong> 但 Pure Pursuit 对圆轨迹的稳态误差不能脱离参考点定义、目标点选择规则、车辆运动学和离散更新方式写成统一的 <span class="arithmatex">\(L_d^2/(2R)\)</span>。理想连续运动学模型在某些选点约定下可以精确保持圆轨迹；工程实现中的“抄近道”则来自离散采样、路径点稀疏、速度与执行器约束等共同作用。</p>
 <p>因此 <span class="arithmatex">\(L_d\)</span> 应通过闭环仿真和实车曲率范围标定：过小通常使控制对噪声和离散路径更敏感，过大则响应迟钝并可能切弯。常见做法是自适应前视 <span class="arithmatex">\(L_d=kv+\Delta_0\)</span>，其中 <span class="arithmatex">\(k\)</span> 与 <span class="arithmatex">\(\Delta_0\)</span> 必须按车辆、速度和路径采样确定，而不是通用常数。</p>
 <p><strong>Stanley 控制器</strong> 用前轴中心到路径的横向误差 <span class="arithmatex">\(e\)</span> 和航向误差 <span class="arithmatex">\(\psi_e\)</span> 直接构造转角：</p>
-<div class="arithmatex">\[\delta=\psi_e+\arctan\!\left(\frac{k\,e}{v+\epsilon}\right),\]</div>
+<div class="arithmatex">\[
+\delta=\psi_e+\arctan\!\left(\frac{k\,e}{v+\epsilon}\right),
+\]</div>
 <p><span class="arithmatex">\(k\)</span> 为横向增益，<span class="arithmatex">\(\epsilon\)</span> 防止低速时除零。它的横向误差近似按 <span class="arithmatex">\(\dot e=-k\,e\)</span> 收敛，即时间常数约 <span class="arithmatex">\(1/k\)</span>：<span class="arithmatex">\(k=2\)</span> 时约 0.5 s 收敛到初值的 37%。</p>
 <table>
 <thead>
@@ -4998,7 +5004,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

@@ -49,8 +49,10 @@ $$
 
     设 $X$ 是任意满足四式的矩阵，令 $Y=V^TXU$，并按秩 $r$ 分块。把 $A=U\Sigma V^T$ 代入四式，相当于让 $Y$ 与
 
-    $$\Sigma=\begin{pmatrix}D&0\\0&0\end{pmatrix},
-    \qquad D=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$$
+    $$
+    \Sigma=\begin{pmatrix}D&0\\0&0\end{pmatrix},
+    \qquad D=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)
+    $$
 
     满足同样四式。由 $\Sigma Y\Sigma=\Sigma$ 得 $DY_{11}D=D$，所以 $Y_{11}=D^{-1}$。由 $\Sigma Y$ 对称，右上块 $DY_{12}$ 必为零，故 $Y_{12}=0$；由 $Y\Sigma$ 对称，同理 $Y_{21}=0$。最后 $Y\Sigma Y=Y$ 的右下块给出 $Y_{22}=0$。因此 $Y=\Sigma^+$，从而 $X=V\Sigma^+U^T=A^+$。四个方程唯一刻画伪逆。
 
@@ -301,7 +303,6 @@ $$
 ## 低秩逼近（Low-Rank Approximation）
 
 秩 $k$ 逼近（rank-$k$ approximation）要在所有秩不超过 $k$ 的矩阵中寻找最接近 $A$ 的矩阵。设
-
 
 $$
 A=\sum_{i=1}^r\sigma_i u_iv_i^T,

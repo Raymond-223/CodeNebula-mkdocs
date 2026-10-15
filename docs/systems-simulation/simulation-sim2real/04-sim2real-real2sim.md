@@ -6,14 +6,16 @@
 
 <figure markdown="span">
   ![Sim2Real 与 Real2Sim 组成不断校准的双向循环。](../../assets/diagrams/sim2real-loop.svg)
-  <figcaption>真实系统提供误差信号，仿真再根据这些误差更新参数和训练分布。</figcaption>
+  <figcaption markdown="span">真实系统提供误差信号，仿真再根据这些误差更新参数和训练分布。</figcaption>
 </figure>
 
 ## 迁移前先列出误差预算
 
 先把“误差预算”定义清楚：设第 $i$ 项差异的幅度为 $\epsilon_i$，任务指标对它的敏感度为 $c_i = \partial J / \partial \epsilon_i$，则总的任务指标误差可近似写成
 
-$$\Delta J \approx \sum_i c_i \epsilon_i$$
+$$
+\Delta J \approx \sum_i c_i \epsilon_i
+$$
 
 这条线性近似说明两件事：**差异大的项不一定重要，敏感度高的项才重要**；并且预算必须逐项列出，因为总量会掩盖主导项。迁移前先把可能影响结果的差异列成表：轮径误差多少、控制延迟多少、相机曝光差异多大、摩擦范围是多少、传感器噪声是否一致。
 
@@ -119,7 +121,9 @@ $$\Delta J \approx \sum_i c_i \epsilon_i$$
 
 Real2Sim 不要求把每个物理参数都精确辨识出来，只需要让仿真在**任务相关观测和行为**上更接近实机。参数辨识的数学形式是最小化仿真与实测残差：
 
-$$\hat{\phi} = \arg\min_{\phi} \sum_{k} \left\| y^{\mathrm{real}}_k - y^{\mathrm{sim}}_k(\phi) \right\|^2$$
+$$
+\hat{\phi} = \arg\min_{\phi} \sum_{k} \left\| y^{\mathrm{real}}_k - y^{\mathrm{sim}}_k(\phi) \right\|^2
+$$
 
 其中 $\phi$ 是待辨识参数向量、$y^{\mathrm{real}}_k$ 与 $y^{\mathrm{sim}}_k$ 分别是第 $k$ 步的实机与仿真观测。注意这个目标函数是可辨识性受限的：**如果某参数对观测的影响小于噪声，最小化过程就无法确定它**，这也是很多参数标不出稳定值的原因。
 

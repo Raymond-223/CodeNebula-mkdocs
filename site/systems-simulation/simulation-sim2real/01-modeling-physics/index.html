@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4545,9 +4545,13 @@
 </table>
 <h2 id="_2">仿真时间步进</h2>
 <p>连续系统满足</p>
-<div class="arithmatex">\[\dot x=f(x,u).\]</div>
+<div class="arithmatex">\[
+\dot x=f(x,u).
+\]</div>
 <p>计算机只能用有限步长 <span class="arithmatex">\(\Delta t\)</span> 推进。最简单的显式欧拉法为</p>
-<div class="arithmatex">\[x_{k+1}=x_k+\Delta t\,f(x_k,u_k).\]</div>
+<div class="arithmatex">\[
+x_{k+1}=x_k+\Delta t\,f(x_k,u_k).
+\]</div>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">euler_step</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
     <span class="n">velocity</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">+</span> <span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span>
     <span class="n">position</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span>
@@ -4589,9 +4593,13 @@
 </table>
 <h2 id="_3">积分器选择与数值稳定性</h2>
 <p>显式欧拉简单但在刚性系统上非常脆弱。工程上更常用的是半隐式（symplectic Euler）积分：先更新速度，再用新速度更新位置。</p>
-<div class="arithmatex">\[v_{k+1}=v_k+\Delta t\,a(x_k),\qquad x_{k+1}=x_k+\Delta t\,v_{k+1}.\]</div>
+<div class="arithmatex">\[
+v_{k+1}=v_k+\Delta t\,a(x_k),\qquad x_{k+1}=x_k+\Delta t\,v_{k+1}.
+\]</div>
 <p>半隐式对哈密顿系统具有良好的能量行为，长期积分下能量在有界范围内振荡而不单调漂移，这就是多数物理引擎默认采用它的原因。高阶方法如四阶 Runge–Kutta 通过多次求导估计降低截断误差：</p>
-<div class="arithmatex">\[x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).\]</div>
+<div class="arithmatex">\[
+x_{k+1}=x_k+\frac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).
+\]</div>
 <p>其中 <span class="arithmatex">\(k_1=f(t_k,x_k)\)</span>，<span class="arithmatex">\(k_2=f(t_k+\Delta t/2,\;x_k+\Delta t\,k_1/2)\)</span>，依次类推。精度更高，代价是每步四次函数求值，并且在接触这种不连续事件附近，高阶方法的光滑假设会失效——事件本身就把解“折断”了。</p>
 <table>
 <thead>
@@ -4636,9 +4644,13 @@
 </tbody>
 </table>
 <p>对线性系统 <span class="arithmatex">\(\dot x=\lambda x\)</span>，显式欧拉的稳定条件可量化为</p>
-<div class="arithmatex">\[\Delta t&lt;\frac{2}{|\lambda_{\max}|}.\]</div>
+<div class="arithmatex">\[
+\Delta t&lt;\frac{2}{|\lambda_{\max}|}.
+\]</div>
 <p>对振荡子 <span class="arithmatex">\(\lambda=\pm j\omega\)</span>，能量每步按</p>
-<div class="arithmatex">\[E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)\]</div>
+<div class="arithmatex">\[
+E_{k+1}=E_k\left(1+\Delta t^2\omega^2\right)
+\]</div>
 <p>增长，所以显式 Euler 会产生虚假能量。半隐式 Euler 则是辛方法：当 <span class="arithmatex">\(0&lt;\omega\Delta t&lt;2\)</span> 时轨道保持有界，但原始机械能通常在一个有界区间内振荡，并不是每步乘 <span class="arithmatex">\(\left(1+\Delta t^2\omega^2\right)^{-1}\)</span>，也不能简单称为耗散。步长判断必须同时检查所用积分器的稳定域与允许的相位/幅值误差。</p>
 <table>
 <thead>
@@ -4723,7 +4735,9 @@
 <p>第一类是<strong>库仑摩擦模型</strong>：把切向力限制在摩擦锥内，<span class="arithmatex">\(\|F_t\|\le\mu F_n\)</span>，静摩擦时物体完全不动，动摩擦时切向力等于 <span class="arithmatex">\(\mu F_n\)</span> 且方向与相对速度相反。它物理直觉清晰，但在速度过零处不连续，容易产生数值抖动。</p>
 <p>第二类是<strong>软接触（罚函数）模型</strong>：允许微小穿透 <span class="arithmatex">\(\delta\)</span>，用弹簧−阻尼模拟法向力，<span class="arithmatex">\(F_n=k_p\delta+d_p\dot\delta\)</span>，切向类似地给出弹簧力并在超出摩擦锥时截断。它实现简单、处处连续、易于求导，非常适合做可微仿真与强化学习环境；代价是引入了一个虚构的接触刚度 <span class="arithmatex">\(k_p\)</span>，接触面会“陷进去”，抓取的接触几何与真实不一致，且 <span class="arithmatex">\(k_p\)</span> 越大越接近刚体、越容易数值不稳定。</p>
 <p>第三类是<strong>互补约束（LCP/凸优化）模型</strong>：把接触写成互补条件</p>
-<div class="arithmatex">\[0\le\lambda\ \perp\ \phi(q)\ge 0,\]</div>
+<div class="arithmatex">\[
+0\le\lambda\ \perp\ \phi(q)\ge 0,
+\]</div>
 <p>即“不是分离就是零力”。它不引入虚构弹簧，接触力在约束层面被精确求解，因此更接近刚体物理，也是抓取与操纵类研究偏好的方式；代价是每一步都要解一个约束问题，且当接触数多、摩擦锥复杂时求解成本较高。</p>
 <table>
 <thead>
@@ -4884,7 +4898,9 @@
 </table>
 <h2 id="_8">实时因子与加速手段</h2>
 <p>实时因子（real-time factor, RTF）定义为</p>
-<div class="arithmatex">\[\mathrm{RTF}=\frac{\text{仿真推进的时间}}{\text{墙钟消耗的时间}}.\]</div>
+<div class="arithmatex">\[
+\mathrm{RTF}=\frac{\text{仿真推进的时间}}{\text{墙钟消耗的时间}}.
+\]</div>
 <p>当 RTF 小于 1 时，仿真比现实慢，适合做精确分析；RTF 大于 1 时，仿真比现实快，这是强化学习训练的常态需求。注意 RTF 与“物理保真度”没有固定关系：一个 RTF 很高的仿真可能只是因为模型极简，而不是因为它高效。</p>
 <p>加速的基本手段有三类。第一类是<strong>减小步长需求</strong>，例如用隐式或半隐式求解器放宽稳定条件，或用软接触把刚性碰撞平滑化。第二类是<strong>子步与并行</strong>：把长步长拆成多个小步提高稳定性，或把多个环境实例并行到多核/多机，通过向量化实现批量推进。第三类是<strong>降低模型复杂度</strong>，例如用简化碰撞几何、合并连杆、冻结不动的关节。</p>
 <table>
@@ -5062,7 +5078,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

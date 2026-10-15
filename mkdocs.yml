@@ -41,7 +41,7 @@ nav:
     - Linear Iterations & Power Method: yau-contest/03-linear-iterations-power.md
     - Fixed Points & Contractions: yau-contest/04-fixed-points-contractions.md
     - Newton's Method & Convergence Order: yau-contest/05-newton-convergence.md
-    - Worked Problems: yau-contest/06-stage-one-workbook.md
+    - 丘赛真题: yau-contest/06-stage-one-workbook.md
 - Foundations:
   - Mathematics:
     - Overview: foundations/mathematics/index.md
@@ -149,8 +149,8 @@ markdown_extensions:
 - pymdownx.arithmatex:
     generic: true
 extra_css:
-- stylesheets/extra.css?v=20261011d
-- css/custom.css?v=20261011d
+- css/custom.css?v=20261014
+- stylesheets/extra.css?v=20261014
 extra_javascript:
 - javascripts/mathjax.js
 - vendor/mathjax/es5/tex-mml-chtml.js

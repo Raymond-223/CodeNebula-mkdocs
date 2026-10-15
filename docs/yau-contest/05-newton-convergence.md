@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![牛顿法用当前点切线与横轴的交点产生下一次迭代。](../assets/diagrams/yau-newton-tangent.svg)
-  <figcaption>牛顿步不是任意公式：它把 $f$ 在 $x_k$ 处线性化，并取这条切线的零点作为 $x_{k+1}$。</figcaption>
+  <figcaption markdown="span">牛顿步不是任意公式：它把 $f$ 在 $x_k$ 处线性化，并取这条切线的零点作为 $x_{k+1}$。</figcaption>
 </figure>
 
 目标是求 $f(x)=0$ 的根 $\alpha$。当前近似为 $x_k$。在 $x_k$ 附近使用一阶泰勒近似（Taylor approximation）：
@@ -547,18 +547,32 @@ $$
 ### 二元方程组计算
 
 求解
-$$F(x,y)=\begin{pmatrix}x^2+y^2-1\\x-y\end{pmatrix}=0,$$
+
+$$
+F(x,y)=\begin{pmatrix}x^2+y^2-1\\x-y\end{pmatrix}=0,
+$$
+
 取初值 $(x_0,y_0)=(0.8,0.6)$。Jacobian 为
-$$J_F(x,y)=\begin{pmatrix}2x&2y\\1&-1\end{pmatrix}.$$
+
+$$
+J_F(x,y)=\begin{pmatrix}2x&2y\\1&-1\end{pmatrix}.
+$$
+
 在初值处 $F(x_0,y_0)=(0,0.2)^T$，Newton 步不是先求逆矩阵，而是解
+
 $$
 \begin{pmatrix}1.6&1.2\\1&-1\end{pmatrix}
 \begin{pmatrix}\Delta x\\\Delta y\end{pmatrix}
 =
 \begin{pmatrix}0\\-0.2\end{pmatrix}.
 $$
+
 第二式给出 $\Delta x-\Delta y=-0.2$；代入第一式得 $\Delta y=4/35\approx0.114286$、$\Delta x=-3/35\approx-0.085714$。因此
-$$x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286.$$
+
+$$
+x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286.
+$$
+
 此时第二个方程已经精确满足，而第一个残差为 $2(5/7)^2-1=1/49$。下一步继续解新的 $2\times2$ 线性方程即可。实际程序使用带主元的线性求解器；显式计算 $J_F^{-1}$ 既多做运算，也通常放大舍入误差。
 
 ## 练习
@@ -576,4 +590,4 @@ $$x_1=5/7\approx0.714286,\qquad y_1=5/7\approx0.714286.$$
 **答案。** 第 1 题 $x_1=7/4$、$x_2=97/56$。第 2 题 $x_{k+1}=x_k/2$。第 4 题 $e_{k+1}=3e_k/4$，修正方法使用系数 $4$。
 
 **上一章：** [不动点与压缩映射](04-fixed-points-contractions.md)  
-**下一章：** [完整解答](06-stage-one-workbook.md)
+**下一章：** [丘赛真题](06-stage-one-workbook.md)

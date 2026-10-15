@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4549,7 +4549,9 @@
 </figure>
 <h2 id="_1">状态的充分性</h2>
 <p>如果未来只需要由当前状态和当前动作决定，就满足 Markov 性：</p>
-<div class="arithmatex">\[P(S_{t+1}=s'\mid S_t=s,A_t=a,\text{history})=P(S_{t+1}=s'\mid S_t=s,A_t=a).\]</div>
+<div class="arithmatex">\[
+P(S_{t+1}=s'\mid S_t=s,A_t=a,\text{history})=P(S_{t+1}=s'\mid S_t=s,A_t=a).
+\]</div>
 <p>这并不表示真实世界"没有历史"，而是要求<strong>状态已经包含决策所需的历史信息</strong>。注意这是一个关于"给定状态后历史是否还有用"的条件独立性陈述，不是关于环境物理机制的陈述。</p>
 <p>判据可以写成一句可检验的话：给定 <span class="arithmatex">\(S_t=s\)</span> 与 <span class="arithmatex">\(A_t=a\)</span>，奖励与下一状态的联合分布 <span class="arithmatex">\(P(r_{t+1},s_{t+1}\mid s,a)\)</span> 是否与 <span class="arithmatex">\(t\)</span> 之前的全部历史条件独立。若独立则状态充分；若不独立，任何基于"只看 <span class="arithmatex">\(s\)</span>"的价值估计都会系统性偏差：同一个 <span class="arithmatex">\(s\)</span> 在不同历史下对应不同的 <span class="arithmatex">\(V^\pi(s)\)</span>，而 Bellman 假设它们相等。</p>
 <p>例如机器人只把当前位置当成状态，但电池温度会受过去负载影响，那么这个状态可能不够；把温度、剩余电量等加入状态后，Markov 近似会更合理。</p>
@@ -4599,7 +4601,9 @@
 <p>因此遇到一个 RL 问题，第一件事不是选 PPO 还是 DQN，而是先问：<strong>我给智能体的状态，是否足以预测动作的后果？</strong></p>
 <h2 id="mdp">马尔可夫决策过程（MDP）的五元组</h2>
 <p>一个 MDP 通常写作</p>
-<div class="arithmatex">\[\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).\]</div>
+<div class="arithmatex">\[
+\mathcal M=(\mathcal S,\mathcal A,P,R,\gamma).
+\]</div>
 <p>其中：</p>
 <ul>
 <li><span class="arithmatex">\(\mathcal S\)</span>：状态空间；</li>
@@ -4640,17 +4644,23 @@
 </tbody>
 </table>
 <p>策略 <span class="arithmatex">\(\pi(a\mid s)\)</span> 决定在状态 <span class="arithmatex">\(s\)</span> 下如何选择动作。连续交互形成轨迹</p>
-<div class="arithmatex">\[\tau=(s_0,a_0,r_1,s_1,a_1,r_2,\ldots).\]</div>
+<div class="arithmatex">\[
+\tau=(s_0,a_0,r_1,s_1,a_1,r_2,\ldots).
+\]</div>
 <p>这条轨迹就是强化学习最基本的数据来源。需要强调：轨迹的分布同时由环境 <span class="arithmatex">\(P\)</span> 和策略 <span class="arithmatex">\(\pi\)</span> 决定，所以改策略就等于改数据分布——这是后面所有"非平稳"困难的根源。</p>
 <h2 id="_2">奖励只评价一步，回报才评价长期结果</h2>
 <p>即时奖励 <span class="arithmatex">\(r_{t+1}\)</span> 只能告诉我们这一步发生了什么。真正要最大化的是从当前时刻开始的累计回报：</p>
-<div class="arithmatex">\[G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1}.\]</div>
+<div class="arithmatex">\[
+G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\cdots=\sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1}.
+\]</div>
 <p>折扣因子有两个直观作用：</p>
 <ol>
 <li>让越远的奖励权重越小；</li>
 <li>在持续型任务中，在常见有界奖励条件下使无限和保持有限。若 <span class="arithmatex">\(|r|\le R_{\max}\)</span>，则由几何级数得</li>
 </ol>
-<div class="arithmatex">\[|G_t|\le \frac{R_{\max}}{1-\gamma}.\]</div>
+<div class="arithmatex">\[
+|G_t|\le \frac{R_{\max}}{1-\gamma}.
+\]</div>
 <p>这个界在工程上很有用：<span class="arithmatex">\(\gamma=0.99\)</span>、<span class="arithmatex">\(R_{\max}=1\)</span> 时回报绝对值不超过 <span class="arithmatex">\(100\)</span>；<span class="arithmatex">\(\gamma=0.999\)</span> 时上限升高到 <span class="arithmatex">\(1000\)</span>。它与 <span class="arithmatex">\(\gamma=0.99\)</span> 的差别不只是"更耐心"，还意味着单步 TD 目标的尺度差了十倍。</p>
 <p><span class="arithmatex">\(\gamma\)</span> 不是"耐心程度"的唯一解释。很多工程问题里，它也影响有效规划范围和数值稳定性。<span class="arithmatex">\(\gamma\)</span> 越接近 1，智能体越需要考虑远期后果，但学习信号也通常更难估计。</p>
 <table>
@@ -4687,18 +4697,26 @@
 <p>失败模式很具体：把 <span class="arithmatex">\(\gamma\)</span> 从 <span class="arithmatex">\(0.99\)</span> 提到 <span class="arithmatex">\(0.999\)</span> 而不动学习率，价值目标尺度上升约 <span class="arithmatex">\(10\)</span> 倍，梯度方差随之上升，表现为训练曲线整体震荡甚至发散；反过来在长视界任务里把 <span class="arithmatex">\(\gamma\)</span> 压到 <span class="arithmatex">\(0.9\)</span>，有效时域只有约 <span class="arithmatex">\(10\)</span> 步，任何需要 50 步以上铺垫的奖励都几乎传不回来。</p>
 <h2 id="_3">价值函数把未来好不好压缩成一个数</h2>
 <p>给定策略 <span class="arithmatex">\(\pi\)</span>，状态价值函数定义为</p>
-<div class="arithmatex">\[V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s].\]</div>
+<div class="arithmatex">\[
+V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s].
+\]</div>
 <p>动作价值函数则把第一步动作也固定下来：</p>
-<div class="arithmatex">\[Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a].\]</div>
+<div class="arithmatex">\[
+Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a].
+\]</div>
 <p>两者的区别很重要：</p>
 <ul>
 <li><span class="arithmatex">\(V^\pi(s)\)</span>：从这里开始，继续按策略行动有多好；</li>
 <li><span class="arithmatex">\(Q^\pi(s,a)\)</span>：在这里先做动作 <span class="arithmatex">\(a\)</span>，之后再按策略行动有多好。</li>
 </ul>
 <p>它们之间有两组必须记住的关系。第一组是"对动作取期望"：</p>
-<div class="arithmatex">\[V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a).\]</div>
+<div class="arithmatex">\[
+V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a).
+\]</div>
 <p>第二组是"先奖励、再跳一步"：</p>
-<div class="arithmatex">\[Q^\pi(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].\]</div>
+<div class="arithmatex">\[
+Q^\pi(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].
+\]</div>
 <p>所以如果已经知道 <span class="arithmatex">\(Q^\pi\)</span>，就能比较同一个状态下不同动作的长期效果。代价是：<span class="arithmatex">\(Q\)</span> 比 <span class="arithmatex">\(V\)</span> 多一维动作，在连续动作空间里这个维度代价很致命。</p>
 <table>
 <thead>
@@ -4738,38 +4756,54 @@
 </table>
 <h2 id="bellman-recursion">贝尔曼递推（Bellman Recursion）</h2>
 <p>回报本身可以拆成</p>
-<div class="arithmatex">\[G_t=r_{t+1}+\gamma G_{t+1}.\]</div>
+<div class="arithmatex">\[
+G_t=r_{t+1}+\gamma G_{t+1}.
+\]</div>
 <p>这一步只是重新分组，没有任何近似。对它取条件期望，就得到 Bellman 期望方程：</p>
-<div class="arithmatex">\[V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].\]</div>
+<div class="arithmatex">\[
+V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V^\pi(s')\right].
+\]</div>
 <p>它表达的不是一种新假设，而是同一个长期回报的递归写法：</p>
 <blockquote>
 <p><strong>当前价值 = 一步奖励 + 下一状态价值的折扣期望。</strong></p>
 </blockquote>
 <p>两个前提必须同时成立这个递归才合法：一是 Markov 性（<span class="arithmatex">\(G_{t+1}\)</span> 的条件分布只依赖 <span class="arithmatex">\(s,a\)</span>），二是期望可交换（无限和的期望存在）。当 <span class="arithmatex">\(|r|\le R_{\max}\)</span> 且 <span class="arithmatex">\(\gamma&lt;1\)</span> 时，后者由 <span class="arithmatex">\(\frac{R_{\max}}{1-\gamma}&lt;\infty\)</span> 保证。</p>
 <p>这一步非常关键，因为"无限长未来"现在被压缩成了"一步 + 一个同类型子问题"。动态规划、TD、Q-Learning 等方法都建立在这个递归结构上。用算子语言写作</p>
-<div class="arithmatex">\[(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V(s')\right],\]</div>
+<div class="arithmatex">\[
+(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V(s')\right],
+\]</div>
 <p>则 <span class="arithmatex">\(V^\pi\)</span> 是不动点 <span class="arithmatex">\(T^\pi V^\pi=V^\pi\)</span>。并且对任意两个值函数</p>
-<div class="arithmatex">\[\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,\]</div>
+<div class="arithmatex">\[
+\|T^\pi V_1-T^\pi V_2\|_\infty\le\gamma\|V_1-V_2\|_\infty ,
+\]</div>
 <p>即 <span class="arithmatex">\(T^\pi\)</span> 是以 <span class="arithmatex">\(\gamma\)</span> 为模的<strong>压缩映射</strong>。收敛速度完全被 <span class="arithmatex">\(\gamma\)</span> 决定：<span class="arithmatex">\(\gamma=0.9\)</span> 时误差上界每次至多乘 <span class="arithmatex">\(0.9\)</span>，<span class="arithmatex">\(\gamma=0.999\)</span> 时至多乘 <span class="arithmatex">\(0.999\)</span>。</p>
 <details class="proof">
 <summary>Bellman 算子的压缩性</summary>
-<p>对任意有界函数 <span class="arithmatex">\(V,W\)</span> 和任意状态 <span class="arithmatex">\(s\)</span>，
-$<span class="arithmatex">\(\begin{aligned}
+<p>对任意有界函数 <span class="arithmatex">\(V,W\)</span> 和任意状态 <span class="arithmatex">\(s\)</span>，</p>
+<div class="arithmatex">\[
+\begin{aligned}
 |(T^\pi V)(s)-(T^\pi W)(s)|
 &amp;=\gamma\left|\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)(V(s')-W(s'))\right|\\
 &amp;\le\gamma\sum_{a,s'}\pi(a\mid s)P(s'\mid s,a)\|V-W\|_\infty\\
 &amp;=\gamma\|V-W\|_\infty.
-\end{aligned}\)</span>$
-再对 <span class="arithmatex">\(s\)</span> 取最大值得 <span class="arithmatex">\(\|T^\pi V-T^\pi W\|_\infty\le\gamma\|V-W\|_\infty\)</span>。有界函数配无穷范数是完备空间，因此 Banach 压缩映射定理给出唯一不动点，并保证反复应用 <span class="arithmatex">\(T^\pi\)</span> 收敛。</p>
+\end{aligned}
+\]</div>
+<p>再对 <span class="arithmatex">\(s\)</span> 取最大值得 <span class="arithmatex">\(\|T^\pi V-T^\pi W\|_\infty\le\gamma\|V-W\|_\infty\)</span>。有界函数配无穷范数是完备空间，因此 Banach 压缩映射定理给出唯一不动点，并保证反复应用 <span class="arithmatex">\(T^\pi\)</span> 收敛。</p>
 </details>
 <h2 id="bellman-optimality-relation">贝尔曼最优性关系（Bellman Optimality Relation）</h2>
 <p>最优动作价值函数定义为</p>
-<div class="arithmatex">\[Q^*(s,a)=\max_\pi Q^\pi(s,a).\]</div>
+<div class="arithmatex">\[
+Q^*(s,a)=\max_\pi Q^\pi(s,a).
+\]</div>
 <p>对应的 Bellman 最优方程为</p>
-<div class="arithmatex">\[Q^*(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')\right].\]</div>
+<div class="arithmatex">\[
+Q^*(s,a)=\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')\right].
+\]</div>
 <p>与期望方程的差别只有一处：<span class="arithmatex">\(\sum_a\pi(a\mid s)\)</span> 被 <span class="arithmatex">\(\max_{a'}\)</span> 取代。但这一处差别导致算子 <span class="arithmatex">\(T^*\)</span> 不再是线性的，Bellman 最优方程因此是<strong>非线性</strong>方程；好在 <span class="arithmatex">\(T^*\)</span> 仍是压缩映射且不动点唯一，所以存在且只存在一个 <span class="arithmatex">\(Q^*\)</span>。</p>
 <p>只要 <span class="arithmatex">\(Q^*\)</span> 已知，在每个状态选择</p>
-<div class="arithmatex">\[\pi^*(s)\in\arg\max_a Q^*(s,a)\]</div>
+<div class="arithmatex">\[
+\pi^*(s)\in\arg\max_a Q^*(s,a)
+\]</div>
 <p>就可以得到一个最优策略。这里"贪心"之所以成立，是因为 <span class="arithmatex">\(Q^*\)</span> 已经把<strong>之后所有步骤的最优未来</strong>计算进去了，而不是因为短视动作本身总是正确。</p>
 <p>需要区分几件容易混淆的事：</p>
 <table>
@@ -4811,11 +4845,17 @@ $<span class="arithmatex">\(\begin{aligned}
 <li>在 <span class="arithmatex">\(B\)</span> 选择 <code>stay</code>：奖励 3，仍在 <span class="arithmatex">\(B\)</span>。</li>
 </ul>
 <p>若在 <span class="arithmatex">\(B\)</span> 持续 <code>stay</code>，则</p>
-<div class="arithmatex">\[V^*(B)=3+0.9V^*(B)\ \Longrightarrow\ V^*(B)=\frac{3}{1-0.9}=30.\]</div>
+<div class="arithmatex">\[
+V^*(B)=3+0.9V^*(B)\ \Longrightarrow\ V^*(B)=\frac{3}{1-0.9}=30.
+\]</div>
 <p>于是 <span class="arithmatex">\(A\)</span> 选择 <code>go</code> 的价值为</p>
-<div class="arithmatex">\[Q^*(A,\text{go})=2+0.9\times30=29,\]</div>
+<div class="arithmatex">\[
+Q^*(A,\text{go})=2+0.9\times30=29,
+\]</div>
 <p>若第一步在 <span class="arithmatex">\(A\)</span> 选择 <code>stay</code>，之后允许改用最优策略，则</p>
-<div class="arithmatex">\[Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.\]</div>
+<div class="arithmatex">\[
+Q^*(A,\text{stay})=1+0.9V^*(A)=1+0.9\times29=27.1.
+\]</div>
 <p>所以虽然 <code>stay</code> 立刻有正奖励，长期看仍应先去 <span class="arithmatex">\(B\)</span>。这就是强化学习和普通"即时打分"最大的不同。</p>
 <table>
 <thead>
@@ -4921,20 +4961,30 @@ $<span class="arithmatex">\(\begin{aligned}
 <h2 id="_6">值迭代与策略迭代</h2>
 <p>给定完整模型 <span class="arithmatex">\(P,R\)</span> 后，求解 Bellman 最优方程有两条经典路线。</p>
 <p><strong>值迭代</strong>反复应用 <span class="arithmatex">\(T^*\)</span>：</p>
-<div class="arithmatex">\[V_{k+1}(s)=\max_a\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V_k(s')\right].\]</div>
+<div class="arithmatex">\[
+V_{k+1}(s)=\max_a\sum_{s'}P(s'\mid s,a)\left[R(s,a,s')+\gamma V_k(s')\right].
+\]</div>
 <p>由压缩映射性质，<span class="arithmatex">\(\|V_k-V^*\|_\infty\le\gamma^{k}\|V_0-V^*\|_\infty\)</span>，误差按 <span class="arithmatex">\(\gamma\)</span> 几何衰减。</p>
 <p><strong>策略迭代</strong>交替进行策略评估与策略改进：</p>
-<div class="arithmatex">\[\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}\pi_{k+1}(s)\in\arg\max_a Q^{\pi_k}(s,a).\]</div>
+<div class="arithmatex">\[
+\text{评估：}V^{\pi_k}\ \text{满足}\ T^{\pi_k}V=V;\qquad \text{改进：}\pi_{k+1}(s)\in\arg\max_a Q^{\pi_k}(s,a).
+\]</div>
 <p>由策略改进定理，<span class="arithmatex">\(\pi_{k+1}\)</span> 不差于 <span class="arithmatex">\(\pi_k\)</span>。对确定性平稳策略作固定的平局选择时，有限 MDP 只有有限多个策略；若策略改变并带来严格改进，就不能回到旧策略，因而有限步终止。实际步数依问题而定，不能统一声称“往往十几步”。</p>
 <details class="proof">
 <summary>策略改进定理</summary>
-<p>设新策略在每个状态选择旧动作价值最大的动作，即
-$<span class="arithmatex">\(Q^\pi(s,\pi'(s))\ge Q^\pi(s,\pi(s))=V^\pi(s).\)</span>$
-于是
-$<span class="arithmatex">\(V^\pi(s)\le r(s,\pi'(s))+\gamma\sum_{s'}P(s'\mid s,\pi'(s))V^\pi(s')=(T^{\pi'}V^\pi)(s).\)</span>$
-Bellman 算子保持逐点不等式，反复作用得到
-$<span class="arithmatex">\(V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots.\)</span>$
-由压缩性，右端收敛到 <span class="arithmatex">\(V^{\pi'}\)</span>，所以 <span class="arithmatex">\(V^{\pi'}\ge V^\pi\)</span>。若某个从相关状态可达的选择严格改善，则相应价值严格提高。</p>
+<p>设新策略在每个状态选择旧动作价值最大的动作，即</p>
+<div class="arithmatex">\[
+Q^\pi(s,\pi'(s))\ge Q^\pi(s,\pi(s))=V^\pi(s).
+\]</div>
+<p>于是</p>
+<div class="arithmatex">\[
+V^\pi(s)\le r(s,\pi'(s))+\gamma\sum_{s'}P(s'\mid s,\pi'(s))V^\pi(s')=(T^{\pi'}V^\pi)(s).
+\]</div>
+<p>Bellman 算子保持逐点不等式，反复作用得到</p>
+<div class="arithmatex">\[
+V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots.
+\]</div>
+<p>由压缩性，右端收敛到 <span class="arithmatex">\(V^{\pi'}\)</span>，所以 <span class="arithmatex">\(V^{\pi'}\ge V^\pi\)</span>。若某个从相关状态可达的选择严格改善，则相应价值严格提高。</p>
 </details>
 <table>
 <thead>
@@ -4991,9 +5041,13 @@ $<span class="arithmatex">\(V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots
 </ul>
 <h2 id="q-v">优势函数与 Q-V 关系</h2>
 <p>定义优势函数</p>
-<div class="arithmatex">\[A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s,a).\]</div>
+<div class="arithmatex">\[
+A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s,a).
+\]</div>
 <p>它回答的不是"这个动作值多少"，而是<strong>比当前策略的平均水平好多少</strong>。由 <span class="arithmatex">\(V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a)\)</span> 直接得</p>
-<div class="arithmatex">\[\sum_a\pi(a\mid s)A^\pi(s,a)=0,\]</div>
+<div class="arithmatex">\[
+\sum_a\pi(a\mid s)A^\pi(s,a)=0,
+\]</div>
 <p>即在策略 <span class="arithmatex">\(\pi\)</span> 下，各动作的优势按被选中概率加权平均为零。这是很有用的自检：估计出的 <span class="arithmatex">\(A\)</span> 在同一状态下加权和若不接近零，说明 <span class="arithmatex">\(Q\)</span> 或 <span class="arithmatex">\(V\)</span> 的估计彼此不一致。</p>
 <table>
 <thead>
@@ -5076,7 +5130,9 @@ $<span class="arithmatex">\(V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots
 </tbody>
 </table>
 <p>同一条 Bellman 关系在三处出现，形式几乎一样但含义不同：</p>
-<div class="arithmatex">\[\underbrace{V^\pi(s)=\mathbb E_\pi[r+\gamma V^\pi(s')]}_{\text{评估已知策略}}\quad\underbrace{V^*(s)=\max_a\mathbb E[r+\gamma V^*(s')]}_{\text{最优，需要}\ \max}\quad\underbrace{V(s)\leftarrow V(s)+\alpha\left[r+\gamma V(s')-V(s)\right]}_{\text{采样的随机近似}}\]</div>
+<div class="arithmatex">\[
+\underbrace{V^\pi(s)=\mathbb E_\pi[r+\gamma V^\pi(s')]}_{\text{评估已知策略}}\quad\underbrace{V^*(s)=\max_a\mathbb E[r+\gamma V^*(s')]}_{\text{最优，需要}\ \max}\quad\underbrace{V(s)\leftarrow V(s)+\alpha\left[r+\gamma V(s')-V(s)\right]}_{\text{采样的随机近似}}
+\]</div>
 <p>第三式是把前两式的期望关系换成单样本的随机近似。它成立的直觉是：每次采样的 TD 误差期望正是 <span class="arithmatex">\((TV)(s)-V(s)\)</span>，因此只要学习率满足 <span class="arithmatex">\(\sum_t\alpha_t=\infty\)</span> 且 <span class="arithmatex">\(\sum_t\alpha_t^2&lt;\infty\)</span>，估计就会朝不动点漂移。<strong>这也是为什么"用了 Q-Learning"本身不保证收敛</strong>——还需要持续访问所有状态—动作对、学习率满足上述条件、MDP 保持平稳。</p>
 <p>后面的价值学习和策略学习，其实都在回答同一个问题：<strong>Bellman 关系已经告诉我们"正确答案应该满足什么"，怎样只靠数据把这个关系学出来？</strong></p>
 <h2 id="_8">贝尔曼关系的适用边界</h2>
@@ -5188,7 +5244,7 @@ $<span class="arithmatex">\(V^\pi\le T^{\pi'}V^\pi\le (T^{\pi'})^2V^\pi\le\cdots
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

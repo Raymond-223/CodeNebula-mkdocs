@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![LQR 与 MPC 都利用模型，但处理未来和约束的方式不同。](../../assets/diagrams/lqr-vs-mpc.svg)
-  <figcaption>LQR 用固定反馈增益实现最优线性控制；MPC 则在每个周期显式优化未来轨迹。</figcaption>
+  <figcaption markdown="span">LQR 用固定反馈增益实现最优线性控制；MPC 则在每个周期显式优化未来轨迹。</figcaption>
 </figure>
 
 ## 线性二次型调节器（LQR）的代价函数
@@ -19,13 +19,17 @@ $$
 
 其中 $p$ 是位置、$v$ 是速度、$a$ 是控制加速度。若采样周期固定，下一时刻的位置和速度都可以由当前 $x_k$ 与输入 $u_k$ 近似算出。把这种关系统一写成
 
-$$x_{k+1}=A x_k + B u_k,$$
+$$
+x_{k+1}=A x_k + B u_k,
+$$
 
 其中 $A$ 回答“**不施加新控制时，当前状态自己会怎样演化**”，$B$ 回答“**输入会怎样改变下一时刻状态**”。因此 $x_k\in\mathbb{R}^{n}$ 表示有 $n$ 个状态量，$u_k\in\mathbb{R}^{m}$ 表示有 $m$ 个控制输入；$A\in\mathbb{R}^{n\times n}$、$B\in\mathbb{R}^{n\times m}$ 的维度只是为了保证矩阵乘法成立。
 
 LQR 接下来要解决的问题就是：在这个模型已经给定的前提下，每一步究竟该选多大的 $u_k$？它先把“偏离目标”和“控制太猛”都换算成代价，再选择让长期总代价最小的控制。目标函数为
 
-$$J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).$$
+$$
+J=\sum_{k=0}^{\infty}\left(x_k^{\top}Q x_k + u_k^{\top}R u_k\right).
+$$
 
 $Q\in\mathbb{R}^{n\times n}$ 用来罚状态偏差，$R\in\mathbb{R}^{m\times m}$ 用来罚输入幅值。所谓 $Q$“半正定”，最小需要理解成对任意状态都有 $x^{\top}Qx\ge 0$；$R$“正定”则意味着只要输入不是零，就有 $u^{\top}Ru>0$。这样两项都只会增加代价，不会出现“偏得更远反而奖励更高”的怪情况。第一项要求系统尽快回到原点，第二项要求执行器别太费力，两者的相对大小决定最终策略。代价能收敛（$J<\infty$）的前提是闭环渐近稳定；若控制器让状态发散，长期平方误差通常会不断累积，这个候选控制显然不会是我们想要的结果。
 
@@ -33,7 +37,9 @@ $Q\in\mathbb{R}^{n\times n}$ 用来罚状态偏差，$R\in\mathbb{R}^{m\times m}
 
 一个标量直觉：若 $Q=1$、$R=1$，那么“偏差 1 个单位停留一个采样周期”与“施加 1 个单位输入持续一个采样周期”代价相等。把 $R$ 改成 100 会降低最优反馈增益，但通常不会恰好把输入除以 100，因为 Riccati 解也随 $R$ 改变。若要表达“远期偏差不那么要紧”，可引入折扣因子 $\gamma\in(0,1)$：
 
-$$J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),$$
+$$
+J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\right),
+$$
 
 折扣同时降低远期状态代价和输入代价的权重。它可经变量缩放转化为另一个 LQR 问题，但不能一般地解释成“只给输入加随时间增长的成本”，也不能无条件推出收敛更快或稳态精度更低。
 
@@ -59,7 +65,9 @@ $$J_{\gamma}=\sum_{k=0}^{\infty}\gamma^{k}\left(x_k^{\top}Q x_k+u_k^{\top}R u_k\
 
 先解释“反馈”是什么。如果控制器每个周期都重新读取当前状态 $x_k$，再根据这个状态计算控制量，就叫**状态反馈**。最简单的线性反馈写成
 
-$$u_k=-K x_k,\qquad K\in\mathbb{R}^{m\times n}.$$
+$$
+u_k=-K x_k,\qquad K\in\mathbb{R}^{m\times n}.
+$$
 
 $K$ 可以理解成一组固定权重：位置偏了多少、速度偏了多少，各自应该对油门或转向产生多大影响。负号表示控制通常要把偏差往 0 的方向拉回去。LQR 最重要的结论就是：在前面的线性模型和二次代价假设下，最优控制恰好具有这种线性反馈形式。
 
@@ -69,15 +77,21 @@ $K$ 可以理解成一组固定权重：位置偏了多少、速度偏了多少�
 
 这句话写成公式就是 Bellman 最优性方程。由于系统是线性的、每步代价是二次型，可以设最优余下代价仍是二次型
 
-$$V(x)=x^{\top}P x,$$
+$$
+V(x)=x^{\top}P x,
+$$
 
 其中 $P$ 是待求矩阵。代回“一步代价 + 下一步余下代价”，得到
 
-$$V(x)=\min_{u}\left[x^{\top}Q x+u^{\top}R u+V(Ax+Bu)\right].$$
+$$
+V(x)=\min_{u}\left[x^{\top}Q x+u^{\top}R u+V(Ax+Bu)\right].
+$$
 
 把 $V(Ax+Bu)$ 展开并对 $u$ 求导置零，得到最优输入
 
-$$u^{\star}=-\left(R+B^{\top}P B\right)^{-1}B^{\top}P A\,x,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.$$
+$$
+u^{\star}=-\left(R+B^{\top}P B\right)^{-1}B^{\top}P A\,x,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.
+$$
 
 把 $u^{\star}$ 代回并令二次项系数相等，就得到关于 $P$ 的不动点方程（下一节细讲），离线迭代即可确定 $P$ 与常数矩阵 $K$。在线阶段，控制器每周期只做一次 $m\times n$ 的矩阵—向量乘法，代价近乎可忽略。值得注意的是，这个解在无约束情形下是**唯一**的：只要 $R$ 正定，代价关于 $u$ 严格凸，最优输入不会出现多个局部极小。
 
@@ -97,7 +111,9 @@ $Q$ 和 $R$ 不是数学装饰，它们编码的是"设计者最怕什么"。$Q$
 
 对双积分器（状态为位置与速度，输入为加速度）可以给出精确的量化关系：
 
-$$\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},$$
+$$
+\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_2}{r}+2\omega_n^{2}},
+$$
 
 其中 $q_1$ 是位置权重、$q_2$ 是速度权重、$r$ 是输入权重，$\omega_n$ 为闭环自然频率、$\zeta$ 为阻尼比。取 $q_1=1,\ r=0.01,\ q_2=0$，得 $\omega_n\approx3.16$ rad/s、$\zeta\approx0.71$。这不是临界阻尼（临界值为 1），而是约 4.3% 超调的常用折中。该精确关系只属于这里的双积分器模型，不能推广到任意 LQR 系统。
 
@@ -113,7 +129,9 @@ $$\omega_n=\left(\frac{q_1}{r}\right)^{1/4},\qquad 2\zeta\omega_n=\sqrt{\frac{q_
 
 LQR 的推导全部建立在 $x_{k+1}=Ax_k+Bu_k$ 之上，而真实系统几乎总是非线性 $\dot x=f(x,u)$。标准做法是选工作点 $(x^{\star},u^{\star})$ 做一阶线性化：
 
-$$A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.$$
+$$
+A=\left.\frac{\partial f}{\partial x}\right|_{(x^{\star},u^{\star})},\qquad B=\left.\frac{\partial f}{\partial u}\right|_{(x^{\star},u^{\star})}.
+$$
 
 只有当偏差 $\delta x=x-x^{\star}$ 足够小，线性模型才可信。无人机悬停、小车小角度平衡、机械臂在某个位形附近都属于这一类；一旦偏离工作点很远（大姿态角、强耦合、进入非线性区），$A$、$B$ 失配，LQR 的"最优"保证随之失效。常用补救是**增益调度**：在多个工作点分别解 $K$，运行时按当前状态插值。
 
@@ -168,15 +186,21 @@ $Q$、$R$ 通常取对角阵，非对角元代表交叉惩罚。若两个状态�
 
 前面说"$K$ 由 Riccati 方程求得"，这里把方程写清楚。连续时间下，$P$ 满足代数 Riccati 方程（ARE）：
 
-$$A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.$$
+$$
+A^{\top}P+P A-P B R^{-1}B^{\top}P+Q=0,\qquad K=R^{-1}B^{\top}P.
+$$
 
 离散时间下对应离散代数 Riccati 方程（DARE）：
 
-$$P=A^{\top}P A-A^{\top}P B\left(R+B^{\top}P B\right)^{-1}B^{\top}P A+Q,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.$$
+$$
+P=A^{\top}P A-A^{\top}P B\left(R+B^{\top}P B\right)^{-1}B^{\top}P A+Q,\qquad K=\left(R+B^{\top}P B\right)^{-1}B^{\top}P A.
+$$
 
 两式都是关于 $P$ 的非线性代数方程，没有闭式解，但可以用不动点迭代数值求解：从 $P_0=Q$ 出发，反复代入
 
-$$P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_i A+Q,$$
+$$
+P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_i A+Q,
+$$
 
 在 $(A,B)$ 可稳、$(A,Q^{1/2})$ 可检的条件下，序列 $\{P_i\}$ 单调收敛到唯一的半正定解 $P$。收敛速度与闭环谱半径相关，通常几十到几百次迭代即可到机器精度。
 
@@ -202,13 +226,17 @@ $$P_{i+1}=A^{\top}P_i A-A^{\top}P_i B\left(R+B^{\top}P_i B\right)^{-1}B^{\top}P_
 
 面对全新系统，最头疼的是不知道 $Q$、$R$ 从哪起步。**Bryson 规则**给出了一个有物理依据的初值：用每个变量的允许最大幅值做归一化，
 
-$$Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).$$
+$$
+Q=\operatorname{diag}\!\left(\frac{1}{x_{\max,1}^{2}},\ \dots,\ \frac{1}{x_{\max,n}^{2}}\right),\qquad R=\operatorname{diag}\!\left(\frac{1}{u_{\max,1}^{2}},\ \dots,\ \frac{1}{u_{\max,m}^{2}}\right).
+$$
 
 它的直觉是：让每个状态到达自身最大允许偏差、每个输入达到自身最大幅值时，在代价里贡献相同的量（都等于 1）。这样不同量纲的变量被拉到同一尺度，$Q$、$R$ 的相对大小才有可比性。
 
 一个具体例子：某小车位置允许最大偏差 $x_{\max,1}=1.0$ m，速度允许最大 $x_{\max,2}=0.5$ m/s，推力最大 $u_{\max,1}=10$ N。按 Bryson 规则，
 
-$$Q=\operatorname{diag}\!\left(\frac{1}{1.0^{2}},\ \frac{1}{0.5^{2}}\right)=\operatorname{diag}(1.0,\ 4.0),\qquad R=\operatorname{diag}\!\left(\frac{1}{10^{2}}\right)=\operatorname{diag}(0.01).$$
+$$
+Q=\operatorname{diag}\!\left(\frac{1}{1.0^{2}},\ \frac{1}{0.5^{2}}\right)=\operatorname{diag}(1.0,\ 4.0),\qquad R=\operatorname{diag}\!\left(\frac{1}{10^{2}}\right)=\operatorname{diag}(0.01).
+$$
 
 即位置权重 1.0、速度权重 4.0、输入权重 0.01。代入数值即可读出相对重视程度：速度权重是位置的 4 倍（因为速度量程更小、同等偏差更危险），输入却被看得很轻（10 N 相对任务需求很宽裕）。可见仅凭"位置 1 m / 速度 0.5 m/s / 推力 10 N"三条规格，就得到一个量纲自洽、能跑通的起点，后续只需在此基础上按响应微调。
 
@@ -224,11 +252,15 @@ Bryson 规则只保证"量纲合理、不荒谬"，不保证"性能最优"。它
 
 纯 LQR 是状态反馈，对**常值扰动**或**模型增益误差**会留下稳态误差：只要模型低估了负载，位置就永远差一点点。想要"无静差"，就把输出误差的积分扩进状态向量，得到 LQI（LQR with Integral action）。设跟踪误差 $e_k=r_k-y_k=r_k-Cx_k$，定义积分状态
 
-$$z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).$$
+$$
+z_{k+1}=z_k+e_k=z_k+\left(r_k-C x_k\right).
+$$
 
 把 $z$ 接到原状态后面，构造增广系统
 
-$$\begin{bmatrix}x_{k+1}\\ z_{k+1}\end{bmatrix}=\underbrace{\begin{bmatrix}A&0\\ -C&I\end{bmatrix}}_{\tilde A}\begin{bmatrix}x_k\\ z_k\end{bmatrix}+\underbrace{\begin{bmatrix}B\\ 0\end{bmatrix}}_{\tilde B}u_k+\begin{bmatrix}0\\ I\end{bmatrix}r_k,$$
+$$
+\begin{bmatrix}x_{k+1}\\ z_{k+1}\end{bmatrix}=\underbrace{\begin{bmatrix}A&0\\ -C&I\end{bmatrix}}_{\tilde A}\begin{bmatrix}x_k\\ z_k\end{bmatrix}+\underbrace{\begin{bmatrix}B\\ 0\end{bmatrix}}_{\tilde B}u_k+\begin{bmatrix}0\\ I\end{bmatrix}r_k,
+$$
 
 再对增广状态 $[x;z]$ 设计 LQR，得到 $u_k=-K_x x_k+K_i z_k$，其中 $K$ 被划分为状态增益 $K_x$ 与积分增益 $K_i$。积分状态让任何常值误差不断累积并推动输入，直到误差归零；但代价是积分器引入相位滞后、增大超调，还可能在执行器饱和时累积出巨大的 $z$（积分饱和）。工程上通常给 $z$ 一个远小于 $Q$ 的权重，并配抗积分饱和（clamping / back-calculation）。
 

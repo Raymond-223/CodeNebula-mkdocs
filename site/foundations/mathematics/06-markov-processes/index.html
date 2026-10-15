@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -5100,11 +5100,17 @@ P^{k+m}=P^kP^m,\qquad (P^{k+m})_{ij}=\sum_l(P^k)_{il}(P^m)_{lj}.
 <details class="proof">
 <summary>有限 Markov 链存在平稳分布</summary>
 <p>任取初始分布 <span class="arithmatex">\(\mu\)</span>，定义前 <span class="arithmatex">\(N\)</span> 个时刻分布的 Cesàro 平均</p>
-<div class="arithmatex">\[\bar\mu_N=\frac1N\sum_{k=0}^{N-1}\mu P^k.\]</div>
+<div class="arithmatex">\[
+\bar\mu_N=\frac1N\sum_{k=0}^{N-1}\mu P^k.
+\]</div>
 <p>每个 <span class="arithmatex">\(\bar\mu_N\)</span> 都在概率单纯形</p>
-<div class="arithmatex">\[\Delta=\{x\in\mathbb R^n:x_i\ge0,\ \sum_i x_i=1\}\]</div>
+<div class="arithmatex">\[
+\Delta=\{x\in\mathbb R^n:x_i\ge0,\ \sum_i x_i=1\}
+\]</div>
 <p>中。<span class="arithmatex">\(\Delta\)</span> 是有界闭集，因此任意序列 <span class="arithmatex">\(\{\bar\mu_N\}\)</span> 都有收敛子列；设该子列收敛到 <span class="arithmatex">\(\pi\in\Delta\)</span>。另一方面，</p>
-<div class="arithmatex">\[\bar\mu_NP-\bar\mu_N=\frac{\mu P^N-\mu}{N}.\]</div>
+<div class="arithmatex">\[
+\bar\mu_NP-\bar\mu_N=\frac{\mu P^N-\mu}{N}.
+\]</div>
 <p>右端每个分量绝对值至多 <span class="arithmatex">\(1/N\)</span>，所以沿该子列趋于零。矩阵乘法关于各分量连续，取极限得到 <span class="arithmatex">\(\pi P=\pi\)</span>。因为 <span class="arithmatex">\(\pi\in\Delta\)</span>，它的分量非负且和为 1，所以确为平稳分布。</p>
 </details>
 <p>存在、唯一和收敛是三个不同问题。有限不可约链有唯一平稳分布；再加非周期，才从任意初始分布收敛。特征值只在这些结构条件成立后用于量化速度，而且非正规或不可对角化矩阵还会带来条件数和多项式因子：</p>
@@ -5528,7 +5534,7 @@ I-Q=\begin{pmatrix}0.02&amp;-0.02\\-0.05&amp;0.15\end{pmatrix}.
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

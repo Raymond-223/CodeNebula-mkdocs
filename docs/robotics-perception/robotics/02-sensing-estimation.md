@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![状态估计在预测与观测之间循环。](../../assets/diagrams/state-estimation-loop.svg)
-  <figcaption>状态估计不断执行“预测 → 观测 → 修正”，而不是只做一次滤波。</figcaption>
+  <figcaption markdown="span">状态估计不断执行“预测 → 观测 → 修正”，而不是只做一次滤波。</figcaption>
 </figure>
 
 ## 不同传感器看到的是不同物理量

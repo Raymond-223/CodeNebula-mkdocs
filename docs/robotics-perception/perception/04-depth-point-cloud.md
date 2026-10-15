@@ -6,7 +6,7 @@
 
 <figure markdown="span">
   ![深度可以来自双目、主动传感器或学习模型，并最终形成三维点。](../../assets/diagrams/depth-modalities.svg)
-  <figcaption>不同深度来源误差特性不同，但都要经过坐标变换进入机器人几何空间。</figcaption>
+  <figcaption markdown="span">不同深度来源误差特性不同，但都要经过坐标变换进入机器人几何空间。</figcaption>
 </figure>
 
 ## 深度可以来自不同物理机制

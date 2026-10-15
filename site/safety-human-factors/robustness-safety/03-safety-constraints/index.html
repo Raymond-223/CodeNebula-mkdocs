@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -47,9 +47,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261011d">
+      <link rel="stylesheet" href="../../../css/custom.css?v=20261014">
     
-      <link rel="stylesheet" href="../../../css/custom.css?v=20261011d">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css?v=20261014">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -821,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    Worked Problems
+    丘赛真题
   
 
     
@@ -4600,7 +4600,9 @@
 \]</div>
 <p>其中 <span class="arithmatex">\(g_i\)</span> 可以表示速度上限、碰撞距离或温度限制。相比把越界做成惩罚项再求和，这种形式把“不可行”与“代价高”明确分开：求解器不会用一点性能换取轻微越界。</p>
 <p>Lagrange 乘子 <span class="arithmatex">\(\lambda_i\)</span> 在这里有一个可解释的作用。把约束右端写成 <span class="arithmatex">\(b_i\)</span>，最优值的灵敏度为</p>
-<div class="arithmatex">\[\frac{\partial J^*}{\partial b_i} = -\lambda_i ,\]</div>
+<div class="arithmatex">\[
+\frac{\partial J^*}{\partial b_i} = -\lambda_i ,
+\]</div>
 <p>即<strong>约束放宽一单位，最优目标能改善多少</strong>。乘子很大说明这条约束正在限制性能，值得投入资源去扩大余量；乘子接近零说明约束当前不起作用，可以暂不优化它。</p>
 <table>
 <thead>
@@ -4636,20 +4638,30 @@
 <p>把约束与性能分开还有测试上的好处：可以单独验证“约束检查器”在给定状态下是否拒绝越界动作，而不必跑完整任务。这类单元级测试通常比端到端测试便宜几个数量级，也更容易覆盖边界情况。</p>
 <h2 id="_3">约束的形式化与可行域</h2>
 <p>把约束写成集合，可以让“安全”这个词有明确外延。定义安全集合</p>
-<div class="arithmatex">\[\mathcal{S} = \{x \mid h(x)\ge 0\},\]</div>
+<div class="arithmatex">\[
+\mathcal{S} = \{x \mid h(x)\ge 0\},
+\]</div>
 <p>其中 <span class="arithmatex">\(h\)</span> 是连续可微的标量函数，<span class="arithmatex">\(h(x)&gt;0\)</span> 表示严格安全，<span class="arithmatex">\(h(x)=0\)</span> 是边界。控制屏障函数（Control Barrier Function, CBF）路线要求控制输入满足</p>
-<div class="arithmatex">\[\dot h(x,u) + \gamma h(x) \ge 0,\]</div>
+<div class="arithmatex">\[
+\dot h(x,u) + \gamma h(x) \ge 0,
+\]</div>
 <p>它的含义是：只要当前 <span class="arithmatex">\(h(x)&gt;0\)</span>，该条件保证 <span class="arithmatex">\(h\)</span> 在未来不会变成负值，也就不会越过边界。<span class="arithmatex">\(\gamma&gt;0\)</span> 越大，返回安全内部的趋势越强；若忽略 <span class="arithmatex">\(\gamma\)</span> 项，约束退化为“<span class="arithmatex">\(\dot h\ge 0\)</span>”，即禁止任何指向边界的运动，在远离边界时过于保守。</p>
 <details class="proof">
 <summary>线性 CBF 条件给出前向不变性</summary>
-<p>假设闭环解存在且绝对连续，并且沿该解几乎处处满足 <span class="arithmatex">\(\dot h(t)+\gamma h(t)\ge0\)</span>。乘以正数 <span class="arithmatex">\(e^{\gamma t}\)</span> 得
-$<span class="arithmatex">\(\frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.\)</span>$
-因此 <span class="arithmatex">\(e^{\gamma t}h(t)\ge h(0)\)</span>，即
-$<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
-若初始状态满足 <span class="arithmatex">\(h(0)\ge0\)</span>，则所有后续时刻都有 <span class="arithmatex">\(h(t)\ge0\)</span>，安全集前向不变。这个证明依赖闭环解存在、<span class="arithmatex">\(h\)</span> 沿轨迹可微（或绝对连续）以及约束连续执行；采样控制、模型误差和执行器饱和需要另加裕量。</p>
+<p>假设闭环解存在且绝对连续，并且沿该解几乎处处满足 <span class="arithmatex">\(\dot h(t)+\gamma h(t)\ge0\)</span>。乘以正数 <span class="arithmatex">\(e^{\gamma t}\)</span> 得</p>
+<div class="arithmatex">\[
+\frac{d}{dt}\left(e^{\gamma t}h(t)\right)=e^{\gamma t}(\dot h(t)+\gamma h(t))\ge0.
+\]</div>
+<p>因此 <span class="arithmatex">\(e^{\gamma t}h(t)\ge h(0)\)</span>，即</p>
+<div class="arithmatex">\[
+h(t)\ge e^{-\gamma t}h(0).
+\]</div>
+<p>若初始状态满足 <span class="arithmatex">\(h(0)\ge0\)</span>，则所有后续时刻都有 <span class="arithmatex">\(h(t)\ge0\)</span>，安全集前向不变。这个证明依赖闭环解存在、<span class="arithmatex">\(h\)</span> 沿轨迹可微（或绝对连续）以及约束连续执行；采样控制、模型误差和执行器饱和需要另加裕量。</p>
 </details>
 <p>把 <span class="arithmatex">\(\dot h\)</span> 展开：<span class="arithmatex">\(\dot h = \nabla h(x)^\top f(x) + \nabla h(x)^\top g(x)u\)</span>，于是 CBF 条件对 <span class="arithmatex">\(u\)</span> 是仿射的，可以在每个控制周期用一个小型二次规划求解：</p>
-<div class="arithmatex">\[\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .\]</div>
+<div class="arithmatex">\[
+\min_{u} \lVert u-u_{nom}\rVert^2 \quad \text{s.t.}\quad \nabla h^\top f + \nabla h^\top g\,u + \gamma h \ge 0 .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4769,7 +4781,9 @@ $<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
 <h2 id="_5">安全余量用来应对估计误差和响应延迟</h2>
 <p>机器人距离障碍 0.5 m 并不意味着可以把安全阈值也设为 0.5 m。定位误差、制动距离和控制延迟都需要计入 margin，安全边界因此应基于最坏合理误差，而不是理想模型中的精确几何距离。</p>
 <p>把余量拆开写，才能知道每一项由谁负责。设感知与传输延迟为 <span class="arithmatex">\(\tau_p\)</span>、通信与调度抖动为 <span class="arithmatex">\(\tau_c\)</span>、执行器响应为 <span class="arithmatex">\(\tau_a\)</span>，则总响应延迟</p>
-<div class="arithmatex">\[\tau = \tau_p + \tau_c + \tau_a .\]</div>
+<div class="arithmatex">\[
+\tau = \tau_p + \tau_c + \tau_a .
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4856,9 +4870,13 @@ $<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
 <p>表中最后一列与感知误差同量级（几厘米到几十厘米），这说明<strong>延迟不是可以忽略的次要项</strong>，而是与传感器精度同等的误差来源。</p>
 <h2 id="_6">安全余量与延迟的定量关系</h2>
 <p>余量不能凭感觉给，它可以被算出来。设速度为 <span class="arithmatex">\(v\)</span>、总响应延迟为 <span class="arithmatex">\(\tau\)</span>、最大减速度为 <span class="arithmatex">\(a\)</span>，则从“决定刹车”到停住的距离为</p>
-<div class="arithmatex">\[d_\text{stop} = v\tau + \frac{v^2}{2a},\]</div>
+<div class="arithmatex">\[
+d_\text{stop} = v\tau + \frac{v^2}{2a},
+\]</div>
 <p>再加上定位误差上界 <span class="arithmatex">\(\epsilon\)</span>，最小安全余量为</p>
-<div class="arithmatex">\[d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.\]</div>
+<div class="arithmatex">\[
+d_\text{safe} = v\tau + \frac{v^2}{2a} + \epsilon.
+\]</div>
 <table>
 <thead>
 <tr>
@@ -4907,7 +4925,9 @@ $<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
 </table>
 <p>这张表说明两个常被低估的事实：<strong>余量对速度是超线性的</strong>（第二项按 <span class="arithmatex">\(v^2\)</span> 增长），以及<strong>延迟与减速度的地位相当</strong>（延迟 0.5 s 配弱制动所需的余量，是 1.5 m/s 标准情形下的两倍）。降低速度要求远比升级感知硬件便宜。</p>
 <p>反推允许速度同样有用。给定可用净空 <span class="arithmatex">\(d\)</span>，把 <span class="arithmatex">\(d_\text{safe}=d\)</span> 解成速度上限：</p>
-<div class="arithmatex">\[v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .\]</div>
+<div class="arithmatex">\[
+v_\text{max} = -a\tau + \sqrt{a^2\tau^2 + 2a(d-\epsilon)} .
+\]</div>
 <p>以 <span class="arithmatex">\(d=2\)</span> m、<span class="arithmatex">\(\epsilon=0.1\)</span> m、<span class="arithmatex">\(a=1.0\)</span>、<span class="arithmatex">\(\tau=0.2\)</span> 为例：<span class="arithmatex">\(v_\text{max} = -0.2+\sqrt{0.04+3.8} \approx 1.76\)</span>。也就是说，2 m 的净空在 0.2 s 延迟下只允许约 1.8 m/s，超过这个速度减速已经来不及，只能靠更早规划或者更高减速度来补救。</p>
 <table>
 <thead>
@@ -5033,7 +5053,9 @@ $<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
 <h2 id="_8">约束可执行性依赖状态估计</h2>
 <p>安全约束通常作用于真实状态 <span class="arithmatex">\(x\)</span>，但系统只能访问带误差的估计 <span class="arithmatex">\(\hat x\)</span>。若不把估计误差和制动延迟纳入安全余量，数学上满足约束的命令仍可能在现实中越界。安全集合应根据可观测性和响应时间适当收缩。</p>
 <p>形式上，如果真实状态与估计满足 <span class="arithmatex">\(\lVert x-\hat x\rVert\le \epsilon\)</span>，那么要求估计状态满足收紧后的约束</p>
-<div class="arithmatex">\[h(\hat x)\;\ge\;\epsilon,\]</div>
+<div class="arithmatex">\[
+h(\hat x)\;\ge\;\epsilon,
+\]</div>
 <p>才能推出真实状态仍在安全域内。这就是“<strong>估计不确定性直接变成安全余量</strong>”的具体含义，也是 <a href="../01-uncertainty-shift/">Uncertainty &amp; Distribution Shift</a> 与本章相接的地方。这类“把不确定性转成集合收缩”的做法，与 <a href="../../../foundations/mathematics/07-optimization-under-uncertainty/">Optimization, Constraints &amp; Uncertainty</a> 中的鲁棒优化是同一思路。</p>
 <p>收缩量 <span class="arithmatex">\(\epsilon\)</span> 本身也需要估计：它来自传感器协方差、标定残差和地图误差的合成。实践中常用的保守做法是按 <span class="arithmatex">\(3\sigma\)</span> 取上界，因为协方差估计本身也有误差，直接用 <span class="arithmatex">\(1\sigma\)</span> 会让越界概率高到不可接受。</p>
 <table>
@@ -5440,7 +5462,7 @@ $<span class="arithmatex">\(h(t)\ge e^{-\gamma t}h(0).\)</span>$
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
