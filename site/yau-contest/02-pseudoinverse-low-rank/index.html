@@ -1019,7 +1019,7 @@
   <span class="md-ellipsis">
     
   
-    丘赛真题
+    Yau Contest Problems
   
 
     
@@ -4845,8 +4845,16 @@ A-A_k=\sum_{i=k+1}^r\sigma_i u_iv_i^T,
 <p>先看达到值：奇异值分解的秩一项在弗罗贝尼乌斯内积（Frobenius inner product）下互相正交，因此</p>
 <div class="arithmatex">\[
 \|A-A_k\|_F^2
-=\sum_{i=k+1}^r\sigma_i^2.
+=\left\|\sum_{i=k+1}^r\sigma_i u_iv_i^T\right\|_F^2.
 \]</div>
+<p>这里的秩一项在 Frobenius 内积下正交。按定义 <span class="arithmatex">\(\langle R,S\rangle_F=\operatorname{tr}(R^TS)\)</span>，并且</p>
+<div class="arithmatex">\[
+\langle u_iv_i^T,u_jv_j^T\rangle_F
+=\operatorname{tr}(v_i u_i^T u_j v_j^T)
+=(u_i^Tu_j)(v_j^Tv_i)=\delta_{ij};
+\]</div>
+<p>同时 <span class="arithmatex">\(\|u_iv_i^T\|_F^2=1\)</span>。展开平方和后交叉项全为零，故</p>
+<div class="arithmatex">\[\|A-A_k\|_F^2=\sum_{i=k+1}^r\sigma_i^2.\]</div>
 <p>再证下界。令 <span class="arithmatex">\(P\)</span> 是到 <span class="arithmatex">\(\operatorname{Col}(B)\)</span> 的正交投影，则 <span class="arithmatex">\(PB=B\)</span>，且</p>
 <div class="arithmatex">\[
 A-B=(I-P)A+(PA-B).
@@ -4857,11 +4865,15 @@ A-B=(I-P)A+(PA-B).
 =\|(I-P)A\|_F^2+\|PA-B\|_F^2
 \ge\|(I-P)A\|_F^2.
 \]</div>
-<p>把 <span class="arithmatex">\(P\)</span> 写到一组完整的左奇异向量标准正交基 <span class="arithmatex">\(u_1,\ldots,u_m\)</span> 中，其中 <span class="arithmatex">\(u_1,\ldots,u_r\)</span> 对应非零奇异值。令 <span class="arithmatex">\(p_i=u_i^TPu_i\)</span>，则 <span class="arithmatex">\(0\le p_i\le1\)</span>，并且下面的求和覆盖完整基：</p>
+<p>把 <span class="arithmatex">\(P\)</span> 写到一组完整的左奇异向量标准正交基 <span class="arithmatex">\(u_1,\ldots,u_m\)</span> 中，其中 <span class="arithmatex">\(u_1,\ldots,u_r\)</span> 对应非零奇异值，并令 <span class="arithmatex">\(p_i=u_i^TPu_i\)</span>。因为 <span class="arithmatex">\(P^T=P=P^2\)</span>，有 <span class="arithmatex">\(p_i=u_i^TP^TPu_i=\|Pu_i\|_2^2\)</span>，所以 <span class="arithmatex">\(0\le p_i\le1\)</span>。在完整正交基下求和，<span class="arithmatex">\(\sum_{i=1}^m p_i=\operatorname{tr}(P)\)</span>。又由谱定理，投影矩阵 <span class="arithmatex">\(P\)</span> 的特征值只可能是 <span class="arithmatex">\(0\)</span> 或 <span class="arithmatex">\(1\)</span>，故 <span class="arithmatex">\(\operatorname{tr}(P)=\operatorname{rank}(P)\le k\)</span>。</p>
+<p>若 <span class="arithmatex">\(k=0\)</span>，条件 <span class="arithmatex">\(\operatorname{rank}(B)\le0\)</span> 强迫 <span class="arithmatex">\(B=0\)</span>。此时唯一候选 <span class="arithmatex">\(A_0=0\)</span> 的误差为 <span class="arithmatex">\(\|A\|_F=\sqrt{\sum_{i=1}^r\sigma_i^2}\)</span>，所以结论成立。以下只需考虑 <span class="arithmatex">\(1\le k&lt;r\)</span>，从而 <span class="arithmatex">\(\sigma_k\)</span> 有定义。因为 <span class="arithmatex">\(\sigma_i^2\le\sigma_k^2\)</span> 对 <span class="arithmatex">\(i&gt;k\)</span>，且前 <span class="arithmatex">\(k\)</span> 个奇异值不小于 <span class="arithmatex">\(\sigma_k\)</span>，</p>
 <div class="arithmatex">\[
-\sum_{i=1}^m p_i=\operatorname{tr}(P)=\operatorname{rank}(P)\le k.
+\sum_{i=1}^r\sigma_i^2p_i
+\le\sum_{i=1}^k\sigma_i^2p_i+\sigma_k^2\sum_{i=k+1}^m p_i
+\le\sum_{i=1}^k\sigma_i^2p_i+\sigma_k^2\left(k-\sum_{i=1}^k p_i\right)
+\le\sum_{i=1}^k\sigma_i^2.
 \]</div>
-<p>正交投影的特征值只能是 <span class="arithmatex">\(0\)</span> 或 <span class="arithmatex">\(1\)</span>，所以迹等于秩。又因 <span class="arithmatex">\(\sigma_1^2\ge\cdots\ge\sigma_r^2\)</span>，在约束 <span class="arithmatex">\(0\le p_i\le1\)</span>、<span class="arithmatex">\(\sum_i p_i\le k\)</span> 下，若较小权重位置仍有质量而较大权重位置尚未达到 <span class="arithmatex">\(1\)</span>，把这部分质量移向前者不会减小加权和。有限次交换后，最大情形就是前 <span class="arithmatex">\(k\)</span> 个 <span class="arithmatex">\(p_i\)</span> 等于 <span class="arithmatex">\(1\)</span>，其余为零。因此</p>
+<p>第二个不等号来自完整和 <span class="arithmatex">\(\sum_{i=1}^m p_i\le k\)</span>；最后一个不等号逐项来自 <span class="arithmatex">\(p_i\le1\)</span> 与 <span class="arithmatex">\(\sigma_i^2\ge\sigma_k^2\)</span>（<span class="arithmatex">\(i\le k\)</span>）。因此</p>
 <div class="arithmatex">\[
 \|PA\|_F^2
 =\sum_{i=1}^r\sigma_i^2p_i

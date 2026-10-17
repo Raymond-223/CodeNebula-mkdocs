@@ -1091,7 +1091,7 @@
   <span class="md-ellipsis">
     
   
-    丘赛真题
+    Yau Contest Problems
   
 
     
@@ -5318,14 +5318,23 @@ A^TA\succ0
 \]</div>
 <details class="proof">
 <summary>证明</summary>
-<p>若 <span class="arithmatex">\(Av=\lambda v\)</span> 且 <span class="arithmatex">\(v\ne0\)</span>，则</p>
+<p>若 <span class="arithmatex">\(\lambda\)</span> 为实数特征值，可在实向量上直接用诱导范数。若 <span class="arithmatex">\(\lambda\)</span> 非实，则特征向量 <span class="arithmatex">\(v\)</span> 在 <span class="arithmatex">\(\mathbb C^n\)</span> 中，必须说明实向量范数怎样用于复向量。对实向量范数定义其复化范数</p>
 <div class="arithmatex">\[
-|\lambda|\|v\|
-=\|\lambda v\|
-=\|Av\|
-\le\|A\|\|v\|.
+\|z\|_{\mathbb C}:=\sup_{\theta\in[0,2\pi]}\|\operatorname{Re}(e^{i\theta}z)\|,\qquad z\in\mathbb C^n.
 \]</div>
-<p>约去 <span class="arithmatex">\(\|v\|\)</span> 得 <span class="arithmatex">\(|\lambda|\le\|A\|\)</span>，再对全部特征值取最大值。对于复特征值，在 <span class="arithmatex">\(\mathbb C^n\)</span> 上使用同一诱导范数。</p>
+<p>它是复向量范数：非负与三角不等式来自实范数；若它为零，则对所有 <span class="arithmatex">\(\theta\)</span> 实部为零，取 <span class="arithmatex">\(0\)</span> 与 <span class="arithmatex">\(\pi/2\)</span> 得 <span class="arithmatex">\(\operatorname{Re}z=\operatorname{Im}z=0\)</span>。具体地，若 <span class="arithmatex">\(c=re^{i\phi}\)</span>，则</p>
+<div class="arithmatex">\[\|cz\|_{\mathbb C}=\sup_\theta\|\operatorname{Re}(re^{i(\theta+\phi)}z)\|=r\sup_\eta\|\operatorname{Re}(e^{i\eta}z)\|=|c|\|z\|_{\mathbb C},\]</div>
+<p>所以复数齐次性成立。对实矩阵 <span class="arithmatex">\(A\)</span>，</p>
+<div class="arithmatex">\[
+\|Az\|_{\mathbb C}=\sup_\theta\|A\operatorname{Re}(e^{i\theta}z)\|
+\le \|A\|\sup_\theta\|\operatorname{Re}(e^{i\theta}z)\|
+=\|A\|\|z\|_{\mathbb C}.
+\]</div>
+<p>因此对任意复特征对 <span class="arithmatex">\(Av=\lambda v\)</span>、<span class="arithmatex">\(v\ne0\)</span>，由复齐次性与诱导范数不等式，</p>
+<div class="arithmatex">\[
+|\lambda|\|v\|_{\mathbb C}=\|\lambda v\|_{\mathbb C}=\|Av\|_{\mathbb C}\le\|A\|\|v\|_{\mathbb C}.
+\]</div>
+<p>约去非零的 <span class="arithmatex">\(\|v\|_{\mathbb C}\)</span> 得 <span class="arithmatex">\(|\lambda|\le\|A\|\)</span>。这对每个复特征值都成立，故取最大值即得 <span class="arithmatex">\(\rho(A)\le\|A\|\)</span>。</p>
 </details>
 <p>反向不成立。矩阵</p>
 <div class="arithmatex">\[

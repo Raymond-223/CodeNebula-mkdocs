@@ -1007,7 +1007,7 @@
   <span class="md-ellipsis">
     
   
-    丘赛真题
+    Yau Contest Problems
   
 
     
@@ -4646,6 +4646,7 @@ r\le\min\{r_0,1/(2C)\}.
 \]</div>
 <p>数学归纳法说明所有迭代点都留在该邻域内，分母始终非零，并且 <span class="arithmatex">\(|e_k|\le2^{-k}|e_0|\to0\)</span>。</p>
 <p><strong>计算渐近常数。</strong> 因为 <span class="arithmatex">\(x_k\to\alpha\)</span>，夹在 <span class="arithmatex">\(x_k\)</span> 与 <span class="arithmatex">\(\alpha\)</span> 之间的 <span class="arithmatex">\(\xi_k\)</span> 也趋于 <span class="arithmatex">\(\alpha\)</span>。由连续性，</p>
+<p>以下的商 <span class="arithmatex">\(e_{k+1}/e_k^2\)</span> 只讨论误差始终非零的迭代序列。若某一步 <span class="arithmatex">\(e_k=0\)</span>，则 <span class="arithmatex">\(x_k=\alpha\)</span> 已精确命中根，算法在有限步成功终止；此时不再用后续商定义渐近阶。</p>
 <div class="arithmatex">\[
 \frac{e_{k+1}}{e_k^2}
 =\frac{f''(\xi_k)}{2f'(x_k)}

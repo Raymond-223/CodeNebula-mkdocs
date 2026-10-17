@@ -385,8 +385,20 @@ $$
 
     $$
     \|A-A_k\|_F^2
-    =\sum_{i=k+1}^r\sigma_i^2.
+    =\left\|\sum_{i=k+1}^r\sigma_i u_iv_i^T\right\|_F^2.
     $$
+
+    这里的秩一项在 Frobenius 内积下正交。按定义 $\langle R,S\rangle_F=\operatorname{tr}(R^TS)$，并且
+
+    $$
+    \langle u_iv_i^T,u_jv_j^T\rangle_F
+    =\operatorname{tr}(v_i u_i^T u_j v_j^T)
+    =(u_i^Tu_j)(v_j^Tv_i)=\delta_{ij};
+    $$
+
+    同时 $\|u_iv_i^T\|_F^2=1$。展开平方和后交叉项全为零，故
+
+    $$\|A-A_k\|_F^2=\sum_{i=k+1}^r\sigma_i^2.$$
 
     再证下界。令 $P$ 是到 $\operatorname{Col}(B)$ 的正交投影，则 $PB=B$，且
 
@@ -402,13 +414,18 @@ $$
     \ge\|(I-P)A\|_F^2.
     $$
 
-    把 $P$ 写到一组完整的左奇异向量标准正交基 $u_1,\ldots,u_m$ 中，其中 $u_1,\ldots,u_r$ 对应非零奇异值。令 $p_i=u_i^TPu_i$，则 $0\le p_i\le1$，并且下面的求和覆盖完整基：
+    把 $P$ 写到一组完整的左奇异向量标准正交基 $u_1,\ldots,u_m$ 中，其中 $u_1,\ldots,u_r$ 对应非零奇异值，并令 $p_i=u_i^TPu_i$。因为 $P^T=P=P^2$，有 $p_i=u_i^TP^TPu_i=\|Pu_i\|_2^2$，所以 $0\le p_i\le1$。在完整正交基下求和，$\sum_{i=1}^m p_i=\operatorname{tr}(P)$。又由谱定理，投影矩阵 $P$ 的特征值只可能是 $0$ 或 $1$，故 $\operatorname{tr}(P)=\operatorname{rank}(P)\le k$。
+
+    若 $k=0$，条件 $\operatorname{rank}(B)\le0$ 强迫 $B=0$。此时唯一候选 $A_0=0$ 的误差为 $\|A\|_F=\sqrt{\sum_{i=1}^r\sigma_i^2}$，所以结论成立。以下只需考虑 $1\le k<r$，从而 $\sigma_k$ 有定义。因为 $\sigma_i^2\le\sigma_k^2$ 对 $i>k$，且前 $k$ 个奇异值不小于 $\sigma_k$，
 
     $$
-    \sum_{i=1}^m p_i=\operatorname{tr}(P)=\operatorname{rank}(P)\le k.
+    \sum_{i=1}^r\sigma_i^2p_i
+    \le\sum_{i=1}^k\sigma_i^2p_i+\sigma_k^2\sum_{i=k+1}^m p_i
+    \le\sum_{i=1}^k\sigma_i^2p_i+\sigma_k^2\left(k-\sum_{i=1}^k p_i\right)
+    \le\sum_{i=1}^k\sigma_i^2.
     $$
 
-    正交投影的特征值只能是 $0$ 或 $1$，所以迹等于秩。又因 $\sigma_1^2\ge\cdots\ge\sigma_r^2$，在约束 $0\le p_i\le1$、$\sum_i p_i\le k$ 下，若较小权重位置仍有质量而较大权重位置尚未达到 $1$，把这部分质量移向前者不会减小加权和。有限次交换后，最大情形就是前 $k$ 个 $p_i$ 等于 $1$，其余为零。因此
+    第二个不等号来自完整和 $\sum_{i=1}^m p_i\le k$；最后一个不等号逐项来自 $p_i\le1$ 与 $\sigma_i^2\ge\sigma_k^2$（$i\le k$）。因此
 
     $$
     \|PA\|_F^2

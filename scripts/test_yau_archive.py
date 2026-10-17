@@ -9,7 +9,7 @@ manifest=json.loads((ROOT/'SOURCE_PAPERS.json').read_text(encoding='utf8'))
 items=json.loads((ROOT/'scripts/yau_selection.json').read_text(encoding='utf8'))
 page=(ROOT/'docs/yau-contest/06-stage-one-workbook.md').read_text(encoding='utf8')
 assert len(items)==manifest['problem_groups']==page.count('??? proof "答案"')
-assert '???+' not in page and page.count('\n### ')==len(items)
+assert '???+' not in page and page.count('\n## ')==len(items)
 assert not any(x in page for x in ('先修章节','学习建议','本章不选'))
 for record in manifest['papers']:
  p=ROOT/'docs/assets/yau-papers'/record['asset']

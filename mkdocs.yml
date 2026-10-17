@@ -41,7 +41,7 @@ nav:
     - Linear Iterations & Power Method: yau-contest/03-linear-iterations-power.md
     - Fixed Points & Contractions: yau-contest/04-fixed-points-contractions.md
     - Newton's Method & Convergence Order: yau-contest/05-newton-convergence.md
-    - 丘赛真题: yau-contest/06-stage-one-workbook.md
+    - Yau Contest Problems: yau-contest/06-stage-one-workbook.md
 - Foundations:
   - Mathematics:
     - Overview: foundations/mathematics/index.md

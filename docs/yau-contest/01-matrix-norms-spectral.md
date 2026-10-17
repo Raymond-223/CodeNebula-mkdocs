@@ -848,16 +848,31 @@ $$
 
 ??? proof "证明"
 
-    若 $Av=\lambda v$ 且 $v\ne0$，则
+    若 $\lambda$ 为实数特征值，可在实向量上直接用诱导范数。若 $\lambda$ 非实，则特征向量 $v$ 在 $\mathbb C^n$ 中，必须说明实向量范数怎样用于复向量。对实向量范数定义其复化范数
 
     $$
-    |\lambda|\|v\|
-    =\|\lambda v\|
-    =\|Av\|
-    \le\|A\|\|v\|.
+    \|z\|_{\mathbb C}:=\sup_{\theta\in[0,2\pi]}\|\operatorname{Re}(e^{i\theta}z)\|,\qquad z\in\mathbb C^n.
     $$
 
-    约去 $\|v\|$ 得 $|\lambda|\le\|A\|$，再对全部特征值取最大值。对于复特征值，在 $\mathbb C^n$ 上使用同一诱导范数。
+    它是复向量范数：非负与三角不等式来自实范数；若它为零，则对所有 $\theta$ 实部为零，取 $0$ 与 $\pi/2$ 得 $\operatorname{Re}z=\operatorname{Im}z=0$。具体地，若 $c=re^{i\phi}$，则
+
+    $$\|cz\|_{\mathbb C}=\sup_\theta\|\operatorname{Re}(re^{i(\theta+\phi)}z)\|=r\sup_\eta\|\operatorname{Re}(e^{i\eta}z)\|=|c|\|z\|_{\mathbb C},$$
+
+    所以复数齐次性成立。对实矩阵 $A$，
+
+    $$
+    \|Az\|_{\mathbb C}=\sup_\theta\|A\operatorname{Re}(e^{i\theta}z)\|
+    \le \|A\|\sup_\theta\|\operatorname{Re}(e^{i\theta}z)\|
+    =\|A\|\|z\|_{\mathbb C}.
+    $$
+
+    因此对任意复特征对 $Av=\lambda v$、$v\ne0$，由复齐次性与诱导范数不等式，
+
+    $$
+    |\lambda|\|v\|_{\mathbb C}=\|\lambda v\|_{\mathbb C}=\|Av\|_{\mathbb C}\le\|A\|\|v\|_{\mathbb C}.
+    $$
+
+    约去非零的 $\|v\|_{\mathbb C}$ 得 $|\lambda|\le\|A\|$。这对每个复特征值都成立，故取最大值即得 $\rho(A)\le\|A\|$。
 
 反向不成立。矩阵
 

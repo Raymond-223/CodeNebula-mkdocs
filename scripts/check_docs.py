@@ -196,7 +196,8 @@ for p in DOCS.rglob('*.md'):
 
     for match in re.finditer(r'^(#{2,6})\s+(.+?)\s*$', clean, flags=re.M):
         heading_text = re.sub(r'\s*\{[^}]*\}\s*$', '', match.group(2)).strip()
-        if not re.search(r'[\u4e00-\u9fff]', heading_text):
+        is_yau_problem_title = p.name == '06-stage-one-workbook.md' and match.group(1) == '##'
+        if not is_yau_problem_title and not re.search(r'[\u4e00-\u9fff]', heading_text):
             errors.append(f'Subordinate heading must use Chinese: {rel} -> {match.group(0)}')
 
     direct_heading_pattern = re.compile(

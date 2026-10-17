@@ -1,7 +1,7 @@
 {
   "source_page": "https://yau-contest.com/lists-jxxg.html",
   "retrieved_date": "2026-10-14",
-  "review_completed": "2026-10-15",
+  "review_completed": "2026-10-16",
   "archives": [
     {
       "url": "https://yau-contest.com/index/reldown?id=9",
@@ -12,8 +12,8 @@
       "sha256": "ed4a90e7983b0a5ff786ad31d017f52fdb710020fc1089c5f8bc23230314b2c5"
     }
   ],
-  "selection_rule": "Stage 1 的证明、Taylor/微分、有限维线性代数、范数、谱、SVD、最小二乘、压缩映射、线性与 Newton 迭代；原题给出的定义、算法和恒等式可直接使用。保留可独立完成的小问；未假设已经掌握 Sobolev/FEM 收敛、弱解存在性、泛函变分与非线性 PDE/动力系统全局理论。重复考题按年份保留。",
-  "problem_groups": 195,
+  "selection_rule": "仅保留可直接用 Stage 1 已讲内容完成的题目或小问：证明与一元微积分/Taylor、实有限维矩阵代数和范数、实对称谱定理、SVD/最小二乘、线性定常迭代/谱半径/幂法、压缩映射/Newton 法。严审并剔除依赖未讲的 PDE/数值格式、复正规谱理论、Krylov/Arnoldi、泛函变分、凸优化、正交多项式、FEM、渐近分析等工具的题目；复合题仅保留合格小问。重复年份赛别仍分别列出。",
+  "problem_groups": 27,
   "papers": [
     {
       "year": 2012,
@@ -22,16 +22,7 @@
       "original_sha256": "7f4c20cdfe7205f1d234b9f6f438bd0ef78c04a2932d61e4051d7bdfc610fa73",
       "local_sha256": "7f4c20cdfe7205f1d234b9f6f438bd0ef78c04a2932d61e4051d7bdfc610fa73",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2013,
@@ -44,10 +35,6 @@
         {
           "kind": "总决赛·个人赛",
           "question": "1(a)、(b)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2(1)–(3)"
         }
       ]
     },
@@ -61,23 +48,7 @@
       "selected": [
         {
           "kind": "总决赛·个人及综合个人赛",
-          "question": "导数余弦定理题1"
-        },
-        {
-          "kind": "总决赛·个人及综合个人赛",
-          "question": "能量稳定题"
-        },
-        {
-          "kind": "总决赛·个人及综合个人赛",
-          "question": "均匀边染色题"
-        },
-        {
-          "kind": "总决赛·个人及综合个人赛",
-          "question": "圆堆积题2、网格题3"
-        },
-        {
-          "kind": "总决赛·个人及综合个人赛",
-          "question": "三对角矩阵题"
+          "question": "1 · Tridiagonal Matrix"
         }
       ]
     },
@@ -91,10 +62,6 @@
       "selected": [
         {
           "kind": "总决赛·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·个人赛",
           "question": "3"
         }
       ]
@@ -106,16 +73,7 @@
       "original_sha256": "57b20e60892ebc033a09902348b6870c446597a28424ceb1b4ca2b0824481961",
       "local_sha256": "57b20e60892ebc033a09902348b6870c446597a28424ceb1b4ca2b0824481961",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1(a)–(c)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -124,12 +82,7 @@
       "original_sha256": "b422fb50471ecf3071fed1ad18c3da03f49a9dbaf46dabe1a3fb2f7b3661e3af",
       "local_sha256": "b422fb50471ecf3071fed1ad18c3da03f49a9dbaf46dabe1a3fb2f7b3661e3af",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1(a)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2018,
@@ -138,12 +91,7 @@
       "original_sha256": "6c2230f798612bdc104c0a5224b76fc9ff6a79d8512b46e5d2531e8022f7633c",
       "local_sha256": "6c2230f798612bdc104c0a5224b76fc9ff6a79d8512b46e5d2531e8022f7633c",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2019,
@@ -159,15 +107,7 @@
         },
         {
           "kind": "总决赛·个人赛",
-          "question": "2"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "3(a)、(b)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "4"
+          "question": "3(a)"
         },
         {
           "kind": "总决赛·个人赛",
@@ -186,10 +126,6 @@
         {
           "kind": "总决赛·个人赛",
           "question": "I(1)、(2)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "II"
         }
       ]
     },
@@ -200,16 +136,7 @@
       "original_sha256": "786d50a3facffc516bfc45161c71770ccee528cc987ad0ea27e7d7a6ea0cab27",
       "local_sha256": "e098fa1f539669f8e3dfae7b35a19914d41fec9e3f5760513785c6cfd5f4f6cc",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "I(1)、(2)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "II(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2021,
@@ -218,20 +145,7 @@
       "original_sha256": "f50a24f98db43c9326deea3b8bef3b8fbd0fc9386f57f24f70e934e7f75fa1c5",
       "local_sha256": "f50a24f98db43c9326deea3b8bef3b8fbd0fc9386f57f24f70e934e7f75fa1c5",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "II(1)、(3)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "I(1)–(3)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "III(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2022,
@@ -243,15 +157,7 @@
       "selected": [
         {
           "kind": "总决赛·个人赛",
-          "question": "I(1)、(2)"
-        },
-        {
-          "kind": "总决赛·个人赛",
           "question": "II(a)、(b)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "III(1)(a)–(c)"
         }
       ]
     },
@@ -262,24 +168,7 @@
       "original_sha256": "c880127c2465e8d319bac34d5410346ca38b48e6942f72e7611f81e7cc5ac2fd",
       "local_sha256": "c880127c2465e8d319bac34d5410346ca38b48e6942f72e7611f81e7cc5ac2fd",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1(a)、(b)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2(a)–(c)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "3(a)、(b)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "4(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2024,
@@ -288,20 +177,7 @@
       "original_sha256": "59e539166c2fb37ce3ebd75154f212259b3cff657625d8b08b02420478b0c917",
       "local_sha256": "59e539166c2fb37ce3ebd75154f212259b3cff657625d8b08b02420478b0c917",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "4(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2025,
@@ -310,16 +186,7 @@
       "original_sha256": "6902c3eb81446a3c39313a965e94159ccbb21a9b6508cf1fa9313ae239f0c827",
       "local_sha256": "6902c3eb81446a3c39313a965e94159ccbb21a9b6508cf1fa9313ae239f0c827",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·个人赛",
-          "question": "2(a)"
-        },
-        {
-          "kind": "总决赛·个人赛",
-          "question": "4"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2012,
@@ -328,12 +195,7 @@
       "original_sha256": "b3140df6084de6797696a7a380ead9b6bce3a7b022380423bd58a7c9f6722500",
       "local_sha256": "b3140df6084de6797696a7a380ead9b6bce3a7b022380423bd58a7c9f6722500",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2013,
@@ -351,12 +213,7 @@
       "original_sha256": "5ac3a2589e87714d7ada7a4fa5fb27449fc218f674e6766ede9ad5c6da067fdd",
       "local_sha256": "5ac3a2589e87714d7ada7a4fa5fb27449fc218f674e6766ede9ad5c6da067fdd",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2016,
@@ -365,12 +222,7 @@
       "original_sha256": "bdac27b072f91cab6acf8375b69ea4311fd230cf175dc467a4911f600344f116",
       "local_sha256": "bdac27b072f91cab6acf8375b69ea4311fd230cf175dc467a4911f600344f116",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -379,12 +231,7 @@
       "original_sha256": "b650765f9a0cf0a0ce9e75e8c33471f6b8858f53d2d32c95c5d7c22ed8050230",
       "local_sha256": "b650765f9a0cf0a0ce9e75e8c33471f6b8858f53d2d32c95c5d7c22ed8050230",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2018,
@@ -393,12 +240,7 @@
       "original_sha256": "5e61c68af596faded424fe05d3a0f41bb5fa31f38b5b31c86440523e5e9bec6e",
       "local_sha256": "5e61c68af596faded424fe05d3a0f41bb5fa31f38b5b31c86440523e5e9bec6e",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1、2"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2019,
@@ -407,16 +249,7 @@
       "original_sha256": "010cf26574f567d21875e04d2a98ff06c50b5e1b27522cd9d0cabfac56b74379",
       "local_sha256": "010cf26574f567d21875e04d2a98ff06c50b5e1b27522cd9d0cabfac56b74379",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "3(1)–(4)"
-        },
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "2"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2020,
@@ -425,12 +258,7 @@
       "original_sha256": "52069749f3b39a25bb95039009d21a614af3e8c7020cef61c2d58210dadf2ce8",
       "local_sha256": "cf8525fc7467d6d050ed8ecc7850938ef6de394dc29e8d1f27aa1574f0313220",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "II(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2021,
@@ -439,16 +267,7 @@
       "original_sha256": "d88215fe4836b9d2792fcaeeb2701b00c2cdb4d96d965d9e1c33d15779aa20b2",
       "local_sha256": "d88215fe4836b9d2792fcaeeb2701b00c2cdb4d96d965d9e1c33d15779aa20b2",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "I(1)、(2)"
-        },
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "II(1)–(4)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2022,
@@ -457,16 +276,7 @@
       "original_sha256": "3a5200011cdf01a768e52699132fe19eec9b6d003f941a8f6626699b72314198",
       "local_sha256": "3a5200011cdf01a768e52699132fe19eec9b6d003f941a8f6626699b72314198",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "I(1)"
-        },
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "II"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2023,
@@ -484,16 +294,7 @@
       "original_sha256": "115456a195a6505698b536a6d17da9db3eeb9b373fbd71047ab2ef73596930f2",
       "local_sha256": "115456a195a6505698b536a6d17da9db3eeb9b373fbd71047ab2ef73596930f2",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1(a)、(b)"
-        },
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "2(a)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2025,
@@ -502,16 +303,7 @@
       "original_sha256": "0cb499b337869e2b58c44e693c3c40fec7410b163fd64639d80848979d57ac8a",
       "local_sha256": "0cb499b337869e2b58c44e693c3c40fec7410b163fd64639d80848979d57ac8a",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "1(a)–(c)"
-        },
-        {
-          "kind": "总决赛·综合个人赛",
-          "question": "2"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2012,
@@ -520,12 +312,7 @@
       "original_sha256": "c74f24a4130d5e7854660794f4803a429a0efdd86cff8df27f19da6aa566eacb",
       "local_sha256": "c74f24a4130d5e7854660794f4803a429a0efdd86cff8df27f19da6aa566eacb",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2013,
@@ -543,16 +330,7 @@
       "original_sha256": "d0bfb137fa0003caf2992b459792a8c0105d2b7f4c0a0fdda192cc69f3f8e9e7",
       "local_sha256": "d0bfb137fa0003caf2992b459792a8c0105d2b7f4c0a0fdda192cc69f3f8e9e7",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "无爪图题"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "受迫热方程题"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2015,
@@ -561,16 +339,7 @@
       "original_sha256": "981fa7aec5b4f9778012494b128defffdfaa6f065ae14dd64bc71a02a51745b9",
       "local_sha256": "981fa7aec5b4f9778012494b128defffdfaa6f065ae14dd64bc71a02a51745b9",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -579,12 +348,7 @@
       "original_sha256": "d1b465a50acf9f78bd89eeec278148e2661067d8fe5e00ba8a70fa43cafe27c9",
       "local_sha256": "d1b465a50acf9f78bd89eeec278148e2661067d8fe5e00ba8a70fa43cafe27c9",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "最优运输题(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -593,20 +357,7 @@
       "original_sha256": "ebd47da185eb7c99a982ee064b5030c7e066e87d06c0990d8b774b8fda05e266",
       "local_sha256": "ebd47da185eb7c99a982ee064b5030c7e066e87d06c0990d8b774b8fda05e266",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1(c)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1(a)、(b)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(a)–(d)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -624,16 +375,7 @@
       "original_sha256": "ba4431d458ffc1d7dbcf1dcdb834e400421cb1bb0d1dc7f239de07a427fe9190",
       "local_sha256": "ba4431d458ffc1d7dbcf1dcdb834e400421cb1bb0d1dc7f239de07a427fe9190",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2019,
@@ -642,20 +384,7 @@
       "original_sha256": "efafbe539eddcf619deb7187670e7255b367684dc53424b9f0cb4a35603371fd",
       "local_sha256": "efafbe539eddcf619deb7187670e7255b367684dc53424b9f0cb4a35603371fd",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1(i)、(ii)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(i)、(ii)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "3(i)、(ii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2023,
@@ -664,20 +393,7 @@
       "original_sha256": "3a8de3b69974620838e68af8aa5c38ea38983ea461243dd957651b1e8202ac4b",
       "local_sha256": "3a8de3b69974620838e68af8aa5c38ea38983ea461243dd957651b1e8202ac4b",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1(i)、(ii)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(ii)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "3(ii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2024,
@@ -686,16 +402,7 @@
       "original_sha256": "6ba5a95b5181c03eaddb65fe273863b9f5c5cbfc4c1d71dc6a04bfd59bf81430",
       "local_sha256": "6ba5a95b5181c03eaddb65fe273863b9f5c5cbfc4c1d71dc6a04bfd59bf81430",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(a-i)、(b)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2025,
@@ -704,20 +411,7 @@
       "original_sha256": "afdfa2052baa1fe6b45ec0c3ab2f56ffc1b51879e7c160ef9faf026a05195a29",
       "local_sha256": "afdfa2052baa1fe6b45ec0c3ab2f56ffc1b51879e7c160ef9faf026a05195a29",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "总决赛·团体赛",
-          "question": "3(c)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "2(a)–(d)"
-        },
-        {
-          "kind": "总决赛·团体赛",
-          "question": "3(a)、(b)、(d)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2010,
@@ -726,16 +420,7 @@
       "original_sha256": "b11ec0d4423d8678fd4aac3a12f395a3fd40d9b3137e25667253e8fbb965fdc5",
       "local_sha256": "b11ec0d4423d8678fd4aac3a12f395a3fd40d9b3137e25667253e8fbb965fdc5",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "6(i)–(iii)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5(i)、(ii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2010,
@@ -745,10 +430,6 @@
       "local_sha256": "e205515b388ad02ade9e7cbb6e76ef38526ab174c30f695b554536b22315b8f4",
       "reviewed": true,
       "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(1)–(3)"
-        },
         {
           "kind": "笔试·个人赛",
           "question": "6(1)、(2)"
@@ -765,10 +446,6 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "1(1)–(4)"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "2"
         }
       ]
@@ -780,16 +457,7 @@
       "original_sha256": "98ae2282c4c1d42e16f8319f0eb3c37f0fdda50e00913540ad9ea93efe9af2ac",
       "local_sha256": "98ae2282c4c1d42e16f8319f0eb3c37f0fdda50e00913540ad9ea93efe9af2ac",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "1(a)–(d)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "2(i)、(ii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2012,
@@ -798,28 +466,7 @@
       "original_sha256": "74faed3900e63da605e5b99af056d86668452a5f7c73dba43d8edc97f89eaf36",
       "local_sha256": "74faed3900e63da605e5b99af056d86668452a5f7c73dba43d8edc97f89eaf36",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(i)–(iii)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(1)–(3)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2012,
@@ -828,28 +475,7 @@
       "original_sha256": "85ea141eb8bdeaa8b44aae12ed173ff50dcf8e8d9d475b53c9c9457fa22da64a",
       "local_sha256": "85ea141eb8bdeaa8b44aae12ed173ff50dcf8e8d9d475b53c9c9457fa22da64a",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "4"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3(2)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5(a)–(c)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3(1)、(3)、(4)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2013,
@@ -861,27 +487,7 @@
       "selected": [
         {
           "kind": "笔试·团体赛",
-          "question": "4(1)"
-        },
-        {
-          "kind": "笔试·团体赛",
           "question": "6"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "1(a)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "2(a)–(c)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(2)、(3)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3"
         }
       ]
     },
@@ -895,18 +501,6 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "2(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(1)、(2)"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "6"
         }
       ]
@@ -918,28 +512,7 @@
       "original_sha256": "db15444b60b6549a89500f0923a2d4a7485f5941582184988292c2288d533576",
       "local_sha256": "db15444b60b6549a89500f0923a2d4a7485f5941582184988292c2288d533576",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(i)、(ii)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(i)–(iii)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(i)、(ii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2014,
@@ -951,19 +524,7 @@
       "selected": [
         {
           "kind": "笔试·团体赛",
-          "question": "3"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·团体赛",
           "question": "5(i)、(ii)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(a)–(d)"
         }
       ]
     },
@@ -974,24 +535,7 @@
       "original_sha256": "fb1e5408cf916ee0b2f1f494bb04f825df41956b5ec29439cfa7cc089d9159b7",
       "local_sha256": "fb1e5408cf916ee0b2f1f494bb04f825df41956b5ec29439cfa7cc089d9159b7",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)–(d)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2015,
@@ -1014,28 +558,7 @@
       "original_sha256": "a9f6bf43dc808e856c4bbb40f00d564090c8e21c6ee8f9d43545e68e4693996a",
       "local_sha256": "a9f6bf43dc808e856c4bbb40f00d564090c8e21c6ee8f9d43545e68e4693996a",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "2(a)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(1)–(5)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5(1)–(3)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "1(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2016,
@@ -1044,24 +567,7 @@
       "original_sha256": "cf413893cba4e3ff48d3b4b49c547a6f2f0ed592c6b24b20bb20598409f2ea69",
       "local_sha256": "cf413893cba4e3ff48d3b4b49c547a6f2f0ed592c6b24b20bb20598409f2ea69",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(1)–(3)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1(1)、(2)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -1070,28 +576,7 @@
       "original_sha256": "6ad12a1e9539fb951d372e5435bd027ceeb6470706bace008304d81237cb896b",
       "local_sha256": "6ad12a1e9539fb951d372e5435bd027ceeb6470706bace008304d81237cb896b",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3(a)–(c)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "2(1)、(2)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(a)–(c)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2017,
@@ -1103,23 +588,7 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "4(a)–(d)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3"
+          "question": "4(a)、(c)、(d)"
         }
       ]
     },
@@ -1130,24 +599,7 @@
       "original_sha256": "5607bb71778285bfe538290acf100111b89660df7e3f65b16c3a98ce49383ddf",
       "local_sha256": "5607bb71778285bfe538290acf100111b89660df7e3f65b16c3a98ce49383ddf",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(1)、(2)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "2(1)–(5)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "3(1)、(2)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5(1)、(2)、(3)(a)–(d)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2018,
@@ -1156,24 +608,7 @@
       "original_sha256": "5754889d14459622c80185cc1ff6fccbde53bf114b4cfb78c027c3081d1cfec9",
       "local_sha256": "5754889d14459622c80185cc1ff6fccbde53bf114b4cfb78c027c3081d1cfec9",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(1)–(4)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(b)、(c)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2019,
@@ -1182,20 +617,7 @@
       "original_sha256": "79abd082e1f1bf814a1ae45904c910e29b708f584545d00a50e302a04abad6e5",
       "local_sha256": "79abd082e1f1bf814a1ae45904c910e29b708f584545d00a50e302a04abad6e5",
       "reviewed": true,
-      "selected": [
-        {
-          "kind": "笔试·个人赛",
-          "question": "1(i)、(ii)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(i)–(iii)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(i)–(iii)"
-        }
-      ]
+      "selected": []
     },
     {
       "year": 2019,
@@ -1207,27 +629,7 @@
       "selected": [
         {
           "kind": "笔试·团体赛",
-          "question": "5(ii)、(iii)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "2"
-        },
-        {
-          "kind": "笔试·团体赛",
           "question": "3(i)–(iii)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "4(i)–(iii)"
-        },
-        {
-          "kind": "笔试·团体赛",
-          "question": "5(i)"
         }
       ]
     },
@@ -1241,27 +643,11 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "3"
         },
         {
           "kind": "笔试·个人赛",
-          "question": "4(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "5"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "6"
         }
       ]
     },
@@ -1275,23 +661,7 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "1(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "4(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)、(b)"
         }
       ]
     },
@@ -1305,27 +675,11 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "6"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "3(a)–(d)"
         },
         {
           "kind": "笔试·个人赛",
           "question": "2"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)、(b)"
         }
       ]
     },
@@ -1340,26 +694,6 @@
         {
           "kind": "笔试·个人赛",
           "question": "3(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "1(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)–(d)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "6(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)–(c)"
         }
       ]
     },
@@ -1373,27 +707,7 @@
       "selected": [
         {
           "kind": "笔试·个人赛",
-          "question": "5(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
           "question": "1(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "2(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "6(a)–(d)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(a)、(b)"
         }
       ]
     },
@@ -1416,22 +730,6 @@
         {
           "kind": "笔试·个人赛",
           "question": "1"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "5(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)、(b)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "6(a)–(d)"
         }
       ]
     },
@@ -1446,18 +744,6 @@
         {
           "kind": "笔试·个人赛",
           "question": "5(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "3(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "4(a)–(c)"
-        },
-        {
-          "kind": "笔试·个人赛",
-          "question": "6(a)、(b)"
         }
       ]
     }
